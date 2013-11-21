@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Listado Roles";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        jQuery("#grdList").jqGrid({
+
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Nombre', 'Estado', "", ""],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
+                    { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
+                    { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
+                    { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            /*caption: 'Lista Referencias',*/
+            height: 120,
+            autowidth: true,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+    });
+
+    function EditarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '/Intranet/Content/images/';
+        var archivo = 'action_edit.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+        return strImg;
+    }
+
+    function EliminarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '/Intranet/Content/images/';
+        var archivo = 'action_delete.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
+        return strImg;
+    }
+
+    function ConsultarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '/Intranet/Content/images/';
+        var archivo = 'action_search.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Consultar" alt="Consultar">';
+        return strImg;
+    }
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Rol</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Nombre</label>
+                            <div class="controles">
+                                <input id="fechaInicio" type="text" class="input-large">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion offset9">
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                </div>
+            </form>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager"></div>
+            </div>
+            <div class="form-actions">
+                <a class="btn btn-info" href="/Intranet/Examen/Edit"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Instrucciones Examen</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/custom-theme/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
+        <!--[if lt IE 9]>
+        <link href="@Url.Content("~/Content/custom-theme/jquery.ui.1.10.0.ie.css")" rel="stylesheet" type="text/css" />
+        <![endif]-->
+        <link href="@Url.Content("~/Content/ui.jqgrid.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/jqGrid.overrides.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    </head>
+<body>
+    <div class="container">
+        <div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Examen</h5>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" href="#" onclick="window.close();"><i class="icon-adjust icon-white"></i> Terminiar</a>
+                </div>
+            </div>
+            <div style="float:left;margin-top:5px;margin-left:10px;">
+                <span>Pregunta </span><input type="text" class="input-xmini" value="3"/> <span> de 4</span>
+            </div>
+            <a class="btn btn-info" style="margin:5px;">Ir a</a>
+            <div style="float:right;margin-top:5px;">
+                <span>Duracion</span>  
+                <input type="text" class="input-mini" id="txduracion" value="30 min." disabled="disabled">&nbsp;&nbsp;
+                <span>Inicio</span>  
+                <input type="text" class="input-mini" id="txinicio" value="5:00 p.m." disabled="disabled">&nbsp-
+                <span>Fin</span>  
+                <input type="text" class="input-mini" id="txtFin" value="5:30 p.m." disabled="disabled">
+            </div>
+            <div style="clear:both"></div>
+            <div class="grilla-opciones">
+                <h6>Comunicación Interpersonal</h6>
+                <div class="opciones">
+                </div>
+                <div style="clear:both"></div>
+            </div>
+<table style="width:100%;margin-left:10px;margin-right:10px;">                                         
+                    <tbody><tr>                        
+                        <td>3.- Me encuentro animado al hablar. Mi lenguaje corporal es rico.
+                        </td>                     
+                    </tr>
+                    <tr><td><input type="radio" name="pregunta2"> &nbsp;No muy Exacta </td></tr>
+                    <tr><td><input type="radio" name="pregunta2"> &nbsp;Ligeramente Exacta</td></tr>
+                    <tr><td><input type="radio" name="pregunta2"> &nbsp;Generalmente Exacta</td></tr>
+                    <tr><td><input type="radio" name="pregunta2"> &nbsp;Muy Exacta</td></tr>
+                  
+                </tbody></table>  
+            <div class="form-actions">       
+                <a class="btn" href="@Url.Action("Examen", "Evaluacion")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                <a class="btn btn-info" href="@Url.Action("Examen3", "Evaluacion")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+            </div>                     
+        </div>
+
+    </div>
+</div>
+    </div>
+        <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-migrate-1.2.1.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/grid.locale-en.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
+</body>
+</html>

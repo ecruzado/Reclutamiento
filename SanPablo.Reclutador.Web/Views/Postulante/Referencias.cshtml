@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Referencias";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script type="text/javascript">        
+
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaReferencias", "Postulante")',
+               datatype: 'json',
+               mtype: 'POST',
+               colNames: ['','Institución','Nombre', 'Empresa', 'Teléfono', 'Anexo', 'Email'],
+               colModel: [
+                       { name: 'CodigoRadio', index: 'CodigoRadio', align: 'center', width: 20, formatter: RadioFormatter, sortable: false },
+                       { name: 'Institucion', index: 'Nombre', align: 'left', width: 190, sortable: false },
+                       { name: 'Nombre', index: 'Nombre', align: 'left', width: 190, sortable: false },
+                       { name: 'Empresa', index: 'Empresa', align: 'left', width: 180, sortable: false },
+                       { name: 'Telefono', index: 'Telefono', align: 'left', sortable: false },
+                       { name: 'Anexo', index: 'Anexo', align: 'left', sortable: false },
+                       { name: 'Email', index: 'Email', align: 'left', sortable: false },                       
+               ],
+               sortname: 'Nombre',
+               sortorder: 'desc',
+               viewrecords: true,
+               autowidth: true,
+                /*caption: 'Lista Referencias',*/
+               height: 120,
+               /*width: 882,*/
+               rowNum: 0,
+               cellsubmit: 'clientArray',
+               hidegrid: false,
+               postData: {
+                   
+               },
+               loadComplete: function (data) {
+
+               }
+           });
+
+        });
+
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function EliminarFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+              var archivo = 'action_delete.gif';
+              var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
+              return strImg;
+        }
+
+        function EditarFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+                var archivo = 'action_edit.gif';
+                var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+                return strImg;
+            }
+
+    </script>
+}
+
+<div class="row">
+    <div class="span12">
+        @Html.Partial("MenuCv")
+    </div>
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Referencias Laborales</h5>
+            </div>
+            <div class="grilla-opciones">
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrarconocimientosgenerales();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%; " >
+                <div>
+                    <table id="grdList">
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+            </div>
+            <div class="formulario-accion">
+                <div class="opciones">
+                    <a class="btn" href="@Url.Action("Conocimientos", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    <a class="btn btn-info" href="@Url.Action("DatosComplementarios", "Postulante")">Siguiente <i class="icon-arrow-right icon-white"></i></a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+   
+</div>

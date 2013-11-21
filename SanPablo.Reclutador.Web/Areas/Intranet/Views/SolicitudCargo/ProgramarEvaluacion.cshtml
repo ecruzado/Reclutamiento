@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "ProgramarEvaluacion";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+
+            $("#txtecha").datepicker();      
+
+        });
+    </script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Programar Evaluación</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="grilla-opciones" style="margin-top:0px;">
+                    <h6>Examen</h6>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Fecha</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtecha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Hora</label>
+                            <div class="controles">
+                                <input type="text" class="input-mini" id="txthora"> - 
+                                <select id="sehora" class="input-small">                                
+                                    <option>a.m.</option>
+                                    <option>p.m.</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Responsable</label>
+                            <div class="controles">
+                                <input type="text" class="input-large" id="txtresponsable">
+                                <a href="#"><img src="@Url.Content("~/Content/images/action_search.gif")" /> </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Observación</label>
+                            <div class="controles">
+                                <textarea class="input-large" id="taobervacion" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-actions">                        
+                <a class="btn" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn btn-info"><i class="icon-check icon-white"></i> Grabar</a>                        
+            </div>
+        </div>
+    </div>
+</div>

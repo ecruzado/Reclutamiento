@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Examen";
+    Layout = "~/Views/Shared/_LayoutExamen.cshtml";
+}
+
+
+    <link href="@Url.Content("~/Content/ui.jqgrid.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/jquery-ui-1.8.16.custom.css")" rel="stylesheet" />
+
+    
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/grid.locale-es.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>   
+
+
+
+@*<section id="opciones">
+    <div class="row">
+        <div class="offset10">        
+            <a class="btn btn-primary" href="@Url.Action("EvaluacionPostulante", "Postulante")"><i class="icon-arrow-left icon-white"></i> Atrás</a>
+        </div>
+    </div>
+</section>*@
+
+
+<section id="forms">
+    <div class="page-header" style="text-align:center;" >
+        <h1>Examen</h1>
+    </div>
+
+    <div class="row">
+        <div class="span10 offset1">
+
+            <form class="form-horizontal well">
+                <fieldset>
+                    <legend>Comunicación Interpersonal</legend>
+                    <table style="width: 100%" border="0">
+                        <tr>
+                            <td>Duración</td>
+                            <td><input type="text" class="input-mini" id="txduracion" value="30 min." disabled="disabled"></td>
+                            <td></td>
+                            <td></td>
+                            <td style="width:50%;"></td>
+                            <td></td>
+                            <td><b>Tiempo</b></td>
+                            <td style="text-align: left;"><b>20'15'' </b></td>
+                        </tr>
+                        <tr>
+                            <td>Inicio</td>
+                            <td>
+                                <input type="text" class="input-mini" id="txinicio" value="5:00 p.m." disabled="disabled"></td>
+                            <td>Fin</td>
+                            <td>
+                                <input type="text" class="input-mini" id="txfin" value="5:30 p.m." disabled="disabled"></td>
+                            <td>
+                            </td>
+                            <td>
+                                </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="8" style="height: 30px;"></td>
+                        </tr>
+                    </table>
+
+                </fieldset>
+
+                <table style="width:100%">
+                     <tr>                        
+                        <td>
+                        </td>
+                        <td style="text-align:center">No muy Exacta</td>
+                        <td style="text-align:center">Ligeramente Exacta</td>
+                        <td style="text-align:center">Generalmente Exacta</td>
+                        <td style="text-align:center">Muy Exacta</td>
+                    </tr>
+                    <tr>                        
+                        <td>1.- Yo si se escuchar siempre estoy atento y en actitud receptiva.
+                        </td>
+                        <td  style="text-align:center"><input type="radio" name="pregunta1" /> </td>
+                        <td style="text-align:center"><input type="radio" name="pregunta1" /></td>
+                        <td style="text-align:center"><input type="radio" name="pregunta1" /></td>
+                        <td style="text-align:center"><input type="radio" name="pregunta1" /></td>
+                    </tr>
+                    <tr>                        
+                        <td>2.- Cuando me encuentro con alguien por primera vez, trato de dar una buena impresión.
+                        </td>
+                        <td style="text-align:center"><input type="radio" name="pregunta2" /> </td>
+                        <td style="text-align:center"><input type="radio" name="pregunta2" /></td>
+                        <td style="text-align:center"><input type="radio" name="pregunta2" /></td>
+                        <td style="text-align:center"><input type="radio" name="pregunta2" /></td>
+                    </tr>
+                </table>
+
+                  <div class="text-center">
+                        <a class="btn btn-primary" href="#"><i class="icon-adjust icon-white"></i> Terminiar</a>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+
+

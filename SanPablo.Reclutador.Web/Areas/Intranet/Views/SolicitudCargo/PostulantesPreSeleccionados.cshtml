@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "PostulantesPreSeleccionados";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaPostulantesPreSeleccionados", "SolicitudCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Apellidos', 'Nombres', "Teléfono", "Celular", "Contactado", "Ver C.V.", 'Estado', 'Evaluación', 'Ptje.Total'],
+                colModel: [
+                        { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false },
+                        { name: 'Nombres', index: 'Nombres', align: 'left', editable: false},
+                        { name: 'Telefono', index: 'Telefono', align: 'left', editable: false },
+                        { name: 'Celular', index: 'Celular', align: 'left', editable: false },
+                        { name: 'Contactado', index: 'Contactado', align: 'center', width: 60, editable: false, formatter: CheckboxFormatter },
+                        { name: 'Imprimir', index: 'Imprimir', align: 'center', sortable: false, width: 50, formatter: ImprimirFormatter },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, editable: false },
+                        { name: 'Evaluacion', index: 'Evaluacion', align: 'center', sortable: false, width: 50, editable: false},
+                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 50, editable: false }
+                ],
+                sortname: 'Apellidos',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: false,
+                /*caption: 'Lista Referencias',*/
+                height: 160,
+                autowidth: true,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+        });
+
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function CheckboxFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="checkbox" name = "contactado">';
+            return strRdo;
+        }
+        function ImprimirFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+              var archivo = 'printer.png';
+              var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+              return strImg;
+        }
+      
+    </script>
+}
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Postulantes Pre-Seleccionados</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Solicitud</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Cargo</label>
+                            <div class="controles">
+                                <input type="text" class="input-xlarge" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Dependencia</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Departamento</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Area</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Sede</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%;">
+                    <div>
+                        <table id="grdList">
+                        </table>
+                        <div id="grdPager">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                <a class="btn btn-info"><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
+                <a class="btn btn-info"><i class="icon-ban-circle icon-white"></i> Excluir</a>
+            </div>
+        </div>
+    </div>
+</div>

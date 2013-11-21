@@ -1,0 +1,927 @@
+﻿@{
+    ViewBag.Title = "Solicitud Personal";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    //Table initialisation 
+    $(document).ready(function () {
+        $('#tblFunciones').dataTable({
+            "sDom": "rt",
+            "oLanguage": {
+                "sProcessing": "Por favor espere",
+            }
+        });
+        $('#tblCompetencias').dataTable({
+            "sDom": "rt",
+            "oLanguage": {
+                "sProcessing": "Por favor espere",
+            }
+        });
+        $('#tblOfrecemos').dataTable({
+            "sDom": "rt",
+            "oLanguage": {
+                "sProcessing": "Por favor espere",
+            }
+        });
+    });
+
+    function irATab(tab) {
+        $('a[href=#' + tab + ']').tab('show');
+    }
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Solicitud Requerimiento Personal</h5>
+            </div>
+            <h5>Motivo requerimiento</h5>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled" value="REQ0001">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Dependecia</label>
+                            <div class="controles">
+                                <select id="sedependencia" class="select-large valid">
+                                    <option selected="selected">Gerencia Médica</option>
+                                </select>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Tipo Puesto</label>
+                            <div class="controles">
+                                <select id="setipopuesto" class="select-large valid">
+                                    <option>Seleccionar</option>
+                                    <option>Full time</option>
+                                    <option>Part time</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                <select >
+                                    <option>Seleccionar</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Tipo Vacante</label>
+                            <div class="controles">
+                                <select id="setipovacante" class="select-large valid">
+                                    <option value="0">Seleccionar</option>
+                                    <option value="1">Ampliación</option>
+                                    <option value="2">Reemplazo - Vacaciones</option>
+                                    <option value="3">Reemplazo - Descanso Médico</option>
+                                    <option value="4">Reemplazo - Cese</option>
+                                    <option value="5">Reemplazo - Permiso</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Area</label>
+                            <div class="controles">
+                                <select id="searea" class="select-large valid">
+                                    <option>Seleccionar</option>
+                                    <option selected="selected">Cuidados Intensivos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Vacantes</label>
+                            <div class="controles">
+                                <input type="text" class="input-mini" id="txtcantidad">
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <div class="controles">
+                                <select id="setipo" class="select-large valid">
+                                    <option>Seleccionar</option>
+                                    <option>Técnico en Enfermería</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Fecha Inicio</label>
+                            <div class="controles">
+                                <input type="text" class="input-small">
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Nombres</label>
+                            <div class="controles">
+                                <input type="text" class="input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Fecha Fin</label>
+                            <div class="controles">
+                                <input type="text" class="input-small">
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="form-actions">
+                    <button type="reset" class="btn"><i class="icon-arrow-left icon-cog"></i> Atras</button>
+                    <button type="submit" class="btn btn-info"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                    <button type="submit" class="btn btn-info"><i class="icon-screenshot icon-white"></i> Enviar</button>
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Publicar</button>
+                </div>
+            </form>
+            <h5>Perfil</h5>
+            <ul class="nav nav-tabs">
+                <li><div style="width:110px;display:inline-block"></div></li>
+                <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
+                <li class=""><a href="#B" data-toggle="tab">General</a></li>
+                <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
+                <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
+                <li class=""><a href="#E" data-toggle="tab">Conocimientos</a></li>
+                <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
+                <li><a href="#G" data-toggle="tab">Evaluación</a></li>
+                <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
+            </ul>
+            <div class="tabbable">
+                <div class="tab-content">
+                    <!--Puesto Inicio -->
+                    <div class="tab-pane active" id="A">
+                        <div class="grilla-opciones" style="margin-top:0px;">
+                            <h6>Objetivos</h6>
+                            <div style="clear:both"></div>
+                        </div>
+                        <textarea style="width:900px;margin-left:8px;" id="taobjetivos" rows="3" disabled="disabled"></textarea>
+                        <div class="espacio-division-entre-fieldset"></div>
+                        <div class="grilla-opciones">
+                            <h6>Funciones</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblFunciones" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descipcion</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Coordinar con los médicos</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="grilla-opciones">
+                            <h6>Competencias</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblCompetencias" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descipcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Responsabilidad</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Capacidad para resolver problemas</td>
+                                </tr>                            
+                            </tbody>
+                        </table>
+                        <div class="grilla-opciones">
+                            <h6>Ofrecemos</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblOfrecemos" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descipcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Remuneración promedio al mercado</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Ingreso a planilla con todos los beneficios de ley</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-actions">                                          
+                            <a class="btn btn-info" href="#" onclick="irATab('B');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div>
+                    </div>
+                    <!--Puesto Fin -->
+
+                    <!--General Inicio -->
+
+                    <div class="tab-pane" id="B">
+                        <div class="grilla-opciones" style="margin-top:0px;">
+                            <h6>Datos generales</h6>
+                            <div style="clear:both"></div>
+                        </div>
+                        <form class="formulario-busqueda">
+                            <div class="formulario-fila">
+                                <div class="span3">
+                                    <div class="">
+                                        <label></label>
+                                        <div class="controles">
+                                            <label>Ptje.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formulario-fila">
+                                <div class="span3">
+                                    <div class="">
+                                        <label class="control-label" for="input01">Postulante Interno</label>
+                                        <div class="controles">
+                                            <input type="text" class="input-xxmini" value="15">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <label style="text-align:right">Rango Edad</label>
+                                </div>
+                                <div class="span5">
+                                    <div style="float:left">
+                                        <input type="text" class="input-xxmini" value="25"> - <input type="text" class="input-xxmini" value="30">
+                                    </div>
+                                    <div class="controles">
+                                        <input type="text" class="input-xxmini text-right" value="10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formulario-fila">
+                                <div class="span3">
+                                    <div class="">
+                                        <label class="control-label" for="input01">Referencias Laborales</label>
+                                        <div class="controles">
+                                            <input type="text" class="input-xxmini text-right" value="30">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <label style="text-align:right">Rango Salarial</label>
+                                </div>
+                                <div class="span5">
+                                    <div style="float:left">
+                                        <input type="text" class="input-mini" value="5000" disabled="disabled" >                                                
+                                        <input type="text" class="input-mini" value="6000" disabled="disabled"  >    
+                                        <select id="semoneda1" class="input-mini" disabled="disabled" >
+                                            <option selected="selected">Soles</option>
+                                            <option>Dólares</option>
+                                        </select>
+                                    </div>
+                                    <div class="controles">
+                                        <input type="text" class="input-xxmini text-right" value="10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formulario-fila">
+                                <div class="span3">
+                                    <div class="">
+                                        <div class="etiquetas">
+                                            <input type="checkbox" checked="checked" value="M"/><label style="width:75px;display:inline-block">Maculino</label>
+                                            <div style="clear:both"></div>
+                                            <input type="checkbox" checked="checked" value="F"/><label style="width:75px;display:inline-block">Femenino</label>
+                                        </div>
+                                        <div class="controles">
+                                            <input type="text" class="input-xxmini" value="10">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <label style="text-align:right">Publicación Sexo</label>
+                                </div>
+                                <div class="span5">
+                                    <select id="sesexo" class="input-medium">
+                                        <option>Indistinto</option>
+                                        <option>Masculino</option>
+                                        <option>Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                            </div>
+                        </form>
+                        <div class="grilla-opciones">
+                            <h6>Horario</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblHorario" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descipcion</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Coordinar con los médicos</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="grilla-opciones">
+                            <h6>Ubigeo</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblUbigeo" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Departamento</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Lima</td>
+                                    <td>Lima</td>
+                                    <td>San Miguel</td>
+                                    <td>15</td>
+                                </tr>
+                            </tbody>
+                        </table>                    
+                        <div class="grilla-opciones">
+                            <h6>Observaciones</h6>
+                            <div style="clear:both"></div>
+                        </div>
+                        <textarea style="width:900px;margin-left:8px;" rows="3" disabled="disabled"></textarea>
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('A');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div>
+                    </div>
+
+                    <!--General Fin-->
+
+                    <div class="tab-pane" id="C">
+                        <div class="grilla-opciones">
+                            <h6>Nivel Académico</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblNivelAcademico" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Nivel de Estudios</th>
+                                    <th>Carrera</th>
+                                    <th>Nivel Alcanzado</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Técnico</td>
+                                    <td>Enfermería</td>
+                                    <td>Titulado</td>
+                                    <td>15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="grilla-opciones">
+                            <h6>Centro Estudios</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblCentroEstudios" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Universidad</td>
+                                    <td>Universidad Católica del Perú</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>                    
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('B');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('D');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div>                    
+                    </div>
+
+                    <div class="tab-pane" id="D">
+                        <div class="grilla-opciones">
+                            <h6>Experiencia Laboral</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblExperienciaLaboral" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Cargo</th>
+                                    <th>Años</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Analista de sitemas</td>
+                                    <td>3</td>
+                                    <td>20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('C');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('E');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="E">
+                        <div class="grilla-opciones">
+                            <h6>Generales</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblConocimientosGenerales" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tipo</th>
+                                    <th>Descripcion</th>
+                                    <th>Nivel</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Software</td>
+                                    <td>Microsoft Word</td>
+                                    <td>Avanzado</td>
+                                    <td>20</td>
+                                </tr>
+                            </tbody>
+                        </table>                    
+                        <div class="grilla-opciones">
+                            <h6>Idiomas</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <table id="tblIdiomas" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descipcion</th>
+                                    <th>Tipo Conoc.</th>
+                                    <th>Nivel</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Ingles</td>
+                                    <td>Escritura</td>
+                                    <td>Avanzado</td>
+                                    <td>15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('D');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('F');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div>                    
+                    </div>
+
+                    <div class="tab-pane" id="F">
+                        <div class="grilla-opciones">
+                            <h6></h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+
+                        <table id="tblDiscapacidad" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tipo</th>
+                                    <th>Descipcion</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Motora</td>
+                                    <td>Parálisis pierna izquierda</td>
+                                    <td>20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('E');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('G');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div> 
+                    </div>
+
+                    <div class="tab-pane" id="G">
+                        <div class="grilla-opciones">
+                            <h6></h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+
+                        <table id="tblEvaluacion" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Descripción</th>
+                                    <th>Tipo</th>
+                                    <th>Nota Mínima</th>
+                                    <th>Responsable</th>
+                                    <th>Puntaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="someRadio" /></td>
+                                    <td>Examen 3 </td>
+                                    <td>Examen</td>
+                                    <td>11</td>
+                                    <td>RRHH</td>
+                                    <td>50</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-actions">               
+                            <a class="btn" href="#" onclick="irATab('F');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            <a class="btn btn-info" href="#" onclick="irATab('H');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        </div> 
+                    </div>
+
+                    <!--Conf. Perfil Inicio-->
+
+                    <div class="tab-pane" id="H">
+                        <form>
+                            <div style="margin-left:20px;">
+                                <table style="width: 900px;" border="0">
+                                    <tr>
+                                        <td style="width: 50%; vertical-align: top">
+                                                <h6>Parámetros Pre-Selección</h6>
+                                                <table border="0">
+                                                    <tr>
+                                                        <td style="width: 80px;"></td>
+                                                        <td></td>
+                                                        <td>Ptje.
+                                                        </td>
+                                                        <td style="width: 10px;"></td>
+                                                        <td>Ptje.Min
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label" style="width: 130px;">
+                                                            <label>Postulante Interno</label></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Edad</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="8" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">
+                                                            <label>Sexo</label></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Rango Salarial</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Nivel de Estudios</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="7" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Centro de Estudios</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                                        <td></td>
+
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Experiencia Laboral</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="6" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Funciones Desempe.</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Conoc. Generales</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="3" disabled="disabled"></td>
+                                                        <td></td>
+
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Conoc. Idiomas</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">
+                                                            <label>Discapacidades</label></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="9" disabled="disabled"></td>
+                                                        <td></td>
+
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Horario</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label">Ubigeo</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
+                                                        <td></td>
+
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="td-label"><b>Totales</b></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="84" disabled="disabled"></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+
+                                                    </tr>
+                                                </table>
+
+                                        </td>
+                                        <td style="width: 50%; vertical-align: top">
+                                            <h6>Parámetros Selección</h6>
+                                                <table border="0">
+                                                        <tr>
+                                                        <td></td>
+                                                        <td>Ptje.
+                                                            </td>
+                                                            <td style="width:10px;"></td>
+                                                        <td>Ptje.Min
+                                                            </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="td-label" style="width:130px;">Referencia Laboral</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
+                                                        <td></td>
+                                                            <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="td-label">Exámenes</td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
+                                                        <td></td>
+                                                            <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+
+                                                    </tr>                                                       
+                                                        <tr>
+                                                        <td class="td-label"><b>Totales</b></td>
+                                                        <td>
+                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                                        <td></td>
+                                                            <td>
+                                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+
+                                                    </tr>   
+                                                    <tr>
+                                                        <td colspan="4" style="height:20px;"></td>
+                                                    </tr>
+                                                </table>
+                                            <label>Vacantes por Estado</label>
+                                                <table border="0">
+                                                    <tr>
+                                                        <td class="td-label" style="width:130px;">
+                                                            Postulantes Pre-Selec.
+                                                        </td>
+                                                        <td> <input type="text" class="input-xxmini text-right" value="9"></td>
+                                                    </tr>
+                                                        <tr>
+                                                        <td colspan="2" style="height:40px;">                                                            
+                                                        </td>                                                            
+                                                    </tr>
+                                                        <tr>
+                                                        <td class="td-label">
+                                                            Fecha de Publicación.
+                                                        </td>
+                                                        <td> <input type="text" id="txtfechapublicacion" class="input-mini" ></td>
+                                                    </tr>
+                                                        <tr>
+                                                        <td class="td-label">
+                                                            Fecha de Expiración
+                                                        </td>
+                                                        <td> <input type="text" id="txtfechaexpiracion" class="input-mini"></td>
+                                                    </tr>
+                                                </table>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="form-actions">     
+                                <a class="btn" href="#" onclick="irATab('G');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <!--Conf. Perfil Fin-->
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,307 @@
+﻿@{
+    ViewBag.Title = "Conocimientos";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+
+@section Head{
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaConocimientosGenerales", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Código', 'Tipo', 'Descripción', 'Nivel','Certificación'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
+                        { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
+                ],
+                sortname: 'Nombre',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdList2").jqGrid({
+                url: '@Url.Action("ListaConocimientosIdiomas", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Código', 'Descripción', 'Tipo Conc.', 'Nivel', 'Certificación'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },                        
+                        { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
+                ],
+                sortname: 'Nombre',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdOtrosConocimientos").jqGrid({
+                            datatype: 'json',
+                            mtype: 'POST',
+                            colNames: ['Código', 'Tipo', 'Descripción', 'Nivel', 'Certificación'],
+                            colModel: [
+                                    { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                                    { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                                    { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                                    { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
+                                    { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
+                            ],
+                            sortname: 'Nombre',
+                            sortorder: 'desc',
+                            viewrecords: true,
+                            autowidth: true,
+                            /*caption: 'Lista Referencias',*/
+                            height: 120,
+                            width: 736,
+                            rowNum: 0,
+                            cellsubmit: 'clientArray',
+                            hidegrid: false,
+                            postData: {
+
+                            },
+                            loadComplete: function (data) {
+
+                            }
+                        });
+            var dlgconocimientosgenerales = $("#dlgconocimientosgenerales").dialog(
+         {
+             autoOpen: false,
+             modal: true,
+             title: "Conocimientos Generales",
+             width: 400,
+             height: 220,
+             buttons: {
+                 "Grabar": function () {
+                     //AsociarReciboAPolizaCorrecta();
+                     return true;
+                 },
+                 "Cancelar": function () {
+                     $(this).dialog("close");
+                     return false;
+                 }
+             }
+         });
+
+            var dlgconocimientosidiomas= $("#dlgconocimientosidiomas").dialog(
+       {
+           autoOpen: false,
+           modal: true,
+           title: "Conocimientos Idiomas",
+           width: 400,
+           height: 220,
+           buttons: {
+               "Grabar": function () {
+                   //AsociarReciboAPolizaCorrecta();
+                   return true;
+               },
+               "Cancelar": function () {
+                   $(this).dialog("close");
+                   return false;
+               }
+           }
+       });
+
+        });
+      
+
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function CheckFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type="checkbox">';
+            return strRdo;
+        }
+
+        function mostrarconocimientosgenerales() {
+            $("#dlgconocimientosgenerales").dialog('open');
+        }
+
+        function mostrarconocimientosidiomas() {
+            $("#dlgconocimientosidiomas").dialog('open');
+        }
+
+        function EliminarFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+             var archivo = 'action_delete.gif';
+             var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
+             return strImg;
+         }
+
+        function EditarFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+                var archivo = 'action_edit.gif';
+                var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+                return strImg;
+            }
+    </script>
+
+}
+<div class="row">
+    <div class="span12">
+        @Html.Partial("MenuCv")
+    </div>
+
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Conocimientos</h5>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Ofimática</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrarconocimientosgenerales();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdList">
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Idiomas</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrarconocimientosidiomas();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdList2">
+                    </table>
+                    <div id="grdPager2">
+                    </div>
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Otros Conocimientos</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrarconocimientosgenerales();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdOtrosConocimientos">
+                    </table>
+                    <div id="grdPagerOtrosConocimientos">
+                    </div>
+                </div>
+            </div>
+            <div class="formulario-accion">
+                <div class="opciones">
+                    <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                    <a class="btn" href="@Url.Action("ExperienciaLaboral", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>                    
+                    <a class="btn btn-info" href="@Url.Action("DatosComplementarios", "Postulante")">Siguiente <i class="icon-arrow-right icon-white"></i></a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+
+</div>
+
+ <div id="dlgconocimientosgenerales">
+       <table style="width:100%;">
+           <tr>
+               <td><label class="control-label">Tipo</label></td>
+               <td>
+                    <select id="setipo" class="select-medium">
+                                <option>Seleccionar</option>                               
+                            </select>
+               </td>
+           </tr>
+           <tr>               
+               <td><label class="control-label" >Descripción</label></td>
+               <td> <select id="securso" class="select-large">
+                                <option>Seleccionar</option>                               
+                            </select></td>
+           </tr>
+           <tr>
+               <td style="height:10px;" > <label class="control-label" >Nivel</label></td>
+               <td> <select id="senivel" class="select-medium">
+                                <option>Seleccionar</option>                               
+                            </select></td>
+           </tr>
+           
+       </table>
+            
+
+        </div>
+ <div id="dlgconocimientosidiomas">
+       <table>
+           <tr>
+               <td>Idioma</td>
+               <td>
+                    <select id="seidioma" class="select-large">
+                                <option>Seleccionar</option>                               
+                            </select>
+               </td>
+           </tr>
+            <tr>
+               <td>Tipo</td>
+               <td>
+                    <select id="setipoconocimientoidioma" class="select-large">
+                                <option>Seleccionar</option>                               
+                            </select>
+               </td>
+           </tr>        
+           <tr>
+               <td style="height:10px;">Nivel</td>
+               <td> <select id="senivelidioma" class="select-large">
+                                <option>Seleccionar</option>                               
+                            </select></td>
+           </tr>
+           
+       </table>
+            
+
+        </div>
+

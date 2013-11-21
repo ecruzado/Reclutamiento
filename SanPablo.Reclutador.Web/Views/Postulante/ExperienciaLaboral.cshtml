@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "ExperienciaLaboral";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaExperienciaLaboral", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Empresa', 'Cargo', 'Fecha Inicio', 'Fecha Fin','Tiempo Servicio','Motivo Cese'],
+                colModel: [
+                        { name: 'Empresa', index: 'Empresa', align: 'left', sortable: false },
+                        { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false },
+                        { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
+                        { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
+                        { name: 'TiempoServicio', index: 'TiempoServicio', align: 'left', sortable: false },
+                        { name: 'MotivoCese', index: 'MotivoCese', align: 'left', sortable: false },
+                ],
+                sortname: 'Nombre',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+
+            jQuery("#grdList2").jqGrid({
+                url: '@Url.Action("ListaFuncionesDesempenhadas", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['','Codigo', 'Descripción'],
+                colModel: [
+                        { name: 'CodigoRadio', index: 'CodigoRadio', align: 'center', width: 20, formatter: RadioFormatter, sortable: false },
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },                        
+                ],
+                sortname: 'Descripcion',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            function RadioFormatter(cellvalue, options, rowObject) {
+                var strRdo = '<input type ="radio" name = "codigo">';
+                return strRdo;
+            }
+
+            function EditarFormatter(cellvalue, options, rowObject) {
+                var imgPath = '@Url.Content("~/Content/images/")';
+                        var archivo = 'action_edit.gif';
+                        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+                        return strImg;
+            }
+
+            function EliminarFormatter(cellvalue, options, rowObject) {
+                var imgPath = '@Url.Content("~/Content/images/")';
+                   var archivo = 'action_delete.gif';
+                   var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
+                   return strImg;
+               }
+
+        });
+    </script>
+}
+
+    <div class="span12">
+        @Html.Partial("MenuCv")
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <h5>Experiencia Laboral</h5>
+                </div>
+                <div class="grilla-opciones">
+                    <div class="opciones">
+                        <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                        <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                        <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div style="width: 100%;">
+                    <div>
+                        <table id="grdList">
+                        </table>
+                        <div id="grdPager">
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion">
+                    <div class="opciones">
+                        <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                        <a class="btn" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>                    
+                        <a class="btn btn-info" href="@Url.Action("Conocimientos", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </div>

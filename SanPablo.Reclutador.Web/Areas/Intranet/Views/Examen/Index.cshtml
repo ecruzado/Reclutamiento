@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Listado Examen";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    //Table initialisation 
+    $(document).ready(function () {
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaExamen", "Examen")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Estado', 'Codigo', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left'},
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left'},
+                    { name: 'Tipo', index: 'Tipo', align: 'left' },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
+            ],
+            pager: jQuery('#grdPager'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            autowidth:true,
+            viewrecords: true,
+            /*caption: 'Lista Referencias',*/
+            height: 350,
+            width: 736,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+    });
+
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+
+    function HabilitarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'enabled.png';
+        var title = "Habilitar"
+        if (rowObject[14] == "Activo") {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        } else {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        }
+
+        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
+        return strImg;
+    }
+
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Examen</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <div class="controles">
+                                <select id="selectTipo">
+                                    <option>Seleccionar</option>
+                                    <option>Examen</option>
+                                    <option>Evaluación</option>
+                                    <option>Entrevista</option>
+                                    <option>Examen Medico</option>                                
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Descripcion</label>
+                            <div class="controles">
+                                <input id="fechaInicio" type="text" class="input-large">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                                <select id="selectEstado">
+                                    <option>Activo</option>                                    
+                                    <option>Inactivo</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion offset9">
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                </div>
+            </form>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager"></div>
+            </div>
+            <div class="form-actions">
+                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-pencil icon-white"></i> Editar</a>
+                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

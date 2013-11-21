@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Listado Solicitud de nuevos cargos";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
+        $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaExamenesPendientes", "Evaluacion")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Descripci&oacuten', 'Duración', 'Estado', 'Iniciar'],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'left', width: 50 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 260 },
+                    { name: 'Duracion', index: 'Duracion', align: 'left' },
+                    { name: 'Estado', index: 'Estado', align: 'left' },
+                    { name: 'Iniciar', index: 'Iniciar', align: 'center', sortable: false, width: 80, formatter: CellButtonInicar }
+            ],
+            sortname: 'Nombre',
+            sortorder: 'desc',
+            height: 250,
+            autowidth: true,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            viewrecords: true,
+            hidegrid: false,
+            altRows: true
+        });
+
+    });
+
+    function CellButtonInicar(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'time.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Iniciar" alt="Iniciar">';
+        //return strImg;
+        if (cellvalue == "1") {
+
+            return '<a class="btn btn-link" style="text-decoration: underline" href="#" onclick="IniciarExamen();">' + strImg + ' Iniciar</a>'
+        }
+        if (cellvalue == "2") {
+
+            return '<a class="btn btn-link" style="text-decoration: underline" href="#">' + strImg + ' Iniciar</a>'
+        }
+        else {
+            return "";
+        }
+    }
+
+    function IniciarExamen() {
+        window.moveTo(0, 0);
+        var pheight = screen.height - 100;
+        var pwidth = screen.width - 20;
+        //alert("Hola mundo");
+        window.open("@Url.Action("InstruccionesExamen", "Evaluacion")", null, "height=" + pheight + ",width=" + pwidth + ", top=0, left=1, status=yes,toolbar=no,menubar=no,location=no,resizable=1");
+    }
+
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Evaluación</h5>
+            </div>
+            <h5>Postulante</h5>
+            <p style="margin-left:10px;margin-right:10px">Estimado usuario, para empezar el examen de click en el botón Iniciar el cual tendrá un tiempo que se indica en la columna Duración. Una vez concluido el tiempo la pantalla se cerrará automáticamente, si ha concluido antes de culminar el tiempo de click en el botón Terminar que se ubicará en la parte inferior del examen.</p>
+
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

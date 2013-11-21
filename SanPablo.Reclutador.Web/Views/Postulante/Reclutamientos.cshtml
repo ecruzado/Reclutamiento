@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Reclutamientos";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+               url: '@Url.Action("ListaReclutamientosPotulante", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Codigo', 'Descripción', 'Ptje.PS', 'Ptje.SE', 'Estado', 'Fec.Registro'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'PuntajePS', index: 'PuntajePS', align: 'center', sortable: false, width: 80 },
+                        { name: 'PuntajeSE', index: 'PuntajeSE', align: 'center', sortable: false, width: 80 },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 80 },
+                        { name: 'FechaRegistro', index: 'FechaRegistro', align: 'center', sortable: false, width: 80 }
+                ],
+                sortname: 'Codigo',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdList2").jqGrid({
+                url: '@Url.Action("ListaEvaluacionesxReclutamiento", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Codigo', 'Exámen', 'Tipo', 'Puntaje'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Examen', index: 'Examen', align: 'left', sortable: false },
+                        { name: 'Tipo', index: 'Tipo', align: 'center', sortable: false, width: 80 },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 80 }
+                ],
+                sortname: 'Codigo',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+        });
+
+    </script>
+}
+<div class="row">
+    <div class="span12">
+        @Html.Partial("MenuCv")
+    </div>
+
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Reclutamientos</h5>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Reclutamientos</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrardiscapcidad();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdList">
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Evaluaciones por Reclutamientos</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar" onclick="mostrardiscapcidad();"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div>
+                <table id="grdList2">
+                </table>
+                <div id="grdPager2">
+                </div>
+            </div>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("EvaluacionesPreSeleccionados", "Operaciones")"><i class="icon-arrow-left icon-black"></i> Atrás</a>
+                <a class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+

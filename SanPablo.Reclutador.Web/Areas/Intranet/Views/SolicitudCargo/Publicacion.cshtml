@@ -1,0 +1,379 @@
+﻿@{
+    ViewBag.Title = "Publicacion";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+        
+    $(document).ready(function () {
+
+        $("#txtfechapublicacion").datepicker();
+        $("#txtfechaexpiracion").datepicker();
+
+        jQuery("#grdListFunciones").jqGrid({
+            url: '@Url.Action("ListaFunciones2", "SolicitudCargo")',
+             datatype: 'json',
+             mtype: 'POST',
+             colNames: ['Descripci&oacuten' ],
+             colModel: [                     
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                     
+             ],
+             sortname: 'Codigo',
+             sortorder: 'desc',
+             viewrecords: true,
+             cellEdit: true,
+             /*caption: 'Horario de Trabajo',*/
+             height: 100,
+             width: 600,
+             rowNum: 0,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             postData: {
+
+             },
+             loadComplete: function (data) {
+
+             }
+        });
+
+        jQuery("#grdListCompetencias").jqGrid({
+            url: '@Url.Action("ListaCompetencias2", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Horario de Trabajo',*/
+            height: 100,
+            width: 600,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+@*        jQuery("#grdListHorarios").jqGrid({
+            url: '@Url.Action("ListaHorarios2", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Horario de Trabajo',*/
+            height: 100,
+            width: 600,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });*@
+
+        jQuery("#grdListOfrecemos").jqGrid({
+            url: '@Url.Action("ListaOfrecemos2", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Horario de Trabajo',*/
+            height: 100,
+            width: 600,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListEstudios").jqGrid({
+            url: '@Url.Action("ListaEstudiosPublicacion", "SolicitudCargo")',
+             datatype: 'json',
+             mtype: 'POST',
+             colNames: ['Descripci&oacuten'],
+             colModel: [
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+             ],
+             sortname: 'Codigo',
+             sortorder: 'desc',
+             viewrecords: true,
+             cellEdit: true,
+             /*caption: 'Horario de Trabajo',*/
+             height: 100,
+             width: 600,
+             rowNum: 0,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             postData: {
+
+             },
+             loadComplete: function (data) {
+
+             }
+        });
+
+        jQuery("#grdListConocimientos").jqGrid({
+            url: '@Url.Action("ListaConocimientosPublicacion", "SolicitudCargo")',
+              datatype: 'json',
+              mtype: 'POST',
+              colNames: ['Descripci&oacuten'],
+              colModel: [
+                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+              ],
+              sortname: 'Codigo',
+              sortorder: 'desc',
+              viewrecords: true,
+              cellEdit: true,
+              /*caption: 'Horario de Trabajo',*/
+              height: 100,
+              width: 600,
+              rowNum: 0,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              postData: {
+
+              },
+              loadComplete: function (data) {
+
+              }
+        });
+
+        jQuery("#grdListExperiencia").jqGrid({
+            url: '@Url.Action("ListaExperienciaPublicacion", "SolicitudCargo")',
+              datatype: 'json',
+              mtype: 'POST',
+              colNames: ['Descripci&oacuten'],
+              colModel: [
+                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+              ],
+              sortname: 'Codigo',
+              sortorder: 'desc',
+              viewrecords: true,
+              cellEdit: true,
+              /*caption: 'Horario de Trabajo',*/
+              height: 100,
+              width: 600,
+              rowNum: 0,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              postData: {
+
+              },
+              loadComplete: function (data) {
+
+              }
+          });
+
+
+
+
+    });
+
+
+
+</script>
+
+}     
+<section id="forms">
+    
+        <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>TÉCNICO EN ENFERMERÍA - SEDE SAN MIGUEL</h5>
+            </div>
+            <form class="form-horizontal well">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Area</label>
+                        <div class="controls">                         
+                              <input type="text" class="input-xlarge" disabled="disabled"  id="txtarea" value="Salud">
+                        </div>
+                    </div>
+                      
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Tipo</label>
+                        <div class="controls">
+                            <input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Vancantes</label>
+                        <div class="controls">
+                            <input type="text" class="input-smini" id="txtvacantes" disabled="disabled" value="1">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="input01" >Sexo</label>
+                        <div class="controls">
+                             <input type="text" class="input-small" id="txtsexo" disabled="disabled" value="Indistinto">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Salario</label>
+                        <div class="controls">
+                            <input type="text" class="input-small" id="txtsalario" disabled="disabled" value="5500">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Fecha de Publicación</label>
+                        <div class="controls">
+                            <input type="text" class="input-small" id="txtfechapublicacion" disabled="disabled" value="15/07/2013" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Fecha de Expiracion</label>
+                        <div class="controls">
+                            <input type="text" class="input-small" id="txtfechaexpiracion" disabled="disabled" value="31/07/2013" >
+                        </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Descripción</label>
+                         <div class="controls">
+                           <textarea style="width:600px;" id="tadescripcion" rows="5" disabled="disabled">Somos una importante organización del sector Salud, con 20 años de experiencia en el mercado y nos encontramos en la búsqueda de un profesional para ocupar el cargo de: "Tecnólogo en Terapia Física y Rehabilitación".</textarea>
+                        </div>
+                    </div>
+                    
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Estudios</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListEstudios">
+                                    </table>
+                                    <div id="grdPagerEstudios">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Conocimientos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListConocimientos">
+                                    </table>
+                                    <div id="grdPagerConocimientos">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Experiencia</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListExperiencia">
+                                    </table>
+                                    <div id="grdPagerExperiencia">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Funciones</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListFunciones">
+                                    </table>
+                                    <div id="grdPagerFunciones">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Competencias</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListCompetencias">
+                                    </table>
+                                    <div id="grdPagerCompetencias">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                        <label class="control-label" for="input01">Ofrecemos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListOfrecemos">
+                                    </table>
+                                    <div id="grdPagerOfrecemos">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="control-group" style="padding-bottom:20px;">
+                        <label class="control-label" for="input01">Observaciones</label>
+                         <div class="controls">
+                            <textarea style="width:600px;" id="taobservacion" disabled="disabled" rows="5">Observaciones</textarea>
+                         </div>
+                    </div>                      
+                              
+
+                </fieldset>
+            </form>
+                  <div class="form-actions"> 
+                     <a class="btn" href="@Url.Action("RegistroSolicitudPersonal", "Operaciones")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                     
+                    <a class="btn btn-info" href="@Url.Action("Publicacion", "Operaciones")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                         
+                </div>
+
+            </div>
+        </div>
+</section>
+
+

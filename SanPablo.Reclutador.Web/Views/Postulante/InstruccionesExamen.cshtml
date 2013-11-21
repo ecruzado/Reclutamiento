@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "InstruccionesExamen";
+    Layout = "~/Views/Shared/_LayoutExamen.cshtml";
+}
+
+
+<section id="forms">
+    <div class="page-header" style="text-align:center">
+        <h1>Instrucciones</h1>
+    </div>
+
+    <div class="row">
+        <div class="span10 offset1">
+            <form class="form-horizontal well">
+                <fieldset>
+                    <legend>Postulante</legend>
+                     <div class="control-group">
+                    <label>Estimado usuario, el siguiente examen es para marcar una alternativa por cada pregunta. Para empezar de click en INICIAR</label>
+                     <div class="text-center" >
+                        <a class="btn btn-primary" href="@Url.Action("Examen", "Postulante")"><i class="icon-time icon-white"></i> Iniciar</a>
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</section>

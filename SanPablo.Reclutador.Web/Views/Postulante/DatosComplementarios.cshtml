@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "DatosComplementarios";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+
+<div class="row">
+    <div class="span12">
+        @Html.Partial("MenuCv")
+    </div>
+
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Datos Complementarios</h5>
+            </div>
+            <div class="grilla-opciones">
+                <div class="opciones">
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <table style="margin-left:100px;">
+                <tr>
+                    <td class="colEtiqueta" style="width:190px;">
+                        <label class="etiquetaFormulario" for="setipodocumento">Sueldo Bruto (S/.) </label>
+                    </td>
+                    <td class="colInput">
+                        <select>
+                            <option>Menos de 1000</option>
+                            <option>De 1000 a 2000</option>
+                            <option>De 2000 a 3000</option>
+                            <option>De 3000 a 4000</option>
+                            <option>De 4000 a 5000</option>
+                            <option>De 5000 a 6000</option>
+                            <option>De 6000 a más</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="setipodocumento">Disponibilidad para trabajar</label>
+                    </td>
+                    <td class="colInput">
+                        <select id="seinstitucion" class="select-large">
+                            <option>Seleccionar</option>
+                            <option>Inmediata</option>
+                            <option>15 días</option>
+                            <option>A Tratar</option>
+                        </select>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">Disponibilidad de horario</label>
+                    </td>
+                    <td class="colInput">
+                            <select id="seturno" class="select-large">
+                                <option>Seleccionar</option>
+                                <option>Rotativo</option>
+                                <option>Fijo</option>
+                                <option>Días</option>
+                            </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">Horario de Trabajo</label>
+                    </td>
+                    <td class="colInput">
+                        <select id="sehorariodesde" class="select-large">
+                            <option>Seleccionar</option>
+                            <option>Mañana</option>
+                            <option>Tarde</option>
+                            <option>Noche</option>
+                        </select>   
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">¿Está dispuesto a reubicarse al interior del país?</label>
+                    </td>
+                    <td class="colInput">
+                        <input type="radio" name="reubicarme" value="1" />SI&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="reubicarme" value="0" />NO    
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">¿Actualmente tiene un pariente que ha trabajado con nosotros?</label>
+                    </td>
+                    <td class="colInput">
+                        <input type="radio" name="tienefamiliar" value="1" />SI&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="tienefamiliar" value="0" />NO
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">¿En cuál de nuestras sedes?</label>
+                    </td>
+                    <td class="colInput">
+                            <select id="sesedefamiliar" class="select-large">
+                                <option>Seleccionar</option>
+                                <option>CHSP - Surco</option>
+                                <option>CHSP - San Miguel</option>
+                            </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">Nombre del pariente</label>
+                    </td>
+                    <td class="colInput">
+                        <input type="text" class="input-medium" id="txtnombrefamiliar">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">Cargo</label>
+                    </td>
+                    <td class="colInput">
+                        <input type="text" class="input-medium" id="txtcargofamiliar">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="input01">¿Como se enteró de nosotros?</label>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td style="width:160px;"><input type="checkbox" value="0" /> Pagina Web CHSP</td>
+                                <td><input type="checkbox" value="3" /> Internet</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" value="3" /> Amigos/Familiares</td>
+                                <td><input type="checkbox" style="margin-right:10px;"/>Otros</td>
+                                <td><input type="text" class="input-medium" id="txtotros"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" value="3" /> Diarios</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="formulario-accion">
+                <div class="opciones">
+                    <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                    <a class="btn" href="@Url.Action("Referencias", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    <a class="btn btn-info" href="@Url.Action("Parientes", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+    </div>
+</div>

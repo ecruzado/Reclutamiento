@@ -1,0 +1,20 @@
+﻿ @using SanPablo.Reclutador.Web.Models
+    <div class="alert alert-info">
+        <a class="close">×</a>
+        Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos
+    </div>
+    <p style="margin-left:380px;margin-top:0px;color:#666;margin-bottom:1px;">Tu CV esta completo al 80%</p>
+    <div class="progress progress-info progress-striped active" style="height:15px;margin-top:0px;">
+        <div class="bar" style="width: 80%;"></div>
+    </div>
+<ul class="nav nav-pills">
+    @Html.MenuItem("1. Datos", "General", "Postulante")
+    @Html.MenuItem("2. Estudios", "Estudios", "Postulante")
+    @Html.MenuItem("3. Experiencia", "ExperienciaLaboral", "Postulante")
+    @Html.MenuItem("4. Conocimientos", "Conocimientos", "Postulante")
+@*    @Html.MenuItem("Referencias", "Referencias", "Postulante")*@
+    @Html.MenuItem("5. Complementarios", "DatosComplementarios", "Postulante")
+    @Html.MenuItem("6. Parientes", "Parientes", "Postulante")
+    @Html.MenuItem("7. Discapacidad", "DiscapacidadOtros", "Postulante")
+@*    @Html.MenuItem("Reclutamientos", "Reclutamientos", "Postulante")*@
+</ul>

@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Listado Examen";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        jQuery("#grdList").jqGrid({
+
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Usuario', 'Sede', 'Rol', 'Estado', "", ""],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
+                    { name: 'Sede', index: 'Sede', align: 'left', sortable: false },
+                    { name: 'Rol', index: 'Rol', align: 'left', sortable: false },
+                    { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
+                    { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
+                    { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            /*caption: 'Lista Referencias',*/
+            height: 120,
+            autowidth: true,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        var dlgregistrousuario = $("#dlgregistrousuario").dialog(
+    {
+        autoOpen: false,
+        modal: true,
+        title: "Registro Usuario",
+        width: 400,
+        height: 220,
+        buttons: {
+            "Grabar": function () {
+                $(this).dialog("close");
+                return true;
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+                return false;
+            }
+        }
+    });
+
+
+    });
+
+    function EditarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'action_edit.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+        return strImg;
+    }
+
+    function EliminarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'action_delete.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
+        return strImg;
+    }
+
+    function ConsultarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'action_search.gif';
+        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Consultar" alt="Consultar">';
+        return strImg;
+    }
+
+    function mostrarregistrousuario() {
+        $("#dlgregistrousuario").dialog('open');
+    }
+
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Examen</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Sede</label>
+                            <div class="controles">
+                                <select id="setipo" class="select-porce valid">
+                                    <option>Seleccionar</option>
+                                    <option>CHSP - San Miguel</option>                                                                        
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Rol</label>
+                            <div class="controles">
+                                <select id="serol" class="select-porce valid">
+                                    <option>Seleccionar</option>
+                                    <option>Administrador</option>                                                                        
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Usuario</label>
+                            <div class="controles">
+                                <input type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                                <select id="selectEstado">
+                                    <option>Activo</option>                                    
+                                    <option>Inactivo</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion offset9">
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                </div>
+            </form>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager"></div>
+            </div>
+            <div class="form-actions">
+                <a class="btn btn-info" href="/Intranet/Examen/Edit"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+            </div>
+        </div>
+    </div>
+</div>

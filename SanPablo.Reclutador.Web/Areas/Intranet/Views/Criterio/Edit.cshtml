@@ -1,0 +1,207 @@
+﻿@{
+    ViewBag.Title = "Listado Criterio";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnbuscaimagen").hide();
+        $("#setipo").change(function () {
+            var vvalor = $(this).val();
+
+            if (vvalor == "2") {
+                $("#btnbuscaimagen").show();
+            }
+            else {
+                $("#btnbuscaimagen").hide();
+            }
+        });
+
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Nº', 'Alternativa', 'Peso', 'Imagen'],
+            colModel: [
+                    { name: 'Item', index: 'Item', align: 'left', width: 10, editable: false, sortable: false },
+                    { name: 'Alternativa', index: 'Alternativa', align: 'left', editable: false, sortable: false },
+                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 30, editable: true },
+                    { name: 'Imagen', index: 'Imagen', align: 'center', sortable: false, width: 30, editable: false, formatter: ImagenFormatter },
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Lista Alternativas',*/
+            height: 160,
+            autowidth: true,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
+           {
+               autoOpen: false,
+               modal: true,
+               title: "Cargar Imagen",
+               width: 500,
+               height: 240,
+               buttons: {
+                   "Subir": function () {
+                       //AsociarReciboAPolizaCorrecta();
+                       return true;
+                   },
+                   "Cancelar": function () {
+                       $(this).dialog("close");
+                       return false;
+                   }
+               }
+           });
+
+    });
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+    function ImagenFormatter(cellvalue, options, rowObject) {
+
+        var strboton = '<input type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" />';
+        return strboton;
+
+    }
+    function mostrarsubirarchivoimagen() {
+        $("#dlgsubirarchivoimagen").dialog('open');
+    }
+
+
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Criterio</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                </div>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Código</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Medición</label>
+                            <div class="controles">
+                                <select id="selectMedicion">
+                                    <option>Seleccionar</option>
+                                    <option>Desempeño</option>                                 
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <div class="controles">
+                                <select id="senivelacademico" class="select-large valid">
+                                    <option>Seleccionar</option>
+                                    <option selected="selected">Examen</option>
+                                    <option>Evaluacion</option>
+                                    <option>Entrevista</option>
+                                    <option>Examen Medico</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Modo</label>
+                            <div class="controles">
+                                <select id="setipo" class="select-large valid">
+                                    <option value="0">Seleccionar</option>
+                                    <option selected="selected" value="1">Texto</option>
+                                    <option value="2">Imagen</option>                                
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Pregunta</label>
+                            <div class="controles">
+                                <input id="fechaInicio" type="text" class="input-large">
+                                <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Calificación</label>
+                            <div class="controles">
+                                <input type="radio" name="rbcalificacion" value="0"> Manual &nbsp;&nbsp;
+                                <input type="radio" name="rbcalificacion" value="1"> Automática
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="grilla-opciones">
+                <h6>Alternativas</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+            </div>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("Index","Criterio",new { area = "Intranet"})" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlgsubirarchivoimagen">
+    <table style="width: 100%">      
+        <tr>
+            <td style="height: 30px; vertical-align: central;">Sólo se permiten archivos con extensión JPG, GIF. Tamaño máximo del archivo 1MB. El archivo debe tener 32px de ancho y 32 px de Largo</td>
+        </tr>
+          <tr>
+            <td style="height: 10px;"></td>
+        </tr> 
+        <tr>
+            <td>
+             <input class="input-file" id="fileInput" type="file"></td>
+        </tr>
+        <tr>
+            <td style="height: 10px;"></td>
+        </tr>       
+    </table>
+</div>

@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Listado Cargo";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    //Table initialisation 
+    $(document).ready(function () {
+        $("#fechaInicio").datepicker();
+        $("#fechaFin").datepicker();
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaCargo", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Estado','Codigo', 'Cargo', 'Descripción', 'Dependencia', 'Departamento', 'Área', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
+                    { name: 'Cargo', index: 'Cargo', align: 'left', width: 130 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left' },
+                    { name: 'Dependencia', index: 'Dependencia', align: 'left' },
+                    { name: 'Departamento', index: 'Departamento', align: 'left' },
+                    { name: 'Area', index: 'Area', align: 'left' },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
+            ],
+            pager: jQuery('#grdPager'),
+            height: 420,
+            width: 930,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            viewrecords: true,
+            hidegrid: false,
+            altRows: true,
+            shrinkToFit: false
+        });
+
+    });
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+
+    function HabilitarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'enabled.png';
+        var title = "Habilitar"
+        if (rowObject[14] == "Activo") {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        } else {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        }
+
+        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
+        return strImg;
+    }
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Cargo</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <div class="controles">
+                                <select id="selectCargo">
+                                    <option>Seleccionar</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                                <select id="selectEstado">
+                                    <option>Activo</option>                                    
+                                    <option>Inactivo</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Dependencia</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Área</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion offset9">
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                </div>
+            </form>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager">
+                </div>
+            </div>            
+            <div class="form-actions">
+                <a class="btn btn-info" href="@Url.Action("Edit","Cargo",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" href="@Url.Action("Edit","Cargo",new { area = "Intranet"})"><i class="icon-pencil icon-white"></i> Editar</a>
+                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+            </div>
+        </div>
+    </div>
+</div>

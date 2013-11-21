@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "DetalleCargo";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+
+<section id="forms">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Discapacidad</h5>
+            </div>
+            <form class="form-horizontal well">
+                <div class="control-group">
+                    <label class="control-label" for="input01">Titulo</label>
+                    <div class="controls">                         
+                            <input type="text" class="input-medium" disabled="disabled"  id="txtTitulo" value="Técnico en enfermeria">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="input01">Area</label>
+                    <div class="controls">                         
+                            <input type="text" class="input-medium" disabled="disabled"  id="txtarea" value="Salud">
+                    </div>
+                </div>
+                      
+                <div class="control-group">
+                    <label class="control-label" for="input01">Tipo</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" id="txttipo" disabled="disabled" value="TIEMPO COMPLETO">
+                    </div>
+                </div>
+
+                    <div class="control-group">
+                    <label class="control-label" for="input01">Vancantes</label>
+                    <div class="controls">
+                        <input type="text" class="input-xmini" id="txtvacantes" disabled="disabled" value="1">
+                    </div>
+                </div>
+
+                    <div class="control-group">
+                    <label class="control-label" for="input01">Sexo</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" id="txtsexo" disabled="disabled" value="Indistinto">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="input01">Salario</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" id="txtsalario" disabled="disabled" value="No específicado">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="input01">Fecha de Publicación</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" id="txtfechapublicacion" disabled="disabled" value="29/05/2013">
+                    </div>
+                </div>
+
+                <div class="control-group" style="padding-bottom:10px;">
+                    <label class="control-label" for="input01">Fecha de Publicación</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" id="txtFechaExpiracion" disabled="disabled" value="29/06/2013">
+                    </div>
+                </div>
+
+                <div class="control-group" style="padding-bottom:10px;">
+                    <label class="control-label" for="input01">Descripción</label>
+                        <div class="controls">
+                        <textarea class="input-xxlarge" id="tadescripcion" rows="7" disabled="disabled">Somos una importante organización del sector Salud, con 20 años de experiencia en el mercado y nos encontramos en la búsqueda de un profesional para ocupar el cargo de: "Tecnólogo en Terapia Física y Rehabilitación".</textarea>
+                    </div>
+                </div>
+
+                <div class="control-group" style="padding-bottom:10px;">
+                    <label class="control-label" for="input01">Requisitos</label>
+                    <div class="controls">
+                        <textarea class="input-xxlarge" id="tarequisitos" rows="7" disabled="disabled">.</textarea>
+                    </div>
+                </div>
+
+                    <div class="control-group" style="padding-bottom:10px;">
+                    <label class="control-label" for="input01">Competencias</label>
+                    <div class="controls">
+                        <textarea class="input-xxlarge" id="tadcompetencias" rows="7" disabled="disabled"></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group" style="padding-bottom:10px;">
+                    <label class="control-label" for="input01">Ofrecemos</label>
+                    <div class="controls">
+                        <textarea class="input-xxlarge" id="taofrecemos" rows="7" disabled="disabled"></textarea>
+                    </div>
+                </div>   
+            </form>
+            
+            <div class="form-actions">                       
+                <a class="btn" href="@Url.Action("Lista", "Postulante")"><i class="icon-arrow-left"></i> Lista</a>
+                <a class="btn btn-info" href="#"><i class="icon-arrow-right icon-white"></i> Postular</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+

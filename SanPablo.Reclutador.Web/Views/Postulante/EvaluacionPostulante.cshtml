@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "EvaluacionPostulante";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <link href="@Url.Content("~/Content/ui.jqgrid.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/jquery-ui-1.8.16.custom.css")" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/grid.locale-es.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaExamenesPendientes", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Codigo', 'Descripción', 'Duración', 'Estado', 'Iniciar'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'Duracion', index: 'Duracion', align: 'left', sortable: false },
+                        { name: 'Estado', index: 'Estado', align: 'left', sortable: false },
+                        { name: 'Iniciar', index: 'Iniciar', align: 'center', sortable: false, width: 80, formatter: CellButtonInicar }
+                ],
+                sortname: 'Nombre',
+                sortorder: 'desc',
+                viewrecords: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            function CellButtonInicar(cellvalue, options, rowObject) {
+                
+                var imgPath = '@Url.Content("~/Content/images/")';
+                var archivo = 'time.gif';
+                var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Iniciar" alt="Iniciar">';
+                //return strImg;
+                if (cellvalue == "1") {
+                    @*return '<a class="btn btn-link" style="text-decoration: underline" href="@Url.Action("Examen", "Postulante")">' + strImg + ' Iniciar</a>'*@
+                    return '<a class="btn btn-link" style="text-decoration: underline" href="#" onclick="IniciarExamen();">' + strImg + ' Iniciar</a>'
+                }
+                else {
+                    return "";
+                }                
+            }
+
+            //function IniciarExamen(idproceso)
+            //{
+            //    if (idproceso != 0) {
+            //        document.location.href = "Examen";
+            //    }
+            //}
+
+           
+            
+
+       });
+
+        function IniciarExamen() {
+            window.moveTo(0, 0);
+            var pheight = screen.height - 100;
+            var pwidth = screen.width- 20;
+            //alert("Hola mundo");
+            window.open("@Url.Action("InstruccionesExamen", "Postulante")", null, "height=" + pheight + ",width=" + pwidth + ", top=0, left=1, status=yes,toolbar=no,menubar=no,location=no,resizable=1");
+        }
+
+    </script>
+
+
+
+<section id="opciones">
+    <div class="row">
+        <div class="offset10">        
+            <a  class="btn btn-primary" href="@Url.Action("Lista", "Postulante")"><i class="icon-arrow-left icon-white"></i> Atrás</a>
+        </div>
+    </div>
+</section>
+
+
+<section id="forms">
+    <div class="page-header">
+        <h1>Evaluación</h1>
+    </div>
+
+    <div class="row">
+        <div class="span10 offset1">
+
+            <form class="form-horizontal well">
+                <fieldset>
+                    <legend>Postulante</legend>
+
+                     <div class="control-group">
+                    <label>Estimado usuario, para empezar el examen de click en el botón <b>Iniciar</b> el cual tendrá un tiempo que se indica en la columna <b>Duración</b>. Una vez concluido el tiempo la pantalla se cerrará automáticamente, si ha concluido antes de culminar el tiempo de click en el botón <b> Terminar</b> que se ubicará en la parte inferior del examen.</label>                  
+                </div>
+
+                 <div style="width: 100%; " >
+                    <div>
+                        <table id="grdList">
+                        </table>
+                        <div id="grdPager">
+                        </div>
+                    </div>
+                 </div>
+
+                </fieldset>
+                
+            </form>
+        </div>
+    </div>
+
+</section>
+

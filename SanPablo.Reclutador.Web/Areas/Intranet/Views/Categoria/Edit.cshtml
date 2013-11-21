@@ -1,0 +1,236 @@
+﻿@{
+    ViewBag.Title = "Listado Categoría";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaSubCategoria", "Categoria")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Nombre', 'Descripci&oacuten', 'Orden de impresión', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                    { name: 'Prioridad', index: 'Prioridad', align: 'left', sortable: false },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', sortable: false },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', sortable: false },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', sortable: false },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', sortable: false }
+
+            ],
+            /*pager: jQuery('#grdPager'),
+            rowNum: 10,
+            rowList: [10, 30, 50],*/
+            autowidth: true,
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            /*caption: 'Lista Referencias',*/
+            height: 120,
+            width: 736,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListCriterio").jqGrid({
+            url: '@Url.Action("ListaCriterio", "Categoria")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Pregunta', 'Ptje.Max', 'Orden de impresión', 'Calificaci&oacute;n'],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
+                    { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false },
+                    { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 60, sortable: false },
+                    { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 50, sortable: false },
+                    { name: 'Calificacion', index: 'Calificacion', align: 'center', width: 50, sortable: false },
+
+
+            ],
+            /*pager: jQuery('#grdPager'),
+            rowNum: 10,
+            rowList: [10, 30, 50],*/
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            autowidth: true,
+            /*caption: 'Lista Referencias',*/
+            height: 120,
+            width: 736,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListAlternativa").jqGrid({
+            url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Nro', 'Alternativa', 'Puntaje'],
+            colModel: [
+                    { name: 'Item', index: 'Item', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
+                    { name: 'Alternativa', index: 'Alternativa', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 30, editable: false },
+            ],
+            sortname: 'Codigo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: false,
+            /*caption: 'Lista Alternativas',*/
+            height: 160,
+            autowidth: true,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+    }); // Fin - $(document).ready
+
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+
+    function HabilitarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'enabled.png';
+        var title = "Habilitar"
+        if (rowObject[14] == "Activo") {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        } else {
+            archivo = 'enabled.png';
+            var title = "Habilitar"
+        }
+
+        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
+        return strImg;
+    }
+</script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Categoría</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                </div>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Categoría</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Nombre</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtnombre" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Descripción</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtDescripcion" value="" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <div class="controles">
+                                <select id="sedepartamento" class="select-large" >
+                                    <option>Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="grilla-opciones">
+                <h6>Subcategorías</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager">
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Criterio</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="tabla-datos">
+                <table id="grdListCriterio">
+                </table>
+            </div>
+
+            <div class="grilla-opciones">
+                <h6>Alternativas</h6>
+                <div class="opciones">
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="tabla-datos">
+                <table id="grdListAlternativa">
+                </table>
+
+            </div>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("Index","Categoria",new { area = "Intranet"})"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button type="reset" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
+            </div>
+        </div>
+    </div>
+</div>

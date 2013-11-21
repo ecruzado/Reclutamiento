@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Postulaciones";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdList2").jqGrid({
+                url: '@Url.Action("ListaMisPostulaciones", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Cargo/Posición', 'Lugar', 'Postulación', 'Fecha Expiración', 'Estado'],
+                colModel: [
+                        { name: 'NombreOferta', index: 'NombreOferta', align: 'left', width: 236, sortable: false },
+                        { name: 'Ubicacion', index: 'Ubicacion', align: 'left', width: 180, sortable: false },
+                        { name: 'Postulacion', index: 'Postulacion', align: 'center', sortable: false },
+                        { name: 'Vigencia', index: 'Vigencia', align: 'center', sortable: false },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false }
+                ],
+                sortname: 'Fecha',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 300,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+        });
+
+    </script>
+}
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Mis Postulaciones</h5>
+            </div>
+            <br />
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdList2">
+                    </table>
+                    <div id="grdPager2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
