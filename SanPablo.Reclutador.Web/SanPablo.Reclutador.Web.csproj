@@ -233,6 +233,7 @@
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\grid.locale-en.js" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\grid.locale-es.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
