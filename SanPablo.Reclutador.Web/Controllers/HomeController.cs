@@ -23,6 +23,12 @@ namespace SanPablo.Reclutador.Web.Controllers
 
         public ActionResult Index()
         {
+            var lista = _sedeRepository.GetPaging("CodigoSede", true, 0, 10);
+            foreach (var item in lista) 
+            {
+                item.CodigoExterno = "codigo ";
+
+            }
             return View();
         }
         /*
