@@ -93,9 +93,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var fAnonymousType2_1 = new
             {
                 id = 1,
-                cell = new string[10]
+                cell = new string[]
         {
-          "200001",
           "200001",
           "SubCat01",
           "SubCategoría 01",
@@ -111,9 +110,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var fAnonymousType2_2 = new
             {
                 id = 2,
-                cell = new string[10]
+                cell = new string[]
         {
-          "200002",
           "200002",
           "SubCat02",
           "SubCategoría 02",
