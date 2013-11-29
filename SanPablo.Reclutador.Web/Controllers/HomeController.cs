@@ -26,7 +26,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             var lista = _sedeRepository.GetPaging("CodigoSede", true, 0, 10);
             foreach (var item in lista) 
             {
-                item.CodigoExterno = "codigo ";
+                //item.CodigoExterno = "codigo ";
 
             }
             return View();

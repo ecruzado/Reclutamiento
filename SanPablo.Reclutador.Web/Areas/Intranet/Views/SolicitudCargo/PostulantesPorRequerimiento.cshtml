@@ -31,7 +31,7 @@
                 /*caption: 'Lista Referencias',*/
                 height: 160,
                 /*width: 736,*/
-                autowidth:true,
+                autowidth: true,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
                 hidegrid: false,
@@ -42,20 +42,55 @@
 
                 }
             });
+            //nueva grilla
 
-            function ImprimirFormatter(cellvalue, options, rowObject) {
-                var imgPath = '@Url.Content("~/Content/images/")';
-                  var archivo = 'printer.png';
-                  var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
-                  return strImg;
-              }
+                   jQuery("#grdListCV").jqGrid({
+                    url: '@Url.Action("ListaPostulantesPorRequerimientoCV", "SolicitudCargo")',
+                    datatype: 'json',
+                    mtype: 'POST',
+                    colNames: ['Apellidos', 'Nombres', 'DNI', 'Telefono', 'Fecha Cita','Hora Cita ','Citado','Asistio'],
+                    colModel: [
+                            { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false, sortable: false },
+                            { name: 'Nombres', index: 'Nombres', align: 'left', editable: false, sortable: false },
+                            { name: 'DNI', index: 'DNI', align: 'center', editable: false, sortable: false },
+                            { name: 'Telefono', index: 'Telefono', align: 'center', editable: false, sortable: false },
+                            { name: 'Fecha Cita', index: 'Fecha Cita', align: 'center', editable: false, sortable: false },
+                            { name: 'Hora Cita', index: 'Hora Cita', align: 'center', editable: false, sortable: false },
+                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox },
+                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox }
+                    ],
+                    sortname: 'Apellidos',
+                    sortorder: 'desc',
+                    viewrecords: true,
+                    cellEdit: true,
+                    /*caption: 'Lista Referencias',*/
+                    height: 160,
+                    /*width: 736,*/
+                    autowidth: true,
+                    rowNum: 0,
+                    cellsubmit: 'clientArray',
+                    hidegrid: false,
+                    postData: {
 
-              function CellCheckBox(cellvalue, options, rowObject) {
-                  return '<input type="checkbox" name="selectedPostulantes"  value="' + cellvalue + '" />';
-              }
+                    },
+                    loadComplete: function (data) {
 
-        });
+                    }
+                });
 
+                function ImprimirFormatter(cellvalue, options, rowObject) {
+                    var imgPath = '@Url.Content("~/Content/images/")';
+                    var archivo = 'printer.png';
+                    var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+                    return strImg;
+                }
+
+                function CellCheckBox(cellvalue, options, rowObject) {
+                    return '<input type="checkbox" name="selectedPostulantes"  value="' + cellvalue + '" />';
+                }
+
+            });
+        
         function ver() {
             //var url = Convert.ToString( ConfigurationManager.AppSettings["urlExtranet"]) + "/Extranet/Postulante/General";
             //alert(ViewBag["ViewurlExtranet"]);
@@ -115,6 +150,7 @@
                         </div>
                     </div>
                 </div>
+         
                 <div class="formulario-fila">
                     <div class="span5">
                         <div class="">
@@ -174,16 +210,28 @@
                     </div>
                 </div>
                 <div style="clear:both"></div>
-                <div style="width: 100%;">
-                    <div>
-                        <table id="grdList">
-                        </table>
-                        <div id="grdPager">
-                        </div>
-                    </div>
+                <div class="tabla-datos">
+                            <table id="grdList">
+                            </table>
+                            <div id="grdPager">
+                            </div>
                 </div>
-            </form>
-            <div class="form-actions">
+                </form> 
+                        <div class="grilla-opciones">
+                            <h6>CV Externos</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="tabla-datos">
+                            <table id="grdListCV">
+                            </table>
+                        </div>
+                                                                         
+                 <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-edit icon-white"></i> CV-Aprobado</a>                        
             </div>
