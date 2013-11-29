@@ -9,6 +9,6 @@ namespace SanPablo.Reclutador.Web.Entity
     {
         public virtual string CodigoSede { get; set; }
         public virtual string DescripcionSede { get; set; }
-        public virtual string CodigoExterno { get; set; }
+        public virtual string EstadoRegistro { get; set; }
     }
 }

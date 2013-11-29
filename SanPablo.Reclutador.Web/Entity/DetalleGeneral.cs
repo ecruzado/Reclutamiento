@@ -8,8 +8,8 @@ namespace SanPablo.Reclutador.Web.Entity
     public class DetalleGeneral : BaseEntity
     {
         public virtual string CodigoDetalleGeneral { get; set; }
-        public virtual string CodigoGeneral { get; set; }
-        public virtual string CodigoDetallePadre { get; set; }
+        public virtual General General { get; set; }
+        public virtual DetalleGeneral DetallePadre { get; set; }
         public virtual string NombreDetalleGeneral { get; set; }
         public virtual int LongitudCampo { get; set; }
         public virtual string TipoCampo { get; set; }

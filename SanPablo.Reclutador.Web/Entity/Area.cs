@@ -8,7 +8,7 @@ namespace SanPablo.Reclutador.Web.Entity
     public class Area : BaseEntity
     {
         public virtual int CodigoArea { get; set; }
-        public virtual int CodigoDepartamento { get; set; }
+        public virtual Departamento Departamento { get; set; }
         public virtual string NombreArea { get; set; }
         public virtual string EstadoDeRegistro { get; set; }
     }

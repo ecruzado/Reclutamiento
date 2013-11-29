@@ -8,9 +8,10 @@
         public SedeMap()
         {
             /*Id(m => m.SedeId);*/
-            Id(m => m.CodigoSede, "COD_SEDE");
-            Map(x => x.DescripcionSede, "DSC_SEDE");
-            Table("T_HMSEDE");
+            Id(m => m.CodigoSede, "IDESEDE");
+            Map(x => x.DescripcionSede, "DESCRIPCION");
+            Map(x => x.EstadoRegistro, "ESTREGISTRO");
+            Table("SEDE");
         }
     }
 }

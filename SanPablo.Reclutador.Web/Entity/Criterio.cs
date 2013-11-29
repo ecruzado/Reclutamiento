@@ -14,6 +14,6 @@ namespace SanPablo.Reclutador.Web.Entity
         public virtual string TipoMedicion { get; set; }
         public virtual string TipoCriterio { get; set; }
         public virtual int TipoModoRegistro { get; set; }
-        public virtual string Estadoregistro { get; set; }
+        public virtual string EstadoRegistro { get; set; }
     }
 }
