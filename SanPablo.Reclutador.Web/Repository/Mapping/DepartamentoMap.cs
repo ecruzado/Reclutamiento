@@ -9,8 +9,8 @@
         {
             Id(m => m.CodigoDepartamento, "IDEDEPARTAMENTO");
             References(x => x.Dependencia).Column("IDEDEPENDENCIA");
-            Map(m => m.NombreDepartamento, "NOMBRE");
-            Map(m => m.EstadoRegistro, "ESTREGISTRO");
+            Map(x => x.NombreDepartamento, "NOMBRE");
+            Map(x => x.EstadoRegistro, "ESTREGISTRO");
             Table("DEPARTAMENTO");
         }
     }

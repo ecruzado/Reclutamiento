@@ -13,5 +13,11 @@ namespace SanPablo.Reclutador.Web.Entity
         public virtual string NombreUsuario {  get; set; }
         public virtual string ClaveUsuario { get; set; }
         public virtual string EstadoRegistro { get; set; }
+        public virtual IList<Sede> UsuarioDeLasSedes { get; protected set; }
+
+        public Usuario()
+        {
+            UsuarioDeLasSedes = new List<Sede>();
+        }
     }
 }

@@ -151,6 +151,7 @@
     <Compile Include="Entity\Examen.cs" />
     <Compile Include="Entity\ExamenPorCategoria.cs" />
     <Compile Include="Entity\General.cs" />
+    <Compile Include="Entity\UsuarioSede.cs" />
     <Compile Include="Repository\CategoriaRepository.cs" />
     <Compile Include="Repository\ConfiguracionAprobacionRepository.cs" />
     <Compile Include="Repository\CriterioPorSubcategoriaRepository.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Entity\SubCategoria.cs" />
     <Compile Include="Entity\Ubigeo.cs" />
     <Compile Include="Entity\Usuario.cs" />
-    <Compile Include="Entity\UsuarioSede.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -212,6 +212,7 @@
     <Compile Include="Repository\Mapping\DetalleGeneralMap.cs" />
     <Compile Include="Repository\Mapping\EmpleadoMap.cs" />
     <Compile Include="Repository\Mapping\SedeMap.cs" />
+    <Compile Include="Repository\Mapping\UsuarioMap.cs" />
     <Compile Include="Repository\NotificacionDeAprobacionRepository.cs" />
     <Compile Include="Repository\OpcionRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
