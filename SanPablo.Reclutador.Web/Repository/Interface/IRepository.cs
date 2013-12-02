@@ -18,7 +18,7 @@
 
         IEnumerable<TEntity> GetBy(Expression<Func<TEntity, bool>> condition);
 
-        IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int rowNumber, int pageSize);
+        IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize);
         
         /// <summary>
         /// Obtiene datos paginados especificado el campo de orden, si es asc/dsc
@@ -29,7 +29,7 @@
         /// <param name="pageSize">Tamaño de la pagina</param>
         /// <param name="where">Condicion de filtrado</param>
         /// <returns></returns>
-        IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int rowNumber, int pageSize, DetachedCriteria where);
+        IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize, DetachedCriteria where);
 
         int CountBy();
     }

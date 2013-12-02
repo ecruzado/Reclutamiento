@@ -43,12 +43,12 @@
                     .List();
         }
 
-        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int rowNumber, int pageSize)
+        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
         {
-            return GetPaging(sortField, ascending, rowNumber, pageSize, null);
+            return GetPaging(sortField, ascending, pageIndex, pageSize, null);
         }
 
-        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int rowNumber, int pageSize, DetachedCriteria where)
+        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize, DetachedCriteria where)
         {
             ICriteria criteria = where != null ? where.GetExecutableCriteria(_session) : _session.CreateCriteria<TEntity>();
 
@@ -58,7 +58,7 @@
                 else criteria.AddOrder(Order.Asc(sortField));
             }
 
-            return criteria.SetFirstResult(rowNumber)
+            return criteria.SetFirstResult(pageSize * (pageIndex - 1))
                     .SetMaxResults(pageSize)
                     .List<TEntity>();
         }
