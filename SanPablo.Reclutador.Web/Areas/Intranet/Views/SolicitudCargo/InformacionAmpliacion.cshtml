@@ -532,8 +532,8 @@
 
                     <!--General Inicio -->
 
-                    <div class="tab-pane" id="B">
-                        <form>                            
+                 <div class="tab-pane" id="B">
+                        <form>
                             <div class="grilla-opciones" style="margin-top:0px;">
                                 <h6>Datos generales</h6>
                                 <div class="opciones">
@@ -543,8 +543,8 @@
                             <table border="0" style="width:100%">
                                 <tbody>
                                     <tr>
-                                        <td style="width:60px"></td>
-                                        <td style="width:250px">
+                                        <td style="width:40px"></td>
+                                        <td style="width:350px">
                                         </td>
                                         <td>
                                             Ptje.
@@ -557,7 +557,8 @@
                                         <td style="text-align:center">
                                             Ptje.
                                         </td>
-                                            <td style="width:80px"></td>
+                                        <td></td>
+                                        <td style="width:80px"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -573,43 +574,13 @@
                                         </td>
                                         <td>
                                               
-                                            <input id="txtEdadInicial" type="text" class="input-mini" value="22"> - <input id="txtEdadFinal" type="text" class="input-mini" value="35">
+                                            <input id="txtEdadInicial" type="text" class="input-xmini" value="22"> - <input id="txtEdadFinal" type="text" class="input-xmini" value="35">
                                         </td>
                                         <td>
                                             <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
                                         </td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <label class="control-label" for="input01">Referencias Laborales</label>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="input-xxmini" value="30">
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                            <label class="control-label" for="input01">Rango Salarial Bruto (S/.)</label>
-                                        </td>
-                                        <td>
-                                            <select class="input-medium">
-                                                <option>Menos de 1000</option>
-                                                <option>De 1000 a 2000</option>
-                                                <option>De 2000 a 3000</option>
-                                                <option>De 3000 a 4000</option>
-                                                <option>De 4000 a 5000</option>
-                                                <option>De 5000 a 6000</option>
-                                                <option>De 6000 a más</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
-                                        </td>
-                                        <td></td>
+                                        <td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>
+              
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -622,7 +593,7 @@
                                                 </select>                                             
                                             </label>
                                         </td>
-                                        <td>
+                                        <td style="width:80px" >
                                             <input type="text" class="input-xxmini" value="10">
                                             <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
                                         </td>                                       
@@ -649,31 +620,51 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                    </tr>                                      
+                                    </tr>   
                                     <tr>
                                         <td></td>
-                                        <td style="height:20px;">
-                                                
-                                        </td>
                                         <td>
-                                                
+                                            <label class="control-label" for="input01">Rango Salarial Bruto (S/.)                                             <select class="input-medium">
+                                                <option>Menos de 1000</option>
+                                                <option>De 1000 a 2000</option>
+                                                <option>De 2000 a 3000</option>
+                                                <option>De 3000 a 4000</option>
+                                                <option>De 4000 a 5000</option>
+                                                <option>De 5000 a 6000</option>
+                                                <option>De 6000 a más</option>
+                                            </select>
+</label>
+                                        </td>
+                                        <td style="width:80px">
+                                            <input type="text" class="input-xxmini" value="10">
+                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
                                         </td>
                                         <td></td>
-                                        <td></td>
-                                            <td>
-                                                 
+                                        
+                                           <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
+                                        <td>                                         
+                                            <select class="input-large">
+                                                <option>Jefe Corporativo Administrativo</option>
+                                                <option>Personal Administrativo</option>
+                                                <option>Personal Asistencial</option>
+                                                <option>Personal de Contacto</option>
+                                                <option>Personal Operativo</option>
+                                            </select>
+
                                         </td>
                                         <td></td>
-                                    </tr>                                     
+                                        <td>
+                                        </td>
+                                    </tr>
+
                                     <tr>
                                         <td></td>
                                         <td colspan="5"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
                                     </tr>
                                 </tbody>
 
-                            </table>                            
+                            </table>
                         </form>
-
                         <div class="grilla-opciones">
                             <h6>Horario</h6>
                             <div class="opciones">
@@ -700,11 +691,15 @@
                             <table id="grdListUbigeo">
                             </table>
                         </div>
+                                            
                         <div class="formulario-accion">
                             <div class="opciones">
+                                <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
                                 <a class="btn" href="#" onclick="irATab('A');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                                 <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
                             </div>
+
                         </div>
                     </div>
 

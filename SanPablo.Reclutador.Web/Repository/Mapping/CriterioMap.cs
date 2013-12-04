@@ -15,6 +15,10 @@
             Map(x => x.TipoCriterio, "TIPCRITE");
             Map(x => x.TipoModoRegistro, "TIPMODOREG");
             Map(x => x.EstadoRegistro, "ESTREGISTRO");
+            HasManyToMany(x => x.SubCategorias)
+                .Cascade.All()
+                .Inverse()
+                .Table("CRITERIO_X_SUBCATEGORIA");
             Table("CRITERIO");
         }
     }

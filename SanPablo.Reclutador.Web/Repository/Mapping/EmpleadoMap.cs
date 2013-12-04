@@ -16,9 +16,6 @@
             Map(x => x.Nombres, "NOMBRES");
             Map(x => x.Correo, "CORREO");
             References(x => x.Sede).Column("IDESEDE");
-            /*HasMany(x => x.Usuarios)
-                .Inverse()
-                .Cascade.all();*/
             Table("EMPLEADO");
         }
     }

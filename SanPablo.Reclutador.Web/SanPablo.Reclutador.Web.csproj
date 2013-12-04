@@ -220,7 +220,12 @@
     <Compile Include="Repository\Mapping\DependenciaMap.cs" />
     <Compile Include="Repository\Mapping\DetalleGeneralMap.cs" />
     <Compile Include="Repository\Mapping\EmpleadoMap.cs" />
+    <Compile Include="Repository\Mapping\ExamenMap.cs" />
+    <Compile Include="Repository\Mapping\OpcionMap.cs" />
+    <Compile Include="Repository\Mapping\RolMap.cs" />
     <Compile Include="Repository\Mapping\SedeMap.cs" />
+    <Compile Include="Repository\Mapping\SubCategoriaMap.cs" />
+    <Compile Include="Repository\Mapping\UbigeoMap.cs" />
     <Compile Include="Repository\Mapping\UsuarioMap.cs" />
     <Compile Include="Repository\NotificacionDeAprobacionRepository.cs" />
     <Compile Include="Repository\OpcionRepository.cs" />

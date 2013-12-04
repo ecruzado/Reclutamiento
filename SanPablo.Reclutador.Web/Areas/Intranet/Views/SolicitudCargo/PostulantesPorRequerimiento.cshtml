@@ -56,8 +56,8 @@
                             { name: 'Telefono', index: 'Telefono', align: 'center', editable: false, sortable: false },
                             { name: 'Fecha Cita', index: 'Fecha Cita', align: 'center', editable: false, sortable: false },
                             { name: 'Hora Cita', index: 'Hora Cita', align: 'center', editable: false, sortable: false },
-                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox },
-                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox }
+                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox},
+                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox}
                     ],
                     sortname: 'Apellidos',
                     sortorder: 'desc',
@@ -169,6 +169,28 @@
                         </div>
                     </div>
                 </div>
+
+                 <div class="grilla-opciones">
+                     <h6>CV Externos</h6>
+                       <div class="opciones">
+                          <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                          <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                          <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                       </div>
+                       <div style="clear:both"></div>
+                  </div>
+                  <div class="tabla-datos">
+                      <table id="grdListCV">
+                      </table>
+                      <div class="Opciones">
+                   </div>
+                      <div class="form-actions">
+                          <a class="btn btn-info"  title="Citado" onclick=""><i class="icon-edit icon-white" ></i> Citado</a> 
+                          <a class="btn btn-info" title="Asistio" onclick=""><i class="icon-edit icon-white" ></i> Asistió</a> 
+                      </div> 
+                  </div>
+                                        
+      
                 <div class="grilla-opciones">
                     <h6>Postulantes</h6>
                     <div style="clear:both"></div>
@@ -217,20 +239,7 @@
                             </div>
                 </div>
                 </form> 
-                        <div class="grilla-opciones">
-                            <h6>CV Externos</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListCV">
-                            </table>
-                        </div>
-                                                                         
+                                                                                               
                  <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-edit icon-white"></i> CV-Aprobado</a>                        

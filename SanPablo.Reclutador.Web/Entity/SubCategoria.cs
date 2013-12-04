@@ -12,5 +12,16 @@ namespace SanPablo.Reclutador.Web.Entity
         public virtual string NombreSubCategoria { get; set; }
         public virtual string DescripcionSubCategoria { get; set; }
         public virtual string EstadoRegistro { get; set; }
+        public virtual IList<Criterio> Criterios { get; set; }
+
+        public SubCategoria()
+        {
+            Criterios = new List<Criterio>();
+        }
+        public virtual void AgregarCriterios(Criterio criterio)
+        {
+            criterio.SubCategorias.Add(this);
+            Criterios.Add(criterio);
+        }
     }
 }
