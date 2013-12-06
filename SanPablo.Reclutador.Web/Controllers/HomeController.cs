@@ -8,10 +8,12 @@ using System.Threading;
 using SanPablo.Reclutador.Web.Repository.Interface;
 using NHibernate.Criterion;
 using SanPablo.Reclutador.Web.Entity;
+using SanPablo.Reclutador.Web.Models.JQGrid;
+using SanPablo.Reclutador.Web.Core;
 
 namespace SanPablo.Reclutador.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private ISedeRepository _sedeRepository;
         //
@@ -23,8 +25,60 @@ namespace SanPablo.Reclutador.Web.Controllers
 
         public ActionResult Index()
         {
+            var lista = _sedeRepository.GetPaging("CodigoSede", true, 0, 10);
+            foreach (var item in lista) 
+            {
+                //item.CodigoExterno = "codigo ";
+
+            }
             return View();
         }
+
+        [HttpPost]
+        public virtual JsonResult Listar(GridTable grid)
+        {
+            try
+            {
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                //var where = (Utils.GetWhere(grid.filters, grid.rules));
+                var where = string.Empty;
+
+                if (!string.IsNullOrEmpty(where))
+                {
+                    grid._search = true;
+
+                    if (!string.IsNullOrEmpty(grid.searchString))
+                    {
+                        where = where + " and ";
+                    }
+                }
+
+                var generic = Listar(_sedeRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.CodigoSede,
+                        cell = new[]
+                            {
+                                item.CodigoSede,
+                                item.DescripcionSede
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
         /*
         [HttpPost]
         public ActionResult GetDataTables(DataTable dataTable)
@@ -64,8 +118,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             var result = new DataTableResult(dataTable, cuenta, cuenta, table);
             result.ContentEncoding = Encoding.UTF8;
             return result;
-        }*/
-
+        }
+        */
 
     }
 }

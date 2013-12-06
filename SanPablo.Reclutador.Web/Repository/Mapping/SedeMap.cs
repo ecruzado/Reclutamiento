@@ -8,9 +8,17 @@
         public SedeMap()
         {
             /*Id(m => m.SedeId);*/
-            Id(m => m.CodigoSede, "COD_SEDE");
-            Map(x => x.DescripcionSede, "DSC_SEDE");
-            Table("T_HMSEDE");
+            Id(m => m.CodigoSede, "IDESEDE");
+            Map(x => x.DescripcionSede, "DESCRIPCION");
+            Map(x => x.EstadoRegistro, "ESTREGISTRO");
+            HasManyToMany(x => x.Usuarios)
+                .Cascade.All()
+                .Inverse()
+                .Table("USUARIO_SEDE");
+            HasMany(x => x.Empleados)
+                .Inverse()
+                .Cascade.All();
+            Table("SEDE");
         }
     }
 }

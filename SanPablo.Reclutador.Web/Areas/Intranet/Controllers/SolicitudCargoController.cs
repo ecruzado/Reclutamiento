@@ -20,7 +20,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             return View("InformacionNuevo");
         }
-
         [HttpPost]
         public ActionResult ListaSolicitudPersonal(string sidx, string sord, int page, int rows)
         {
@@ -916,6 +915,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             return View();
         }
+        public ActionResult PostulantesPorRequerimientoCV()
+        {
+            return View();
+        }
         public ActionResult PostulantesPreSeleccionados()
         {
             return View();
@@ -1005,6 +1008,68 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return result;
         }
         
+        [HttpPost]
+
+        public ActionResult ListaPostulantesPorRequerimientoCV(string sidx, string sord, int page, int rows)
+        {
+            ActionResult result = null;
+            List<object> lstFilas = new List<object>();
+
+            var fila1 = new
+            {
+                id = 1,                 // ID único de la fila
+                cell = new string[] {   // Array de celdas de la fila
+                    "Linares Roca",
+                    "Miguel Fransisco",
+                    "42158963",
+                    "01-458796",
+                    "28/11/13",
+                    "10:25","",""
+                }
+            };
+            lstFilas.Add(fila1);
+
+            var fila2 = new
+            {
+                id = 2,                 // ID único de la fila
+                cell = new string[] {   // Array de celdas de la fila
+                    "Ochoa Ramirez",
+                    "Maria ",
+                    "42158963",
+                    "01-458796",
+                    "28/11/13",
+                    "11:15","",""
+                }
+            };
+            lstFilas.Add(fila2);
+
+            var fila3 = new
+            {
+                id = 3,                 // ID único de la fila
+                cell = new string[] {   // Array de celdas de la fila
+                     "Carbajal Saravia",
+                    "Gianfranco ",
+                    "42158963",
+                    "01-458796",
+                    "29/11/13",
+                    "16:00","",""
+                }
+            };
+            lstFilas.Add(fila3);
+
+           //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
+            var data = new
+            {
+                //total = totalPag,       // Total de páginas
+                //page = page,            // Página actual
+                //records = totalReg,     // Total de registros (obtenido del modelo)
+                rows = lstFilas
+            };
+            result = Json(data);
+
+            return result;
+        }
+
         [HttpPost]
         public ActionResult ListaPostulantesPreSeleccionados(string sidx, string sord, int page, int rows)
         {
