@@ -36,14 +36,18 @@
                 cellsubmit: 'clientArray',
                 hidegrid: false,
                 postData: {
-
+                    /**/
                 },
                 loadComplete: function (data) {
 
                 }
             });
         });
-
+        jQuery("#cm1").click( function() {
+            var s;
+            s = jQuery("#grdList").jqGrid('getGridParam', 'selrow');
+            alert(s);
+        });
         function RadioFormatter(cellvalue, options, rowObject) {
             var strRdo = '<input type ="radio" name = "codigo">';
             return strRdo;
@@ -59,8 +63,8 @@
               var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
               return strImg;
         }
-       
-    </script>
+
+  </script>
 }
 
 <div class="row">
@@ -138,7 +142,7 @@
                 <a class="btn btn-info" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
                 <a class="btn btn-info"><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
                 <a class="btn btn-info"><i class="icon-ban-circle icon-white"></i> Excluir</a>
-                <a class="btn btn-info"><i class="icon-edit icon-white"></i> Contactado</a>
+                <a class="btn btn-info" href="javascript:void(0)" id="cm1"><i class="icon-edit icon-white"></i> Contactado</a>
                 
             </div>
         </div>

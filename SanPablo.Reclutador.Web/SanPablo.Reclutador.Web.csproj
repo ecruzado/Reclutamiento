@@ -221,6 +221,8 @@
     <Compile Include="Repository\Mapping\DetalleGeneralMap.cs" />
     <Compile Include="Repository\Mapping\EmpleadoMap.cs" />
     <Compile Include="Repository\Mapping\ExamenMap.cs" />
+    <Compile Include="Repository\Mapping\GeneralMap.cs" />
+    <Compile Include="Repository\Mapping\NotificacionAprobacionMap.cs" />
     <Compile Include="Repository\Mapping\OpcionMap.cs" />
     <Compile Include="Repository\Mapping\RolMap.cs" />
     <Compile Include="Repository\Mapping\SedeMap.cs" />

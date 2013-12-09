@@ -56,8 +56,8 @@
                             { name: 'Telefono', index: 'Telefono', align: 'center', editable: false, sortable: false },
                             { name: 'Fecha Cita', index: 'Fecha Cita', align: 'center', editable: false, sortable: false },
                             { name: 'Hora Cita', index: 'Hora Cita', align: 'center', editable: false, sortable: false },
-                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox},
-                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, formatter: CellCheckBox}
+                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
+                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } }
                     ],
                     sortname: 'Apellidos',
                     sortorder: 'desc',
