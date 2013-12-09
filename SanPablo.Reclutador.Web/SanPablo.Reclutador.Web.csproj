@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +49,14 @@
     </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.MVC4.5.0.0.1\lib\Net40\FluentValidation.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -153,19 +163,6 @@
     <Compile Include="Entity\Examen.cs" />
     <Compile Include="Entity\ExamenPorCategoria.cs" />
     <Compile Include="Entity\General.cs" />
-    <Compile Include="Entity\UsuarioSede.cs" />
-    <Compile Include="Repository\CategoriaRepository.cs" />
-    <Compile Include="Repository\ConfiguracionAprobacionRepository.cs" />
-    <Compile Include="Repository\CriterioPorSubcategoriaRepository.cs" />
-    <Compile Include="Repository\CriterioRepository.cs" />
-    <Compile Include="Repository\DepartamentoRepository.cs" />
-    <Compile Include="Repository\DependenciaRepository.cs" />
-    <Compile Include="Repository\DetalleGeneralRepository.cs" />
-    <Compile Include="Repository\EmpleadoRepository.cs" />
-    <Compile Include="Repository\ExamenPorCategoriaRepository.cs" />
-    <Compile Include="Repository\ExamenRepository.cs" />
-    <Compile Include="Repository\GeneralRepository.cs" />
-    <Compile Include="Repository\Interface\ISubcategoriaRepository.cs" />
     <Compile Include="Entity\NotificacionDeAprobacion.cs" />
     <Compile Include="Entity\Opcion.cs" />
     <Compile Include="Entity\Rol.cs" />
@@ -174,6 +171,8 @@
     <Compile Include="Entity\SubCategoria.cs" />
     <Compile Include="Entity\Ubigeo.cs" />
     <Compile Include="Entity\Usuario.cs" />
+    <Compile Include="Entity\UsuarioSede.cs" />
+    <Compile Include="Entity\Validation\SedeValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -186,59 +185,11 @@
     <Compile Include="Models\JQGrid\Rule.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\AlternativaRepository.cs" />
-    <Compile Include="Repository\AreaRepository.cs" />
-    <Compile Include="Repository\Interface\IConfiguracionAprobacionRepository.cs" />
-    <Compile Include="Repository\Interface\IAlternativaRepository.cs" />
-    <Compile Include="Repository\Interface\IAreaRepository.cs" />
-    <Compile Include="Repository\Interface\ICategoriaRepository.cs" />
-    <Compile Include="Repository\Interface\ICriterioPorSubcategoriaRepository.cs" />
-    <Compile Include="Repository\Interface\ICriterioRepository.cs" />
-    <Compile Include="Repository\Interface\IDepartamentoRepository.cs" />
-    <Compile Include="Repository\Interface\IDependenciaRepository.cs" />
-    <Compile Include="Repository\Interface\IDetalleGeneralRepository.cs" />
-    <Compile Include="Repository\Interface\IEmpleadoRepository.cs" />
-    <Compile Include="Repository\Interface\IExamenPorCategoriaRepository.cs" />
-    <Compile Include="Repository\Interface\IExamenRepository.cs" />
-    <Compile Include="Repository\Interface\IGeneralRepository.cs" />
-    <Compile Include="Repository\Interface\INotificacionDeAprobacionRepository.cs" />
-    <Compile Include="Repository\Interface\IOpcionRepository.cs" />
     <Compile Include="Repository\Interface\IRepository.cs" />
-    <Compile Include="Repository\Interface\IRolOpcionRepository.cs" />
-    <Compile Include="Repository\Interface\IRolRepository.cs" />
     <Compile Include="Repository\Interface\ISedeRepository.cs" />
-    <Compile Include="Repository\Interface\IUbigeoRepository.cs" />
-    <Compile Include="Repository\Interface\IUsuarioRepository.cs" />
-    <Compile Include="Repository\Interface\IUsuarioSedeRepository.cs" />
-    <Compile Include="Repository\Mapping\AlternativaMap.cs" />
-    <Compile Include="Repository\Mapping\AreaMap.cs" />
-    <Compile Include="Repository\Mapping\CategoriaMap.cs" />
-    <Compile Include="Repository\Mapping\ConfiguracionAprobacionMap.cs" />
-    <Compile Include="Repository\Mapping\CriterioMap.cs" />
-    <Compile Include="Repository\Mapping\CriterioPorSubcategoriaMap.cs" />
-    <Compile Include="Repository\Mapping\DepartamentoMap.cs" />
-    <Compile Include="Repository\Mapping\DependenciaMap.cs" />
-    <Compile Include="Repository\Mapping\DetalleGeneralMap.cs" />
-    <Compile Include="Repository\Mapping\EmpleadoMap.cs" />
-    <Compile Include="Repository\Mapping\ExamenMap.cs" />
-    <Compile Include="Repository\Mapping\GeneralMap.cs" />
-    <Compile Include="Repository\Mapping\NotificacionAprobacionMap.cs" />
-    <Compile Include="Repository\Mapping\OpcionMap.cs" />
-    <Compile Include="Repository\Mapping\RolMap.cs" />
     <Compile Include="Repository\Mapping\SedeMap.cs" />
-    <Compile Include="Repository\Mapping\SubCategoriaMap.cs" />
-    <Compile Include="Repository\Mapping\UbigeoMap.cs" />
-    <Compile Include="Repository\Mapping\UsuarioMap.cs" />
-    <Compile Include="Repository\NotificacionDeAprobacionRepository.cs" />
-    <Compile Include="Repository\OpcionRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
-    <Compile Include="Repository\RolOpcionRepository.cs" />
-    <Compile Include="Repository\RolRepository.cs" />
     <Compile Include="Repository\SedeRepository.cs" />
-    <Compile Include="Repository\SubcategoriaRepository.cs" />
-    <Compile Include="Repository\UbigeoRepository.cs" />
-    <Compile Include="Repository\UsuarioRepository.cs" />
-    <Compile Include="Repository\UsuarioSedeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -331,7 +282,6 @@
     <Content Include="Scripts\jquery-migrate-1.2.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.custom.min.js" />
     <Content Include="Scripts\jquery.jqGrid.min.js" />
-    <Content Include="Scripts\SanPablo.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -406,6 +356,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

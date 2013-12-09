@@ -12,7 +12,7 @@
         {
             var configuration = OracleClientConfiguration.Oracle10
                  .ConnectionString(c =>
-                    c.Is("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.24.64.82)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=WKN2)));User ID=CHSPHM2;Password=CHSPHM2;Pooling=True; Min Pool Size=3;"));
+                    c.Is(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             var fluentConfiguration = Fluently.Configure()
                     .Database(configuration)
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<SedeRepository>());
