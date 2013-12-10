@@ -118,6 +118,12 @@
     function ocultarConfirmacion() {
         $('#modalConfirmacion').modal('hide');
     }
+    function deshabilita() {
+        $('#taobservacionaprobacion').modal('hide');
+    }
+    function habilita() {
+        $('#taobservacionaprobacion').modal('show');
+    }
 </script>
 }
 <div class="row">
@@ -232,33 +238,33 @@
                 </div>
             </form>
             <h5>Perfil</h5>
-            <ul class="nav nav-tabs">
-                <li><div style="width:110px;display:inline-block"></div></li>
-                <li class="active"><a href="#A" data-toggle="tab">Estudios</a></li>
-                <li class=""><a href="#B" data-toggle="tab">Competencias</a></li>
-                <li class=""><a href="#C" data-toggle="tab">Funciones</a></li>
-                <li class=""><a href="#E" data-toggle="tab">Observaciones adicionales</a></li>
-            </ul>
-            <div class="tabbable">
-                <div class="tab-content">
-                    <!--Estudios -->
-                    <div class="tab-pane active" id="A">
-                        <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
-                    </div>
-                    <!--Competecias -->
-                    <div class="tab-pane " id="B">
-                        <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
-                    </div>
-                    
-                    <!--Funciones -->
-                    <div class="tab-pane" id="C">
-                        <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
-                    </div>
-                    
-                    <!--Observaciones -->
-                    <div class="tab-pane" id="E">
-                        <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
-                    </div>
+            
+            <div>
+                <div class="grilla-opciones">
+                <h6>Estudios</h6>
+                <div style="clear:both"></div>
+                <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Competencias</h6>
+                <div style="clear:both"></div>
+                <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Funciones</h6>
+                <div style="clear:both"></div>
+                <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Observaciones adicionales</h6>
+                <div style="clear:both"></div>
+                <textarea style="width:900px;margin-left:8px;" rows="3"></textarea>
                 </div>
             </div>
             <div class="form-actions">     
@@ -276,12 +282,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h5>Aprobación/Rechazo</h5>
     </div>
+    
     <div class="modal-body">
         <label>Comentarios</label>
         <textarea class="input-porce" id="taobservacionaprobacion" rows="3"></textarea>
         <br />
-        <input type="radio" /><span> Aprobar</span> 
-        <input type="radio" /><span> Rechazar</span>
+        <input type="radio" name="Aprob/rech" value="Aprobar" onclick="deshabilita()"/><span>Aprobar</span>
+        <input type="radio" name="Aprob/rech" value="Rechazar" checked onclick="habilita()"/><span>Rechazar</span>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" onclick="ocultarAprobarDesaprobar();">Cancelar</a>

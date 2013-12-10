@@ -262,7 +262,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                           "Linares",
                           "Rodriguez",
                           "Juan Carlos",                          
-                          "Padre",
+                          "Padre","",
                 }
             };
             lstFilas.Add(fila1);
@@ -274,10 +274,21 @@ namespace SanPablo.Reclutador.Web.Controllers
                           "Roca",
                           "Tello",
                           "Rosa María",                          
-                          "Madre",                      
+                          "Madre", "",                     
                 }
             };
             lstFilas.Add(fila2);
+            var fila3 = new
+            {
+                id = 3,                 // ID único de la fila
+                cell = new string[] {   // Array de celdas de la fila
+                          "Valverde",
+                          "Bravo",
+                          "Hanna",                          
+                          "Hija", "07/06/2012",                     
+                }
+            };
+            lstFilas.Add(fila3);
 
             //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
             var data = new

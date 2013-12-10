@@ -187,7 +187,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Interface\IRepository.cs" />
     <Compile Include="Repository\Interface\ISedeRepository.cs" />
+    <Compile Include="Repository\Mapping\AlternativaMap.cs" />
+    <Compile Include="Repository\Mapping\AreaMap.cs" />
+    <Compile Include="Repository\Mapping\CategoriaMap.cs" />
+    <Compile Include="Repository\Mapping\ConfiguracionAprobacionMap.cs" />
+    <Compile Include="Repository\Mapping\CriterioMap.cs" />
+    <Compile Include="Repository\Mapping\CriterioPorSubcategoriaMap.cs" />
+    <Compile Include="Repository\Mapping\DepartamentoMap.cs" />
+    <Compile Include="Repository\Mapping\DependenciaMap.cs" />
+    <Compile Include="Repository\Mapping\DetalleGeneralMap.cs" />
+    <Compile Include="Repository\Mapping\EmpleadoMap.cs" />
+    <Compile Include="Repository\Mapping\ExamenMap.cs" />
+    <Compile Include="Repository\Mapping\GeneralMap.cs" />
+    <Compile Include="Repository\Mapping\NotificacionAprobacionMap.cs" />
+    <Compile Include="Repository\Mapping\OpcionMap.cs" />
+    <Compile Include="Repository\Mapping\RolMap.cs" />
     <Compile Include="Repository\Mapping\SedeMap.cs" />
+    <Compile Include="Repository\Mapping\SubCategoriaMap.cs" />
+    <Compile Include="Repository\Mapping\UbigeoMap.cs" />
+    <Compile Include="Repository\Mapping\UsuarioMap.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\SedeRepository.cs" />
   </ItemGroup>
