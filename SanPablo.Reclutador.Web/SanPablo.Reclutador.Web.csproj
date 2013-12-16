@@ -145,6 +145,7 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostulanteController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
@@ -152,30 +153,6 @@
     <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\JsonResponse.cs" />
     <Compile Include="Core\Utils.cs" />
-    <Compile Include="Entity\Alternativa.cs" />
-    <Compile Include="Entity\Area.cs" />
-    <Compile Include="Entity\BaseEntity.cs" />
-    <Compile Include="Entity\Categoria.cs" />
-    <Compile Include="Entity\ConfiguracionAprobacion.cs" />
-    <Compile Include="Entity\Criterio.cs" />
-    <Compile Include="Entity\CriterioPorSubcategoria.cs" />
-    <Compile Include="Entity\Departamento.cs" />
-    <Compile Include="Entity\Dependencia.cs" />
-    <Compile Include="Entity\DetalleGeneral.cs" />
-    <Compile Include="Entity\Empleado.cs" />
-    <Compile Include="Entity\Examen.cs" />
-    <Compile Include="Entity\ExamenPorCategoria.cs" />
-    <Compile Include="Entity\General.cs" />
-    <Compile Include="Entity\NotificacionDeAprobacion.cs" />
-    <Compile Include="Entity\Opcion.cs" />
-    <Compile Include="Entity\Rol.cs" />
-    <Compile Include="Entity\RolOpcion.cs" />
-    <Compile Include="Entity\Sede.cs" />
-    <Compile Include="Entity\SubCategoria.cs" />
-    <Compile Include="Entity\Ubigeo.cs" />
-    <Compile Include="Entity\Usuario.cs" />
-    <Compile Include="Entity\UsuarioSede.cs" />
-    <Compile Include="Entity\Validation\SedeValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -188,11 +165,6 @@
     <Compile Include="Models\JQGrid\Rule.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\Interface\IRepository.cs" />
-    <Compile Include="Repository\Interface\ISedeRepository.cs" />
-    <Compile Include="Repository\Mapping\SedeMap.cs" />
-    <Compile Include="Repository\Repository.cs" />
-    <Compile Include="Repository\SedeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -235,38 +207,33 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\Intranet\Views\Web.config" />
-    <Content Include="Areas\Intranet\Views\Criterio\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Examen\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Cargo\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\Criterio\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\Examen\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaNuevo.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaReemplazo.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
-    <Content Include="Areas\Intranet\Views\Evaluacion\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Evaluacion\InstruccionesExamen.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen1.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen2.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen3.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\InstruccionesExamen.cshtml" />
+    <Content Include="Areas\Intranet\Views\Examen\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Examen\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Rol\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Usuario\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Seguridad\Login.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaReemplazo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPorRequerimiento.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPreSeleccionados.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ProgramarEvaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen1.cshtml" />
@@ -274,6 +241,11 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen3.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen4.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen5.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Web.config" />
+    <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\grid.locale-en.js" />
@@ -318,6 +290,7 @@
     <Content Include="Views\Shared\MenuCv.cshtml" />
     <Content Include="Views\Seguridad\Login.cshtml" />
     <Content Include="Views\Sede\Edit.cshtml" />
+    <Content Include="Views\Sede\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -334,6 +307,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">
+      <Project>{f18ae36d-836e-47cb-b712-6287528c3310}</Project>
+      <Name>SanPablo.Reclutador.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SanPablo.Reclutador.Repository\SanPablo.Reclutador.Repository.csproj">
+      <Project>{4492ad21-c07e-497d-9214-1024cf2f1a03}</Project>
+      <Name>SanPablo.Reclutador.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

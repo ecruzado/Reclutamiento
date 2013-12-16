@@ -61,10 +61,19 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controller\SedeControllerTest.cs" />
+    <Compile Include="Model\PersonaValidatorTest.cs" />
     <Compile Include="Model\SedeValidarTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">
+      <Project>{f18ae36d-836e-47cb-b712-6287528c3310}</Project>
+      <Name>SanPablo.Reclutador.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SanPablo.Reclutador.Repository\SanPablo.Reclutador.Repository.csproj">
+      <Project>{4492ad21-c07e-497d-9214-1024cf2f1a03}</Project>
+      <Name>SanPablo.Reclutador.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SanPablo.Reclutador.Web\SanPablo.Reclutador.Web.csproj">
       <Project>{b977d52a-21e6-4c0c-be0a-3824e02cb7b7}</Project>
       <Name>SanPablo.Reclutador.Web</Name>

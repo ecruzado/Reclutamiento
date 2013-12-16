@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SanPablo.Reclutador.Entity;
+using SanPablo.Reclutador.Repository.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,15 +10,67 @@ namespace SanPablo.Reclutador.Web.Controllers
 {
     public class PostulanteController : Controller
     {
+        private IPersonaRepository _personaRepository;
+
+        public PostulanteController(IPersonaRepository personaRepository)
+        {
+            _personaRepository = personaRepository;
+        }
+
+
+        #region General
+        
+        public ActionResult General()
+        {
+            var persona = new Persona();
+            persona.TipoDocumentos = new List<ItemTabla>();
+            persona.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            persona.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
+            persona.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
+
+            persona.Sexo = new List<ItemTabla>();
+            persona.Sexo.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            persona.Sexo.Add(new ItemTabla { Codigo = "01", Descripcion = "Masculito" });
+            persona.Sexo.Add(new ItemTabla { Codigo = "02", Descripcion = "Femenino" });
+            
+            persona.EstadosCiviles = new List<ItemTabla>();
+            persona.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            persona.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero" });
+            persona.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
+
+            return View(persona);
+        }
+
+        [HttpPost]
+        public ActionResult General(Persona persona)
+        {
+            if (!ModelState.IsValid)
+            {
+                persona.TipoDocumentos = new List<ItemTabla>();
+                persona.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+                persona.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
+                persona.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
+
+                persona.Sexo = new List<ItemTabla>();
+                persona.Sexo.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+                persona.Sexo.Add(new ItemTabla { Codigo = "01", Descripcion = "Masculito" });
+                persona.Sexo.Add(new ItemTabla { Codigo = "02", Descripcion = "Femenino" });
+
+                persona.EstadosCiviles = new List<ItemTabla>();
+                persona.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+                persona.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero" });
+                persona.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
+                return View("Edit", persona);
+            }
+            _personaRepository.Add(persona);
+            return View("Estudios");
+        }
+
+        #endregion
 
         public ActionResult Index()
         {
             return View();
-        }
-
-        public ActionResult General()
-        {
-            return View("General");
         }
 
         public ActionResult Estudios()

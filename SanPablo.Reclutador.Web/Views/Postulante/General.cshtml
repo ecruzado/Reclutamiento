@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Entity.Persona
+@{
     ViewBag.Title = "General";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
@@ -7,12 +8,8 @@
 
 @section Scripts{
 <script>
-
     $(document).ready(function () {
-
         $("#dtpfechanacimiento").datepicker();
-
-
     });
 </script>
 }
@@ -21,299 +18,287 @@
         @Html.Partial("MenuCv")
     </div>
     <div class="span12">
-        <div class="widget-box">
-            <div class="widget-title">
-                <h5>Datos</h5>
-            </div>
-            <p style="margin-left:300px;margin-top:10px;">No olvides que los campos marcados con (<span class="text-error">*</span>) son obligatorios</p>
-            <div class="grilla-opciones">
-                <h6>Datos Generales</h6>
-                <div class="opciones">
+        @using (Html.BeginForm("General","Postulante")){
+            <div class="widget-box">
+                <div class="widget-title">
+                    <h5>Datos</h5>
                 </div>
-                <div style="clear:both"></div>
-            </div>
-            <table style="margin-left:120px;">
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="setipodocumento">Tipo Documento <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="setipodocumento" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">DNI</option>
-                            <option>Carnet de Extranjería</option>
-                        </select>
-                    </td>
-                    <td rowspan="7" colspan="3" style="text-align:center;">
-                        <img src="~/Content/images/user4.png" alt="user" title="user" />
-                        <br />
-                        <input type="button" class="btn btn-info" value="Subir Foto" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="optionsCheckbox">Número Documento <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtnumerodocumento" value="42525235">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido Paterno <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtapellidopaterno" value="Linares">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido Materno <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtapellidomaterno" value="Linares">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtprimernombre">Primer Nombre <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtprimernombre" value="Linares">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtsegundonombre">Segundo Nombre</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtsegundonombre" value="Fransisco">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="senacionalidad">Nacionalidad <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="senacionalidad" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Peruana</option>
-                            <option>Argentina</option>
-                            <option>Chilena</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="dtpfechanacimiento" value="01/07/1970">
-                    </td>
-                    <td style="width:40px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="seSexo">Sexo <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="seSexo" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Masculino</option>
-                            <option>Femenino</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtnumerolicencia" value="7892450457">
-                    </td>
-                    <td style="width:40px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="seestadocivil">Estado Civil <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="seestadocivil" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Soltero</option>
-                            <option>Casado</option>
-                            <option>Divorciado</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="taobservaciongeneral">Observación</label>
-                    </td >
-                    <td colspan="4" class="colInput">
-                        <textarea id="taobservaciongeneral" rows="3" class="textoFormulario" style="width:95%"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <div class="grilla-opciones">
-                <h6>Datos de Residencia</h6>
-                <div class="opciones">
+                <p style="margin-left:300px;margin-top:10px;">No olvides que los campos marcados con (<span class="text-error">*</span>) son obligatorios</p>
+                <div class="grilla-opciones">
+                    <h6>Datos Generales</h6>
+                    <div class="opciones">
+                    </div>
+                    <div style="clear:both"></div>
                 </div>
-                <div style="clear:both"></div>
-            </div>
-            <table style="margin-left:120px;">
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="sedepartamento">País <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="pais" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Peru</option>
-                        </select>
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="setipovia" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option>Av.</option>
-                            <option selected="selected">Jr.</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="sedepartamento">Departamento <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <select id="sedepartamento" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Lima</option>
-                            <option>Arequipa</option>
-                        </select>
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtnombrevia" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="seprovincia">Provincia</label>
-                    </td>
-                    <td class="colInput">
-                        <select id="seprovincia" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Lima</option>
-                        </select>
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtnumero">Número <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="input-xmini" id="txtnumero" value="">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                        <input type="text" class="input-xmini" id="txtinterior" value="456">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="sedistrito">Distrito</label>
-                    </td>
-                    <td class="colInput">
-                        <select id="sedistrito" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Lima</option>
-                        </select>
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtnumero">Manzana <span class="text-error">*</span></label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="input-xmini" id="txtManzana" value="">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
-                        <input type="text" class="input-xmini" id="txtLote" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtemail">Email</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtemail" value="mlinares@gmail.com" disabled="">
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="input-xmini" id="txtBloque" value="">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                        <input type="text" class="input-xmini" id="txtEtapa" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txttelefonomovil" value="42525235">
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="setipozona">Tipo Zona</label>
-                    </td>
-                    <td class="colInput">
-                        <select id="setipozona" class="textoFormulario">
-                            <option>Seleccionar</option>
-                            <option>Av.</option>
-                            <option>Jr.</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txttelefonofijo">Teléfono Fijo</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txttelefonofijo" value="">
-                    </td>
-                    <td style="width:10px;"></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="setipozona">Nombre Zona</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtNombreZona" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="txttelefonofijo">Referencia</label>
-                    </td>
-                    <td class="colInput">
-                        <input type="text" class="textoFormulario" id="txtReferencia" value="">
-                    </td>
-                </tr>
+                <table style="margin-left:120px;">
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="setipodocumento">Tipo Documento <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.DropDownListFor(model => model.TipoDocumento, new SelectList(Model.TipoDocumentos, "Codigo", "Descripcion", Model.TipoDocumento))
+                        </td>
+                        <td rowspan="7" colspan="3" style="text-align:center;">
+                            <img src="~/Content/images/user4.png" alt="user" title="user" />
+                            <br />
+                            <input type="button" class="btn btn-info" value="Subir Foto" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="optionsCheckbox">Número Documento <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.NumeroDocumento, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido Paterno <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido Materno <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtprimernombre">Primer Nombre <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.PrimerNombre, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtsegundonombre">Segundo Nombre</label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.SegundoNombre, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="senacionalidad">Nacionalidad <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <select id="senacionalidad" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option selected="selected">Peruana</option>
+                                <option>Argentina</option>
+                                <option>Chilena</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "textoFormulario" })
+                        </td>
+                        <td style="width:40px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="seSexo">Sexo <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.DropDownListFor(model => model.IndicadorSexo, new SelectList(Model.Sexo, "Codigo", "Descripcion", Model.IndicadorSexo))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.NumeroLicencia, new { @class = "textoFormulario" })
+                        </td>
+                        <td style="width:40px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="seestadocivil">Estado Civil <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            @Html.DropDownListFor(model => model.TipoEstadoCivil, new SelectList(Model.EstadosCiviles, "Codigo", "Descripcion", Model.TipoEstadoCivil))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="taobservaciongeneral">Observación</label>
+                        </td >
+                        <td colspan="4" class="colInput">
+                            @Html.TextAreaFor(model => model.Observacion, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                </table>
+                <div class="grilla-opciones">
+                    <h6>Datos de Residencia</h6>
+                    <div class="opciones">
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <table style="margin-left:120px;">
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="sedepartamento">País <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <select id="pais" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option selected="selected">Peru</option>
+                            </select>
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <select id="setipovia" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option>Av.</option>
+                                <option selected="selected">Jr.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="sedepartamento">Departamento <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <select id="sedepartamento" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option selected="selected">Lima</option>
+                                <option>Arequipa</option>
+                            </select>
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txtnombrevia" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="seprovincia">Provincia</label>
+                        </td>
+                        <td class="colInput">
+                            <select id="seprovincia" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option selected="selected">Lima</option>
+                            </select>
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtnumero">Número <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="input-xmini" id="txtnumero" value="">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
+                            <input type="text" class="input-xmini" id="txtinterior" value="456">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="sedistrito">Distrito</label>
+                        </td>
+                        <td class="colInput">
+                            <select id="sedistrito" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option selected="selected">Lima</option>
+                            </select>
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtnumero">Manzana <span class="text-error">*</span></label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="input-xmini" id="txtManzana" value="">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
+                            <input type="text" class="input-xmini" id="txtLote" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtemail">Email</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txtemail" value="mlinares@gmail.com" disabled="">
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="input-xmini" id="txtBloque" value="">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
+                            <input type="text" class="input-xmini" id="txtEtapa" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txttelefonomovil" value="42525235">
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="setipozona">Tipo Zona</label>
+                        </td>
+                        <td class="colInput">
+                            <select id="setipozona" class="textoFormulario">
+                                <option>Seleccionar</option>
+                                <option>Av.</option>
+                                <option>Jr.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txttelefonofijo">Teléfono Fijo</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txttelefonofijo" value="">
+                        </td>
+                        <td style="width:10px;"></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="setipozona">Nombre Zona</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txtNombreZona" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="txttelefonofijo">Referencia</label>
+                        </td>
+                        <td class="colInput">
+                            <input type="text" class="textoFormulario" id="txtReferencia" value="">
+                        </td>
+                    </tr>
 
-            </table>
-            <div class="formulario-accion">
-                <div class="opciones">
-                    <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
-                    <button type="reset" class="btn">Cancelar</button>
-                    <a class="btn btn-info" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                </table>
+                <div class="formulario-accion">
+                    <div class="opciones">
+                        <button type="submit"><i class="icon-hdd icon-white"></i> Grabar</button>
+                        <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                        <button type="reset" class="btn">Cancelar</button>
+                        <a class="btn btn-info" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                    </div>
                 </div>
+                <div style="clear:both"></div>
             </div>
-            <div style="clear:both"></div>
-        </div>
+        }
     </div>
-
-
 </div>
 

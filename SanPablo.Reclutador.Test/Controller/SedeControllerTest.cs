@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SanPablo.Reclutador.Web.Controllers;
-using SanPablo.Reclutador.Web.Entity;
-using SanPablo.Reclutador.Web.Repository;
-using SanPablo.Reclutador.Web.Repository.Interface;
+using SanPablo.Reclutador.Entity;
+using SanPablo.Reclutador.Repository;
+using SanPablo.Reclutador.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

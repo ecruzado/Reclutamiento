@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.Threading;
-using SanPablo.Reclutador.Web.Repository.Interface;
+using SanPablo.Reclutador.Repository.Interface;
 using NHibernate.Criterion;
-using SanPablo.Reclutador.Web.Entity;
+using SanPablo.Reclutador.Entity;
 using SanPablo.Reclutador.Web.Models.JQGrid;
 using SanPablo.Reclutador.Web.Core;
 

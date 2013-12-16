@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SanPablo.Reclutador.Web.Entity;
-using SanPablo.Reclutador.Web.Entity.Validation;
+using SanPablo.Reclutador.Entity;
+using SanPablo.Reclutador.Entity.Validation;
 using FluentValidation.Results;
 
 namespace SanPablo.Reclutador.Test.Model

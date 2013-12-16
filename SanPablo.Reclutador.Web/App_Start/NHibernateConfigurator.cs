@@ -4,7 +4,7 @@
     using FluentNHibernate.Cfg.Db;
     using NHibernate;
     using NHibernate.Cfg;
-    using SanPablo.Reclutador.Web.Repository;
+    using SanPablo.Reclutador.Repository;
 
     public class NHibernateConfigurator
     {

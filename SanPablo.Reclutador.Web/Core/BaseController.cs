@@ -1,6 +1,6 @@
 ﻿using SanPablo.Reclutador.Web.Models;
 using SanPablo.Reclutador.Web.Models.JQGrid;
-using SanPablo.Reclutador.Web.Repository.Interface;
+using SanPablo.Reclutador.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

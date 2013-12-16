@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8C9FE2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanPablo.Reclutador.Test", "SanPablo.Reclutador.Test\SanPablo.Reclutador.Test.csproj", "{5DEE20D8-A1A5-4D0D-9B85-F707FD411D29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanPablo.Reclutador.Entity", "SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj", "{F18AE36D-836E-47CB-B712-6287528C3310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanPablo.Reclutador.Repository", "SanPablo.Reclutador.Repository\SanPablo.Reclutador.Repository.csproj", "{4492AD21-C07E-497D-9214-1024CF2F1A03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{5DEE20D8-A1A5-4D0D-9B85-F707FD411D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DEE20D8-A1A5-4D0D-9B85-F707FD411D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DEE20D8-A1A5-4D0D-9B85-F707FD411D29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18AE36D-836E-47CB-B712-6287528C3310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18AE36D-836E-47CB-B712-6287528C3310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18AE36D-836E-47CB-B712-6287528C3310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18AE36D-836E-47CB-B712-6287528C3310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4492AD21-C07E-497D-9214-1024CF2F1A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4492AD21-C07E-497D-9214-1024CF2F1A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4492AD21-C07E-497D-9214-1024CF2F1A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4492AD21-C07E-497D-9214-1024CF2F1A03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

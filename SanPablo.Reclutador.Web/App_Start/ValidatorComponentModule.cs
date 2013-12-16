@@ -2,8 +2,8 @@
 {
     using Autofac;
     using FluentValidation;
-    using SanPablo.Reclutador.Web.Entity;
-    using SanPablo.Reclutador.Web.Entity.Validation;
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Entity.Validation;
 
     public class ValidatorComponentModule : Module
     {
@@ -11,6 +11,10 @@
         {
             builder.RegisterType<SedeValidator>()
                    .Keyed<IValidator>(typeof(IValidator<Sede>))
+                   .As<IValidator>();
+
+            builder.RegisterType<PersonaValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<Persona>))
                    .As<IValidator>();
         }
     }
