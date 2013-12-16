@@ -9,19 +9,20 @@ using System.Web.Mvc;
 namespace SanPablo.Reclutador.Web.Controllers
 {
     public class PostulanteController : Controller
-    {
+    {/*
         private IPersonaRepository _personaRepository;
 
         public PostulanteController(IPersonaRepository personaRepository)
         {
             _personaRepository = personaRepository;
         }
-
+        */
 
         #region General
         
         public ActionResult General()
         {
+            
             var persona = new Persona();
             persona.TipoDocumentos = new List<ItemTabla>();
             persona.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
@@ -62,7 +63,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                 persona.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
                 return View("Edit", persona);
             }
-            _personaRepository.Add(persona);
+            //_personaRepository.Add(persona);
             return View("Estudios");
         }
 

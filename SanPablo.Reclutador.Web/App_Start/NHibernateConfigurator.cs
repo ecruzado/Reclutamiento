@@ -15,7 +15,8 @@
                     c.Is(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             var fluentConfiguration = Fluently.Configure()
                     .Database(configuration)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<SedeRepository>());
+                    .Mappings(m => m.FluentMappings
+                        .AddFromAssemblyOf<SedeRepository>());
             return fluentConfiguration.BuildConfiguration();
         }
 

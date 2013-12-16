@@ -8,7 +8,7 @@
         public SedeMap()
         {
             /*Id(m => m.SedeId);*/
-            Id(m => m.CodigoSede, "IDESEDE");
+            Id(m => m.CodigoSede, "IDESEDE").GeneratedBy.Sequence("");
             Map(x => x.DescripcionSede, "DESCRIPCION");
             Map(x => x.EstadoRegistro, "ESTREGISTRO");
             //HasManyToMany(x => x.Usuarios)

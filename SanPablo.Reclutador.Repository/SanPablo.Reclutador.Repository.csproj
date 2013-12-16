@@ -50,59 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlternativaRepository.cs" />
-    <Compile Include="AreaRepository.cs" />
-    <Compile Include="CategoriaRepository.cs" />
-    <Compile Include="ConfiguracionAprobacionRepository.cs" />
-    <Compile Include="CriterioPorSubcategoriaRepository.cs" />
-    <Compile Include="CriterioRepository.cs" />
-    <Compile Include="DepartamentoRepository.cs" />
-    <Compile Include="DependenciaRepository.cs" />
-    <Compile Include="DetalleGeneralRepository.cs" />
-    <Compile Include="EmpleadoRepository.cs" />
-    <Compile Include="ExamenPorCategoriaRepository.cs" />
-    <Compile Include="ExamenRepository.cs" />
-    <Compile Include="GeneralRepository.cs" />
-    <Compile Include="Interface\IAlternativaRepository.cs" />
-    <Compile Include="Interface\IAreaRepository.cs" />
-    <Compile Include="Interface\ICategoriaRepository.cs" />
-    <Compile Include="Interface\IConfiguracionAprobacionRepository.cs" />
-    <Compile Include="Interface\ICriterioPorSubcategoriaRepository.cs" />
-    <Compile Include="Interface\ICriterioRepository.cs" />
-    <Compile Include="Interface\IDepartamentoRepository.cs" />
-    <Compile Include="Interface\IDependenciaRepository.cs" />
-    <Compile Include="Interface\IDetalleGeneralRepository.cs" />
-    <Compile Include="Interface\IEmpleadoRepository.cs" />
-    <Compile Include="Interface\IExamenPorCategoriaRepository.cs" />
-    <Compile Include="Interface\IExamenRepository.cs" />
-    <Compile Include="Interface\IGeneralRepository.cs" />
-    <Compile Include="Interface\INotificacionDeAprobacionRepository.cs" />
-    <Compile Include="Interface\IOpcionRepository.cs" />
     <Compile Include="Interface\IPersonaRepository.cs" />
-    <Compile Include="Interface\IRepository.cs" />
-    <Compile Include="Interface\IRolOpcionRepository.cs" />
-    <Compile Include="Interface\IRolRepository.cs" />
-    <Compile Include="Interface\ISedeRepository.cs" />
-    <Compile Include="Interface\ISubcategoriaRepository.cs" />
-    <Compile Include="Interface\IUbigeoRepository.cs" />
-    <Compile Include="Interface\IUsuarioRepository.cs" />
-    <Compile Include="Interface\IUsuarioSedeRepository.cs" />
-    <Compile Include="Mapping\PersonaMap.cs">
+    <Compile Include="Interface\IRepository.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interface\ISedeRepository.cs" />
     <Compile Include="Mapping\SedeMap.cs" />
-    <Compile Include="NotificacionDeAprobacionRepository.cs" />
-    <Compile Include="OpcionRepository.cs" />
     <Compile Include="PersonaRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository.cs" />
-    <Compile Include="RolOpcionRepository.cs" />
-    <Compile Include="RolRepository.cs" />
+    <Compile Include="Repository.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SedeRepository.cs" />
-    <Compile Include="SubcategoriaRepository.cs" />
-    <Compile Include="UbigeoRepository.cs" />
-    <Compile Include="UsuarioRepository.cs" />
-    <Compile Include="UsuarioSedeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

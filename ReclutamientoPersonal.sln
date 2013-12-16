@@ -16,6 +16,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanPablo.Reclutador.Entity"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanPablo.Reclutador.Repository", "SanPablo.Reclutador.Repository\SanPablo.Reclutador.Repository.csproj", "{4492AD21-C07E-497D-9214-1024CF2F1A03}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BaseDatos", "BaseDatos", "{D1517AEF-E81A-4B0D-A94F-4CBAF0CC801E}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\ecruzado\Desktop\Persona.SQL = C:\Users\ecruzado\Desktop\Persona.SQL
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
