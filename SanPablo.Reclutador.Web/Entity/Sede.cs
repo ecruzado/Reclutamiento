@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentValidation.Attributes;
+using SanPablo.Reclutador.Web.Entity.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;

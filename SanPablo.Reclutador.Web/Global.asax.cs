@@ -1,5 +1,6 @@
 ﻿namespace SanPablo.Reclutador.Web
 {
+    using FluentValidation.Mvc.WebApi;
     using SanPablo.Reclutador.Web.App_Start;
     using System;
     using System.Collections.Generic;
@@ -21,6 +22,8 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutofacConfig.Config();
+
+            //FluentValidationModelValidatorProvider.Configure();
         }
     }
 }

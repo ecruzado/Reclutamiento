@@ -1,0 +1,38 @@
+﻿@model SanPablo.Reclutador.Web.Entity.Sede
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Crear", "Sede", FormMethod.Post, new { id = "frmModel" }))
+{
+
+<table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+    <tr>
+        <td style="height: 10px">
+        </td>
+    </tr>
+    <tr>
+        <td class="right">
+            <b>@Html.LabelFor(model => model.DescripcionSede)</b>
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.DescripcionSede, new { @class = "inp-form" })
+            @Html.ValidationMessageFor(model => model.DescripcionSede)
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td colspan="3">
+            <br />
+            <input type="submit" value="Guardar" id="btnRegistrar" /> 
+            <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" />
+        </td>
+    </tr>
+</table>
+}
+
+<script src="@Url.Content("~/Scripts/jquery-1.9.1.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>

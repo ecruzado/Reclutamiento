@@ -4,7 +4,7 @@ using SanPablo.Reclutador.Web.Entity;
 using SanPablo.Reclutador.Web.Entity.Validation;
 using FluentValidation.Results;
 
-namespace SanPablo.Reclutador.Test
+namespace SanPablo.Reclutador.Test.Model
 {
     [TestClass]
     public class SedeValidarTest

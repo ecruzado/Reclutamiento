@@ -16,6 +16,8 @@
 
         void Update(TEntity entity);
 
+        TEntity GetSingle(Expression<Func<TEntity, bool>> condition);
+
         IEnumerable<TEntity> GetBy(Expression<Func<TEntity, bool>> condition);
 
         IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize);

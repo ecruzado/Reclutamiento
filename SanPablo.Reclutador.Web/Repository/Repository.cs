@@ -36,12 +36,20 @@
             _session.Update(entity);
         }
 
+        public TEntity GetSingle(Expression<Func<TEntity, bool>> condition)
+        {
+            return _session.QueryOver<TEntity>()
+                    .Where(condition)
+                    .SingleOrDefault();
+        }
+
         public IEnumerable<TEntity> GetBy(Expression<Func<TEntity, bool>> condition)
         {
             return _session.QueryOver<TEntity>()
                     .Where(condition)
                     .List();
         }
+
 
         public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
         {
