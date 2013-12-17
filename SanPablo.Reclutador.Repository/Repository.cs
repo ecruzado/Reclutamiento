@@ -23,7 +23,9 @@
 
         public int Add(TEntity entity)
         {
-            return (int)_session.Save(entity);
+            int resultado = (int)_session.Save(entity);
+            _session.Flush();
+            return resultado;
         }
 
         public void Remove(TEntity entity)

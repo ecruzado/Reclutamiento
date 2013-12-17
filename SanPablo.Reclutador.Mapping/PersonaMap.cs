@@ -7,7 +7,9 @@
     {
         public PersonaMap()
         {
-            Id(m => m.IdePersona, "IDEPERSONA");
+            Id(m => m.IdePersona, "IDEPERSONA")
+                .GeneratedBy
+                .Sequence("IDEPERSONA_SQ");
             Map(x => x.TipoDocumento, "TIPDOCUMEN");
             Map(x => x.NumeroDocumento, "NUMDOCUMENTO");
             Map(x => x.ApellidoPaterno, "APEPATERNO");

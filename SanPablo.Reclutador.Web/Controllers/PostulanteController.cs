@@ -9,14 +9,14 @@ using System.Web.Mvc;
 namespace SanPablo.Reclutador.Web.Controllers
 {
     public class PostulanteController : Controller
-    {/*
+    {
         private IPersonaRepository _personaRepository;
 
         public PostulanteController(IPersonaRepository personaRepository)
         {
             _personaRepository = personaRepository;
         }
-        */
+        
 
         #region General
         
@@ -30,9 +30,9 @@ namespace SanPablo.Reclutador.Web.Controllers
             persona.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
 
             persona.Sexo = new List<ItemTabla>();
-            persona.Sexo.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            persona.Sexo.Add(new ItemTabla { Codigo = "01", Descripcion = "Masculito" });
-            persona.Sexo.Add(new ItemTabla { Codigo = "02", Descripcion = "Femenino" });
+            persona.Sexo.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            persona.Sexo.Add(new ItemTabla { Codigo = "1", Descripcion = "Masculito" });
+            persona.Sexo.Add(new ItemTabla { Codigo = "2", Descripcion = "Femenino" });
             
             persona.EstadosCiviles = new List<ItemTabla>();
             persona.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
@@ -61,9 +61,9 @@ namespace SanPablo.Reclutador.Web.Controllers
                 persona.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
                 persona.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero" });
                 persona.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
-                return View("Edit", persona);
+                return View("General", persona);
             }
-            //_personaRepository.Add(persona);
+            _personaRepository.Add(persona);
             return View("Estudios");
         }
 

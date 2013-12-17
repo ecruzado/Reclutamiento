@@ -1,4 +1,4 @@
-﻿namespace SanPablo.Reclutador.Repository.Mapping
+﻿namespace SanPablo.Reclutador.Mapping
 {
     using FluentNHibernate.Mapping;
     using SanPablo.Reclutador.Entity;
@@ -8,7 +8,7 @@
         public SedeMap()
         {
             /*Id(m => m.SedeId);*/
-            Id(m => m.CodigoSede, "IDESEDE").GeneratedBy.Sequence("");
+            Id(m => m.CodigoSede, "IDESEDE");
             Map(x => x.DescripcionSede, "DESCRIPCION");
             Map(x => x.EstadoRegistro, "ESTREGISTRO");
             //HasManyToMany(x => x.Usuarios)

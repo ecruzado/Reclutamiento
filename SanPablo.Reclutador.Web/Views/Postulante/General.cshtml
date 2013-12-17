@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Entity.Persona
+﻿@model SanPablo.Reclutador.Entity.Persona
 @{
     ViewBag.Title = "General";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
@@ -37,6 +37,7 @@
                         </td>
                         <td class="colInput">
                             @Html.DropDownListFor(model => model.TipoDocumento, new SelectList(Model.TipoDocumentos, "Codigo", "Descripcion", Model.TipoDocumento))
+                            @Html.ValidationMessageFor(model => model.TipoDocumento)
                         </td>
                         <td rowspan="7" colspan="3" style="text-align:center;">
                             <img src="~/Content/images/user4.png" alt="user" title="user" />
@@ -50,6 +51,7 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.NumeroDocumento, new { @class = "textoFormulario" })
+                            @Html.ValidationMessageFor(model => model.NumeroDocumento)
                         </td>
                     </tr>
                     <tr>
@@ -58,6 +60,7 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "textoFormulario" })
+                            @Html.ValidationMessageFor(model => model.ApellidoPaterno)
                         </td>
                     </tr>
                     <tr>

@@ -13,9 +13,9 @@
                    .Keyed<IValidator>(typeof(IValidator<Sede>))
                    .As<IValidator>();
 
-            //builder.RegisterType<PersonaValidator>()
-            //       .Keyed<IValidator>(typeof(IValidator<Persona>))
-            //       .As<IValidator>();
+            builder.RegisterType<PersonaValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<Persona>))
+                   .As<IValidator>();
         }
     }
 }
