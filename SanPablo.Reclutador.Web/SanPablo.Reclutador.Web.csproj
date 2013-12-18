@@ -167,6 +167,7 @@
     <Compile Include="Models\JQGrid\Row.cs" />
     <Compile Include="Models\JQGrid\Rule.cs" />
     <Compile Include="Models\MenuItem.cs" />
+    <Compile Include="Models\PostulanteGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

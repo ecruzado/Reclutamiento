@@ -19,10 +19,5 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndicadorSexo { get; set; }
         public virtual string TipoEstadoCivil { get; set; }
         public virtual string Observacion { get; set; }
-
-        public virtual IList<ItemTabla> TipoDocumentos { get; set; }
-        public virtual IList<ItemTabla> Nacionalidad { get; set; }
-        public virtual IList<ItemTabla> Sexo { get; set; }
-        public virtual IList<ItemTabla> EstadosCiviles { get; set; }
     }
 }
