@@ -4,7 +4,8 @@
     using FluentNHibernate.Cfg.Db;
     using NHibernate;
     using NHibernate.Cfg;
-    using SanPablo.Reclutador.Web.Repository;
+    using SanPablo.Reclutador.Mapping;
+    using SanPablo.Reclutador.Repository;
 
     public class NHibernateConfigurator
     {
@@ -15,7 +16,8 @@
                     c.Is(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             var fluentConfiguration = Fluently.Configure()
                     .Database(configuration)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<SedeRepository>());
+                    .Mappings(m => m.FluentMappings
+                        .AddFromAssemblyOf<SedeMap>());
             return fluentConfiguration.BuildConfiguration();
         }
 

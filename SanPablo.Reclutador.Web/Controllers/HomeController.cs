@@ -5,16 +5,18 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.Threading;
-using SanPablo.Reclutador.Web.Repository.Interface;
+using SanPablo.Reclutador.Repository.Interface;
 using NHibernate.Criterion;
-using SanPablo.Reclutador.Web.Entity;
+using SanPablo.Reclutador.Entity;
 using SanPablo.Reclutador.Web.Models.JQGrid;
 using SanPablo.Reclutador.Web.Core;
+using NHibernate;
 
 namespace SanPablo.Reclutador.Web.Controllers
 {
     public class HomeController : BaseController
     {
+        
         private ISedeRepository _sedeRepository;
         //
         // GET: /Home/
@@ -23,20 +25,33 @@ namespace SanPablo.Reclutador.Web.Controllers
             _sedeRepository = sedeRepository;
         }
 
+        /*
+        private ISession _session;
+        public HomeController(ISession session)
+        {
+            _session = session;
+        }*/
+
         public ActionResult Index()
         {
             var lista = _sedeRepository.GetPaging("CodigoSede", true, 0, 10);
-            foreach (var item in lista) 
-            {
-                //item.CodigoExterno = "codigo ";
+            //foreach (var item in lista) 
+            //{
+            //    //item.CodigoExterno = "codigo ";
 
-            }
+            //}
+
+            //var test = _session.QueryOver<Sede>().List();
+            
+
             return View();
         }
 
+        /*
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
         {
+
             try
             {
                 grid.page = (grid.page == 0) ? 1 : grid.page;

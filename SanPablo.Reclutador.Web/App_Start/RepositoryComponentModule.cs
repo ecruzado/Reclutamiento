@@ -1,8 +1,8 @@
 ﻿namespace SanPablo.Reclutador.Web.App_Start
 {
     using Autofac;
-    using SanPablo.Reclutador.Web.Repository;
-    using SanPablo.Reclutador.Web.Repository.Interface;
+    using SanPablo.Reclutador.Repository;
+    using SanPablo.Reclutador.Repository.Interface;
 
     public class RepositoryComponentModule : Module
     {
@@ -10,6 +10,9 @@
         {
             builder.RegisterType<SedeRepository>()
                 .As<ISedeRepository>();
+
+            builder.RegisterType<PersonaRepository>()
+                .As<IPersonaRepository>();
         }
     }
 }

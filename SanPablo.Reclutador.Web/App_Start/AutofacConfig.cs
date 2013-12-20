@@ -2,6 +2,7 @@
 {
     using Autofac;
     using Autofac.Integration.Mvc;
+    using FluentValidation.Mvc;
     using NHibernate;
     using SanPablo.Reclutador.Web.Controllers;
     using System.Reflection;
@@ -20,11 +21,18 @@
                 .As<ISession>().InstancePerHttpRequest();
 
             builder.RegisterModule(new RepositoryComponentModule());
+            builder.RegisterModule(new ValidatorComponentModule());
 
             builder.RegisterModule(new AutofacWebTypesModule());
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
+
+            // Set up the FluentValidation provider factory and add it as a Model validator
+            var fluentValidationModelValidatorProvider = new FluentValidationModelValidatorProvider(new AutofacValidatorFactory(container));
+            DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
+            fluentValidationModelValidatorProvider.AddImplicitRequiredValidator = false;
+            ModelValidatorProviders.Providers.Add(fluentValidationModelValidatorProvider);
         }
     }
 }

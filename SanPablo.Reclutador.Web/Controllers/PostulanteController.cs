@@ -1,22 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace SanPablo.Reclutador.Web.Controllers
+﻿namespace SanPablo.Reclutador.Web.Controllers
 {
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Repository.Interface;
+    using SanPablo.Reclutador.Web.Models;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    
     public class PostulanteController : Controller
     {
+        private IPersonaRepository _personaRepository;
+
+        public PostulanteController(IPersonaRepository personaRepository)
+        {
+            _personaRepository = personaRepository;
+        }
+        
+
+        #region General
+        
+        public ViewResult General()
+        {
+            var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
+
+            postulanteGeneralViewModel.TipoDocumentos = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
+            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
+
+            postulanteGeneralViewModel.Sexo = new List<ItemTabla>();
+            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "1", Descripcion = "Masculito" });
+            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "2", Descripcion = "Femenino" });
+            
+            postulanteGeneralViewModel.EstadosCiviles = new List<ItemTabla>();
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
+
+            return View(postulanteGeneralViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult General([Bind(Prefix = "Persona")]Persona persona)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("General", persona);
+            }
+            _personaRepository.Add(persona);
+            return RedirectToAction("Estudios");
+        }
+
+        #endregion
 
         public ActionResult Index()
         {
             return View();
-        }
-
-        public ActionResult General()
-        {
-            return View("General");
         }
 
         public ActionResult Estudios()
