@@ -16,7 +16,7 @@
             url: '@Url.Action("ListaSolicitudPersonal", "SolicitudCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Estado', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
+            colNames: ['Estado', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
             colModel: [
                     { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
@@ -35,7 +35,8 @@
                     { name: 'Responsable', index: 'Responsable', align: 'left', width: 100 },
                     { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
                     { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
-                    { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 }
+                    { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 },
+                    { name: 'Grupo', index: 'Grupo', align: 'center', width: 100 }
             ],
             pager: '#grdPager',
             height: 420,
@@ -45,7 +46,11 @@
             viewrecords: true,
             hidegrid: false,
             altRows: true,
-            shrinkToFit: false
+            shrinkToFit: false,
+            treeGrid: true,
+            treeGridModel: 'adjacency',
+            treedatatype: "local",
+            ExpandColumn: 'Codigo',
         });
 
     });

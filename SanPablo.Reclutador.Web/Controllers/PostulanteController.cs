@@ -21,7 +21,7 @@
         public ViewResult General()
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
-
+            postulanteGeneralViewModel.Persona = new Persona();
             postulanteGeneralViewModel.TipoDocumentos = new List<ItemTabla>();
             postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
             postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
@@ -185,7 +185,7 @@
                           "Secretaria de Hospitalización",                          
                           "Tiempo Parcial",    
                           "15/07/2013",
-                     
+                          "Hospitalización",
                 }
             };
             lstFilas.Add(fila1);
@@ -199,6 +199,7 @@
                           "Técnico en Enfermería",                          
                           "Tiempo Completo",            
                           "15/07/2013",
+                          "Hospitalización"
                 }
             };
             lstFilas.Add(fila2);
@@ -212,6 +213,7 @@
                           "Ayudante de cocina",                          
                           "Tiempo Completo",         
                           "31/07/2013",
+                          "Cocina"
                 }
             };
             lstFilas.Add(fila3);
