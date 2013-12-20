@@ -24,37 +24,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult ListaSolicitudPersonal(string sidx, string sord, int page, int rows)
         {
             List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[19]
-        {
-          "200001",
-          "200001",
-          "Secretaría Ejecutiva",
-          "Gerencia de Créditos",
-          "Cobranzas",
-          "Cobranzas",
-          "5",
-          "0",
-          "0",
-          "0",
-          "0",
-          "0",
-          "19/10/2012",
-          "",
-          "Jefe de Cobranza",
-          "Carol Sandoval",
-          "NO",
-          "Nuevo",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
             var fAnonymousType2_2 = new
             {
                 id = 2,
-                cell = new string[19]
+                cell = new string[]
         {
           "200002",
           "200002",
@@ -74,41 +47,104 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
           "Pedro Gutierrez",
           "SI",
           "Pend. Aproba.",
+          "Almacén - Técnico de Almacén",
           "Activo"
         }
             };
             list.Add((object)fAnonymousType2_2);
-            var fAnonymousType2_3 = new
+            var fAnonymousType2_5 = new
             {
-                id = 3,
-                cell = new string[19]
+                id = 5,
+                cell = new string[]
         {
-          "200003",
-          "200003",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "4",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
+          "200005",
+          "200005",
+          "Técnico de Almacén",
+          "Gerencia Administrativa",
+          "Logística",
+          "Almacén",
+          "8",
+          "8",
+          "0",
+          "0",
+          "0",
+          "0",
           "20/10/2012",
           "",
           "RRHH",
           "Pedro Gutierrez",
           "SI",
-          "En Evaluación",
+          "Pend. Aproba.",
+          "Almacén - Técnico de Almacén",
           "Activo"
         }
             };
-            list.Add((object)fAnonymousType2_3);
+
+            list.Add((object)fAnonymousType2_5);
+            var fAnonymousType2_8 = new
+            {
+                id = 8,
+                cell = new string[]
+        {
+          "200008",
+          "200008",
+          "Técnico de Almacén",
+          "Gerencia Administrativa",
+          "Logística",
+          "Almacén",
+          "8",
+          "8",
+          "0",
+          "0",
+          "0",
+          "0",
+          "20/10/2012",
+          "",
+          "RRHH",
+          "Pedro Gutierrez",
+          "SI",
+          "Pend. Aproba.",
+          "Almacén - Técnico de Almacén",
+          "Activo"
+        }
+            };
+
+            list.Add((object)fAnonymousType2_8);
+
+
+            var fAnonymousType2_1 = new
+            {
+                id = 1,
+                cell = new string[]
+        {
+          "200001",
+          "200001",
+          "Secretaría Ejecutiva",
+          "Gerencia de Créditos",
+          "Cobranzas",
+          "Cobranzas",
+          "5",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "19/10/2012",
+          "",
+          "Jefe de Cobranza",
+          "Carol Sandoval",
+          "NO",
+          "Nuevo",
+          "Cobranzas - Secretaría Ejecutiva",
+          "Activo"
+        }
+            };
+            list.Add((object)fAnonymousType2_1);
+
             var fAnonymousType2_4 = new
             {
                 id = 4,
-                cell = new string[19]
+                cell = new string[]
         {
           "200004",
           "200004",
@@ -128,68 +164,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
           "Carol Sandoval",
           "NO",
           "Nuevo",
+          "Cobranzas - Secretaría Ejecutiva",
           "Activo"
         }
             };
             list.Add((object)fAnonymousType2_4);
-            var fAnonymousType2_5 = new
-            {
-                id = 5,
-                cell = new string[19]
-        {
-          "200005",
-          "200005",
-          "Técnico de Almacén",
-          "Gerencia Administrativa",
-          "Logística",
-          "Almacén",
-          "8",
-          "8",
-          "0",
-          "0",
-          "0",
-          "0",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "Pend. Aproba.",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_5);
-            var fAnonymousType2_6 = new
-            {
-                id = 6,
-                cell = new string[19]
-        {
-          "200006",
-          "200006",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "5",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "En Evaluación",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_6);
+
             var fAnonymousType2_7 = new
             {
                 id = 7,
-                cell = new string[19]
+                cell = new string[]
         {
           "200007",
           "200007",
@@ -209,41 +193,76 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
           "Carol Sandoval",
           "NO",
           "Nuevo",
+          "Cobranzas - Secretaría Ejecutiva",
           "Activo"
         }
             };
             list.Add((object)fAnonymousType2_7);
-            var fAnonymousType2_8 = new
+
+            var fAnonymousType2_3 = new
             {
-                id = 8,
-                cell = new string[19]
+                id = 3,
+                cell = new string[]
         {
-          "200008",
-          "200008",
-          "Técnico de Almacén",
-          "Gerencia Administrativa",
-          "Logística",
-          "Almacén",
-          "8",
-          "8",
-          "0",
-          "0",
-          "0",
-          "0",
+          "200003",
+          "200003",
+          "Técnico de Enfermería",
+          "Gerencia Médica",
+          "Enfermería",
+          "Cuidados Intensivos",
+          "4",
+          "1",
+          "50",
+          "2",
+          "1",
+          "1",
           "20/10/2012",
           "",
           "RRHH",
           "Pedro Gutierrez",
           "SI",
-          "Pend. Aproba.",
+          "En Evaluación",
+          "Cuidados Intensivos - Técnico de Enfermería",
           "Activo"
         }
             };
-            list.Add((object)fAnonymousType2_8);
+            list.Add((object)fAnonymousType2_3);
+
+
+            var fAnonymousType2_6 = new
+            {
+                id = 6,
+                cell = new string[]
+        {
+          "200006",
+          "200006",
+          "Técnico de Enfermería",
+          "Gerencia Médica",
+          "Enfermería",
+          "Cuidados Intensivos",
+          "5",
+          "1",
+          "50",
+          "2",
+          "1",
+          "1",
+          "20/10/2012",
+          "",
+          "RRHH",
+          "Pedro Gutierrez",
+          "SI",
+          "En Evaluación",
+          "Cuidados Intensivos - Técnico de Enfermería",
+          "Activo"
+        }
+            };
+            list.Add((object)fAnonymousType2_6);
+
+
             var fAnonymousType2_9 = new
             {
                 id = 9,
-                cell = new string[19]
+                cell = new string[]
         {
           "200009",
           "200009",
@@ -263,6 +282,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
           "Pedro Gutierrez",
           "SI",
           "En Evaluación",
+          "Cuidados Intensivos - Técnico de Enfermería",
           "Activo"
         }
             };
@@ -270,7 +290,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var fAnonymousType2_10 = new
             {
                 id = 10,
-                cell = new string[19]
+                cell = new string[]
         {
           "200010",
           "200010",
@@ -290,6 +310,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
           "Pedro Gutierrez",
           "SI",
           "En Evaluación",
+          "Cuidados Intensivos - Técnico de Enfermería",
           "Activo"
         }
             };

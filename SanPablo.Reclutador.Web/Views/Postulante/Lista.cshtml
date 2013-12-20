@@ -16,15 +16,16 @@
                 url: '@Url.Action("ListaOfertasLaborales", "Postulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Fecha', 'Lugar', 'Cargo/Posición', 'Tipo', 'Fecha Expiración', 'Postular'],
+                colNames: ['Fecha', 'Lugar', 'Cargo/Posición', 'Tipo', 'Fecha Expiración', 'Area', 'Postular'],
                 colModel: [
                         { name: 'Fecha', index: 'Fecha', align: 'center', width: 80, sortable: false },
-                        { name: 'Lugar', index: 'Lugar', align: 'left', width: 180, sortable: false },
-                        { name: 'CargoPosicion', index: 'CargoPosicion', width: 248, align: 'left', sortable: false, formatter: DetalleCargoFormatter },
+                        { name: 'Lugar', index: 'Lugar', align: 'left', width: 150, sortable: false },
+                        { name: 'CargoPosicion', index: 'CargoPosicion', width: 180, align: 'left', sortable: false, formatter: DetalleCargoFormatter },
                         //{ name: 'CargoPosicion', index: 'CargoPosicion', align: 'left', sortable: false, formatter: 'showlink', formatoptions: { baseLinkUrl: 'DetalleCargo', addParam: '&id=1' } },
-                        { name: 'Tipo', index: 'Tipo', align: 'center', sortable: false },
+                        { name: 'Tipo', index: 'Tipo', align: 'center', sortable: false, width: 90 },
                         { name: 'FechaExpiracion', index: 'FechaExpiracion', align: 'center', sortable: false, width: 80},
-                        { name: 'Postular', index: 'Postular', align: 'center', sortable: false, width: 60, formatter: PostularFormatter },
+                        { name: 'Area', index: 'Area', hidden: true, visible: false, width: 80 },
+                        { name: 'Postular', index: 'Postular', align: 'center', sortable: false, width: 40, formatter: PostularFormatter }
                 ],
                 pager: jQuery('#grdPager'),
                 rowNum: 10,
@@ -32,10 +33,8 @@
                 sortname: 'Fecha',
                 sortorder: 'desc',
                 viewrecords: true,
-                autowidth: true,
-                /*caption: 'Lista Referencias',*/
                 height: 320,
-                width: 736,
+                width: 850,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
                 hidegrid: false,
@@ -52,6 +51,11 @@
                         }
                     }
 
+                },
+                grouping: true,
+                groupingView: {
+                    groupField: ['Area'],
+                    groupDataSorted: true
                 }
             });
 
