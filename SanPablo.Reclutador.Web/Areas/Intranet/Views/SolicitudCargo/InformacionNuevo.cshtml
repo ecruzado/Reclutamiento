@@ -119,10 +119,12 @@
         $('#modalConfirmacion').modal('hide');
     }
     function deshabilita() {
-        $('#taobservacionaprobacion').modal('hide');
+        document.getElementById('idB1').style.display = "none";
+        //$('#taobservacionaprobacion').modal('hide');
     }
     function habilita() {
-        $('#taobservacionaprobacion').modal('show');
+        //$('#taobservacionaprobacion').modal('show');
+        document.getElementById('idB1').style.display = "block";
     }
 </script>
 }
@@ -284,11 +286,14 @@
     </div>
     
     <div class="modal-body">
-        <label>Comentarios</label>
-        <textarea class="input-porce" id="taobservacionaprobacion" rows="3"></textarea>
         <br />
-        <input type="radio" name="Aprob/rech" value="Aprobar" onclick="deshabilita()"/><span>Aprobar</span>
-        <input type="radio" name="Aprob/rech" value="Rechazar" checked onclick="habilita()"/><span>Rechazar</span>
+        <input type="radio" name="Aprob/rech" value="Aprobar"  onclick="deshabilita()"/><span>  Aprobar  </span>
+        <input type="radio" name="Aprob/rech" value="Rechazar" checked onclick="habilita()"/><span>  Rechazar  </span>
+        <div></div>
+        <div class="modal-body" id=idB1>
+        <label>Comentarios</label>
+        <textarea name="comentario"  class="input-porce" id="taobservacionaprobacion" rows="3"  ></textarea>
+        </div>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" onclick="ocultarAprobarDesaprobar();">Cancelar</a>

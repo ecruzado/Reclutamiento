@@ -284,7 +284,27 @@
             cellsubmit: 'clientArray',
             hidegrid: false
         });
+        jQuery("#grdListRemplazos").jqGrid({
+            //url: 'alt-64//Url.Action("ListaCompetencias", "SolicitudCargo")',
+            datatype: 'json', 
+            mtype: 'POST',
+            colNames: ['Fecha Inicio', 'Fecha Fin','Nombre',' Apellido'],
+            colModel: [
+                    { name: 'Fecha Inicio', index: 'Fecha Inicio', align: 'center', editable: false, sortable: false },
+                    { name: 'Fecha Fin', index: 'Fecha Fin', align: 'left', editable: false, sortable: false },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, sortable: false },
+                    { name: 'Apellido', index: 'Apellido', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'Fecha Inicio',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 90,
+            width: 930,
+            rowNum: 4,
+            cellsubmit: 'clientArray',
+            hidegrid: true
 
+        });
         var dlgobservacion = $("#dlgAprobarRechazo").dialog(
            {
                autoOpen: false,
@@ -371,7 +391,7 @@
                 </div>            
             </div>
             <h5>Motivo requerimiento</h5>
-<form class="formulario-busqueda">
+ <form class="formulario-busqueda">
                 <div class="formulario-fila">
                     <div class="span5">
                         <div class="">
@@ -398,8 +418,7 @@
                             <label class="control-label" for="inputSuccess">Tipo Puesto</label>
                             <div class="controles">
                                 <select id="setipopuesto" class="select-large valid">
-                                    <option>Seleccionar</option>
-                                    <option>Tiempo Completo</option>
+                                    <option selected="selected">Tiempo Completo</option>
                                     <option>Tiempo Parcial</option>
                                 </select>
                             </div>
@@ -467,46 +486,6 @@
                 <div class="formulario-fila">
                     <div class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Fecha Inicio</label>
-                            <div class="controles">
-                                <input type="text" class="input-small hasDatepicker" id="txtFechaInicio">
-                            </div>
-                        </div>
-                    </div>                    
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Nombres</label>
-                            <div class="controles">
-                                <input type="text" class="input">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Fecha Fin</label>
-                            <div class="controles">
-                                <input type="text" class="input-small hasDatepicker" id="txtFechaFin">
-                            </div>
-                        </div>
-                    </div>     
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Permanencia</label>
-                            <div class="controles">
-                                <select class="select-large valid">
-                                    <option>Seleccionar</option>
-                                    <option>Temporal</option>
-                                    <option>Permanente</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>     
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
                             <label class="control-label" for="inputSuccess">Observaciones</label>
                             <div class="controles">
                                 <textarea class="input-large" rows="3"></textarea>
@@ -514,6 +493,21 @@
                         </div>
                     </div>                    
                 </div>
+                <div class="grilla-opciones">
+                    <h6>Remplazos</h6>
+                        <div class="opciones">
+                            <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                            <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                            <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                        </div>
+                        <div style="clear:both"></div>
+                </div>
+                <div class="tabla-datos">
+                        <table id="grdListRemplazos">
+                        </table>
+                    </div>
+                
+                             
             </form>
             <h5>Perfil</h5>
             <ul class="nav nav-tabs">
@@ -575,6 +569,7 @@
                             </div>
                         </div>
                     </div>
+                    <div style="clear:both"></div>
                     <!--Puesto Fin -->
 
                     <!--General Inicio -->
@@ -645,13 +640,24 @@
                                             <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
                                         </td>                                       
                                         <td></td>
-                                        <td> <label class="control-label" for="input01">Publicación Sexo</label></td>
+                                        <!--<td> <label class="control-label" for="input01">Publicación Sexo</label></td>
                                         <td>
                                             <select id="sesexo" class="input-medium">
                                                 <option>Indistinto</option>
                                                 <option>Masculino</option>
                                                 <option>Femenino</option>
                                             </select> 
+                                        </td> -->
+                                        <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
+                                        <td>                                         
+                                            <select class="input-large">
+                                                <option>Jefe Corporativo Administrativo</option>
+                                                <option>Personal Administrativo</option>
+                                                <option>Personal Asistencial</option>
+                                                <option>Personal de Contacto</option>
+                                                <option>Personal Operativo</option>
+                                            </select>
+
                                         </td>
                                         <td>
                                         </td>
@@ -687,18 +693,6 @@
                                             <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
                                         </td>
                                         <td></td>
-                                        
-                                           <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
-                                        <td>                                         
-                                            <select class="input-large">
-                                                <option>Jefe Corporativo Administrativo</option>
-                                                <option>Personal Administrativo</option>
-                                                <option>Personal Asistencial</option>
-                                                <option>Personal de Contacto</option>
-                                                <option>Personal Operativo</option>
-                                            </select>
-
-                                        </td>
                                         <td></td>
                                         <td>
                                         </td>
@@ -1107,18 +1101,6 @@
                                                         <tr>
                                                         <td colspan="2" style="height:40px;">                                                            
                                                         </td>                                                            
-                                                    </tr>
-                                                        <tr>
-                                                        <td class="td-label">
-                                                            Fecha de Publicación.<span class="text-error">*</span>
-                                                        </td>
-                                                        <td> <input type="text" id="txtfechapublicacion" class="input-small" ></td>
-                                                    </tr>
-                                                        <tr>
-                                                        <td class="td-label">
-                                                            Fecha de Expiración<span class="text-error">*</span>
-                                                        </td>
-                                                        <td> <input type="text" id="txtfechaexpiracion" class="input-small"></td>
                                                     </tr>
                                                 </table>
 
