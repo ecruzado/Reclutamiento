@@ -52,7 +52,6 @@
                     .List();
         }
 
-
         public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
         {
             return GetPaging(sortField, ascending, pageIndex, pageSize, null);

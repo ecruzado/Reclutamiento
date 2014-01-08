@@ -1,7 +1,7 @@
-﻿namespace SanPablo.Reclutador.Web.Repository.Mapping
+﻿namespace SanPablo.Reclutador.Repository.Mapping
 {
     using FluentNHibernate.Mapping;
-    using SanPablo.Reclutador.Web.Entity;
+    using SanPablo.Reclutador.Entity;
 
     public class GeneralMap : ClassMap<General>
     {

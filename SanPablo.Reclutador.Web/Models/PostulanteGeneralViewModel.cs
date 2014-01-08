@@ -10,6 +10,11 @@
         public virtual IList<ItemTabla> Nacionalidad { get; set; }
         public virtual IList<ItemTabla> Sexo { get; set; }
         public virtual IList<ItemTabla> EstadosCiviles { get; set; }
+        public virtual IList<ItemTabla> Departamentos { get; set; }
+
+        public IList<EstudioPostulante> estudiosPostulante { get; set; }
+
+
 
     }
 }

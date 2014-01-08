@@ -13,6 +13,9 @@
 
             builder.RegisterType<PersonaRepository>()
                 .As<IPersonaRepository>();
+
+            builder.RegisterType<GeneralRepository>()
+                .As<IGeneralRepository>();
         }
     }
 }

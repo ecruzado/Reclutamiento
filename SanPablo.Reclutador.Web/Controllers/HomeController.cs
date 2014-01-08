@@ -91,10 +91,9 @@ namespace SanPablo.Reclutador.Web.Controllers
                 //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
                 return MensajeError();
             }
-        }
+        }*/
 
-
-        /*
+        /*        
         [HttpPost]
         public ActionResult GetDataTables(DataTable dataTable)
         {

@@ -9,16 +9,17 @@
     public class PostulanteController : Controller
     {
         private IPersonaRepository _personaRepository;
-
+        private IEstudioPostulanteRepository _estudioPostulanteRepository;
+        private IGeneralRepository _generalRepository;
+        private IUbigeoRepository _ubigeoRepository;
+        
         public PostulanteController(IPersonaRepository personaRepository)
         {
             _personaRepository = personaRepository;
+                        
         }
-        
-
         #region General
-        
-        public ViewResult General()
+        public PostulanteGeneralViewModel inicializarPostulante()
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Persona = new Persona();
@@ -27,40 +28,147 @@
             postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
             postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
 
+            postulanteGeneralViewModel.Nacionalidad = new List<ItemTabla>();
+            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "01", Descripcion = "Peruana" });
+            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "02", Descripcion = "Chilena" });
+
             postulanteGeneralViewModel.Sexo = new List<ItemTabla>();
             postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "1", Descripcion = "Masculito" });
+            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "1", Descripcion = "Masculino" });
             postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "2", Descripcion = "Femenino" });
-            
+
             postulanteGeneralViewModel.EstadosCiviles = new List<ItemTabla>();
             postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero(a)" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado(a)" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Viudo(a)" });
+            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Divorciado(a)" });
 
+            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "1", Descripcion = "Amazonas" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "2", Descripcion = "Ancash" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "3", Descripcion = "Apurimac" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "4", Descripcion = "Arequipa" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "5", Descripcion = "Cusco" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "6", Descripcion = "Lima" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "7", Descripcion = "Loreto" });
+            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "8", Descripcion = "Madre de Dios" });
+
+
+            /*var departamentos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
+            var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.Codigo == "010000");
+            foreach (var datos in obtenerDepartamentos)
+            {
+                departamentos.Add(new ItemTabla
+                {
+                    Codigo = datos.IdeUbigeo.ToString(),
+                    Descripcion = datos.Nombre
+                });
+            }
+            postulanteGeneralViewModel.Departamentos = departamentos;*/
+            
+            return postulanteGeneralViewModel;
+        }
+        public ViewResult General()
+        {
+            var postulanteGeneralViewModel = inicializarPostulante();
             return View(postulanteGeneralViewModel);
         }
 
         [HttpPost]
         public ActionResult General([Bind(Prefix = "Persona")]Persona persona)
         {
+                       
             if (!ModelState.IsValid)
             {
-                return View("General", persona);
+                var personaModel = inicializarPostulante();
+                personaModel.Persona = persona;
+                return View("General",personaModel);
             }
             _personaRepository.Add(persona);
             return RedirectToAction("Estudios");
         }
+        #endregion
 
+
+        #region Estudios
+        public EstudioPostulanteGeneralViewModel inicializarEstudio()
+        {
+            var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
+            estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
+            estudioPostulanteGeneralViewModel.TipoInstituciones = new List<ItemTabla>();
+            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "01", Descripcion = "Universidad" });
+            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "02", Descripcion = "Instituto" });
+            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "03", Descripcion = "Colegio" });
+
+            var listaInstituciones = new List<ItemTabla>();
+            estudioPostulanteGeneralViewModel.Instituciones = new List<ItemTabla>();
+            var recuperarInstituciones = _personaRepository.GetBy(x => x.PrimerNombre == "LIKE '%J'" );
+            foreach (var data in recuperarInstituciones)
+            { 
+                listaInstituciones.Add(new ItemTabla
+                {
+                    Codigo = data.TipoDocumento,
+                    Descripcion = data.ApellidoPaterno
+                });
+            }
+            estudioPostulanteGeneralViewModel.Instituciones = listaInstituciones;
+            estudioPostulanteGeneralViewModel.Instituciones.Insert(0, new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+
+            estudioPostulanteGeneralViewModel.AreasEstudio = new List<ItemTabla>();
+            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "01", Descripcion = "Medicina General" });
+            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "02", Descripcion = "Ing. Informática y de Sistemas" });
+            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "03", Descripcion = "Enfemeria" });
+            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "04", Descripcion = "Medicina Pediatrica" });
+
+            estudioPostulanteGeneralViewModel.Educacion = new List<ItemTabla>();
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "01", Descripcion = "Secundaria" });
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "02", Descripcion = "Tecnica" });
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "03", Descripcion = "Universitaria" });
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "04", Descripcion = "Maestria" });
+            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "05", Descripcion = "Doctorado" });
+
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<ItemTabla>();
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "01", Descripcion = "Incompleta" });
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "02", Descripcion = "Completa" });
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "03", Descripcion = "En curso" });
+            
+            return estudioPostulanteGeneralViewModel;
+        }
+        
+
+        public ViewResult Estudios()
+        {
+            var estudioGeneralViewModel = inicializarEstudio();
+            return View(estudioGeneralViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Estudios([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                var estudioPostulanteModel = inicializarEstudio();
+                estudioPostulanteModel.Estudio = estudioPostulante;
+                return View("Estudios", estudioPostulanteModel);
+            }
+            
+            _estudioPostulanteRepository.Add(estudioPostulante);
+            return RedirectToAction("Experiencia");
+        }
         #endregion
 
         public ActionResult Index()
         {
             return View();
-        }
-
-        public ActionResult Estudios()
-        {
-            return View("Estudios");
         }
 
         public ActionResult Conocimientos()
@@ -107,7 +215,6 @@
         {
             return View("InstruccionesExamen");
         }
-
 
         public ActionResult Lista()
         {

@@ -20,7 +20,7 @@
 
             RuleFor(x => x.ApellidoPaterno)
                 .NotEmpty()
-                .WithMessage("Ingresar apellido paterno");
+                .WithMessage ("Ingresar apellido paterno");
             RuleFor(x => x.ApellidoPaterno)
                 .Length(1,25)
                 .WithMessage("Ingresar apellido paterno con menos de 25 caracteres");
@@ -43,7 +43,7 @@
                 .NotEmpty()
                 .WithMessage("Ingresar fecha de nacimiento");
             RuleFor(x => x.FechaNacimiento)
-                .GreaterThan(new DateTime(1900,1,1))
+                .GreaterThan(new DateTime(1980,01,01))
                 .WithMessage("Ingresar fecha de nacimiento válida");
 
             RuleFor(x => x.IndicadorSexo)
@@ -53,6 +53,10 @@
             RuleFor(x => x.TipoEstadoCivil)
                 .NotEmpty()
                 .WithMessage("Ingresar Estado Civil");
+            
+            RuleFor(x => x.Correo)
+                .EmailAddress()
+                .WithMessage("Ingresar Correo Valido");
         }
     }
 }

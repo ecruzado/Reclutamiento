@@ -55,6 +55,7 @@
     <Compile Include="Dependencia.cs" />
     <Compile Include="DetalleGeneral.cs" />
     <Compile Include="Empleado.cs" />
+    <Compile Include="EstudioPostulante.cs" />
     <Compile Include="Examen.cs" />
     <Compile Include="ExamenPorCategoria.cs" />
     <Compile Include="General.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Ubigeo.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="UsuarioSede.cs" />
+    <Compile Include="Validation\EstudioPostulanteValidator.cs" />
     <Compile Include="Validation\PersonaValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
   </ItemGroup>

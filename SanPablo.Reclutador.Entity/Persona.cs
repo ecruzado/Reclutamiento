@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace SanPablo.Reclutador.Entity
 {
+    
     public class Persona
     {
         public virtual int IdePersona { get; set; }
@@ -18,6 +20,22 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NumeroLicencia { get; set; }
         public virtual string IndicadorSexo { get; set; }
         public virtual string TipoEstadoCivil { get; set; }
+        public virtual string Correo { get; set; }
         public virtual string Observacion { get; set; }
+       
+        public virtual IList<EstudioPostulante> Estudios { get; set; }
+
+        public Persona()
+        {
+            Estudios = new List<EstudioPostulante>();
+        }
+
+        public virtual void agregarEstudio(EstudioPostulante estudioPostulante)
+        {
+            estudioPostulante.postulante = this;
+            Estudios.Add(estudioPostulante);
+        }
+     
+
     }
 }

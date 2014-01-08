@@ -50,17 +50,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EstudioPostulanteRepository.cs" />
+    <Compile Include="GeneralRepository.cs" />
+    <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
+    <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IPersonaRepository.cs" />
     <Compile Include="Interface\IRepository.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interface\ISedeRepository.cs" />
+    <Compile Include="Interface\IUbigeoRepository.cs" />
     <Compile Include="PersonaRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SedeRepository.cs" />
+    <Compile Include="UbigeoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

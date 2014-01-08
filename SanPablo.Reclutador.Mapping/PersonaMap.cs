@@ -7,21 +7,25 @@
     {
         public PersonaMap()
         {
-            Id(m => m.IdePersona, "IDEPERSONA")
+            Id(m => m.IdePersona, "IDEPOSTULANTE")
                 .GeneratedBy
-                .Sequence("IDEPERSONA_SQ");
-            Map(x => x.TipoDocumento, "TIPDOCUMEN");
+                .Sequence("IDEPOSTULANTE_SQ");
+            Map(x => x.TipoDocumento, "TIPDOCUMENTO");
             Map(x => x.NumeroDocumento, "NUMDOCUMENTO");
             Map(x => x.ApellidoPaterno, "APEPATERNO");
             Map(x => x.ApellidoMaterno, "APEMATERNO");
             Map(x => x.PrimerNombre, "PRINOMBRE");
             Map(x => x.SegundoNombre, "SEGNOMBRE");
-            Map(x => x.FechaNacimiento, "FECNACIMIEN");
+            Map(x => x.FechaNacimiento, "FECNACIMIENTO");
             Map(x => x.NumeroLicencia, "NUMLICENCIA");
             Map(x => x.IndicadorSexo, "INDSEXO");
             Map(x => x.TipoEstadoCivil, "TIPESTCIVIL");
+            Map(x => x.Correo, "CORREO");
             Map(x => x.Observacion, "OBSERVACION");
-            Table("PERSONA");
+            HasMany(x => x.Estudios)
+                    .Inverse()
+                    .Cascade.All();
+            Table("POSTULANTE");
         }
     }
 }

@@ -11,6 +11,14 @@
     $(document).ready(function () {
         $("#dtpfechanacimiento").datepicker();
     });
+
+    $(function () {
+        $('select#Departamentos').change(function () {
+            var districtId = $(this).val();
+          
+            alert(districtId);
+        });
+    });
 </script>
 }
 <div class="row">
@@ -18,11 +26,13 @@
         @Html.Partial("MenuCv")
     </div>
     <div class="span12">
-        @using (Html.BeginForm("General","Postulante")){
+        @using (Html.BeginForm("General", "Postulante"))
+        { 
             <div class="widget-box">
                 <div class="widget-title">
                     <h5>Datos</h5>
                 </div>
+         
                 <p style="margin-left:300px;margin-top:10px;">No olvides que los campos marcados con (<span class="text-error">*</span>) son obligatorios</p>
                 <div class="grilla-opciones">
                     <h6>Datos Generales</h6>
@@ -43,6 +53,7 @@
                             <img src="~/Content/images/user4.png" alt="user" title="user" />
                             <br />
                             <input type="button" class="btn btn-info" value="Subir Foto" />
+                            
                         </td>
                     </tr>
                     <tr>
@@ -145,7 +156,7 @@
                     </div>
                     <div style="clear:both"></div>
                 </div>
-                <table style="margin-left:120px;">
+                <table style="margin-left:160px;">
                     <tr>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="sedepartamento">País <span class="text-error">*</span></label>
@@ -156,7 +167,7 @@
                                 <option selected="selected">Peru</option>
                             </select>
                         </td>
-                        <td style="width:10px;"></td>
+                        <td style="width:40px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
                         </td>
@@ -172,13 +183,11 @@
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="sedepartamento">Departamento <span class="text-error">*</span></label>
                         </td>
-                        <td class="colInput">
-                            <select id="sedepartamento" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option selected="selected">Lima</option>
-                                <option>Arequipa</option>
-                            </select>
+                        
+                        <td id="Distritos" class="colInput">
+                            @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "Codigo", "Descripcion", Model.Departamentos), new {@id="Departamentos" })
                         </td>
+                      
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
@@ -189,7 +198,7 @@
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="seprovincia">Provincia</label>
+                            <label class="etiquetaFormulario" for="seprovincia">Provincia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
                             <select id="seprovincia" class="textoFormulario">
@@ -199,7 +208,7 @@
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="txtnumero">Número <span class="text-error">*</span></label>
+                            <label class="etiquetaFormulario" for="txtnumero">Número </label>
                         </td>
                         <td class="colInput">
                             <input type="text" class="input-xmini" id="txtnumero" value="">
@@ -209,7 +218,7 @@
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="sedistrito">Distrito</label>
+                            <label class="etiquetaFormulario" for="sedistrito">Distrito <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
                             <select id="sedistrito" class="textoFormulario">
@@ -219,7 +228,7 @@
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="txtnumero">Manzana <span class="text-error">*</span></label>
+                            <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
                             <input type="text" class="input-xmini" id="txtManzana" value="">
@@ -232,7 +241,8 @@
                             <label class="etiquetaFormulario" for="txtemail">Email</label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txtemail" value="mlinares@gmail.com" disabled="">
+                            @Html.TextBoxFor(model => model.Persona.Correo, new { @class = "textoFormulario" })
+                            @Html.ValidationMessageFor(model => model.Persona.Correo)
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
@@ -246,7 +256,7 @@
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil</label>
+                            <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
                             <input type="text" class="textoFormulario" id="txttelefonomovil" value="42525235">
@@ -283,7 +293,7 @@
                         <td></td>
                         <td></td>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="txttelefonofijo">Referencia</label>
+                            <label class="etiquetaFormulario" for="txttelefonofijo">Referencia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
                             <input type="text" class="textoFormulario" id="txtReferencia" value="">
