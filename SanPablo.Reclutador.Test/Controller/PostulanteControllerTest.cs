@@ -17,7 +17,10 @@
         public void Accion_general_retona_PostulanteGeneralViewModel()
         {
             var mockPersonaRepository = new Mock<IPersonaRepository>();
-            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object);
+            var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
+            var mockUbigeoRepository = new Mock<IUbigeoRepository>();
+            var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
+            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object,mockEstudioPostulanteRepository.Object,mockUbigeoRepository.Object, mockDetalleGeneralRepository.Object);
 
             var resultado = postulanteController.General().Model;
             
@@ -28,7 +31,10 @@
         public void Accion_post_general_modelo_valido_retorna_RedirectToRouteResult()
         {
             var mockPersonaRepository = new Mock<IPersonaRepository>();
-            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object);
+            var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
+            var mockUbigeoRepository = new Mock<IUbigeoRepository>();
+            var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
+            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object,mockEstudioPostulanteRepository.Object,mockUbigeoRepository.Object,mockDetalleGeneralRepository.Object);
             Persona persona = new Persona();
 
             var resultado = postulanteController.General(persona);
@@ -40,7 +46,10 @@
         public void Accion_post_general_modelo_invalido_retorna_la_misma_vista()
         {
             var mockPersonaRepository = new Mock<IPersonaRepository>();
-            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object);
+            var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
+            var mockUbigeoRepository = new Mock<IUbigeoRepository>();
+            var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
+            PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object,mockEstudioPostulanteRepository.Object,mockUbigeoRepository.Object,mockDetalleGeneralRepository.Object);
             Persona persona = new Persona();
             postulanteController.ModelState.AddModelError("TipoDocumento", "modelo invalido");
             

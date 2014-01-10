@@ -7,14 +7,11 @@ namespace SanPablo.Reclutador.Entity
 {
     public class DetalleGeneral : BaseEntity
     {
-        public virtual string CodigoDetalleGeneral { get; set; }
+        public virtual string IdeDetalleGeneral { get; set; }
         public virtual General General { get; set; }
-        public virtual DetalleGeneral DetallePadre { get; set; }
-        public virtual string NombreDetalleGeneral { get; set; }
-        public virtual int LongitudCampo { get; set; }
-        public virtual string TipoCampo { get; set; }
-        public virtual string Abreviatura { get; set; }
-        public virtual string Simbolo { get; set; }
-        public virtual string EstadoRegistro { get; set; }
+        public virtual string TipoTabla { get; set; }
+        public virtual string Valor { get; set; }
+        public virtual string Descripcion { get; set; }
+        
    }
 }

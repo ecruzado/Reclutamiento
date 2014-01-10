@@ -39,6 +39,10 @@
                 .Length(1, 25)
                 .WithMessage("Ingresar primer nombre con menos de 25 caracteres");
 
+            RuleFor(x => x.SegundoNombre)
+                .Length(0, 25)
+                .WithMessage("Ingresar primer nombre con menos de 25 caracteres");
+
             RuleFor(x => x.FechaNacimiento)
                 .NotEmpty()
                 .WithMessage("Ingresar fecha de nacimiento");
@@ -47,16 +51,28 @@
                 .WithMessage("Ingresar fecha de nacimiento válida");
 
             RuleFor(x => x.IndicadorSexo)
-                .NotEmpty()
+                .NotEqual("0")
                 .WithMessage("Ingresar sexo");
             
             RuleFor(x => x.TipoEstadoCivil)
-                .NotEmpty()
+                .NotEqual("00")
                 .WithMessage("Ingresar Estado Civil");
-            
+
+            RuleFor(x => x.IdeUbigeo)
+                .NotEqual(0)
+                .WithMessage("Ingresar Distrito de residencia");
+
             RuleFor(x => x.Correo)
                 .EmailAddress()
                 .WithMessage("Ingresar Correo Valido");
+
+            RuleFor(x => x.TipoVia)
+                .NotEqual("00")
+                .WithMessage("Ingresar Tipo Via");
+
+            RuleFor(x => x.NumeroDireccion)
+                .InclusiveBetween(0, 999999)
+                .WithMessage("Ingresar Numero Valido");
         }
     }
 }

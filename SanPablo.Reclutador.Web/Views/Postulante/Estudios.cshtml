@@ -14,7 +14,7 @@
             $("#txtfechainicio").datepicker({});
             $("#txtfechafin").datepicker({});
             
-
+           
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("ListaEstudios", "Postulante")',
                 datatype: 'json',
@@ -68,6 +68,8 @@
                var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
                return strImg;
         }
+
+
         function mostrarAgregarEstudios() {
             $('#modalAgregarEstudios').modal({
                 autoClose: false
@@ -137,7 +139,7 @@
         </div>
     </div>
 </div>
-        }
+        
 <!-- MODULO PARA AGREGAR ESTUDIOS -->
 
 <div id="modalAgregarEstudios" class="modal hide fade" style="width:650px">
@@ -157,8 +159,8 @@
                     <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Institución <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput">
-                    @Html.DropDownListFor(model => model.Estudio.tipTipoInstitucion, new SelectList(Model.TipoInstituciones, "Codigo", "Descripcion", Model.Estudio.tipTipoInstitucion))
-                    @Html.ValidationMessageFor(model => model.Estudio.tipTipoInstitucion)
+                    @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoInstituciones, "Codigo", "Descripcion", Model.Estudio.TipTipoInstitucion))
+                    @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
                 </td>
             </tr>
             <tr>
@@ -166,8 +168,8 @@
                     <label class="etiquetaFormulario" for="setInstitucion">Institución <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput;input-xxlarge">
-                     @Html.DropDownListFor(model => model.Estudio.tipNombreInstitucion , new SelectList(Model.Instituciones , "Codigo", "Descripcion", Model.Estudio.tipNombreInstitucion ))
-                     @Html.ValidationMessageFor(model => model.Estudio.tipNombreInstitucion )
+                     @Html.DropDownListFor(model => model.Estudio.TipoNombreInstitucion , new SelectList(Model.Instituciones , "Codigo", "Descripcion", Model.Estudio.TipoNombreInstitucion ))
+                     @Html.ValidationMessageFor(model => model.Estudio.TipoNombreInstitucion )
                 </td>
             </tr> 
             <tr>
@@ -183,8 +185,8 @@
                     <label class="etiquetaFormulario" for="setAreaEstudio"> Área de Estudio <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput">
-                    @Html.DropDownListFor(model => model.Estudio.tipoArea, new SelectList(Model.AreasEstudio, "Codigo", "Descripcion", Model.Estudio.tipoArea))
-                    @Html.ValidationMessageFor(model => model.Estudio.tipoArea)
+                    @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Codigo", "Descripcion", Model.Estudio.TipoArea))
+                    @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
                 </td>
             </tr>
             <tr>
@@ -192,8 +194,8 @@
                     <label class="etiquetaFormulario" for="setAreaEstudio"> Nivel Alcanzado <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput">
-                    @Html.DropDownListFor(model => model.Estudio.tipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Codigo", "Descripcion", Model.Estudio.tipoNivelAlcanzado))
-                    @Html.ValidationMessageFor(model => model.Estudio.tipoNivelAlcanzado)
+                    @Html.DropDownListFor(model => model.Estudio.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Codigo", "Descripcion", Model.Estudio.TipoNivelAlcanzado))
+                    @Html.ValidationMessageFor(model => model.Estudio.TipoNivelAlcanzado)
                 </td>
             </tr>
             <tr>
@@ -201,8 +203,8 @@
                     <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Inicio <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput" id="txtfechainicio">
-                    @Html.TextBoxFor(model => model.Estudio.fechaEstudioInicio,"{0:d}", new { @class = "datepicker" })
-                    @Html.ValidationMessageFor(model => model.Estudio.fechaEstudioInicio)
+                    @Html.TextBoxFor(model => model.Estudio.FechaEstudioInicio,"{0:d}", new { @class = "datepicker" })
+                    @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
                 </td>
             </tr>
             <tr>
@@ -210,8 +212,8 @@
                     <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Fin </label>
                 </td>
                 <td class="colInput">
-                    @Html.TextBoxFor(model => model.Estudio.fechaEstudioFin,"{0:d}", new { @class = "datepicker" })
-                    @Html.ValidationMessageFor(model => model.Estudio.fechaEstudioFin)
+                    @Html.TextBoxFor(model => model.Estudio.FechaEstudioFin,"{0:d}", new { @class = "datepicker" })
+                    @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioFin)
                 </td>
                 <td>
                     <Label style="display:inline-block; font-size:10pt" for="estudiando">   Actualmente Estudiando</Label>
@@ -225,4 +227,6 @@
         <!--<a href="#" class="btn btn-info">Grabar</a>-->
         <a href="#" class="btn" onclick="cerrarAgregarEstudios()" >Cancelar</a>
     </div>
+    
 </div>
+}

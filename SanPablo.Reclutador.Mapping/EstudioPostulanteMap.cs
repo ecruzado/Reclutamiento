@@ -7,19 +7,20 @@
     {
         public EstudioPostulanteMap()
         {
-            Id(m => m.ideEstudiosPostulante, "IDEESTUDIOSPOSTULANTE")
+            Id(m => m.IdeEstudiosPostulante, "IDEESTUDIOSPOSTULANTE")
                 .GeneratedBy
                 .Sequence("IDEESTUDIOSPOSTULANTE_SQ");
-            References(x => x.postulante);
-            Map(x => x.tipTipoInstitucion, "TIPTIPOINSTITUCION");
-            Map(x => x.tipNombreInstitucion, "TIPNOMINSTITUCION");
-            Map(x => x.nombreInstitucion, "NOMINSTITUCION");
-            Map(x => x.tipoArea, "TIPAREA");
-            Map(x => x.tipoEducacion, "TIPEDUCACION");
-            Map(x => x.tipoNivelAlcanzado, "TIPNIVELALCANZADO");
-            Map(x => x.fechaEstudioInicio, "FECESTUDIOINICIO");
-            Map(x => x.fechaEstudioFin, "FECESTUDIOFIN");
-            Map(x => x.indicadorActualmenteEstudiando, "INDESTACTUALMENTE");
+            References(x => x.Postulante);
+            Map(x => x.IdePostulante, "IDEPOSTULANTE");
+            Map(x => x.TipTipoInstitucion, "TIPTIPOINSTITUCION");
+            Map(x => x.TipoNombreInstitucion, "TIPNOMINSTITUCION");
+            Map(x => x.NombreInstitucion, "NOMINSTITUCION");
+            Map(x => x.TipoArea, "TIPAREA");
+            Map(x => x.TipoEducacion, "TIPEDUCACION");
+            Map(x => x.TipoNivelAlcanzado, "TIPNIVELALCANZADO");
+            Map(x => x.FechaEstudioInicio, "FECESTUDIOINICIO");
+            Map(x => x.FechaEstudioFin, "FECESTUDIOFIN");
+            Map(x => x.IndicadorActualmenteEstudiando, "INDESTACTUALMENTE");
             Table("ESTUDIOS_POSTULANTE");
         }
     }

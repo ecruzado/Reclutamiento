@@ -7,16 +7,17 @@ namespace SanPablo.Reclutador.Entity
 {
     public class EstudioPostulante
     {
-        public virtual int ideEstudiosPostulante { get; set; }
-        public virtual Persona postulante { get; set; }
-        public virtual string tipTipoInstitucion { get; set; }
-        public virtual string tipNombreInstitucion { get; set; }
-        public virtual string nombreInstitucion { get; set; }
-        public virtual string tipoArea { get; set; }
-        public virtual string tipoEducacion { get; set; }
-        public virtual string tipoNivelAlcanzado { get; set; }
-        public virtual DateTime fechaEstudioInicio { get; set; }
-        public virtual DateTime fechaEstudioFin { get; set; }
-        public virtual string indicadorActualmenteEstudiando { get; set; }
+        public virtual int IdeEstudiosPostulante { get; set; }
+        public virtual Persona Postulante { get; set; }
+        public virtual int IdePostulante { get; set; }
+        public virtual string TipTipoInstitucion { get; set; }
+        public virtual string TipoNombreInstitucion { get; set; }
+        public virtual string NombreInstitucion { get; set; }
+        public virtual string TipoArea { get; set; }
+        public virtual string TipoEducacion { get; set; }
+        public virtual string TipoNivelAlcanzado { get; set; }
+        public virtual DateTime FechaEstudioInicio { get; set; }
+        public virtual DateTime FechaEstudioFin { get; set; }
+        public virtual string IndicadorActualmenteEstudiando { get; set; }
     }
 }

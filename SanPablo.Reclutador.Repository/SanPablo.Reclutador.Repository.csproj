@@ -50,8 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetalleGeneralRepository.cs" />
     <Compile Include="EstudioPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
+    <Compile Include="Interface\IDetalleGeneralRepository.cs" />
     <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
     <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IPersonaRepository.cs" />

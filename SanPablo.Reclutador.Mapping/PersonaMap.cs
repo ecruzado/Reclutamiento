@@ -20,8 +20,23 @@
             Map(x => x.NumeroLicencia, "NUMLICENCIA");
             Map(x => x.IndicadorSexo, "INDSEXO");
             Map(x => x.TipoEstadoCivil, "TIPESTCIVIL");
+            Map(x => x.TipoVia, "TIPVIA");
+            Map(x => x.NombreVia, "NOMVIA");
+            Map(x => x.NumeroDireccion, "NUMDIRECCION");
+            Map(x => x.InteriorDireccion, "INTERIOR");
+            Map(x => x.Manzana, "MANZANA");
+            Map(x => x.Lote, "LOTE");
+            Map(x => x.Bloque, "BLOQUE");
+            Map(x => x.Etapa, "ETAPA");
             Map(x => x.Correo, "CORREO");
             Map(x => x.Observacion, "OBSERVACION");
+
+            Map(x => x.TelefonoMovil, "TELMOVIL");
+            Map(x => x.TelefonoFijo, "TELFIJO");
+            Map(x => x.TipoZona, "TIPZONA");
+            Map(x => x.NombreZona, "NOMZONA");
+                    
+            Map(x => x.IdeUbigeo, "IDEUBIGEO");
             HasMany(x => x.Estudios)
                     .Inverse()
                     .Cascade.All();

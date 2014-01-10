@@ -14,8 +14,14 @@
             builder.RegisterType<PersonaRepository>()
                 .As<IPersonaRepository>();
 
-            builder.RegisterType<GeneralRepository>()
-                .As<IGeneralRepository>();
+            builder.RegisterType<DetalleGeneralRepository>()
+                .As<IDetalleGeneralRepository>();
+
+            builder.RegisterType<EstudioPostulanteRepository>()
+                .As<IEstudioPostulanteRepository>();
+
+            builder.RegisterType<UbigeoRepository>()
+                .As<IUbigeoRepository>();
         }
     }
 }

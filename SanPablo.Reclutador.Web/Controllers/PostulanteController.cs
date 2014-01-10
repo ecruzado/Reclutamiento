@@ -5,17 +5,22 @@
     using SanPablo.Reclutador.Web.Models;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using System.Web;
+    using System.Web.Services;
     
     public class PostulanteController : Controller
     {
         private IPersonaRepository _personaRepository;
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
-        private IGeneralRepository _generalRepository;
+        private IDetalleGeneralRepository _detalleGeneralRepository;
         private IUbigeoRepository _ubigeoRepository;
         
-        public PostulanteController(IPersonaRepository personaRepository)
+        public PostulanteController(IPersonaRepository personaRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
             _personaRepository = personaRepository;
+            _estudioPostulanteRepository = estudioPostulanteRepository;
+            _ubigeoRepository = ubigeoRepository;
+            _detalleGeneralRepository = detalleGeneralRepository;
                         
         }
         #region General
@@ -45,31 +50,22 @@
             postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Viudo(a)" });
             postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Divorciado(a)" });
 
-            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "1", Descripcion = "Amazonas" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "2", Descripcion = "Ancash" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "3", Descripcion = "Apurimac" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "4", Descripcion = "Arequipa" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "5", Descripcion = "Cusco" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "6", Descripcion = "Lima" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "7", Descripcion = "Loreto" });
-            postulanteGeneralViewModel.Departamentos.Add(new ItemTabla { Codigo = "8", Descripcion = "Madre de Dios" });
+            postulanteGeneralViewModel.TipoVias = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoVias = listarVias();
+            postulanteGeneralViewModel.TipoVias.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
 
+            postulanteGeneralViewModel.TipoZonas = new List<ItemTabla>();
 
-            /*var departamentos = new List<ItemTabla>();
             postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
-            var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.Codigo == "010000");
-            foreach (var datos in obtenerDepartamentos)
-            {
-                departamentos.Add(new ItemTabla
-                {
-                    Codigo = datos.IdeUbigeo.ToString(),
-                    Descripcion = datos.Nombre
-                });
-            }
-            postulanteGeneralViewModel.Departamentos = departamentos;*/
-            
+            postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
+            postulanteGeneralViewModel.Departamentos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.Provincias = new List<ItemTabla>();
+            postulanteGeneralViewModel.Provincias.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.Distritos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Distritos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+                      
             return postulanteGeneralViewModel;
         }
         public ViewResult General()
@@ -107,13 +103,13 @@
 
             var listaInstituciones = new List<ItemTabla>();
             estudioPostulanteGeneralViewModel.Instituciones = new List<ItemTabla>();
-            var recuperarInstituciones = _personaRepository.GetBy(x => x.PrimerNombre == "LIKE '%J'" );
+            var recuperarInstituciones = _detalleGeneralRepository.GetBy(x => x.TipoTabla  == "INSTITUTOS" );
             foreach (var data in recuperarInstituciones)
             { 
                 listaInstituciones.Add(new ItemTabla
                 {
-                    Codigo = data.TipoDocumento,
-                    Descripcion = data.ApellidoPaterno
+                    Codigo = data.Valor,
+                    Descripcion = data.Descripcion
                 });
             }
             estudioPostulanteGeneralViewModel.Instituciones = listaInstituciones;
@@ -160,10 +156,65 @@
                 estudioPostulanteModel.Estudio = estudioPostulante;
                 return View("Estudios", estudioPostulanteModel);
             }
-            
+            estudioPostulante.IdePostulante = 1;
             _estudioPostulanteRepository.Add(estudioPostulante);
             return RedirectToAction("Experiencia");
         }
+        #endregion
+
+
+
+        #region METODOS
+
+        public List<ItemTabla> cargarDepartamentos()
+        {
+            var departamentos = new List<ItemTabla>();
+            var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null);
+            foreach (var datos in obtenerDepartamentos)
+            {
+                departamentos.Add(new ItemTabla
+                {
+                    Codigo = datos.IdeUbigeo.ToString(),
+                    Descripcion = datos.Nombre
+                });
+            }
+            return departamentos;
+            
+        }
+        [HttpPost]
+        public ActionResult SeleccionarProvincia(int departamento)
+        {
+             ActionResult result = null;
+                        
+             var provincias = new List<ItemTabla>();
+             var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == departamento);
+            foreach (var datos in obtenerDepartamentos)
+            {
+                provincias.Add(new ItemTabla
+                {
+                    Codigo = datos.IdeUbigeo.ToString(),
+                    Descripcion = datos.Nombre
+                });
+            }
+            result = Json(provincias);
+            return result;
+        }
+
+        public List<ItemTabla> listarVias()
+        {
+            var tipoVias = new List<ItemTabla>();
+            var obtenerTipoVias = _detalleGeneralRepository.GetBy(x => x.TipoTabla == "TIPOVIA");
+            foreach (var datos in obtenerTipoVias)
+            {
+                tipoVias.Add(new ItemTabla
+                {
+                    Codigo = datos.Valor.ToString(),
+                    Descripcion = datos.Descripcion
+                });
+            }
+            return tipoVias;
+        }
+
         #endregion
 
         public ActionResult Index()

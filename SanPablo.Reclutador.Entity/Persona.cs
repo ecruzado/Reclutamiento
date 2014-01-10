@@ -20,8 +20,22 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NumeroLicencia { get; set; }
         public virtual string IndicadorSexo { get; set; }
         public virtual string TipoEstadoCivil { get; set; }
+        public virtual string TipoVia { get; set; }
+        public virtual string NombreVia { get; set; }
+        public virtual int NumeroDireccion { get; set; }
+        public virtual int InteriorDireccion { get; set; }
+        public virtual string Manzana { get; set; }
+        public virtual string Lote { get; set; }
+        public virtual string Bloque { get; set; }
+        public virtual string Etapa { get; set; }
+
         public virtual string Correo { get; set; }
         public virtual string Observacion { get; set; }
+        public virtual int TelefonoMovil { get; set; }
+        public virtual int TelefonoFijo { get; set; }
+        public virtual string TipoZona { get; set; }
+        public virtual string NombreZona { get; set; }
+        public virtual int IdeUbigeo { get; set; }
        
         public virtual IList<EstudioPostulante> Estudios { get; set; }
 
@@ -32,7 +46,7 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual void agregarEstudio(EstudioPostulante estudioPostulante)
         {
-            estudioPostulante.postulante = this;
+            estudioPostulante.Postulante = this;
             Estudios.Add(estudioPostulante);
         }
      

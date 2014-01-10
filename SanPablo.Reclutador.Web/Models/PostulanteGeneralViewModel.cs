@@ -11,6 +11,10 @@
         public virtual IList<ItemTabla> Sexo { get; set; }
         public virtual IList<ItemTabla> EstadosCiviles { get; set; }
         public virtual IList<ItemTabla> Departamentos { get; set; }
+        public virtual IList<ItemTabla> Provincias { get; set; }
+        public virtual IList<ItemTabla> Distritos { get; set; }
+        public virtual IList<ItemTabla> TipoVias { get; set; }
+        public virtual IList<ItemTabla> TipoZonas { get; set; }
 
         public IList<EstudioPostulante> estudiosPostulante { get; set; }
 

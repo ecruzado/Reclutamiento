@@ -9,25 +9,80 @@
 @section Scripts{
 <script>
     $(document).ready(function () {
-        $("#dtpfechanacimiento").datepicker();
-    });
+        $.datepicker.regional['es'] =
+        {
+            closeText: 'Cerrar',
+            prevText: 'Previo',
+            nextText: 'Próximo',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+            'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            dateFormat: 'dd/mm/yy', firstDay: 0,
+            initStatus: 'Selecciona la fecha', isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
 
-    $(function () {
+        $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+
+        $("#dtpfechanacimiento").datepicker({});
+
+
+        //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
-            var districtId = $(this).val();
-          
-            alert(districtId);
-        });
-    });
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SeleccionarProvincia","Postulante")',
+                data: { departamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#Provincias").empty();
+                    $("select#Provincias").append("<option value='00'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Provincias").append("<option value='" 
+                        + item.Codigo +"'>" + item.Descripcion + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+        //Cargar Distritos
+        $('select#Provincias').change(function () {
+            var ideProvincia = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SeleccionarProvincia","Postulante")',
+                data: { departamento: ideProvincia },
+                success: function (respuesta) {
+                    $("select#Distritos").empty();
+                    $("select#Distritos").append("<option value='00'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Distritos").append("<option value='"
+                        + item.Codigo + "'>" + item.Descripcion + "</option>");
+                    }
+                );
+                }
+            });
+        })
+  });
+
 </script>
 }
 <div class="row">
     <div class="span12">
+    
         @Html.Partial("MenuCv")
-    </div>
-    <div class="span12">
-        @using (Html.BeginForm("General", "Postulante"))
-        { 
+   </div>
+    <div class="span12"> 
+       
+     @using (Html.BeginForm("General", "Postulante"))
+       { 
+
             <div class="widget-box">
                 <div class="widget-title">
                     <h5>Datos</h5>
@@ -62,7 +117,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.NumeroDocumento, new { @class = "textoFormulario" })
-                            @Html.ValidationMessageFor(model => model.Persona.NumeroDocumento)
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.NumeroDocumento)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -71,7 +128,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.ApellidoPaterno, new { @class = "textoFormulario" })
-                            @Html.ValidationMessageFor(model => model.Persona.ApellidoPaterno)
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.ApellidoPaterno)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -80,6 +139,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.ApellidoMaterno, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.ApellidoMaterno)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -88,6 +150,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.PrimerNombre, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.PrimerNombre)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -96,6 +161,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.SegundoNombre, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.SegundoNombre)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -117,6 +185,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.FechaNacimiento, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.FechaNacimiento)
+                            </div>
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
@@ -124,6 +195,9 @@
                         </td>
                         <td class="colInput">
                             @Html.DropDownListFor(model => model.Persona.IndicadorSexo, new SelectList(Model.Sexo, "Codigo", "Descripcion", Model.Persona.IndicadorSexo))
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.IndicadorSexo)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -132,6 +206,7 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.NumeroLicencia, new { @class = "textoFormulario" })
+
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
@@ -139,6 +214,9 @@
                         </td>
                         <td class="colInput">
                             @Html.DropDownListFor(model => model.Persona.TipoEstadoCivil, new SelectList(Model.EstadosCiviles, "Codigo", "Descripcion", Model.Persona.TipoEstadoCivil))
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.TipoEstadoCivil)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -171,21 +249,19 @@
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
                         </td>
-                        <td class="colInput">
-                            <select id="setipovia" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option>Av.</option>
-                                <option selected="selected">Jr.</option>
-                            </select>
+                        <td id="tipoVias" class="colInput">
+                           @Html.DropDownListFor(model => model.TipoVias, new SelectList(Model.TipoVias, "Codigo", "Descripcion", Model.TipoVias), new {@id="tipoVias" })
                         </td>
+                        
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="sedepartamento">Departamento <span class="text-error">*</span></label>
                         </td>
                         
-                        <td id="Distritos" class="colInput">
+                        <td id="Departamentos" class="colInput">
                             @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "Codigo", "Descripcion", Model.Departamentos), new {@id="Departamentos" })
+
                         </td>
                       
                         <td style="width:10px;"></td>
@@ -193,47 +269,46 @@
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txtnombrevia" value="">
+                            @Html.TextBoxFor(model => model.Persona.NombreVia, new { @class = "textoFormulario" })
                         </td>
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="seprovincia">Provincia <span class="text-error">*</span></label>
                         </td>
-                        <td class="colInput">
-                            <select id="seprovincia" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option selected="selected">Lima</option>
-                            </select>
+                        <td id="Provincias" class="colInput">
+                              @Html.DropDownListFor(model => model.Provincias ,new SelectList(Model.Provincias,"Codigo","Descripcion",Model.Provincias),new {@id="Provincias" }) 
+                           
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="txtnumero">Número </label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="input-xmini" id="txtnumero" value="">
+                            @Html.TextBoxFor(model => model.Persona.NumeroDireccion, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            <input type="text" class="input-xmini" id="txtinterior" value="456">
+                            @Html.TextBoxFor(model => model.Persona.InteriorDireccion, new { @class = "input-xmini" })                           
                         </td>
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="sedistrito">Distrito <span class="text-error">*</span></label>
                         </td>
-                        <td class="colInput">
-                            <select id="sedistrito" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option selected="selected">Lima</option>
-                            </select>
+                        <td id="Distritos" class="colInput">
+                              @Html.DropDownListFor(model => model.Persona.IdeUbigeo ,new SelectList(Model.Distritos,"Codigo","Descripcion",Model.Persona.IdeUbigeo),new {@id="Distritos" }) 
+                             <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.IdeUbigeo)
+                            </div>
+                           
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="input-xmini" id="txtManzana" value="">
+                            @Html.TextBoxFor(model => model.Persona.Manzana, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
-                            <input type="text" class="input-xmini" id="txtLote" value="">
+                            @Html.TextBoxFor(model => model.Persona.Lote, new { @class = "input-xmini" })
                         </td>
                     </tr>
                     <tr>
@@ -242,16 +317,18 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Persona.Correo, new { @class = "textoFormulario" })
-                            @Html.ValidationMessageFor(model => model.Persona.Correo)
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Persona.Correo)
+                            </div>
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="input-xmini" id="txtBloque" value="">
+                            @Html.TextBoxFor(model => model.Persona.Bloque, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            <input type="text" class="input-xmini" id="txtEtapa" value="">
+                            @Html.TextBoxFor(model => model.Persona.Etapa, new { @class = "input-xmini" })
                         </td>
                     </tr>
                     <tr>
@@ -303,7 +380,7 @@
                 </table>
                 <div class="formulario-accion">
                     <div class="opciones">
-                        <button type="submit"><i class="icon-hdd icon-white"></i> Grabar</button>
+                        <button id="btnGrabar" type="submit" onclick="barraProgreso()"><i class="icon-hdd icon-white"></i> Grabar</button>
                         <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
                         <button type="reset" class="btn">Cancelar</button>
                         <a class="btn btn-info" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
