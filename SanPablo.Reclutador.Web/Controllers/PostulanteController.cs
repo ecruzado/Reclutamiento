@@ -503,60 +503,6 @@
         }
         #endregion
 
-        #region ListaEstudios
-        /// <summary>
-        /// Lista de Estudios
-        /// </summary>       
-        [HttpPost]
-        public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
-        {
-            ActionResult result = null;
-            List<object> lstFilas = new List<object>();
-
-            var fila1 = new
-            {
-                id = 1,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Universidad",
-                          "Universidad de Lima",
-                          "Administración",                          
-                          "Pregrado",
-                          "Completa",
-                          "Ene/2005",
-                          "Dic/2010",
-                }
-            };
-            lstFilas.Add(fila1);
-
-            var fila2 = new
-            {
-                id = 2,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Colegio",
-                          "Colegio la Recoleta",
-                          "",                          
-                          "Secundaria",
-                          "Completa",
-                          "Ene/2008",
-                          "Dic/2012",                    
-                }
-            };
-            lstFilas.Add(fila2);
-
-            //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-            var data = new
-            {
-                //total = totalPag,       // Total de páginas
-                //page = page,            // Página actual
-                //records = totalReg,     // Total de registros (obtenido del modelo)
-                rows = lstFilas
-            };
-            result = Json(data);
-
-            return result;
-        }
-        #endregion
-
         #region ListaExperienciaLaboral
         /// <summary>
         /// Lista de Experiencia Laboral

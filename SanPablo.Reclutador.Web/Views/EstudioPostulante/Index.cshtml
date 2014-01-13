@@ -1,0 +1,144 @@
+﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
+@{
+    ViewBag.Title = "Estudios";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $.datepicker.regional['es'] =
+            {
+                closeText: 'Cerrar',
+                prevText: 'Previo',
+                nextText: 'Próximo',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                dateFormat: 'dd/mm/yy', firstDay: 0,
+                initStatus: 'Selecciona la fecha', isRTL: false
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+        });
+
+        $(document).ready(function () {
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("Listar", "EstudioPostulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colModel: [
+                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
+                        { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
+                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
+                        { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
+                        { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
+                        { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
+                ],
+                sortname: 'Nombre',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                height: 300,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            $('#updateDialog').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function () {
+                        $.post("/EstudioPostulante/Edit",
+                            $("#estudioPostulanteForm").serialize(),
+                            function (data) {
+                                $("#updateDialog").dialog("close");
+                            }
+                        );
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnAgregar').click(function () {
+                mostrarAgregarEstudios();
+            });
+
+            $('#btnEditar').click(function () {
+                var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                alert(selr);
+            });
+        });
+
+
+        function mostrarAgregarEstudios() {
+            var dialogDiv = $('#updateDialog');
+            $.get("/EstudioPostulante/Edit", function (data) {
+                dialogDiv.html(data);
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+    </script>
+}
+<div class="span12">
+    @Html.Partial("MenuCv")
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Nivel Académico</h5>
+            </div>
+            <div class="grilla-opciones">
+                <div class="opciones">
+                    <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditar" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdList">
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+            </div>
+            <div class="formulario-accion">
+                <div class="opciones">
+                    <a class="btn" href="@Url.Action("General", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    <a class="btn btn-info" href="@Url.Action("ExperienciaLaboral", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+</div>
+<div id="updateDialog" title="Agregar Estudio"></div>
+
+
+
