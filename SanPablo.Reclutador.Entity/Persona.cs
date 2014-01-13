@@ -36,8 +36,21 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoZona { get; set; }
         public virtual string NombreZona { get; set; }
         public virtual int IdeUbigeo { get; set; }
+        public virtual string TipoNacionalidad { get; set; }
        
         public virtual IList<EstudioPostulante> Estudios { get; set; }
+
+        public virtual string TipoSalario { get; set; }
+        public virtual string TipoDisponibilidadTrabajo { get; set; }
+        public virtual string TipoDisponibilidadHorario { get; set; }
+        public virtual string TipoHorario { get; set;}
+        public virtual string IndicadorReubicarseInterior { get; set; }
+        public virtual string IndicadorParientesCHSP { get; set; }
+        public virtual string TipoParienteSede { get; set; }
+        public virtual string ParienteNombre { get; set; }
+        public virtual string ParienteCargo { get; set; }
+        public virtual string DescripcionOtroMedio { get; set; }
+        public virtual string TipoComoSeEntero { get; set; }
 
         public Persona()
         {

@@ -1,0 +1,37 @@
+--DROP TABLE GENERAL CASCADE CONSTRAINTS;
+CREATE TABLE GENERAL
+(
+	CODGENERAL       NUMBER(8) NOT NULL,    -- Tipo de tabla 
+	TIPTABLA         VARCHAR2(15) NOT NULL,    -- Tipo de Tabla 
+	DESCRIPCION      VARCHAR2(50) NOT NULL,    -- nombre del tipo de tabla 
+	TIPDATO          VARCHAR2(8) NOT NULL,
+	LONCAMPO         VARCHAR2(3) NOT NULL,
+	USRCREACION      VARCHAR2(15) NULL,    -- fecha de creacion 
+	FECCREACION      DATE NULL,    -- fecha de creacion 
+	USRMODIFICACION  VARCHAR2(15) NULL,    -- fecha de modificacion 
+	FECMODIFICACION  DATE NULL    -- fecha de modificación 
+)
+;
+
+COMMENT ON TABLE GENERAL IS 'Tabla de datos generales'
+;
+COMMENT ON COLUMN GENERAL.CODGENERAL       IS 'Tipo de tabla'
+;
+COMMENT ON COLUMN GENERAL.TIPTABLA         IS 'Tipo de Tabla'
+;
+COMMENT ON COLUMN GENERAL.DESCRIPCION      IS 'nombre del tipo de tabla'
+;
+COMMENT ON COLUMN GENERAL.USRCREACION      IS 'fecha de creacion'
+;
+COMMENT ON COLUMN GENERAL.FECCREACION      IS 'fecha de creacion'
+;
+COMMENT ON COLUMN GENERAL.USRMODIFICACION  IS 'fecha de modificacion'
+;
+COMMENT ON COLUMN GENERAL.FECMODIFICACION  IS 'fecha de modificación'
+;
+
+ALTER TABLE GENERAL ADD CONSTRAINT PK_GENERAL 
+	PRIMARY KEY (CODGENERAL) 
+ USING INDEX 
+;
+
