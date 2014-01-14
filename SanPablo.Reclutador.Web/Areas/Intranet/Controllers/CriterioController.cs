@@ -1,5 +1,8 @@
-﻿using System;
+﻿using SanPablo.Reclutador.Repository.Interface;
+using System;
 using System.Collections.Generic;
+using SanPablo.Reclutador.Entity;
+using SanPablo.Reclutador.Web.Areas.Intranet.Models;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,13 +11,80 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
     public class CriterioController : Controller
     {
-        //
-        // GET: /Intranet/Criterio/
+        private ICriterioRepository _criterioRepository;
+        private IDetalleGeneralRepository _detalleGeneralRepository;
 
+        public CriterioController(ICriterioRepository criterioRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        {
+            _criterioRepository = criterioRepository;
+            _detalleGeneralRepository = detalleGeneralRepository;
+        }
+
+
+       
+
+        public CriterioViewModel inicializarCriterios()
+        {
+            var criterioViewModel = new CriterioViewModel();
+            criterioViewModel.Criterio = new Criterio();
+
+            criterioViewModel.TipoCriterio = 
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
+            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            
+            /*criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "01", Descripcion = "Examen" });
+            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "02", Descripcion = "Evaluación" });
+            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "02", Descripcion = "Entrevista" });
+            */
+
+/*
+            criterioViewModel.Medicion = new List<DetalleGeneral>();
+            criterioViewModel.Medicion.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            criterioViewModel.Medicion.Add(new ItemTabla { Codigo = "01", Descripcion = "Desempeño" });
+
+            criterioViewModel.Estado = new List<ItemTabla>();
+            criterioViewModel.estado.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            criterioViewModel.estado.Add(new ItemTabla { Codigo = "01", Descripcion = "Activo" });
+            criterioViewModel.estado.Add(new ItemTabla { Codigo = "02", Descripcion = "Inactivo" });
+
+            */
+
+            /*
+            postulanteGeneralViewModel.TipoVias = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoVias = listarVias();
+            postulanteGeneralViewModel.TipoVias.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.TipoZonas = new List<ItemTabla>();
+
+            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
+            postulanteGeneralViewModel.Departamentos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.Provincias = new List<ItemTabla>();
+            postulanteGeneralViewModel.Provincias.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.Distritos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Distritos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            */
+            return criterioViewModel;
+        }
+        
+        
+        
         public ActionResult Index()
         {
-            return View();
+           /* var lista = _criterioRepository.ObtenerListaMarciana("");*/
+           /* var postulanteGeneralViewModel = inicializarPostulante();
+            return View(postulanteGeneralViewModel); */
+
+            var criterioViewModel = inicializarCriterios();
+
+            return View(criterioViewModel);
         }
+
+
+
 
         public ActionResult Edit()
         {

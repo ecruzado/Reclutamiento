@@ -150,6 +150,7 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -254,7 +255,9 @@
     <Content Include="Areas\Intranet\Views\SolicitudPersonal\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudPersonal\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Web.config" />
+    <Content Include="Areas\Intranet\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
@@ -306,7 +309,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Intranet\Models\" />
     <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>
