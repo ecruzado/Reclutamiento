@@ -87,8 +87,8 @@
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
                               
-                                @Html.DropDownListFor(model => model.criterio.TipoCriterio, new SelectList(Model.tipoCriterio, "Codigo", "Descripcion", Model.criterio.TipoCriterio))
-		                        @Html.ValidationMessageFor(model => model.criterio.TipoCriterio)
+                                @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
+		                        @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
 
                             </div>
                         </div>
@@ -97,8 +97,8 @@
                         <div class="">
                             <label class="control-label" for="selectError">Medición</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.criterio.TipoMedicion, new SelectList(Model.medicion, "Codigo", "Descripcion", Model.criterio.TipoMedicion))
-		                        @Html.ValidationMessageFor(model => model.criterio.TipoMedicion)
+                                @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
+		                        @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
                             </div>
                         </div>
                     </div>
@@ -116,8 +116,8 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.criterio.EstadoCriterio, new SelectList(Model.estado, "Codigo", "Descripcion", Model.criterio.EstadoCriterio))
-		                        @Html.ValidationMessageFor(model => model.criterio.EstadoCriterio)
+                                @Html.DropDownListFor(model => model.Criterio.EstadoCriterio, new SelectList(Model.Estado, "Codigo", "Descripcion", Model.Criterio.EstadoCriterio))
+		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoCriterio)
                             </div>
                         </div>
                     </div>

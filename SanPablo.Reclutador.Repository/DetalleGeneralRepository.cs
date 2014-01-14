@@ -14,8 +14,8 @@
 
         public IList<DetalleGeneral> GetByTipoTabla(string tipoVal)
         {
-            //var lista = GetBy(x => x.TipoTabla == tipoVal);
-            return null;
+            var lista = GetBy(x => x.TipoTabla == tipoVal);
+            return lista;
         }
 
     }
