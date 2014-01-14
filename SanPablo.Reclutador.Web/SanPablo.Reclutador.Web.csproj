@@ -304,6 +304,8 @@
     <Content Include="Views\Seguridad\Login.cshtml" />
     <Content Include="Views\Sede\Edit.cshtml" />
     <Content Include="Views\Sede\Index.cshtml" />
+    <Content Include="Views\EstudioPostulante\Edit.cshtml" />
+    <Content Include="Views\EstudioPostulante\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

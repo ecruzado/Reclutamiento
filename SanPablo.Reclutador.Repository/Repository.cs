@@ -45,19 +45,19 @@
                     .SingleOrDefault();
         }
 
-        public IEnumerable<TEntity> GetBy(Expression<Func<TEntity, bool>> condition)
+        public IList<TEntity> GetBy(Expression<Func<TEntity, bool>> condition)
         {
             return _session.QueryOver<TEntity>()
                     .Where(condition)
                     .List();
         }
 
-        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
+        public IList<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
         {
             return GetPaging(sortField, ascending, pageIndex, pageSize, null);
         }
 
-        public IEnumerable<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize, DetachedCriteria where)
+        public IList<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize, DetachedCriteria where)
         {
             ICriteria criteria = where != null ? where.GetExecutableCriteria(_session) : _session.CreateCriteria<TEntity>();
 

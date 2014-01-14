@@ -6,6 +6,7 @@
     using SanPablo.Reclutador.Entity.Validation;
     using FluentValidation.TestHelper;
     using System;
+    using FluentValidation.Results;
 
     [TestClass]                
     public class PersonaValidatorTest
@@ -21,6 +22,7 @@
         [TestMethod]
         public void TipoDocumento_no_puede_ser_nulo_o_vacio() 
         {
+            
             validator
                 .ShouldHaveValidationErrorFor(x => x.TipoDocumento, null as string);
             validator

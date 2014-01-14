@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SanPablo.Reclutador.Entity;
 using SanPablo.Reclutador.Entity.Validation;
 using FluentValidation.Results;
+using FluentValidation.TestHelper;
+using FluentValidation;
 
 namespace SanPablo.Reclutador.Test.Model
 {
@@ -13,8 +15,8 @@ namespace SanPablo.Reclutador.Test.Model
         public void SedeValidator_ValidaEntidadValida()
         {
             Sede sede = GetSedeValida();
-
             SedeValidator sedeValidator = new SedeValidator();
+            
             ValidationResult validationResult = sedeValidator.Validate(sede);
 
             Assert.IsTrue(validationResult.IsValid);
@@ -28,6 +30,7 @@ namespace SanPablo.Reclutador.Test.Model
             sede.CodigoSede = null;
 
             SedeValidator sedeValidator = new SedeValidator();
+            
             ValidationResult validationResult = sedeValidator.Validate(sede);
 
             Assert.IsFalse(validationResult.IsValid);

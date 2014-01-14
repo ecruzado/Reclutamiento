@@ -37,9 +37,22 @@
             Map(x => x.NombreZona, "NOMZONA");
                     
             Map(x => x.IdeUbigeo, "IDEUBIGEO");
+            Map(x => x.TipoNacionalidad, "TIPNACIONALIDAD");
             HasMany(x => x.Estudios)
                     .Inverse()
                     .Cascade.All();
+
+            Map(x => x.TipoDisponibilidadTrabajo, "TIPDISPTRABAJO");
+            Map(x => x.TipoDisponibilidadHorario, "TIPDISPHORARIO");
+            Map(x => x.TipoHorario, "TIPOHORARIO");
+            Map(x => x.IndicadorReubicarseInterior, "INDREUBIINTEPAIS");
+            Map(x => x.IndicadorParientesCHSP, "INDPARIENTECHSP");
+            Map(x => x.TipoParienteSede, "TIPPARIENTESEDE");
+            Map(x => x.ParienteNombre, "PARIENTENOMBRE");
+            Map(x => x.ParienteCargo, "PARIENTECARGO");
+            Map(x => x.TipoComoSeEntero, "TIPCOMOSEENTERO");
+            Map(x => x.DescripcionOtroMedio, "DESOTROMEDIO");
+
             Table("POSTULANTE");
         }
     }

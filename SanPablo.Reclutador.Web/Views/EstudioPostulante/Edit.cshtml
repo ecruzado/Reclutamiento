@@ -1,0 +1,77 @@
+﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
+@{
+    Layout = "";
+}
+@using (Html.BeginForm("Edit", "EstudioPostulante", new { @id = "estudioPostulanteForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Institución <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoInstituciones, "Codigo", "Descripcion", Model.Estudio.TipTipoInstitucion))
+                @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Institución <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                    @Html.TextBoxFor(model => model.Estudio.NombreInstitucion)
+                    @Html.ValidationMessageFor(model => model.Estudio.NombreInstitucion )
+            </td>
+        </tr> 
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" style="visibility:hidden"> Otro <span class="text-error">*</span></label>
+            </td>
+            <td>
+                <input style="visibility:hidden" type="text" class="input-large" id="txtOtraInstitucion" />
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setAreaEstudio"> Área de Estudio <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Codigo", "Descripcion", Model.Estudio.TipoArea))
+                @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setAreaEstudio"> Nivel Alcanzado <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Estudio.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Codigo", "Descripcion", Model.Estudio.TipoNivelAlcanzado))
+                @Html.ValidationMessageFor(model => model.Estudio.TipoNivelAlcanzado)
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Inicio <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" id="txtfechainicio">
+                @Html.TextBoxFor(model => model.Estudio.FechaEstudioInicio,"{0:d}", new { @class = "datepicker" })
+                @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Fin </label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.Estudio.FechaEstudioFin,"{0:d}", new { @class = "datepicker" })
+                @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioFin)
+            </td>
+            <td>
+                <Label style="display:inline-block; font-size:10pt" for="estudiando">   Actualmente Estudiando</Label>
+                <input type="checkbox" value="estudiando" id="indicadorEstudiando" name="Estudiando">
+            </td>
+        </tr>
+        </table>
+}

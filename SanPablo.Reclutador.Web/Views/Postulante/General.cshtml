@@ -9,29 +9,9 @@
 @section Scripts{
 <script>
     $(document).ready(function () {
-        $.datepicker.regional['es'] =
-        {
-            closeText: 'Cerrar',
-            prevText: 'Previo',
-            nextText: 'Próximo',
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-            'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
-            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-            dateFormat: 'dd/mm/yy', firstDay: 0,
-            initStatus: 'Selecciona la fecha', isRTL: false
-        };
-        $.datepicker.setDefaults($.datepicker.regional['es']);
-
-        $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
-
+        $('.datepicker').datepicker({});
         $("#dtpfechanacimiento").datepicker({});
-
-
+       
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
@@ -71,6 +51,26 @@
         })
   });
 
+    $(function () {
+        $.datepicker.regional['es'] =
+           {
+               closeText: 'Cerrar',
+               prevText: 'Previo',
+               nextText: 'Próximo',
+               monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+               monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+               monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+               dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+               dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+               dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+               dateFormat: 'dd/mm/yy', firstDay: 0,
+               initStatus: 'Selecciona la fecha', isRTL: false
+           };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+    });
 </script>
 }
 <div class="row">
@@ -171,12 +171,7 @@
                             <label class="etiquetaFormulario" for="senacionalidad">Nacionalidad <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            <select id="senacionalidad" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option selected="selected">Peruana</option>
-                                <option>Argentina</option>
-                                <option>Chilena</option>
-                            </select>
+                             @Html.DropDownListFor(model => model.Persona.TipoNacionalidad , new SelectList(Model.Nacionalidad, "Codigo", "Descripcion", Model.Persona.TipoNacionalidad))
                         </td>
                     </tr>
                     <tr>
@@ -336,18 +331,14 @@
                             <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txttelefonomovil" value="42525235">
+                            <input type="text" class="textoFormulario" id="txttelefonomovil">
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="setipozona">Tipo Zona</label>
                         </td>
                         <td class="colInput">
-                            <select id="setipozona" class="textoFormulario">
-                                <option>Seleccionar</option>
-                                <option>Av.</option>
-                                <option>Jr.</option>
-                            </select>
+                            @Html.DropDownListFor(model => model.Persona.TipoZona, new SelectList(Model.TipoZonas, "Codigo", "Descripcion", Model.TipoZonas), new {@id="tipoZonas" })
                         </td>
                     </tr>
                     <tr>

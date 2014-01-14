@@ -16,6 +16,12 @@
         public virtual IList<ItemTabla> TipoVias { get; set; }
         public virtual IList<ItemTabla> TipoZonas { get; set; }
 
+        public virtual IList<ItemTabla> TipoSueldosBrutos { get; set; }
+        public virtual IList<ItemTabla> TipoDisponibilidadesTrabajos { get; set; }
+        public virtual IList<ItemTabla> TipoDisponibilidadesHorarios { get; set; }
+        public virtual IList<ItemTabla> TipoHorarios { get; set; }
+        public virtual IList<ItemTabla> TipoParientesSedes { get; set; }
+
         public IList<EstudioPostulante> estudiosPostulante { get; set; }
 
 

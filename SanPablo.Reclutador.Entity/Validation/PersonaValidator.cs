@@ -73,6 +73,22 @@
             RuleFor(x => x.NumeroDireccion)
                 .InclusiveBetween(0, 999999)
                 .WithMessage("Ingresar Numero Valido");
+
+            RuleFor(x => x.TipoSalario)
+                .NotEqual("0")
+                .WithMessage("Seleccionar  su espectativa de Sueldo Bruto");
+
+            RuleFor(x => x.TipoDisponibilidadTrabajo)
+                .NotEqual("0")
+                .WithMessage("Seleccionar su Disponibilidad para trabajar");
+
+            RuleFor(x => x.TipoDisponibilidadHorario)
+                .NotEqual("0")
+                .WithMessage("Seleccionar su Disponibilidad de horario");
+
+            RuleFor(x => x.TipoComoSeEntero)
+                .NotEmpty()
+                .WithMessage("Seleccionar como se entero de la convocatoria");
         }
     }
 }

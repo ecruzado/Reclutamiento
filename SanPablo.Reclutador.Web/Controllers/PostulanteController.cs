@@ -14,6 +14,8 @@
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IUbigeoRepository _ubigeoRepository;
+
+        private PostulanteGeneralViewModel personaModel = new PostulanteGeneralViewModel();
         
         public PostulanteController(IPersonaRepository personaRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
@@ -29,32 +31,28 @@
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Persona = new Persona();
             postulanteGeneralViewModel.TipoDocumentos = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "01", Descripcion = "DNI" });
-            postulanteGeneralViewModel.TipoDocumentos.Add(new ItemTabla { Codigo = "02", Descripcion = "Carnet de Extranjeria" });
-
+            postulanteGeneralViewModel.TipoDocumentos = listarDatos("TIPODOCUMENTO");
+            postulanteGeneralViewModel.TipoDocumentos.Insert(0,new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            
             postulanteGeneralViewModel.Nacionalidad = new List<ItemTabla>();
-            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "01", Descripcion = "Peruana" });
-            postulanteGeneralViewModel.Nacionalidad.Add(new ItemTabla { Codigo = "02", Descripcion = "Chilena" });
-
+            postulanteGeneralViewModel.Nacionalidad = listarDatos("NACIONALIDAD");
+            postulanteGeneralViewModel.Nacionalidad.Insert(0,new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            
             postulanteGeneralViewModel.Sexo = new List<ItemTabla>();
-            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "1", Descripcion = "Masculino" });
-            postulanteGeneralViewModel.Sexo.Add(new ItemTabla { Codigo = "2", Descripcion = "Femenino" });
-
+            postulanteGeneralViewModel.Sexo = listarDatos("SEXO");
+            postulanteGeneralViewModel.Sexo.Insert(0,new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            
             postulanteGeneralViewModel.EstadosCiviles = new List<ItemTabla>();
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "01", Descripcion = "Soltero(a)" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Casado(a)" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Viudo(a)" });
-            postulanteGeneralViewModel.EstadosCiviles.Add(new ItemTabla { Codigo = "02", Descripcion = "Divorciado(a)" });
-
+            postulanteGeneralViewModel.EstadosCiviles = listarDatos("ESTADOCIVIL");
+            postulanteGeneralViewModel.EstadosCiviles.Insert(0,new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            
             postulanteGeneralViewModel.TipoVias = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoVias = listarVias();
+            postulanteGeneralViewModel.TipoVias = listarDatos("TIPOVIA");
             postulanteGeneralViewModel.TipoVias.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
 
             postulanteGeneralViewModel.TipoZonas = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoZonas = listarDatos("TIPOZONA");
+            postulanteGeneralViewModel.TipoZonas.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
 
             postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
             postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
@@ -80,9 +78,10 @@
                        
             if (!ModelState.IsValid)
             {
-                var personaModel = inicializarPostulante();
+                personaModel = inicializarPostulante();
                 personaModel.Persona = persona;
                 return View("General",personaModel);
+                //return View("General", postulanteGeneralViewModel);
             }
             _personaRepository.Add(persona);
             return RedirectToAction("Estudios");
@@ -163,6 +162,55 @@
         #endregion
 
 
+        #region DatosComplementarios
+
+        public PostulanteGeneralViewModel inicializarDatosComplementarios()
+        {
+            var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
+            postulanteGeneralViewModel.Persona = new Persona();
+            postulanteGeneralViewModel.TipoSueldosBrutos = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoSueldosBrutos = listarDatos("TIPSALARIO");
+            postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = listarDatos("TIPDISPTRABAJO");
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios = listarDatos("TIPDISPHORARIO");
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.TipoHorarios = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoHorarios = listarDatos("TIPHORARIO");
+            postulanteGeneralViewModel.TipoHorarios.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            postulanteGeneralViewModel.TipoParientesSedes = new List<ItemTabla>();
+            postulanteGeneralViewModel.TipoParientesSedes = listarDatos("TIPPARIENTESEDE");
+            postulanteGeneralViewModel.TipoParientesSedes.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+
+            return postulanteGeneralViewModel;
+        }
+        public ViewResult DatosComplementarios()
+        {
+            var postulanteGeneralViewModel = inicializarDatosComplementarios();
+            return View(postulanteGeneralViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult DatosComplementarios([Bind(Prefix = "Persona")]Persona persona)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                personaModel = inicializarDatosComplementarios();
+                //personaModel.Persona = persona;
+                return View("DatosComplementarios", personaModel);
+            }
+            _personaRepository.Update(persona);
+            return RedirectToAction("Parientes");
+        }
+
+        #endregion
 
         #region METODOS
 
@@ -200,19 +248,19 @@
             return result;
         }
 
-        public List<ItemTabla> listarVias()
+        public List<ItemTabla> listarDatos(string tipoDato)
         {
-            var tipoVias = new List<ItemTabla>();
-            var obtenerTipoVias = _detalleGeneralRepository.GetBy(x => x.TipoTabla == "TIPOVIA");
-            foreach (var datos in obtenerTipoVias)
+            var listaDatos = new List<ItemTabla>();
+            var obtenerDatos = _detalleGeneralRepository.GetBy(x => x.TipoTabla == tipoDato);
+            foreach (var datos in obtenerDatos)
             {
-                tipoVias.Add(new ItemTabla
+                listaDatos.Add(new ItemTabla
                 {
                     Codigo = datos.Valor.ToString(),
                     Descripcion = datos.Descripcion
                 });
             }
-            return tipoVias;
+            return listaDatos;
         }
 
         #endregion
@@ -225,11 +273,6 @@
         public ActionResult Conocimientos()
         {
             return View("Conocimientos");
-        }
-
-        public ActionResult DatosComplementarios()
-        {
-            return View("DatosComplementarios");
         }
 
         public ActionResult DiscapacidadOtros()
@@ -488,60 +531,6 @@
                 }
             };
             lstFilas.Add(fila3);
-
-            //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-            var data = new
-            {
-                //total = totalPag,       // Total de páginas
-                //page = page,            // Página actual
-                //records = totalReg,     // Total de registros (obtenido del modelo)
-                rows = lstFilas
-            };
-            result = Json(data);
-
-            return result;
-        }
-        #endregion
-
-        #region ListaEstudios
-        /// <summary>
-        /// Lista de Estudios
-        /// </summary>       
-        [HttpPost]
-        public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
-        {
-            ActionResult result = null;
-            List<object> lstFilas = new List<object>();
-
-            var fila1 = new
-            {
-                id = 1,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Universidad",
-                          "Universidad de Lima",
-                          "Administración",                          
-                          "Pregrado",
-                          "Completa",
-                          "Ene/2005",
-                          "Dic/2010",
-                }
-            };
-            lstFilas.Add(fila1);
-
-            var fila2 = new
-            {
-                id = 2,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Colegio",
-                          "Colegio la Recoleta",
-                          "",                          
-                          "Secundaria",
-                          "Completa",
-                          "Ene/2008",
-                          "Dic/2012",                    
-                }
-            };
-            lstFilas.Add(fila2);
 
             //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
             var data = new
