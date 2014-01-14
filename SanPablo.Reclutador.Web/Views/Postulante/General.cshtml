@@ -245,7 +245,7 @@
                             <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
                         </td>
                         <td id="tipoVias" class="colInput">
-                           @Html.DropDownListFor(model => model.TipoVias, new SelectList(Model.TipoVias, "Codigo", "Descripcion", Model.TipoVias), new {@id="tipoVias" })
+                           @Html.DropDownListFor(model => model.Persona.TipoVia, new SelectList(Model.TipoVias, "Codigo", "Descripcion", Model.Persona.TipoVia), new {@id="tipoVias" })
                         </td>
                         
                     </tr>

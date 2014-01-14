@@ -44,7 +44,7 @@
 
             Map(x => x.TipoDisponibilidadTrabajo, "TIPDISPTRABAJO");
             Map(x => x.TipoDisponibilidadHorario, "TIPDISPHORARIO");
-            Map(x => x.TipoHorario, "TIPOHORARIO");
+            Map(x => x.TipoHorario, "TIPHORARIO");
             Map(x => x.IndicadorReubicarseInterior, "INDREUBIINTEPAIS");
             Map(x => x.IndicadorParientesCHSP, "INDPARIENTECHSP");
             Map(x => x.TipoParienteSede, "TIPPARIENTESEDE");

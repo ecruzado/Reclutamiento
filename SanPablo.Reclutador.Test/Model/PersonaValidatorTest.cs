@@ -5,6 +5,7 @@
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Entity.Validation;
     using FluentValidation.TestHelper;
+    using FluentValidation.Results;
     using System;
 
     [TestClass]                
@@ -18,15 +19,31 @@
             validator = new PersonaValidator();
         }
 
+
         [TestMethod]
-        public void TipoDocumento_no_puede_ser_nulo_o_vacio() 
+        public void validacionGeneral()
         {
+            Persona persona = new Persona();
+            //ValidationResult result = validator.Validate(persona,"TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
+            //                          "SegundoNombre", "FechaNacimiento", "IndicadorSexo", "TipoEstadoCivil", "IdeUbigeo", "Correo", "TipoVia");
+            persona.TipoDocumento = "01";
+            persona.NumeroDocumento = "45419565";
+
+            ValidationResult result = validator.Validate(persona, "TipoDocumento", "NumeroDocumento");
+            Assert.IsTrue(result.IsValid);
+
+        }
+
+        [TestMethod]
+        
+        public void TipoDocumento_no_puede_ser_nulo_o_vacio() 
+        {   
+            
             validator
                 .ShouldHaveValidationErrorFor(x => x.TipoDocumento, null as string);
             validator
                 .ShouldHaveValidationErrorFor(x => x.TipoDocumento, "");
         }
-
         [TestMethod]
         public void NumeroDocumento_no_puede_ser_nulo_o_vacio()
         {
@@ -117,5 +134,15 @@
             validator
                 .ShouldHaveValidationErrorFor(x => x.TipoEstadoCivil, string.Empty);
         }
+
+        [TestMethod]
+        public void IdeUbigeo_no_puede_aceptar_valor_cero()
+        {
+            validator
+                .ShouldHaveValidationErrorFor(x => x.IdeUbigeo, 0);
+        }
+
+       
+
     }
 }

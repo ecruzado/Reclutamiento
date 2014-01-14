@@ -63,7 +63,7 @@
                     <td class="colInput">
                          @Html.DropDownListFor(model => model.Persona.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Codigo", "Descripcion", Model.Persona.TipoSalario))
                          <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.TipoSalario)
+                         @Html.ValidationMessageFor(model => model.Persona.TipoSalario)
                          </div>
                     </td>
                 </tr>

@@ -7,6 +7,9 @@
     using System.Web.Mvc;
     using System.Web;
     using System.Web.Services;
+    using SanPablo.Reclutador.Entity.Validation;
+    using FluentValidation.Results;
+    using FluentValidation;
     
     public class PostulanteController : Controller
     {
@@ -14,9 +17,8 @@
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IUbigeoRepository _ubigeoRepository;
-
         private PostulanteGeneralViewModel personaModel = new PostulanteGeneralViewModel();
-        
+                
         public PostulanteController(IPersonaRepository personaRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
             _personaRepository = personaRepository;
@@ -75,13 +77,15 @@
         [HttpPost]
         public ActionResult General([Bind(Prefix = "Persona")]Persona persona)
         {
-                       
-            if (!ModelState.IsValid)
+            PersonaValidator validator = new PersonaValidator();
+            ValidationResult result = validator.Validate(persona, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
+                                      "SegundoNombre", "FechaNacimiento", "IndicadorSexo", "TipoEstadoCivil", "IdeUbigeo", "Correo", "TipoVia", "NumeroDireccion");
+
+            if (!result.IsValid)
             {
                 personaModel = inicializarPostulante();
                 personaModel.Persona = persona;
                 return View("General",personaModel);
-                //return View("General", postulanteGeneralViewModel);
             }
             _personaRepository.Add(persona);
             return RedirectToAction("Estudios");
@@ -199,11 +203,13 @@
         [HttpPost]
         public ActionResult DatosComplementarios([Bind(Prefix = "Persona")]Persona persona)
         {
-
-            if (!ModelState.IsValid)
+            PersonaValidator validator = new PersonaValidator();
+            ValidationResult result = validator.Validate(persona, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero");
+            
+            if (!result.IsValid)
             {
                 personaModel = inicializarDatosComplementarios();
-                //personaModel.Persona = persona;
+                personaModel.Persona = persona;
                 return View("DatosComplementarios", personaModel);
             }
             _personaRepository.Update(persona);
