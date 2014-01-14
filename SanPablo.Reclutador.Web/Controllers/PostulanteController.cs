@@ -159,7 +159,10 @@
                 estudioPostulanteModel.Estudio = estudioPostulante;
                 return View("Estudios", estudioPostulanteModel);
             }
-            estudioPostulante.IdePostulante = 1;
+            var persona = new Persona();
+            persona.IdePersona = 11;
+            estudioPostulante.Postulante = persona;
+
             _estudioPostulanteRepository.Add(estudioPostulante);
             return RedirectToAction("Experiencia");
         }
