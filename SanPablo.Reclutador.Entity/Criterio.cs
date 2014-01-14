@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCriterio { get; set; }
         public virtual int TipoModoRegistro { get; set; }
         public virtual string EstadoRegistro { get; set; }
+        public virtual string EstadoCriterio { get; set; }
         public virtual IList<SubCategoria> SubCategorias { get; set; }
 
         public Criterio()

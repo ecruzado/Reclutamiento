@@ -22,6 +22,10 @@
 
             builder.RegisterType<UbigeoRepository>()
                 .As<IUbigeoRepository>();
+
+            builder.RegisterType<CriterioRepository>()
+                .As<ICriterioRepository>();
+
         }
     }
 }
