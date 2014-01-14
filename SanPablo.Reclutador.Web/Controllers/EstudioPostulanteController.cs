@@ -133,14 +133,14 @@
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
-                       
+
             if (!ModelState.IsValid)
             {
                 var estudioPostulanteModel = InicializarEstudio();
                 estudioPostulanteModel.Estudio = estudioPostulante;
                 return Json("dadf", JsonRequestBehavior.DenyGet);
             }
-            //_estudioPostulanteRepository.Add(estudioPostulante);
+            _estudioPostulanteRepository.Add(estudioPostulante);
             return Json("ddafd", JsonRequestBehavior.DenyGet);
             
         }

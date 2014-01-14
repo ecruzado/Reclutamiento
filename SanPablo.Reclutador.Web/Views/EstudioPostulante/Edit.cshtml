@@ -2,7 +2,7 @@
 @{
     Layout = "";
 }
-@using (Html.BeginForm("Edit", "EstudioPostulante", new { @id = "estudioPostulanteForm" }))
+@using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))
     {
     @Html.ValidationSummary(true)
    
