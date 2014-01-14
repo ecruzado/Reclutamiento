@@ -10,7 +10,7 @@
             Id(m => m.IdeEstudiosPostulante, "IDEESTUDIOSPOSTULANTE")
                 .GeneratedBy
                 .Sequence("IDEESTUDIOSPOSTULANTE_SQ");
-            References(x => x.Postulante);
+            References(x => x.Postulante, "IDEPOSTULANTE");
             Map(x => x.IdePostulante, "IDEPOSTULANTE");
             Map(x => x.TipTipoInstitucion, "TIPTIPOINSTITUCION");
             Map(x => x.TipoNombreInstitucion, "TIPNOMINSTITUCION");
