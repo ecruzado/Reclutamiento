@@ -158,6 +158,11 @@
 
 </script>
 }
+
+@using (Html.BeginForm("Edit", "Criterio", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    @Html.ValidationSummary(true)
+
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -214,6 +219,7 @@
                             <label class="control-label" for="inputSuccess">Pregunta</label>
                             <div class="controles">
                                 <input id="fechaInicio" type="text" class="input-large">
+                                <input type="file" name="file" id="file"/>
                                 <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;">
                             </div>
                         </div>
@@ -250,6 +256,7 @@
         </div>
     </div>
 </div>
+}
 
 
 <div id="dlgsubirarchivoimagen">

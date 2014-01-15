@@ -305,6 +305,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 rows = list
             };
             return (ActionResult)this.Json((object)fAnonymousType3);
-        }    
+        }
+
+        [HttpPost]
+        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase file)
+        {
+            return null;
+        }
     }
 }
