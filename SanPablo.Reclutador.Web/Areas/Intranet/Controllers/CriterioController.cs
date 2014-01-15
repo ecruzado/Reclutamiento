@@ -1,5 +1,6 @@
 ﻿using SanPablo.Reclutador.Repository.Interface;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using SanPablo.Reclutador.Entity;
 using SanPablo.Reclutador.Web.Areas.Intranet.Models;
@@ -20,10 +21,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _detalleGeneralRepository = detalleGeneralRepository;
         }
 
-
-       
-
-        public CriterioViewModel inicializarCriterios()
+        public CriterioViewModel inicializarCriteriosIndex()
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Criterio = new Criterio();
@@ -31,65 +29,144 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             criterioViewModel.TipoCriterio = 
              new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
             criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-            
-            /*criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "01", Descripcion = "Examen" });
-            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "02", Descripcion = "Evaluación" });
-            criterioViewModel.tipoCriterio.Add(new ItemTabla { Codigo = "02", Descripcion = "Entrevista" });
-            */
 
-/*
-            criterioViewModel.Medicion = new List<DetalleGeneral>();
-            criterioViewModel.Medicion.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            criterioViewModel.Medicion.Add(new ItemTabla { Codigo = "01", Descripcion = "Desempeño" });
+            criterioViewModel.Medicion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MEDICION"));
+            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            criterioViewModel.Estado = new List<ItemTabla>();
-            criterioViewModel.estado.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            criterioViewModel.estado.Add(new ItemTabla { Codigo = "01", Descripcion = "Activo" });
-            criterioViewModel.estado.Add(new ItemTabla { Codigo = "02", Descripcion = "Inactivo" });
+            criterioViewModel.Estado =
+               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("ESTADOCRIT"));
+            criterioViewModel.Estado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            */
-
-            /*
-            postulanteGeneralViewModel.TipoVias = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoVias = listarVias();
-            postulanteGeneralViewModel.TipoVias.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-
-            postulanteGeneralViewModel.TipoZonas = new List<ItemTabla>();
-
-            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
-            postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
-            postulanteGeneralViewModel.Departamentos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-
-            postulanteGeneralViewModel.Provincias = new List<ItemTabla>();
-            postulanteGeneralViewModel.Provincias.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-
-            postulanteGeneralViewModel.Distritos = new List<ItemTabla>();
-            postulanteGeneralViewModel.Distritos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
-            */
+         
             return criterioViewModel;
         }
-        
-        
-        
+
+        public CriterioViewModel inicializarCriteriosEdit()
+        {
+            var criterioViewModel = new CriterioViewModel();
+            criterioViewModel.Criterio = new Criterio();
+
+            criterioViewModel.TipoCriterio =
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
+            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.Medicion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MEDICION"));
+            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.TipoModo =
+               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MODO"));
+            criterioViewModel.TipoModo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            return criterioViewModel;
+        }
+
+
+        //
+        [HttpPost]
+        public JsonResult PopupCriterio(CriterioViewModel model)
+        {
+            //CriterioViewModel objCriterioViewModel = new CriterioViewModel();
+            String nombreAlternativa=null;
+            int pesoAlternativa=0; 
+            
+            nombreAlternativa = model.Alternativa.NombreAlternativa;
+            pesoAlternativa = model.Alternativa.Peso;
+
+           
+            ////_estudioPostulanteRepository.Add(estudioPostulante);
+            //return Json("ddafd", JsonRequestBehavior.DenyGet);
+            return null;
+        }
+        //
+
+        [HttpPost]
+        public virtual ActionResult UploadFile()
+        {
+            HttpPostedFileBase myFile = Request.Files["MyFile"];
+            bool isUploaded = false;
+            string message = "File upload failed";
+
+            if (myFile != null && myFile.ContentLength != 0)
+            {
+                string pathForSaving = Server.MapPath("~/Uploads");
+                if (this.CreateFolderIfNeeded(pathForSaving))
+                {
+                    try
+                    {
+                        myFile.SaveAs(Path.Combine(pathForSaving, myFile.FileName));
+                        isUploaded = true;
+                        message = "File uploaded successfully!";
+                    }
+                    catch (Exception ex)
+                    {
+                        message = string.Format("File upload failed: {0}", ex.Message);
+                    }
+                }
+            }
+            return Json(new { isUploaded = isUploaded, message = message }, "text/html");
+        }
+
+
+        private bool CreateFolderIfNeeded(string path)
+        {
+            bool result = true;
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.CreateDirectory(path);
+                }
+                catch (Exception)
+                {
+                    /*TODO: You must process this exception.*/
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+
         public ActionResult Index()
         {
-           /* var lista = _criterioRepository.ObtenerListaMarciana("");*/
-           /* var postulanteGeneralViewModel = inicializarPostulante();
-            return View(postulanteGeneralViewModel); */
 
-            var criterioViewModel = inicializarCriterios();
+            var criterioViewModel = inicializarCriteriosIndex();
 
             return View(criterioViewModel);
         }
 
 
 
-
         public ActionResult Edit()
         {
-            return View();
+
+            var criterioViewModel = inicializarCriteriosEdit();
+            return View(criterioViewModel);
         }
+
+        public ViewResult PopupCriterio(int id)
+        {
+            if (id == 0)
+            {
+                CriterioViewModel modelo = new CriterioViewModel();
+                // levanta un nuevo modelo
+                
+                return View(modelo);
+            }
+            else 
+            {
+                CriterioViewModel modelo = new CriterioViewModel();
+                modelo.Criterio = new Criterio();//conexion bd
+                //obtener los datos de la alternativa seleccionada
+
+                return View(modelo);
+
+            }
+            
+        }
+             
 
         [HttpPost]
         public ActionResult ListaCriterio(string sidx, string sord, int page, int rows)
@@ -228,6 +305,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 rows = list
             };
             return (ActionResult)this.Json((object)fAnonymousType3);
-        }    
+        }
+
+        [HttpPost]
+        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase file)
+        {
+            return null;
+        }
     }
 }

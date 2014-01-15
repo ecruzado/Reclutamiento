@@ -1,0 +1,47 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CriterioViewModel
+@{
+    Layout = "";
+}
+
+<script type="text/javascript">
+
+   
+</script>
+
+
+
+@using (Html.BeginForm("PopupCriterio", "Criterio", FormMethod.Post, new { @id = "criterioForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Alternativa<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+               @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa)
+               @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Peso<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                @Html.TextBoxFor(model => model.Alternativa.Peso)
+                @Html.ValidationMessageFor(model => model.Alternativa.Peso)
+            </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <!--<input type="file" name="file1" value="" />-->
+              @Html.TextBoxFor(model => model.Alternativa.RutaDeImagen, new { id = "uploadFile", type = "file" })
+          </td>
+           
+        </tr>
+        
+         
+       
+    </table>
+}

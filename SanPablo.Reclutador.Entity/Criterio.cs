@@ -13,10 +13,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual int Calificacion { get; set;}
         public virtual string TipoMedicion { get; set; }
         public virtual string TipoCriterio { get; set; }
-        public virtual int TipoModoRegistro { get; set; }
+        public virtual string TipoModoRegistro { get; set; }
         public virtual string EstadoRegistro { get; set; }
         public virtual string EstadoCriterio { get; set; }
         public virtual IList<SubCategoria> SubCategorias { get; set; }
+        
+        public virtual string Alternatica { get; set; }
+        public virtual string Peso { get; set; }
 
         public Criterio()
         {
