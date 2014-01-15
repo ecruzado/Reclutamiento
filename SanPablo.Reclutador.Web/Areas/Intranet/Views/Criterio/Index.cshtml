@@ -19,15 +19,15 @@
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
-                    { name: 'Pregunta', index: 'Pregunta', align: 'left' },
-                    { name: 'Medicion', index: 'Medicion', align: 'left', width: 60 },
+                    { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
+                    { name: 'Medicion', index: 'Medicion', align: 'left', width: 200 },
                     { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 50 },
-                    { name: 'Modo', index: 'Modo', align: 'left', width: 50 },
-                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
-                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },
-                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
-                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
+                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 200 },
+                    { name: 'Modo', index: 'Modo', align: 'left', width: 150 },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 250 },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150 },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 250 }
             ],
             pager: jQuery('#grdPager'),
             rowNum: 10,
@@ -116,7 +116,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Criterio.EstadoCriterio, new SelectList(Model.Estado, "Codigo", "Descripcion", Model.Criterio.EstadoCriterio))
+                                @Html.DropDownListFor(model => model.Criterio.EstadoCriterio, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.EstadoCriterio))
 		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoCriterio)
                             </div>
                         </div>

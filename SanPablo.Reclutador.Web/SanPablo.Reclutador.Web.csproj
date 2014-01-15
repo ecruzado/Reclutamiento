@@ -203,6 +203,7 @@
     <Content Include="Content\custom-theme\jquery.ui.1.9.2.ie.css" />
     <Content Include="Content\images\action_search.gif" />
     <Content Include="Content\images\application.gif" />
+    <Content Include="Content\images\delete.gif" />
     <Content Include="Content\images\enabled.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
@@ -259,6 +260,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\PopupCriterio.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\grid.locale-en.js" />
@@ -273,6 +275,15 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\SanPablo.js" />
+    <Content Include="Scripts\uploadify\cancel.png" />
+    <Content Include="Scripts\uploadify\expressInstall.swf" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.v2.1.4.js" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.v2.1.4.min.js" />
+    <Content Include="Scripts\uploadify\swfobject.js" />
+    <Content Include="Scripts\uploadify\uploadify.allglyphs.swf" />
+    <Content Include="Scripts\uploadify\uploadify.css" />
+    <Content Include="Scripts\uploadify\uploadify.swf" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -306,6 +317,9 @@
     <Content Include="Views\Sede\Index.cshtml" />
     <Content Include="Views\EstudioPostulante\Edit.cshtml" />
     <Content Include="Views\EstudioPostulante\Index.cshtml" />
+    <Content Include="Scripts\uploadify\check.php" />
+    <Content Include="Scripts\uploadify\uploadify.fla" />
+    <Content Include="Scripts\uploadify\uploadify.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

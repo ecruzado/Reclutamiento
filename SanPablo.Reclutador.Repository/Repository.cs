@@ -50,6 +50,7 @@
             return _session.QueryOver<TEntity>()
                     .Where(condition)
                     .List();
+                  
         }
 
         public IList<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
