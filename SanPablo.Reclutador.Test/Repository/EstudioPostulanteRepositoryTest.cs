@@ -18,13 +18,14 @@ namespace SanPablo.Reclutador.Test.Repository
             //var lista = repository.GetPaging("IdeEstudiosPostulante", true, 0, 10);
             var entidad = new EstudioPostulante();
             entidad.IndicadorActualmenteEstudiando = "1";
-            entidad.NombreInstitucion = "test";
+            entidad.NombreInstitucion = "HEY";
             entidad.Postulante = persona;
-            entidad.TipoArea = "1";
-            entidad.TipoEducacion = "1";
-            entidad.TipoNivelAlcanzado = "1";
+            entidad.TipoArea = "00";
+            entidad.TipoEducacion = "00";
+            entidad.TipoNivelAlcanzado = "00";
             entidad.TipoNombreInstitucion = "1";
             entidad.TipTipoInstitucion = "1";
+            //entidad.FechaEstudioInicio = ;
             repository.Add(entidad);
         }
     }

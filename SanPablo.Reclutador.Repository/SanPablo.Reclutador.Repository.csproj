@@ -53,10 +53,12 @@
     <Compile Include="CriterioRepository.cs" />
     <Compile Include="DetalleGeneralRepository.cs" />
     <Compile Include="EstudioPostulanteRepository.cs" />
+    <Compile Include="ExperienciaPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
     <Compile Include="Interface\ICriterioRepository.cs" />
     <Compile Include="Interface\IDetalleGeneralRepository.cs" />
     <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
+    <Compile Include="Interface\IExperienciaPostulanteRepository.cs" />
     <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IPersonaRepository.cs" />
     <Compile Include="Interface\IRepository.cs">

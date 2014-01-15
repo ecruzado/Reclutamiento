@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="DetalleGeneralMap.cs" />
     <Compile Include="EstudioPostulanteMap.cs" />
+    <Compile Include="ExperienciaPostulanteMap.cs" />
     <Compile Include="GeneralMap.cs" />
     <Compile Include="PersonaMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,39 +32,34 @@
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Persona = new Persona();
-            postulanteGeneralViewModel.TipoDocumentos = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoDocumentos = listarDatos("TIPODOCUMENTO");
-            postulanteGeneralViewModel.TipoDocumentos.Insert(0,new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDocumentos = 
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPODOCUMENTO"));
+            postulanteGeneralViewModel.TipoDocumentos.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             
-            postulanteGeneralViewModel.Nacionalidad = new List<ItemTabla>();
-            postulanteGeneralViewModel.Nacionalidad = listarDatos("NACIONALIDAD");
-            postulanteGeneralViewModel.Nacionalidad.Insert(0,new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Nacionalidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("NACIONALIDAD"));
+            postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             
-            postulanteGeneralViewModel.Sexo = new List<ItemTabla>();
-            postulanteGeneralViewModel.Sexo = listarDatos("SEXO");
-            postulanteGeneralViewModel.Sexo.Insert(0,new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Sexo = new List<DetalleGeneral>( _detalleGeneralRepository.GetByTipoTabla("SEXO"));
+            postulanteGeneralViewModel.Sexo.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
             
-            postulanteGeneralViewModel.EstadosCiviles = new List<ItemTabla>();
-            postulanteGeneralViewModel.EstadosCiviles = listarDatos("ESTADOCIVIL");
-            postulanteGeneralViewModel.EstadosCiviles.Insert(0,new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.EstadosCiviles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("ESTADOCIVIL"));
+            postulanteGeneralViewModel.EstadosCiviles.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
             
-            postulanteGeneralViewModel.TipoVias = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoVias = listarDatos("TIPOVIA");
-            postulanteGeneralViewModel.TipoVias.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoVias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPOVIA"));
+            postulanteGeneralViewModel.TipoVias.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.TipoZonas = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoZonas = listarDatos("TIPOZONA");
-            postulanteGeneralViewModel.TipoZonas.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoZonas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPOZONA"));
+            postulanteGeneralViewModel.TipoZonas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.Departamentos = new List<ItemTabla>();
+            postulanteGeneralViewModel.Departamentos = new List<Ubigeo>();
             postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
-            postulanteGeneralViewModel.Departamentos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
 
-            postulanteGeneralViewModel.Provincias = new List<ItemTabla>();
-            postulanteGeneralViewModel.Provincias.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Provincias = new List<Ubigeo>();
+            postulanteGeneralViewModel.Provincias.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
 
-            postulanteGeneralViewModel.Distritos = new List<ItemTabla>();
-            postulanteGeneralViewModel.Distritos.Add(new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Distritos = new List<Ubigeo>();
+            postulanteGeneralViewModel.Distritos.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
                       
             return postulanteGeneralViewModel;
         }
@@ -93,107 +88,30 @@
         #endregion
 
 
-        #region Estudios
-        public EstudioPostulanteGeneralViewModel inicializarEstudio()
-        {
-            var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
-            estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
-            estudioPostulanteGeneralViewModel.TipoInstituciones = new List<ItemTabla>();
-            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "01", Descripcion = "Universidad" });
-            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "02", Descripcion = "Instituto" });
-            estudioPostulanteGeneralViewModel.TipoInstituciones.Add(new ItemTabla { Codigo = "03", Descripcion = "Colegio" });
-
-            var listaInstituciones = new List<ItemTabla>();
-            estudioPostulanteGeneralViewModel.Instituciones = new List<ItemTabla>();
-            var recuperarInstituciones = _detalleGeneralRepository.GetBy(x => x.TipoTabla  == "INSTITUTOS" );
-            foreach (var data in recuperarInstituciones)
-            { 
-                listaInstituciones.Add(new ItemTabla
-                {
-                    Codigo = data.Valor,
-                    Descripcion = data.Descripcion
-                });
-            }
-            estudioPostulanteGeneralViewModel.Instituciones = listaInstituciones;
-            estudioPostulanteGeneralViewModel.Instituciones.Insert(0, new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-
-            estudioPostulanteGeneralViewModel.AreasEstudio = new List<ItemTabla>();
-            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "01", Descripcion = "Medicina General" });
-            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "02", Descripcion = "Ing. Informática y de Sistemas" });
-            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "03", Descripcion = "Enfemeria" });
-            estudioPostulanteGeneralViewModel.AreasEstudio.Add(new ItemTabla { Codigo = "04", Descripcion = "Medicina Pediatrica" });
-
-            estudioPostulanteGeneralViewModel.Educacion = new List<ItemTabla>();
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "01", Descripcion = "Secundaria" });
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "02", Descripcion = "Tecnica" });
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "03", Descripcion = "Universitaria" });
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "04", Descripcion = "Maestria" });
-            estudioPostulanteGeneralViewModel.Educacion.Add(new ItemTabla { Codigo = "05", Descripcion = "Doctorado" });
-
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<ItemTabla>();
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "00", Descripcion = "Seleccionar" });
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "01", Descripcion = "Incompleta" });
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "02", Descripcion = "Completa" });
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Add(new ItemTabla { Codigo = "03", Descripcion = "En curso" });
-            
-            return estudioPostulanteGeneralViewModel;
-        }
-        
-
-        public ViewResult Estudios()
-        {
-            var estudioGeneralViewModel = inicializarEstudio();
-            return View(estudioGeneralViewModel);
-        }
-
-        [HttpPost]
-        public ActionResult Estudios([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
-        {
-
-            if (!ModelState.IsValid)
-            {
-                var estudioPostulanteModel = inicializarEstudio();
-                estudioPostulanteModel.Estudio = estudioPostulante;
-                return View("Estudios", estudioPostulanteModel);
-            }
-            var persona = new Persona();
-            persona.IdePersona = 11;
-            estudioPostulante.Postulante = persona;
-
-            _estudioPostulanteRepository.Add(estudioPostulante);
-            return RedirectToAction("Experiencia");
-        }
-        #endregion
-
-
         #region DatosComplementarios
 
         public PostulanteGeneralViewModel inicializarDatosComplementarios()
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Persona = new Persona();
-            postulanteGeneralViewModel.TipoSueldosBrutos = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoSueldosBrutos = listarDatos("TIPSALARIO");
-            postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoSueldosBrutos = _detalleGeneralRepository.GetByTipoTabla("TIPSALARIO");
+            postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = listarDatos("TIPDISPTRABAJO");
-            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = 
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPDISPTRABAJO"));
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.TipoDisponibilidadesHorarios = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoDisponibilidadesHorarios = listarDatos("TIPDISPHORARIO");
-            postulanteGeneralViewModel.TipoDisponibilidadesHorarios.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios = 
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPDISPHORARIO"));
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.TipoHorarios = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoHorarios = listarDatos("TIPHORARIO");
-            postulanteGeneralViewModel.TipoHorarios.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoHorarios = 
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPHORARIO"));
+            postulanteGeneralViewModel.TipoHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            postulanteGeneralViewModel.TipoParientesSedes = new List<ItemTabla>();
-            postulanteGeneralViewModel.TipoParientesSedes = listarDatos("TIPPARIENTESEDE");
-            postulanteGeneralViewModel.TipoParientesSedes.Insert(0, new ItemTabla { Codigo = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoParientesSedes = 
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPPARIENTESEDE"));
+            postulanteGeneralViewModel.TipoParientesSedes.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             return postulanteGeneralViewModel;
         }
@@ -223,53 +141,38 @@
 
         #region METODOS
 
-        public List<ItemTabla> cargarDepartamentos()
+        public List<Ubigeo> cargarDepartamentos()
         {
-            var departamentos = new List<ItemTabla>();
+            var departamentos = new List<Ubigeo>();
             var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null);
             foreach (var datos in obtenerDepartamentos)
             {
-                departamentos.Add(new ItemTabla
+                departamentos.Add(new Ubigeo
                 {
-                    Codigo = datos.IdeUbigeo.ToString(),
-                    Descripcion = datos.Nombre
+                    IdeUbigeo = datos.IdeUbigeo,
+                    Nombre = datos.Nombre
                 });
             }
             return departamentos;
             
         }
         [HttpPost]
-        public ActionResult SeleccionarProvincia(int departamento)
+        public ActionResult  listarUbigeos (int ideUbigeoPadre)
         {
              ActionResult result = null;
-                        
-             var provincias = new List<ItemTabla>();
-             var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == departamento);
-            foreach (var datos in obtenerDepartamentos)
+                      
+             var listaResultado = new List<Ubigeo>();
+             var obtenerUbigeos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre);
+             foreach (var datos in obtenerUbigeos)
             {
-                provincias.Add(new ItemTabla
+                listaResultado.Add(new Ubigeo
                 {
-                    Codigo = datos.IdeUbigeo.ToString(),
-                    Descripcion = datos.Nombre
+                    IdeUbigeo = datos.IdeUbigeo,
+                    Nombre = datos.Nombre
                 });
             }
-            result = Json(provincias);
+            result = Json(listaResultado);
             return result;
-        }
-
-        public List<ItemTabla> listarDatos(string tipoDato)
-        {
-            var listaDatos = new List<ItemTabla>();
-            var obtenerDatos = _detalleGeneralRepository.GetBy(x => x.TipoTabla == tipoDato);
-            foreach (var datos in obtenerDatos)
-            {
-                listaDatos.Add(new ItemTabla
-                {
-                    Codigo = datos.Valor.ToString(),
-                    Descripcion = datos.Descripcion
-                });
-            }
-            return listaDatos;
         }
 
         #endregion

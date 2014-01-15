@@ -26,6 +26,9 @@
             builder.RegisterType<CriterioRepository>()
                 .As<ICriterioRepository>();
 
+            builder.RegisterType<ExperienciaPostulanteRepository>()
+                .As<IExperienciaPostulanteRepository>();
+
         }
     }
 }

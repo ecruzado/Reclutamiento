@@ -1,6 +1,6 @@
-﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
+﻿@model SanPablo.Reclutador.Web.Models.ExperienciaPostulanteGeneralViewModel
 @{
-    ViewBag.Title = "Estudios";
+    ViewBag.Title = "Experiencia";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
@@ -11,29 +11,29 @@
 
         $(document).ready(function () {
             jQuery("#grdList").jqGrid({
-                url: '@Url.Action("Listar", "EstudioPostulante")',
+                url: '@Url.Action("ListaExperienciaLaboral", "Postulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colNames: ['Empresa', 'Cargo', 'Fecha Inicio', 'Fecha Fin', 'Tiempo Servicio', 'Motivo Cese'],
                 colModel: [
-                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
-                        { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
-                        { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
-                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
-                        { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
+                        { name: 'Empresa', index: 'Empresa', align: 'left', sortable: false },
+                        { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false },
                         { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
                         { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
+                        { name: 'TiempoServicio', index: 'TiempoServicio', align: 'left', sortable: false },
+                        { name: 'MotivoCese', index: 'MotivoCese', align: 'left', sortable: false },
                 ],
-                sortname: 'IdeEstudiosPostulante',
+                sortname: 'Nombre',
                 sortorder: 'desc',
                 viewrecords: true,
                 autowidth: true,
-                height: 300,
+                height: 120,
                 width: 736,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
                 hidegrid: false,
                 postData: {
+
                 },
                 loadComplete: function (data) {
 
@@ -47,8 +47,8 @@
                 modal: true,
                 buttons: {
                     "Grabar": function () {
-                        $.post("/EstudioPostulante/Edit",
-                            $("#estudioPostulanteForm").serialize(),
+                        $.post("/ExperienciaPostulante/Edit",
+                            $("#experienciaPostulanteForm").serialize(),
                             function (data) {
                                 $("#updateDialog").dialog("close");
                             }
@@ -61,7 +61,7 @@
             });
 
             $('#btnAgregar').click(function () {
-                mostrarAgregarEstudios();
+                mostrarAgregarExperiencia();
             });
 
             $('#btnEditar').click(function () {
@@ -71,9 +71,9 @@
         });
 
 
-        function mostrarAgregarEstudios() {
+        function mostrarAgregarExperiencia() {
             var dialogDiv = $('#updateDialog');
-            $.get("/EstudioPostulante/Edit", function (data) {
+            $.get("/ExperienciaPostulante/Edit", function (data) {
                 dialogDiv.html(data);
                 dialogDiv.dialog('open');
             });
@@ -89,7 +89,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Nivel Académico</h5>
+                <h5>Experiencia Laboral</h5>
             </div>
             <div class="grilla-opciones">
                 <div class="opciones">
@@ -109,15 +109,15 @@
             </div>
             <div class="formulario-accion">
                 <div class="opciones">
-                    <a class="btn" href="@Url.Action("General", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
-                    <a class="btn btn-info" href="@Url.Action("ExperienciaLaboral", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                    <a class="btn" href="@Url.Action("EstudioPostulante", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    <a class="btn btn-info" href="@Url.Action("Conocimientos", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                 </div>
             </div>
             <div style="clear:both"></div>
         </div>
     </div>
 </div>
-<div id="updateDialog" title="Agregar Estudio"></div>
+<div id="updateDialog" title="Agregar Experiencia"></div>
 
 
 

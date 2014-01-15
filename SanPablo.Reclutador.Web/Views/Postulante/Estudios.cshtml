@@ -159,7 +159,7 @@
                     <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Institución <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput">
-                    @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoInstituciones, "Codigo", "Descripcion", Model.Estudio.TipTipoInstitucion))
+                    @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoTipoInstituciones, "Codigo", "Descripcion", Model.Estudio.TipTipoInstitucion))
                     @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
                 </td>
             </tr>
@@ -168,7 +168,7 @@
                     <label class="etiquetaFormulario" for="setInstitucion">Institución <span class="text-error">*</span></label>
                 </td>
                 <td class="colInput;input-xxlarge">
-                     @Html.DropDownListFor(model => model.Estudio.TipoNombreInstitucion , new SelectList(Model.Instituciones , "Codigo", "Descripcion", Model.Estudio.TipoNombreInstitucion ))
+                     @Html.DropDownListFor(model => model.Estudio.TipoNombreInstitucion , new SelectList(Model.TipoNombreInstituciones , "Codigo", "Descripcion", Model.Estudio.TipoNombreInstitucion ))
                      @Html.ValidationMessageFor(model => model.Estudio.TipoNombreInstitucion )
                 </td>
             </tr> 

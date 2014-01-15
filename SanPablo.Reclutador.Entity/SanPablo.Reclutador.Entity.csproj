@@ -58,6 +58,7 @@
     <Compile Include="EstudioPostulante.cs" />
     <Compile Include="Examen.cs" />
     <Compile Include="ExamenPorCategoria.cs" />
+    <Compile Include="ExperienciaPostulante.cs" />
     <Compile Include="General.cs" />
     <Compile Include="ItemTabla.cs" />
     <Compile Include="NotificacionDeAprobacion.cs" />
