@@ -18,6 +18,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public virtual List<DetalleGeneral> Medicion { get; set; }
         public virtual List<DetalleGeneral> Estado { get; set; }
         public virtual List<DetalleGeneral> TipoModo { get; set; }
+        public virtual List<DetalleGeneral> TipoCalificacion { get; set; }
 
                 
     }

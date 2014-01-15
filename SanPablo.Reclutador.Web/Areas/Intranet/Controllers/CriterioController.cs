@@ -60,6 +60,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             criterioViewModel.TipoModo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
 
+            criterioViewModel.TipoCalificacion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCALIFICA"));
+            criterioViewModel.TipoCalificacion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
             return criterioViewModel;
         }
 

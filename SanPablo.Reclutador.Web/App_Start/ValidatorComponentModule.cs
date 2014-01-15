@@ -16,9 +16,15 @@
             builder.RegisterType<PersonaValidator>()
                    .Keyed<IValidator>(typeof(IValidator<Persona>))
                    .As<IValidator>();
+
             builder.RegisterType<EstudioPostulanteValidator>()
                 .Keyed<IValidator>(typeof(IValidator<EstudioPostulanteValidator>))
                 .As<IValidator>();
+
+            builder.RegisterType<CriterioValidator>()
+                .Keyed<IValidator>(typeof(IValidator<CriterioValidator>))
+                .As<IValidator>();
+
         }
     }
 }

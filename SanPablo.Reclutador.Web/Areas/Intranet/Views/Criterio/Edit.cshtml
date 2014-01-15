@@ -18,6 +18,10 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        
+     
+        $(".grilla-opciones").hide();
+
         $("#btnbuscaimagen").hide();
         $("#Criterio_TipoModoRegistro").change(function () {
             var vvalor = $(this).val();
@@ -60,9 +64,27 @@
         });
 
         $('#btnEditar').click(function () {
-            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-            mostrarAgregarEstudios(selr);
+            
+                var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                if (selr != null) {
+                    mostrarAgregarEstudios(selr);
+                } else {
+                    SanPablo.ShowAlert('', 'Seleccione una Alternativa');
+                   // alert("Seleccione una Alternativa");
+                }
+                
+            
+            
         });
+
+
+        $('#btnGuardar').click(function () {
+            $(".tabla-datos").show();
+            $(".grilla-opciones").show();
+
+
+        });
+
 
         jQuery("#grdList").jqGrid({
             url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
@@ -154,10 +176,9 @@
         return false;
     }
 
-
-
 </script>
 }
+
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -222,13 +243,16 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Calificación</label>
                             <div class="controles">
-                                <input type="radio" name="rbcalificacion" value="0"> Manual &nbsp;&nbsp;
-                                <input type="radio" name="rbcalificacion" value="1"> Automática
+                               
+                                 @Html.DropDownListFor(model => model.Criterio.Calificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.Calificacion))
+		                         @Html.ValidationMessageFor(model => model.Criterio.Calificacion)
+                                
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>            
             </form>
+            
             <div class="grilla-opciones">
                 <h6>Alternativas</h6>
                 <div class="opciones">
@@ -239,14 +263,17 @@
                 </div>
                 <div style="clear:both"></div>
             </div>
-            <div class="tabla-datos">
-                <table id="grdList">
+            
+            <div class="tabla-datos" >
+                <table id="grdList" >
                 </table>
             </div>
-            <div class="form-actions">
+           
+             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index","Criterio",new { area = "Intranet"})" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>
+                <button type="submit" id="btnGuardar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>
             </div>
+           
         </div>
     </div>
 </div>
@@ -269,6 +296,7 @@
         </tr>       
     </table>
 </div>
+
 
 <div id="updateDialog" title="Agregar Alternativa"></div>
 
