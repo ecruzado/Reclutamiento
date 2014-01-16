@@ -89,7 +89,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return View(criterioViewModel);
             }
 
-            _AlternativaRepository.Add(alternativa);
+            if (alternativa.CodigoAlternativa != 0 && alternativa.CodigoAlternativa != null)
+            {
+                _AlternativaRepository.Update(alternativa);
+            }
+            else
+            {
+                _AlternativaRepository.Add(alternativa);
+            }
+           
+
+            
+
             criterioViewModel.Alternativa.IdCriterio = alternativa.IdCriterio;
             criterioViewModel.Alternativa.CodigoAlternativa = alternativa.CodigoAlternativa;
             criterioViewModel.Alternativa.NombreAlternativa = alternativa.NombreAlternativa;
@@ -179,8 +190,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             else 
             {
                 CriterioViewModel modelo = new CriterioViewModel();
-                modelo.Criterio = new Criterio();//conexion bd
+                modelo.Alternativa = new Alternativa();//conexion bd
+
+                modelo.Alternativa.IdCriterio = IdCriterio;
+                modelo.Alternativa.CodigoAlternativa = id;
                 //obtener los datos de la alternativa seleccionada
+                modelo.Alternativa = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == id);
 
                 return View(modelo);
 

@@ -66,7 +66,12 @@
 
         $('#Agregar').click(function () {
             var codigoCriterio = $("#Criterio_IdeCriterio").val();
-            mostrarAgregarEstudios(0, codigoCriterio);
+            if (codigoCriterio != null && codigoCriterio > 0) {
+                mostrarAgregarEstudios(0, codigoCriterio);
+            } else {
+                alert('Ingrese un Criterio');
+            }
+            
         });
 
         $('#btnEditar').click(function () {
