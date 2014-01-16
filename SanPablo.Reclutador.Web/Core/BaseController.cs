@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using NHibernate.Criterion;
 
 namespace SanPablo.Reclutador.Web.Core
 {
@@ -33,10 +34,10 @@ namespace SanPablo.Reclutador.Web.Core
                 pageSize = 100;
             }
 
-            return Listar(logic, sidx, sord, pageIndex, pageSize, search, searchField, searchOper, searchString, string.Empty);
+            return Listar(logic, sidx, sord, pageIndex, pageSize, search, searchField, searchOper, searchString, null);
         }
         
-        protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, string @where) where T : class
+        protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, DetachedCriteria where) where T : class
         {
             var jqgrid = new JQgrid();
             IList<T> list;
@@ -45,10 +46,10 @@ namespace SanPablo.Reclutador.Web.Core
             {
                 int totalPages = 0;
 
-                if (search)
-                {
-                    @where = @where + GetWhere(searchField, searchOper, searchString);
-                }
+                //if (search)
+                //{
+                //    @where = @where + GetWhere(searchField, searchOper, searchString);
+                //}
 
                 var count = logic.CountBy();
 
@@ -79,7 +80,7 @@ namespace SanPablo.Reclutador.Web.Core
                 jqgrid.records = count;
                 jqgrid.start = start;
 
-                list = logic.GetPaging(sidx, true, pageIndex,pageSize).ToList();
+                list = logic.GetPaging(sidx, true, pageIndex,pageSize,where).ToList();
             }
             catch (Exception ex)
             {

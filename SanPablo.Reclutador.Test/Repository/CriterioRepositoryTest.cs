@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SanPablo.Reclutador.Repository;
 using SanPablo.Reclutador.Entity;
+using NHibernate.Criterion;
 
 namespace SanPablo.Reclutador.Test.Repository
 {
@@ -20,6 +21,20 @@ namespace SanPablo.Reclutador.Test.Repository
             criterio.TipoCalificacion = "02";
             criterio.FechaCreacion = DateTime.Now;
             repository.Add(criterio);
+
+        }
+
+        [TestMethod]
+        public void Test_DetachedCriteria()
+        {
+            var repository = new CriterioRepository(NHibernateHelper.OpenSession());
+
+            DetachedCriteria where = DetachedCriteria.For<Criterio>();
+            where.Add(Expression.Eq("IdeCriterio", ));
+
+            var lista = repository.GetPaging("IdeCriterio", true, 0, 100, where);
+
+
         }
     }
 }
