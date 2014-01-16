@@ -82,6 +82,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controller\EstudioPostulanteControllerTest.cs" />
     <Compile Include="Controller\SedeControllerTest.cs" />
     <Compile Include="Controller\PostulanteControllerTest.cs" />
     <Compile Include="Model\PersonaValidatorTest.cs" />

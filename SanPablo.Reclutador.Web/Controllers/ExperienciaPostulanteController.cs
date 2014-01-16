@@ -10,14 +10,14 @@
     using System.Web.Mvc;
     using System.Linq;
 
-    public class EstudioPostulanteController : BaseController
+    public class ExperienciaPostulanteController : BaseController
     {
-        private IEstudioPostulanteRepository _estudioPostulanteRepository;
+        private IExperienciaPostulanteRepository _experienciaPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
-               
-        public EstudioPostulanteController(IEstudioPostulanteRepository estudioPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
+
+        public ExperienciaPostulanteController(IExperienciaPostulanteRepository experienciaPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
-            _estudioPostulanteRepository = estudioPostulanteRepository;
+            _experienciaPostulanteRepository = experienciaPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
         }
 
@@ -27,7 +27,7 @@
         }
 
         [HttpPost]
-        public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
+        public ActionResult ListaExperiencia(string sidx, string sord, int page, int rows)
         {
             ActionResult result = null;
             List<object> lstFilas = new List<object>();
@@ -74,7 +74,7 @@
 
             return result;
         }
-        
+
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
         {
@@ -97,22 +97,21 @@
                         where = where + " and ";
                     }
                 }
-                
-                var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                var generic = Listar(_experienciaPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.IdeEstudiosPostulante.ToString(),
+                        id = item.IdeExperienciaPostulante.ToString(),
                         cell = new string[]
                             {
-                                item.TipTipoInstitucion,
-                                item.NombreInstitucion,
-                                item.TipoArea,
-                                item.TipoEducacion,
-                                item.TipoNivelAlcanzado,
-                                item.FechaEstudioInicio.ToString(),
-                                item.FechaEstudioFin.ToString()
+                                item.NombreEmpresa,
+                                item.TipoCargoTrabajo,
+                                item.FechaTrabajoInicio.ToString(),
+                                item.FechaTrabajoFin.ToString(),
+                                item.TiempoDeServicio,
+                                item.TipoMotivoCese
                             }
                     }).ToArray();
 
@@ -127,47 +126,41 @@
 
         public ViewResult Edit()
         {
-            var estudioGeneralViewModel = InicializarEstudio();
+            var estudioGeneralViewModel = InicializarExperiencia();
             return View(estudioGeneralViewModel);
         }
 
         [HttpPost]
-        public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
+        public JsonResult Edit([Bind(Prefix = "Experiencia")]ExperienciaPostulante experienciaPostulante)
         {
 
             if (!ModelState.IsValid)
             {
-                var estudioPostulanteModel = InicializarEstudio();
-                estudioPostulanteModel.Estudio = estudioPostulante;
+                var experienciaPostulanteModel = InicializarExperiencia();
+                experienciaPostulanteModel.Experiencia = experienciaPostulante;
                 return Json("dadf", JsonRequestBehavior.DenyGet);
             }
-            _estudioPostulanteRepository.Add(estudioPostulante);
+            _experienciaPostulanteRepository.Add(experienciaPostulante);
             return Json("ddafd", JsonRequestBehavior.DenyGet);
-            
+
         }
 
-        public EstudioPostulanteGeneralViewModel InicializarEstudio()
+        public ExperienciaPostulanteGeneralViewModel InicializarExperiencia()
         {
-            var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
-            estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
-            estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPTIPOINSTITUC"));
-            estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            var experienciaPostulanteGeneralViewModel = new ExperienciaPostulanteGeneralViewModel();
+            experienciaPostulanteGeneralViewModel.Experiencia = new ExperienciaPostulante();
+            experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPTIPOINSTITUC"));
+            experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPNOMINSTITUC"));
-            estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            experienciaPostulanteGeneralViewModel.TipoMotivosCese = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPNOMINSTITUC"));
+            experienciaPostulanteGeneralViewModel.TipoMotivosCese.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPAREA"));
-            estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
-            estudioPostulanteGeneralViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPEDUCACION"));
-            estudioPostulanteGeneralViewModel.TiposEducacion.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("NIVELALCANZADO"));
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
-            return estudioPostulanteGeneralViewModel;
+            experienciaPostulanteGeneralViewModel.TipoCargosReferente = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPAREA"));
+            experienciaPostulanteGeneralViewModel.TipoCargosReferente.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
+            return experienciaPostulanteGeneralViewModel;
         }
-        
+
 
 
     }

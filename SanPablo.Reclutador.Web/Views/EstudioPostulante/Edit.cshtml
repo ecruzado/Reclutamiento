@@ -2,6 +2,46 @@
 @{
     Layout = "";
 }
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.datepicker').datepicker({});
+            $("#fechainicio").datepicker({});
+            $("#fechafin").datepicker({});
+
+            //Habilitar texto Otro 
+            $('select#tipo_nombre_institucion').change(function () {
+                var tipoNombre = $(this).val();
+                if (tipoNombre == '99') {
+                    $('#NombreInstitucion_otro').removeAttr('disabled');
+                }
+                else {
+                    $('#NombreInstitucion_otro').attr('disabled', 'disabled');
+                }
+            })
+        });
+                
+        $(function () {
+            $.datepicker.regional['es'] =
+            {
+                closeText: 'Cerrar',
+                prevText: 'Previo',
+                nextText: 'Próximo',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                dateFormat: 'dd/mm/yy', firstDay: 0,
+                initStatus: 'Selecciona la fecha', isRTL: false
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+        });
+    </script>
 @using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))
     {
     @Html.ValidationSummary(true)
@@ -12,7 +52,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Institución <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoInstituciones, "Codigo", "Descripcion", Model.Estudio.TipTipoInstitucion))
+                @Html.DropDownListFor(model => model.Estudio.TipTipoInstitucion, new SelectList(Model.TipoTipoInstituciones, "Valor", "Descripcion", Model.Estudio.TipTipoInstitucion))
                 @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
             </td>
         </tr>
@@ -21,16 +61,17 @@
                 <label class="etiquetaFormulario" for="setInstitucion">Institución <span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                    @Html.TextBoxFor(model => model.Estudio.NombreInstitucion)
+                    @Html.DropDownListFor(model => model.Estudio.TipoNombreInstitucion, new SelectList(Model.TipoNombreInstituciones, "Valor", "Descripcion", Model.Estudio.TipoNombreInstitucion), new { @id="tipo_nombre_institucion"})
                     @Html.ValidationMessageFor(model => model.Estudio.NombreInstitucion )
             </td>
         </tr> 
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="visibility:hidden"> Otro <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario"> Otro <span class="text-error">*</span></label>
             </td>
             <td>
-                <input style="visibility:hidden" type="text" class="input-large" id="txtOtraInstitucion" />
+                @Html.TextBoxFor(model => model.Estudio.NombreInstitucion, new { @id="NombreInstitucion_otro",@disabled = "disabled"})
+                @Html.ValidationMessageFor(model => model.Estudio.NombreInstitucion )
             </td>
         </tr>
         <tr>
@@ -38,8 +79,17 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Área de Estudio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Codigo", "Descripcion", Model.Estudio.TipoArea))
+                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.Estudio.TipoArea))
                 @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setAreaEstudio"> Tipo de Educación <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Estudio.TipoEducacion, new SelectList(Model.TiposEducacion, "Valor", "Descripcion", Model.Estudio.TipoEducacion))
+                @Html.ValidationMessageFor(model => model.Estudio.TipoEducacion)
             </td>
         </tr>
         <tr>
@@ -47,7 +97,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Nivel Alcanzado <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Estudio.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Codigo", "Descripcion", Model.Estudio.TipoNivelAlcanzado))
+                @Html.DropDownListFor(model => model.Estudio.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Valor", "Descripcion", Model.Estudio.TipoNivelAlcanzado))
                 @Html.ValidationMessageFor(model => model.Estudio.TipoNivelAlcanzado)
             </td>
         </tr>
@@ -56,7 +106,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Inicio <span class="text-error">*</span></label>
             </td>
             <td class="colInput" id="txtfechainicio">
-                @Html.TextBoxFor(model => model.Estudio.FechaEstudioInicio,"{0:d}", new { @class = "datepicker" })
+                @Html.TextBoxFor(model => model.Estudio.FechaEstudioInicio,"{0:d}", new { @class = "datepicker",@id="fechainicio" })
                 @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
             </td>
         </tr>
@@ -65,7 +115,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Fin </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Estudio.FechaEstudioFin,"{0:d}", new { @class = "datepicker" })
+                @Html.TextBoxFor(model => model.Estudio.FechaEstudioFin,"{0:d}", new { @class = "datepicker", @id="fechafin" })
                 @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioFin)
             </td>
             <td>

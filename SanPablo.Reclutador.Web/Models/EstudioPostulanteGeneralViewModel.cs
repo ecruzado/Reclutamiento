@@ -6,10 +6,10 @@
     public class EstudioPostulanteGeneralViewModel
     {
         public EstudioPostulante Estudio { get; set; }
-        public virtual IList<ItemTabla> TipoInstituciones { get; set; }
-        public virtual IList<ItemTabla> Instituciones { get; set; }
-        public virtual IList<ItemTabla> AreasEstudio { get; set; }
-        public virtual IList<ItemTabla> Educacion { get; set; }
-        public virtual IList<ItemTabla> NivelesAlcanzados { get; set; }
+        public virtual IList<DetalleGeneral> TipoTipoInstituciones { get; set; }
+        public virtual IList<DetalleGeneral> TipoNombreInstituciones { get; set; }
+        public virtual IList<DetalleGeneral> AreasEstudio { get; set; }
+        public virtual IList<DetalleGeneral> TiposEducacion { get; set; }
+        public virtual IList<DetalleGeneral> NivelesAlcanzados { get; set; }
     }
 }

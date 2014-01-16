@@ -61,9 +61,9 @@
                         <label class="etiquetaFormulario" for="setipodocumento">Sueldo Bruto (S/.) <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
-                         @Html.DropDownListFor(model => model.Persona.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Codigo", "Descripcion", Model.Persona.TipoSalario))
+                         @Html.DropDownListFor(model => model.Persona.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Valor", "Descripcion", Model.Persona.TipoSalario))
                          <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.TipoSalario)
+                         @Html.ValidationMessageFor(model => model.Persona.TipoSalario)
                          </div>
                     </td>
                 </tr>
@@ -72,7 +72,7 @@
                         <label class="etiquetaFormulario" for="setipodisponibilidad">Disponibilidad para trabajar <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Persona.TipoDisponibilidadTrabajo, new SelectList(Model.TipoDisponibilidadesTrabajos, "Codigo", "Descripcion", Model.Persona.TipoDisponibilidadTrabajo))
+                        @Html.DropDownListFor(model => model.Persona.TipoDisponibilidadTrabajo, new SelectList(Model.TipoDisponibilidadesTrabajos, "Valor", "Descripcion", Model.Persona.TipoDisponibilidadTrabajo))
                         <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Persona.TipoDisponibilidadTrabajo)
                         </div>
@@ -83,7 +83,7 @@
                         <label class="etiquetaFormulario" for="input01">Disponibilidad de horario <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Persona.TipoDisponibilidadHorario, new SelectList(Model.TipoDisponibilidadesHorarios, "Codigo", "Descripcion", Model.Persona.TipoDisponibilidadHorario))
+                        @Html.DropDownListFor(model => model.Persona.TipoDisponibilidadHorario, new SelectList(Model.TipoDisponibilidadesHorarios, "Valor", "Descripcion", Model.Persona.TipoDisponibilidadHorario))
                         <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Persona.TipoDisponibilidadHorario)
                         </div>
@@ -94,7 +94,7 @@
                         <label class="etiquetaFormulario" for="input01">Horario de Trabajo</label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Persona.TipoHorario, new SelectList(Model.TipoHorarios, "Codigo", "Descripcion", Model.Persona.TipoHorario))   
+                        @Html.DropDownListFor(model => model.Persona.TipoHorario, new SelectList(Model.TipoHorarios, "Valor", "Descripcion", Model.Persona.TipoHorario))   
                     </td>
                 </tr>
                 <tr>
@@ -120,7 +120,7 @@
                         <label class="etiquetaFormulario" for="input01">¿En cuál de nuestras sedes?</label>
                     </td>
                     <td class="colInput">
-                         @Html.DropDownListFor(model => model.Persona.TipoParienteSede, new SelectList(Model.TipoParientesSedes, "Codigo", "Descripcion", Model.Persona.TipoParienteSede))   
+                         @Html.DropDownListFor(model => model.Persona.TipoParienteSede, new SelectList(Model.TipoParientesSedes, "Valor", "Descripcion", Model.Persona.TipoParienteSede))   
                     </td>
                 </tr>
                 <tr>
