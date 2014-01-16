@@ -77,6 +77,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             String nombreAlternativa=null;
             int pesoAlternativa=0; 
             
+            
+
             nombreAlternativa = model.Alternativa.NombreAlternativa;
             pesoAlternativa = model.Alternativa.Peso;
 
@@ -336,10 +338,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
-            //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
-            criterioViewModel.Criterio.IdeCriterio = 20;
-
-
+            criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
+            
 
             return View(criterioViewModel);
 

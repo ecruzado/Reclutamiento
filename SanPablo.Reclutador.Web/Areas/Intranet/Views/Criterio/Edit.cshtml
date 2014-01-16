@@ -20,10 +20,11 @@
     $(document).ready(function () {
         
      
-        $(".grilla-opciones").hide();
-        $("#btnbuscaimagen").hide();
+      //  $(".grilla-opciones").hide();
+      //  $("#btnbuscaimagen").hide();
 
-        /*$("#Criterio_CodigoCriterio").attr('disabled', true);*/
+       // $("#Criterio_CodigoCriterio").attr('disabled', true);
+
         
         $("#Criterio_TipoModoRegistro").change(function () {
             var vvalor = $(this).val();
@@ -62,7 +63,11 @@
         });
 
         $('#Agregar').click(function () {
+
+            
             mostrarAgregarEstudios(0);
+
+
         });
 
         $('#btnEditar').click(function () {
@@ -202,8 +207,7 @@
                          <label class="etiquetaFormulario">Código</label>
                     </td>
                     <td class="colInput">
-                         @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario" })  
-                       <!-- <input type="text" class="input-small" id="txtcodigo" disabled="disabled"> -->
+                          @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { disabled = "disabled" ,@class = "textoFormulario"})                       
                     </td>
                     <td style="width:40px;"></td>
                    
