@@ -116,8 +116,8 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Criterio.EstadoCriterio, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.EstadoCriterio))
-		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoCriterio)
+                                @Html.DropDownListFor(model => model.Criterio.EstadoRegistro, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.EstadoRegistro))
+		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoRegistro)
                             </div>
                         </div>
                     </div>

@@ -25,6 +25,10 @@
                 .Keyed<IValidator>(typeof(IValidator<Criterio>))
                 .As<IValidator>();
 
+            builder.RegisterType<AlternativaValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Alternativa>))
+                .As<IValidator>();
+
         }
     }
 }

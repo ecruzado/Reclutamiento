@@ -29,7 +29,7 @@
         $("#Criterio_TipoModoRegistro").change(function () {
             var vvalor = $(this).val();
 
-            if (vvalor == "01") {
+            if (vvalor == "0") {
                 $("#btnbuscaimagen").show();
                 $(".Imagen").show();
             }
@@ -51,9 +51,11 @@
                 "Grabar": function () {
                     $.post("/Intranet/Criterio/PopupCriterio",
                     $("#criterioForm").serialize(),
-                    function (data) {
-                        $("#updateDialog").dialog("close");
-                    }
+                        function (data) {
+                            //$("#updateDialog").dialog("close");
+                            $("#updateDialog").html(data);
+                            //$(data).find(".dfdf");
+                        }
                     );
                 },
                  "Cancelar": function () {
@@ -63,21 +65,18 @@
         });
 
         $('#Agregar').click(function () {
-
-            
-            mostrarAgregarEstudios(0);
-
-
+            var codigoCriterio = $("#Criterio_IdeCriterio").val();
+            mostrarAgregarEstudios(0, codigoCriterio);
         });
 
         $('#btnEditar').click(function () {
-            
+                var codigoCriterio = $("#Criterio_IdeCriterio").val();
                 var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (selr != null) {
-                    mostrarAgregarEstudios(selr);
+                    mostrarAgregarEstudios(selr, codigoCriterio);
                 } else {
-                    SanPablo.ShowAlert('', 'Seleccione una Alternativa');
-                   // alert("Seleccione una Alternativa");
+                   alert('Seleccione una Alternativa');
+                   
                 }
                 
             
@@ -97,12 +96,12 @@
             mtype: 'POST',
             colNames: ['Nº', 'Alternativa', 'Peso', 'Imagen'],
             colModel: [
-                    { name: 'Item', index: 'Item', align: 'left', width: 10, editable: false, sortable: false },
-                    { name: 'Alternativa', index: 'Alternativa', align: 'left', editable: false, sortable: false },
+                    { name: 'CodigoAlternativa', index: 'CodigoAlternativa', align: 'left', width: 10, editable: false, sortable: false },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', editable: false, sortable: false },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 30, editable: false },
-                    { name: 'Imagen', index: 'Imagen', align: 'center', sortable: false, width: 30, editable: false, formatter: ImagenFormatter },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 30, editable: false, formatter: ImagenFormatter },
             ],
-            sortname: 'Codigo',
+            sortname: 'CodigoAlternativa',
             sortorder: 'desc',
             viewrecords: true,
             cellEdit: true,
@@ -118,6 +117,11 @@
             loadComplete: function (data) {
 
             }
+
+
+
+
+
         });
 
 
@@ -172,9 +176,9 @@
         $("#dlgsubirarchivoimagen").dialog('open');
     }
 
-    function mostrarAgregarEstudios(id) {
+    function mostrarAgregarEstudios(id, codCriterio) {
         var dialogDiv = $('#updateDialog');
-        $.get("/Intranet/Criterio/PopupCriterio/"+id, function (data) {
+        $.get("/Intranet/Criterio/PopupCriterio/" + id + "?codCriterio=" +codCriterio, function (data) {
             dialogDiv.html(data);
             dialogDiv.dialog('open');
         });

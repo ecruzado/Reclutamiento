@@ -26,6 +26,10 @@
             builder.RegisterType<CriterioRepository>()
                 .As<ICriterioRepository>();
 
+            builder.RegisterType<AlternativaRepository>()
+                .As<IAlternativaRepository>();
+
+
             builder.RegisterType<ExperienciaPostulanteRepository>()
                 .As<IExperienciaPostulanteRepository>();
 
