@@ -18,11 +18,11 @@
                    .As<IValidator>();
 
             builder.RegisterType<EstudioPostulanteValidator>()
-                .Keyed<IValidator>(typeof(IValidator<EstudioPostulanteValidator>))
+                .Keyed<IValidator>(typeof(IValidator<EstudioPostulante>))
                 .As<IValidator>();
 
             builder.RegisterType<CriterioValidator>()
-                .Keyed<IValidator>(typeof(IValidator<CriterioValidator>))
+                .Keyed<IValidator>(typeof(IValidator<Criterio>))
                 .As<IValidator>();
 
         }

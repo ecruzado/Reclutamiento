@@ -7,19 +7,18 @@ namespace SanPablo.Reclutador.Entity
 {
     public class Criterio : BaseEntity
     {
-        public virtual int CodigoCriterio { get; set; }
-        public virtual string NombreCriterio { get; set; }
+        public virtual int IdeCriterio { get; set; }
+        public virtual string Pregunta { get; set; }
         public virtual string DescripcionCriterio { get; set; }
-        public virtual int Calificacion { get; set;}
         public virtual string TipoMedicion { get; set; }
         public virtual string TipoCriterio { get; set; }
-        public virtual string TipoModoRegistro { get; set; }
+        public virtual string TipoModo { get; set; }
         public virtual string EstadoRegistro { get; set; }
-        public virtual string EstadoCriterio { get; set; }
-        public virtual IList<SubCategoria> SubCategorias { get; set; }
+        public virtual string TipoCalificacion { get; set; }
         
-        public virtual string Alternatica { get; set; }
-        public virtual string Peso { get; set; }
+        public virtual int OrdenImpresion { get; set; }
+
+        public virtual IList<SubCategoria> SubCategorias { get; set; }
 
         public Criterio()
         {

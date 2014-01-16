@@ -13,7 +13,7 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual("0")
                 .WithMessage("Ingresar tipo criterio");
             
-            RuleFor(x => x.NombreCriterio)
+            RuleFor(x => x.Pregunta)
                 .NotEmpty()
                 .WithMessage("Ingresar Pregunta");
 
@@ -21,13 +21,13 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual("0")
                 .WithMessage ("Ingresar tipo Medición");
             
-            RuleFor(x => x.TipoModoRegistro)
+            RuleFor(x => x.TipoModo)
                 .NotEqual("0")
                 .WithMessage("Ingresar modo de registro");
 
-            RuleFor(x => x.Calificacion)
-                .NotEqual(0)
-                .WithMessage("Ingresar Tipo de calificacion");
+            RuleFor(x => x.TipoCalificacion)
+                .NotEqual("0")
+                .WithMessage("Ingresar Tipo de calificación");
            
         }
 

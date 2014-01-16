@@ -95,6 +95,7 @@
     <Compile Include="Repository\InMemorySessionFactoryProvider.cs" />
     <Compile Include="Repository\NHibernateHelper.cs" />
     <Compile Include="Repository\EstudioPostulanteRepositoryTest.cs" />
+    <Compile Include="Repository\CriterioRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

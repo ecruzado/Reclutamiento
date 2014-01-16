@@ -21,8 +21,10 @@
         
      
         $(".grilla-opciones").hide();
-
         $("#btnbuscaimagen").hide();
+
+        /*$("#Criterio_CodigoCriterio").attr('disabled', true);*/
+        
         $("#Criterio_TipoModoRegistro").change(function () {
             var vvalor = $(this).val();
 
@@ -81,8 +83,6 @@
         $('#btnGuardar').click(function () {
             $(".tabla-datos").show();
             $(".grilla-opciones").show();
-
-
         });
 
 
@@ -180,11 +180,9 @@
 }
 
 @using (Html.BeginForm("Edit", "Criterio", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
+{
     @Html.ValidationSummary(true)
-
-<div class="row">
-    <div class="span12">
+    <div class="span12"> 
         <div class="widget-box">
             <div class="widget-title">
                 <h5>Criterio</h5>
@@ -193,70 +191,95 @@
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                 </div>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Código</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled">
-                            </div>
+
+            <table style="margin-left:120px;">
+                <tr>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+                <tr>
+                     <td class="colEtiqueta">
+                         
+                         <label class="etiquetaFormulario">Código</label>
+                    </td>
+                    <td class="colInput">
+                         @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario" })  
+                       <!-- <input type="text" class="input-small" id="txtcodigo" disabled="disabled"> -->
+                    </td>
+                    <td style="width:40px;"></td>
+                   
+                    <td class="colEtiqueta">
+                            <label class="etiquetaFormulario">Medición</label>
+                    </td>
+                     <td class="colInput">
+                            @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
+		                     <div class="tex-error" style="font-size:12px;color:red">    
+                             @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
+                             </div>
+                     </td>
+                 </tr>
+                 <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Tipo</label>
+                    </td>
+                   <td class="colInput">
+                            @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
+		                   <div class="tex-error" style="font-size:12px;color:red">         
+                           @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
+                           </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Modo</label>
+                    </td>
+                    <td class="colInput">
+                        @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))
+		                <div class="tex-error" style="font-size:12px;color:red">     
+                        @Html.ValidationMessageFor(model => model.Criterio.TipoModo)
                         </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Medición</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
-		                        @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
+                    </td>
+
+                  </tr>
+                
+                   <tr>
+                       <td class="colEtiqueta">
+                            <label class="etiquetaFormulario">Pregunta</label>
+                        </td>
+                       <td class="colInput">
+                             @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })    
+                            <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo</label>
-                            <div class="controles">
-                                 @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
-		                         @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Modo</label>
-                            <div class="controles">
-                                 @Html.DropDownListFor(model => model.Criterio.TipoModoRegistro, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModoRegistro))
-		                         @Html.ValidationMessageFor(model => model.Criterio.TipoModoRegistro)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Pregunta</label>
-                            <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-large">
-                                <input type="file" name="file" id="file"/>
-                                <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Calificación</label>
-                            <div class="controles">
+                       </td>
+                         
+                         <td style="width:40px;"></td>
+                         
+                         <td class="colEtiqueta">
+                            <label class="etiquetaFormulario">Calificación</label>
+                         </td>
+
+                          <td class="colInput">
                                
-                                 @Html.DropDownListFor(model => model.Criterio.Calificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.Calificacion))
-		                         @Html.ValidationMessageFor(model => model.Criterio.Calificacion)
-                                
+                            @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))
+		                    <div class="tex-error" style="font-size:12px;color:red">     
+                            @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
                             </div>
-                        </div>
-                    </div>
-                </div>            
-            </form>
+                          </td>
+                       
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                             <input  type="file" name="file" id="btnbuscaimagen"/> 
+                            <!-- <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;"> -->
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+               </table>          
             
             <div class="grilla-opciones">
                 <h6>Alternativas</h6>
@@ -275,13 +298,12 @@
             </div>
            
              <div class="form-actions">
-                <a class="btn" href="@Url.Action("Index","Criterio",new { area = "Intranet"})" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn" href="@Url.Action("Index", "Criterio", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" id="btnGuardar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>
             </div>
            
         </div>
-    </div>
-</div>
+        </div>
 }
 
 

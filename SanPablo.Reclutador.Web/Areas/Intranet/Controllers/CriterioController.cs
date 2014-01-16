@@ -46,7 +46,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Criterio = new Criterio();
-
+            
             criterioViewModel.TipoCriterio =
              new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
             criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
@@ -312,10 +312,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
 
+        
+
+
         [HttpPost]
         public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase file)
         {
-            return null;
+            var criterioViewModel = inicializarCriteriosEdit();
+           
+
+            if (!ModelState.IsValid){
+                criterioViewModel.Criterio = model.Criterio;
+                return View(criterioViewModel);
+            }
+
+            
+           // string result = new StreamReader(file.InputStream).ReadToEnd();
+            
+            _criterioRepository.Add(model.Criterio);
+
+            criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+            criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+            criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
+            criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+            //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
+            criterioViewModel.Criterio.IdeCriterio = 20;
+
+
+
+            return View(criterioViewModel);
+
         }
     }
 }
