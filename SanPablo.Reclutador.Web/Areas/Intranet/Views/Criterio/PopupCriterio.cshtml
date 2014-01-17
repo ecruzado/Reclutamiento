@@ -13,15 +13,20 @@
 @using (Html.BeginForm("PopupCriterio", "Criterio", FormMethod.Post, new { @id = "criterioForm" }))
     {
     @Html.ValidationSummary(true)
-   
+    @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.Alternativa.CodigoAlternativa,  new { style = "display: none;" })
+
     <table style="margin-left:30px;">
         <tr >
             <td class="colEtiqueta" >
                 <label class="etiquetaFormulario" for="setipoInstitucion">Alternativa<span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
+               
                @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa)
+                <div class="tex-error" style="font-size:12px;color:red">    
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
+                </div>
             </td>
         </tr>
         <tr>
@@ -30,7 +35,9 @@
             </td>
             <td class="colInput;input-xxlarge">
                 @Html.TextBoxFor(model => model.Alternativa.Peso)
+                <div class="tex-error" style="font-size:12px;color:red">   
                 @Html.ValidationMessageFor(model => model.Alternativa.Peso)
+                </div>
             </td>
         </tr>
         <tr>

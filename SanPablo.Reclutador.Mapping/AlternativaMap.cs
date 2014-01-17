@@ -1,18 +1,25 @@
 ﻿namespace SanPablo.Reclutador.Web.Repository.Mapping
 {
     using FluentNHibernate.Mapping;
-    using SanPablo.Reclutador.Web.Entity;
+    using SanPablo.Reclutador.Entity;
 
     public class AlternativaMap : ClassMap<Alternativa>
     {
         public AlternativaMap()
         {
-            Id(m => m.CodigoAlternativa, "IDEALTERNATIVA");
-            References(x => x.Criterio).Column("IDECRITERIO");
-            Map(x => x.NombreAlternativa, "NOMBRE");
+            Id(m => m.CodigoAlternativa, "IDEALTERNATIVA")
+                .GeneratedBy
+                .Sequence("IDEALTERNATIVA_SQ");
+           // References(x => x.Criterio).Column("IDECRITERIO");
+            References(x => x.Criterio, "IDECRITERIO");
+            //Map(x => x.IdCriterio, "IDECRITERIO");
+            Map(x => x.NombreAlternativa, "ALTERNATIVA");
             Map(x => x.Peso, "PESO");
             Map(x => x.RutaDeImagen, "RUTAIMAGEN");
-            Map(x => x.EstadoDeRegistro, "ESTREGISTRO");
+            Map(x => x.UsrCreacion, "USRCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.UsrMod, "USRMODIFICACION");
+            Map(x => x.FechaMod, "FECMODIFICACION");
             Table("ALTERNATIVA");
         }
     }

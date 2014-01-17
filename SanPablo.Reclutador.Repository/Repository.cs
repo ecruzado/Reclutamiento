@@ -31,11 +31,13 @@
         public void Remove(TEntity entity)
         {
             _session.Delete(entity);
+            _session.Flush();
         }
 
         public void Update(TEntity entity)
         {
             _session.Update(entity);
+            _session.Flush();
         }
 
         public TEntity GetSingle(Expression<Func<TEntity, bool>> condition)

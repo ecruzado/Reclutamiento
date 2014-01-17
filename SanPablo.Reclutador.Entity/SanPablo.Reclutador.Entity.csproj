@@ -73,6 +73,8 @@
     <Compile Include="Ubigeo.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="UsuarioSede.cs" />
+    <Compile Include="Validation\AlternativaValidator.cs" />
+    <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />
     <Compile Include="Validation\ExperienciaPostulanteValitator.cs" />
     <Compile Include="Validation\PersonaValidator.cs" />
