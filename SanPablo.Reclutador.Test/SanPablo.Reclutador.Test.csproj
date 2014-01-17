@@ -83,6 +83,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controller\EstudioPostulanteControllerTest.cs" />
+    <Compile Include="Controller\ExperienciaPostulanteControllerTest.cs" />
     <Compile Include="Controller\SedeControllerTest.cs" />
     <Compile Include="Controller\PostulanteControllerTest.cs" />
     <Compile Include="Model\EstudioPostulanteValidatorTest.cs" />

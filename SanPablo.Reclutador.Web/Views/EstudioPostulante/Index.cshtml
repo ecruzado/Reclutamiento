@@ -66,26 +66,52 @@
 
             $('#btnEditar').click(function () {
                 var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                alert(ideEstudio);
-                
-                mostrarEditarEstudios(ideEstudio);
-
+                if (ideEstudio != null) {
+                    mostrarEditarEstudios(ideEstudio);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
             });
+
+            // btn Eliminar
+            $('#btnEliminar').click(function () {
+                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                alert(ideEstudio);
+                if (ideEstudio != null) {
+                    eliminarEstudio(ideEstudio);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
+            });
+
         });
 
-        function mostrarEditarEstudios(ideEstudioEdit) {
+        function mostrarEditarEstudios(id) {
             var dialogDiv = $('#updateDialog');
-            $.get("/EstudioPostulante/Edit/" + ideEstudioEdit, function (data) {
+            //var id = parseInt(ideEstudioEdit);
+            $.get("/EstudioPostulante/Edit/"+id, function (data) {
                 dialogDiv.html(data);
                 dialogDiv.dialog('open');
             });
             return false;
         }
 
+        function eliminarEstudio(id) {
+            $.ajax({
+            type: "POST",
+            url: '@Url.Action("eliminarEstudio","EstudioPostulante")',
+                    data: { ideEstudio: id },
+                    success: function (respuesta) {
+                        alert(respuesta);
+                    }
+            });
+        }
 
         function mostrarAgregarEstudios() {
             var dialogDiv = $('#updateDialog');
-            $.get("/EstudioPostulante/Edit", function (data) {
+            $.get("/EstudioPostulante/Edit/"+"0", function (data) {
                 dialogDiv.html(data);
                 dialogDiv.dialog('open');
             });

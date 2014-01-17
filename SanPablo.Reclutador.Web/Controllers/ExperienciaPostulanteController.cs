@@ -130,10 +130,21 @@
             }
         }
 
-        public ViewResult Edit()
+        public ViewResult Edit(string id)
         {
             var experienciaGeneralViewModel = InicializarExperiencia();
-            return View(experienciaGeneralViewModel);
+            if (id == "0")
+            {
+                return View(experienciaGeneralViewModel);
+            }
+            else
+            {
+                int ideExperienciaEdit = Convert.ToInt32(id);
+                var experienciaResultado = new ExperienciaPostulante();
+                experienciaResultado = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == ideExperienciaEdit);
+                experienciaGeneralViewModel.Experiencia = experienciaResultado;
+                return View(experienciaGeneralViewModel);
+            }
         }
 
         [HttpPost]
@@ -144,7 +155,7 @@
             {
                 var experienciaPostulanteModel = InicializarExperiencia();
                 experienciaPostulanteModel.Experiencia = experienciaPostulante;
-                return Json("dadf", JsonRequestBehavior.DenyGet);
+                return Json(experienciaPostulanteModel, JsonRequestBehavior.DenyGet);
             }
             _experienciaPostulanteRepository.Add(experienciaPostulante);
             return Json("ddafd", JsonRequestBehavior.DenyGet);
