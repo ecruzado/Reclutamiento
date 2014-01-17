@@ -209,7 +209,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
              
 
-        [HttpPost]
+       /* [HttpPost]
         public ActionResult ListaCriterio(string sidx, string sord, int page, int rows)
         {
             List<object> list = new List<object>();
@@ -276,7 +276,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             };
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
-
+        */
         [HttpPost]
         public ActionResult ListaAlternativaxCriterio(GridTable grid, int idCriterio)
         {
@@ -372,6 +372,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+
             //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
 
 
@@ -379,6 +380,53 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+
+        [HttpPost]
+        public ActionResult ListaCriterio(GridTable grid)
+        {
+            try
+            {
+                CriterioViewModel model = new CriterioViewModel();
+                model.Criterio = new Criterio();
+                
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                //obtiene el valor del criterio
+
+
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+
+                DetachedCriteria where = DetachedCriteria.For<Alternativa>();
+                where.Add(Expression.Eq("Criterio.IdeCriterio", model.Criterio.IdeCriterio));
+
+
+                var generic = Listar(_AlternativaRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.CodigoAlternativa.ToString(),
+                        cell = new string[]
+                            {
+                                "1",
+                                item.CodigoAlternativa.ToString(),
+                                item.NombreAlternativa.ToString(),
+                                item.Peso.ToString(),
+                                ""
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
 
 
     }
