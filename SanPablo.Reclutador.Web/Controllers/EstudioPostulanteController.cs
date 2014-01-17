@@ -186,7 +186,5 @@
             return result;
         }
 
-        #endregion
-
     }
 }
