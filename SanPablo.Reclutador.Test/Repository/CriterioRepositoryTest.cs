@@ -22,18 +22,29 @@ namespace SanPablo.Reclutador.Test.Repository
             criterio.FechaCreacion = DateTime.Now;
             repository.Add(criterio);
         }
+
+         [TestMethod]
+          public void TestMethod3()
+          {
+           
+              var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
+              var alternativa = repository.GetSingle(x => x.CodigoAlternativa == 24);
+              repository.Remove(alternativa);
+
+          }
+          
         /*
-        [TestMethod]
-        public void TestMethod2()
-        {
-            var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
+          [TestMethod]
+          public void TestMethod2()
+          {
+              var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
 
-            DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-            where.Add(Expression.Like("IdCriterio",27));
+              DetachedCriteria where = DetachedCriteria.For<Alternativa>();
+              where.Add(Expression.Like("IdCriterio",27));
 
-            var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
-        }
-        */
+              var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
+          }
+          */
       /*  [TestMethod]
         public void TestMethod3()
         {

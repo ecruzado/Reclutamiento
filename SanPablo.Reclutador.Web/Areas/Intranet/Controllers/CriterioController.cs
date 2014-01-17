@@ -442,13 +442,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Alternativa.CodigoAlternativa = Convert.ToInt32(codigoAlternativa);
 
 
-            var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == model.Alternativa.CodigoAlternativa);
-            alter.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
+            var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == Convert.ToInt32(codigoAlternativa));
+            //alter.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
             _AlternativaRepository.Remove(alter);
-            
-            var criterioViewModel = inicializarCriteriosEdit();
-
-             return View(criterioViewModel);
+            return null;            
         }
     }
 }

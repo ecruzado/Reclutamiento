@@ -178,7 +178,7 @@
 
         $.post("/Intranet/Criterio/Eliminar?codigoAlternativa=" + selr + "&codigoCriterio=" + codCriterio,
         function (data) {
-            alert("ola k ase")
+            $('#grdList').trigger('reloadGrid');
             }
         );
         
