@@ -63,6 +63,7 @@
     <Compile Include="ItemTabla.cs" />
     <Compile Include="NotificacionDeAprobacion.cs" />
     <Compile Include="Opcion.cs" />
+    <Compile Include="ParientePostulante.cs" />
     <Compile Include="Persona.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rol.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Validation\AlternativaValidator.cs" />
     <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />
+    <Compile Include="Validation\ExperienciaPostulanteValitator.cs" />
     <Compile Include="Validation\PersonaValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
   </ItemGroup>

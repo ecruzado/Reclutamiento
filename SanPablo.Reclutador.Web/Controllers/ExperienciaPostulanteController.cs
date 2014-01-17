@@ -110,8 +110,14 @@
                                 item.TipoCargoTrabajo,
                                 item.FechaTrabajoInicio.ToString(),
                                 item.FechaTrabajoFin.ToString(),
+                                item.IndicadorActualmenteTrabajo,
                                 item.TiempoDeServicio,
-                                item.TipoMotivoCese
+                                item.TipoMotivoCese,
+                                item.NombreReferente,
+                                item.TipoCargoTrabajoReferente,
+                                item.NumeroMovilReferencia.ToString(),
+                                item.NumeroFijoInstitucionReferente.ToString(),
+                                item.NumeroAnexoInstitucionReferente.ToString()
                             }
                     }).ToArray();
 
@@ -126,8 +132,8 @@
 
         public ViewResult Edit()
         {
-            var estudioGeneralViewModel = InicializarExperiencia();
-            return View(estudioGeneralViewModel);
+            var experienciaGeneralViewModel = InicializarExperiencia();
+            return View(experienciaGeneralViewModel);
         }
 
         [HttpPost]

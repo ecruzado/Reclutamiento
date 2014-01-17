@@ -21,6 +21,8 @@
                 .Keyed<IValidator>(typeof(IValidator<EstudioPostulante>))
                 .As<IValidator>();
 
+            builder.RegisterType<ExperienciaPostulanteValidator>()
+                .Keyed<IValidator>(typeof(IValidator<ExperienciaPostulante>))
             builder.RegisterType<CriterioValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Criterio>))
                 .As<IValidator>();

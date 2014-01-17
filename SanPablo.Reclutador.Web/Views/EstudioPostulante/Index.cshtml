@@ -65,10 +65,22 @@
             });
 
             $('#btnEditar').click(function () {
-                var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                alert(selr);
+                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                alert(ideEstudio);
+                
+                mostrarEditarEstudios(ideEstudio);
+
             });
         });
+
+        function mostrarEditarEstudios(ideEstudioEdit) {
+            var dialogDiv = $('#updateDialog');
+            $.get("/EstudioPostulante/Edit/" + ideEstudioEdit, function (data) {
+                dialogDiv.html(data);
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
 
 
         function mostrarAgregarEstudios() {

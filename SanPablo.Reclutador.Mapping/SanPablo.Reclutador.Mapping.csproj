@@ -57,6 +57,7 @@
     <Compile Include="EstudioPostulanteMap.cs" />
     <Compile Include="ExperienciaPostulanteMap.cs" />
     <Compile Include="GeneralMap.cs" />
+    <Compile Include="ParientesPostulanteMap.cs" />
     <Compile Include="PersonaMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SedeMap.cs" />

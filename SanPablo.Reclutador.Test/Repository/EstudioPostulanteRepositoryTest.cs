@@ -18,7 +18,7 @@ namespace SanPablo.Reclutador.Test.Repository
             //var lista = repository.GetPaging("IdeEstudiosPostulante", true, 0, 10);
             var entidad = new EstudioPostulante();
             entidad.IndicadorActualmenteEstudiando = "1";
-            entidad.NombreInstitucion = "HEY";
+            entidad.NombreInstitucion = "";
             entidad.Postulante = persona;
             entidad.TipoArea = "00";
             entidad.TipoEducacion = "00";
