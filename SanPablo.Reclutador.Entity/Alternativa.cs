@@ -13,6 +13,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreAlternativa { get; set; }
         public virtual int Peso { get; set; }
         public virtual string RutaDeImagen { get; set; }
+        public virtual int NroOrden { get; set; }
         
         public virtual string UsrCreacion { get; set; }
         public virtual string FechaCreacion { get; set; }

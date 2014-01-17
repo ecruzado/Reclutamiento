@@ -52,8 +52,11 @@
                     $.post("/Intranet/Criterio/PopupCriterio",
                     $("#criterioForm").serialize(),
                         function (data) {
-                            //$("#updateDialog").dialog("close");
                             $("#updateDialog").html(data);
+                            
+                            //$(this).data('bob').text($(this).find("textarea").val();
+                            $('#grdList').trigger('reloadGrid');
+                           // $("#updateDialog").dialog("close");
                             //$(data).find(".dfdf");
                         }
                     );
@@ -84,8 +87,6 @@
                    
                 }
                 
-            
-            
         });
 
 
@@ -96,12 +97,14 @@
 
 
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
+            url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")' + '?idCriterio=' + $("#Criterio_IdeCriterio").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Nº', 'Alternativa', 'Peso', 'Imagen'],
+            colNames: ['Nº','','Alternativa', 'Peso', 'Imagen'],
             colModel: [
-                    { name: 'CodigoAlternativa', index: 'CodigoAlternativa', align: 'left', width: 10, editable: false, sortable: false },
+
+                    { name: 'NroOrden', index: 'NroOrden', align: 'left',  width: 10, editable: false, sortable: false },
+                    { name: 'CodigoAlternativa', index: 'CodigoAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
                     { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', editable: false, sortable: false },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 30, editable: false },
                     { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 30, editable: false, formatter: ImagenFormatter },
@@ -111,6 +114,7 @@
             viewrecords: true,
             cellEdit: true,
             /*caption: 'Lista Alternativas',*/
+            rules: true ,
             height: 160,
             autowidth: true,
             rowNum: 0,
@@ -122,9 +126,6 @@
             loadComplete: function (data) {
 
             }
-
-
-
 
 
         });

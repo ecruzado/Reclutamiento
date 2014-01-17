@@ -13,6 +13,8 @@ using System.Web;
 using System.Web.Mvc;
 using SanPablo.Reclutador.Web.Models;
 using NHibernate.Criterion;
+using FluentValidation.Results;
+using FluentValidation;
 
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
@@ -84,24 +86,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Alternativa = new Alternativa();
 
-            if (!ModelState.IsValid)
+            AlternativaValidator validator = new AlternativaValidator();
+            ValidationResult result = validator.Validate(alternativa, "NombreAlternativa", "Peso");
+
+            if (!result.IsValid)
             {
                 return View(criterioViewModel);
             }
 
             if (alternativa.CodigoAlternativa != 0 && alternativa.CodigoAlternativa != null)
             {
-                _AlternativaRepository.Update(alternativa);
+                //_AlternativaRepository.Update(alternativa);
+                var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == alternativa.CodigoAlternativa);
+                alter.NombreAlternativa = alternativa.NombreAlternativa;
+                alter.Peso = alternativa.Peso;
+                _AlternativaRepository.Update(alter);
             }
             else
             {
                 _AlternativaRepository.Add(alternativa);
             }
            
-
-            
-
-            criterioViewModel.Alternativa.IdCriterio = alternativa.IdCriterio;
+            criterioViewModel.Alternativa.IdCriterio = alternativa.Criterio.IdeCriterio;
             criterioViewModel.Alternativa.CodigoAlternativa = alternativa.CodigoAlternativa;
             criterioViewModel.Alternativa.NombreAlternativa = alternativa.NombreAlternativa;
             criterioViewModel.Alternativa.Peso = alternativa.Peso;
@@ -178,21 +184,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             int IdCriterio = codCriterio;
+            CriterioViewModel modelo = new CriterioViewModel();
+            modelo.Alternativa = new Alternativa();
+            modelo.Alternativa.Criterio = new Criterio();
             if (id == 0)
             {
-                CriterioViewModel modelo = new CriterioViewModel();
-                modelo.Alternativa = new Alternativa();
-
-                modelo.Alternativa.IdCriterio = IdCriterio;
+                
+                modelo.Alternativa.Criterio.IdeCriterio = IdCriterio;
                 // levanta un nuevo modelo
                 return View(modelo);
             }
             else 
             {
-                CriterioViewModel modelo = new CriterioViewModel();
-                modelo.Alternativa = new Alternativa();//conexion bd
-
-                modelo.Alternativa.IdCriterio = IdCriterio;
+                
+                modelo.Alternativa.Criterio.IdeCriterio = IdCriterio;
                 modelo.Alternativa.CodigoAlternativa = id;
                 //obtener los datos de la alternativa seleccionada
                 modelo.Alternativa = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == id);
@@ -273,16 +278,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         [HttpPost]
-        public ActionResult ListaAlternativaxCriterio(GridTable grid)
+        public ActionResult ListaAlternativaxCriterio(GridTable grid, int idCriterio)
         {
             try
             {
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                
+                //obtiene el valor del criterio
+               
+                
+               // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
                 DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-                where.Add(Expression.Eq("IdCriterio", 27));
+
+
+                where.Add(Expression.Eq("Criterio.IdeCriterio", idCriterio));
 
 
                 var generic = Listar(_AlternativaRepository,
@@ -294,6 +306,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         id = item.CodigoAlternativa.ToString(),
                         cell = new string[]
                             {
+                                "1",
                                 item.CodigoAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
@@ -343,6 +356,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View(criterioViewModel);
 
         }
+
+
+        [HttpPost]
+        public ActionResult Index(CriterioViewModel model)
+        {
+            var criterioViewModel = inicializarCriteriosIndex();
+
+            criterioViewModel.Criterio = model.Criterio;
+            
+            //_criterioRepository.Add(model.Criterio);
+
+            criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+            criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+            criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
+            criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+            //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
+
+
+            return View(criterioViewModel);
+
+        }
+
+
 
     }
 }

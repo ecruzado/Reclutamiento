@@ -10,8 +10,9 @@
             Id(m => m.CodigoAlternativa, "IDEALTERNATIVA")
                 .GeneratedBy
                 .Sequence("IDEALTERNATIVA_SQ");
-          //  References(x => x.Criterio.IdeCriterio).Column("IDECRITERIO");
-            Map(x => x.IdCriterio, "IDECRITERIO");
+           // References(x => x.Criterio).Column("IDECRITERIO");
+            References(x => x.Criterio, "IDECRITERIO");
+            //Map(x => x.IdCriterio, "IDECRITERIO");
             Map(x => x.NombreAlternativa, "ALTERNATIVA");
             Map(x => x.Peso, "PESO");
             Map(x => x.RutaDeImagen, "RUTAIMAGEN");
