@@ -382,7 +382,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
-        public ActionResult ListaCriterio(GridTable grid, string tipCriterio, string tipMed, string pregunta, string estado)
+        public ActionResult ListaCriterio(GridTable grid)
         {
             try
             {
@@ -399,8 +399,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
                 DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-
-
                 where.Add(Expression.Eq("Criterio.IdeCriterio", model.Criterio.IdeCriterio));
 
 
