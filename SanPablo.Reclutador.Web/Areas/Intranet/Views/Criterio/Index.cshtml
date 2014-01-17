@@ -11,8 +11,14 @@
     //Table initialisation 
     $(document).ready(function () {
 
+        $('#btnBuscar').click(function () {
+            $('#grdList').trigger('reloadGrid');
+        });
+
+
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaCriterio", "Criterio")',
+            url: '@Url.Action("ListaCriterio", "Criterio")' + '?tipCriterio=' + $("#Criterio_TipoCriterio").val() + '& tipMed=' + $("#Criterio_TipoMedicion").val() + '& pregunta=' + $("#Criterio_Pregunta").val() + '&estado=' + $("#Criterio_EstadoRegistro").val(),
+           
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Estado', 'Codigo', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
@@ -31,8 +37,9 @@
             ],
             pager: jQuery('#grdPager'),
             rowNum: 10,
+            rules: true,
             rowList: [10, 30, 50],
-            sortname: 'Codigo',
+            sortname: 'IdeCriterio',
             sortorder: 'desc',
             viewrecords: true,
             /*caption: 'Lista Referencias',*/
@@ -71,6 +78,8 @@
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;
     }
+
+
 
 </script>
 }
@@ -111,7 +120,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Pregunta</label>
                             <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-large">
+                                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })  
                             </div>
                         </div>
                     </div>
@@ -126,7 +135,7 @@
                     </div>
                 </div>
                 <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
                 </div>
             </form>
