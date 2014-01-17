@@ -19,12 +19,12 @@
                 .NotEmpty()
                 .WithMessage("Ingresar la fecha de inicio de trabajo");
             RuleFor(x => x.FechaTrabajoInicio)
-                .GreaterThan(new DateTime(1990,01,01))
+                .GreaterThan(new DateTime(1950,01,01))
                 .WithMessage("Ingresar una Fecha Inicio válida");
 
-            RuleFor(x => x.FechaTrabajoFin)
-               .GreaterThan(new DateTime(1990, 01, 01))
-               .WithMessage("Ingresar una Fecha Fin válida");
+            //RuleFor(x => x.FechaTrabajoFin)
+            //   .GreaterThan(new DateTime(1990, 01, 01))
+            //   .WithMessage("Ingresar una Fecha Fin válida");
 
             RuleFor(x => x.NombreReferente)
                 .NotEmpty()
@@ -37,10 +37,18 @@
             RuleFor(x => x.NumeroFijoInstitucionReferente)
                 .NotEmpty()
                 .WithMessage("Ingresar telefono fijo de la institucion");
+
             RuleFor(x => x.NumeroFijoInstitucionReferente)
-                .InclusiveBetween(0, 999999)
+                .InclusiveBetween(0, 999999999)
                 .WithMessage("Ingresar telefono fijo válido");
 
+            RuleFor(x => x.NumeroMovilReferencia)
+                .InclusiveBetween(0, 999999999)
+                .WithMessage("Ingresar telefono movil válido");
+
+            RuleFor(x => x.NumeroAnexoInstitucionReferente)
+               .InclusiveBetween(0, 999999)
+               .WithMessage("Ingresar anexo válido");
 
         }
     }

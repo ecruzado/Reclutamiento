@@ -33,6 +33,9 @@
             builder.RegisterType<ExperienciaPostulanteRepository>()
                 .As<IExperienciaPostulanteRepository>();
 
+            builder.RegisterType<ParientePostulanteRepository>()
+                .As<IParientePostulanteRepository>();
+
         }
     }
 }

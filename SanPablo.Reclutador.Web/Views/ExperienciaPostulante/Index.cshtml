@@ -11,7 +11,7 @@
 
         $(document).ready(function () {
             jQuery("#grdList").jqGrid({
-                url: '@Url.Action("Listar", "ExperienciaLaboral")',
+                url: '@Url.Action("Listar", "ExperienciaPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
                 colNames: ['Empresa', 'Cargo', 'Fecha Inicio', 'Fecha Fin', 'Actualmente', 'Tiempo Servicio', 'Motivo Cese', 'Nombre Referente', 'Celular', 'Cargo Referente', 'Telefono Institucion', 'Anexo'],
@@ -69,17 +69,55 @@
             $('#btnAgregar').click(function () {
                 mostrarAgregarExperiencia();
             });
-
+            // btn Editar
             $('#btnEditar').click(function () {
-                var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                alert(selr);
+                var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                if (ideExperiencia != null) {
+                    mostrarEditarExperiencia(ideExperiencia);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
+            });
+
+            // btn Eliminar
+            $('#btnEliminar').click(function () {
+                var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                alert(ideEliminar);
+                if (ideExperiencia != null) {
+                    eliminarExperiencia(ideExperiencia);
+                }
+                else {
+                    alert("Seleccionar un item a elimnar");
+                }
             });
         });
+
+        function mostrarEditarExperiencia(id) {
+            var dialogDiv = $('#updateDialog');
+            //var id = parseInt(ideEstudioEdit);
+            $.get("/ExperienciaPostulante/Edit/" + id, function (data) {
+                dialogDiv.html(data);
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function eliminarExperiencia(id) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("eliminarExperiencia","EstudioPostulante")',
+            data: { ideEstudio: id },
+            success: function (respuesta) {
+                alert(respuesta);
+            }
+            });
+    }
 
 
         function mostrarAgregarExperiencia() {
             var dialogDiv = $('#updateDialog');
-            $.get("/ExperienciaPostulante/Edit", function (data) {
+            $.get("/ExperienciaPostulante/Edit/"+0, function (data) {
                 dialogDiv.html(data);
                 dialogDiv.dialog('open');
             });

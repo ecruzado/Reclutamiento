@@ -125,17 +125,23 @@
             }
         }
 
-        public ViewResult Edit()
+        public ViewResult Edit(string id)
         {
             var estudioGeneralViewModel = InicializarEstudio();
-            return View(estudioGeneralViewModel);
+            if (id == "0")
+            {
+                return View(estudioGeneralViewModel);
+            }
+            else
+            {
+                int ideEstudioEdit = Convert.ToInt32(id);
+                var estudioResultado = new EstudioPostulante();
+                estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudioEdit);
+                estudioGeneralViewModel.Estudio = estudioResultado;
+                return View(estudioGeneralViewModel);
+            }
         }
 
-        //public ViewResult Edit(int ideEstudioEdit)
-        //{
-        //    var estudioGeneralViewModel = InicializarEstudio();
-        //    return View(estudioGeneralViewModel);
-        //}
 
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
@@ -176,13 +182,15 @@
         
 
         [HttpPost]
-        public ActionResult recuperarDatosEstudio(int ideEstudio)
+        public ActionResult eliminarEstudio(int ideEstudio)
         {
             ActionResult result = null;
 
             var estudioResultado = new EstudioPostulante();
             estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudio);
-            result = Json(estudioResultado);
+            int antes = _estudioPostulanteRepository.CountBy();
+            _estudioPostulanteRepository.Remove(estudioResultado);
+            int despues = _estudioPostulanteRepository.CountBy();
             return result;
         }
 

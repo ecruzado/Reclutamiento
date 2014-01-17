@@ -20,9 +20,9 @@
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
             EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
 
-            var resultado = estudioPostulanteController.Edit().Model;
+            var resultado = estudioPostulanteController.Edit("0").Model;
 
-            Assert.IsInstanceOfType(resultado, typeof(PostulanteGeneralViewModel));
+            Assert.IsInstanceOfType(resultado, typeof(EstudioPostulanteGeneralViewModel));
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@
 
             var resultado = estudioPostulanteController.Edit(estudioPostulante);
 
-            Assert.IsInstanceOfType(resultado, typeof(PostulanteGeneralViewModel));
+            Assert.IsInstanceOfType(resultado, typeof(EstudioPostulanteGeneralViewModel));
         }
 
         [TestMethod]
@@ -46,9 +46,9 @@
             EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
             EstudioPostulante estudioPostulante = new EstudioPostulante();
             estudioPostulanteController.ModelState.AddModelError("IdeEstudiosPostulante", "modelo invalido");
-            var resultado = estudioPostulanteController.Edit().Model;
+            var resultado = estudioPostulanteController.Edit(estudioPostulante);
 
-            Assert.IsInstanceOfType(resultado, typeof(PostulanteGeneralViewModel));
+            Assert.IsInstanceOfType(resultado, typeof(EstudioPostulanteGeneralViewModel));
         }
     }
 }
