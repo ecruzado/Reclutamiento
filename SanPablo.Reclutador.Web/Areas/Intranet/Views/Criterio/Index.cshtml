@@ -88,57 +88,66 @@
 {
     @Html.ValidationSummary(true)
     <div class="span12">
-        <div class="widget-box">
+       <div class="widget-box">
             <div class="widget-title">
                 <h5>Criterio</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo</label>
-                            <div class="controles">
+            <table style="margin-left:120px;">
+                <tr>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario" for="inputSuccess">Tipo</label>
+                    </td>
+                    <td class="colInput">
                               
                                 @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
 		                        @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
+                    </td>
+                     <td style="width:40px;"></td>
+                     <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="selectError">Medición</label>
+                     </td>   
+                     <td class="colInput">
+                            @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
+		                    @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
+                     </td>
+                <tr/>
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Medición</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
-		                        @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Pregunta</label>
-                            <div class="controles">
-                                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })  
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
-                            <div class="controles">
+                 <tr>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
+                    </td>
+                    <td class="colInput">
+                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })  
+                    </td>
+                    <td style="width:40px;"></td>
+                     <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
+                     </td>
+                     <td class="colInput">
                                 @Html.DropDownListFor(model => model.Criterio.EstadoRegistro, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.EstadoRegistro))
 		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoRegistro)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+                     </td>
+                  </tr>
+              
+                  
+           </table>
+            <table>
+                <tr>
+                  <td  class="formulario-accion offset9">
+                     <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
+                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                   </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+
             <div class="tabla-datos">
                 <table id="grdList">
                 </table>

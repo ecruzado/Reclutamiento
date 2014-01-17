@@ -430,6 +430,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Eliminar(string codigoAlternativa, string codigoCriterio)
+        {
 
+            //int nCodAlternativa = codigoAlternativa;
+            
+            CriterioViewModel model = new CriterioViewModel();
+            model.Alternativa = new Alternativa();
+            model.Alternativa.Criterio = new Criterio();
+
+            model.Alternativa.Criterio.IdeCriterio = Convert.ToInt32(codigoCriterio);
+            model.Alternativa.CodigoAlternativa = Convert.ToInt32(codigoAlternativa);
+
+
+            var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == model.Alternativa.CodigoAlternativa);
+            alter.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
+            _AlternativaRepository.Remove(alter);
+            
+            var criterioViewModel = inicializarCriteriosEdit();
+
+             return View(criterioViewModel);
+        }
     }
 }

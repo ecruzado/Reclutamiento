@@ -89,12 +89,20 @@
                 
         });
 
+        $('#btnEliminar').click(function () {
+            var codigoCriterio = $("#Criterio_IdeCriterio").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                eliminarAlternativa(selr, codigoCriterio);
+            } else {
+                alert('Seleccione una Alternativa');
+            }
+        });
 
         $('#btnGuardar').click(function () {
             $(".tabla-datos").show();
             $(".grilla-opciones").show();
         });
-
 
         jQuery("#grdList").jqGrid({
             url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")' + '?idCriterio=' + $("#Criterio_IdeCriterio").val(),
@@ -158,7 +166,25 @@
         return strRdo;
     }
 
+    function eliminarAlternativa(selr, codCriterio) {
+@*        //var dialogDiv = $('#updateDialog');
+        if (selr != null) {
+            var url = '@Url.Action("PopupCriterio", "Criterio",  new { area = "Intranet" })' + '/' + selr + "?codCriterio=" + codCriterio;
+           // window.location = url;
 
+        } else {
+            alert("Seleccione una alternativa");
+        }*@
+
+        $.post("/Intranet/Criterio/Eliminar?codigoAlternativa=" + selr + "&codigoCriterio=" + codCriterio,
+        function (data) {
+            alert("ola k ase")
+            }
+        );
+        
+        return false;
+
+    }
     
     
     function InicializarMsg() {
