@@ -119,8 +119,8 @@ namespace SanPablo.Reclutador.Test.Model
         {
             return new Sede() 
             { 
-                DescripcionSede = "descripcion dummy",
-                EstadoRegistro = "A",
+                DescripcionSede = "",
+                EstadoRegistro = "",
                 CodigoSede = "01",
                 FechaCreacion = new DateTime(2013,1,1)
             };

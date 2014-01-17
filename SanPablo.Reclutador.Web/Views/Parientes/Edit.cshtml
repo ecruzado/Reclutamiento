@@ -19,21 +19,8 @@
                     $('#NombreInstitucion_otro').attr('disabled', 'disabled');
                 }
             })
-
-
         });
-              
-        
-       @* $.ajax({
-            type: "POST",
-            url: '@Url.Action("recuperarDatosEstudio","EstudioPostulante")',
-                    data: { ideEstudio: ideEstudio },
-                    success: function (respuesta) {
-                        $("#tipoInstitucion").append("<option value='"
-                       + respuesta.TipTipoInstitucion + "'>" + respuesta.TipTipoInstitucion + "</option>");
-                    }
-                        });*@
-
+                
         $(function () {
             $.datepicker.regional['es'] =
             {

@@ -35,12 +35,12 @@
                 .NotEmpty()
                 .WithMessage("Ingresar Fecha de Inicio");
             RuleFor(x => x.FechaEstudioInicio)
-                .GreaterThan(new DateTime(1900, 01, 01))
+                .GreaterThan(new DateTime(1950, 01, 01))
                 .WithMessage("Ingresar Fecha de Inicio Válido");
 
-            RuleFor(x => x.FechaEstudioFin  )
-                .GreaterThan(new DateTime(1900, 01, 01))
-                .WithMessage("Ingresar Fecha de Fin Válido");
+            //RuleFor(x => x.FechaEstudioFin  )
+            //    .GreaterThan(new DateTime(1900, 01, 01))
+            //    .WithMessage("Ingresar Fecha de Fin Válido");
 
 
         }

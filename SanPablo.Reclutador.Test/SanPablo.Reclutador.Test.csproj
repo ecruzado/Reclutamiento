@@ -85,6 +85,7 @@
     <Compile Include="Controller\EstudioPostulanteControllerTest.cs" />
     <Compile Include="Controller\SedeControllerTest.cs" />
     <Compile Include="Controller\PostulanteControllerTest.cs" />
+    <Compile Include="Model\EstudioPostulanteValidatorTest.cs" />
     <Compile Include="Model\PersonaValidatorTest.cs" />
     <Compile Include="Model\SedeValidarTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

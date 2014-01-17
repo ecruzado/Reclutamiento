@@ -175,6 +175,7 @@
     <Compile Include="Models\JQGrid\Row.cs" />
     <Compile Include="Models\JQGrid\Rule.cs" />
     <Compile Include="Models\MenuItem.cs" />
+    <Compile Include="Models\ParientePostulanteGeneralViewModel.cs" />
     <Compile Include="Models\PostulanteGeneralViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -324,6 +325,8 @@
     <Content Include="Views\ExperienciaPostulante\Edit.cshtml" />
     <Content Include="Views\ExperienciaPostulante\Index.cshtml" />
     <Content Include="Scripts\uploadify\uploadify.php" />
+    <Content Include="Views\Parientes\Edit.cshtml" />
+    <Content Include="Views\Parientes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

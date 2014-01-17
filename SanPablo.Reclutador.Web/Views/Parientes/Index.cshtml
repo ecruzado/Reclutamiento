@@ -1,6 +1,6 @@
-﻿@model SanPablo.Reclutador.Web.Models.ExperienciaPostulanteGeneralViewModel
+﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
 @{
-    ViewBag.Title = "Experiencia";
+    ViewBag.Title = "Estudios";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
@@ -11,25 +11,20 @@
 
         $(document).ready(function () {
             jQuery("#grdList").jqGrid({
-                url: '@Url.Action("Listar", "ExperienciaLaboral")',
+                url: '@Url.Action("Listar", "EstudioPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Empresa', 'Cargo', 'Fecha Inicio', 'Fecha Fin', 'Actualmente', 'Tiempo Servicio', 'Motivo Cese', 'Nombre Referente', 'Celular', 'Cargo Referente', 'Telefono Institucion', 'Anexo'],
+                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
                 colModel: [
-                        { name: 'Empresa', index: 'Empresa', align: 'left', sortable: false },
-                        { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false },
+                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
+                        { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
+                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
+                        { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
                         { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
                         { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
-                        { name: 'Actualmente', index: 'Actualmente', align: 'left', sortable: false },
-                        { name: 'TiempoServicio', index: 'TiempoServicio', align: 'left', sortable: false },
-                        { name: 'MotivoCese', index: 'MotivoCese', align: 'left', sortable: false },
-                        { name: 'NombreReferente', index: 'NombreReferente', align: 'left', sortable: false },
-                        { name: 'TelefonoCelular', index: 'TelefonoCelular', align: 'left', sortable: false },
-                        { name: 'CargoReferente', index: 'CargoReferente', align: 'left', sortable: false },
-                        { name: 'TelefonoInstitucion', index: 'TelefonoInstitucion', align: 'left', sortable: false },
-                        { name: 'Anexo', index: 'Anexo', align: 'left', sortable: false },
                 ],
-                sortname: 'IdeExperienciaPostulante',
+                sortname: 'IdeEstudiosPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
                 autowidth: true,
@@ -39,7 +34,6 @@
                 cellsubmit: 'clientArray',
                 hidegrid: false,
                 postData: {
-
                 },
                 loadComplete: function (data) {
 
@@ -53,8 +47,8 @@
                 modal: true,
                 buttons: {
                     "Grabar": function () {
-                        $.post("/ExperienciaPostulante/Edit",
-                            $("#experienciaPostulanteForm").serialize(),
+                        $.post("/EstudioPostulante/Edit",
+                            $("#estudioPostulanteForm").serialize(),
                             function (data) {
                                 $("#updateDialog").dialog("close");
                             }
@@ -67,19 +61,33 @@
             });
 
             $('#btnAgregar').click(function () {
-                mostrarAgregarExperiencia();
+                mostrarAgregarEstudios();
             });
 
             $('#btnEditar').click(function () {
                 var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 alert(selr);
+                //recuperar datos y mostrar en pop pup
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("recuperarDatosEstudio","EstudioPostulante")',
+                data: { ideEstudio: ideEstudio },
+                success: function (respuesta) {
+                     $.each(respuesta, function (i, item) {
+                         $("#tipoInstitucion").append("<option value='"
+                        + item.TipTipoInstitucion + "'>" + item.TipTipoInstitucion + "</option>");
+                        }
+                    );
+                 }
+                });
+
             });
         });
 
 
-        function mostrarAgregarExperiencia() {
+        function mostrarAgregarEstudios() {
             var dialogDiv = $('#updateDialog');
-            $.get("/ExperienciaPostulante/Edit", function (data) {
+            $.get("/EstudioPostulante/Edit", function (data) {
                 dialogDiv.html(data);
                 dialogDiv.dialog('open');
             });
@@ -95,7 +103,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Experiencia Laboral</h5>
+                <h5>Nivel Académico</h5>
             </div>
             <div class="grilla-opciones">
                 <div class="opciones">
@@ -115,15 +123,15 @@
             </div>
             <div class="formulario-accion">
                 <div class="opciones">
-                    <a class="btn" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
-                    <a class="btn btn-info" href="@Url.Action("Conocimientos", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                    <a class="btn" href="@Url.Action("General", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    <a class="btn btn-info" href="@Url.Action("ExperienciaLaboral", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                 </div>
             </div>
             <div style="clear:both"></div>
         </div>
     </div>
 </div>
-<div id="updateDialog" title="Agregar Experiencia"></div>
+<div id="updateDialog" title="Agregar Estudio"></div>
 
 
 

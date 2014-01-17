@@ -14,7 +14,7 @@
     {
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
-               
+
         public EstudioPostulanteController(IEstudioPostulanteRepository estudioPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
             _estudioPostulanteRepository = estudioPostulanteRepository;
@@ -74,7 +74,7 @@
 
             return result;
         }
-        
+
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
         {
@@ -97,7 +97,7 @@
                         where = where + " and ";
                     }
                 }
-                
+
                 var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
@@ -131,6 +131,12 @@
             return View(estudioGeneralViewModel);
         }
 
+        //public ViewResult Edit(int ideEstudioEdit)
+        //{
+        //    var estudioGeneralViewModel = InicializarEstudio();
+        //    return View(estudioGeneralViewModel);
+        //}
+
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
@@ -139,11 +145,11 @@
             {
                 var estudioPostulanteModel = InicializarEstudio();
                 estudioPostulanteModel.Estudio = estudioPostulante;
-                return Json("dadf", JsonRequestBehavior.DenyGet);
+                return Json(estudioPostulanteModel, JsonRequestBehavior.DenyGet);
             }
             _estudioPostulanteRepository.Add(estudioPostulante);
             return Json("ddafd", JsonRequestBehavior.DenyGet);
-            
+
         }
 
         public EstudioPostulanteGeneralViewModel InicializarEstudio()
@@ -151,24 +157,37 @@
             var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
             estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPTIPOINSTITUC"));
-            estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPNOMINSTITUC"));
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPAREA"));
-            estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
+            estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
             estudioPostulanteGeneralViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPEDUCACION"));
-            estudioPostulanteGeneralViewModel.TiposEducacion.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
+            estudioPostulanteGeneralViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
             estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("NIVELALCANZADO"));
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-            
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
             return estudioPostulanteGeneralViewModel;
         }
-        
 
+        #region METODOS
+
+        [HttpPost]
+        public ActionResult recuperarDatosEstudio(int ideEstudio)
+        {
+            ActionResult result = null;
+
+            var estudioResultado = new EstudioPostulante();
+            estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudio);
+            result = Json(estudioResultado);
+            return result;
+        }
+
+        #endregion
 
     }
 }
