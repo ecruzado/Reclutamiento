@@ -22,7 +22,7 @@
                 .As<IValidator>();
 
             builder.RegisterType<ExperienciaPostulanteValidator>()
-                .Keyed<IValidator>(typeof(IValidator<ExperienciaPostulante>));
+                .Keyed<IValidator>(typeof(IValidator<ExperienciaPostulante>))
                 .As<IValidator>();
 
             builder.RegisterType<CriterioValidator>()
