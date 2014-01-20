@@ -312,8 +312,6 @@
                 _criterioRepository.Update(model.Criterio);
             }
             
-            
-
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
