@@ -9,7 +9,7 @@ namespace SanPablo.Reclutador.Entity
     public class ExperienciaPostulante
     {
         public virtual int IdeExperienciaPostulante { get; set; }
-        public virtual Persona Postulante { get; set; }
+        public virtual Postulante Postulante { get; set; }
         public virtual int IdePostulante { get; set; }
         public virtual string NombreEmpresa { get; set; }
         public virtual string TipoCargoTrabajo { get; set; }

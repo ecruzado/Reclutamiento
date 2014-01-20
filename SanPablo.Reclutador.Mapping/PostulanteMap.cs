@@ -3,11 +3,11 @@
     using FluentNHibernate.Mapping;
     using SanPablo.Reclutador.Entity;
 
-    public class PersonaMap : ClassMap<Persona>
+    public class PostulanteMap : ClassMap<Postulante>
     {
-        public PersonaMap()
+        public PostulanteMap()
         {
-            Id(m => m.IdePersona, "IDEPOSTULANTE")
+            Id(m => m.IdePostulante, "IDEPOSTULANTE")
                 .GeneratedBy
                 .Sequence("IDEPOSTULANTE_SQ");
             Map(x => x.TipoDocumento, "TIPDOCUMENTO");

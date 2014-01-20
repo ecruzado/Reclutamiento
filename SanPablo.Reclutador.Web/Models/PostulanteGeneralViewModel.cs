@@ -5,7 +5,7 @@
 
     public class PostulanteGeneralViewModel
     {
-        public Persona Persona { get; set; }
+        public Postulante Postulante { get; set; }
         public virtual IList<DetalleGeneral> TipoDocumentos { get; set; }
         public virtual IList<DetalleGeneral> Nacionalidad { get; set; }
         public virtual IList<DetalleGeneral> Sexo { get; set; }

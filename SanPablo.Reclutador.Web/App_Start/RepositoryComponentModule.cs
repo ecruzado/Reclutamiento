@@ -11,8 +11,8 @@
             builder.RegisterType<SedeRepository>()
                 .As<ISedeRepository>();
 
-            builder.RegisterType<PersonaRepository>()
-                .As<IPersonaRepository>();
+            builder.RegisterType<PostulanteRepository>()
+                .As<IPostulanteRepository>();
 
             builder.RegisterType<DetalleGeneralRepository>()
                 .As<IDetalleGeneralRepository>();

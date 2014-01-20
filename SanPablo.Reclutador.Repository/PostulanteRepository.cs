@@ -4,9 +4,9 @@
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Repository.Interface;
 
-    public class PersonaRepository : Repository<Persona>, IPersonaRepository
+    public class PostulanteRepository : Repository<Persona>, IPostulanteRepository
     {
-        public PersonaRepository(ISession session)
+        public PostulanteRepository(ISession session)
             : base(session)
         {
         }
