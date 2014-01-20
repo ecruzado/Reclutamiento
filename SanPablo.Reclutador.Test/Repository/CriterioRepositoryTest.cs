@@ -28,11 +28,11 @@ namespace SanPablo.Reclutador.Test.Repository
           {
            
               var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
-              var alternativa = repository.GetSingle(x => x.CodigoAlternativa == 24);
+              var alternativa = repository.GetSingle(x => x.IdeAlternativa == 24);
               repository.Remove(alternativa);
 
           }
-          
+
         /*
           [TestMethod]
           public void TestMethod2()
@@ -42,30 +42,30 @@ namespace SanPablo.Reclutador.Test.Repository
               DetachedCriteria where = DetachedCriteria.For<Alternativa>();
               where.Add(Expression.Like("IdCriterio",27));
 
-              var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
+              var lista = repository.GetPaging("IdeAlternativa", true, 0, 100, where);
           }
           */
-      /*  [TestMethod]
-        public void TestMethod3()
-        {
+        /*  [TestMethod]
+          public void TestMethod3()
+          {
            
-            var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
-            var alternativa = repository.GetSingle(x => x.CodigoAlternativa == 23);
-            alternativa.NombreAlternativa = "cambio";
-            repository.Update(alternativa);
+              var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
+              var alternativa = repository.GetSingle(x => x.IdeAlternativa == 23);
+              alternativa.NombreAlternativa = "cambio";
+              repository.Update(alternativa);
 
-        }
+          }
 
-        [TestMethod]
-        public void Test_DetachedCriteria()
-        {
-            var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
+          [TestMethod]
+          public void Test_DetachedCriteria()
+          {
+              var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
 
-            DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-            where.Add(Expression.Eq("Criterio.IdeCriterio", 52));
+              DetachedCriteria where = DetachedCriteria.For<Alternativa>();
+              where.Add(Expression.Eq("Criterio.IdeCriterio", 52));
 
-            var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
+              var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
 
-        }*/
+          }*/
     }
 }

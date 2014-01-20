@@ -16,9 +16,11 @@
                     set.ColumnName("VALOR");
                 });
             References(x => x.General).Column("IDEGENERAL");
-            Map(x => x.IndicadorActivo, "INDACTIVO");
+            Map(x => x.IndicadorActivo, "ESTACTIVO");
             Map(x => x.Descripcion , "DESCRIPCION");
             Table("DETALLE_GENERAL");
+
+
         }
 
     }

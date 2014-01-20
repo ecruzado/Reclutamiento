@@ -16,16 +16,13 @@
             Map(x => x.Pregunta, "PREGUNTA");
             Map(x => x.TipoCalificacion, "TIPCALIFICACION");
             Map(x => x.OrdenImpresion, "ORDENIMPRESION");
-            Map(x => x.IndicadorActivo, "INDACTIVO");
+            Map(x => x.IndicadorActivo, "ESTACTIVO");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
-            //HasManyToMany(x => x.SubCategorias)
-            //    .Cascade.All()
-            //    .Inverse()
-            //    .Table("CRITERIO_X_SUBCATEGORIA");
             Table("CRITERIO");
+
         }
     }
 }

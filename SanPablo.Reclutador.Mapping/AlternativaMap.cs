@@ -7,20 +7,18 @@
     {
         public AlternativaMap()
         {
-            Id(m => m.CodigoAlternativa, "IDEALTERNATIVA")
+            Id(m => m.IdeAlternativa, "IDEALTERNATIVA")
                 .GeneratedBy
                 .Sequence("IDEALTERNATIVA_SQ");
-           // References(x => x.Criterio).Column("IDECRITERIO");
-            References(x => x.Criterio, "IDECRITERIO");
-            //Map(x => x.IdCriterio, "IDECRITERIO");
-            Map(x => x.NombreAlternativa, "ALTERNATIVA");
-            Map(x => x.Peso, "PESO");
-            Map(x => x.RutaDeImagen, "RUTAIMAGEN");
-            Map(x => x.UsrCreacion, "USRCREACION");
-            Map(x => x.FechaCreacion, "FECCREACION");
-            Map(x => x.UsrMod, "USRMODIFICACION");
-            Map(x => x.FechaMod, "FECMODIFICACION");
-            Table("ALTERNATIVA");
+           References(x => x.Criterio, "IDECRITERIO");
+           Map(x => x.NombreAlternativa, "ALTERNATIVA");
+           Map(x => x.Peso, "PESO");
+           Map(x => x.RutaDeImagen, "RUTAIMAGEN");
+           Map(x => x.UsrCreacion, "USRCREACION");
+           Map(x => x.FechaCreacion, "FECCREACION");
+           Map(x => x.UsrMod, "USRMODIFICACION");
+           Map(x => x.FechaMod, "FECMODIFICACION");
+           Table("ALTERNATIVA");
         }
     }
 }
