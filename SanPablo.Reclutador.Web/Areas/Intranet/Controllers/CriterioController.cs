@@ -207,6 +207,9 @@
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Actualizar.ToString();
 
+            var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
+            model.Alternativa = objAlternativa;
+
             return View("Edit", model);
         }
 
