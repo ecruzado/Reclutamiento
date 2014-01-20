@@ -9,14 +9,14 @@
     using FluentValidation.Results;
 
     [TestClass]                
-    public class PersonaValidatorTest
+    public class PostulanteValidatorTest
     {
-        private PersonaValidator validator;
+        private PostulanteValidator validator;
         
         [TestInitialize]
         public void Iniciar() 
         {
-            validator = new PersonaValidator();
+            validator = new PostulanteValidator();
         }
 
         [TestMethod]

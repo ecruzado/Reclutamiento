@@ -35,9 +35,9 @@
             var mockUbigeoRepository = new Mock<IUbigeoRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
             PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object,mockEstudioPostulanteRepository.Object,mockUbigeoRepository.Object,mockDetalleGeneralRepository.Object);
-            Persona persona = new Persona();
+            Postulante postulante = new Postulante();
 
-            var resultado = postulanteController.General(persona);
+            var resultado = postulanteController.General(postulante);
 
             Assert.IsInstanceOfType(resultado, typeof(RedirectToRouteResult));
         }
@@ -50,10 +50,10 @@
             var mockUbigeoRepository = new Mock<IUbigeoRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
             PostulanteController postulanteController = new PostulanteController(mockPersonaRepository.Object,mockEstudioPostulanteRepository.Object,mockUbigeoRepository.Object,mockDetalleGeneralRepository.Object);
-            Persona persona = new Persona();
+            Postulante postulante = new Postulante();
             postulanteController.ModelState.AddModelError("TipoDocumento", "modelo invalido");
             
-            var resultado = postulanteController.General(persona);
+            var resultado = postulanteController.General(postulante);
 
             Assert.IsInstanceOfType(resultado, typeof(ViewResult));
 

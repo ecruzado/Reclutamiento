@@ -82,7 +82,7 @@
                 postulanteModel.Postulante = postulante;
                 return View("General",postulanteModel);
             }
-            _personaRepository.Add(postulante);
+            _postulanteRepository.Add(postulante);
             return RedirectToAction("Estudios");
         }
         #endregion
@@ -93,7 +93,7 @@
         public PostulanteGeneralViewModel inicializarDatosComplementarios()
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
-            postulanteGeneralViewModel.Persona = new Persona();
+            postulanteGeneralViewModel.Postulante = new Postulante();
             postulanteGeneralViewModel.TipoSueldosBrutos = _detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario);
             postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 

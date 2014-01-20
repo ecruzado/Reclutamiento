@@ -63,14 +63,14 @@
     <Compile Include="Interface\IExperienciaPostulanteRepository.cs" />
     <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IParientePostulanteRepository.cs" />
-    <Compile Include="Interface\IPersonaRepository.cs" />
+    <Compile Include="Interface\IPostulanteRepository.cs" />
     <Compile Include="Interface\IRepository.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interface\ISedeRepository.cs" />
     <Compile Include="Interface\IUbigeoRepository.cs" />
     <Compile Include="ParientePostulanteRepository.cs" />
-    <Compile Include="PersonaRepository.cs" />
+    <Compile Include="PostulanteRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs">
       <SubType>Code</SubType>
