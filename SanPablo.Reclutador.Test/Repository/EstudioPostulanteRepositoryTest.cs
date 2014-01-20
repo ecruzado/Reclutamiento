@@ -12,14 +12,14 @@ namespace SanPablo.Reclutador.Test.Repository
         public void TestMethod1()
         {
             var repository = new EstudioPostulanteRepository(NHibernateHelper.OpenSession());
-            var persona = new Persona();
-            persona.IdePersona = 11;
+            var postulante = new Postulante();
+            postulante.IdePostulante = 11;
 
             //var lista = repository.GetPaging("IdeEstudiosPostulante", true, 0, 10);
             var entidad = new EstudioPostulante();
             entidad.IndicadorActualmenteEstudiando = "1";
             entidad.NombreInstitucion = "";
-            entidad.Postulante = persona;
+            entidad.Postulante = postulante;
             entidad.TipoArea = "00";
             entidad.TipoEducacion = "00";
             entidad.TipoNivelAlcanzado = "00";

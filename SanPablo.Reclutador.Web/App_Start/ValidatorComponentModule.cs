@@ -13,8 +13,8 @@
                    .Keyed<IValidator>(typeof(IValidator<Sede>))
                    .As<IValidator>();
 
-            builder.RegisterType<PersonaValidator>()
-                   .Keyed<IValidator>(typeof(IValidator<Persona>))
+            builder.RegisterType<PostulanteValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<Postulante>))
                    .As<IValidator>();
 
             builder.RegisterType<EstudioPostulanteValidator>()

@@ -79,7 +79,7 @@
     <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />
     <Compile Include="Validation\ExperienciaPostulanteValitator.cs" />
-    <Compile Include="Validation\PersonaValidator.cs" />
+    <Compile Include="Validation\PostulanteValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
   </ItemGroup>
   <ItemGroup>
