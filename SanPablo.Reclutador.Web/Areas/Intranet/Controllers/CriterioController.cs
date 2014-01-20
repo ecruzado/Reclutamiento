@@ -51,8 +51,7 @@
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
                 var i = grid.page * grid.rows;
 
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
+                generic.Value.rows = generic.List.Select(item => new Row
                     {
                         id = item.IdeCriterio.ToString(),
                         cell = new string[]
@@ -88,6 +87,7 @@
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Alternativa = new Alternativa();
+            criterioViewModel.Alternativa.Criterio = new Criterio();
 
             AlternativaValidator validator = new AlternativaValidator();
             ValidationResult result = validator.Validate(alternativa, "NombreAlternativa", "Peso");
@@ -97,10 +97,10 @@
                 return View(criterioViewModel);
             }
 
-            if (alternativa.CodigoAlternativa != 0 && alternativa.CodigoAlternativa != null)
+            if (alternativa.IdeAlternativa != 0 && alternativa.IdeAlternativa != null)
             {
-                //_AlternativaRepository.Update(alternativa);
-                var alter = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == alternativa.CodigoAlternativa);
+                
+                var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == alternativa.IdeAlternativa);
                 alter.NombreAlternativa = alternativa.NombreAlternativa;
                 alter.Peso = alternativa.Peso;
                 _alternativaRepository.Update(alter);
@@ -110,8 +110,8 @@
                 _alternativaRepository.Add(alternativa);
             }
            
-            criterioViewModel.Alternativa.IdCriterio = alternativa.Criterio.IdeCriterio;
-            criterioViewModel.Alternativa.CodigoAlternativa = alternativa.CodigoAlternativa;
+            criterioViewModel.Alternativa.Criterio.IdeCriterio = alternativa.Criterio.IdeCriterio;
+            criterioViewModel.Alternativa.IdeAlternativa = alternativa.IdeAlternativa;
             criterioViewModel.Alternativa.NombreAlternativa = alternativa.NombreAlternativa;
             criterioViewModel.Alternativa.Peso = alternativa.Peso;
 
@@ -164,12 +164,51 @@
             return result;
         }
 
-        public ActionResult Edit()
+        public ActionResult Edit(string ideCriterio)
         {
 
             var criterioViewModel = InicializarCriteriosEdit();
             return View(criterioViewModel);
         }
+
+        public ActionResult Consultar(string id)
+        {
+
+            var criterioViewModel = InicializarCriteriosEdit();
+            return View("Edit",criterioViewModel);
+        }
+
+        public ActionResult Nuevo()
+        {
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+
+            model = InicializarCriteriosEdit();
+            model.Criterio.IndPagina = Accion.Nuevo;
+
+            return View("Edit", model);
+        }
+
+        public ActionResult Edicion(string id)
+        {
+
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+
+            model = InicializarCriteriosEdit();
+            
+            var alter = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+            model.Criterio.TipoCalificacion = alter.TipoCalificacion;
+            model.Criterio.TipoCriterio = alter.TipoCriterio;
+            model.Criterio.TipoMedicion = alter.TipoMedicion;
+            model.Criterio.TipoModo = alter.TipoModo;
+            model.Criterio.IdeCriterio = alter.IdeCriterio;
+            model.Criterio.Pregunta = alter.Pregunta;
+            model.Criterio.IndPagina = Accion.Nuevo.ToString();
+
+            return View("Edit", model);
+        }
+
 
         public ViewResult PopupCriterio(int id, int codCriterio)
         {
@@ -182,16 +221,14 @@
             {
                 
                 modelo.Alternativa.Criterio.IdeCriterio = IdCriterio;
-                // levanta un nuevo modelo
                 return View(modelo);
             }
             else 
             {
                 
                 modelo.Alternativa.Criterio.IdeCriterio = IdCriterio;
-                modelo.Alternativa.CodigoAlternativa = id;
-                //obtener los datos de la alternativa seleccionada
-                modelo.Alternativa = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == id);
+                modelo.Alternativa.IdeAlternativa = id;
+                modelo.Alternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == id);
 
                 return View(modelo);
 
@@ -226,11 +263,11 @@
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.CodigoAlternativa.ToString(),
+                        id = item.IdeAlternativa.ToString(),
                         cell = new string[]
                             {
                                 "1",
-                                item.CodigoAlternativa.ToString(),
+                                item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
                                 ""
@@ -263,10 +300,19 @@
                 return View(criterioViewModel);
             }
 
+            model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
+
+            if (model.Criterio.IndPagina.Equals(Accion.Nuevo))
+            {
+                _criterioRepository.Add(model.Criterio);
+            }
+            else
+            {
+                //actualiza
+                _criterioRepository.Update(model.Criterio);
+            }
             
-           // string result = new StreamReader(file.InputStream).ReadToEnd();
             
-            _criterioRepository.Add(model.Criterio);
 
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
@@ -305,21 +351,11 @@
 
 
         [HttpPost]
-        public ActionResult Eliminar(string codigoAlternativa, string codigoCriterio)
+        public ActionResult Eliminar(string ideAlternativa, string codigoCriterio)
         {
 
-            //int nCodAlternativa = codigoAlternativa;
+            var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(ideAlternativa));
             
-            CriterioViewModel model = new CriterioViewModel();
-            model.Alternativa = new Alternativa();
-            model.Alternativa.Criterio = new Criterio();
-
-            model.Alternativa.Criterio.IdeCriterio = Convert.ToInt32(codigoCriterio);
-            model.Alternativa.CodigoAlternativa = Convert.ToInt32(codigoAlternativa);
-
-
-            var alter = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == Convert.ToInt32(codigoAlternativa));
-            //alter.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
             _alternativaRepository.Remove(alter);
             return null;            
         }
@@ -338,7 +374,7 @@
             criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             criterioViewModel.Estado =
-               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoCriterio));
+               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
             criterioViewModel.Estado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
 
@@ -355,7 +391,7 @@
             criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             criterioViewModel.Medicion =
-                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Medicion));
             criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             criterioViewModel.TipoModo =
@@ -370,6 +406,16 @@
 
             return criterioViewModel;
         }
-    
+
+        [HttpPost]
+        public ActionResult EdicionCriterio(string selr)
+        {
+
+            //var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(ideAlternativa));
+
+            //_alternativaRepository.Remove(alter);
+            return null;
+        }
+       
     }
 }

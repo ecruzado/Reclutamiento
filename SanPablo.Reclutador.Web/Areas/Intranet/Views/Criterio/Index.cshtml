@@ -15,6 +15,29 @@
             $('#grdList').trigger('reloadGrid');
         });
 
+        $('#btnConsultar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                window.location = "/Intranet/Criterio/Consultar/" + selr;
+            } else {
+                alert('Seleccione un criterio');
+            }
+        });
+
+        $('#btnEditar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                window.location = "/Intranet/Criterio/Edicion/" + selr;
+            } else {
+                alert('Seleccione un criterio');
+            }
+        });
+
+        $('#btnNuevo').click(function () {
+                window.location = "/Intranet/Criterio/Nuevo";
+        });
+        
+
         jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -56,14 +79,14 @@
                     }
                 });
             },
-            colNames: ['Estado', 'Codigo', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado', '', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
-                    { name: 'Medicion', index: 'Medicion', align: 'left', width: 200 },
+                    { name: 'Medicion', index: 'Medicion', align: 'left', width: 150 },
                     { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 200 },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 150 },
                     { name: 'Modo', index: 'Modo', align: 'left', width: 150 },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },
                     { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 250 },
@@ -82,7 +105,8 @@
             rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            rownumbers:true
+            rownumbers: true,
+            shrinkToFit: false
         });
 
     });
@@ -108,7 +132,15 @@
         return strImg;
     }
 
+    function Edicion_Criterio(selr) {
+        $.post("/Intranet/Criterio/EdicionCriterio?selr=" + selr,
+       function (data) {
+          
+       }
+       );
 
+        return false;
+    }  
 
 </script>
 }
@@ -184,9 +216,9 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("Edit","Criterio",new { area = "Intranet"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("Edit","Criterio",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info"  href="@Url.Action("Edit","Criterio",new { area = "Intranet"})"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>

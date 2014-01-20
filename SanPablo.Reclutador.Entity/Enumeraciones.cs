@@ -21,11 +21,11 @@
         TipoCargo = 17,
         TipoMotivoCese = 18,
         TipoCargoReferente = 19,
-        TipoCriterio = 20,
-        Medicion = 21,
-        EstadoCriterio = 22,
-        Modo=23,
-        TipoCalificacion = 24
+        TipoCriterio = 1,
+        Medicion = 2,
+        EstadoMant = 3,
+        Modo=4,
+        TipoCalificacion = 5
     }
 
     public sealed class IndicadorActivo
@@ -33,5 +33,15 @@
         public const string Activo = "A";
         public const string Inactivo = "I";
     }
+
+    public sealed class Accion
+    {
+        public const string Nuevo = "Nuevo";
+        public const string Editar = "Editar";
+        public const string Eliminar = "Eliminar";
+        public const string Actualizar = "Actualizar";
+
+    }
+
 
 }
