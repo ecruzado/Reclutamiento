@@ -6,7 +6,7 @@
 
     public interface IDetalleGeneralRepository : IRepository<DetalleGeneral>
     {
-        IList<DetalleGeneral> GetByTipoTabla(string tipoVal);
+        IList<DetalleGeneral> GetByTipoTabla(TipoTabla tipoTabla);
 
     }
 }

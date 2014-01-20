@@ -8,16 +8,14 @@
 @section Scripts{
 
 <script type="text/javascript">
-    //Table initialisation 
+
     $(document).ready(function () {
 
         $('#btnBuscar').click(function () {
             $('#grdList').trigger('reloadGrid');
         });
 
-
         jQuery("#grdList").jqGrid({
-            @*url: '@Url.Action("ListaCriterio", "Criterio")' + '?tipCriterio=' + $("#Criterio_TipoCriterio").val() + '& tipMed=' + $("#Criterio_TipoMedicion").val() + '& pregunta=' + $("#Criterio_Pregunta").val() + '&estado=' + $("#Criterio_EstadoRegistro").val(),*@
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -61,7 +59,7 @@
             colNames: ['Estado', 'Codigo', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
                     { name: 'Medicion', index: 'Medicion', align: 'left', width: 200 },
                     { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
@@ -84,11 +82,7 @@
             rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            postData: {
-            },
-            loadComplete: function (data) {
-
-            }
+            rownumbers:true
         });
 
     });
@@ -102,11 +96,11 @@
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'enabled.png';
         var title = "Habilitar"
-        if (rowObject[14] == "Activo") {
+        if (rowObject[1] == "A") {
             archivo = 'enabled.png';
             var title = "Habilitar"
         } else {
-            archivo = 'enabled.png';
+            archivo = 'delete.gif';
             var title = "Habilitar"
         }
 
@@ -162,8 +156,8 @@
                             <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
                      </td>
                      <td class="colInput">
-                                @Html.DropDownListFor(model => model.Criterio.EstadoRegistro, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.EstadoRegistro))
-		                        @Html.ValidationMessageFor(model => model.Criterio.EstadoRegistro)
+                                @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo))
+		                        @Html.ValidationMessageFor(model => model.Criterio.IndicadorActivo)
                      </td>
                   </tr>
               

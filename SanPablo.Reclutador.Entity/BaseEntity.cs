@@ -9,5 +9,8 @@ namespace SanPablo.Reclutador.Entity
     {
         public virtual DateTime FechaCreacion { get; set; }
         public virtual DateTime FechaModificacion { get; set; }
+        public virtual string UsuarioCreacion { get; set; }
+        public virtual string UsuarioModificacion { get; set; }
+
     }
 }

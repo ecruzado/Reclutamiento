@@ -17,6 +17,11 @@ namespace SanPablo.Reclutador.Web.Core
 
         protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString) where T : class
         {
+            return Listar(logic, sidx, sord, pageIndex, pageSize, search, searchField, searchOper, searchString, null);
+        }
+        
+        protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, DetachedCriteria where) where T : class
+        {
             if (string.IsNullOrEmpty(sidx))
             {
                 sidx = string.Empty;
@@ -34,11 +39,6 @@ namespace SanPablo.Reclutador.Web.Core
                 pageSize = 100;
             }
 
-            return Listar(logic, sidx, sord, pageIndex, pageSize, search, searchField, searchOper, searchString, null);
-        }
-        
-        protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, DetachedCriteria where) where T : class
-        {
             var jqgrid = new JQgrid();
             IList<T> list;
 

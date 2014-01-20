@@ -8,7 +8,7 @@
 
     public interface IRepository<TEntity> where TEntity : class
     {
-        IEnumerable<TEntity> All();
+        IList<TEntity> All();
 
         int Add(TEntity entity);
 

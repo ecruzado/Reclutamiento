@@ -18,20 +18,20 @@ namespace SanPablo.Reclutador.Test.Repository
 
             get
             {
-
+                log4net.Config.XmlConfigurator.Configure();
                 if (_sessionFactory == null)
                 {
 
                     var configuration = OracleClientConfiguration.Oracle10
                          .ConnectionString(c =>
                             c.Is(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
-                    
+
                     var fluentConfiguration = Fluently.Configure()
                             .Database(configuration)
                             .Mappings(m => m.FluentMappings
                                 .AddFromAssemblyOf<SedeMap>());
+                            
                     fluentConfiguration.BuildConfiguration();
-
                     _sessionFactory = fluentConfiguration.BuildSessionFactory();
 
                 }

@@ -1,85 +1,88 @@
-﻿using SanPablo.Reclutador.Repository.Interface;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using SanPablo.Reclutador.Entity;
-using SanPablo.Reclutador.Entity.Validation;
-using SanPablo.Reclutador.Web.Areas.Intranet.Models;
-using SanPablo.Reclutador.Web.Core;
-using SanPablo.Reclutador.Web.Models.JQGrid;
-using FluentValidation.Results;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using SanPablo.Reclutador.Web.Models;
-using NHibernate.Criterion;
-using FluentValidation.Results;
-using FluentValidation;
-
-namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
+﻿namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
+    using FluentValidation;
+    using FluentValidation.Results;
+    using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Entity.Validation;
+    using SanPablo.Reclutador.Repository.Interface;
+    using SanPablo.Reclutador.Web.Areas.Intranet.Models;
+    using SanPablo.Reclutador.Web.Core;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+
     public class CriterioController : BaseController
     {
         private ICriterioRepository _criterioRepository;
-        private IAlternativaRepository _AlternativaRepository;
+        private IAlternativaRepository _alternativaRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
 
-        public CriterioController(ICriterioRepository criterioRepository, IDetalleGeneralRepository detalleGeneralRepository, IAlternativaRepository alternativaRepository)
+        public CriterioController(ICriterioRepository criterioRepository, 
+            IDetalleGeneralRepository detalleGeneralRepository, 
+            IAlternativaRepository alternativaRepository)
         {
             _criterioRepository = criterioRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
-            _AlternativaRepository = alternativaRepository;
+            _alternativaRepository = alternativaRepository;
         }
-
-        public CriterioViewModel inicializarCriteriosIndex()
+        
+        public ActionResult Index()
         {
-            var criterioViewModel = new CriterioViewModel();
-            criterioViewModel.Criterio = new Criterio();
-
-            criterioViewModel.TipoCriterio = 
-             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
-            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            criterioViewModel.Medicion =
-                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MEDICION"));
-            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            criterioViewModel.Estado =
-               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("ESTADOCRIT"));
-            criterioViewModel.Estado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-         
-            return criterioViewModel;
+            var criterioViewModel = InicializarCriteriosIndex();
+            return View(criterioViewModel);
         }
 
-        public CriterioViewModel inicializarCriteriosEdit()
+        [HttpPost]
+        public ActionResult ListaCriterio(GridTable grid)
         {
-            var criterioViewModel = new CriterioViewModel();
-            criterioViewModel.Criterio = new Criterio();
-            
-            criterioViewModel.TipoCriterio =
-             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCRITERIO"));
-            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            criterioViewModel.Medicion =
-                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MEDICION"));
-            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            criterioViewModel.TipoModo =
-               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("MODO"));
-            criterioViewModel.TipoModo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            try
+            {
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                //DetachedCriteria where = DetachedCriteria.For<Criterio>();
+                //where.Add(Expression.Eq("Criterio.IdeCriterio", 1));
 
 
-            criterioViewModel.TipoCalificacion =
-                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla("TIPCALIFICA"));
-            criterioViewModel.TipoCalificacion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                var generic = Listar(_criterioRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                var i = grid.page * grid.rows;
 
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCriterio.ToString(),
+                        cell = new string[]
+                            {
+                                "1",
+                                item.IndicadorActivo,
+                                item.Pregunta,
+                                item.TipoMedicion,
+                                item.TipoCriterio,
+                                item.TipoModo,
+                                item.TipoCalificacion,
+                                item.FechaCreacion.ToString(),
+                                item.UsuarioCreacion,
+                                item.FechaModificacion.ToString(),
+                                item.UsuarioModificacion
+                            }
+                    }).ToArray();
 
-            return criterioViewModel;
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
         }
 
 
-        //
+
+
         [HttpPost]
         public ActionResult PopupCriterio([Bind(Prefix = "Alternativa")]Alternativa alternativa)
         {
@@ -97,14 +100,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (alternativa.CodigoAlternativa != 0 && alternativa.CodigoAlternativa != null)
             {
                 //_AlternativaRepository.Update(alternativa);
-                var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == alternativa.CodigoAlternativa);
+                var alter = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == alternativa.CodigoAlternativa);
                 alter.NombreAlternativa = alternativa.NombreAlternativa;
                 alter.Peso = alternativa.Peso;
-                _AlternativaRepository.Update(alter);
+                _alternativaRepository.Update(alter);
             }
             else
             {
-                _AlternativaRepository.Add(alternativa);
+                _alternativaRepository.Add(alternativa);
             }
            
             criterioViewModel.Alternativa.IdCriterio = alternativa.Criterio.IdeCriterio;
@@ -114,7 +117,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return View(criterioViewModel);
         }
-        //
 
         [HttpPost]
         public virtual ActionResult UploadFile()
@@ -162,21 +164,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return result;
         }
 
-
-        public ActionResult Index()
-        {
-
-            var criterioViewModel = inicializarCriteriosIndex();
-
-            return View(criterioViewModel);
-        }
-
-
-
         public ActionResult Edit()
         {
 
-            var criterioViewModel = inicializarCriteriosEdit();
+            var criterioViewModel = InicializarCriteriosEdit();
             return View(criterioViewModel);
         }
 
@@ -200,7 +191,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 modelo.Alternativa.Criterio.IdeCriterio = IdCriterio;
                 modelo.Alternativa.CodigoAlternativa = id;
                 //obtener los datos de la alternativa seleccionada
-                modelo.Alternativa = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == id);
+                modelo.Alternativa = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == id);
 
                 return View(modelo);
 
@@ -209,74 +200,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
              
 
-       /* [HttpPost]
-        public ActionResult ListaCriterio(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[11]
-        {
-          "100001",
-          "100001",
-          "¿Cuál es la capital del Perú?",
-          "Desempeño",
-          "Examen",
-          "Texto",
-          "Manual",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[11]
-        {
-          "100002",
-          "100002",
-          "¿Cómo se llama el Presidente del Perú?",
-          "Desempeño",
-          "Examen",
-          "Texto",
-          "Manual",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin"
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType2_3 = new
-            {
-                id = 3,
-                cell = new string[11]
-        {
-          "100003",
-          "100003",
-          "",
-          "Desempeño",
-          "Examen",
-          "Imagen",
-          "Automática",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin"        
-        }
-            };
-            list.Add((object)fAnonymousType2_3);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
-        */
         [HttpPost]
         public ActionResult ListaAlternativaxCriterio(GridTable grid, int idCriterio)
         {
@@ -297,7 +220,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 where.Add(Expression.Eq("Criterio.IdeCriterio", idCriterio));
 
 
-                var generic = Listar(_AlternativaRepository,
+                var generic = Listar(_alternativaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
@@ -332,7 +255,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase file)
         {
-            var criterioViewModel = inicializarCriteriosEdit();
+            var criterioViewModel = InicializarCriteriosEdit();
            
 
             if (!ModelState.IsValid){
@@ -361,7 +284,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public ActionResult Index(CriterioViewModel model)
         {
-            var criterioViewModel = inicializarCriteriosIndex();
+            var criterioViewModel = InicializarCriteriosIndex();
 
             criterioViewModel.Criterio = model.Criterio;
             
@@ -382,53 +305,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
-        public ActionResult ListaCriterio(GridTable grid)
-        {
-            try
-            {
-                CriterioViewModel model = new CriterioViewModel();
-                model.Criterio = new Criterio();
-                
-                grid.page = (grid.page == 0) ? 1 : grid.page;
-
-                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
-
-                //obtiene el valor del criterio
-
-
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-
-                DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-                where.Add(Expression.Eq("Criterio.IdeCriterio", model.Criterio.IdeCriterio));
-
-
-                var generic = Listar(_AlternativaRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
-                    {
-                        id = item.CodigoAlternativa.ToString(),
-                        cell = new string[]
-                            {
-                                "1",
-                                item.CodigoAlternativa.ToString(),
-                                item.NombreAlternativa.ToString(),
-                                item.Peso.ToString(),
-                                ""
-                            }
-                    }).ToArray();
-
-                return Json(generic.Value);
-            }
-            catch (Exception ex)
-            {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
-                return MensajeError();
-            }
-        }
-
-        [HttpPost]
         public ActionResult Eliminar(string codigoAlternativa, string codigoCriterio)
         {
 
@@ -442,10 +318,58 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Alternativa.CodigoAlternativa = Convert.ToInt32(codigoAlternativa);
 
 
-            var alter = _AlternativaRepository.GetSingle(x => x.CodigoAlternativa == Convert.ToInt32(codigoAlternativa));
+            var alter = _alternativaRepository.GetSingle(x => x.CodigoAlternativa == Convert.ToInt32(codigoAlternativa));
             //alter.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
-            _AlternativaRepository.Remove(alter);
+            _alternativaRepository.Remove(alter);
             return null;            
         }
+
+        private CriterioViewModel InicializarCriteriosIndex()
+        {
+            var criterioViewModel = new CriterioViewModel();
+            criterioViewModel.Criterio = new Criterio();
+
+            criterioViewModel.TipoCriterio =
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.Medicion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Medicion));
+            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.Estado =
+               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoCriterio));
+            criterioViewModel.Estado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            return criterioViewModel;
+        }
+
+        private CriterioViewModel InicializarCriteriosEdit()
+        {
+            var criterioViewModel = new CriterioViewModel();
+            criterioViewModel.Criterio = new Criterio();
+
+            criterioViewModel.TipoCriterio =
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+            criterioViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.Medicion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+            criterioViewModel.Medicion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            criterioViewModel.TipoModo =
+               new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Modo));
+            criterioViewModel.TipoModo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            criterioViewModel.TipoCalificacion =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCalificacion));
+            criterioViewModel.TipoCalificacion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            return criterioViewModel;
+        }
+    
     }
 }

@@ -7,10 +7,16 @@
     {
         public DetalleGeneralMap()
         {
-            Id(m => m.IdeDetalleGeneral, "IDEDETALLEGENERAL");
+            CompositeId()
+                .KeyProperty(x => x.IdeGeneral, set => {
+                    set.ColumnName("IDEGENERAL");
+                })
+                .KeyProperty(x => x.Valor, set =>
+                {
+                    set.ColumnName("VALOR");
+                });
             References(x => x.General).Column("IDEGENERAL");
-            Map(x => x.TipoTabla , "TIPTABLA");
-            Map(x => x.Valor, "VALOR");
+            Map(x => x.IndicadorActivo, "INDACTIVO");
             Map(x => x.Descripcion , "DESCRIPCION");
             Table("DETALLE_GENERAL");
         }

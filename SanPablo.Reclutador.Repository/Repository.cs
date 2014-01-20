@@ -16,7 +16,7 @@
             _session = session;
         }
 
-        public IEnumerable<TEntity> All()
+        public IList<TEntity> All()
         {
             return _session.QueryOver<TEntity>().List();
         }

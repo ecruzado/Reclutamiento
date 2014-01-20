@@ -12,9 +12,10 @@
         { 
         }
 
-        public IList<DetalleGeneral> GetByTipoTabla(string tipoVal)
+        public IList<DetalleGeneral> GetByTipoTabla(TipoTabla tipoTabla)
         {
-            var lista = GetBy(x => x.TipoTabla == tipoVal);
+            var lista = GetBy(x => x.IdeGeneral == (int)tipoTabla 
+                && x.IndicadorActivo == IndicadorActivo.Activo);
             return lista;
         }
 
