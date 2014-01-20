@@ -13,15 +13,15 @@
     
     public class PostulanteController : Controller
     {
-        private IPersonaRepository _personaRepository;
+        private IPostulanteRepository _postulanteRepository;
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IUbigeoRepository _ubigeoRepository;
-        private PostulanteGeneralViewModel personaModel = new PostulanteGeneralViewModel();
+        private PostulanteGeneralViewModel postulanteModel = new PostulanteGeneralViewModel();
                 
-        public PostulanteController(IPersonaRepository personaRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        public PostulanteController(IPostulanteRepository postulanteRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
         {
-            _personaRepository = personaRepository;
+            _postulanteRepository = postulanteRepository;
             _estudioPostulanteRepository = estudioPostulanteRepository;
             _ubigeoRepository = ubigeoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -31,7 +31,7 @@
         public PostulanteGeneralViewModel inicializarPostulante()
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
-            postulanteGeneralViewModel.Persona = new Persona();
+            postulanteGeneralViewModel.Postulante = new Postulante();
             postulanteGeneralViewModel.TipoDocumentos = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
             postulanteGeneralViewModel.TipoDocumentos.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -70,19 +70,19 @@
         }
 
         [HttpPost]
-        public ActionResult General([Bind(Prefix = "Persona")]Persona persona)
+        public ActionResult General([Bind(Prefix = "Persona")]Postulante postulante)
         {
-            PersonaValidator validator = new PersonaValidator();
-            ValidationResult result = validator.Validate(persona, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
+            PostulanteValidator validator = new PostulanteValidator();
+            ValidationResult result = validator.Validate(postulante, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
                                       "SegundoNombre", "FechaNacimiento", "IndicadorSexo", "TipoEstadoCivil", "IdeUbigeo", "Correo", "TipoVia", "NumeroDireccion");
 
             if (!result.IsValid)
             {
-                personaModel = inicializarPostulante();
-                personaModel.Persona = persona;
-                return View("General",personaModel);
+                postulanteModel = inicializarPostulante();
+                postulanteModel.Postulante = postulante;
+                return View("General",postulanteModel);
             }
-            _personaRepository.Add(persona);
+            _personaRepository.Add(postulante);
             return RedirectToAction("Estudios");
         }
         #endregion
@@ -122,18 +122,18 @@
         }
 
         [HttpPost]
-        public ActionResult DatosComplementarios([Bind(Prefix = "Persona")]Persona persona)
+        public ActionResult DatosComplementarios([Bind(Prefix = "Persona")]Postulante postulante)
         {
-            PersonaValidator validator = new PersonaValidator();
-            ValidationResult result = validator.Validate(persona, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero");
+            PostulanteValidator validator = new PostulanteValidator();
+            ValidationResult result = validator.Validate(postulante, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero");
             
             if (!result.IsValid)
             {
-                personaModel = inicializarDatosComplementarios();
-                personaModel.Persona = persona;
-                return View("DatosComplementarios", personaModel);
+                postulanteModel = inicializarDatosComplementarios();
+                postulanteModel.Postulante = postulante;
+                return View("DatosComplementarios", postulanteModel);
             }
-            _personaRepository.Update(persona);
+            _postulanteRepository.Update(postulante);
             return RedirectToAction("Parientes");
         }
 

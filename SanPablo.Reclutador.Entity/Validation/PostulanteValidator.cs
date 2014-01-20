@@ -3,9 +3,9 @@
     using FluentValidation;
     using System;
 
-    public class PersonaValidator : AbstractValidator<Persona>
+    public class PostulanteValidator : AbstractValidator<Postulante>
     {
-        public PersonaValidator()
+        public PostulanteValidator()
         {
             RuleFor(x => x.TipoDocumento)
                 .NotEmpty()

@@ -2,7 +2,7 @@
 {
     using SanPablo.Reclutador.Entity;
 
-    public interface IPersonaRepository : IRepository<Persona>
+    public interface IPostulanteRepository : IRepository<Postulante>
     {
     }
 }

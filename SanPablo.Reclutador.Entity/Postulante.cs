@@ -7,9 +7,9 @@ using System.Web;
 namespace SanPablo.Reclutador.Entity
 {
     
-    public class Persona
+    public class Postulante
     {
-        public virtual int IdePersona { get; set; }
+        public virtual int IdePostulante { get; set; }
         public virtual string TipoDocumento { get; set; }
         public virtual string NumeroDocumento { get; set; }
         public virtual string ApellidoPaterno { get; set; }
@@ -52,7 +52,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionOtroMedio { get; set; }
         public virtual string TipoComoSeEntero { get; set; }
 
-        public Persona()
+        public Postulante()
         {
             Estudios = new List<EstudioPostulante>();
         }

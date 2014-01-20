@@ -16,7 +16,7 @@
         [TestMethod]
         public void Accion_general_retona_PostulanteGeneralViewModel()
         {
-            var mockPersonaRepository = new Mock<IPersonaRepository>();
+            var mockPersonaRepository = new Mock<IPostulanteRepository>();
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockUbigeoRepository = new Mock<IUbigeoRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
@@ -30,7 +30,7 @@
         [TestMethod]
         public void Accion_post_general_modelo_valido_retorna_RedirectToRouteResult()
         {
-            var mockPersonaRepository = new Mock<IPersonaRepository>();
+            var mockPersonaRepository = new Mock<IPostulanteRepository>();
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockUbigeoRepository = new Mock<IUbigeoRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
@@ -45,7 +45,7 @@
         [TestMethod]
         public void Accion_post_general_modelo_invalido_retorna_la_misma_vista()
         {
-            var mockPersonaRepository = new Mock<IPersonaRepository>();
+            var mockPersonaRepository = new Mock<IPostulanteRepository>();
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockUbigeoRepository = new Mock<IUbigeoRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
