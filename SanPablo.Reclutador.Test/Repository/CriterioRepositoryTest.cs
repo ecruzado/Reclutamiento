@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SanPablo.Reclutador.Repository;
 using SanPablo.Reclutador.Entity;
 using NHibernate.Criterion;
+using System.Linq;
 
 namespace SanPablo.Reclutador.Test.Repository
 {
@@ -54,18 +55,20 @@ namespace SanPablo.Reclutador.Test.Repository
               alternativa.NombreAlternativa = "cambio";
               repository.Update(alternativa);
 
-          }
-
-          [TestMethod]
-          public void Test_DetachedCriteria()
-          {
-              var repository = new AlternativaRepository(NHibernateHelper.OpenSession());
-
-              DetachedCriteria where = DetachedCriteria.For<Alternativa>();
-              where.Add(Expression.Eq("Criterio.IdeCriterio", 52));
-
-              var lista = repository.GetPaging("CodigoAlternativa", true, 0, 100, where);
-
           }*/
+
+        [TestMethod]
+        public void Test_DetachedCriteria()
+        {
+            //var repository = new CriterioRepository(NHibernateHelper.OpenSession());
+
+            //DetachedCriteria where = DetachedCriteria.For<Criterio>();
+            //where.Add(Expression.Eq("Criterio.IdeCriterio", 52));
+
+            //var lista = repository.GetPaging("IdeCriterio", true, 0, 100, null);
+            //var session = NHibernateHelper.OpenSession();
+            //var logs = session.CreateQuery("Select C, D from Criterio C, DetalleGeneral D where C.TipoMedicion = D.Valor and D.IdeGeneral = 1")
+            //    .List();
+        }
     }
 }
