@@ -2,9 +2,13 @@
 {
     using Autofac;
     using Autofac.Integration.Mvc;
+    using FluentValidation.Internal;
     using FluentValidation.Mvc;
+    using FluentValidation.Validators;
     using NHibernate;
     using SanPablo.Reclutador.Web.Controllers;
+    using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Web.Mvc;
 
@@ -33,6 +37,32 @@
             DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
             fluentValidationModelValidatorProvider.AddImplicitRequiredValidator = false;
             ModelValidatorProviders.Providers.Add(fluentValidationModelValidatorProvider);
+            fluentValidationModelValidatorProvider.Add(typeof(NotEqualValidator), (metadata, context, description, validator) => new NotEqualPropertyValidator(metadata, context, description, validator));
+        }
+    }
+
+    public class NotEqualPropertyValidator : FluentValidationPropertyValidator
+    {
+
+        public NotEqualPropertyValidator(ModelMetadata metadata, ControllerContext controllerContext, PropertyRule rule, IPropertyValidator validator)
+            : base(metadata, controllerContext, rule, validator)
+        {
+        }
+
+        public override IEnumerable<ModelClientValidationRule> GetClientValidationRules()
+        {
+            if (!ShouldGenerateClientSideRules()) yield break;
+
+            var formatter = new MessageFormatter().AppendPropertyName(Rule.PropertyName);
+            string message = formatter.BuildMessage(Validator.ErrorMessageSource.GetString());
+            var rule = new ModelClientValidationRule
+            {
+                ValidationType = "notequal",
+                ErrorMessage = message
+            };
+            rule.ValidationParameters["field"] = String.Format("{0}", ((NotEqualValidator)Validator).ValueToCompare);
+            //rule.ValidationParameters["field"] = "0";
+            yield return rule;
         }
     }
 }

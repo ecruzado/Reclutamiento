@@ -331,6 +331,14 @@
         return match;
     });
 
+    $jQval.addMethod("notequal", function (value, element, param) {
+        var valorNotEqual = param;
+        if (value != valorNotEqual)
+            return true;
+        return false;
+    });
+
+
     if ($jQval.methods.extension) {
         adapters.addSingleVal("accept", "mimtype");
         adapters.addSingleVal("extension", "extension");
@@ -386,6 +394,11 @@
         if (options.params.regex) {
             setValidationValues(options, "regex", options.params.regex);
         }
+    });
+
+    adapters.add("notequal", ["field"], function (options) {
+        options.rules["notequal"] = options.params.field;
+        if (options.message) options.messages["notequal"] = options.message;
     });
 
     $(function () {

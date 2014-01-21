@@ -8,7 +8,21 @@
 
 @section Scripts{
 <script>
+    //$.validator.addMethod("notequal", function (value, element, param) {
+    //    var valorNotEqual = param;
+    //    if (value != valorNotEqual)
+    //        return true;
+    //    return false;
+    //}, "Debe tener otro valor");
+
+    //$.validator.unobtrusive.adapters.add("notequal", ["field"], function (options) {
+    //    options.rules["notequal"] = options.params.field;
+    //    if (options.message) options.messages["notequal"] = options.message;
+    //});
+
     $(document).ready(function () {
+
+
         $('.datepicker').datepicker({});
         $("#fechanacimiento").datepicker({});
        
