@@ -1,6 +1,8 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CriterioViewModel
+@using SanPablo.Reclutador.Entity
+
 @{
-    ViewBag.Title = "Listado Criterio";
+    ViewBag.Title = "Listado Categoría";
 }
 
 
@@ -15,6 +17,7 @@
 <script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -39,7 +42,7 @@
             }
         });
 
-
+       
 
         $('#updateDialog').dialog({
             autoOpen: false,
@@ -72,7 +75,7 @@
             if (codigoCriterio != null && codigoCriterio > 0) {
                 mostrarAgregarEstudios(0, codigoCriterio);
             } else {
-                alert('Ingrese un Criterio');
+                MostrarMensaje('Ingrese un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
             
         });
@@ -83,21 +86,37 @@
                 if (selr != null) {
                     mostrarAgregarEstudios(selr, codigoCriterio);
                 } else {
-                   alert('Seleccione una Alternativa');
-                   
+                    MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
                 
         });
 
-        $('#btnEliminar').click(function () {
-            var codigoCriterio = $("#Criterio_IdeCriterio").val();
-            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-            if (selr != null) {
-                eliminarAlternativa(selr, codigoCriterio);
-            } else {
-                alert('Seleccione una Alternativa');
+       
+
+       
+        $("#spanConfirmacion").html("¿Desea eliminar el registro?")
+        $('#confirmacion').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    var codigoCriterio = $("#Criterio_IdeCriterio").val();
+                    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    if (selr != null) {
+                        eliminarAlternativa(selr, codigoCriterio);
+                    } else {
+                        MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
             }
         });
+
+
         /*
         $('#btnGuardar').click(function () {
             $(".tabla-datos").show();
@@ -110,11 +129,11 @@
             mtype: 'POST',
             colNames: ['','Alternativa', 'Peso', 'Imagen'],
             colModel: [
-
+    
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 250, editable: false, sortable: false },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 600, editable: false, sortable: false },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 100, editable: false, formatter: ImagenFormatter },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 300, editable: false, formatter: ImagenFormatter },
             ],
             rownumbers: true,
             sortname: 'IdeAlternativa',
@@ -140,6 +159,8 @@
 
 
         });
+
+
 
 
         var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
@@ -169,16 +190,14 @@
         return strRdo;
     }
 
-    function eliminarAlternativa(selr, codCriterio) {
 
+    function eliminarAlternativa(selr, codCriterio) {
         $.post("/Intranet/Criterio/Eliminar?ideAlternativa=" + selr + "&codigoCriterio=" + codCriterio,
         function (data) {
             $('#grdList').trigger('reloadGrid');
             }
         );
-        
         return false;
-
     }
     
     
@@ -211,17 +230,11 @@
         });
         return false;
     }
-    /*
-    $('#btnGuardar').click(function () {
-        //var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        if (selr != null) {
-            window.location = "/Intranet/Criterio/Guardar/" + selr;
-        } else {
-            alert('Seleccione un criterio');
-        }
-    });
-
-    */
+    
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+    
 </script>
 }
 
@@ -234,7 +247,7 @@
                 <h5>Criterio</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    <button class="btn btn-primary btn-small disabled" readonly = "readonly">Activo</button>
                 </div>
             </div>
 
@@ -248,8 +261,9 @@
                          <label class="etiquetaFormulario">Código</label>
                     </td>
                     <td class="colInput">
-                           @Html.TextBoxFor(model => model.Criterio.IndPagina,  new { style = "display: none;" })
-                          @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { disabled = "disabled", @class = "textoFormulario"})                       
+                          @Html.HiddenFor(model => model.Criterio.IndPagina)
+                          @*@Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario"})                       *@
+                        <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.Criterio.IdeCriterio" readonly="readonly">
                     </td>
                     <td style="width:40px;"></td>
                    
@@ -257,11 +271,18 @@
                             <label class="etiquetaFormulario">Medición</label>
                     </td>
                      <td class="colInput">
+                        @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                        {
+                            @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { @readonly = "readonly" })
+                        }
+                        else
+                        {
                             @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
-		                     <div class="tex-error" style="font-size:12px;color:red">    
-                             @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
-                             </div>
-                     </td>
+		                }
+                        <div class="tex-error" style="font-size:12px;color:red">    
+                        @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
+                        </div>
+                    </td>
                  </tr>
                  <tr>
 
@@ -269,18 +290,32 @@
                       <label class="etiquetaFormulario">Tipo</label>
                     </td>
                    <td class="colInput">
-                            @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
-		                   <div class="tex-error" style="font-size:12px;color:red">         
-                           @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
-                           </div>
+                        @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                        { 
+                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { @readonly = "readonly" }) 
+                        }
+                        else
+                        {
+                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))     
+                        }
+                        <div class="tex-error" style="font-size:12px;color:red">         
+                        @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
+                        </div>
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
                     <label class="etiquetaFormulario">Modo</label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))
-		                <div class="tex-error" style="font-size:12px;color:red">     
+                        @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                        {
+                          @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @readonly = "readonly"})
+                        }
+                        else
+                        {
+                          @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))  
+                        }
+                        <div class="tex-error" style="font-size:12px;color:red">     
                         @Html.ValidationMessageFor(model => model.Criterio.TipoModo)
                         </div>
                     </td>
@@ -289,10 +324,17 @@
                 
                    <tr>
                        <td class="colEtiqueta">
-                            <label class="etiquetaFormulario">Pregunta</label>
-                        </td>
+                         <label class="etiquetaFormulario">Pregunta</label>
+                       </td>
                        <td class="colInput">
-                             @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })    
+                           @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                           {
+                             @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" , @readonly = "readonly"})    
+                           }
+                           else
+                           {
+                              @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario",@maxlength = "50" }) 
+                           } 
                             <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
                             </div>
@@ -305,8 +347,15 @@
                          </td>
 
                           <td class="colInput">
-                               
-                            @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))
+                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion), new { @readonly = "readonly"})
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))     
+                            }     
+                            
 		                    <div class="tex-error" style="font-size:12px;color:red">     
                             @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
                             </div>
@@ -315,8 +364,24 @@
                     </tr>
                     <tr>
                         <td colspan="8">
-                             <input  type="file" name="file" id="btnbuscaimagen"/> 
-                            <!-- <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;"> -->
+                             @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                             { 
+                              <input  type="file" name="file" id="btnbuscaimagen" hidden="hidden"/>
+                             }
+                             else
+                             {
+                                if ("02".Equals(@Model.Criterio.TipoModo))
+                                {
+                                  <input  type="file" name="file" id="btnbuscaimagen"/> 
+                                }
+                                else
+                                {
+                                  <input  type="file" name="file" id="btnbuscaimagen" hidden="hidden"/>      
+                                }
+                             }   
+                                
+                             
+                                 <!-- <input id="btnbuscaimagen" type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" style="display: inline-block;"> -->
                         </td>
                         
                     </tr>
@@ -327,14 +392,28 @@
                     </tr>
                </table>          
             
+            
+           @if (@Visualicion.SI.Equals(Model.IndVisual))
+           {
             <div class="grilla-opciones">
                 <h6>Alternativas</h6>
-                <div class="opciones">
-                    
+                @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina)){
+                    <div class="opciones"></div>
+                }
+                @if (@Accion.Nuevo.Equals(Model.Criterio.IndPagina))
+                {
+                    <div class="opciones">
+                    <a id="Agregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
+                    </div>
+                }
+                else
+                {
+                    <div class="opciones">
                     <a id="Agregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
                     <a id="btnEditar" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                </div>
+                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"  onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-remove icon-white"></i></a>        
+                    </div>
+                }
                 <div style="clear:both"></div>
             </div>
             
@@ -342,10 +421,17 @@
                 <table id="grdList" >
                 </table>
             </div>
-           
-             <div class="form-actions">
+           }
+             <div class="opciones">
                 <a class="btn" href="@Url.Action("Index", "Criterio", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" id="btnGuardar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>
+                  @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                  {
+                    <span></span>
+                  }
+                  else
+                  {
+                    <button type="submit" id="btnGuardar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>  
+                  }    
             </div>
            
         </div>
@@ -374,6 +460,7 @@
 
 <div id="updateDialog" title="Agregar Alternativa"></div>
 
+
 <div class="msgModel" style="display: none">
     <div class="tips loading">
         Por favor espere, procesando solicitud...
@@ -383,3 +470,8 @@
     <div class="tips mexito">
     </div>
 </div>
+
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>

@@ -1,18 +1,25 @@
 ﻿namespace SanPablo.Reclutador.Web.Repository.Mapping
 {
     using FluentNHibernate.Mapping;
-    using SanPablo.Reclutador.Web.Entity;
+    using SanPablo.Reclutador.Entity;
 
     public class CategoriaMap : ClassMap<Categoria>
     {
         public CategoriaMap()
         {
-            Id(m => m.CodigoCategoria, "IDECATEGORIA");
-            Map(x => x.NombreCategoria, "NOMBRE");
-            Map(x => x.DescripcionCategoria, "DESCRIPCION");
-            Map(x => x.TipoDeCategoria, "TIPCATEGORIA");
-            Map(x => x.EstadoDeRegistro, "ESTREGISTRO");
-            HasManyToMany(x => x.ExamenesCategoria)
+            Id(x => x.IDECATEGORIA, "IDECATEGORIA")
+              .GeneratedBy
+              .Sequence("IDECATEGORIA_SQ");
+            Map(x => x.ORDENIMPRESION, "ORDENIMPRESION");
+            Map(x => x.NOMCATEGORIA, "NOMCATEGORIA");
+            Map(x => x.TIPCATEGORIA, "TIPCATEGORIA");
+            Map(x => x.ESTACTIVO, "ESTACTIVO");
+            Map(x => x.USRCREACION, "USRCREACION");
+            Map(x => x.FECCREACION, "FECCREACION");
+            Map(x => x.USRMODIFICA, "USRMODIFICA");
+            Map(x => x.FECMODIFICA, "FECMODIFICA");
+          
+           /* HasManyToMany(x => x.ExamenesCategoria)
                 .Cascade.All()
                 .Inverse()
                 .Table("EXAMEN_X_CATEGORIA");
@@ -20,6 +27,9 @@
                 .Inverse()
                 .Cascade.All();
             Table("CATEGORIA");
+            * */
+            Table("CATEGORIA");
+
         }
     }
 }

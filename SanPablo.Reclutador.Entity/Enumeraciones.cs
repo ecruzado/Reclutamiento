@@ -25,7 +25,8 @@
         Medicion = 2,
         EstadoMant = 3,
         Modo=4,
-        TipoCalificacion = 5
+        TipoCalificacion = 5,
+        TipoCategoria = 26
     }
 
     public sealed class IndicadorActivo
@@ -36,11 +37,18 @@
 
     public sealed class Accion
     {
-        public const string Nuevo = "Nuevo";
-        public const string Editar = "Editar";
-        public const string Eliminar = "Eliminar";
-        public const string Actualizar = "Actualizar";
+        public const string Nuevo = "N";
+        public const string Editar = "E";
+        public const string Eliminar = "D";
+        public const string Actualizar = "A";
+        public const string Consultar = "C";
 
+    }
+
+    public sealed class Visualicion
+    {
+        public const string SI = "S";
+        public const string NO = "N";
     }
 
 

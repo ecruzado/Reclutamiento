@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CriterioViewModel
+@using SanPablo.Reclutador.Entity
+@{
     ViewBag.Title = "Listado Categoría";
 }
 @section Head{
@@ -68,6 +70,11 @@
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;
     }
+
+    $('#btnNuevo').click(function () {
+        window.location = "/Intranet/Categoria/Nuevo";
+    });
+
 </script>
 }
 <div class="row">
@@ -127,11 +134,11 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-pencil  icon-white"></i> Editar</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+                <a class="btn btn-info" id="btnNuevo"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a class="btn btn-info" id="btnConsultar" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" id="btnEditar" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-pencil  icon-white"></i> Editar</a>
+                <button type="reset" id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+                <button type="submit" id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
         </div>
     </div>

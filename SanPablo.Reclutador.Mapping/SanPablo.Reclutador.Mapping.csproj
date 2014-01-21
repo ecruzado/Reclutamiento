@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaMap.cs" />
+    <Compile Include="CategoriaMap.cs" />
     <Compile Include="CriterioMap.cs" />
     <Compile Include="DetalleGeneralMap.cs" />
     <Compile Include="EstudioPostulanteMap.cs" />

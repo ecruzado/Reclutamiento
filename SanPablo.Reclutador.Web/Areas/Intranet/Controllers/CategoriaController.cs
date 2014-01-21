@@ -1,16 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿
 
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
-    public class CategoriaController : Controller
-    {
-        //
-        // GET: /Intranet/Categoria/
+    using FluentValidation;
+    using FluentValidation.Results;
+    using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Entity.Validation;
+    using SanPablo.Reclutador.Repository.Interface;
+    using SanPablo.Reclutador.Web.Areas.Intranet.Models;
+    using SanPablo.Reclutador.Web.Core;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
 
+    public class CategoriaController : BaseController
+    {
+        private ICategoriaRepository _categoriaRepository;
+        private IAlternativaRepository _alternativaRepository;
+        private IDetalleGeneralRepository _detalleGeneralRepository;
+
+
+        public CategoriaController(ICategoriaRepository categoriaRepository, 
+            IDetalleGeneralRepository detalleGeneralRepository, 
+            IAlternativaRepository alternativaRepository)
+        {
+            _categoriaRepository = categoriaRepository;
+            _detalleGeneralRepository = detalleGeneralRepository;
+            _alternativaRepository = alternativaRepository;
+        }
+        
+        
         public ActionResult Index()
         {
             return View();
@@ -167,6 +191,36 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             };
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
+
+
+
+
+        public ActionResult Nuevo()
+        {
+            CategoriaViewModel model = new CategoriaViewModel();
+            model.Categoria = new Categoria();
+
+            model = InicializarCategoriaEdit();
+            //model.Categoria.i = Accion.Nuevo;
+            model.IndVisual = Visualicion.NO;
+            return View("Edit", model);
+        }
+
+
+        private CategoriaViewModel InicializarCategoriaEdit()
+        {
+            var categoriaViewModel = new CategoriaViewModel();
+            categoriaViewModel.Categoria = new Categoria();
+
+            
+            categoriaViewModel.TipoCategoria =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCategoria));
+            categoriaViewModel.TipoCategoria.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            return categoriaViewModel;
+        }
+
     
     }
 }

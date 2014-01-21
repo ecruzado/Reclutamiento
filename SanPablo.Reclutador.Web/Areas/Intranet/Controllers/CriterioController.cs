@@ -43,12 +43,36 @@
             try
             {
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                //DetachedCriteria where = DetachedCriteria.For<Criterio>();
-                //where.Add(Expression.Eq("Criterio.IdeCriterio", 1));
+                DetachedCriteria where = null;
+                
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data) ) ||
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data !="0")
+                   )
+                {
+                    where = DetachedCriteria.For<Criterio>();
 
-
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
+                    }
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+                        where.Add(Expression.Eq("TipoMedicion", grid.rules[1].data));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data !="0")
+                    {
+                        where.Add(Expression.Like("Pregunta", '%'+grid.rules[2].data+'%'));
+                    }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data !="0")
+                    {
+                        where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
+                    }
+                }
+                
                 var generic = Listar(_criterioRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
 
                 generic.Value.rows = generic.List.Select(item => new Row
@@ -57,6 +81,7 @@
                         cell = new string[]
                             {
                                 "1",
+                                item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
                                 item.TipoMedicion,
@@ -171,11 +196,16 @@
             return View(criterioViewModel);
         }
 
-        public ActionResult Consultar(string id)
-        {
+       
 
-            var criterioViewModel = InicializarCriteriosEdit();
-            return View("Edit",criterioViewModel);
+        public ActionResult BuscarCriterios()
+        {
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+
+            model = InicializarCriteriosIndex();
+            
+            return View("Index", model);
         }
 
         public ActionResult Nuevo()
@@ -185,7 +215,7 @@
 
             model = InicializarCriteriosEdit();
             model.Criterio.IndPagina = Accion.Nuevo;
-
+            model.IndVisual = Visualicion.NO;
             return View("Edit", model);
         }
 
@@ -206,11 +236,73 @@
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Actualizar.ToString();
+            model.IndVisual = Visualicion.SI;
 
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
             model.Alternativa = objAlternativa;
 
+
+
             return View("Edit", model);
+        }
+
+
+        public ActionResult ActivarDesactivar(string id,string estado)
+        {
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+            model = InicializarCriteriosIndex();
+
+            var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+            
+            if (IndicadorActivo.Activo.Equals(estado))
+            {
+                objCriterio.IndicadorActivo = IndicadorActivo.Inactivo;
+            }
+            else
+            {
+                objCriterio.IndicadorActivo = IndicadorActivo.Activo;
+            }
+            _criterioRepository.Update(objCriterio);
+
+            return View("Index", model); ;
+        }
+
+        public ActionResult EliminarCriterio(string id)
+        {
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+
+            model = InicializarCriteriosIndex();
+            var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+            _criterioRepository.Remove(objCriterio);
+            return View("Index", model);
+
+        }
+
+        public ActionResult ConsultaCriterios(string id)
+        {
+
+            CriterioViewModel model = new CriterioViewModel();
+            model.Criterio = new Criterio();
+
+            model = InicializarCriteriosEdit();
+
+            var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+            model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
+            model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
+            model.Criterio.TipoCriterio = objCriterio.TipoCriterio;
+            model.Criterio.TipoMedicion = objCriterio.TipoMedicion;
+            model.Criterio.TipoModo = objCriterio.TipoModo;
+            model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
+            model.Criterio.Pregunta = objCriterio.Pregunta;
+            model.Criterio.IndPagina = Accion.Consultar;
+            model.IndVisual = Visualicion.SI;
+            var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
+            model.Alternativa = objAlternativa;
+
+            return View("Edit", model);
+
         }
 
 
@@ -270,7 +362,7 @@
                         id = item.IdeAlternativa.ToString(),
                         cell = new string[]
                             {
-                                "1",
+                                
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
@@ -305,8 +397,8 @@
             }
 
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
-
-            if (model.Criterio.IndPagina.Equals(Accion.Nuevo))
+            
+            if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
             {
                 _criterioRepository.Add(model.Criterio);
             }
@@ -320,16 +412,17 @@
                 objCriterio.Pregunta = model.Criterio.Pregunta;
                 _criterioRepository.Update(objCriterio);
             }
-            
+
+            criterioViewModel.IndVisual = Visualicion.SI;
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
-            
+           
 
-            return View(criterioViewModel);
+            return View("Edit",criterioViewModel);
 
         }
 

@@ -150,6 +150,7 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />
     <Compile Include="Controllers\ExperienciaPostulanteController.cs" />
@@ -266,6 +267,7 @@
     <Content Include="Areas\Intranet\Views\Criterio\PopupCriterio.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
+    <Content Include="Scripts\Funciones.js" />
     <Content Include="Scripts\grid.locale-en.js" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
