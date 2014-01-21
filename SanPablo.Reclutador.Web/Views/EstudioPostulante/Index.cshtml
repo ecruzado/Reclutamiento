@@ -50,7 +50,7 @@
                         $.post("/EstudioPostulante/Edit",
                             $("#estudioPostulanteForm").serialize(),
                             function (data) {
-                                $("#updateDialog").dialog("close");
+                                $('#updateDialog').html(data);
                             }
                         );
                     },
@@ -104,8 +104,9 @@
             url: '@Url.Action("eliminarEstudio","EstudioPostulante")',
                     data: { ideEstudio: id },
                     success: function (respuesta) {
-                        alert(respuesta);
+                        alert("Eliminado satisfactoriamente");
                     }
+
             });
         }
 

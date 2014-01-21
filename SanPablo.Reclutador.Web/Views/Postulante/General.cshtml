@@ -15,6 +15,8 @@
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
+            $("select#Distritos").empty();
+            $("select#Distritos").append("<option value='00'> Seleccionar </option>");
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listarUbigeos","Postulante")',
@@ -49,6 +51,7 @@
                 }
             });
         })
+
   });
 
     $(function () {
@@ -101,8 +104,8 @@
                             <label class="etiquetaFormulario" for="setipodocumento">Tipo Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.DropDownListFor(model => model.Persona.TipoDocumento, new SelectList(Model.TipoDocumentos, "Valor", "Descripcion", Model.Persona.TipoDocumento))
-                            @Html.ValidationMessageFor(model => model.Persona.TipoDocumento)
+                            @Html.DropDownListFor(model => model.Postulante.TipoDocumento, new SelectList(Model.TipoDocumentos, "Valor", "Descripcion", Model.Postulante.TipoDocumento))
+                            @Html.ValidationMessageFor(model => model.Postulante.TipoDocumento)
                         </td>
                         <td rowspan="7" colspan="3" style="text-align:center;">
                             <img src="~/Content/images/user4.png" alt="user" title="user" />
@@ -116,9 +119,9 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.NumeroDocumento, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.NumeroDocumento)
+                                @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>
                         </td>
                     </tr>
@@ -127,9 +130,9 @@
                             <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido Paterno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.ApellidoPaterno, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.ApellidoPaterno)
+                                @Html.ValidationMessageFor(model => model.Postulante.ApellidoPaterno)
                             </div>
                         </td>
                     </tr>
@@ -138,9 +141,9 @@
                             <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido Materno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.ApellidoMaterno, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.ApellidoMaterno)
+                                @Html.ValidationMessageFor(model => model.Postulante.ApellidoMaterno)
                             </div>
                         </td>
                     </tr>
@@ -149,9 +152,9 @@
                             <label class="etiquetaFormulario" for="txtprimernombre">Primer Nombre <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.PrimerNombre, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.PrimerNombre)
+                                @Html.ValidationMessageFor(model => model.Postulante.PrimerNombre)
                             </div>
                         </td>
                     </tr>
@@ -160,9 +163,9 @@
                             <label class="etiquetaFormulario" for="txtsegundonombre">Segundo Nombre</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.SegundoNombre, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.SegundoNombre)
+                                @Html.ValidationMessageFor(model => model.Postulante.SegundoNombre)
                             </div>
                         </td>
                     </tr>
@@ -171,7 +174,7 @@
                             <label class="etiquetaFormulario" for="senacionalidad">Nacionalidad <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                             @Html.DropDownListFor(model => model.Persona.TipoNacionalidad , new SelectList(Model.Nacionalidad, "Valor", "Descripcion", Model.Persona.TipoNacionalidad))
+                             @Html.DropDownListFor(model => model.Postulante.TipoNacionalidad , new SelectList(Model.Nacionalidad, "Valor", "Descripcion", Model.Postulante.TipoNacionalidad))
                         </td>
                     </tr>
                     <tr>
@@ -179,9 +182,9 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.FechaNacimiento, new { @class = "textoFormulario" , @id="fechanacimiento"})
+                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" , @id="fechanacimiento"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.FechaNacimiento)
+                                @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
                         </td>
                         <td style="width:40px;"></td>
@@ -189,9 +192,9 @@
                             <label class="etiquetaFormulario" for="seSexo">Sexo <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.DropDownListFor(model => model.Persona.IndicadorSexo, new SelectList(Model.Sexo, "Valor", "Descripcion", Model.Persona.IndicadorSexo))
+                            @Html.DropDownListFor(model => model.Postulante.IndicadorSexo, new SelectList(Model.Sexo, "Valor", "Descripcion", Model.Postulante.IndicadorSexo))
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.IndicadorSexo)
+                                @Html.ValidationMessageFor(model => model.Postulante.IndicadorSexo)
                             </div>
                         </td>
                     </tr>
@@ -200,7 +203,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.NumeroLicencia, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -208,9 +211,9 @@
                             <label class="etiquetaFormulario" for="seestadocivil">Estado Civil <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.DropDownListFor(model => model.Persona.TipoEstadoCivil, new SelectList(Model.EstadosCiviles, "Valor", "Descripcion", Model.Persona.TipoEstadoCivil))
+                            @Html.DropDownListFor(model => model.Postulante.TipoEstadoCivil, new SelectList(Model.EstadosCiviles, "Valor", "Descripcion", Model.Postulante.TipoEstadoCivil))
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.TipoEstadoCivil)
+                                @Html.ValidationMessageFor(model => model.Postulante.TipoEstadoCivil)
                             </div>
                         </td>
                     </tr>
@@ -219,7 +222,7 @@
                             <label class="etiquetaFormulario" for="taobservaciongeneral">Observación</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Persona.Observacion, new { @class = "textoFormulario" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario" })
                         </td>
                     </tr>
                 </table>
@@ -245,7 +248,7 @@
                             <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
                         </td>
                         <td id="tipoVias" class="colInput">
-                           @Html.DropDownListFor(model => model.Persona.TipoVia, new SelectList(Model.TipoVias, "Valor", "Descripcion", Model.Persona.TipoVia), new {@id="tipoVias" })
+                           @Html.DropDownListFor(model => model.Postulante.TipoVia, new SelectList(Model.TipoVias, "Valor", "Descripcion", Model.Postulante.TipoVia), new {@id="tipoVias" })
                         </td>
                         
                     </tr>
@@ -264,7 +267,7 @@
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.NombreVia, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" })
                         </td>
                     </tr>
                     <tr>
@@ -280,9 +283,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Número </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.NumeroDireccion, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Persona.InteriorDireccion, new { @class = "input-xmini" })                           
+                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini" })                           
                         </td>
                     </tr>
                     <tr>
@@ -290,9 +293,9 @@
                             <label class="etiquetaFormulario" for="sedistrito">Distrito <span class="text-error">*</span></label>
                         </td>
                         <td id="Distritos" class="colInput">
-                              @Html.DropDownListFor(model => model.Persona.IdeUbigeo ,new SelectList(Model.Distritos,"IdeUbigeo","Nombre",Model.Persona.IdeUbigeo),new {@id="Distritos" }) 
+                              @Html.DropDownListFor(model => model.Postulante.IdeUbigeo ,new SelectList(Model.Distritos,"IdeUbigeo","Nombre",Model.Postulante.IdeUbigeo),new {@id="Distritos" }) 
                              <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.IdeUbigeo)
+                                @Html.ValidationMessageFor(model => model.Postulante.IdeUbigeo)
                             </div>
                            
                         </td>
@@ -301,9 +304,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.Manzana, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Persona.Lote, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" })
                         </td>
                     </tr>
                     <tr>
@@ -311,9 +314,9 @@
                             <label class="etiquetaFormulario" for="txtemail">Email</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.Correo, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.Correo, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Persona.Correo)
+                                @Html.ValidationMessageFor(model => model.Postulante.Correo)
                             </div>
                         </td>
                         <td style="width:10px;"></td>
@@ -321,9 +324,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Persona.Bloque, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Persona.Etapa, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini" })
                         </td>
                     </tr>
                     <tr>
@@ -338,7 +341,7 @@
                             <label class="etiquetaFormulario" for="setipozona">Tipo Zona</label>
                         </td>
                         <td class="colInput">
-                            @Html.DropDownListFor(model => model.Persona.TipoZona, new SelectList(Model.TipoZonas, "Valor", "Descripcion", Model.TipoZonas), new {@id="tipoZonas" })
+                            @Html.DropDownListFor(model => model.Postulante.TipoZona, new SelectList(Model.TipoZonas, "Valor", "Descripcion", Model.TipoZonas), new {@id="tipoZonas" })
                         </td>
                     </tr>
                     <tr>

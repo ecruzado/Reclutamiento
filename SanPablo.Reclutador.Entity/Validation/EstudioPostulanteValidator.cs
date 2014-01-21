@@ -16,8 +16,8 @@
                 .WithMessage("Seleccionar nombre de la institución");
 
             RuleFor(x => x.NombreInstitucion)
-                .Length(25, 100)
-                .WithMessage("Ingresar Nombre Universidad con longitud entre 25 a 100 caracteres");
+                .Length(10, 100)
+                .WithMessage("Ingresar Nombre Universidad con longitud entre 10 a 100 caracteres");
 
             RuleFor(x => x.TipoArea)
                 .NotEqual("00")
@@ -39,12 +39,9 @@
                 .WithMessage("Ingresar Fecha de Inicio Válido");
 
 
-            RuleFor(x => x.FechaEstudioFin)
-               .GreaterThan(x => x.FechaEstudioInicio)
-               .WithMessage("end date must be after start date");
-            //RuleFor(x => x.FechaEstudioFin  )
-            //    .GreaterThan(new DateTime(1900, 01, 01))
-            //    .WithMessage("Ingresar Fecha de Fin Válido");
+            //RuleFor(x => x.FechaEstudioFin)
+            //   .GreaterThan(x => x.FechaEstudioInicio)
+            //   .WithMessage("La fecha final debe ser posterior a la fecha de Inicio");
 
 
         }

@@ -23,5 +23,20 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCargoTrabajoReferente { get; set; }
         public virtual int NumeroFijoInstitucionReferente { get; set; }
         public virtual int NumeroAnexoInstitucionReferente { get; set; }
+
+        public virtual bool ActualmenteTrabajando
+        {
+            get
+            {
+                return IndicadorActualmenteTrabajo == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorActualmenteTrabajo = Indicador.Si;
+                else
+                    IndicadorActualmenteTrabajo = Indicador.No;
+            }
+        }
     }
 }

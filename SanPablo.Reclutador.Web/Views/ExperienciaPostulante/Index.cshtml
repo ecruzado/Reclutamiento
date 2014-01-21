@@ -56,7 +56,7 @@
                         $.post("/ExperienciaPostulante/Edit",
                             $("#experienciaPostulanteForm").serialize(),
                             function (data) {
-                                $("#updateDialog").dialog("close");
+                                $("#updateDialog").html(data);
                             }
                         );
                     },

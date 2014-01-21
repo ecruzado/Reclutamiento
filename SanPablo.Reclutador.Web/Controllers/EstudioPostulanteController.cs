@@ -26,54 +26,54 @@
             return View();
         }
 
-        [HttpPost]
-        public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
-        {
-            ActionResult result = null;
-            List<object> lstFilas = new List<object>();
+        //[HttpPost]
+        //public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
+        //{
+        //    ActionResult result = null;
+        //    List<object> lstFilas = new List<object>();
 
-            var fila1 = new
-            {
-                id = 1,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Universidad",
-                          "Universidad de Lima",
-                          "Administración",                          
-                          "Pregrado",
-                          "Completa",
-                          "Ene/2005",
-                          "Dic/2010",
-                }
-            };
-            lstFilas.Add(fila1);
+        //    var fila1 = new
+        //    {
+        //        id = 1,                 // ID único de la fila
+        //        cell = new string[] {   // Array de celdas de la fila
+        //                  "Universidad",
+        //                  "Universidad de Lima",
+        //                  "Administración",                          
+        //                  "Pregrado",
+        //                  "Completa",
+        //                  "Ene/2005",
+        //                  "Dic/2010",
+        //        }
+        //    };
+        //    lstFilas.Add(fila1);
 
-            var fila2 = new
-            {
-                id = 2,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "Colegio",
-                          "Colegio la Recoleta",
-                          "",                          
-                          "Secundaria",
-                          "Completa",
-                          "Ene/2008",
-                          "Dic/2012",                    
-                }
-            };
-            lstFilas.Add(fila2);
+        //    var fila2 = new
+        //    {
+        //        id = 2,                 // ID único de la fila
+        //        cell = new string[] {   // Array de celdas de la fila
+        //                  "Colegio",
+        //                  "Colegio la Recoleta",
+        //                  "",                          
+        //                  "Secundaria",
+        //                  "Completa",
+        //                  "Ene/2008",
+        //                  "Dic/2012",                    
+        //        }
+        //    };
+        //    lstFilas.Add(fila2);
 
-            //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-            var data = new
-            {
-                //total = totalPag,       // Total de páginas
-                //page = page,            // Página actual
-                //records = totalReg,     // Total de registros (obtenido del modelo)
-                rows = lstFilas
-            };
-            result = Json(data);
+        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
+        //    var data = new
+        //    {
+        //        //total = totalPag,       // Total de páginas
+        //        //page = page,            // Página actual
+        //        //records = totalReg,     // Total de registros (obtenido del modelo)
+        //        rows = lstFilas
+        //    };
+        //    result = Json(data);
 
-            return result;
-        }
+        //    return result;
+        //}
         
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
@@ -138,23 +138,25 @@
                 var estudioResultado = new EstudioPostulante();
                 estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudioEdit);
                 estudioGeneralViewModel.Estudio = estudioResultado;
+                estudioGeneralViewModel = actualizarDatos(estudioGeneralViewModel, estudioResultado);
                 return View(estudioGeneralViewModel);
             }
         }
 
 
         [HttpPost]
-        public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
+        public ViewResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
 
             if (!ModelState.IsValid)
             {
                 var estudioPostulanteModel = InicializarEstudio();
+                estudioPostulanteModel = actualizarDatos(estudioPostulanteModel, estudioPostulante);
                 estudioPostulanteModel.Estudio = estudioPostulante;
-                return Json(estudioPostulanteModel, JsonRequestBehavior.DenyGet);
+                return View(estudioPostulanteModel);
             }
             _estudioPostulanteRepository.Add(estudioPostulante);
-            return Json("ddafd", JsonRequestBehavior.DenyGet);
+            return View("ddafd", JsonRequestBehavior.DenyGet);
 
         }
 
@@ -165,9 +167,9 @@
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstitucion));
+            estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>();
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
+           
             estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
             estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
@@ -194,5 +196,51 @@
             return result;
         }
 
+
+        #region METODOS
+
+        [HttpPost]
+        public ActionResult listarNombreInstitucion(string tipoInstituto)
+        {
+            ActionResult result = null;
+            var listaResultado = new List<DetalleGeneral>();
+
+            switch (tipoInstituto)
+            {
+                case "01": //es Universidad
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
+                    break;
+                case "02": // es Instituto
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+                    break;
+                case "03": // es Colegio
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
+                    break;
+            }
+            result = Json(listaResultado);
+            return result;
+        }
+        public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
+        {
+             if (estudioPostulante != null)
+            {
+                string tipTipoInst = estudioPostulante.TipTipoInstitucion;
+                switch (tipTipoInst)
+                {
+                    case "01":
+                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
+                        break;
+                    case "02":
+                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+                        break;
+                    case "03":
+                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+                        break;
+                }
+
+            }
+             return estudioPostulanteGeneralViewModel;
+        }
+        #endregion
     }
 }
