@@ -51,6 +51,9 @@
                 .WithMessage("Ingresar fecha de nacimiento válida");
 
             RuleFor(x => x.IndicadorSexo)
+                .NotEmpty()
+                .WithMessage("Ingresar sexo");
+            RuleFor(x => x.IndicadorSexo)
                 .NotEqual("0")
                 .WithMessage("Ingresar sexo");
             
