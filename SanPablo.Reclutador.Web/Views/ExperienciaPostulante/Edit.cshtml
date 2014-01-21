@@ -19,6 +19,21 @@
                     $('#NombreCargo_otro').attr('disabled', 'disabled');
                 }
             })
+
+
+            //actualmente trabajando
+            $('#indActuaTrabajando').change(function () {
+                if ($(this).is(":checked")) {
+                    $('#fechaTrabajoFin').val('');
+                    $('#fechaTrabajoFin').attr("disabled", "disabled");
+
+                }
+                else {
+                    $('#fechaTrabajoFin').removeAttr("disabled");
+                }
+
+            })
+
         });
                 
         $(function () {
@@ -53,7 +68,9 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa)
-                @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
+                </div>
             </td>
         </tr>
         <tr>
@@ -62,7 +79,9 @@
             </td>
             <td class="colInput;input-xxlarge">
                     @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajo, new SelectList(Model.TipoCargos, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajo), new { @id = "Tipocargo"})
+                <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
+                </div>
             </td>
         </tr> 
         <tr>
@@ -71,7 +90,9 @@
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Experiencia.TipoCargoTrabajo, new { @id="NombreCargo_otro",@disabled = "disabled"})
-                @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
+                </div>
             </td>
         </tr>
         <tr>
@@ -80,7 +101,9 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoInicio, new { @id = "fechaTrabajoInicio"})
-                @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
+                </div>
             </td>
         </tr>
         <tr>
@@ -89,11 +112,14 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoFin, new { @id = "fechaTrabajoFin"})
-                @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
+                </div>
             </td>
             <td>
                 <Label style="display:inline-block; font-size:10pt" for="estudiando">   Actualmente Trabajando</Label>
-                <input type="checkbox" value="estudiando" id="indicadorEstudiando" name="Estudiando">
+                @Html.CheckBoxFor(model => model.Experiencia.ActualmenteTrabajando, new { @id="indActuaTrabajando"})
+                
             </td>
         </tr>
         <tr>
@@ -102,7 +128,9 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio)
-                @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
+                </div>
             </td>
         </tr>
         <tr>
@@ -111,7 +139,9 @@
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Experiencia.TipoMotivoCese, new SelectList(Model.TipoMotivosCese, "Valor", "Descripcion", Model.Experiencia.TipoMotivoCese))
-                @Html.ValidationMessageFor(model => model.Experiencia.TipoMotivoCese)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.TipoMotivoCese)
+                </div>
             </td>
             
         </tr>
@@ -127,7 +157,9 @@
             </td>
             <td class="colInput" >
                 @Html.TextBoxFor(model => model.Experiencia.NombreReferente)
-                @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
+                </div>
             </td>
         </tr>
         <tr>
@@ -136,7 +168,9 @@
             </td>
             <td class="colInput" >
                 @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajoReferente, new SelectList(Model.TipoCargosReferente, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajoReferente))
-                @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
+                </div>
             </td>
         </tr>
         <tr>
@@ -145,7 +179,9 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia)
-                @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
+                </div>
             </td>
             
         </tr>
@@ -155,14 +191,18 @@
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px"})
-                @Html.ValidationMessageFor(model => model.Experiencia.NumeroFijoInstitucionReferente)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NumeroFijoInstitucionReferente)
+                </div>
             </td>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Anexo </label>
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NumeroAnexoInstitucionReferente, new { @style = "width: 70px"})
-                @Html.ValidationMessageFor(model => model.Experiencia.NumeroAnexoInstitucionReferente)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.NumeroAnexoInstitucionReferente)
+                </div>
             </td>
             
         </tr>

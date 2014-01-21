@@ -39,7 +39,7 @@
             postulanteGeneralViewModel.Nacionalidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Nacionalidad));
             postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             
-            postulanteGeneralViewModel.Sexo = new List<DetalleGeneral>( _detalleGeneralRepository.GetByTipoTabla(TipoTabla.Nacionalidad));
+            postulanteGeneralViewModel.Sexo = new List<DetalleGeneral>( _detalleGeneralRepository.GetByTipoTabla(TipoTabla.Sexo));
             postulanteGeneralViewModel.Sexo.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
             
             postulanteGeneralViewModel.EstadosCiviles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoCivil));
@@ -70,7 +70,7 @@
         }
 
         [HttpPost]
-        public ActionResult General([Bind(Prefix = "Persona")]Postulante postulante)
+        public ActionResult General([Bind(Prefix = "Postulante")]Postulante postulante)
         {
             PostulanteValidator validator = new PostulanteValidator();
             ValidationResult result = validator.Validate(postulante, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
@@ -83,7 +83,7 @@
                 return View("General",postulanteModel);
             }
             _postulanteRepository.Add(postulante);
-            return RedirectToAction("Estudios");
+            return RedirectToAction("EstudioPostulante/Index");
         }
         #endregion
 
@@ -122,7 +122,7 @@
         }
 
         [HttpPost]
-        public ActionResult DatosComplementarios([Bind(Prefix = "Persona")]Postulante postulante)
+        public ActionResult DatosComplementarios([Bind(Prefix = "Postulante")]Postulante postulante)
         {
             PostulanteValidator validator = new PostulanteValidator();
             ValidationResult result = validator.Validate(postulante, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero");
@@ -143,16 +143,7 @@
 
         public List<Ubigeo> cargarDepartamentos()
         {
-            var departamentos = new List<Ubigeo>();
-            var obtenerDepartamentos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null);
-            foreach (var datos in obtenerDepartamentos)
-            {
-                departamentos.Add(new Ubigeo
-                {
-                    IdeUbigeo = datos.IdeUbigeo,
-                    Nombre = datos.Nombre
-                });
-            }
+            var departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
             return departamentos;
             
         }
@@ -160,17 +151,8 @@
         public ActionResult  listarUbigeos (int ideUbigeoPadre)
         {
              ActionResult result = null;
-                      
-             var listaResultado = new List<Ubigeo>();
-             var obtenerUbigeos = _ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre);
-             foreach (var datos in obtenerUbigeos)
-            {
-                listaResultado.Add(new Ubigeo
-                {
-                    IdeUbigeo = datos.IdeUbigeo,
-                    Nombre = datos.Nombre
-                });
-            }
+
+             var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
             result = Json(listaResultado);
             return result;
         }

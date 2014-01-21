@@ -8,6 +8,9 @@
         public ExperienciaPostulanteValidator()
         {
             RuleFor(x => x.NombreEmpresa)
+               .NotEmpty()
+               .WithMessage("Ingresar Nombre de la Empresa");
+            RuleFor(x => x.NombreEmpresa)
                 .Length(10,100)
                 .WithMessage("Ingresar Empresa con longitud entre 10 a 100 caracteres");
 

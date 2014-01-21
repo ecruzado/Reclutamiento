@@ -20,5 +20,20 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FechaEstudioInicio { get; set; }
         public virtual DateTime FechaEstudioFin { get; set; }
         public virtual string IndicadorActualmenteEstudiando { get; set; }
+
+        public virtual bool ActualmenteEstudiando
+        {
+            get
+            {
+                return IndicadorActualmenteEstudiando == Indicador.Si? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorActualmenteEstudiando = Indicador.Si;
+                else
+                    IndicadorActualmenteEstudiando = Indicador.No;
+            }
+        }
     }
 }

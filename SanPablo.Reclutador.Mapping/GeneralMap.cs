@@ -7,9 +7,11 @@
     {
         public GeneralMap()
         {
-            Id(m => m.CodigoGeneral, "CODGENERAL");
-            Map(x => x.NombreGeneral, "NOMBRE");
-            Map(x => x.EstadoRegistro, "ESTREGISTRO");
+            Id(m => m.IdeGeneral, "IDEGENERAL");
+            Map(x => x.TipoTabla, "TIPTABLA");
+            Map(x => x.Descripcion, "DESCRIPCION");
+            Map(x => x.TipoDato, "TIPDATO");
+            Map(x => x.LongitudCampo, "LONCAMPO");
             Table("GENERAL");
         }
     }
