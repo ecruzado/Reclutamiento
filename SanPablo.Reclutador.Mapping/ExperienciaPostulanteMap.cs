@@ -14,6 +14,7 @@
             //Map(x => x.IdePostulante, "IDEPOSTULANTE");
             Map(x => x.NombreEmpresa, "NOMEMPRESA ");
             Map(x => x.TipoCargoTrabajo, "TIPCARGOTRABAJO");
+            Map(x => x.NombreCargoTrabajo, "NOMCARGOTRABAJO");
             Map(x => x.FechaTrabajoInicio, "FECTRABINICIO");
             Map(x => x.FechaTrabajoFin, "FECTRABFIN");
             Map(x => x.IndicadorActualmenteTrabajo, "INDTRABACTUALMENTE");
@@ -21,9 +22,11 @@
             Map(x => x.TipoMotivoCese, "TIPMOTIVOCESE");
             Map(x => x.NombreReferente, "NOMREFERENTE");
             Map(x => x.NumeroMovilReferencia, "NUMTELEFMOVILREF");
+            Map(x => x.CorreoReferente, "CORREOREFERENTE");
             Map(x => x.TipoCargoTrabajoReferente, "TIPCARGOTRABAJOREF");
             Map(x => x.NumeroFijoInstitucionReferente, "NUMTELEFONOFIJOINST");
             Map(x => x.NumeroAnexoInstitucionReferente, "NUMANEXOINST");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
 
             Table("EXP_POSTULANTE");
         }
