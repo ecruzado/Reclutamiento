@@ -197,14 +197,18 @@
 
             model = InicializarCriteriosEdit();
             
-            var alter = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
-            model.Criterio.TipoCalificacion = alter.TipoCalificacion;
-            model.Criterio.TipoCriterio = alter.TipoCriterio;
-            model.Criterio.TipoMedicion = alter.TipoMedicion;
-            model.Criterio.TipoModo = alter.TipoModo;
-            model.Criterio.IdeCriterio = alter.IdeCriterio;
-            model.Criterio.Pregunta = alter.Pregunta;
-            model.Criterio.IndPagina = Accion.Nuevo.ToString();
+            var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+            model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
+            model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
+            model.Criterio.TipoCriterio = objCriterio.TipoCriterio;
+            model.Criterio.TipoMedicion = objCriterio.TipoMedicion;
+            model.Criterio.TipoModo = objCriterio.TipoModo;
+            model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
+            model.Criterio.Pregunta = objCriterio.Pregunta;
+            model.Criterio.IndPagina = Accion.Actualizar.ToString();
+
+            var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
+            model.Alternativa = objAlternativa;
 
             return View("Edit", model);
         }
@@ -308,8 +312,13 @@
             }
             else
             {
-                //actualiza
-                _criterioRepository.Update(model.Criterio);
+                var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == model.Criterio.IdeCriterio);
+                objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
+                objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
+                objCriterio.TipoModo = model.Criterio.TipoModo;
+                objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+                objCriterio.Pregunta = model.Criterio.Pregunta;
+                _criterioRepository.Update(objCriterio);
             }
             
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
