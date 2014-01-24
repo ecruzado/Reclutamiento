@@ -50,6 +50,8 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="ConfiguracionAprobacion.cs" />
+    <Compile Include="ConocimientoGeneralPostulante.cs" />
+    <Compile Include="DiscapacidadPostulante.cs" />
     <Compile Include="Enumeraciones.cs" />
     <Compile Include="Criterio.cs" />
     <Compile Include="CriterioPorSubcategoria.cs" />
@@ -76,9 +78,12 @@
     <Compile Include="Usuario.cs" />
     <Compile Include="UsuarioSede.cs" />
     <Compile Include="Validation\AlternativaValidator.cs" />
+    <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
+    <Compile Include="Validation\DiscapacidadPostulanteValidaton.cs" />
     <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />
     <Compile Include="Validation\ExperienciaPostulanteValitator.cs" />
+    <Compile Include="Validation\ParientePostulanteValidaton.cs" />
     <Compile Include="Validation\PostulanteValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
   </ItemGroup>

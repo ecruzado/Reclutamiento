@@ -1,0 +1,97 @@
+﻿@model SanPablo.Reclutador.Web.Models.ParientePostulanteGeneralViewModel
+@{
+    Layout = "";
+}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.datepicker').datepicker({});
+            $("#fechaNacimiento").datepicker({});
+
+            $(function () {
+                $.datepicker.regional['es'] =
+                {
+                    closeText: 'Cerrar',
+                    prevText: 'Previo',
+                    nextText: 'Próximo',
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+                    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    dateFormat: 'dd/mm/yy', firstDay: 0,
+                    initStatus: 'Selecciona la fecha', isRTL: false
+                };
+                $.datepicker.setDefaults($.datepicker.regional['es']);
+                $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+            });
+        });
+    </script>
+@using (Html.BeginForm("Edit", "ParientePostulante", FormMethod.Post, new { @id = "parientePostulanteForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Apellido Paterno <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.Pariente.ApellidoPaterno);
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Pariente.ApellidoPaterno)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Apellido Materno <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.Pariente.ApellidoMaterno);
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Pariente.ApellidoMaterno)
+                </div>
+            </td>
+        </tr> 
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario"> Nombres<span class="text-error">*</span></label>
+            </td>
+            <td >
+                @Html.TextBoxFor(model => model.Pariente.Nombres);
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Pariente.Nombres)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" > Tipo de Vínculo <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Pariente.TipoDeVinculo, new SelectList(Model.TipoVinculos, "Valor", "Descripcion", Model.Pariente.TipoDeVinculo))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Pariente.TipoDeVinculo)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario"> Fecha de Nacimiento <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+                @Html.TextBoxFor(model => model.Pariente.FechaNacimiento,"{0:d}", new { @class = "datepicker",@id="fechaNacimiento" })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Pariente.FechaNacimiento)
+                </div>
+            </td>
+        </tr>
+        </table>
+            <div>
+                
+            </div>
+}

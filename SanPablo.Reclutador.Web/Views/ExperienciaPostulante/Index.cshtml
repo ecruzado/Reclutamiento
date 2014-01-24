@@ -52,18 +52,27 @@
                 resizable: false,
                 modal: true,
                 buttons: {
-                    "Grabar": function () {
-                        $.post("/ExperienciaPostulante/Edit",
-                            $("#experienciaPostulanteForm").serialize(),
-                            function (data) {
-                                $("#updateDialog").html(data);
-                            }
-                        );
-                    },
-                    "Cancelar": function () {
-                        $(this).dialog("close");
-                    }
+                "Grabar": function (e) {
+                     e.preventDefault();
+                     var result = $('form').valid();
+                     if (result) {
+                         $.post("/ExperienciaPostulante/Edit",
+                         $("#experienciaPostulanteForm").serialize(),
+                         function (msj) {
+                             if (msj) {
+                                 $("#updateDialog").dialog("close");
+                                 location.reload(true);
+                              }
+                              else {
+                                    alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                              }
+                          });
+                     }
+                },
+                "Cancelar": function () {
+                     $(this).dialog("close");
                 }
+               }
             });
 
             $('#btnAgregar').click(function () {
@@ -83,13 +92,18 @@
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                alert(ideEliminar);
-                if (ideExperiencia != null) {
-                    eliminarExperiencia(ideExperiencia);
-                }
-                else {
-                    alert("Seleccionar un item a elimnar");
-                }
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+
+                $("#divMensaje").dialog({
+                    title: 'CONVOCATORIAS SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); location.reload(true) },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
             });
         });
 
@@ -98,6 +112,7 @@
             //var id = parseInt(ideEstudioEdit);
             $.get("/ExperienciaPostulante/Edit/" + id, function (data) {
                 dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
             });
             return false;
@@ -119,6 +134,7 @@
             var dialogDiv = $('#updateDialog');
             $.get("/ExperienciaPostulante/Edit/"+0, function (data) {
                 dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
             });
             return false;
@@ -162,6 +178,9 @@
     </div>
 </div>
 <div id="updateDialog" title="Agregar Experiencia"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>
 
 
 

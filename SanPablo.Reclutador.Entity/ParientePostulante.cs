@@ -8,7 +8,7 @@ namespace SanPablo.Reclutador.Entity
 {
     public class ParientePostulante
     {
-        public virtual int IdeParientesPostulante { get; set; }
+        public virtual int IdeParientePostulante { get; set; }
         public virtual Postulante Postulante { get; set; }
         public virtual int IdePostulante { get; set; }
         public virtual string ApellidoPaterno { get; set; }
@@ -16,5 +16,6 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Nombres { get; set; }
         public virtual string TipoDeVinculo { get; set; }
         public virtual DateTime FechaNacimiento { get; set; }
+        public virtual string EstadoActivo { get; set; }
     }
 }

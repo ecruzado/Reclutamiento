@@ -20,6 +20,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FechaEstudioInicio { get; set; }
         public virtual DateTime FechaEstudioFin { get; set; }
         public virtual string IndicadorActualmenteEstudiando { get; set; }
+        public virtual string EstadoActivo { get; set; }
 
         public virtual bool ActualmenteEstudiando
         {

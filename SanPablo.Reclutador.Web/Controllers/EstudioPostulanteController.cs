@@ -25,56 +25,7 @@
         {
             return View();
         }
-
-        //[HttpPost]
-        //public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
-        //{
-        //    ActionResult result = null;
-        //    List<object> lstFilas = new List<object>();
-
-        //    var fila1 = new
-        //    {
-        //        id = 1,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila
-        //                  "Universidad",
-        //                  "Universidad de Lima",
-        //                  "Administración",                          
-        //                  "Pregrado",
-        //                  "Completa",
-        //                  "Ene/2005",
-        //                  "Dic/2010",
-        //        }
-        //    };
-        //    lstFilas.Add(fila1);
-
-        //    var fila2 = new
-        //    {
-        //        id = 2,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila
-        //                  "Colegio",
-        //                  "Colegio la Recoleta",
-        //                  "",                          
-        //                  "Secundaria",
-        //                  "Completa",
-        //                  "Ene/2008",
-        //                  "Dic/2012",                    
-        //        }
-        //    };
-        //    lstFilas.Add(fila2);
-
-        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-        //    var data = new
-        //    {
-        //        //total = totalPag,       // Total de páginas
-        //        //page = page,            // Página actual
-        //        //records = totalReg,     // Total de registros (obtenido del modelo)
-        //        rows = lstFilas
-        //    };
-        //    result = Json(data);
-
-        //    return result;
-        //}
-        
+   
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
         {
@@ -145,18 +96,23 @@
 
 
         [HttpPost]
-        public ViewResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
+        public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
-
+            //var result = new JsonResult();
+            
+ 
             if (!ModelState.IsValid)
             {
-                var estudioPostulanteModel = InicializarEstudio();
-                estudioPostulanteModel = actualizarDatos(estudioPostulanteModel, estudioPostulante);
-                estudioPostulanteModel.Estudio = estudioPostulante;
-                return View(estudioPostulanteModel);
+                //var estudioPostulanteModel = InicializarEstudio();
+                //estudioPostulanteModel = actualizarDatos(estudioPostulanteModel, estudioPostulante);
+                //estudioPostulanteModel.Estudio = estudioPostulante;
+                //Mensaje = "ERROR: No se guardo los cambios";
+                //new {msg = success }
+                return Json(new {msj = false },JsonRequestBehavior.DenyGet);
             }
+            estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
             _estudioPostulanteRepository.Add(estudioPostulante);
-            return View("ddafd", JsonRequestBehavior.DenyGet);
+            return Json(new {msj = true}, JsonRequestBehavior.DenyGet);
 
         }
 
@@ -188,11 +144,12 @@
         {
             ActionResult result = null;
 
-            var estudioResultado = new EstudioPostulante();
-            estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudio);
+            var estudioEliminar = new EstudioPostulante();
+            estudioEliminar = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudio);
             int antes = _estudioPostulanteRepository.CountBy();
-            _estudioPostulanteRepository.Remove(estudioResultado);
+            _estudioPostulanteRepository.Remove(estudioEliminar);
             int despues = _estudioPostulanteRepository.CountBy();
+
             return result;
         }
 

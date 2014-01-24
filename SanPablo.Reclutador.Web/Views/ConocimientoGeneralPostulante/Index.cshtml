@@ -1,0 +1,453 @@
+﻿@model SanPablo.Reclutador.Web.Models.ConocimientoPostulanteGeneralViewModel
+@{
+    ViewBag.Title = "Conocimientos";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+
+@section Head{
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jQuery("#grdListOfimatica").jqGrid({
+                url: '@Url.Action("Listar", "ConocimientoGeneralPostulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Código', 'Tipo', 'Descripción', 'Nivel', 'Certificación'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
+                        { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, editable: true, sortable: false }
+                ],
+                sortname: 'IdeConocimientoGeneralPostulante',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdListIdioma").jqGrid({
+                url: '@Url.Action("ListarIdiomas", "ConocimientoGeneralPostulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Código', 'Descripción', 'Tipo Conc.', 'Nivel', 'Certificación'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
+                        { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
+                ],
+                sortname: 'IdeConocimientoGeneralPostulante',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdOtrosConocimientos").jqGrid({
+                url: '@Url.Action("ListarOtrosConocimientos", "ConocimientoGeneralPostulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Código', 'Tipo', 'Descripción', 'Nivel', 'Certificación'],
+                colModel: [
+                        { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
+                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
+                        { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
+                ],
+                sortname: 'IdeConocimientoGeneralPostulante',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 120,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+            $('#updateDialog').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post("/ConocimientoGeneralPostulante/Ofimatica",
+                                $("#ofimaticaForm").serialize(),
+                                function (msj) {
+                                    if (msj) {
+                                        $("#updateDialog").dialog("close");
+                                        location.reload(true);
+
+                                    }
+                                    else {
+                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                    }
+                                }
+                            );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $('#updateDialogIdiomas').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post("/ConocimientoGeneralPostulante/Idiomas",
+                                $("#idiomasForm").serialize(),
+                                function (msj) {
+                                    if (msj) {
+                                        $("#updateDialogIdiomas").dialog("close");
+                                        location.reload(true);
+
+                                    }
+                                    else {
+                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                    }
+                                }
+                            );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#updateDialogOtro').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post("/ConocimientoGeneralPostulante/OtroConocimiento",
+                                $("#otroConocimientoForm").serialize(),
+                                function (msj) {
+                                    if (msj) {
+                                        $("#updateDialogOtro").dialog("close");
+                                        location.reload(true);
+
+                                    }
+                                    else {
+                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                    }
+                                }
+                            );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $('#btnAgregarIdioma').click(function () {
+                mostrarAgregarIdioma();
+            });
+
+            $('#btnAgregarOtro').click(function () {
+                mostrarAgregarOtro();
+            });
+
+            $('#btnAgregar').click(function () {
+                mostrarAgregarOfimatica();
+            });
+
+            $('#btnEditar').click(function () {
+                var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
+                if (ideOfimatica != null) {
+                    mostrarEditarOfimatica(ideOfimatica);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
+            });
+
+            $('#btnEditarIdioma').click(function () {
+                var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
+                if (ideIdioma != null) {
+                    mostrarEditarIdioma(ideIdioma);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
+            });
+           
+            $('#btnEditarOtro').click(function () {
+                var ideOtroConocimiento = jQuery('#grdOtrosConocimientos').jqGrid('getGridParam', 'selrow');
+                if (ideOtroConocimiento != null) {
+                    mostrarEditarOtroConocimiento(ideOtroConocimiento);
+                }
+                else {
+                    alert("Seleccionar un item a editar");
+                }
+            });
+
+            // btn Eliminar
+            $('#btnEliminar').click(function () {
+                var ideConocimiento = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'CONVOCATORIAS SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () {
+                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                        },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            });
+
+            $('#btnEliminarIdioma').click(function () {
+                var ideConocimiento = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'CONVOCATORIAS SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () {
+                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                        },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            });
+
+            $('#btnEliminarOtro').click(function () {
+                var ideConocimiento = jQuery('#grdOtrosConocimientos').jqGrid('getGridParam', 'selrow');
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'CONVOCATORIAS SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () {
+                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                        },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            });
+
+        });
+
+        function mostrarEditarOfimatica(id) {
+            var dialogDiv = $('#updateDialog');
+            $.get("/ConocimientoGeneralPostulante/Ofimatica/" + id, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function mostrarEditarIdioma(id) {
+            var dialogDiv = $('#updateDialogIdiomas');
+            $.get("/ConocimientoGeneralPostulante/Idiomas/" + id, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogIdioma"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function mostrarEditarOtroConocimiento(id) {
+            var dialogDiv = $('#updateDialogOtro');
+            $.get("/ConocimientoGeneralPostulante/OtroConocimiento/" + id, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogOtro"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function eliminarConocimiento(id) {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '@Url.Action("eliminarConocimiento","ConocimientoGeneralPostulante")',
+                data: { ideConocimiento: id },
+            });
+        }
+
+        function mostrarAgregarOfimatica() {
+            var dialogDiv = $('#updateDialog');
+            $.get("/ConocimientoGeneralPostulante/Ofimatica/" + "0", function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function mostrarAgregarIdioma() {
+            var dialogDiv = $('#updateDialogIdiomas');
+            $.get("/ConocimientoGeneralPostulante/Idiomas/" + "0", function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogIdiomas"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function mostrarAgregarOtro() {
+            var dialogDiv = $('#updateDialogOtro');
+            $.get("/ConocimientoGeneralPostulante/OtroConocimiento/" + "0", function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogOtro"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function CheckFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type="checkbox">';
+            return strRdo;
+        }
+
+    </script>
+
+}
+<div class="span12">
+    @Html.Partial("MenuCv")
+</div>
+
+   <div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Conocimientos</h5>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Ofimática</h6>
+                <div class="opciones">
+                    <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditar" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdListOfimatica">
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Idiomas</h6>
+                <div class="opciones">
+                    <a id="btnAgregarIdioma" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditarIdioma" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminarIdioma" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdListIdioma">
+                    </table>
+                    <div id="grdPager2">
+                    </div>
+                </div>
+            </div>
+            <div class="grilla-opciones">
+                <h6>Otros Conocimientos</h6>
+                <div class="opciones">
+                    <a id="btnAgregarOtro" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditarOtro" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminarOtro" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdOtrosConocimientos">
+                    </table>
+                    <div id="grdPagerOtrosConocimientos">
+                    </div>
+                </div>
+            </div>
+            <div class="formulario-accion">
+                <div class="opciones">
+                    <a class="btn" href="@Url.Action("ExperienciaLaboral", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>                    
+                    <a class="btn btn-info" href="@Url.Action("DatosComplementarios", "Postulante")">Siguiente <i class="icon-arrow-right icon-white"></i></a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+</div>
+    <div id="updateDialog" title="Agregar Conocimientos Ofimática"></div>
+    <div id="updateDialogIdiomas" title="Agregar Conocimientos Idiomas"></div>
+    <div id="updateDialogOtro" title="Agregar Otros Conocimientos"></div>
+        <div id="divMensaje">
+            <span id="spanMensaje"></span>
+        </div>
+
+

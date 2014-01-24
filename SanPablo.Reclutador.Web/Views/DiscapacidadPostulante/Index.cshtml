@@ -1,6 +1,6 @@
 ﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
 @{
-    ViewBag.Title = "Estudios";
+    ViewBag.Title = "Discapacidad";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
@@ -11,20 +11,15 @@
 
         $(document).ready(function () {
             jQuery("#grdList").jqGrid({
-                url: '@Url.Action("Listar", "EstudioPostulante")',
+                url: '@Url.Action("Listar", "DiscapacidadPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colNames: ['Tipo de discapacidad', 'Descripcion'],
                 colModel: [
-                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
-                        { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
-                        { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
-                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
-                        { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
-                        { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
-                        { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
+                        { name: 'Tipo de discapacidad', index: 'TipoDiscapacidad', align: 'left', sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
                 ],
-                sortname: 'IdeEstudiosPostulante',
+                sortname: 'IdeDiscapacidadPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
                 autowidth: true,
@@ -48,18 +43,13 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        // now trigger the form validation, result is 1 or 0
                         var result = $('form').valid();
-                        //var errores = $("#estudioPostulanteForm").validate().errorList.length;
-                        //if (errores == 0)
-                        //
                         if (result)
                         {
-                            $.post("/EstudioPostulante/Edit",
-                                $("#estudioPostulanteForm").serialize(),
+                            $.post("/DiscapacidadPostulante/Edit",
+                                $("#discapacidadPostulanteForm").serialize(),
                                 function (msj) {
                                     if (msj) {
-                                        //alert("Se guardo satisfactoriamente");
                                         $("#updateDialog").dialog("close");
                                         location.reload(true);
                                         
@@ -78,13 +68,13 @@
             });
 
             $('#btnAgregar').click(function () {
-                mostrarAgregarEstudios();
+                mostrarAgregarDiscapacidad();
             });
 
             $('#btnEditar').click(function () {
-                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                if (ideEstudio != null) {
-                    mostrarEditarEstudios(ideEstudio);
+                var ideDiscapacidad = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                if (ideDiscapacidad != null) {
+                    mostrarEditarDiscapacidad(ideDiscapacidad);
                 }
                 else {
                     alert("Seleccionar un item a editar");
@@ -93,23 +83,15 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
-                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                ////alert(ideEstudio);
-                //if (ideEstudio != null) {
-                //    eliminarEstudio(ideEstudio);
-                //    location.reload(true);
-                //}
-                //else {
-                //    alert("Seleccionar un item a editar");
-                //}
-
+                var ideDiscapacidad = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+           
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
                 $("#divMensaje").dialog({
                     title: 'CONVOCATORIAS SAN PABLO',
                     modal: true,
                     buttons: {
-                        "Eliminar": function () { eliminarEstudio(ideEstudio); $(this).dialog("close"); location.reload(true)},
+                        "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); location.reload(true) },
                         "Cancel": function () { $(this).dialog("close"); }
                     }
                 });
@@ -119,10 +101,10 @@
 
         });
 
-        function mostrarEditarEstudios(id) {
+        function mostrarEditarDiscapacidad(id) {
             var dialogDiv = $('#updateDialog');
             //var id = parseInt(ideEstudioEdit);
-            $.get("/EstudioPostulante/Edit/"+id, function (data) {
+            $.get("/DiscapacidadPostulante/Edit/"+id, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -130,18 +112,18 @@
             return false;
         }
 
-        function eliminarEstudio(id) {
+        function eliminarDiscapacidad(id) {
             $.ajax({
                 async: false,
                 type: "POST",
-                url: '@Url.Action("eliminarEstudio","EstudioPostulante")',
-                        data: { ideEstudio: id },
+                url: '@Url.Action("eliminarDiscapacidad","DiscapacidadPostulante")',
+                        data: { ideDiscapacidad: id },
                 });
             }
 
-        function mostrarAgregarEstudios() {
+        function mostrarAgregarDiscapacidad() {
             var dialogDiv = $('#updateDialog');
-            $.get("/EstudioPostulante/Edit/"+"0", function (data) {
+            $.get("/DiscapacidadPostulante/Edit/"+"0", function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -187,7 +169,7 @@
         </div>
     </div>
 </div>
-<div id="updateDialog" title="Agregar Estudio"></div>
+<div id="updateDialog" title="Agregar Discapacidad"></div>
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>

@@ -86,11 +86,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controller\ConocimientoGeneralPostulanteControllerTest.cs" />
     <Compile Include="Controller\EstudioPostulanteControllerTest.cs" />
     <Compile Include="Controller\ExperienciaPostulanteControllerTest.cs" />
+    <Compile Include="Controller\ParientePostulanteController.cs" />
     <Compile Include="Controller\SedeControllerTest.cs" />
     <Compile Include="Controller\PostulanteControllerTest.cs" />
+    <Compile Include="Model\ConocimientoGeneralPostulanteValidatorTest.cs" />
     <Compile Include="Model\EstudioPostulanteValidatorTest.cs" />
+    <Compile Include="Model\ParientePostulanteValidator.cs" />
     <Compile Include="Model\PersonaValidatorTest.cs" />
     <Compile Include="Model\SedeValidarTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="Repository\NHibernateHelper.cs" />
     <Compile Include="Repository\EstudioPostulanteRepositoryTest.cs" />
     <Compile Include="Repository\CriterioRepositoryTest.cs" />
+    <Compile Include="Repository\ParientePostulanteRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

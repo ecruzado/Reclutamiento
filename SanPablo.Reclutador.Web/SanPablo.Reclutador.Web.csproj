@@ -151,10 +151,13 @@
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
+    <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
+    <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />
     <Compile Include="Controllers\ExperienciaPostulanteController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ParientePostulanteController.cs" />
     <Compile Include="Controllers\PostulanteController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
@@ -165,12 +168,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConocimientoPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\EstudioPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\ExperienciaPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\GenericDouble.cs" />
     <Compile Include="Models\JQGrid\Filter.cs" />
     <Compile Include="Models\JQGrid\GridTable.cs" />
     <Compile Include="Models\JQGrid\JQgrid.cs" />
+    <Compile Include="Models\DiscapacidadPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\JQGrid\ResponseData.cs" />
     <Compile Include="Models\JQGrid\Row.cs" />
     <Compile Include="Models\JQGrid\Rule.cs" />
@@ -327,8 +332,14 @@
     <Content Include="Views\ExperienciaPostulante\Edit.cshtml" />
     <Content Include="Views\ExperienciaPostulante\Index.cshtml" />
     <Content Include="Scripts\uploadify\uploadify.php" />
-    <Content Include="Views\Parientes\Edit.cshtml" />
-    <Content Include="Views\Parientes\Index.cshtml" />
+    <Content Include="Views\ParientePostulante\Edit.cshtml" />
+    <Content Include="Views\ParientePostulante\Index.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Ofimatica.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Index.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Idiomas.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\OtroConocimiento.cshtml" />
+    <Content Include="Views\DiscapacidadPostulante\Edit.cshtml" />
+    <Content Include="Views\DiscapacidadPostulante\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

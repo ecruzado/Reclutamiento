@@ -26,7 +26,7 @@
                 .NotEmpty()
                 .WithMessage("Ingresar la fecha de inicio de trabajo");
             RuleFor(x => x.FechaTrabajoInicio)
-                .GreaterThan(new DateTime(1950,01,01))
+                .GreaterThan(new DateTime(1900,01,01))
                 .WithMessage("Ingresar una Fecha Inicio válida");
 
             //RuleFor(x => x.FechaTrabajoFin)

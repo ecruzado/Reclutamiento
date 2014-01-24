@@ -51,12 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaRepository.cs" />
+    <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
     <Compile Include="CriterioRepository.cs" />
     <Compile Include="DetalleGeneralRepository.cs" />
+    <Compile Include="DiscapacidadPostulanteRepository.cs" />
     <Compile Include="EstudioPostulanteRepository.cs" />
     <Compile Include="ExperienciaPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
+    <Compile Include="Interface\IDiscapacidadPostulanteRepository.cs" />
     <Compile Include="Interface\IAlternativaRepository.cs" />
+    <Compile Include="Interface\IConocimientoGeneralPostulanteRepository.cs" />
     <Compile Include="Interface\ICriterioRepository.cs" />
     <Compile Include="Interface\IDetalleGeneralRepository.cs" />
     <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
