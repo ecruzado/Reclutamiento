@@ -52,6 +52,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionOtroMedio { get; set; }
         public virtual string TipoComoSeEntero { get; set; }
 
+        public virtual byte[] FotoPostulante { get; set; }
+
         public Postulante()
         {
             Estudios = new List<EstudioPostulante>();

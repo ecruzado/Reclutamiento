@@ -53,6 +53,8 @@
             Map(x => x.TipoComoSeEntero, "TIPCOMOSEENTERO");
             Map(x => x.DescripcionOtroMedio, "DESOTROMEDIO");
 
+            Map(x => x.FotoPostulante, "FOTOPOSTULANTE");
+
             Table("POSTULANTE");
         }
     }

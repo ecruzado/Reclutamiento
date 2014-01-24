@@ -24,6 +24,9 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
                         { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, editable: true, sortable: false }
                 ],
+                pager: jQuery('#grdPager'),
+                rownumbers: true,
+                rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
@@ -54,6 +57,9 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
                         { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
                 ],
+                pager: jQuery('#grdPager2'),
+                rownumbers: true,
+                rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
@@ -84,6 +90,9 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', sortable: false },
                         { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
                 ],
+                pager: jQuery('#grdPager3'),
+                rownumbers: true,
+                rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
@@ -365,7 +374,7 @@
         }
 
         function CheckFormatter(cellvalue, options, rowObject) {
-            var strRdo = '<input type="checkbox">';
+            var strRdo = '<input type="checkbox" disabled="disabled">';
             return strRdo;
         }
 
@@ -429,7 +438,7 @@
                 <div>
                     <table id="grdOtrosConocimientos">
                     </table>
-                    <div id="grdPagerOtrosConocimientos">
+                    <div id="grdPager3">
                     </div>
                 </div>
             </div>

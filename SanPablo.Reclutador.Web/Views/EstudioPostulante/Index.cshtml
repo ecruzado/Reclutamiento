@@ -24,15 +24,20 @@
                         { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
                         { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
                 ],
+                pager: jQuery('#grdPager'),
+                rownumbers: true,
+                rowList: [10, 30, 50],
                 sortname: 'IdeEstudiosPostulante',
                 sortorder: 'desc',
                 viewrecords: true,
-                autowidth: true,
                 height: 300,
                 width: 736,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
+                rules: true,
                 hidegrid: false,
+                autowidth: true,
+                shrinkToFit: false,
                 postData: {
                 },
                 loadComplete: function (data) {
@@ -48,11 +53,7 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        // now trigger the form validation, result is 1 or 0
                         var result = $('form').valid();
-                        //var errores = $("#estudioPostulanteForm").validate().errorList.length;
-                        //if (errores == 0)
-                        //
                         if (result)
                         {
                             $.post("/EstudioPostulante/Edit",
@@ -94,15 +95,6 @@
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                ////alert(ideEstudio);
-                //if (ideEstudio != null) {
-                //    eliminarEstudio(ideEstudio);
-                //    location.reload(true);
-                //}
-                //else {
-                //    alert("Seleccionar un item a editar");
-                //}
-
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
                 $("#divMensaje").dialog({
@@ -116,6 +108,9 @@
 
                 return false;
             });
+
+
+            
 
         });
 

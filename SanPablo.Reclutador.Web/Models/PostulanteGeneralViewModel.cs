@@ -2,6 +2,9 @@
 {
     using SanPablo.Reclutador.Entity;
     using System.Collections.Generic;
+    using System;
+    using System.Linq;
+    using System.Web;
 
     public class PostulanteGeneralViewModel
     {
@@ -23,6 +26,8 @@
         public virtual IList<DetalleGeneral> TipoParientesSedes { get; set; }
 
         public IList<EstudioPostulante> estudiosPostulante { get; set; }
+
+        public HttpPostedFileBase FotoPostulante { get; set; }
 
 
 

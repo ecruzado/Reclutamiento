@@ -3489,6 +3489,9 @@ input[type="button"].btn-block {
   background-color: #408140 \9;
 }
 
+
+
+
 .btn-info {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -6330,3 +6333,5 @@ a.badge:focus {
 .affix {
   position: fixed;
 }
+
+ 

@@ -9,7 +9,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using System.Linq;
-
+    using NHibernate.Criterion;
     public class EstudioPostulanteController : BaseController
     {
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
@@ -36,20 +36,23 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                //var where = (Utils.GetWhere(grid.filters, grid.rules));
-                var where = string.Empty;
+                ////var where = (Utils.GetWhere(grid.filters, grid.rules));
+                //var where = string.Empty;
 
-                if (!string.IsNullOrEmpty(where))
-                {
-                    grid._search = true;
+                //if (!string.IsNullOrEmpty(where))
+                //{
+                //    grid._search = true;
 
-                    if (!string.IsNullOrEmpty(grid.searchString))
-                    {
-                        where = where + " and ";
-                    }
-                }
-                
-                var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                //    if (!string.IsNullOrEmpty(grid.searchString))
+                //    {
+                //        where = where + " and ";
+                //    }
+                //}
+                Session["PostulanteId"] = 11;
+                DetachedCriteria where = DetachedCriteria.For<EstudioPostulante>();
+                where.Add(Expression.Eq( "Postulante", Convert.ToInt32(Session["PostulanteId"])));
+
+                var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
                     .Select(item => new Row

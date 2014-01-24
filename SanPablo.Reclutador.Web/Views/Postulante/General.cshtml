@@ -4,9 +4,17 @@
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
+     <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
 }
 
 @section Scripts{
+
+    
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
 <script>
     //$.validator.addMethod("notequal", function (value, element, param) {
     //    var valorNotEqual = param;
@@ -66,7 +74,34 @@
             });
         })
 
+
+        //MOSTRAR IMAGEN
+        $(function () {
+            $('#FotoPostulante').change(function (e) {
+                addImage(e);
+            });
+
+            function addImage(e) {
+                var file = e.target.files[0],
+                imageType = /image.*/;
+
+                if (!file.type.match(imageType))
+                    return;
+
+                var reader = new FileReader();
+                reader.onload = fileOnload;
+                reader.readAsDataURL(file);
+            }
+
+            function fileOnload(e) {
+                var result = e.target.result;
+                $('#imgSalida').attr("src", result);
+            }
+        });
+
+
   });
+
 
     $(function () {
         $.datepicker.regional['es'] =
@@ -97,8 +132,8 @@
    </div>
     <div class="span12"> 
        
-     @using (Html.BeginForm("General", "Postulante"))
-       { 
+     @using (Html.BeginForm("General", "Postulante", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     { 
 
             <div class="widget-box">
                 <div class="widget-title">
@@ -121,11 +156,12 @@
                             @Html.DropDownListFor(model => model.Postulante.TipoDocumento, new SelectList(Model.TipoDocumentos, "Valor", "Descripcion", Model.Postulante.TipoDocumento))
                             @Html.ValidationMessageFor(model => model.Postulante.TipoDocumento)
                         </td>
-                        <td rowspan="7" colspan="3" style="text-align:center;">
-                            <img src="~/Content/images/user4.png" alt="user" title="user" />
+                        <td rowspan="7" colspan="3" style="text-align:center; width:300px"> 
+                                            
+                            <img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>
                             <br />
-                            <input type="button" class="btn btn-info" value="Subir Foto" />
-                            
+                             @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" })
+                               
                         </td>
                     </tr>
                     <tr>
@@ -188,7 +224,7 @@
                             <label class="etiquetaFormulario" for="senacionalidad">Nacionalidad <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                             @Html.DropDownListFor(model => model.Postulante.TipoNacionalidad , new SelectList(Model.Nacionalidad, "Valor", "Descripcion", Model.Postulante.TipoNacionalidad))
+                             @Html.DropDownListFor(model => model.Postulante.TipoNacionalidad, new SelectList(Model.Nacionalidad, "Valor", "Descripcion", Model.Postulante.TipoNacionalidad))
                         </td>
                     </tr>
                     <tr>
@@ -196,7 +232,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" , @id="fechanacimiento"})
+                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", @id = "fechanacimiento" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
@@ -262,7 +298,7 @@
                             <label class="etiquetaFormulario" for="setipovia">Tipo Vía <span class="text-error">*</span></label>
                         </td>
                         <td id="tipoVias" class="colInput">
-                           @Html.DropDownListFor(model => model.Postulante.TipoVia, new SelectList(Model.TipoVias, "Valor", "Descripcion", Model.Postulante.TipoVia), new {@id="tipoVias" })
+                           @Html.DropDownListFor(model => model.Postulante.TipoVia, new SelectList(Model.TipoVias, "Valor", "Descripcion", Model.Postulante.TipoVia), new { @id = "tipoVias" })
                         </td>
                         
                     </tr>
@@ -272,7 +308,7 @@
                         </td>
                         
                         <td id="Departamentos" class="colInput">
-                            @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos), new {@id="Departamentos" })
+                            @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos), new { @id = "Departamentos" })
 
                         </td>
                       
@@ -289,7 +325,7 @@
                             <label class="etiquetaFormulario" for="seprovincia">Provincia <span class="text-error">*</span></label>
                         </td>
                         <td id="Provincias" class="colInput">
-                              @Html.DropDownListFor(model => model.Provincias ,new SelectList(Model.Provincias,"IdeUbigeo","Nombre",Model.Provincias),new {@id="Provincias" }) 
+                              @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias), new { @id = "Provincias" }) 
                            
                         </td>
                         <td style="width:10px;"></td>
@@ -307,7 +343,7 @@
                             <label class="etiquetaFormulario" for="sedistrito">Distrito <span class="text-error">*</span></label>
                         </td>
                         <td id="Distritos" class="colInput">
-                              @Html.DropDownListFor(model => model.Postulante.IdeUbigeo ,new SelectList(Model.Distritos,"IdeUbigeo","Nombre",Model.Postulante.IdeUbigeo),new {@id="Distritos" }) 
+                              @Html.DropDownListFor(model => model.Postulante.IdeUbigeo, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Postulante.IdeUbigeo), new { @id = "Distritos" }) 
                              <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.IdeUbigeo)
                             </div>
@@ -355,7 +391,7 @@
                             <label class="etiquetaFormulario" for="setipozona">Tipo Zona</label>
                         </td>
                         <td class="colInput">
-                            @Html.DropDownListFor(model => model.Postulante.TipoZona, new SelectList(Model.TipoZonas, "Valor", "Descripcion", Model.TipoZonas), new {@id="tipoZonas" })
+                            @Html.DropDownListFor(model => model.Postulante.TipoZona, new SelectList(Model.TipoZonas, "Valor", "Descripcion", Model.TipoZonas), new { @id = "tipoZonas" })
                         </td>
                     </tr>
                     <tr>
@@ -396,7 +432,26 @@
                 </div>
                 <div style="clear:both"></div>
             </div>
-        }
+     }
     </div>
+</div>
+
+<div id="dlgsubirFoto">
+    <table style="width: 100%">      
+        <tr>
+            <td style="height: 30px; vertical-align: central;">Sólo se permiten archivos con extensión JPG, GIF. Tamaño máximo del archivo 1MB. El archivo debe tener 32px de ancho y 32 px de Largo</td>
+        </tr>
+          <tr>
+            <td style="height: 10px;"></td>
+        </tr> 
+        <tr>
+            <td>
+             @*<input class="input-file" id="fileInput" type="file"></td>*@
+            
+        </tr>
+        <tr>
+            <td style="height: 10px;"></td>
+        </tr>       
+    </table>
 </div>
 
