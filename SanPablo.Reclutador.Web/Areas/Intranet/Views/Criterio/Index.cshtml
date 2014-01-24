@@ -212,20 +212,16 @@
                     </td>
                     <td class="colInput">
                               
-                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))
-		                <div class="tex-error" style="font-size:12px;color:red">          
-                        @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
-                        </div>
+                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { data_val = "false" })
+		               
                     </td>
                      <td style="width:40px;"></td>
                      <td class="colEtiqueta">
                         <label class="etiquetaFormulario" for="selectError">Medición</label>
                      </td>   
                      <td class="colInput">
-                         @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
-		                 <div class="tex-error" style="font-size:12px;color:red">    
-                         @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
-                         </div>
+                         @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { data_val = "false" })
+		                 
                      </td>
                 <tr/>
 
@@ -234,17 +230,15 @@
                     <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
                     </td>
                     <td class="colInput">
-                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" })  
+                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" ,data_val = "false" })  
                     </td>
                     <td style="width:40px;"></td>
                      <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
                      </td>
                      <td class="colInput">
-                         @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo))
-		                 <div class="tex-error" style="font-size:12px;color:red">       
-                         @Html.ValidationMessageFor(model => model.Criterio.IndicadorActivo)
-                         </div>
+                         @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo),new { data_val = "false" })
+		                 
                      </td>
                   </tr>
               

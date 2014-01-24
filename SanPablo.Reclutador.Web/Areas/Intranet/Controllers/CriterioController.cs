@@ -551,7 +551,7 @@
             return null;            
         }
 
-        private CriterioViewModel InicializarCriteriosIndex()
+        public CriterioViewModel InicializarCriteriosIndex()
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Criterio = new Criterio();
@@ -607,7 +607,13 @@
             //_alternativaRepository.Remove(alter);
             return null;
         }
+        
+        
 
+        //PopupListaCriterio
+
+
+        // lista de criterios del popup
         [HttpPost]
         public ActionResult ListaCriterioxSubCategoria(GridTable grid)
         {
@@ -651,18 +657,15 @@
                     id = item.IdeCriterio.ToString(),
                     cell = new string[]
                             {
-                                "1",
+                                "",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
                                 item.TipoModo,
-                                item.TipoCalificacion,
-                                item.FechaCreacion.ToString(),
-                                item.UsuarioCreacion,
-                                item.FechaModificacion.ToString(),
-                                item.UsuarioModificacion
+                                item.TipoCalificacion
+                               
                             }
                 }).ToArray();
 
@@ -675,7 +678,90 @@
             }
         }
 
+/*
+        [HttpPost]
+        public ActionResult PopupListaCriterio(CategoriaViewModel model)
+        {
+            //[Bind(Prefix = "SubCategoria")]SubCategoria
 
+            CategoriaViewModel objCategoriaModel = new CategoriaViewModel();
+            objCategoriaModel.SubCategoria = new SubCategoria();
+            objCategoriaModel.SubCategoria.Categoria = new Categoria();
+            DateTime Hoy = DateTime.Today;
+
+
+            if (model.SubCategoria.IDESUBCATEGORIA != null && model.SubCategoria.IDESUBCATEGORIA > 0)
+            {
+                objCategoriaModel.SubCategoria = _subcategoriaRepository.GetSingle(x => x.IDESUBCATEGORIA == model.SubCategoria.IDESUBCATEGORIA);
+                objCategoriaModel.SubCategoria.FECMODIFICACION = Hoy;
+                objCategoriaModel.SubCategoria.USRMODIFICACION = "Prueba 02";
+                objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
+                objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
+                objCategoriaModel.SubCategoria.Categoria = model.Categoria;
+                _subcategoriaRepository.Update(objCategoriaModel.SubCategoria);
+            }
+            else
+            {
+
+                objCategoriaModel.SubCategoria.FECMODIFICACION = Hoy;
+                objCategoriaModel.SubCategoria.FECCREACION = Hoy;
+                objCategoriaModel.SubCategoria.USRCREACION = "Prueba01";
+                objCategoriaModel.SubCategoria.USRMODIFICACION = "Prueba02";
+                objCategoriaModel.SubCategoria.ORDENIMPRESION = 1;
+                objCategoriaModel.SubCategoria.ESTACTIVO = "A";
+                objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
+                objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
+                objCategoriaModel.SubCategoria.Categoria = model.Categoria;
+
+
+                _subcategoriaRepository.Add(objCategoriaModel.SubCategoria);
+            }
+
+            return View(objCategoriaModel);
+
+        }
+ * */
+        [HttpPost]
+        public ActionResult PopupListaCriterio(CriterioViewModel model)
+        {
+            CriterioViewModel objCriterioModel = new CriterioViewModel();
+            objCriterioModel = InicializarCriteriosIndex();
+
+            objCriterioModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+            objCriterioModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            objCriterioModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+            objCriterioModel.Criterio.Pregunta = model.Criterio.Pregunta;
+
+            return View(objCriterioModel);
+        }
+
+        public ViewResult PopupListaCriterio(int id, string idSubCategoria)
+        {
+            try
+            {
+                CriterioViewModel objCriterioModel = new CriterioViewModel();
+                objCriterioModel = InicializarCriteriosIndex();
+                objCriterioModel.CriterioPorSubcategoria = new CriterioPorSubcategoria();
+                objCriterioModel.CriterioPorSubcategoria.IDESUBCATEGORIA = Convert.ToInt32(idSubCategoria);
+                
+                return View(objCriterioModel);
+                
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                MensajeError();
+                return null;
+            }
+           
+
+        }
+
+        [HttpPost]
+        public ActionResult Test(List<int> test)
+        {
+            return null;
+        }
        
     }
 }

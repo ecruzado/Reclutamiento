@@ -19,20 +19,39 @@
 
         $('#btnAgregarSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
-           
+            
             if (codigoCategoria != null && codigoCategoria > 0) {
                 mostrarAgregar(codigoCategoria, 0);
+            } else {
+                MostrarMensaje('Ingrese una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                
             }
+
 
         });
 
 
         $('#btnAgregarCriterio').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
-
-            if (codigoCategoria != null && codigoCategoria > 0) {
-                mostrarCriterios(codigoCategoria, 0);
+            var codigoSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            
+            if (codigoCategoria == null && codigoCategoria <= 0) {
+                MostrarMensaje('Ingrese una categorría', "Sistema de Reclutamiento Y Seleccion de Personal");
+                return;
             }
+
+            if (codigoSub == null) {
+                MostrarMensaje('Seleccione una subcategoría', "Sistema de Reclutamiento Y Seleccion de Personal");
+                return;
+            }
+
+            if (codigoSub <= 0) {
+                MostrarMensaje('Seleccione una subcategoría', "Sistema de Reclutamiento Y Seleccion de Personal");
+                return;
+            }
+            
+
+            mostrarCriterios(codigoCategoria, codigoSub);
 
         });
         
@@ -67,23 +86,21 @@
 
         $('#criterioDialog').dialog({
             autoOpen: false,
-            width: 600,
-            height: 300,
+            width: 850,
+            height: 700,
             resizable: false,
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $.post("/Intranet/Criterio/PopupCriterio",
-                    $("#frmPopupCriterio").serialize(),
-                        function (data) {
-                            $("#criterioDialog").html(data);
-                           // $('#grdList').trigger('reloadGrid');
-                            //$(this).data('bob').text($(this).find("textarea").val();
-                            //$('#grdList').trigger('reloadGrid');
-                            // $("#updateDialog").dialog("close");
-                            //$(data).find(".dfdf");
+                    $.ajax({
+                        data: { test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow') },
+                        type: "POST",
+                        url: "/Intranet/Criterio/Test",
+                        traditional: true,
+                        success: function(){
+                            
                         }
-                    );
+                    });
 
                 },
                 "Cancelar": function () {
@@ -92,7 +109,7 @@
             }
         });
 
-
+       
 
 
         jQuery("#grdList").jqGrid({
@@ -178,12 +195,14 @@
 
 
         jQuery("#grdListCriterio").jqGrid({
-            url: '@Url.Action("ListaCriterio", "Categoria")',
+            url: '@Url.Action("ListaCriterioxSub", "Categoria")' + '?idSub=' + jQuery('#grdList').jqGrid('getGridParam', 'selrow'),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Codigo', 'Pregunta', 'Ptje.Max', 'Orden de impresión', 'Calificaci&oacute;n'],
+            colNames: ['','','', 'Pregunta', 'Ptje.Max', 'Orden de impresión', 'Calificaci&oacute;n'],
             colModel: [
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
+                    { name: 'CodigoSub', index: 'CodigoSub', align: 'center', width: 50, sortable: false, hidden: true },
+                    { name: 'CodigoCrit', index: 'CodigoCrit', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false },
                     { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 60, sortable: false },
                     { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 50, sortable: false },
@@ -192,12 +211,12 @@
             /*pager: jQuery('#grdPager'),
             rowNum: 10,
             rowList: [10, 30, 50],*/
-            sortname: 'Codigo',
+            sortname: 'IDECRITERIOXSUBCATEGORIA',
             sortorder: 'desc',
             viewrecords: true,
             autowidth: true,
             /*caption: 'Lista Referencias',*/
-            height: 120,
+            height: 100,
             width: 736,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -210,7 +229,7 @@
             }
         });
 
-        jQuery("#grdListAlternativa").jqGrid({
+      jQuery("#grdListAlternativa").jqGrid({
             url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
             datatype: 'json',
             mtype: 'POST',
@@ -237,7 +256,7 @@
 
             }
         });
-
+    
     }); // Fin - $(document).ready
 
     function RadioFormatter(cellvalue, options, rowObject) {
@@ -275,15 +294,17 @@
 
     function mostrarCriterios(id, idSubCategoria) {
         var dialogDiv = $('#criterioDialog');
-        $.get("/Intranet/Criterio/PopupCriterio/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        $.get("/Intranet/Criterio/PopupListaCriterio/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
             dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialog"));
+            $.validator.unobtrusive.parse($("#criterioDialog"));
             dialogDiv.dialog('open');
         });
         return false;
     }
    
-
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
 
 
 
@@ -445,7 +466,8 @@
                 <table id="grdListCriterio">
                 </table>
             </div>
-
+            }
+            @if (Grilla.Tabla2.Equals("S")){
             <div class="grilla-opciones">
                 <h6>Alternativas</h6>
                 <div class="opciones">
@@ -469,3 +491,7 @@
 }
 <div id="updateDialog" title="Agregar SubCategoria"></div>
 <div id="criterioDialog" title="Buscar Criterio"></div>
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>

@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public Criterio Criterio { get; set; }
         public virtual string IndVisual { get; set; }
         public Alternativa Alternativa { get; set; }
+        public CriterioPorSubcategoria CriterioPorSubcategoria { get; set; }
         public virtual List<DetalleGeneral> TipoCriterio { get; set; }
         public virtual List<DetalleGeneral> Medicion { get; set; }
         public virtual List<DetalleGeneral> Estado { get; set; }
