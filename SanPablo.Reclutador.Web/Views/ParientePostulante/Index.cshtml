@@ -1,6 +1,6 @@
-﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
+﻿@model SanPablo.Reclutador.Web.Models.ParientePostulanteGeneralViewModel
 @{
-    ViewBag.Title = "Estudios";
+    ViewBag.Title = "Parientes";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
@@ -11,20 +11,18 @@
 
         $(document).ready(function () {
             jQuery("#grdList").jqGrid({
-                url: '@Url.Action("Listar", "EstudioPostulante")',
+                url: '@Url.Action("Listar", "ParientePostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colNames: ['Apellido Paterno', 'Apellido Materno', 'Nombres', 'Vínculo', 'Fecha Nac.'],
                 colModel: [
-                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
-                        { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
-                        { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
-                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
-                        { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
-                        { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
-                        { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
+                        { name: 'ApellidoPaterno', index: 'ApellidoPaterno', align: 'left', sortable: false },
+                        { name: 'ApellidoMaterno', index: 'ApellidoMaterno', align: 'left', sortable: false },
+                        { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false },
+                        { name: 'Vinculo', index: 'Vinculo', align: 'left', sortable: false },
+                        { name: 'Fecha Nac.', index: 'Fecha Nac.', align: 'left', sortable: false },
                 ],
-                sortname: 'IdeEstudiosPostulante',
+                sortname: 'IdeParientePostulante',
                 sortorder: 'desc',
                 viewrecords: true,
                 autowidth: true,
@@ -48,25 +46,19 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        // now trigger the form validation, result is 1 or 0
                         var result = $('form').valid();
-                        //var errores = $("#estudioPostulanteForm").validate().errorList.length;
-                        //if (errores == 0)
-                        //
-                        if (result)
-                        {
-                            $.post("/EstudioPostulante/Edit",
-                                $("#estudioPostulanteForm").serialize(),
+                        if (result) {
+                            $.post("/ParientePostulante/Edit",
+                                $("#parientePostulanteForm").serialize(),
                                 function (msj) {
                                     if (msj) {
-                                        //alert("Se guardo satisfactoriamente");
                                         $("#updateDialog").dialog("close");
                                         location.reload(true);
-                                        
+
                                     }
                                     else {
-                                            alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
-                                         }
+                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                    }
                                 }
                             );
                         }
@@ -78,13 +70,13 @@
             });
 
             $('#btnAgregar').click(function () {
-                mostrarAgregarEstudios();
+                mostrarAgregarPariente();
             });
 
             $('#btnEditar').click(function () {
-                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                if (ideEstudio != null) {
-                    mostrarEditarEstudios(ideEstudio);
+                var idePariente = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                if (idePariente != null) {
+                    mostrarEditarPariente(idePariente);
                 }
                 else {
                     alert("Seleccionar un item a editar");
@@ -93,15 +85,7 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
-                var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                ////alert(ideEstudio);
-                //if (ideEstudio != null) {
-                //    eliminarEstudio(ideEstudio);
-                //    location.reload(true);
-                //}
-                //else {
-                //    alert("Seleccionar un item a editar");
-                //}
+                var idePariente = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
 
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
@@ -109,7 +93,7 @@
                     title: 'CONVOCATORIAS SAN PABLO',
                     modal: true,
                     buttons: {
-                        "Eliminar": function () { eliminarEstudio(ideEstudio); $(this).dialog("close"); location.reload(true)},
+                        "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
                         "Cancel": function () { $(this).dialog("close"); }
                     }
                 });
@@ -119,10 +103,10 @@
 
         });
 
-        function mostrarEditarEstudios(id) {
+        function mostrarEditarPariente(id) {
             var dialogDiv = $('#updateDialog');
             //var id = parseInt(ideEstudioEdit);
-            $.get("/EstudioPostulante/Edit/"+id, function (data) {
+            $.get("/ParientePostulante/Edit/" + id, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -130,25 +114,24 @@
             return false;
         }
 
-        function eliminarEstudio(id) {
+        function eliminarPariente(id) {
             $.ajax({
                 async: false,
                 type: "POST",
-                url: '@Url.Action("eliminarEstudio","EstudioPostulante")',
-                        data: { ideEstudio: id },
-                });
-            }
+                url: '@Url.Action("eliminarPariente","ParientePostulante")',
+                data: { idePariente: id },
+            });
+        }
 
-        function mostrarAgregarEstudios() {
+        function mostrarAgregarPariente() {
             var dialogDiv = $('#updateDialog');
-            $.get("/EstudioPostulante/Edit/"+"0", function (data) {
+            $.get("/ParientePostulante/Edit/" + "0", function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
             });
             return false;
         }
-
     </script>
 }
 <div class="span12">
@@ -159,7 +142,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Nivel Académico</h5>
+                <h5>Parientes</h5>
             </div>
             <div class="grilla-opciones">
                 <div class="opciones">
@@ -187,8 +170,8 @@
         </div>
     </div>
 </div>
-<div id="updateDialog" title="Agregar Estudio"></div>
-    <div id="divMensaje">
+<div id="updateDialog" title="Agregar Datos Pariente"></div>
+ <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>
 

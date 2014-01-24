@@ -1,0 +1,35 @@
+﻿@model SanPablo.Reclutador.Web.Models.DiscapacidadPostulanteGeneralViewModel
+@{
+    Layout = "";
+}
+
+@using (Html.BeginForm("Edit", "DiscapacidadPostulante", FormMethod.Post, new { @id = "discapacidadPostulanteForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Discapacidad <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Discapacidad.TipoDiscapacidad, new SelectList(Model.TipoDiscapacidades, "Valor", "Descripcion", Model.Discapacidad.TipoDiscapacidad))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Descripción <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                    @Html.TextBoxFor(model => model.Discapacidad.DescripcionDiscapacidad)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Discapacidad.DescripcionDiscapacidad )
+                </div>
+            </td>
+        </tr> 
+       
+        </table>
+}

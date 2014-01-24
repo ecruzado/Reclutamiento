@@ -51,7 +51,7 @@
                 dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
                 dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
                 dateFormat: 'dd/mm/yy', firstDay: 0,
-                initStatus: 'Selecciona la fecha', isRTL: false
+                initStatus: 'Selecciona la fecha', isRTL: true
             };
             $.datepicker.setDefaults($.datepicker.regional['es']);
             $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
@@ -89,9 +89,9 @@
                 <label class="etiquetaFormulario"> Otro </label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Experiencia.TipoCargoTrabajo, new { @id="NombreCargo_otro",@disabled = "disabled"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id="NombreCargo_otro",@disabled = "disabled"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                    @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
+                    @Html.ValidationMessageFor(model => model.Experiencia.NombreCargoTrabajo )
                 </div>
             </td>
         </tr>
@@ -100,7 +100,7 @@
                 <label class="etiquetaFormulario" > Fecha Inicio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoInicio, new { @id = "fechaTrabajoInicio"})
+                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker", @id = "fechaTrabajoInicio"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
                 </div>
@@ -111,7 +111,7 @@
                 <label class="etiquetaFormulario" > Fecha Fin </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoFin, new { @id = "fechaTrabajoFin"})
+                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker", @id = "fechaTrabajoFin"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
                 </div>
@@ -169,7 +169,7 @@
             <td class="colInput" >
                 @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajoReferente, new SelectList(Model.TipoCargosReferente, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajoReferente))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                    @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
+                    @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajoReferente)
                 </div>
             </td>
         </tr>
@@ -178,9 +178,21 @@
                 <label class="etiquetaFormulario" > Celular de Referencia  </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia)
+                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia, new { @value =""})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
+                </div>
+            </td>
+            
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" > Correo de Referencia  </label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.Experiencia.CorreoReferente)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.CorreoReferente)
                 </div>
             </td>
             

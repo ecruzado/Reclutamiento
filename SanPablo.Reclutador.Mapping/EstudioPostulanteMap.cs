@@ -21,6 +21,7 @@
             Map(x => x.FechaEstudioInicio, "FECESTUDIOINICIO");
             Map(x => x.FechaEstudioFin, "FECESTUDIOFIN");
             Map(x => x.IndicadorActualmenteEstudiando, "INDESTACTUALMENTE");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
             Table("ESTUDIOS_POSTULANTE");
         }
     }

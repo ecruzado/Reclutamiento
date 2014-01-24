@@ -2,6 +2,7 @@
 {
     public enum TipoTabla:int
     {
+        //GENERAL
         TipoVia = 9,
         TipoZona = 10,
         EstadoCivil = 8,
@@ -14,21 +15,45 @@
         TipoParienteSede = 100,
         TipoSalario = 11,
         TipoInstitucion = 17,
+
+        //ESTUDIOS
         TipoNombreUnivesidad = 18,
         TipoNombreInstituto = 22,
         TipoNombreColegio = 23,
         TipoArea = 19,
         TipoEducacion = 20,
         NivelAlcanzado = 21,
-        TipoCargo = 17,
-        TipoMotivoCese = 18,
+
+        //EXPERIENCIA
+        TipoCargo = 24,
+        TipoMotivoCese = 25,
         TipoCargoReferente = 19,
+
+        //CONOCIMIENTOS GENERALES
+        TipoConocimientoOfimatica = 27,
+        TiponombreOfimatica = 28,
+        TipoNivelConocimiento = 29,
+        TipoIdioma = 30,
+        TipoConocimientoIdioma=31,
+        TipoConocimientoGral =32,
+        TipoCGSoftware = 33,
+        TipoCGPrimerosAux =34,
+        TipoCGContabilidad = 35,
+
+        //PARIENTE
+        TipoVinculo = 36,
+
+        //DISCAPACIDAD
+        TipoDiscapacidad = 37,
+
         TipoCriterio = 1,
         Medicion = 2,
         EstadoMant = 3,
         Modo=4,
         TipoCalificacion = 5,
         TipoCategoria = 1
+
+
     }
 
     public sealed class IndicadorActivo

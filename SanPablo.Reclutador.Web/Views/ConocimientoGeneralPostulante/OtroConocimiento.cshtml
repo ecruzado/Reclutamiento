@@ -1,0 +1,91 @@
+﻿@model SanPablo.Reclutador.Web.Models.ConocimientoPostulanteGeneralViewModel
+@{
+    Layout = "";
+}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            //ELEGIR EL TIPO DE CONOCIMIENTO
+            $('select#tipoConocimientoGral').change(function () {
+                var tipoConocimiento = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("listarNombreConocimiento","ConocimientoGeneralPostulante")',
+                    data: { tipoConocimiento: tipoConocimiento },
+                    success: function (respuesta) {
+                        $("select#nombreConocimiento").empty();
+                        $("select#nombreConocimiento").append("<option value='00'> Seleccionar </option>");
+                        $.each(respuesta, function (i, items) {
+                            $("select#nombreConocimiento").append("<option value='"
+                            + items.Valor + "'>" + items.Descripcion + "</option>");
+                        }
+                        );
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            })
+        });
+           
+
+    </script>
+@using (Html.BeginForm("OtroConocimiento", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "otroConocimientoForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoConocimientoGeneral, new SelectList(Model.TipoConocimientoGenerales, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoConocimientoGeneral), new { @id="tipoConocimientoGral"})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoConocimientoGeneral)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario">Descripcion <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                    @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoNombreConocimientoGeneral, new SelectList(Model.TipoNombresConocimientosGrales, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoNombreConocimientoGeneral), new { @id = "nombreConocimiento"})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoNombreConocimientoGeneral)
+                </div>
+            </td>
+        </tr> 
+         <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario">Otro </label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @id="nombreOtroConocimiento", @disabled="disabled"})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral)
+                </div>
+            </td>
+        </tr> 
+
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario"> Nivel <span class="text-error">*</span></label>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoNivelConocimiento, new SelectList(Model.TipoNivelesConocimiento, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoNivelConocimiento))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoNivelConocimiento )
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" > Certificación </label>
+            </td>
+            <td class="colInput">
+              @Html.CheckBoxFor(model => model.ConocimientoGeneral.Certificacion)
+        </tr>
+        </table>
+}

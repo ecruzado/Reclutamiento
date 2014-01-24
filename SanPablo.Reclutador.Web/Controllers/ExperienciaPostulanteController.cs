@@ -26,55 +26,6 @@
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult ListaExperiencia(string sidx, string sord, int page, int rows)
-        //{
-        //    ActionResult result = null;
-        //    List<object> lstFilas = new List<object>();
-
-        //    var fila1 = new
-        //    {
-        //        id = 1,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila
-        //                  "Universidad",
-        //                  "Universidad de Lima",
-        //                  "Administración",                          
-        //                  "Pregrado",
-        //                  "Completa",
-        //                  "Ene/2005",
-        //                  "Dic/2010",
-        //        }
-        //    };
-        //    lstFilas.Add(fila1);
-
-        //    var fila2 = new
-        //    {
-        //        id = 2,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila
-        //                  "Colegio",
-        //                  "Colegio la Recoleta",
-        //                  "",                          
-        //                  "Secundaria",
-        //                  "Completa",
-        //                  "Ene/2008",
-        //                  "Dic/2012",                    
-        //        }
-        //    };
-        //    lstFilas.Add(fila2);
-
-        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-        //    var data = new
-        //    {
-        //        //total = totalPag,       // Total de páginas
-        //        //page = page,            // Página actual
-        //        //records = totalReg,     // Total de registros (obtenido del modelo)
-        //        rows = lstFilas
-        //    };
-        //    result = Json(data);
-
-        //    return result;
-        //}
-
         [HttpPost]
         public virtual JsonResult Listar(GridTable grid)
         {
@@ -148,31 +99,33 @@
         }
 
         [HttpPost]
-        public ViewResult Edit([Bind(Prefix = "Experiencia")]ExperienciaPostulante experienciaPostulante)
+        public JsonResult Edit([Bind(Prefix = "Experiencia")]ExperienciaPostulante experienciaPostulante)
         {
 
             if (!ModelState.IsValid)
             {
-                var experienciaPostulanteModel = InicializarExperiencia();
-                experienciaPostulanteModel.Experiencia = experienciaPostulante;
-                return View(experienciaPostulanteModel);
+                //var experienciaPostulanteModel = InicializarExperiencia();
+                //experienciaPostulanteModel.Experiencia = experienciaPostulante;
+                //return View(experienciaPostulanteModel);
+                return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
             }
+            experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
             _experienciaPostulanteRepository.Add(experienciaPostulante);
-            return View("ddafd", JsonRequestBehavior.DenyGet);
-
+            return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
         }
 
         public ExperienciaPostulanteGeneralViewModel InicializarExperiencia()
         {
             var experienciaPostulanteGeneralViewModel = new ExperienciaPostulanteGeneralViewModel();
             experienciaPostulanteGeneralViewModel.Experiencia = new ExperienciaPostulante();
+            
             experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
             experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             experienciaPostulanteGeneralViewModel.TipoMotivosCese = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoMotivoCese));
             experienciaPostulanteGeneralViewModel.TipoMotivosCese.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            experienciaPostulanteGeneralViewModel.TipoCargosReferente = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
+            experienciaPostulanteGeneralViewModel.TipoCargosReferente = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
             experienciaPostulanteGeneralViewModel.TipoCargosReferente.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             return experienciaPostulanteGeneralViewModel;

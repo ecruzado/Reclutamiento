@@ -53,8 +53,10 @@
   <ItemGroup>
     <Compile Include="AlternativaMap.cs" />
     <Compile Include="CategoriaMap.cs" />
+    <Compile Include="ConocimientoGeneralPostulanteMap.cs" />
     <Compile Include="CriterioMap.cs" />
     <Compile Include="DetalleGeneralMap.cs" />
+    <Compile Include="DiscapacidadPostulanteMap.cs" />
     <Compile Include="EstudioPostulanteMap.cs" />
     <Compile Include="ExperienciaPostulanteMap.cs" />
     <Compile Include="GeneralMap.cs" />

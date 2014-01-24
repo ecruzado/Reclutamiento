@@ -7,7 +7,7 @@
     {
         public ParientesPostulanteMap()
         {
-            Id(m => m.IdeParientesPostulante, "IDEPARIENTESPOSTULANTE")
+            Id(m => m.IdeParientePostulante, "IDEPARIENTESPOSTULANTE")
                 .GeneratedBy
                 .Sequence("IDEPARIENTESPOSTULANTE_SQ");
             References(x => x.Postulante, "IDEPOSTULANTE");
@@ -17,6 +17,7 @@
             Map(x => x.Nombres, "NOMBRES");
             Map(x => x.TipoDeVinculo, "TIPVINCULO");
             Map(x => x.FechaNacimiento, "FECNACIMIENTO");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
             Table("PARIENTES_POSTULANTE");
         }
     }

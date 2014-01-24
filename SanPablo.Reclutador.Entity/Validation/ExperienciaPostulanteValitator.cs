@@ -18,11 +18,15 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar el cargo que desempeñaba");
 
+            RuleFor(x => x.NombreCargoTrabajo)
+                .Length(10,50)
+                .WithMessage("Ingresar un cargo con longitud entre 10 y 50c caracteres");
+
             RuleFor(x => x.FechaTrabajoInicio)
                 .NotEmpty()
                 .WithMessage("Ingresar la fecha de inicio de trabajo");
             RuleFor(x => x.FechaTrabajoInicio)
-                .GreaterThan(new DateTime(1950,01,01))
+                .GreaterThan(new DateTime(1900,01,01))
                 .WithMessage("Ingresar una Fecha Inicio válida");
 
             //RuleFor(x => x.FechaTrabajoFin)
@@ -40,18 +44,21 @@
             RuleFor(x => x.NumeroFijoInstitucionReferente)
                 .NotEmpty()
                 .WithMessage("Ingresar telefono fijo de la institucion");
-
             RuleFor(x => x.NumeroFijoInstitucionReferente)
-                .InclusiveBetween(0, 999999999)
+                .InclusiveBetween(100000, 999999999)
                 .WithMessage("Ingresar telefono fijo válido");
 
             RuleFor(x => x.NumeroMovilReferencia)
-                .InclusiveBetween(0, 999999999)
+                .InclusiveBetween(900000000, 999999999)
                 .WithMessage("Ingresar telefono movil válido");
 
             RuleFor(x => x.NumeroAnexoInstitucionReferente)
-               .InclusiveBetween(0, 999999)
+               .InclusiveBetween(1, 999999)
                .WithMessage("Ingresar anexo válido");
+
+            RuleFor(x => x.CorreoReferente)
+                .EmailAddress()
+                .WithMessage("Ingresar un correo válido");
 
         }
     }

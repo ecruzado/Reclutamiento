@@ -43,6 +43,14 @@
             builder.RegisterType<ParientePostulanteRepository>()
                 .As<IParientePostulanteRepository>();
 
+            builder.RegisterType<ConocimientoGeneralPostulanteRepository>()
+                .As<IConocimientoGeneralPostulanteRepository>();
+
+            builder.RegisterType<ParientePostulanteRepository>()
+                .As<IParientePostulanteRepository>();
+
+            builder.RegisterType<DiscapacidadPostulanteRepository>()
+                .As<IDiscapacidadPostulanteRepository>();
         }
     }
 }

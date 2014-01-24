@@ -16,19 +16,20 @@
     @Html.MenuItem("1. Datos", "General", "Postulante")
     @Html.MenuItem("2. Estudios", "Index", "EstudioPostulante")
     @Html.MenuItem("3. Experiencia", "Index", "ExperienciaPostulante")
-    @Html.MenuItem("4. Conocimientos", "Conocimientos", "Postulante")
+    @Html.MenuItem("4. Conocimientos", "Index", "ConocimientoGeneralPostulante")
 @*    @Html.MenuItem("Referencias", "Referencias", "Postulante")*@
     @Html.MenuItem("5. Complementarios", "DatosComplementarios", "Postulante")
-    @Html.MenuItem("6. Parientes", "Parientes", "Postulante")
-    @Html.MenuItem("7. Discapacidad", "DiscapacidadOtros", "Postulante")
+    @Html.MenuItem("6. Parientes", "Index", "ParientePostulante")
+    @Html.MenuItem("7. Discapacidad", "Index", "DiscapacidadPostulante")
 @*    @Html.MenuItem("Reclutamientos", "Reclutamientos", "Postulante")*@
 </ul>
 <script>
 
-    function barraProgreso(porcentaje) {
+    function ActualizarDatos(porcentaje) {
         //var porcentaje = '25%';
         var progresso = 'Tu CV esta completo al ' + porcentaje;
         document.getElementById("progressBar").style.width = porcentaje;
         document.getElementById("progreso").firstChild.nodeValue = progresso;
+        document.getElementById("#checkInfo").style.visibility = true;
     }
 </script>

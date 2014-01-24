@@ -1,0 +1,57 @@
+﻿@model SanPablo.Reclutador.Web.Models.ConocimientoPostulanteGeneralViewModel
+@{
+    Layout = "";
+}
+    <script type="text/javascript">
+
+           
+
+    </script>
+@using (Html.BeginForm("Idiomas", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "idiomasForm" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+         <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Descripcion <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                    @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoIdioma, new SelectList(Model.TipoIdiomas, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoIdioma))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoIdioma )
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoConocimientoIdioma, new SelectList(Model.TipoConocimientoIdiomas, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoConocimientoIdioma))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoConocimientoIdioma)
+                </div>
+            </td>
+        </tr>
+ 
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario"> Nivel <span class="text-error">*</span></label>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoNivelConocimiento, new SelectList(Model.TipoNivelesConocimiento, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoNivelConocimiento))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.ConocimientoGeneral.TipoNivelConocimiento )
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" > Certificación </label>
+            </td>
+            <td class="colInput">
+              @Html.CheckBoxFor(model => model.ConocimientoGeneral.Certificacion)
+        </tr>
+        </table>
+}
