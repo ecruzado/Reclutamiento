@@ -9,7 +9,8 @@ namespace SanPablo.Reclutador.Entity.Validation
     {
         public AlternativaValidator()
         {
-           
+
+
             RuleFor(x => x.NombreAlternativa)
                 .NotEmpty()
                 .WithMessage("Ingresar nombre alternativa");

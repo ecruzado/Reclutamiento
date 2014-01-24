@@ -7,13 +7,21 @@ namespace SanPablo.Reclutador.Entity
 {
     public class SubCategoria : BaseEntity
     {
-        public virtual int CodigoSubCategoria { get; set; }
+        public virtual int IDESUBCATEGORIA { get; set; }
         public virtual Categoria Categoria { get; set; }
-        public virtual string NombreSubCategoria { get; set; }
-        public virtual string DescripcionSubCategoria { get; set; }
-        public virtual string EstadoRegistro { get; set; }
+        public virtual int ORDENIMPRESION { get; set; }
+        public virtual string NOMSUBCATEGORIA { get; set; }
+        public virtual string DESCSUBCATEGORIA { get; set; }
+        public virtual string ESTACTIVO { get; set; }
+        public virtual string USRCREACION { get; set; }
+        public virtual DateTime FECCREACION { get; set; }
+        public virtual string USRMODIFICACION { get; set; }
+        public virtual DateTime FECMODIFICACION { get; set; }
         public virtual IList<Criterio> Criterios { get; set; }
 
+
+
+        
         public SubCategoria()
         {
             Criterios = new List<Criterio>();

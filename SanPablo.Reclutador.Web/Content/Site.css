@@ -18,6 +18,8 @@
     border-bottom: 1px solid #e5e5e5;
 }
 
+
+
 .input-xmini {
   width: 40px;
 }
@@ -120,8 +122,11 @@
 }
 
 .form-actions {
-    text-align:center;
+    text-align:right;
 }
+
+
+
 
 .formulario-accion {
     display:block;

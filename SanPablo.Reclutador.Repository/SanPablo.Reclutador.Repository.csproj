@@ -70,6 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Interface\ISedeRepository.cs" />
+    <Compile Include="Interface\ISubcategoriaRepository.cs" />
     <Compile Include="Interface\IUbigeoRepository.cs" />
     <Compile Include="ParientePostulanteRepository.cs" />
     <Compile Include="PostulanteRepository.cs" />
@@ -78,6 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SedeRepository.cs" />
+    <Compile Include="SubcategoriaRepository.cs" />
     <Compile Include="UbigeoRepository.cs" />
   </ItemGroup>
   <ItemGroup>

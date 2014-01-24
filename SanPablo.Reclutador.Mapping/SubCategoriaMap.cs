@@ -1,22 +1,26 @@
 ﻿namespace SanPablo.Reclutador.Web.Repository.Mapping
 {
     using FluentNHibernate.Mapping;
-    using SanPablo.Reclutador.Web.Entity;
+    using SanPablo.Reclutador.Entity;
 
     public class SubCategoriaMap : ClassMap<SubCategoria>
     {
         public SubCategoriaMap()
         {
-            Id(m => m.CodigoSubCategoria, "IDESUBCATEGORIA");
-            References(x => x.Categoria).Column("IDECATEGORIA");
-            Map(x => x.NombreSubCategoria, "NOMBRE");
-            Map(x => x.DescripcionSubCategoria, "DESCRIPCION");
-            Map(x => x.EstadoRegistro, "ESTREGISTRO");
-            HasManyToMany(x => x.Criterios)
-                .Cascade.All()
-                .Inverse()
-                .Table("CRITERIO_X_SUBCATEGORIA");
+            Id(m => m.IDESUBCATEGORIA, "IDESUBCATEGORIA")
+                .GeneratedBy
+                .Sequence("IDESUBCATEGORIA_SQ");
+            References(m => m.Categoria, "IDECATEGORIA");
+            Map(x => x.ORDENIMPRESION,   "ORDENIMPRESION");
+            Map(x => x.NOMSUBCATEGORIA,  "NOMSUBCATEGORIA");
+            Map(x => x.DESCSUBCATEGORIA, "DESCSUBCATEGORIA");
+            Map(x => x.ESTACTIVO,        "ESTACTIVO");
+            Map(x => x.USRCREACION,      "USRCREACION");
+            Map(x => x.FECCREACION,      "FECCREACION");
+            Map(x => x.USRMODIFICACION,  "USRMODIFICACION");
+            Map(x => x.FECMODIFICACION,  "FECMODIFICACION");
             Table("SUBCATEGORIA");
+           
         }
     }
 }

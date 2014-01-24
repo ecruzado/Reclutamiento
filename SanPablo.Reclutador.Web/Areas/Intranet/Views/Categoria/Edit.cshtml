@@ -16,35 +16,117 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+
+        $('#btnAgregarSubCategoria').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+           
+            if (codigoCategoria != null && codigoCategoria > 0) {
+                mostrarAgregar(codigoCategoria, 0);
+            }
+
+        });
+
+
+        $('#btnAgregarCriterio').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+
+            if (codigoCategoria != null && codigoCategoria > 0) {
+                mostrarCriterios(codigoCategoria, 0);
+            }
+
+        });
+        
+
+        $('#updateDialog').dialog({
+            autoOpen: false,
+            width: 600,
+            height: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function () {
+                    $.post("/Intranet/Categoria/PopupSubCategoria",
+                    $("#frmPopupSubCategoria").serialize(),
+                        function (data) {
+                            $("#updateDialog").html(data);
+                            $('#grdList').trigger('reloadGrid');
+                            //$(this).data('bob').text($(this).find("textarea").val();
+                            //$('#grdList').trigger('reloadGrid');
+                           // $("#updateDialog").dialog("close");
+                            //$(data).find(".dfdf");
+                        }
+                    );
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+        $('#criterioDialog').dialog({
+            autoOpen: false,
+            width: 600,
+            height: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function () {
+                    $.post("/Intranet/Criterio/PopupCriterio",
+                    $("#frmPopupCriterio").serialize(),
+                        function (data) {
+                            $("#criterioDialog").html(data);
+                           // $('#grdList').trigger('reloadGrid');
+                            //$(this).data('bob').text($(this).find("textarea").val();
+                            //$('#grdList').trigger('reloadGrid');
+                            // $("#updateDialog").dialog("close");
+                            //$(data).find(".dfdf");
+                        }
+                    );
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaSubCategoria", "Categoria")',
+            url: '@Url.Action("ListaSubCategoria", "Categoria")' + '?idCategoria=' + $("#Categoria_IDECATEGORIA").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Codigo', 'Nombre', 'Descripci&oacuten', 'Orden de impresión', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'center', sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
-                    { name: 'Prioridad', index: 'Prioridad', align: 'left', sortable: false },
-                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', sortable: false },
-                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', sortable: false },
-                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', sortable: false },
-                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', sortable: false }
 
+                    { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
+                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'center', sortable: false ,width: 100},
+                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 200 },
+                    { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
+                    { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
+                    { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false , width: 110},
+                    { name: 'USRCREACION', index: 'USRCREACION', align: 'left', sortable: false, width: 180 },
+                    { name: 'FECMODIFICACION', index: 'FECMODIFICACION', align: 'left', sortable: false, width: 130 },
+                    { name: 'USRMODIFICACION', index: 'USRMODIFICACION', align: 'left', sortable: false, width: 180 }
             ],
-            /*pager: jQuery('#grdPager'),
+            pager: jQuery('#grdPager'),
             rowNum: 10,
-            rowList: [10, 30, 50],*/
+            rowList: [10, 30, 50],
             autowidth: true,
-            sortname: 'Codigo',
+            sortname: 'IDESUBCATEGORIA',
             sortorder: 'desc',
             viewrecords: true,
-            /*caption: 'Lista Referencias',*/
             height: 120,
             width: 736,
             rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
+            rownumbers: false,
+            shrinkToFit: false,
+
             postData: {
 
             },
@@ -52,6 +134,48 @@
 
             }
         });
+
+        //$("#Categoria_TEXTOEJEMPLO").hide();
+        
+        var dato = '@Session["Tipo"]';
+        if (dato == 1) {
+            $("#ejemplo").hide();
+            $("#Categoria_TEXTOEJEMPLO").hide();
+            $("#image").hide();
+        }
+        if (dato == "I") {
+            $("#ejemplo").show();
+            $("#Categoria_TEXTOEJEMPLO").hide();
+            $("#image").show();
+        }
+        if (dato == "T") {
+            $("#ejemplo").show();
+            $("#Categoria_TEXTOEJEMPLO").show();
+            $("#image").hide();
+        }
+
+       
+
+        $("#Categoria_TIPOEJEMPLO").change(function () {
+            var vvalor = $(this).val();
+
+            if (vvalor == "01") {
+                $("#ejemplo").show();
+                $("#Categoria_TEXTOEJEMPLO").show();
+                $("#image").hide();
+            }
+            else if (vvalor == "02") {
+                $("#ejemplo").show();
+                $("#Categoria_TEXTOEJEMPLO").hide();
+                $("#image").show();
+            }
+            else {
+                $("#ejemplo").hide();
+                $("#Categoria_TEXTOEJEMPLO").hide();
+                $("#image").hide();
+            }
+        });
+
 
         jQuery("#grdListCriterio").jqGrid({
             url: '@Url.Action("ListaCriterio", "Categoria")',
@@ -64,8 +188,6 @@
                     { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 60, sortable: false },
                     { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 50, sortable: false },
                     { name: 'Calificacion', index: 'Calificacion', align: 'center', width: 50, sortable: false },
-
-
             ],
             /*pager: jQuery('#grdPager'),
             rowNum: 10,
@@ -138,8 +260,39 @@
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;
     }
+
+   
+
+    function mostrarAgregar(id, idSubCategoria) {
+        var dialogDiv = $('#updateDialog');
+        $.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarCriterios(id, idSubCategoria) {
+        var dialogDiv = $('#criterioDialog');
+        $.get("/Intranet/Criterio/PopupCriterio/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+   
+
+
+
+
 </script>
 }
+
+@using (Html.BeginForm("Edit", "Categoria", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmCategoria" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -150,52 +303,118 @@
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                 </div>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+            <table class="formulario-busqueda">
+            
+                <tr class="formulario-fila">
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Categoría</label>
                             <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" value="@Model.Categoria.IDECATEGORIA" readonly="readonly">
+                              <input id="Categoria_IDECATEGORIA" name="Categoria.IDECATEGORIA" type="text" value="@Model.Categoria.IDECATEGORIA" readonly="readonly"> 
+                              
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                       
+                    </td>
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario",@maxlength = "10" }) 
+                                @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" }) 
+                                <div class="tex-error" style="font-size:12px;color:red">    
                                 @Html.ValidationMessageFor(model => model.Categoria.NOMCATEGORIA)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                                </div>
+                           </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario",@maxlength = "255" }) 
+                                @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" }) 
+                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.DESCCATEGORIA)
+                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                   
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA)) 
+                                <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.TIPCATEGORIA)
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                        
+                    </td>
+                   
+                </tr>
 
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
+                            <label class="control-label" for="inputSuccess">Tipo Ejemplo </label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO)) 
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Categoria.TIPOEJEMPLO)
+                                </div>
+                            </div>
+                        
+                    </td>
+                   
+                    <td class="span5">
+                            
+                            <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
+                            <div class="controles">
+                                
+                               
+                                @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150" }) 
+                               
+                                @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })
+                               
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+
+                              @if ("01".Equals(Model.Categoria.TIPOEJEMPLO))
+                                {
+                                 @Html.ValidationMessageFor(model => model.Categoria.TEXTOEJEMPLO)
+                                }
+                                else
+                                {
+                                <span></span>
+                                }
+                                 </div>
+                            </div>
+
+                        
+                    </td>
+
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span12" >
+                    <label class="control-label" for="inputSuccess" id="lblInstrucciones">Insruccciones</label>
+                    <div class="controles">
+                         @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255"}) 
+                         <div class="tex-error" style="font-size:12px;color:red">  
+                         @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
+                         </div>
+                    </div>
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+            @if (Grilla.Tabla1.Equals(Session["Tabla1"]))
+            {
             <div class="grilla-opciones">
                 <h6>Subcategorías</h6>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnAgregarSubCategoria" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                     <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
                     <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
                     <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
@@ -209,10 +428,13 @@
                 <div id="grdPager">
                 </div>
             </div>
+            } 
+            @if (Grilla.Tabla2.Equals(Session["Tabla2"]))
+            {  
             <div class="grilla-opciones">
                 <h6>Criterio</h6>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                     <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
                     <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
                     <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
@@ -235,10 +457,15 @@
                 </table>
 
             </div>
+            }
             <div class="form-actions">
-                <a class="btn" href="@Url.Action("Index","Categoria",new { area = "Intranet"})"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="reset" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
+                <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button type="submit" id="btnGuardar" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
             </div>
         </div>
     </div>
 </div>
+   
+}
+<div id="updateDialog" title="Agregar SubCategoria"></div>
+<div id="criterioDialog" title="Buscar Criterio"></div>

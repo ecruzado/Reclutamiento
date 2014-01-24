@@ -108,37 +108,70 @@
 
 
         [HttpPost]
-        public ActionResult PopupCriterio([Bind(Prefix = "Alternativa")]Alternativa alternativa)
+        public ActionResult PopupCriterio(CriterioViewModel model, HttpPostedFileBase ImagenAlternativa)
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Alternativa = new Alternativa();
             criterioViewModel.Alternativa.Criterio = new Criterio();
 
             AlternativaValidator validator = new AlternativaValidator();
-            ValidationResult result = validator.Validate(alternativa, "NombreAlternativa", "Peso");
+            ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
 
             if (!result.IsValid)
             {
                 return View(criterioViewModel);
             }
 
-            if (alternativa.IdeAlternativa != 0 && alternativa.IdeAlternativa != null)
+            /*HttpPostedFileBase imagen = Request.Files[model.Alternativa.RutaDeImagen];
+
+
+            if (imagen != null)
             {
-                
-                var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == alternativa.IdeAlternativa);
-                alter.NombreAlternativa = alternativa.NombreAlternativa;
-                alter.Peso = alternativa.Peso;
+                //string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.image.FileName));
+                //model.image.SaveAs(filePath);
+                byte[] data;
+
+                using (Stream inputStream = imagen.InputStream)
+                {
+                    MemoryStream memoryStream = inputStream as MemoryStream;
+                    if (memoryStream == null)
+                    {
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+                    data = memoryStream.ToArray();
+                }
+                model.Alternativa.Image = data;
+
+            }
+            */
+
+
+            if (model.Alternativa.IdeAlternativa != 0 && model.Alternativa.IdeAlternativa != null)
+            {
+
+                var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
+                alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
+                alter.Peso = model.Alternativa.Peso;
+
+                /*if (imagen.FileName.Length > 0)
+                {
+                    alter.Image = model.Alternativa.Image;
+                }*/
+
                 _alternativaRepository.Update(alter);
+
+
             }
             else
             {
-                _alternativaRepository.Add(alternativa);
+                _alternativaRepository.Add(model.Alternativa);
             }
-           
-            criterioViewModel.Alternativa.Criterio.IdeCriterio = alternativa.Criterio.IdeCriterio;
-            criterioViewModel.Alternativa.IdeAlternativa = alternativa.IdeAlternativa;
-            criterioViewModel.Alternativa.NombreAlternativa = alternativa.NombreAlternativa;
-            criterioViewModel.Alternativa.Peso = alternativa.Peso;
+
+            criterioViewModel.Alternativa.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
+            criterioViewModel.Alternativa.IdeAlternativa = model.Alternativa.IdeAlternativa;
+            criterioViewModel.Alternativa.NombreAlternativa = model.Alternativa.NombreAlternativa;
+            criterioViewModel.Alternativa.Peso = model.Alternativa.Peso;
 
             return View(criterioViewModel);
         }
@@ -216,6 +249,9 @@
             model = InicializarCriteriosEdit();
             model.Criterio.IndPagina = Accion.Nuevo;
             model.IndVisual = Visualicion.NO;
+            
+            Session["TipoModo"] = 1;
+            
             return View("Edit", model);
         }
 
@@ -241,7 +277,15 @@
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
             model.Alternativa = objAlternativa;
 
-
+            if ("01".Equals(model.Criterio.TipoModo))
+            {
+                Session["TipoModo"] = "T";
+            }
+            else
+            {
+                Session["TipoModo"] = "I";
+               
+            }
 
             return View("Edit", model);
         }
@@ -300,6 +344,16 @@
             model.IndVisual = Visualicion.SI;
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
             model.Alternativa = objAlternativa;
+
+            if ("01".Equals(model.Criterio.TipoModo))
+            {
+                Session["TipoModo"] = "T";
+            }
+            else
+            {
+                Session["TipoModo"] = "I";
+
+            }
 
             return View("Edit", model);
 
@@ -386,17 +440,39 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase file)
+        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase image)
         {
             var criterioViewModel = InicializarCriteriosEdit();
-           
-
+            byte[] data; 
             if (!ModelState.IsValid){
                 criterioViewModel.Criterio = model.Criterio;
                 return View(criterioViewModel);
             }
 
+           
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
+
+            if (model.image != null)
+            {
+                //string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.image.FileName));
+                //model.image.SaveAs(filePath);
+               
+
+                using (Stream inputStream = model.image.InputStream)
+                {
+                    MemoryStream memoryStream = inputStream as MemoryStream;
+                    if (memoryStream == null)
+                    {
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+                    data = memoryStream.ToArray();
+                }
+                model.Criterio.IMAGENCRIT = data;
+
+            }
+            
+            
             
             if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
             {
@@ -404,12 +480,18 @@
             }
             else
             {
+                
                 var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == model.Criterio.IdeCriterio);
                 objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
                 objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
                 objCriterio.TipoModo = model.Criterio.TipoModo;
                 objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
                 objCriterio.Pregunta = model.Criterio.Pregunta;
+                if ("02".Equals(model.Criterio.TipoModo))
+                {
+                    objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
+                }
+                
                 _criterioRepository.Update(objCriterio);
             }
 
@@ -417,6 +499,15 @@
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            if("01".Equals(model.Criterio.TipoModo))
+            {
+                Session["TipoModo"] = "T";
+            }
+            else
+	        {
+                Session["TipoModo"] = "I";
+                criterioViewModel.image = model.image;
+	        }
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
@@ -516,6 +607,75 @@
             //_alternativaRepository.Remove(alter);
             return null;
         }
+
+        [HttpPost]
+        public ActionResult ListaCriterioxSubCategoria(GridTable grid)
+        {
+            try
+            {
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                   )
+                {
+                    where = DetachedCriteria.For<Criterio>();
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
+                    }
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+                        where.Add(Expression.Eq("TipoMedicion", grid.rules[1].data));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    {
+                        where.Add(Expression.Like("Pregunta", '%' + grid.rules[2].data + '%'));
+                    }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
+                    }
+                }
+
+                var generic = Listar(_criterioRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeCriterio.ToString(),
+                    cell = new string[]
+                            {
+                                "1",
+                                item.IndicadorActivo,
+                                item.IndicadorActivo,
+                                item.Pregunta,
+                                item.TipoMedicion,
+                                item.TipoCriterio,
+                                item.TipoModo,
+                                item.TipoCalificacion,
+                                item.FechaCreacion.ToString(),
+                                item.UsuarioCreacion,
+                                item.FechaModificacion.ToString(),
+                                item.UsuarioModificacion
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
        
     }
 }

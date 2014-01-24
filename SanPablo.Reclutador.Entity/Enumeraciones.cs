@@ -28,7 +28,7 @@
         EstadoMant = 3,
         Modo=4,
         TipoCalificacion = 5,
-        TipoCategoria = 26
+        TipoCategoria = 1
     }
 
     public sealed class IndicadorActivo
@@ -58,5 +58,9 @@
         public const string NO = "N";
     }
 
-
+    public sealed class Grilla
+    {
+        public const string Tabla1 = "Tabla1";
+        public const string Tabla2 = "Tabla2";
+    }
 }

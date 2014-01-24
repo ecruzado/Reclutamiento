@@ -265,6 +265,8 @@
     </Content>
     <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\PopupCriterio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\PopupCriterio.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

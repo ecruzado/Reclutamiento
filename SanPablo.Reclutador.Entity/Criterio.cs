@@ -17,6 +17,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionCriterio { get; set; }
         public virtual string IndicadorActivo { get; set; }
         public virtual string IndPagina { get; set; }
+        public virtual byte[] IMAGENCRIT { get; set; }
         public virtual IList<SubCategoria> SubCategorias { get; set; }
 
         public Criterio()

@@ -12,13 +12,19 @@
               .Sequence("IDECATEGORIA_SQ");
             Map(x => x.ORDENIMPRESION, "ORDENIMPRESION");
             Map(x => x.NOMCATEGORIA, "NOMCATEGORIA");
+            Map(x => x.DESCCATEGORIA, "DESCCATEGORIA");
             Map(x => x.TIPCATEGORIA, "TIPCATEGORIA");
             Map(x => x.ESTACTIVO, "ESTACTIVO");
             Map(x => x.USRCREACION, "USRCREACION");
             Map(x => x.FECCREACION, "FECCREACION");
             Map(x => x.USRMODIFICA, "USRMODIFICA");
             Map(x => x.FECMODIFICA, "FECMODIFICA");
-          
+            Map(x => x.INSTRUCCIONES, "INSTRUCCIONES");
+            Map(x => x.TIPOEJEMPLO, "TIPOEJEMPLO");
+            Map(x => x.IMAGENEJEMPLO, "IMAGENEJEMPLO");
+            Map(x => x.TEXTOEJEMPLO, "TEXTOEJEMPLO");
+
+            
            /* HasManyToMany(x => x.ExamenesCategoria)
                 .Cascade.All()
                 .Inverse()

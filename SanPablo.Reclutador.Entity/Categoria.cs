@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
+
 namespace SanPablo.Reclutador.Entity
 {
     public class Categoria : BaseEntity
@@ -14,10 +16,15 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TIPCATEGORIA { get; set; }
         public virtual string ESTACTIVO { get; set; }
         public virtual string USRCREACION { get; set; }
-        public virtual string FECCREACION { get; set; }
+        public virtual DateTime FECCREACION { get; set; }
         public virtual string USRMODIFICA { get; set; }
-        public virtual string FECMODIFICA { get; set; }
-
+        public virtual DateTime FECMODIFICA { get; set; }
+        public virtual string INSTRUCCIONES { get; set; }
+        public virtual string TIPOEJEMPLO { get; set; }
+        public virtual byte[] IMAGENEJEMPLO { get; set; }
+        public virtual string TEXTOEJEMPLO { get; set; }
+        
+       
 
         public virtual IList<Examen> ExamenesCategoria { get; set; }
         public virtual IList<SubCategoria> SubCategorias { get; set; }

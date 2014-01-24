@@ -18,6 +18,7 @@
            Map(x => x.FechaCreacion, "FECCREACION");
            Map(x => x.UsrMod, "USRMODIFICACION");
            Map(x => x.FechaMod, "FECMODIFICACION");
+           Map(x => x.Image, "IMAGE");
            Table("ALTERNATIVA");
         }
     }

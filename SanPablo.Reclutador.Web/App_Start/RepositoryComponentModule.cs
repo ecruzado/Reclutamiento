@@ -32,6 +32,11 @@
             builder.RegisterType<CategoriaRepository>()
                 .As<ICategoriaRepository>();
 
+            builder.RegisterType<SubcategoriaRepository>()
+                .As<ISubcategoriaRepository>();
+
+
+
             builder.RegisterType<ExperienciaPostulanteRepository>()
                 .As<IExperienciaPostulanteRepository>();
 

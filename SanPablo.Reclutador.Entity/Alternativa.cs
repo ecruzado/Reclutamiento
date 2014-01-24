@@ -17,20 +17,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string   FechaCreacion { get; set; }
         public virtual string   UsrMod { get; set; }
         public virtual string   FechaMod { get; set; }
-
-        /*
-         IDEALTERNATIVA
-   IDECRITERIO
-   ALTERNATIVA
-   PESO
-   RUTAIMAGEN
-   USRCREACION
-   FECCREACION
-   USRMODIFICACION
-   FECMODIFICACION
-      
-         */
-
+        public virtual byte[]   Image { get; set; }
 
     }
 }

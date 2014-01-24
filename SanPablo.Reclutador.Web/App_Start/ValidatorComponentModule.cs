@@ -33,6 +33,11 @@
                 .Keyed<IValidator>(typeof(IValidator<Alternativa>))
                 .As<IValidator>();
 
+            builder.RegisterType<CategoriaValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Categoria>))
+                .As<IValidator>();
+
+
          
 
         }

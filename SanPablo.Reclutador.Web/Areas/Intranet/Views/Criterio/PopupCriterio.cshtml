@@ -5,13 +5,27 @@
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
-    
+    $(document).ready(function () {
+        
+     
+        var dato = '@Session["TipoModo"]';
+        if (dato == 1) {
+            $("#Alternativa_RutaDeImagen").hide();
+        }
+        if (dato == "I") {
+            $("#Alternativa_RutaDeImagen").show();
+        }
+        if (dato == "T") {
+            $("#Alternativa_RutaDeImagen").hide();
+        }
+                
+        
+    });
    
 </script>
 
 
-
-@using (Html.BeginForm("PopupCriterio", "Criterio", FormMethod.Post, new { @id = "criterioForm" }))
+@using (Html.BeginForm("PopupCriterio", "Criterio", FormMethod.Post, new {  id = "frmPopupCriterio" }))
     {
     @Html.ValidationSummary(true)
     @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
@@ -36,16 +50,20 @@
             </td>
             <td class="colInput;input-xxlarge">
 
-                @Html.TextBoxFor(model => model.Alternativa.Peso, new { onkeypress="return Funciones.isNumberKey(event)",@maxlength = "3" })
+                @Html.TextBoxFor(model => model.Alternativa.Peso, new { onkeypress="return Funciones.isNumberKey(event)",@maxlength = "2" })
                 <div class="tex-error" style="font-size:12px;color:red">   
                 @Html.ValidationMessageFor(model => model.Alternativa.Peso)
                 </div>
             </td>
         </tr>
         <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
           <td colspan="2">
-            <!--<input type="file" name="file1" value="" />-->
-              @Html.TextBoxFor(model => model.Alternativa.RutaDeImagen, new { id = "uploadFile", type = "file" })
+            @Html.TextBoxFor(model => model.Alternativa.RutaDeImagen, new { type = "file" })
           </td>
            
         </tr>
