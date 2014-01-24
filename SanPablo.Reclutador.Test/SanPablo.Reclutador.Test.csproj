@@ -91,7 +91,7 @@
     <Compile Include="Controller\ExperienciaPostulanteControllerTest.cs" />
     <Compile Include="Controller\ParientePostulanteController.cs" />
     <Compile Include="Controller\SedeControllerTest.cs" />
-    <Compile Include="Controller\PostulanteControllerTest.cs" />
+    <Compile Include="Controller\2PostulanteControllerTest.cs" />
     <Compile Include="Model\ConocimientoGeneralPostulanteValidatorTest.cs" />
     <Compile Include="Model\EstudioPostulanteValidatorTest.cs" />
     <Compile Include="Model\ParientePostulanteValidator.cs" />
