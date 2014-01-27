@@ -52,10 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaMap.cs" />
+<<<<<<< HEAD
     <Compile Include="CategoriaMap.cs" />
+=======
     <Compile Include="ConocimientoGeneralPostulanteMap.cs" />
+>>>>>>> a00a13ed7b1b0088a0997341d1f2b8bed8e18e8f
     <Compile Include="CriterioMap.cs" />
-    <Compile Include="CriterioPorSubcategoriaMap.cs" />
     <Compile Include="DetalleGeneralMap.cs" />
     <Compile Include="DiscapacidadPostulanteMap.cs" />
     <Compile Include="EstudioPostulanteMap.cs" />

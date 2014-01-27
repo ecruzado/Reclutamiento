@@ -4,6 +4,7 @@ using SanPablo.Reclutador.Repository;
 using SanPablo.Reclutador.Entity;
 using NHibernate.Criterion;
 using System.Linq;
+using SanPablo.Reclutador.Repository.Interface;
 
 namespace SanPablo.Reclutador.Test.Repository
 {
@@ -69,6 +70,13 @@ namespace SanPablo.Reclutador.Test.Repository
             //var session = NHibernateHelper.OpenSession();
             //var logs = session.CreateQuery("Select C, D from Criterio C, DetalleGeneral D where C.TipoMedicion = D.Valor and D.IdeGeneral = 1")
             //    .List();
+            var repo = new CriterioPorSubcategoriaRepository(NHibernateHelper.OpenSession());
+            var list = repo.All();
+            foreach (var item in list)
+            {
+                var test = item.Criterio.Pregunta;
+            }
+
         }
     }
 }

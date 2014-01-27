@@ -42,7 +42,6 @@
         {
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
                 DetachedCriteria where = null;
                 
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data) ) ||
@@ -88,9 +87,9 @@
                                 item.TipoCriterio,
                                 item.TipoModo,
                                 item.TipoCalificacion,
-                                item.FechaCreacion.ToString(),
+                                item.FechaCreacion == DateTime.MinValue? "": item.FechaCreacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioCreacion,
-                                item.FechaModificacion.ToString(),
+                                item.FechaModificacion == DateTime.MinValue? "": item.FechaModificacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioModificacion
                             }
                     }).ToArray();
@@ -103,9 +102,6 @@
                 return MensajeError();
             }
         }
-
-
-
 
         [HttpPost]
         public ActionResult PopupCriterio(CriterioViewModel model, HttpPostedFileBase ImagenAlternativa)
@@ -176,60 +172,12 @@
             return View(criterioViewModel);
         }
 
-        [HttpPost]
-        public virtual ActionResult UploadFile()
-        {
-            HttpPostedFileBase myFile = Request.Files["MyFile"];
-            bool isUploaded = false;
-            string message = "File upload failed";
-
-            if (myFile != null && myFile.ContentLength != 0)
-            {
-                string pathForSaving = Server.MapPath("~/Uploads");
-                if (this.CreateFolderIfNeeded(pathForSaving))
-                {
-                    try
-                    {
-                        myFile.SaveAs(Path.Combine(pathForSaving, myFile.FileName));
-                        isUploaded = true;
-                        message = "File uploaded successfully!";
-                    }
-                    catch (Exception ex)
-                    {
-                        message = string.Format("File upload failed: {0}", ex.Message);
-                    }
-                }
-            }
-            return Json(new { isUploaded = isUploaded, message = message }, "text/html");
-        }
-
-
-        private bool CreateFolderIfNeeded(string path)
-        {
-            bool result = true;
-            if (!Directory.Exists(path))
-            {
-                try
-                {
-                    Directory.CreateDirectory(path);
-                }
-                catch (Exception)
-                {
-                    /*TODO: You must process this exception.*/
-                    result = false;
-                }
-            }
-            return result;
-        }
-
         public ActionResult Edit(string ideCriterio)
         {
 
             var criterioViewModel = InicializarCriteriosEdit();
             return View(criterioViewModel);
         }
-
-       
 
         public ActionResult BuscarCriterios()
         {
@@ -359,7 +307,6 @@
 
         }
 
-
         public ViewResult PopupCriterio(int id, int codCriterio)
         {
 
@@ -433,12 +380,6 @@
             }
         }
 
-        protected JsonResult MensajeError(string mensaje = "Ocurrio un error al cargar...")
-        {
-            Response.StatusCode = 404;
-            return Json(new JsonResponse { Message = mensaje }, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpPost]
         public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase image)
         {
@@ -476,6 +417,9 @@
             
             if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
             {
+                model.Criterio.FechaCreacion = DateTime.Now;
+                model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
+
                 _criterioRepository.Add(model.Criterio);
             }
             else
@@ -487,6 +431,9 @@
                 objCriterio.TipoModo = model.Criterio.TipoModo;
                 objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
                 objCriterio.Pregunta = model.Criterio.Pregunta;
+                objCriterio.FechaModificacion = DateTime.Now;
+                objCriterio.UsuarioModificacion = UsuarioActual.NombreUsuario;
+
                 if ("02".Equals(model.Criterio.TipoModo))
                 {
                     objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
@@ -540,7 +487,6 @@
 
         }
 
-
         [HttpPost]
         public ActionResult Eliminar(string ideAlternativa, string codigoCriterio)
         {
@@ -551,7 +497,7 @@
             return null;            
         }
 
-        private CriterioViewModel InicializarCriteriosIndex()
+        public CriterioViewModel InicializarCriteriosIndex()
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Criterio = new Criterio();
@@ -607,7 +553,9 @@
             //_alternativaRepository.Remove(alter);
             return null;
         }
+        
 
+        // lista de criterios del popup
         [HttpPost]
         public ActionResult ListaCriterioxSubCategoria(GridTable grid)
         {
@@ -651,18 +599,15 @@
                     id = item.IdeCriterio.ToString(),
                     cell = new string[]
                             {
-                                "1",
+                                "",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
                                 item.TipoModo,
-                                item.TipoCalificacion,
-                                item.FechaCreacion.ToString(),
-                                item.UsuarioCreacion,
-                                item.FechaModificacion.ToString(),
-                                item.UsuarioModificacion
+                                item.TipoCalificacion
+                               
                             }
                 }).ToArray();
 
@@ -675,7 +620,47 @@
             }
         }
 
+        [HttpPost]
+        public ActionResult PopupListaCriterio(CriterioViewModel model)
+        {
+            CriterioViewModel objCriterioModel = new CriterioViewModel();
+            objCriterioModel = InicializarCriteriosIndex();
 
+            objCriterioModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+            objCriterioModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            objCriterioModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+            objCriterioModel.Criterio.Pregunta = model.Criterio.Pregunta;
+
+            return View(objCriterioModel);
+        }
+
+        public ViewResult PopupListaCriterio(int id, string idSubCategoria)
+        {
+            try
+            {
+                CriterioViewModel objCriterioModel = new CriterioViewModel();
+                objCriterioModel = InicializarCriteriosIndex();
+                objCriterioModel.CriterioPorSubcategoria = new CriterioPorSubcategoria();
+                objCriterioModel.CriterioPorSubcategoria.IDESUBCATEGORIA = Convert.ToInt32(idSubCategoria);
+                
+                return View(objCriterioModel);
+                
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                MensajeError();
+                return null;
+            }
+           
+
+        }
+
+        [HttpPost]
+        public ActionResult Test(List<int> test)
+        {
+            return null;
+        }
        
     }
 }

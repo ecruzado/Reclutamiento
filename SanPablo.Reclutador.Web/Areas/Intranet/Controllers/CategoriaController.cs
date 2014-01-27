@@ -24,17 +24,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IAlternativaRepository _alternativaRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private ISubcategoriaRepository _subcategoriaRepository;
-
+        private ICriterioRepository _criterioRepository;
+        private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
 
         public CategoriaController(ICategoriaRepository categoriaRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
             IAlternativaRepository alternativaRepository,
-            ISubcategoriaRepository subcategoriaRepository)
+            ISubcategoriaRepository subcategoriaRepository,
+            ICriterioRepository criterioRepository,
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            )
         {
             _categoriaRepository = categoriaRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _alternativaRepository = alternativaRepository;
             _subcategoriaRepository = subcategoriaRepository;
+            _criterioRepository = criterioRepository;
+            _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
         }
         
         
@@ -357,91 +363,69 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+
                 return MensajeError();
             }
 
-           
-
-        //    List<object> list = new List<object>();
-        //    var fAnonymousType2_1 = new
-        //    {
-        //        id = 1,
-        //        cell = new string[]
-        //{
-        //  "200001",
-        //  "Activo",
-        //  "SubCat01",
-        //  "SubCategoría 01",
-        //  "5",
-        //  "01/01/2013",
-        //  "Admin",
-        //  "10/10/2013",
-        //  "Admin"
-          
-        //}
-        //    };
-        //    list.Add((object)fAnonymousType2_1);
-        //    var fAnonymousType2_2 = new
-        //    {
-        //        id = 2,
-        //        cell = new string[]
-        //{
-        //  "200002",
-        //  "Activo",
-        //  "SubCat02",
-        //  "SubCategoría 02",
-        //  "4",
-        //  "01/01/2013",
-        //  "Admin",
-        //  "10/10/2013",
-        //  "Admin"
-          
-        //}
-        //    };
-        //    list.Add((object)fAnonymousType2_2);
-        //    var fAnonymousType3 = new
-        //    {
-        //        rows = list
-        //    };
-        //    return (ActionResult)this.Json((object)fAnonymousType3);
         }
-
+        
         [HttpPost]
-        public ActionResult ListaCriterio(string sidx, string sord, int page, int rows)
+        public ActionResult ListaCriterioxSub(GridTable grid, string idSub)
         {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
+            try
             {
-                id = 1,
-                cell = new string[]
-        {
-          "100001",
-          "¿Cuál es la capital del Perú?",
-          "10",
-          "1",
-          "Automática"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[]
-        {
-          "100002",
-          "¿Cómo se llama el Presidente del Perú?",
-          "10",
-          "1",
-          "Automática"
-        }
-            };
+                string id = (idSub == null ? "" : idSub);
+                id = (idSub == "null" ? "" : idSub);
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                //DetachedCriteria where = null;
+                DetachedCriteria where = null;
+                grid.page = (grid.page == 0) ? 1 : grid.page;
 
-            var fAnonymousType3 = new
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                //obtiene el valor del criterio
+
+
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                if (!"".Equals(id))
+                {
+                    where = DetachedCriteria.For<CriterioPorSubcategoria>();
+                    where.Add(Expression.Eq("SubCategoria.IDESUBCATEGORIA", Convert.ToInt32(idSub)));    
+                }
+                
+
+                var generic = Listar(_criterioPorSubcategoriaRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDECRITERIOXSUBCATEGORIA.ToString(),
+                    cell = new string[]
+                            {
+                                item.IDECRITERIOXSUBCATEGORIA.ToString(),
+                                item.SubCategoria.IDESUBCATEGORIA.ToString(),
+                                item.Criterio.IdeCriterio.ToString(),
+                                item.Criterio.Pregunta,
+                                item.PUNTAMAXIMO.ToString(),
+                                item.Criterio.OrdenImpresion.ToString(),
+                                item.Criterio.TipoCalificacion.ToString()
+                                //item.FECCREACION.ToString(),
+                                //item.USRCREACION,
+                                //item.FECMODIFICACION.ToString(),
+                                //item.USRMODIFICACION
+                                
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
             {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
+
+                return MensajeError();
+            }
+
         }
 
         public ActionResult Nuevo()
@@ -480,6 +464,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             categoriaViewModel.TipoEjemplo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             return categoriaViewModel;
+        }
+
+
+        [HttpPost]
+        public ActionResult PopupListaCriterio(CriterioViewModel model)
+        {
+            CriterioController criterio = new CriterioController(_criterioRepository,_detalleGeneralRepository,_alternativaRepository);
+            CriterioViewModel objCriterioModel = new CriterioViewModel();
+            objCriterioModel = criterio.InicializarCriteriosIndex();
+
+           /* objCriterioModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+            objCriterioModel.Criterio.TipoModo = model.Criterio.TipoModo;
+            objCriterioModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+            objCriterioModel.Criterio.Pregunta = model.Criterio.Pregunta;
+            */
+            return View(objCriterioModel);
         }
 
     

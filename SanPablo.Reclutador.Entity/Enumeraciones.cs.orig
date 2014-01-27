@@ -50,10 +50,14 @@
         Medicion = 2,
         EstadoMant = 3,
         Modo=4,
+<<<<<<< HEAD
         TipoCalificacion = 5,
         TipoCategoria = 1
+=======
+        TipoCalificacion = 5
 
 
+>>>>>>> a00a13ed7b1b0088a0997341d1f2b8bed8e18e8f
     }
 
     public sealed class IndicadorActivo
@@ -88,6 +92,4 @@
         public const string Tabla1 = "Tabla1";
         public const string Tabla2 = "Tabla2";
     }
-
-
 }

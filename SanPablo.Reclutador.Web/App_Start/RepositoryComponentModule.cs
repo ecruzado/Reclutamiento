@@ -35,7 +35,8 @@
             builder.RegisterType<SubcategoriaRepository>()
                 .As<ISubcategoriaRepository>();
 
-
+            builder.RegisterType<CriterioPorSubcategoriaRepository>()
+                .As<ICriterioPorSubcategoriaRepository>();
 
             builder.RegisterType<ExperienciaPostulanteRepository>()
                 .As<IExperienciaPostulanteRepository>();
