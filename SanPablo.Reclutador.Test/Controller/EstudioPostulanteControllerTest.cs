@@ -18,7 +18,8 @@
         {
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
 
             var resultado = estudioPostulanteController.Edit("0").Model;
 
@@ -30,7 +31,8 @@
         {
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             EstudioPostulante estudioPostulante = new EstudioPostulante();
 
             var resultado = estudioPostulanteController.Edit(estudioPostulante);
@@ -43,7 +45,8 @@
         {
             var mockEstudioPostulanteRepository = new Mock<IEstudioPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            EstudioPostulanteController estudioPostulanteController = new EstudioPostulanteController(mockEstudioPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             EstudioPostulante estudioPostulante = new EstudioPostulante();
             estudioPostulanteController.ModelState.AddModelError("IdeEstudiosPostulante", "modelo invalido");
             var resultado = estudioPostulanteController.Edit(estudioPostulante);

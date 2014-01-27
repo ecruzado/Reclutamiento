@@ -81,37 +81,46 @@
         //public ActionResult General([Bind(Prefix = "Postulante")]Postulante postulante, HttpPostedFileBase fotoPostulante)
         public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
         {
-            PostulanteValidator validator = new PostulanteValidator();
-            ValidationResult result = validator.Validate(model.Postulante, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
-                                      "SegundoNombre", "FechaNacimiento", "IndicadorSexo", "TipoEstadoCivil", "IdeUbigeo", "Correo", "TipoVia", "NumeroDireccion");
+            try
+            {
+                PostulanteValidator validator = new PostulanteValidator();
+                ValidationResult result = validator.Validate(model.Postulante, "TipoDocumento", "NumeroDocumento", "ApellidoPaterno", "ApellidoMaterno", "PrimerNombre",
+                                          "SegundoNombre", "FechaNacimiento", "IndicadorSexo", "TipoEstadoCivil", "IdeUbigeo", "Correo", "TipoVia", "NumeroDireccion");
 
-            byte[] data; 
-            if (!result.IsValid)
-            {
-                postulanteModel = inicializarPostulante();
-                postulanteModel.Postulante = model.Postulante;
-                return View("General",postulanteModel);
-            }
-            
-            //guardar la foto del postulante
-            if (model.FotoPostulante != null)
-            {
-                using (Stream inputStream = model.FotoPostulante.InputStream)
+                byte[] data;
+                if (!result.IsValid)
                 {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    data = memoryStream.ToArray();
+                    postulanteModel = inicializarPostulante();
+                    postulanteModel.Postulante = model.Postulante;
+                    return View("General", postulanteModel);
                 }
-                model.Postulante.FotoPostulante = data;
 
+                //Guardar la foto del postulante
+                if (model.FotoPostulante != null)
+                {
+                    using (Stream inputStream = model.FotoPostulante.InputStream)
+                    {
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        data = memoryStream.ToArray();
+                    }
+                    model.Postulante.FotoPostulante = data;
+
+                }
+                //Guardar postulante
+                _postulanteRepository.Add(model.Postulante);
+                Session["PostulanteId"] = model.Postulante.IdePostulante;
+                return RedirectToAction("../EstudioPostulante/Index");
             }
-            _postulanteRepository.Add(model.Postulante);
-            Session["PostulanteId"] = model.Postulante.IdePostulante;
-            return RedirectToAction("../EstudioPostulante/Index");
+            catch (InvalidCastException e)
+            {
+               // throw new Exception("ERROR.", e);
+                return View("General", postulanteModel);
+            } 
         }
         #endregion
 

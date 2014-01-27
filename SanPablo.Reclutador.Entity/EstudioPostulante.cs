@@ -36,5 +36,6 @@ namespace SanPablo.Reclutador.Entity
                     IndicadorActualmenteEstudiando = Indicador.No;
             }
         }
+
     }
 }

@@ -14,11 +14,15 @@
     {
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private IPostulanteRepository _postulanteRepository;
                
-        public EstudioPostulanteController(IEstudioPostulanteRepository estudioPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        public EstudioPostulanteController(IEstudioPostulanteRepository estudioPostulanteRepository, 
+                                           IDetalleGeneralRepository detalleGeneralRepository,
+                                           IPostulanteRepository postulanteRepository )
         {
             _estudioPostulanteRepository = estudioPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _postulanteRepository = postulanteRepository;
         }
 
         public ActionResult Index()
@@ -36,21 +40,8 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                ////var where = (Utils.GetWhere(grid.filters, grid.rules));
-                //var where = string.Empty;
-
-                //if (!string.IsNullOrEmpty(where))
-                //{
-                //    grid._search = true;
-
-                //    if (!string.IsNullOrEmpty(grid.searchString))
-                //    {
-                //        where = where + " and ";
-                //    }
-                //}
-                Session["PostulanteId"] = 11;
                 DetachedCriteria where = DetachedCriteria.For<EstudioPostulante>();
-                where.Add(Expression.Eq( "Postulante", Convert.ToInt32(Session["PostulanteId"])));
+                where.Add(Expression.Eq("Postulante.IdePostulante", Convert.ToInt32(Session["PostulanteId"])));
 
                 var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -88,9 +79,8 @@
             }
             else
             {
-                int ideEstudioEdit = Convert.ToInt32(id);
                 var estudioResultado = new EstudioPostulante();
-                estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudioEdit);
+                estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == Convert.ToInt32(id));
                 estudioGeneralViewModel.Estudio = estudioResultado;
                 estudioGeneralViewModel = actualizarDatos(estudioGeneralViewModel, estudioResultado);
                 return View(estudioGeneralViewModel);
@@ -101,20 +91,36 @@
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
-            //var result = new JsonResult();
-            
- 
             if (!ModelState.IsValid)
             {
-                //var estudioPostulanteModel = InicializarEstudio();
-                //estudioPostulanteModel = actualizarDatos(estudioPostulanteModel, estudioPostulante);
-                //estudioPostulanteModel.Estudio = estudioPostulante;
-                //Mensaje = "ERROR: No se guardo los cambios";
-                //new {msg = success }
+                
                 return Json(new {msj = false },JsonRequestBehavior.DenyGet);
             }
-            estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
-            _estudioPostulanteRepository.Add(estudioPostulante);
+            if (estudioPostulante.IdeEstudiosPostulante == 0)
+            {
+                estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
+                var postulante = new Postulante();
+                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == Convert.ToInt32(Session["PostulanteId"]));
+                postulante.agregarEstudio(estudioPostulante);
+                _estudioPostulanteRepository.Add(estudioPostulante);
+            }
+            else
+            {
+                var estudioEdit = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == estudioPostulante.IdeEstudiosPostulante);
+                estudioEdit.TipTipoInstitucion = estudioPostulante.TipTipoInstitucion;
+                estudioEdit.TipoNombreInstitucion = estudioPostulante.TipoNombreInstitucion;
+                estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNombreInstitucion;
+                estudioEdit.TipoEducacion = estudioPostulante.TipoEducacion;
+                estudioEdit.TipoArea = estudioPostulante.TipoArea;
+                estudioEdit.Postulante = estudioPostulante.Postulante;
+                estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
+                estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
+                estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
+                estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
+                estudioEdit.EstadoActivo = estudioPostulante.EstadoActivo;
+
+                _estudioPostulanteRepository.Update(estudioEdit);
+            }
             return Json(new {msj = true}, JsonRequestBehavior.DenyGet);
 
         }
