@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CriterioViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CategoriaViewModel
 @using SanPablo.Reclutador.Entity
 @{
     ViewBag.Title = "Listado Categoría";
@@ -7,49 +7,115 @@
 }
 
 @section Scripts{
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
 
-    $(function () {
-        jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaCategoria", "Categoria")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Estado', 'Codigo', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
-            colModel: [
-                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'left' },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left' },
-                    { name: 'Tipo', index: 'Tipo', align: 'left' },
-                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
-                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },
-                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
-                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
-            ],
-            pager: jQuery('#grdPager'),
-            rowNum: 10,
-            rowList: [10, 30, 50],
-            autowidth: true,
-            shrinkToFit: true,
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            /*caption: 'Listado',*/
-            height: 350,
-            /*width: 736,*/
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
+    $(document).ready(function () {
 
-            },
-            loadComplete: function (data) {
+        $('#btnBuscar').click(function () {
+            $('#grdListaPrincipalCategoria').trigger('reloadGrid');
+        });
 
+        $('#btnEditar').click(function () {
+            var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                window.location = '@Url.Action("btnEditarDetalle", "Categoria")' + '/' + selr;
+            } else {
+                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
 
+
+
+        $('#btnConsultar').click(function () {
+            var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                window.location = '@Url.Action("btnConsultarDetalle", "Categoria")' + '/' + selr;
+            } else {
+                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        }); 
+
+
+        jQuery("#grdListaPrincipalCategoria").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'ideCategoria', data: jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow') },
+                       { field: 'tipCriterio', data: $("#Categoria_TipoCriterio").val() },
+                       { field: 'estado', data: $("#Categoria_ESTACTIVO").val() },
+                       { field: 'descrip', data: $("#Categoria_DESCCATEGORIA").val() }
+                      
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaPrincipalCategoria", "Categoria")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListaPrincipalCategoria')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Estado','', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 90 },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 150 },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150 },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 160 }
+            ],
+            pager: jQuery('#grdPagerCategoria'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IDECATEGORIA',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 350,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });
+
+
+
     });
+
+
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
@@ -71,75 +137,86 @@
         return strImg;
     }
 
-    $('#btnNuevo').click(function () {
-        window.location = "/Intranet/Categoria/Nuevo";
-    });
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+    
 
 </script>
 }
+
+@using (Html.BeginForm("Index", "Categoria", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmListaCategoria" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
                 <h5>Categoría</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo</label>
-                            <div class="controles">
-                                <select id="selectTipo">
-                                    <option>Seleccionar</option>
-                                    <option>Examen</option>
-                                    <option>Evaluación</option>
-                                    <option>Entrevista</option>
-                                    <option>Examen Medico</option>                                
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Descripción</label>
-                            <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-large">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
-                            <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+            <table style="margin-left:120px;">
+                <tr>
+                  <td colspan="8">&nbsp;</td>
+                </tr>
+                <tr >
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario" for="inputSuccess">Tipo</label>
+                    </td>
+                    <td class="colInput">
+                      @Html.DropDownListFor(model => model.Categoria.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Categoria.TipoCriterio),new { data_val = "false" })
+                    </td>
+                    <td style="width:40px;"></td> 
+                <td class="colEtiqueta">
+                    <label class="etiquetaFormulario" for="inputSuccess">Descripción</label>
+                    </td>   
+                    <td class="colInput">
+                      @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false"}) 
+                    </td>
+                </tr>
+                <tr >
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
+                    </td>
+                    <td class="colInput">
+                      @Html.DropDownListFor(model => model.Categoria.ESTACTIVO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Categoria.ESTACTIVO),new { data_val = "false" })
+                    </td>
+                </tr>
+              
+            </table>
 
-            <div class="tabla-datos">
-                <table id="grdList">
+             <table>
+                <tr>
+                  <td  class="formulario-accion offset9">
+                     <button type="submit" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
+                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                   </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+
+             <div class="tabla-datos">
+                <table id="grdListaPrincipalCategoria">
                 </table>
-                <div id="grdPager">
+                <div id="grdPagerCategoria">
                 </div>
             </div>
             <div class="form-actions">
                 <a class="btn btn-info" id="btnNuevo"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" id="btnConsultar" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" id="btnEditar" href="@Url.Action("Edit","Categoria",new { area = "Intranet"})"><i class="icon-pencil  icon-white"></i> Editar</a>
-                <button type="reset" id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+                <a class="btn btn-info" id="btnConsultar"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" id="btnEditar"><i class="icon-pencil  icon-white"></i> Editar</a>
+                <a  id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <a  id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>
 </div>
+}
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="divEliminar"><span id="spanEliminar"></span></div>
+<div id="divMensaje"><span id="spnMensaje"></span></div>

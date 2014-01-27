@@ -669,30 +669,49 @@
 
 
 
-            CriterioPorSubcategoria objCriterioxSubCategoria = new CriterioPorSubcategoria();
+            CriterioPorSubcategoria objCriterioxSubCategoria;
 
-            objCriterioxSubCategoria.SubCategoria = new SubCategoria();
-            objCriterioxSubCategoria.Criterio = new Criterio();
+           
 
             if (test!=null && test.Count>0)
             {
                 for (int i = 0; i < test.Count; i++)
                 {
+
+                    objCriterioxSubCategoria = new CriterioPorSubcategoria();
+                    objCriterioxSubCategoria.SubCategoria = new SubCategoria();
+                    objCriterioxSubCategoria.Criterio = new Criterio();
+
                     codCriterio = test[i];
+                    
                     var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == codCriterio);
-                    objCriterioxSubCategoria.PRIORIDAD = objCriterio.OrdenImpresion;
-                    objCriterioxSubCategoria.SubCategoria.IDESUBCATEGORIA = codSubCategoria;
+
+
+                   var criterioxSubCategoria = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == codSubCategoria && 
+                                                                 s.Criterio.IdeCriterio == codCriterio);
+
+
+                   if (criterioxSubCategoria !=null && criterioxSubCategoria.Criterio.IdeCriterio > 0)
+                   {
+                       continue;
+                   }
+                   else
+                   {
+                       objCriterioxSubCategoria.PRIORIDAD = objCriterio.OrdenImpresion;
+                       objCriterioxSubCategoria.SubCategoria.IDESUBCATEGORIA = codSubCategoria;
+
+                       objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
+                       objCriterioxSubCategoria.PUNTAMAXIMO = 0;
+                       objCriterioxSubCategoria.ESTREGISTRO = "A";
+                       objCriterioxSubCategoria.USRCREACION = "PRUEBA";
+                       objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
+                       objCriterioxSubCategoria.FECCREACION = Hoy;
+                       objCriterioxSubCategoria.FECMODIFICA = Hoy;
+
+                       _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
+                   }
+
                     
-                    objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
-                    objCriterioxSubCategoria.PUNTAMAXIMO = 0;
-                    objCriterioxSubCategoria.ESTREGISTRO = "A";
-                    objCriterioxSubCategoria.USRCREACION = "PRUEBA";
-                    objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
-                    objCriterioxSubCategoria.FECCREACION = Hoy;
-                    objCriterioxSubCategoria.FECMODIFICA = Hoy;
-                    
-                    
-                    _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
 
                 }
             }

@@ -46,7 +46,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         
         public ActionResult Index()
         {
-            return View();
+
+            CategoriaViewModel objCategoriaView = new CategoriaViewModel();
+            objCategoriaView = InicializarCategoriaIndex();
+
+            return View(objCategoriaView);
         }
 
         public ActionResult Edit()
@@ -248,73 +252,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-
-
-        [HttpPost]
-        public ActionResult ListaCategoria(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "200001",
-          "Cat01",
-          "Categoría 01",
-          "Evaluación",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin",
-          "Activo",
-          ""
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[]
-        {
-          "200002",
-          "Cat02",
-          "Categoría 02",
-          "Entrevista",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin",
-          "Activo",
-          ""
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType2_3 = new
-            {
-                id = 3,
-                cell = new string[]
-        {
-          "200003",
-          "Cat03",
-          "Categoría 03",
-          "Entrevista",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin",
-          "Activo",
-          ""
-        }
-            };
-            list.Add((object)fAnonymousType2_3);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
-
         [HttpPost]
         public ActionResult ListaSubCategoria(GridTable grid, int idCategoria)
         {
@@ -370,29 +307,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
         
         [HttpPost]
-        public ActionResult ListaCriterioxSub(GridTable grid, string idSub)
+        public ActionResult ListaCriterioxSub(GridTable grid)
         {
             try
             {
-                string id = (idSub == null ? "" : idSub);
-                id = (idSub == "null" ? "" : idSub);
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                //DetachedCriteria where = null;
+                //IdeSubCategoria
                 DetachedCriteria where = null;
+                where = DetachedCriteria.For<CriterioPorSubcategoria>();
+
+                if ((grid.rules[0].data!=null))
+                {
+                   
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        where.Add(Expression.Eq("SubCategoria.IDESUBCATEGORIA", Convert.ToInt32(grid.rules[0].data)));
+                    }
+
+                }
+                else
+                {
+                    where.Add(Expression.Eq("SubCategoria.IDESUBCATEGORIA", 0));
+                }
+
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                //obtiene el valor del criterio
-
-
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                if (!"".Equals(id))
-                {
-                    where = DetachedCriteria.For<CriterioPorSubcategoria>();
-                    where.Add(Expression.Eq("SubCategoria.IDESUBCATEGORIA", Convert.ToInt32(idSub)));    
-                }
-                
 
                 var generic = Listar(_criterioPorSubcategoriaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -466,9 +406,246 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return categoriaViewModel;
         }
 
+        private CategoriaViewModel InicializarCategoriaIndex()
+        {
+            var categoriaViewModel = new CategoriaViewModel();
+            categoriaViewModel.Categoria = new Categoria();
 
-       
 
-    
+            categoriaViewModel.TipoCriterio =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+            categoriaViewModel.TipoCriterio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+            categoriaViewModel.TipoEstado =
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            categoriaViewModel.TipoEstado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            return categoriaViewModel;
+        }
+
+
+        [HttpPost]
+        public ActionResult ListCriterioxAlternativa(GridTable grid)
+        {
+            try
+            {
+                
+                
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<Alternativa>();
+
+                if ((grid.rules[0].data != null))
+                {
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        where.Add(Expression.Eq("Criterio.IdeCriterio", Convert.ToInt32(grid.rules[0].data)));
+                    }
+
+                }
+                else
+                {
+                    where.Add(Expression.Eq("Criterio.IdeCriterio", 0));
+                }
+
+
+                var generic = Listar(_alternativaRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeAlternativa.ToString(),
+                        cell = new string[]
+                            {
+                                
+                                item.IdeAlternativa.ToString(),
+                                item.NombreAlternativa.ToString(),
+                                item.Peso.ToString(),
+                                ""
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
+        
+        [HttpPost]
+        public ActionResult Index(CategoriaViewModel model)
+        {
+
+            CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel();
+            
+            objCategoriaViewModel = InicializarCategoriaIndex();
+            objCategoriaViewModel.Criterio = new Criterio();
+            objCategoriaViewModel.Categoria = new Categoria();
+
+            objCategoriaViewModel.Categoria.TipoCriterio = model.Categoria.TipoCriterio;
+            objCategoriaViewModel.Categoria.ESTACTIVO = model.Categoria.ESTACTIVO;
+
+            return View(objCategoriaViewModel);
+
+        }
+
+
+        
+        [HttpPost]
+        public ActionResult ListaPrincipalCategoria(GridTable grid)
+        {
+            try
+            {
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                   )
+                {
+                    where = DetachedCriteria.For<Categoria>();
+
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+                        where.Add(Expression.Eq("TIPCATEGORIA", grid.rules[1].data));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+                    {
+                        where.Add(Expression.Eq("ESTACTIVO", grid.rules[2].data));
+                    }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Like("DESCCATEGORIA", '%' + grid.rules[3].data + '%'));
+                    }
+                  
+                }
+
+                var generic = Listar(_categoriaRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDECATEGORIA.ToString(),
+                    cell = new string[]
+                            {
+                                "",
+                                item.IDECATEGORIA.ToString(),
+                                item.NOMCATEGORIA,
+                                item.DESCCATEGORIA,
+                                item.TIPCATEGORIA,
+                                item.FECCREACION.ToString(),
+                                item.USRCREACION,
+                                item.FECMODIFICA.ToString(),
+                                item.USRMODIFICA
+                               
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+        /// <summary>
+        /// btnEditarDetalle Edicion del detalle de la categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult btnEditarDetalle(string id)
+        {
+
+            CategoriaViewModel model;
+            model = new CategoriaViewModel();
+
+
+            model = InicializarCategoriaEdit();
+
+            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+            model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
+            model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
+            model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
+            model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
+            model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
+            model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
+            
+            Session["AccionCategoria"] = Accion.Editar;
+            Session["Tabla1"] = Grilla.Tabla1;
+            Session["Tabla2"] = Grilla.Tabla2;
+
+
+            if("01".Equals(model.Categoria.TIPOEJEMPLO)){
+                Session["Tipo"] = "T";
+                model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
+            }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
+              Session["Tipo"]  = "I";
+              model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+            }
+            else
+            {
+                Session["Tipo"] = 1;
+            }
+
+            return View("Edit", model);
+        }
+
+        /// <summary>
+        /// btnConsultarDetalle consulta del detalle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult btnConsultarDetalle(string id)
+        {
+
+            CategoriaViewModel model;
+            model = new CategoriaViewModel();
+
+
+            model = InicializarCategoriaEdit();
+
+            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+            model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
+            model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
+            model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
+            model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
+            model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
+            model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
+            
+            Session["Tabla1"] = Grilla.Tabla1;
+            Session["Tabla2"] = Grilla.Tabla2;
+            Session["AccionCategoria"] = Accion.Consultar;
+
+            if("01".Equals(model.Categoria.TIPOEJEMPLO)){
+                Session["Tipo"] = "T";
+                model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
+            }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
+              Session["Tipo"]  = "I";
+              model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+            }
+            else
+            {
+                Session["Tipo"] = 1;
+            }
+
+            return View("Edit", model);
+        }
+
+        
+
+
     }
 }
