@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NHibernate.Criterion;
+using SanPablo.Reclutador.Entity;
 
 namespace SanPablo.Reclutador.Web.Core
 {
@@ -157,6 +158,41 @@ namespace SanPablo.Reclutador.Web.Core
         }
 
         #endregion Control Error
+
+        #region Propiedades
+
+        protected Usuario UsuarioActual
+        {
+            get 
+            { 
+                //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
+                return new Usuario {NombreUsuario ="system" };
+            }
+            set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
+        }
+
+        ///// <summary>
+        ///// Logger instance.
+        ///// </summary>
+        //protected static readonly ILog logger = LogManager.GetLogger(string.Empty);
+
+        public DateTime FechaSistema
+        {
+            get { return DateTime.Now; }
+        }
+
+        public DateTime FechaCreacion
+        {
+            get { return DateTime.Now; }
+        }
+
+        public DateTime FechaModificacion
+        {
+            get { return DateTime.Now; }
+        }
+
+        #endregion Propiedades
+
 
 
     }
