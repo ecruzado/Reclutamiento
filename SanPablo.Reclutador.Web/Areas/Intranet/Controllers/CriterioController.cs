@@ -772,6 +772,9 @@
 
             CriterioPorSubcategoria objCriterioxSubCategoria = new CriterioPorSubcategoria();
 
+            objCriterioxSubCategoria.SubCategoria = new SubCategoria();
+            objCriterioxSubCategoria.Criterio = new Criterio();
+
             if (test!=null && test.Count>0)
             {
                 for (int i = 0; i < test.Count; i++)
@@ -788,8 +791,8 @@
                     objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
                     objCriterioxSubCategoria.FECCREACION = Hoy;
                     objCriterioxSubCategoria.FECMODIFICA = Hoy;
-
-
+                    
+                    
                     _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
 
                 }

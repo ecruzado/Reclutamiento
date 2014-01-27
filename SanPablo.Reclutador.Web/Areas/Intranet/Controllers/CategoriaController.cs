@@ -467,20 +467,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult PopupListaCriterio(CriterioViewModel model)
-        {
-            CriterioController criterio = new CriterioController(_criterioRepository,_detalleGeneralRepository,_alternativaRepository);
-            CriterioViewModel objCriterioModel = new CriterioViewModel();
-            objCriterioModel = criterio.InicializarCriteriosIndex();
-
-           /* objCriterioModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
-            objCriterioModel.Criterio.TipoModo = model.Criterio.TipoModo;
-            objCriterioModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
-            objCriterioModel.Criterio.Pregunta = model.Criterio.Pregunta;
-            */
-            return View(objCriterioModel);
-        }
+       
 
     
     }
