@@ -93,9 +93,13 @@
             buttons: {
                 "Grabar": function () {
                     $.ajax({
-                        data: { test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow') },
+                        data: {
+                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+
+                        },
                         type: "POST",
-                        url: "/Intranet/Criterio/Test",
+                        url: "/Intranet/Criterio/GetListaCriterio",
                         traditional: true,
                         success: function(){
                             

@@ -21,14 +21,18 @@
         private ICriterioRepository _criterioRepository;
         private IAlternativaRepository _alternativaRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
 
         public CriterioController(ICriterioRepository criterioRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
-            IAlternativaRepository alternativaRepository)
+            IAlternativaRepository alternativaRepository,
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            )
         {
             _criterioRepository = criterioRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _alternativaRepository = alternativaRepository;
+            _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
         }
         
         public ActionResult Index()
@@ -758,8 +762,39 @@
         }
 
         [HttpPost]
-        public ActionResult Test(List<int> test)
+        public ActionResult GetListaCriterio(List<int> test, string subCategoria)
         {
+            int codSubCategoria = Convert.ToInt32(subCategoria);
+            int codCriterio=0;
+            DateTime Hoy = DateTime.Today;
+
+
+
+            CriterioPorSubcategoria objCriterioxSubCategoria = new CriterioPorSubcategoria();
+
+            if (test!=null && test.Count>0)
+            {
+                for (int i = 0; i < test.Count; i++)
+                {
+                    codCriterio = test[i];
+                    var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == codCriterio);
+                    objCriterioxSubCategoria.PRIORIDAD = objCriterio.OrdenImpresion;
+                    objCriterioxSubCategoria.SubCategoria.IDESUBCATEGORIA = codSubCategoria;
+                    
+                    objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
+                    objCriterioxSubCategoria.PUNTAMAXIMO = 0;
+                    objCriterioxSubCategoria.ESTREGISTRO = "A";
+                    objCriterioxSubCategoria.USRCREACION = "PRUEBA";
+                    objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
+                    objCriterioxSubCategoria.FECCREACION = Hoy;
+                    objCriterioxSubCategoria.FECMODIFICA = Hoy;
+
+
+                    _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
+
+                }
+            }
+
             return null;
         }
        
