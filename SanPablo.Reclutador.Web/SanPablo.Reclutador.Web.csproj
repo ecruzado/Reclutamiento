@@ -164,6 +164,7 @@
     <Compile Include="Controllers\SeguridadController.cs" />
     <Compile Include="Controllers\UbigeoController.cs" />
     <Compile Include="Core\BaseController.cs" />
+    <Compile Include="Core\ConstanteSesion.cs" />
     <Compile Include="Core\JsonResponse.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="Global.asax.cs">
@@ -283,6 +284,7 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-migrate-1.2.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.custom.min.js" />
+    <Content Include="Scripts\jquery.conastec.js" />
     <Content Include="Scripts\jquery.jqGrid.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -344,6 +346,9 @@
     <Content Include="Views\ConocimientoGeneralPostulante\OtroConocimiento.cshtml" />
     <Content Include="Views\DiscapacidadPostulante\Edit.cshtml" />
     <Content Include="Views\DiscapacidadPostulante\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\NotAccess.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

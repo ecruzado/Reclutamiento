@@ -1530,15 +1530,16 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
 	color: #ffffff;
-	background-color: #0064cd;
+	background-color: #99356b;
 	background-repeat: repeat-x;
-	background-image: -webkit-linear-gradient(top, #049cdb, #0064cd); /* Safari 5.1+, Chrome 10+ */
-	background-image: -moz-linear-gradient(top, #049cdb, #0064cd); /* Firefox 3.6 */
-	background-image: -o-linear-gradient(top, #049cdb, #0064cd); /* Opera 11.10+ */
-	background-image: linear-gradient(to bottom, #049cdb, #0064cd); /* CSS3 Compliant */
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0); /* IE8 */
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #0064cd #0064cd #003f81;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b03d7b), to(#772953)); /* Safari 5.1+, Chrome 10+ */
+	background-image: -moz-linear-gradient(top, #b03d7b, #772953); /* Firefox 3.6 */
+	background-image: -o-linear-gradient(top, #b03d7b, #772953); /* Opera 11.10+ */
+	background-image: linear-gradient(to bottom, #b03d7b, #772953); /* CSS3 Compliant */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffb03d7b', endColorstr='#ff772953', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);	
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	border-color: #e6e6e6 #e6e6e6 #bfbfbf;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 

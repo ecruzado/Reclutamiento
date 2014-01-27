@@ -88,4 +88,6 @@
         public const string Tabla1 = "Tabla1";
         public const string Tabla2 = "Tabla2";
     }
+
+
 }
