@@ -178,6 +178,7 @@
     <Compile Include="Models\JQGrid\GridTable.cs" />
     <Compile Include="Models\JQGrid\JQgrid.cs" />
     <Compile Include="Models\DiscapacidadPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\JQGrid\JsonMessage.cs" />
     <Compile Include="Models\JQGrid\ResponseData.cs" />
     <Compile Include="Models\JQGrid\Row.cs" />
     <Compile Include="Models\JQGrid\Rule.cs" />

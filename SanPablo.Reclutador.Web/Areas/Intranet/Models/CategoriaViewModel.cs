@@ -23,6 +23,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public Alternativa Alternativa { get; set; }
         public List<DetalleGeneral> TipoCategoria { get; set; }
         public List<DetalleGeneral> TipoEjemplo { get; set; }
+        public List<DetalleGeneral> TipoCriterio { get; set; }
+        public List<DetalleGeneral> TipoEstado { get; set; }
+
         public HttpPostedFileBase image { get; set; }
     }
 }

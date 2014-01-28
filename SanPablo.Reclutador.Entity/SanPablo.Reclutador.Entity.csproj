@@ -87,6 +87,7 @@
     <Compile Include="Validation\ParientePostulanteValidaton.cs" />
     <Compile Include="Validation\PostulanteValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
+    <Compile Include="Validation\SubCategoriaValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

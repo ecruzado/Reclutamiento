@@ -71,7 +71,7 @@
                 <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
                 <a id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                <a id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>
@@ -111,7 +111,10 @@
                     { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 250 }
             ],
             pager: '#grdPager',
-            sortname: 'IdeCriterio'
+            sortname: 'IdeCriterio',
+            rowNum: 10,
+            rownumbers: true
+
         });
 
         $('#btnBuscar').click(function () {
@@ -147,7 +150,7 @@
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
                     if (selr != null) {
-                        window.location = '@Url.Action("ActivarDesactivar", "Criterio")'+"/"+ selr + '?estado=' + rowData.CodigoEstado;
+                        ActivarDesactivar(selr, rowData);
                     } else {
                         MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
@@ -167,7 +170,7 @@
                     var selr = $('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdList').jqGrid('getRowData', selr);
                     if (selr != null) {
-                        window.location = '@Url.Action("EliminarCriterio", "Criterio")'+"/" + selr;
+                        EliminarCriterio(selr,rowData);
                     } else {
                         MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
@@ -191,5 +194,25 @@
     function MostrarMensaje(mensaje,titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje,titulo);
     }
+
+    function ActivarDesactivar(selr, rowData) {
+        $.post("@Url.Action("ActivarDesactivar", "Criterio")?id=" + selr + "&estado=" + rowData.CodigoEstado,
+            function (data) {
+                $('#grdList').trigger('reloadGrid');
+            }
+        );
+        return false;
+    }
+
+    function EliminarCriterio(selr, rowData) {
+        $.post("@Url.Action("EliminarCriterio", "Criterio")?id=" + selr,
+             function (data) {
+                 $('#grdList').trigger('reloadGrid');
+             }
+         );
+         return false;
+     }
+    
+
 </script>
 }

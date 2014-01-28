@@ -34,5 +34,7 @@
         IList<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize, DetachedCriteria where);
 
         int CountBy();
+
+       
     }
 }

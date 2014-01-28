@@ -13,8 +13,8 @@
 @using (Html.BeginForm("PopupSubCategoria", "Categoria", FormMethod.Post, new { id = "frmPopupSubCategoria" }))
 {
     @Html.ValidationSummary(true)
-    @Html.TextBoxFor(model => model.Categoria.IDECATEGORIA, new { style = "display: none;" })
-  
+    @Html.HiddenFor(model => model.Categoria.IDECATEGORIA)
+    @Html.HiddenFor(model => model.SubCategoria.IDESUBCATEGORIA)
 
     <table style="margin-left:30px;">
         <tr >

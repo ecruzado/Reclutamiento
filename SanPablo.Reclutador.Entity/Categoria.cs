@@ -10,7 +10,7 @@ namespace SanPablo.Reclutador.Entity
     public class Categoria : BaseEntity
     {
         public virtual int IDECATEGORIA { get; set; }
-        public virtual string ORDENIMPRESION { get; set; }
+        public virtual int ORDENIMPRESION { get; set; }
         public virtual string NOMCATEGORIA { get; set; }
         public virtual string DESCCATEGORIA { get; set; }
         public virtual string TIPCATEGORIA { get; set; }
@@ -23,7 +23,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TIPOEJEMPLO { get; set; }
         public virtual byte[] IMAGENEJEMPLO { get; set; }
         public virtual string TEXTOEJEMPLO { get; set; }
-        
+        public virtual string TipoCriterio { get; set; }
        
 
         public virtual IList<Examen> ExamenesCategoria { get; set; }

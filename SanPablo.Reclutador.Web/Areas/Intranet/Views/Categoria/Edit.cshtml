@@ -17,6 +17,72 @@
     $(document).ready(function () {
 
 
+        var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
+          {
+              autoOpen: false,
+              modal: true,
+              title: "Cargar Imagen",
+              width: 500,
+              height: 240,
+              buttons: {
+                  "Subir": function () {
+                      //Guardar();
+                      return true;
+                  },
+                  "Cancelar": function () {
+                      $(this).dialog("close");
+                      return false;
+                  }
+              }
+          });
+
+
+
+        $("#spanEliminar").html("¿Desea Eliminar la Subcategoria?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var codCategoria = $("#Categoria_IDECATEGORIA").val();
+                    var selr = $('#grdList').jqGrid('getGridParam', 'selrow');
+                   
+                    if (selr != null) {
+                        EliminarSubCategoria(codCategoria, selr);
+                    } else {
+                        MostrarMensaje('Seleccione una subCategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+        $("#spanEliminarSubCrit").html("¿Desea Eliminar el Criterio?")
+        $('#divEliminarSubCrit').dialogo({
+            buttons: {
+                "Si": function () {
+                    //var codCategoria = $("#Categoria_IDECATEGORIA").val();
+                    //EliminarCritxSub
+                    var selsub = $('#grdList').jqGrid('getGridParam', 'selrow');
+                    var selCritxSub = $('#grdListCriterio').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selCritxSub);
+                    if (rowData.CodigoCrit != null && selsub != null) {
+                        EliminarCritxSub(selsub, rowData.CodigoCrit);
+                    } else {
+                        MostrarMensaje('Seleccione una subCategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
         $('#btnAgregarSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             
@@ -26,8 +92,18 @@
                 MostrarMensaje('Ingrese una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
                 
             }
+        });
 
 
+        $('#btnEditarSubCategoria').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            
+            if (selr != null && selr > 0) {
+                mostrarEditarSub(codigoCategoria, selr);
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
         });
 
 
@@ -93,12 +169,19 @@
             buttons: {
                 "Grabar": function () {
                     $.ajax({
-                        data: { test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow') },
+                        data: {
+                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+
+                        },
                         type: "POST",
-                        url: "/Intranet/Criterio/Test",
+                        url: "/Intranet/Criterio/GetListaCriterio",
                         traditional: true,
                         success: function(){
+                           // $(this).dialog("close");
+                             $('#grdListCriterio').trigger('reloadGrid');
                             
+                           
                         }
                     });
 
@@ -108,9 +191,6 @@
                 }
             }
         });
-
-       
-
 
 
         jQuery("#grdList").jqGrid({
@@ -139,17 +219,23 @@
             viewrecords: true,
             height: 120,
             width: 736,
-            rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: false,
             shrinkToFit: false,
+            onSelectRow: function (rowid, status) {
+                if (rowid!=null) {
+                    $('#grdListCriterio').trigger('reloadGrid');
+                }
+            },
 
             postData: {
 
             },
             loadComplete: function (data) {
-
+                $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
+                $('#grdListCriterio').trigger('reloadGrid');
+               
             }
         });
 
@@ -194,75 +280,172 @@
             }
         });
 
-
         jQuery("#grdListCriterio").jqGrid({
-            url: '@Url.Action("ListaCriterioxSub", "Categoria")' + '?idSub=' + jQuery('#grdList').jqGrid('getGridParam', 'selrow'),
-            datatype: 'json',
-            mtype: 'POST',
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                    { field: 'IdeSubCategoria', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaCriterioxSub", "Categoria")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListCriterio')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
             colNames: ['','','', 'Pregunta', 'Ptje.Max', 'Orden de impresión', 'Calificaci&oacute;n'],
             colModel: [
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoSub', index: 'CodigoSub', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoCrit', index: 'CodigoCrit', align: 'center', width: 50, sortable: false, hidden: true },
-                    { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false },
-                    { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 60, sortable: false },
-                    { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 50, sortable: false },
-                    { name: 'Calificacion', index: 'Calificacion', align: 'center', width: 50, sortable: false },
+                    { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false, width: 400 },
+                    { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 100, sortable: false },
+                    { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 180, sortable: false },
+                    { name: 'Calificacion', index: 'Calificacion', align: 'center', width: 150, sortable: false },
             ],
-            /*pager: jQuery('#grdPager'),
+            pager: jQuery('#grdPagerCriterio'),
             rowNum: 10,
-            rowList: [10, 30, 50],*/
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
             sortname: 'IDECRITERIOXSUBCATEGORIA',
             sortorder: 'desc',
             viewrecords: true,
-            autowidth: true,
-            /*caption: 'Lista Referencias',*/
-            height: 100,
+            height: 120,
             width: 736,
-            rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            postData: {
-
+            rownumbers: true,
+            shrinkToFit: false,
+            onSelectRow: function (rowid, status) {
+                if (rowid != null) {
+                    $('#grdListCriterioxAlternativa').trigger('reloadGrid');
+                }
             },
-            loadComplete: function (data) {
-
+            postData: {
+            },loadComplete: function (data) {
+                
+                $("#grdListCriterio").setSelection($("#grdList").getDataIDs()[0], true);
+                $('#grdListCriterioxAlternativa').trigger('reloadGrid');
             }
         });
 
-      jQuery("#grdListAlternativa").jqGrid({
-            url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Nro', 'Alternativa', 'Puntaje'],
+
+      
+
+        jQuery("#grdListCriterioxAlternativa").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                var selr = jQuery('#grdListCriterio').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selr);
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+
+                migrilla.Rules = [
+                    { field: 'IdeCriterio', data: rowData.CodigoCrit }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListCriterioxAlternativa", "Categoria")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListCriterioxAlternativa')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['', 'Alternativa', 'Peso', 'Imagen'],
             colModel: [
-                    { name: 'Item', index: 'Item', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'Alternativa', index: 'Alternativa', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 30, editable: false },
+
+                    { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 600, editable: false, sortable: false },
+                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 300, editable: false, formatter: ImagenFormatter },
             ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            cellEdit: false,
-            /*caption: 'Lista Alternativas',*/
-            height: 160,
-            autowidth: true,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
+             pager: jQuery('#grdPagerAlternativa'),
+             rowNum: 10,
+             rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IdeAlternativa',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 120,
+             width: 736,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
+            
+             postData: {
 
-            },
-            loadComplete: function (data) {
+             }, loadComplete: function (data) {
+             }
+         });
 
-            }
-        });
+
     
-    }); // Fin - $(document).ready
+    }); // Fin
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
+    }
+
+
+    function ImagenFormatter(cellvalue, options, rowObject) {
+
+        var strboton = '<input type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" />';
+        return strboton;
+
+    }
+    function mostrarsubirarchivoimagen() {
+        $("#dlgsubirarchivoimagen").dialog('open');
     }
 
     function HabilitarFormatter(cellvalue, options, rowObject) {
@@ -281,7 +464,52 @@
         return strImg;
     }
 
-   
+
+    function EliminarSubCategoria(idCategoria, idSubCategoria) {
+      
+        $.ajax({
+            data: { id: idCategoria,
+                    codSub: idSubCategoria
+                  },
+            type: "POST",
+            url: "@Url.Action("EliminarSubCategoria", "Categoria")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+
+        
+    }
+ 
+
+
+    function EliminarCritxSub(idSubCategoria, idCriterio) {
+        
+        $.ajax({
+            data: {
+                id: idCriterio,
+                codSub: idSubCategoria
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarCritxSub", "Categoria")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+
+
+    }
 
     function mostrarAgregar(id, idSubCategoria) {
         var dialogDiv = $('#updateDialog');
@@ -292,6 +520,18 @@
         });
         return false;
     }
+
+    function mostrarEditarSub(id, idSubCategoria) {
+        var dialogDiv = $('#updateDialog');
+        $.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+    
+
 
     function mostrarCriterios(id, idSubCategoria) {
         var dialogDiv = $('#criterioDialog');
@@ -341,7 +581,15 @@
                         
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" }) 
+                                
+                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" }) 
+                                }
+                                else
+                                {
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" , @readonly = "readonly"})    
+                                }
+                                
                                 <div class="tex-error" style="font-size:12px;color:red">    
                                 @Html.ValidationMessageFor(model => model.Categoria.NOMCATEGORIA)
                                 </div>
@@ -353,7 +601,13 @@
                         
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" }) 
+                                
+                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" }) 
+                                }else{
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" ,@readonly = "readonly" }) 
+                                }
+                                
                                  <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.DESCCATEGORIA)
                                  </div>
@@ -365,7 +619,13 @@
                         
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA)) 
+                                 @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                  @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA)) 
+                                 }
+                                 else
+                                 {
+                                  @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA),new {disabled = "disabled"})       
+                                 }
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.TIPCATEGORIA)
                                 </div>
@@ -380,8 +640,14 @@
                         
                             <label class="control-label" for="inputSuccess">Tipo Ejemplo </label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO)) 
-                                <div class="tex-error" style="font-size:12px;color:red"> 
+                               
+                                 @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO)) 
+                                 }
+                                 else{
+                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO), new { disabled = "disabled"}) 
+                                 } 
+                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.TIPOEJEMPLO)
                                 </div>
                             </div>
@@ -393,10 +659,15 @@
                             <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
                             <div class="controles">
                                 
-                               
-                                @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150" }) 
-                               
-                                @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })
+                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                  @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150" }) 
+                                  @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })
+                                }
+                                else
+                                {
+                                  @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150", @readonly = "readonly"}) 
+                                  @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" })
+                                }    
                                
                                 <div class="tex-error" style="font-size:12px;color:red"> 
 
@@ -419,7 +690,14 @@
                     <td class="span12" >
                     <label class="control-label" for="inputSuccess" id="lblInstrucciones">Insruccciones</label>
                     <div class="controles">
-                         @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255"}) 
+                         
+                        @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                          @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255"}) 
+                        }
+                        else
+                        {
+                          @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255",@readonly = "readonly"}) 
+                        }
                          <div class="tex-error" style="font-size:12px;color:red">  
                          @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
                          </div>
@@ -433,54 +711,68 @@
 
             @if (Grilla.Tabla1.Equals(Session["Tabla1"]))
             {
-            <div class="grilla-opciones">
-                <h6>Subcategorías</h6>
-                <div class="opciones">
-                    <a id="btnAgregarSubCategoria" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
-                    <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
-                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="tabla-datos">
-                <table id="grdList">
-                </table>
-                <div id="grdPager">
-                </div>
-            </div>
+                if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                    <div class="grilla-opciones">
+                        <h6>Subcategorías</h6>
+                        <div class="opciones">
+                            <a id="btnAgregarSubCategoria" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                            <a id="btnEditarSubCategoria"  class ="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                            <a id="btnSubirSubCategoria" class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                            <a id="btnBajarSubCategoria" class ="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                            <a id="btnEliminaSubCategoria" class="btn btn-small btn-info" title="Eliminar" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i></a>                                  
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                }   
+                    <div class="grilla-opciones">
+                    </div>
+                     <div class="tabla-datos">
+                        <table id="grdList">
+                        </table>
+                        <div id="grdPager">
+                        </div>
+                    </div>
+               
             } 
             @if (Grilla.Tabla2.Equals(Session["Tabla2"]))
             {  
+            
+                if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                    <div class="grilla-opciones">
+                    <h6>Criterio</h6>
+                        <div class="opciones">
+                            <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                            <a id="btnSubirCriterio"  class ="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                            <a id="btnBajarCriterio" class ="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                            <a id="btnEliminarCrit" onclick="$('#divEliminarSubCrit').dialog('open'); return false;"  class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                        </div>
+                    <div style="clear:both"></div>
+                    </div>
+                }
             <div class="grilla-opciones">
-                <h6>Criterio</h6>
-                <div class="opciones">
-                    <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
-                    <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
-                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                </div>
-                <div style="clear:both"></div>
-            </div>
+            </div>  
             <div class="tabla-datos">
                 <table id="grdListCriterio">
                 </table>
+                <div id="grdPagerCriterio">
+                </div>
             </div>
-            }
-            @if (Grilla.Tabla2.Equals("S")){
-            <div class="grilla-opciones">
+           
+            
+             <div class="grilla-opciones">
                 <h6>Alternativas</h6>
                 <div class="opciones">
                 </div>
                 <div style="clear:both"></div>
             </div>
             <div class="tabla-datos">
-                <table id="grdListAlternativa">
+                <table id="grdListCriterioxAlternativa">
                 </table>
+                <div id="grdPagerAlternativa"></div>
 
             </div>
             }
+            
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" id="btnGuardar" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
@@ -492,7 +784,30 @@
 }
 <div id="updateDialog" title="Agregar SubCategoria"></div>
 <div id="criterioDialog" title="Buscar Criterio"></div>
+<div id="divEliminar"><span id="spanEliminar"></span></div>
+<div id="divEliminarSubCrit"><span id="spanEliminarSubCrit"></span></div>
+
+
+
 <div id="divMensaje">
         <span id="spnMensaje"></span>
 </div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="dlgsubirarchivoimagen">
+    <table style="width: 100%">      
+        <tr>
+            <td style="height: 30px; vertical-align: central;">Sólo se permiten archivos con extensión JPG, GIF. Tamaño máximo del archivo 1MB. El archivo debe tener 32px de ancho y 32 px de Largo</td>
+        </tr>
+          <tr>
+            <td style="height: 10px;"></td>
+        </tr> 
+        <tr>
+            <td>
+             <input class="input-file" id="fileInput" type="file"></td>
+        </tr>
+        <tr>
+            <td style="height: 10px;"></td>
+        </tr>       
+    </table>
+</div>
+

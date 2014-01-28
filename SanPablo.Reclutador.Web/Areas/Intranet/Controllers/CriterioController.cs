@@ -21,14 +21,18 @@
         private ICriterioRepository _criterioRepository;
         private IAlternativaRepository _alternativaRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
 
         public CriterioController(ICriterioRepository criterioRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
-            IAlternativaRepository alternativaRepository)
+            IAlternativaRepository alternativaRepository,
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            )
         {
             _criterioRepository = criterioRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _alternativaRepository = alternativaRepository;
+            _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
         }
         
         public ActionResult Index()
@@ -110,6 +114,8 @@
             criterioViewModel.Alternativa = new Alternativa();
             criterioViewModel.Alternativa.Criterio = new Criterio();
 
+            DateTime Hoy = DateTime.Today;
+
             AlternativaValidator validator = new AlternativaValidator();
             ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
 
@@ -141,7 +147,7 @@
 
             }
             */
-
+            
 
             if (model.Alternativa.IdeAlternativa != 0 && model.Alternativa.IdeAlternativa != null)
             {
@@ -150,10 +156,9 @@
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
 
-                /*if (imagen.FileName.Length > 0)
-                {
-                    alter.Image = model.Alternativa.Image;
-                }*/
+                model.Alternativa.FechaMod = Hoy;
+                model.Alternativa.UsrMod = "Prueba 02";
+                
 
                 _alternativaRepository.Update(alter);
 
@@ -161,6 +166,8 @@
             }
             else
             {
+                model.Alternativa.FechaCreacion = Hoy;
+                model.Alternativa.UsrCreacion = "Prueba 01";
                 _alternativaRepository.Add(model.Alternativa);
             }
 
@@ -420,6 +427,14 @@
                 model.Criterio.FechaCreacion = DateTime.Now;
                 model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
 
+
+                var objCriterio = _criterioRepository.All();
+                int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
+
+                maxOrdenImp = maxOrdenImp + 1;
+
+                model.Criterio.OrdenImpresion = maxOrdenImp;
+
                 _criterioRepository.Add(model.Criterio);
             }
             else
@@ -657,8 +672,61 @@
         }
 
         [HttpPost]
-        public ActionResult Test(List<int> test)
+        public ActionResult GetListaCriterio(List<int> test, string subCategoria)
         {
+            int codSubCategoria = Convert.ToInt32(subCategoria);
+            int codCriterio=0;
+            DateTime Hoy = DateTime.Today;
+
+
+
+            CriterioPorSubcategoria objCriterioxSubCategoria;
+
+           
+
+            if (test!=null && test.Count>0)
+            {
+                for (int i = 0; i < test.Count; i++)
+                {
+
+                    objCriterioxSubCategoria = new CriterioPorSubcategoria();
+                    objCriterioxSubCategoria.SubCategoria = new SubCategoria();
+                    objCriterioxSubCategoria.Criterio = new Criterio();
+
+                    codCriterio = test[i];
+                    
+                    var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == codCriterio);
+
+
+                   var criterioxSubCategoria = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == codSubCategoria && 
+                                                                 s.Criterio.IdeCriterio == codCriterio);
+
+
+                   if (criterioxSubCategoria !=null && criterioxSubCategoria.Criterio.IdeCriterio > 0)
+                   {
+                       continue;
+                   }
+                   else
+                   {
+                       objCriterioxSubCategoria.PRIORIDAD = objCriterio.OrdenImpresion;
+                       objCriterioxSubCategoria.SubCategoria.IDESUBCATEGORIA = codSubCategoria;
+
+                       objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
+                       objCriterioxSubCategoria.PUNTAMAXIMO = 0;
+                       objCriterioxSubCategoria.ESTREGISTRO = "A";
+                       objCriterioxSubCategoria.USRCREACION = "PRUEBA";
+                       objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
+                       objCriterioxSubCategoria.FECCREACION = Hoy;
+                       objCriterioxSubCategoria.FECMODIFICA = Hoy;
+
+                       _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
+                   }
+
+                    
+
+                }
+            }
+
             return null;
         }
        
