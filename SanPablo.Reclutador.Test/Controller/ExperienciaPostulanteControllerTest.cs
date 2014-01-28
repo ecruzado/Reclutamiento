@@ -18,7 +18,8 @@
         {
             var mockExperienciaPostulanteRepository = new Mock<IExperienciaPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
 
             var resultado = experienciaPostulanteController.Edit("0").Model;
 
@@ -30,7 +31,8 @@
         {
             var mockExperienciaPostulanteRepository = new Mock<IExperienciaPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ExperienciaPostulante experienciaPostulante = new ExperienciaPostulante();
 
             var resultado = experienciaPostulanteController.Edit(experienciaPostulante);
@@ -43,7 +45,8 @@
         {
             var mockExperienciaPostulanteRepository = new Mock<IExperienciaPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ExperienciaPostulanteController experienciaPostulanteController = new ExperienciaPostulanteController(mockExperienciaPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ExperienciaPostulante experienciaPostulante = new ExperienciaPostulante();
             experienciaPostulanteController.ModelState.AddModelError("IdeExperienciaPostulante", "modelo invalido");
             var resultado = experienciaPostulanteController.Edit(experienciaPostulante);

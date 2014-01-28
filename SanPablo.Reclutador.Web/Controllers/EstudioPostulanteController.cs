@@ -27,7 +27,10 @@
 
         public ActionResult Index()
         {
-            return View();
+            var estudioGeneralViewModel = InicializarEstudio();
+            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            estudioGeneralViewModel.Estudio.Postulante = postulante;
+            return View(estudioGeneralViewModel);
         }
    
         [HttpPost]
@@ -41,7 +44,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<EstudioPostulante>();
-                where.Add(Expression.Eq("Postulante.IdePostulante", Convert.ToInt32(Session["PostulanteId"])));
+                where.Add(Expression.Eq("Postulante.IdePostulante",IdePostulante));
 
                 var generic = Listar(_estudioPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -53,9 +56,9 @@
                             {
                                 item.TipTipoInstitucion,
                                 item.NombreInstitucion,
-                                item.TipoArea,
-                                item.TipoEducacion,
-                                item.TipoNivelAlcanzado,
+                                datosDetalle(item.TipoArea,Convert.ToInt32(TipoTabla.TipoArea)),
+                                datosDetalle(item.TipoEducacion,Convert.ToInt32(TipoTabla.TipoEducacion)),
+                                datosDetalle(item.TipoNivelAlcanzado,Convert.ToInt32(TipoTabla.NivelAlcanzado)),
                                 item.FechaEstudioInicio.ToString(),
                                 item.FechaEstudioFin.ToString()
                             }
@@ -68,6 +71,12 @@
                 //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
                 return MensajeError();
             }
+        }
+        public string datosDetalle(string codigo, int tipoDato)
+        {
+            var general = _detalleGeneralRepository.GetBy(x => x.IdeGeneral == tipoDato);
+            var dato = general.Single(x => x.Valor == codigo);
+            return dato.Descripcion;
         }
 
         public ViewResult Edit(string id)
@@ -100,7 +109,7 @@
             {
                 estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
                 var postulante = new Postulante();
-                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == Convert.ToInt32(Session["PostulanteId"]));
+                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarEstudio(estudioPostulante);
                 _estudioPostulanteRepository.Add(estudioPostulante);
             }
@@ -112,7 +121,6 @@
                 estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNombreInstitucion;
                 estudioEdit.TipoEducacion = estudioPostulante.TipoEducacion;
                 estudioEdit.TipoArea = estudioPostulante.TipoArea;
-                estudioEdit.Postulante = estudioPostulante.Postulante;
                 estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
                 estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
                 estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
@@ -173,19 +181,20 @@
 
             switch (tipoInstituto)
             {
-                case "01": //es Universidad
+                case TipoInstitucion.TipoUniversidad: //es Universidad
                     listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
                     break;
-                case "02": // es Instituto
+                case TipoInstitucion.TipoInstituto: // es Instituto
                     listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
                     break;
-                case "03": // es Colegio
+                case TipoInstitucion.TipoColegio: // es Colegio
                     listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
                     break;
             }
             result = Json(listaResultado);
             return result;
         }
+
         public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
         {
              if (estudioPostulante != null)
@@ -193,14 +202,14 @@
                 string tipTipoInst = estudioPostulante.TipTipoInstitucion;
                 switch (tipTipoInst)
                 {
-                    case "01":
+                    case TipoInstitucion.TipoUniversidad:
                         estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
                         break;
-                    case "02":
+                    case TipoInstitucion.TipoInstituto:
                         estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
                         break;
-                    case "03":
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+                    case TipoInstitucion.TipoColegio:
+                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
                         break;
                 }
 

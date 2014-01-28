@@ -18,7 +18,8 @@
         {
             var mockParientePersonaRepository = new Mock<IParientePostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
 
             var resultado = parientePostulanteController.Edit("0").Model;
 
@@ -30,7 +31,8 @@
         {
             var mockParientePersonaRepository = new Mock<IParientePostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ParientePostulante parientePostulante = new ParientePostulante();
 
             var resultado = parientePostulanteController.Edit(parientePostulante);
@@ -43,7 +45,8 @@
         {
             var mockParientePersonaRepository = new Mock<IParientePostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ParientePostulanteController parientePostulanteController = new ParientePostulanteController(mockParientePersonaRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ParientePostulante parientePostulante = new ParientePostulante();
             parientePostulanteController.ModelState.AddModelError("IdeParientePostulante", "modelo invalido");
 

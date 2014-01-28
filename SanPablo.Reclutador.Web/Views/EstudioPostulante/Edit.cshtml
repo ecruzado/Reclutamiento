@@ -9,6 +9,16 @@
             $("#fechainicio").datepicker({});
             $("#fechafin").datepicker({});
 
+            var indActual = $('#chbIndEstudiando').is(":checked");
+            if (indActual == true) {
+                $('#fechafin').val("");
+                $('#fechafin').attr("disabled", "disabled");
+            }
+            else {
+                $('#fechafin').removeAttr("disabled");
+            }
+
+
             //ELEGIR EL TIPO DE INSTITUCIONES
             $('select#tipoInstitucion').change(function () {
                 var tipoInstituto = $(this).val();

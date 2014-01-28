@@ -18,7 +18,8 @@
         {
             var mockConocimientoGeneralPostulanteRepository = new Mock<IConocimientoGeneralPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
 
             var resultado = conocimientoGeneralPostulanteController.Ofimatica("0").Model;
 
@@ -30,7 +31,8 @@
         {
             var mockConocimientoGeneralPostulanteRepository = new Mock<IConocimientoGeneralPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ConocimientoGeneralPostulante conocimientoGeneralPostulante = new ConocimientoGeneralPostulante();
 
             var resultado = conocimientoGeneralPostulanteController.Ofimatica(conocimientoGeneralPostulante);
@@ -43,7 +45,8 @@
         {
             var mockConocimientoGeneralPostulanteRepository = new Mock<IConocimientoGeneralPostulanteRepository>();
             var mockDetalleGeneralRepository = new Mock<IDetalleGeneralRepository>();
-            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object);
+            var mockPostulanteRepository = new Mock<IPostulanteRepository>();
+            ConocimientoGeneralPostulanteController conocimientoGeneralPostulanteController = new ConocimientoGeneralPostulanteController(mockConocimientoGeneralPostulanteRepository.Object, mockDetalleGeneralRepository.Object, mockPostulanteRepository.Object);
             ConocimientoGeneralPostulante conocimientoGeneralPostulante = new ConocimientoGeneralPostulante();
             conocimientoGeneralPostulanteController.ModelState.AddModelError("IdeConocimientoGeneralPostulante", "modelo invalido");
             var resultado = conocimientoGeneralPostulanteController.Ofimatica(conocimientoGeneralPostulante);

@@ -18,16 +18,23 @@
     {
         private IConocimientoGeneralPostulanteRepository _conocimientoGeneralPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private IPostulanteRepository _postulanteRepository;
 
-        public ConocimientoGeneralPostulanteController(IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        public ConocimientoGeneralPostulanteController(IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository, 
+                                                       IDetalleGeneralRepository detalleGeneralRepository,
+                                                       IPostulanteRepository postulanteRepository)
         {
             _conocimientoGeneralPostulanteRepository = conocimientoGeneralPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _postulanteRepository = postulanteRepository;
         }
 
         public ActionResult Index()
         {
-            return View();
+            var conocimientoViewModel = InicializarConocimiento();
+            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            conocimientoViewModel.ConocimientoGeneral.Postulante = postulante;
+            return View(conocimientoViewModel);
         }
 
         [HttpPost]
@@ -39,11 +46,10 @@
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
-
+                
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralPostulante>();
-
-
                 where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
+                where.Add(Expression.Eq("Postulante.IdePostulante",IdePostulante));
 
                 var generic = Listar(_conocimientoGeneralPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -83,7 +89,7 @@
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralPostulante>();
                 where.Add(Expression.IsNotNull("TipoIdioma"));
-
+                where.Add(Expression.Eq("Postulante.IdePostulante", IdePostulante));
 
                 var generic = Listar(_conocimientoGeneralPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -122,7 +128,7 @@
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralPostulante>();
                 where.Add(Expression.IsNotNull("TipoConocimientoGeneral"));
-
+                where.Add(Expression.Eq("Postulante.IdePostulante", IdePostulante));
 
                 var generic = Listar(_conocimientoGeneralPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -159,9 +165,8 @@
             }
             else
             {
-                int ideConocimintoEdit = Convert.ToInt32(id);
                 var conocimientoResultado = new ConocimientoGeneralPostulante();
-                conocimientoResultado = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == ideConocimintoEdit);
+                conocimientoResultado = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == Convert.ToInt32(id));
                 conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoResultado;
                 return View(conocimientoGeneralViewModel);
             }
@@ -177,8 +182,22 @@
             {
                 return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
             }
-            conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-            _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+            if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+            {
+                conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+            }
+            else
+            {
+                var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                conocimientoEdit.TipoNombreOfimatica = conocimientoGeneralPostulante.TipoNombreOfimatica;
+                conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
+                conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+            }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
         }
@@ -228,9 +247,8 @@
             }
             else
             {
-                int ideConocimintoEdit = Convert.ToInt32(id);
                 var conocimientoResultado = new ConocimientoGeneralPostulante();
-                conocimientoResultado = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == ideConocimintoEdit);
+                conocimientoResultado = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == Convert.ToInt32(id));
                 conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoResultado;
                 return View(conocimientoGeneralViewModel);
             }
@@ -246,17 +264,25 @@
             }
             else
             {
-                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante != 0)
+                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
                 {
-                    _conocimientoGeneralPostulanteRepository.Update(conocimientoGeneralPostulante);
-                    return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
+                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                   
                 }
                 else
                 {
-                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                    return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
+                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                    conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
+                    conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
+                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+
+                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
                 }
+                return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
             }
 
         }
@@ -298,6 +324,7 @@
                 var conocimientoResultado = new ConocimientoGeneralPostulante();
                 conocimientoResultado = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == ideConocimientoEdit);
                 conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoResultado;
+                actualizarOtrosConocimientos(conocimientoGeneralViewModel);
                 return View(conocimientoGeneralViewModel);
             }
         }
@@ -312,8 +339,24 @@
             {
                 return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
             }
-            conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-            _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+            if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+            {
+                conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+            }
+            else
+            {
+                var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                conocimientoEdit.TipoNombreConocimientoGeneral = conocimientoGeneralPostulante.TipoNombreConocimientoGeneral;
+                conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
+                conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
+                conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+
+                _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+            }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
         }
@@ -354,6 +397,24 @@
             }
             result = Json(listaResultado);
             return result;
+        }
+        public void actualizarOtrosConocimientos(ConocimientoPostulanteGeneralViewModel conocimientoModel)
+        {
+            var listaResultado = new List<DetalleGeneral>();
+            switch (conocimientoModel.ConocimientoGeneral.TipoConocimientoGeneral)
+            {
+                case "01": //es software
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGSoftware));
+                    break;
+                case "02": // es primeros auxilios
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGPrimerosAux));
+                    break;
+                case "03": // es Contabilidad
+                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGContabilidad));
+                    break;
+            }
+            conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
+
         }
         #endregion
     }

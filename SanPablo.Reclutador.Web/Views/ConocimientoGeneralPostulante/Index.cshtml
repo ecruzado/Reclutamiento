@@ -12,6 +12,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            actualizarBarra();
+
             jQuery("#grdListOfimatica").jqGrid({
                 url: '@Url.Action("Listar", "ConocimientoGeneralPostulante")',
                 datatype: 'json',
@@ -129,7 +131,14 @@
 
                                     }
                                     else {
-                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
+                                        $("#divMensaje").dialog({
+                                            title: 'SAN PABLO',
+                                            modal: true,
+                                            buttons: {
+                                                "Ok": function () { $(this).dialog("close"); }
+                                            }
+                                        });
                                     }
                                 }
                             );
@@ -161,7 +170,14 @@
 
                                     }
                                     else {
-                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
+                                        $("#divMensaje").dialog({
+                                            title: 'SAN PABLO',
+                                            modal: true,
+                                            buttons: {
+                                                "Ok": function () { $(this).dialog("close"); }
+                                            }
+                                        });
                                     }
                                 }
                             );
@@ -192,7 +208,14 @@
 
                                     }
                                     else {
-                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
+                                        $("#divMensaje").dialog({
+                                            title: 'SAN PABLO',
+                                            modal: true,
+                                            buttons: {
+                                                "Ok": function () { $(this).dialog("close"); }
+                                            }
+                                        });
                                     }
                                 }
                             );
@@ -221,7 +244,14 @@
                     mostrarEditarOfimatica(ideOfimatica);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
+                    $("#spanMensaje").html('Seleccionar un item a editar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
                 }
             });
 
@@ -231,8 +261,15 @@
                     mostrarEditarIdioma(ideIdioma);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
-                }
+                    $("#spanMensaje").html('Seleccionar un item a editar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+               }
             });
            
             $('#btnEditarOtro').click(function () {
@@ -241,7 +278,14 @@
                     mostrarEditarOtroConocimiento(ideOtroConocimiento);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
+                    $("#spanMensaje").html('Seleccionar un item a editar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
                 }
             });
 
@@ -374,7 +418,12 @@
         }
 
         function CheckFormatter(cellvalue, options, rowObject) {
-            var strRdo = '<input type="checkbox" disabled="disabled">';
+            if (cellvalue == "True") {
+                var strRdo = '<input type="checkbox" disabled="disabled" checked>';
+            }
+            else {
+                var strRdo = '<input type="checkbox" disabled="disabled">';
+            }
             return strRdo;
         }
 
@@ -391,6 +440,7 @@
             <div class="widget-title">
                 <h5>Conocimientos</h5>
             </div>
+            @Html.HiddenFor(model => model.ConocimientoGeneral.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
             <div class="grilla-opciones">
                 <h6>Ofimática</h6>
                 <div class="opciones">

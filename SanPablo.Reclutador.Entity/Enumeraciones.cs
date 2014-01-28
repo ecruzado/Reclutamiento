@@ -12,7 +12,7 @@
         DisponibilidadTrabajo = 12,
         DisponibilidadHorario = 13,
         TipoHorario = 14,
-        TipoParienteSede = 100,
+        TipoParienteSede = 38,
         TipoSalario = 11,
         TipoInstitucion = 17,
 
@@ -89,5 +89,16 @@
         public const string Tabla2 = "Tabla2";
     }
 
+    public sealed class TipoInstitucion
+    {
+        public const string TipoUniversidad = "01";
+        public const string TipoInstituto = "02";
+        public const string TipoColegio = "03";
+    }
+
+    public sealed class TipoVinculo
+    {
+        public const string Hijo = "03";
+    }
 
 }

@@ -10,6 +10,9 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            actualizarBarra();
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "ParientePostulante")',
                 datatype: 'json',
@@ -60,7 +63,15 @@
 
                                     }
                                     else {
-                                        alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        //alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
+                                        $("#divMensaje").dialog({
+                                            title: 'SAN PABLO',
+                                            modal: true,
+                                            buttons: {
+                                                "OK": function () { $(this).dialog("close"); }
+                                            }
+                                        });
                                     }
                                 }
                             );
@@ -82,33 +93,49 @@
                     mostrarEditarPariente(idePariente);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
+                    $("#spanMensaje").html('Seleccione un item a editar.');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "OK": function () { $(this).dialog("close"); }
+                        }
+                    });
                 }
             });
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var idePariente = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                if (idePariente != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-
-                $("#divMensaje").dialog({
-                    title: 'CONVOCATORIAS SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
-                        "Cancel": function () { $(this).dialog("close"); }
-                    }
-                });
-
-                return false;
+                    $("#divMensaje").dialog({
+                        title: 'CONVOCATORIAS SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccione un item a eliminar.');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "OK": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
         });
 
         function mostrarEditarPariente(id) {
             var dialogDiv = $('#updateDialog');
-            //var id = parseInt(ideEstudioEdit);
             $.get("/ParientePostulante/Edit/" + id, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
@@ -147,6 +174,7 @@
             <div class="widget-title">
                 <h5>Parientes</h5>
             </div>
+            @Html.HiddenFor(model => model.Pariente.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  

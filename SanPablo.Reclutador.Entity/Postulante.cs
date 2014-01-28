@@ -37,8 +37,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreZona { get; set; }
         public virtual int IdeUbigeo { get; set; }
         public virtual string TipoNacionalidad { get; set; }
+        public virtual string ReferenciaDireccion { get; set; }
        
         public virtual IList<EstudioPostulante> Estudios { get; set; }
+        public virtual IList<ExperienciaPostulante> Experiencias { get; set; }
+        public virtual IList<ConocimientoGeneralPostulante> Conocimientos { get; set; }
+        public virtual IList<ParientePostulante> Parientes { get; set; }
+        public virtual IList<DiscapacidadPostulante> Discapacidades { get; set; }
 
         public virtual string TipoSalario { get; set; }
         public virtual string TipoDisponibilidadTrabajo { get; set; }
@@ -54,9 +59,16 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual byte[] FotoPostulante { get; set; }
 
+        public virtual string IndicadorRegistroCompleto { get; set; }
+
         public Postulante()
         {
             Estudios = new List<EstudioPostulante>();
+            Experiencias = new List<ExperienciaPostulante>();
+            Conocimientos = new List<ConocimientoGeneralPostulante>();
+            Parientes = new List<ParientePostulante>();
+            Discapacidades = new List<DiscapacidadPostulante>();
+            
         }
 
         public virtual void agregarEstudio(EstudioPostulante estudioPostulante)
@@ -64,7 +76,29 @@ namespace SanPablo.Reclutador.Entity
             estudioPostulante.Postulante = this;
             Estudios.Add(estudioPostulante);
         }
-     
 
+        public virtual void agregarExperiencia(ExperienciaPostulante experienciaPostulante)
+        {
+            experienciaPostulante.Postulante = this;
+            Experiencias.Add(experienciaPostulante);
+        }
+        
+        public virtual void agregarConocimiento(ConocimientoGeneralPostulante conocimientoPostulante)
+        {
+            conocimientoPostulante.Postulante = this;
+            Conocimientos.Add(conocimientoPostulante);
+        }
+
+        public virtual void agregarPariente(ParientePostulante parientePostulante)
+        {
+            parientePostulante.Postulante = this;
+            Parientes.Add(parientePostulante);
+        }
+
+        public virtual void agregarDiscapacidad(DiscapacidadPostulante discapacidadPostulante)
+        {
+            discapacidadPostulante.Postulante = this;
+            Discapacidades.Add(discapacidadPostulante);
+        }
     }
 }

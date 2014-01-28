@@ -4,7 +4,10 @@
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Repository.Interface;
     using System.Collections.Generic;
-
+    using System.Linq.Expressions;
+    using NHibernate.Criterion;
+    using System;
+   
     public class DetalleGeneralRepository : Repository<DetalleGeneral>, IDetalleGeneralRepository
     {
         public DetalleGeneralRepository(ISession session)
@@ -18,6 +21,8 @@
                 && x.IndicadorActivo == IndicadorActivo.Activo);
             return lista;
         }
+
+        
 
     }
 }

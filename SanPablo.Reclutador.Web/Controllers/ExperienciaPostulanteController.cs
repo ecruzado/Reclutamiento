@@ -1,29 +1,37 @@
 ﻿namespace SanPablo.Reclutador.Web.Controllers
 {
-    using SanPablo.Reclutador.Entity;
+    
     using SanPablo.Reclutador.Repository.Interface;
-    using SanPablo.Reclutador.Web.Core;
-    using SanPablo.Reclutador.Web.Models;
     using SanPablo.Reclutador.Web.Models.JQGrid;
+    using SanPablo.Reclutador.Web.Models;
+    using SanPablo.Reclutador.Web.Core;
+    using SanPablo.Reclutador.Entity;
     using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using System.Linq;
+    using System.Web.Mvc;
+    using System.Collections.Generic;
+    using NHibernate.Criterion;
 
     public class ExperienciaPostulanteController : BaseController
     {
         private IExperienciaPostulanteRepository _experienciaPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
-
-        public ExperienciaPostulanteController(IExperienciaPostulanteRepository experienciaPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        private IPostulanteRepository _postulanteRepository;
+        public ExperienciaPostulanteController(IExperienciaPostulanteRepository experienciaPostulanteRepository, 
+                                               IDetalleGeneralRepository detalleGeneralRepository,
+                                               IPostulanteRepository postulanteRepository )
         {
             _experienciaPostulanteRepository = experienciaPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _postulanteRepository = postulanteRepository;
         }
 
         public ActionResult Index()
         {
-            return View();
+            var experienciaViewModel = InicializarExperiencia();
+            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            experienciaViewModel.Experiencia.Postulante = postulante;
+            return View(experienciaViewModel);
         }
 
         [HttpPost]
@@ -36,20 +44,10 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                //var where = (Utils.GetWhere(grid.filters, grid.rules));
-                var where = string.Empty;
-
-                if (!string.IsNullOrEmpty(where))
-                {
-                    grid._search = true;
-
-                    if (!string.IsNullOrEmpty(grid.searchString))
-                    {
-                        where = where + " and ";
-                    }
-                }
-
-                var generic = Listar(_experienciaPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                DetachedCriteria where = DetachedCriteria.For<ExperienciaPostulante>();
+                where.Add(Expression.Eq("Postulante.IdePostulante", IdePostulante));
+                
+                var generic = Listar(_experienciaPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
                     .Select(item => new Row
@@ -90,9 +88,8 @@
             }
             else
             {
-                int ideExperienciaEdit = Convert.ToInt32(id);
                 var experienciaResultado = new ExperienciaPostulante();
-                experienciaResultado = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == ideExperienciaEdit);
+                experienciaResultado = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == Convert.ToInt32(id));
                 experienciaGeneralViewModel.Experiencia = experienciaResultado;
                 return View(experienciaGeneralViewModel);
             }
@@ -104,13 +101,36 @@
 
             if (!ModelState.IsValid)
             {
-                //var experienciaPostulanteModel = InicializarExperiencia();
-                //experienciaPostulanteModel.Experiencia = experienciaPostulante;
-                //return View(experienciaPostulanteModel);
                 return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
             }
-            experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
-            _experienciaPostulanteRepository.Add(experienciaPostulante);
+            if (experienciaPostulante.IdeExperienciaPostulante == 0)
+            {
+                experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
+                var postulante = new Postulante();
+                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulante.agregarExperiencia(experienciaPostulante);
+                _experienciaPostulanteRepository.Add(experienciaPostulante);
+            }
+            else
+            {
+                var experienciaEdit = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == experienciaPostulante.IdeExperienciaPostulante);
+                experienciaEdit.TipoMotivoCese = experienciaPostulante.TipoMotivoCese;
+                experienciaEdit.TipoCargoTrabajoReferente = experienciaPostulante.TipoCargoTrabajoReferente;
+                experienciaEdit.TipoCargoTrabajo = experienciaPostulante.TipoCargoTrabajo;
+                experienciaEdit.TiempoDeServicio = experienciaPostulante.TiempoDeServicio;
+                experienciaEdit.NumeroMovilReferencia = experienciaPostulante.NumeroMovilReferencia;
+                experienciaEdit.NumeroFijoInstitucionReferente = experienciaPostulante.NumeroFijoInstitucionReferente;
+                experienciaEdit.NumeroAnexoInstitucionReferente = experienciaPostulante.NumeroAnexoInstitucionReferente;
+                experienciaEdit.NombreReferente = experienciaPostulante.NombreReferente;
+                experienciaEdit.NombreEmpresa = experienciaPostulante.NombreEmpresa;
+                experienciaEdit.NombreCargoTrabajo = experienciaPostulante.NombreCargoTrabajo;
+                experienciaEdit.IndicadorActualmenteTrabajo = experienciaPostulante.IndicadorActualmenteTrabajo;
+                experienciaEdit.FechaTrabajoInicio = experienciaPostulante.FechaTrabajoInicio;
+                experienciaEdit.FechaTrabajoFin = experienciaPostulante.FechaTrabajoFin;
+                experienciaEdit.CorreoReferente = experienciaPostulante.CorreoReferente;
+
+                _experienciaPostulanteRepository.Update(experienciaEdit);
+            }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
         }
 

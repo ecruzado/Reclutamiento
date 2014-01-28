@@ -7,6 +7,7 @@ namespace SanPablo.Reclutador.Web.Core
 {
     public sealed class ConstanteSesion
     {
-        public const string Usuario = "USUARIO";
+        public const string Usuario = "Usuario";
+        public const string IdePostulante = "IdePostulante";
     }
 }

@@ -10,6 +10,9 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            actualizarBarra();
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "EstudioPostulante")',
                 datatype: 'json',
@@ -66,7 +69,14 @@
                                         
                                     }
                                     else {
-                                            alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
+                                        $("#divMensaje").dialog({
+                                            title: 'SAN PABLO',
+                                            modal: true,
+                                            buttons: {
+                                                "Ok": function () { $(this).dialog("close"); }
+                                            }
+                                        });
                                          }
                                 }
                             );
@@ -88,25 +98,43 @@
                     mostrarEditarEstudios(ideEstudio);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
+                    $("#spanMensaje").html('Seleccionar un item a editar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
                 }
             });
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                if (ideEstudio != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarEstudio(ideEstudio); $(this).dialog("close"); location.reload(true) },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
 
-                $("#divMensaje").dialog({
-                    title: 'CONVOCATORIAS SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () { eliminarEstudio(ideEstudio); $(this).dialog("close"); location.reload(true)},
-                        "Cancel": function () { $(this).dialog("close"); }
-                    }
-                });
-
-                return false;
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccionar un item a eliminar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
 
@@ -156,6 +184,7 @@
             <div class="widget-title">
                 <h5>Nivel Académico</h5>
             </div>
+            @Html.HiddenFor(model => model.Estudio.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  

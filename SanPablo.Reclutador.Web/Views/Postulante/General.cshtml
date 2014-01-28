@@ -33,7 +33,19 @@
 
         $('.datepicker').datepicker({});
         $("#fechanacimiento").datepicker({});
-       
+
+        actualizarBarra();
+
+        //Cargar imagen
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("obtenerImagen","Postulante")',
+            success: function (respuesta) {
+                alert(respuesta);
+                leerImagen(respuesta);
+                }
+        });
+
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
@@ -74,7 +86,15 @@
             });
         })
 
-
+        function leerImagen(file) {
+            if (file.type.indexOf("image") == 0) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("imgSalida").src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
         //MOSTRAR IMAGEN
         $(function () {
             $('#FotoPostulante').change(function (e) {
@@ -97,6 +117,8 @@
                 var result = e.target.result;
                 $('#imgSalida').attr("src", result);
             }
+
+           
         });
 
 
@@ -150,6 +172,7 @@
                 <table style="margin-left:120px;">
                     <tr>
                         <td class="colEtiqueta">
+                            @Html.HiddenFor(model=>model.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
                             <label class="etiquetaFormulario" for="setipodocumento">Tipo Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
@@ -160,8 +183,9 @@
                                             
                             <img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>
                             <br />
-                             @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" })
-                               
+                            
+                             @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
+                                  
                         </td>
                     </tr>
                     <tr>
@@ -384,7 +408,7 @@
                             <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono Movil <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txttelefonomovil">
+                            @Html.TextBoxFor(model => model.Postulante.TelefonoMovil)
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
@@ -399,14 +423,14 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Teléfono Fijo</label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txttelefonofijo" value="">
+                            @Html.TextBoxFor(model => model.Postulante.TelefonoFijo)
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">
                             <label class="etiquetaFormulario" for="setipozona">Nombre Zona</label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txtNombreZona" value="">
+                             @Html.TextBoxFor(model => model.Postulante.NombreZona)
                         </td>
                     </tr>
                     <tr>
@@ -417,15 +441,15 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Referencia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            <input type="text" class="textoFormulario" id="txtReferencia" value="">
+                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion)
                         </td>
                     </tr>
 
                 </table>
                 <div class="formulario-accion">
                     <div class="opciones">
-                        <button id="btnGrabar" type="submit" onclick ="ActualizarDatos('25%')"><i class="icon-hdd icon-white"></i> Grabar</button>
-                        <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                        @*<a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>*@
                         <button type="reset" class="btn">Cancelar</button>
                         <a class="btn btn-info" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                     </div>

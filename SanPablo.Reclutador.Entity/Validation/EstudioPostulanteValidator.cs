@@ -38,11 +38,13 @@
                 .GreaterThan(new DateTime(1950, 01, 01))
                 .WithMessage("Ingresar Fecha de Inicio Válido");
 
-
-            //RuleFor(x => x.FechaEstudioFin)
-            //   .GreaterThan(x => x.FechaEstudioInicio)
-            //   .WithMessage("La fecha final debe ser posterior a la fecha de Inicio");
-
+            When(x => x.ActualmenteEstudiando.Equals(false), () =>
+            {
+                RuleFor(x => x.FechaEstudioFin)
+                    .GreaterThan(x => x.FechaEstudioInicio)
+                    .WithMessage("Ingresar una fecha final válida");
+            });
+            
 
         }
     }

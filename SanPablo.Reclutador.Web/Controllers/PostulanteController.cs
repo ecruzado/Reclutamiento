@@ -4,6 +4,7 @@
     using SanPablo.Reclutador.Repository.Interface;
     using SanPablo.Reclutador.Web.Models;
     using System.Collections.Generic;
+    using SanPablo.Reclutador.Web.Core;
     using System.Web.Mvc;
     using System.Web;
     using System.Web.Services;
@@ -12,8 +13,8 @@
     using FluentValidation;
     using System.IO;
     using System;
-    
-    public class PostulanteController : Controller
+
+    public class PostulanteController :  BaseController
     {
         private IPostulanteRepository _postulanteRepository;
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
@@ -68,10 +69,9 @@
         public ViewResult General()
         {
             var postulanteGeneralViewModel = inicializarPostulante();
-            if (Session["PostulanteId"] != null)
+            if (IdePostulante != 0)
             {
-                int idePostulante = Convert.ToInt32(Session["PostulanteId"]);
-                postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == idePostulante);
+                postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 mostrarUbigeo(postulanteGeneralViewModel);
             }
             return View(postulanteGeneralViewModel);
@@ -111,9 +111,49 @@
                     model.Postulante.FotoPostulante = data;
 
                 }
-                //Guardar postulante
-                _postulanteRepository.Add(model.Postulante);
-                Session["PostulanteId"] = model.Postulante.IdePostulante;
+                //Guardar postulante si es nuevo
+                if (IdePostulante == 0)
+                {
+                    _postulanteRepository.Add(model.Postulante);
+
+                }
+                else
+                {
+                    var postulante = model.Postulante;
+                    var postulanteEdit = _postulanteRepository.GetSingle(x=>x.IdePostulante == IdePostulante);
+                    #region copiar datos
+                    postulanteEdit.TipoZona = postulante.TipoZona;
+                    postulanteEdit.TipoVia = postulante.TipoVia;
+                    postulanteEdit.TipoNacionalidad = postulante.TipoNacionalidad;
+                    postulanteEdit.TipoEstadoCivil = postulante.TipoHorario;
+                    postulanteEdit.TipoEstadoCivil = postulante.TipoEstadoCivil;
+                    postulanteEdit.TipoDocumento = postulante.TipoDocumento;
+                    postulanteEdit.TelefonoMovil = postulante.TelefonoMovil;
+                    postulanteEdit.TelefonoFijo = postulante.TelefonoFijo;
+                    postulanteEdit.SegundoNombre = postulante.SegundoNombre;
+                    postulanteEdit.ReferenciaDireccion = postulante.ReferenciaDireccion;
+                    postulanteEdit.PrimerNombre = postulante.PrimerNombre;
+                    postulanteEdit.Observacion = postulante.Observacion;
+                    postulanteEdit.NumeroLicencia = postulante.NumeroLicencia;
+                    postulanteEdit.NumeroDocumento = postulante.NumeroDocumento;
+                    postulanteEdit.NumeroDireccion = postulante.NumeroDireccion;
+                    postulanteEdit.NombreZona = postulante.NombreZona;
+                    postulanteEdit.NombreVia = postulante.NombreVia;
+                    postulanteEdit.Manzana = postulante.Manzana;
+                    postulanteEdit.Lote = postulante.Lote;
+                    postulanteEdit.InteriorDireccion = postulante.InteriorDireccion;
+                    postulanteEdit.IndicadorSexo = postulante.IndicadorSexo;
+                    postulanteEdit.IdeUbigeo = postulante.IdeUbigeo;
+                    postulanteEdit.FotoPostulante = postulante.FotoPostulante;
+                    postulanteEdit.FechaNacimiento = postulante.FechaNacimiento;
+                    postulanteEdit.Etapa = postulante.Etapa;
+                    postulanteEdit.Correo = postulante.Correo;
+                    postulanteEdit.Bloque = postulante.Bloque;
+                    postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
+                    postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;
+                    #endregion
+                    _postulanteRepository.Update(postulanteEdit);
+                }
                 return RedirectToAction("../EstudioPostulante/Index");
             }
             catch (InvalidCastException e)
@@ -121,6 +161,22 @@
                // throw new Exception("ERROR.", e);
                 return View("General", postulanteModel);
             } 
+        }
+        
+        [HttpPost]
+        public ActionResult obtenerImagen()
+        {
+            ActionResult result = null;
+            if (IdePostulante != 0)
+            {
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                result = Json(postulante.FotoPostulante);
+            }
+            else
+            {
+                result = Json(false);
+            }
+            return result;
         }
         #endregion
 
@@ -155,6 +211,10 @@
         public ViewResult DatosComplementarios()
         {
             var postulanteGeneralViewModel = inicializarDatosComplementarios();
+            if (IdePostulante != 0)
+            {
+                postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            }
             return View(postulanteGeneralViewModel);
         }
 
@@ -170,8 +230,21 @@
                 postulanteModel.Postulante = postulante;
                 return View("DatosComplementarios", postulanteModel);
             }
-            _postulanteRepository.Update(postulante);
-            return RedirectToAction("Parientes");
+            var postulanteEdit = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            postulanteEdit.TipoSalario = postulante.TipoSalario;
+            postulanteEdit.TipoDisponibilidadTrabajo = postulante.TipoDisponibilidadTrabajo;
+            postulanteEdit.TipoDisponibilidadHorario = postulante.TipoDisponibilidadHorario;
+            postulanteEdit.TipoComoSeEntero = postulante.TipoComoSeEntero;
+            postulanteEdit.TipoParienteSede = postulante.TipoParienteSede;
+            postulanteEdit.TipoHorario = postulante.TipoHorario;
+            postulanteEdit.ParienteCargo = postulante.ParienteCargo;
+            postulanteEdit.ParienteNombre = postulante.ParienteNombre;
+            postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
+            postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
+            postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
+                       
+            _postulanteRepository.Update(postulanteEdit);
+            return RedirectToAction("../ParientePostulante/Index");
         }
 
         #endregion

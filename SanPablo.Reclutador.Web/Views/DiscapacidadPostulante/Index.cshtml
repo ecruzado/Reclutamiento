@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Models.EstudioPostulanteGeneralViewModel
+﻿@model SanPablo.Reclutador.Web.Models.DiscapacidadPostulanteGeneralViewModel
 @{
     ViewBag.Title = "Discapacidad";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
@@ -10,6 +10,9 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            actualizarBarra();
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "DiscapacidadPostulante")',
                 datatype: 'json',
@@ -146,6 +149,7 @@
             <div class="widget-title">
                 <h5>Nivel Académico</h5>
             </div>
+            @Html.HiddenFor(model => model.Discapacidad.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  

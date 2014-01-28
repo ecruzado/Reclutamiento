@@ -33,9 +33,11 @@
                 .NotEqual("00")
                 .WithMessage("Seleccione vinculo de parentesco");
 
-            //RuleFor(x => x.FechaNacimiento)
-            //    .GreaterThan(new DateTime(1950, 01, 01))
-            //    .WithMessage("Ingresar Fecha de Inicio Válido");
+            When(x => x.TipoDeVinculo.Equals(TipoVinculo.Hijo), () => {
+                RuleFor(x => x.FechaNacimiento).GreaterThan(new DateTime(1950,01,01))
+                    .WithMessage("La fecha de nacimiento en caso de hijos es obligatoria");
+                
+            });
 
 
         }

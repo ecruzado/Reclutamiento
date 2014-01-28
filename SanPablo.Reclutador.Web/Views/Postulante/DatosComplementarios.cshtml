@@ -9,6 +9,13 @@
 @section Scripts{
 <script>
     $(document).ready(function () {
+
+        //verficar el radio button
+        actualizarBarra();
+
+        //Determinar el radio button
+        actualizarDatosCHSP();
+
         //Habilitar seccion Otros - Como se entero
         $("input[id='rad-btn-comoEntero']").click(function () {
             var selectedRadio = $("#rad-btn-comoEntero:checked").val();
@@ -20,21 +27,27 @@
             }
         })
 
+        
+
         //Habilitar datos del pariente que trabaja CHSP -
         $("input[id='rd-btn-parienteCHSP']").click(function () {
-            var selectedRadio = $("#rd-btn-parienteCHSP:checked").val();
-            if (selectedRadio == 'S') {
-                $('#Postulante_TipoParienteSede').removeAttr('disabled');
-                $('#Postulante_ParienteNombre').removeAttr('disabled');
-                $('#Postulante_ParienteCargo').removeAttr('disabled');
-            }
-            else {
-                $('#Postulante_TipoParienteSede').attr('disabled', 'disabled');
-                $('#Postulante_ParienteNombre').attr('disabled', 'disabled');
-                $('#Postulante_ParienteCargo').attr('disabled', 'disabled');
-            }
+            actualizarDatosCHSP();
         })
     });
+    function actualizarDatosCHSP()
+    {
+        var selectedRadio = $("#rd-btn-parienteCHSP:checked").val();
+        if (selectedRadio == 'S') {
+            $('#Postulante_TipoParienteSede').removeAttr('disabled');
+            $('#Postulante_ParienteNombre').removeAttr('disabled');
+            $('#Postulante_ParienteCargo').removeAttr('disabled');
+        }
+        else {
+            $('#Postulante_TipoParienteSede').attr('disabled', 'disabled');
+            $('#Postulante_ParienteNombre').attr('disabled', 'disabled');
+            $('#Postulante_ParienteCargo').attr('disabled', 'disabled');
+        }
+    }
 
 </script>
 }
@@ -50,6 +63,7 @@
             <div class="widget-title">
                 <h5>Datos Complementarios</h5>
             </div>
+               @Html.HiddenFor(model => model.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
             <div class="grilla-opciones">
                 <div class="opciones">
                 </div>
@@ -157,7 +171,8 @@
                                  @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"03", new { @id = "rad-btn-comoEntero" }) @Html.Label("Amigos/Familiares", new { @style = "display: inline-block" }) &nbsp;&nbsp;&nbsp;
                                  @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero, "04", new { @id = "rad-btn-comoEntero" }) @Html.Label("Otros", new { @style = "display: inline-block" })
                                 </td>
-                                <td><input type="text" class="input-medium" id="txtotros" disabled="disabled"></td>
+                                <td>@Html.TextBoxFor(model => model.Postulante.DescripcionOtroMedio, new { @class = "input-medium"})
+                                    @*<input type="text" class="input-medium" id="txtotros" disabled="disabled"></td>*@
                             </tr>
                             <tr>
                                 <td>

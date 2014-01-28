@@ -35,13 +35,25 @@
             Map(x => x.TelefonoFijo, "TELFIJO");
             Map(x => x.TipoZona, "TIPZONA");
             Map(x => x.NombreZona, "NOMZONA");
+            Map(x => x.ReferenciaDireccion, "REFERENCIA");
                     
             Map(x => x.IdeUbigeo, "IDEUBIGEO");
             Map(x => x.TipoNacionalidad, "TIPNACIONALIDAD");
+
             HasMany(x => x.Estudios)
                     .Inverse()
                     .Cascade.All();
+            HasMany(x => x.Experiencias)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.Parientes)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.Discapacidades)
+                    .Inverse()
+                    .Cascade.All();
 
+            Map(x => x.TipoSalario, "TIPSALARIO");
             Map(x => x.TipoDisponibilidadTrabajo, "TIPDISPTRABAJO");
             Map(x => x.TipoDisponibilidadHorario, "TIPDISPHORARIO");
             Map(x => x.TipoHorario, "TIPHORARIO");
@@ -54,6 +66,8 @@
             Map(x => x.DescripcionOtroMedio, "DESOTROMEDIO");
 
             Map(x => x.FotoPostulante, "FOTOPOSTULANTE");
+
+            Map(x => x.IndicadorRegistroCompleto, "INDTREGISTRO");
 
             Table("POSTULANTE");
         }

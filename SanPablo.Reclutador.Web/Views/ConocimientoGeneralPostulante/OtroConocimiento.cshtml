@@ -26,6 +26,16 @@
                     }
                 });
             })
+            $('select#nombreConocimiento').change(function () {
+                var tipoNombre = $(this).val();
+                if (tipoNombre == "99") {
+                    $('#nombreOtroConocimiento').removeAttr("disabled");
+                }
+                else {
+                    $('#nombreOtroConocimiento').attr("disabled","disabled");
+                }
+                
+            });
         });
            
 
@@ -37,6 +47,7 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
+                 @Html.HiddenFor(model=>model.ConocimientoGeneral.IdeConocimientoGeneralPostulante)
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">

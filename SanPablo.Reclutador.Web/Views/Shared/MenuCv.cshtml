@@ -24,12 +24,30 @@
 @*    @Html.MenuItem("Reclutamientos", "Reclutamientos", "Postulante")*@
 </ul>
 <script>
-
-    function ActualizarDatos(porcentaje) {
-        //var porcentaje = '25%';
-        var progresso = 'Tu CV esta completo al ' + porcentaje;
-        document.getElementById("progressBar").style.width = porcentaje;
+    
+        //barra de progreso
+    function actualizarBarra() {
+        var porc = $('#indicadorRegistroCompleto').val();
+        var porcentaje = '0'
+        if (porc == 'A') { porcentaje = '20'; }
+        else {
+            if (porc == 'B') { porcentaje = '40'; }
+            else {
+                if (porc == 'C') { porcentaje = '50'; }
+                else {
+                    if (porc == 'D') { porcentaje = '70'; }
+                    else {
+                        if (porc == 'E') { porcentaje = '80'; }
+                        else {
+                            if (porc == 'F') { porcentaje = '100'; }
+                        }
+                    }
+                }
+            }
+        }
+        var progresso = 'Tu CV esta completo al ' + porcentaje + '%';
+        document.getElementById("progressBar").style.width = porcentaje + '%';
         document.getElementById("progreso").firstChild.nodeValue = progresso;
-        document.getElementById("#checkInfo").style.visibility = true;
+        //document.getElementById("#checkInfo").style = "visibility: visible";
     }
 </script>

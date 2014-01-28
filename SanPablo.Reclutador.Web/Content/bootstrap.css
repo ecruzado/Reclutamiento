@@ -8,6 +8,46 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Subir Foto';
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #99356b;
+  *background-color: #772953;
+  background-image: -moz-linear-gradient(top, #b03d7b, #772953);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b03d7b), to(#772953));
+  background-image: -webkit-linear-gradient(top, #b03d7b, #772953);
+  background-image: -o-linear-gradient(top, #b03d7b, #772953);
+  background-image: linear-gradient(to bottom, #b03d7b, #772953);
+  background-repeat: repeat-x;
+  border-color: #772953 #772953 #3e152b;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+
+  border: 1px solid #999;
+  border-radius: 5px;
+  padding: 5px 8px;
+  outline: none;
+  
+  -webkit-user-select: none;
+  cursor: pointer;
+
+
+
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+
+
 .clearfix {
   *zoom: 1;
 }
@@ -6294,6 +6334,9 @@ a.badge:focus {
 .btn-warning.active {
   background-color: #e7a413 \9;
 }
+
+
+
 
 .alert {
   text-shadow: none;

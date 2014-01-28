@@ -9,21 +9,28 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using System.Linq;
+    using NHibernate.Criterion;
 
     public class DiscapacidadPostulanteController : BaseController
     {
         private IDiscapacidadPostulanteRepository _discapacidadPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
-
-        public DiscapacidadPostulanteController(IDiscapacidadPostulanteRepository discapacidadPostulanteRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        private IPostulanteRepository _postulanteRepository;
+        public DiscapacidadPostulanteController(IDiscapacidadPostulanteRepository discapacidadPostulanteRepository, 
+                                                IDetalleGeneralRepository detalleGeneralRepository,
+                                                IPostulanteRepository postulanteRepository)
         {
             _discapacidadPostulanteRepository = discapacidadPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _postulanteRepository = postulanteRepository;
         }
 
         public ActionResult Index()
         {
-            return View();
+            var discapacidadViewModel = InicializarDiscapacidades();
+            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            discapacidadViewModel.Discapacidad.Postulante = postulante;
+            return View(discapacidadViewModel);
         }
 
         [HttpPost]
@@ -36,20 +43,11 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                //var where = (Utils.GetWhere(grid.filters, grid.rules));
-                var where = string.Empty;
+                DetachedCriteria where = DetachedCriteria.For<DiscapacidadPostulante>();
+                where.Add(Expression.Eq("Postulante.IdePostulante", IdePostulante));
 
-                if (!string.IsNullOrEmpty(where))
-                {
-                    grid._search = true;
 
-                    if (!string.IsNullOrEmpty(grid.searchString))
-                    {
-                        where = where + " and ";
-                    }
-                }
-
-                var generic = Listar(_discapacidadPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                var generic = Listar(_discapacidadPostulanteRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
                     .Select(item => new Row
@@ -100,8 +98,20 @@
             {
                 return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
             }
-            discapacidadPostulante.EstadoActivo = IndicadorActivo.Activo;
-            _discapacidadPostulanteRepository.Add(discapacidadPostulante);
+            if (discapacidadPostulante.IdeDiscapacidadPostulante == 0)
+            {
+                discapacidadPostulante.EstadoActivo = IndicadorActivo.Activo;
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulante.agregarDiscapacidad(discapacidadPostulante);
+                _discapacidadPostulanteRepository.Add(discapacidadPostulante);
+            }
+            else
+            {
+                var discapacidadEdit = _discapacidadPostulanteRepository.GetSingle(x => x.IdeDiscapacidadPostulante == discapacidadPostulante.IdeDiscapacidadPostulante);
+                discapacidadEdit.TipoDiscapacidad = discapacidadPostulante.TipoDiscapacidad;
+                discapacidadEdit.DescripcionDiscapacidad = discapacidadPostulante.DescripcionDiscapacidad;
+                _discapacidadPostulanteRepository.Update(discapacidadEdit);
+            }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
         }
