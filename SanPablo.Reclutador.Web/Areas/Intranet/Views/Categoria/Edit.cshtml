@@ -37,6 +37,52 @@
           });
 
 
+
+        $("#spanEliminar").html("¿Desea Eliminar la Subcategoria?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var codCategoria = $("#Categoria_IDECATEGORIA").val();
+                    var selr = $('#grdList').jqGrid('getGridParam', 'selrow');
+                   
+                    if (selr != null) {
+                        EliminarSubCategoria(codCategoria, selr);
+                    } else {
+                        MostrarMensaje('Seleccione una subCategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+        $("#spanEliminarSubCrit").html("¿Desea Eliminar el Criterio?")
+        $('#divEliminarSubCrit').dialogo({
+            buttons: {
+                "Si": function () {
+                    //var codCategoria = $("#Categoria_IDECATEGORIA").val();
+                    //EliminarCritxSub
+                    var selsub = $('#grdList').jqGrid('getGridParam', 'selrow');
+                    var selCritxSub = $('#grdListCriterio').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selCritxSub);
+                    if (rowData.CodigoCrit != null && selsub != null) {
+                        EliminarCritxSub(selsub, rowData.CodigoCrit);
+                    } else {
+                        MostrarMensaje('Seleccione una subCategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
         $('#btnAgregarSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             
@@ -46,8 +92,18 @@
                 MostrarMensaje('Ingrese una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
                 
             }
+        });
 
 
+        $('#btnEditarSubCategoria').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            
+            if (selr != null && selr > 0) {
+                mostrarEditarSub(codigoCategoria, selr);
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
         });
 
 
@@ -135,9 +191,6 @@
                 }
             }
         });
-
-       
-
 
 
         jQuery("#grdList").jqGrid({
@@ -411,7 +464,52 @@
         return strImg;
     }
 
-   
+
+    function EliminarSubCategoria(idCategoria, idSubCategoria) {
+      
+        $.ajax({
+            data: { id: idCategoria,
+                    codSub: idSubCategoria
+                  },
+            type: "POST",
+            url: "@Url.Action("EliminarSubCategoria", "Categoria")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+
+        
+    }
+ 
+
+
+    function EliminarCritxSub(idSubCategoria, idCriterio) {
+        
+        $.ajax({
+            data: {
+                id: idCriterio,
+                codSub: idSubCategoria
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarCritxSub", "Categoria")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+
+
+    }
 
     function mostrarAgregar(id, idSubCategoria) {
         var dialogDiv = $('#updateDialog');
@@ -422,6 +520,18 @@
         });
         return false;
     }
+
+    function mostrarEditarSub(id, idSubCategoria) {
+        var dialogDiv = $('#updateDialog');
+        $.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+    
+
 
     function mostrarCriterios(id, idSubCategoria) {
         var dialogDiv = $('#criterioDialog');
@@ -606,10 +716,10 @@
                         <h6>Subcategorías</h6>
                         <div class="opciones">
                             <a id="btnAgregarSubCategoria" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                            <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            <a id="btnEditarSubCategoria"  class ="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                            <a id="btnSubirSubCategoria" class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                            <a id="btnBajarSubCategoria" class ="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                            <a id="btnEliminaSubCategoria" class="btn btn-small btn-info" title="Eliminar" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i></a>                                  
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -632,9 +742,9 @@
                     <h6>Criterio</h6>
                         <div class="opciones">
                             <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                            <a class="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            <a id="btnSubirCriterio"  class ="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
+                            <a id="btnBajarCriterio" class ="btn btn-small btn-info" title="Bajar"><i class=" icon-arrow-down icon-white"></i></a>
+                            <a id="btnEliminarCrit" onclick="$('#divEliminarSubCrit').dialog('open'); return false;"  class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                         </div>
                     <div style="clear:both"></div>
                     </div>
@@ -674,6 +784,11 @@
 }
 <div id="updateDialog" title="Agregar SubCategoria"></div>
 <div id="criterioDialog" title="Buscar Criterio"></div>
+<div id="divEliminar"><span id="spanEliminar"></span></div>
+<div id="divEliminarSubCrit"><span id="spanEliminarSubCrit"></span></div>
+
+
+
 <div id="divMensaje">
         <span id="spnMensaje"></span>
 </div>
@@ -695,3 +810,4 @@
         </tr>       
     </table>
 </div>
+

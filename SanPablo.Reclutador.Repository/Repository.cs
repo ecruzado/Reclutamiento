@@ -47,6 +47,8 @@
                     .SingleOrDefault();
         }
 
+       
+
         public IList<TEntity> GetBy(Expression<Func<TEntity, bool>> condition)
         {
             return _session.QueryOver<TEntity>()
@@ -82,6 +84,9 @@
                     .FutureValue<int>()
                     .Value;
         }
+
+
+      
 
     }
 

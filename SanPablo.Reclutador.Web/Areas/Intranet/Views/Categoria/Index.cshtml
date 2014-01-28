@@ -27,6 +27,59 @@
         });
 
 
+        $('#btnNuevo').click(function () {
+            var selr = 0;
+            if (selr != null) {
+                window.location = '@Url.Action("Nuevo", "Categoria")' + '/' + selr;
+            } else {
+                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+      
+
+
+        $("#spanConfirmacion").html("¿Desea Activar/Desactivar el registro?")
+        $('#confirmacion').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+                    
+                    var rowData = jQuery('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
+                    if (selr != null) {
+                        ActivarDesactivarCatgoria(selr, rowData);
+                    } else {
+                        MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+
+        $("#spanEliminar").html("¿Desea Eliminar el registro?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = $('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+                    var rowData = $('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
+                    if (selr != null) {
+                        EliminarCategoria(selr, rowData);
+                    } else {
+                        MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
 
         $('#btnConsultar').click(function () {
             var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
@@ -80,9 +133,10 @@
                     }
                 });
             },
-            colNames: ['Estado','', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado','','','Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left' ,hidden:true},
                     { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
                     { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
@@ -121,28 +175,30 @@
         return strRdo;
     }
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar"
-        if (rowObject[14] == "Activo") {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        } else {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        }
-
-        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-        return strImg;
-    }
-
+   
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
-    
+
+    function ActivarDesactivarCatgoria(selr, rowData) {
+        $.post("@Url.Action("ActivarDesactivar", "Categoria")?id=" + selr + "&estado=" + rowData.ESTACTIVO,
+            function (data) {
+                $('#grdListaPrincipalCategoria').trigger('reloadGrid');
+            }
+        );
+        return false;
+    }
+
+    function EliminarCategoria(selr, rowData) {
+        $.post("@Url.Action("EliminarCategoria", "Categoria")?id=" + selr,
+             function (data) {
+                 $('#grdListaPrincipalCategoria').trigger('reloadGrid');
+             }
+         );
+        return false;
+    }
 
 </script>
 }
@@ -210,8 +266,8 @@
                 <a class="btn btn-info" id="btnNuevo"><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a class="btn btn-info" id="btnConsultar"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" id="btnEditar"><i class="icon-pencil  icon-white"></i> Editar</a>
-                <a  id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a  id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                <a  id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <a  id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>

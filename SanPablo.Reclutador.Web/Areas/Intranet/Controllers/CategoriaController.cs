@@ -139,10 +139,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.Categoria.FECCREACION = Hoy;
                     model.Categoria.USRMODIFICA = "Prueba 01";
                     model.Categoria.FECMODIFICA = Hoy;
-                    model.Categoria.ORDENIMPRESION = "1";
+                    //model.Categoria.ORDENIMPRESION = "1";
                     model.Categoria.ESTACTIVO = "A";
+
+
+                    var listaCategoria = _categoriaRepository.All();
+                    int maxOrdenImp = 0;
+                    if (listaCategoria!=null && listaCategoria.Count>0)
+                    {
+                        maxOrdenImp = (listaCategoria.Select(d => d.ORDENIMPRESION).Max()) == null ? 0 : (listaCategoria.Select(d => d.ORDENIMPRESION).Max());    
+                    }
+                    
+                    maxOrdenImp = maxOrdenImp + 1;
+
+                    model.Categoria.ORDENIMPRESION = maxOrdenImp;
+
                     _categoriaRepository.Add(model.Categoria);
-                    //Session.Remove("AccionCategoria");
+                    
                     Session["Tabla1"] = Grilla.Tabla1;
                     Session["Tabla2"] = Grilla.Tabla2;
                 }
@@ -162,6 +175,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objCategoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
                     objCategoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
                     objCategoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
+                    objCategoria.ORDENIMPRESION = model.Categoria.ORDENIMPRESION;
                     if ("01".Equals(model.Categoria.TIPOEJEMPLO))
                     {
                         objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
@@ -193,7 +207,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public ActionResult PopupSubCategoria(CategoriaViewModel model)
         {
-            //[Bind(Prefix = "SubCategoria")]SubCategoria
+            
+            SubCategoriaValidator objSubCategoriaValidate = new SubCategoriaValidator();
+            ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA");
+
+            if (!result.IsValid)
+            {
+                return View(model);
+            }
 
             CategoriaViewModel objCategoriaModel = new CategoriaViewModel();
             objCategoriaModel.SubCategoria = new SubCategoria();
@@ -209,6 +230,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
+                objCategoriaModel.SubCategoria.ORDENIMPRESION = model.SubCategoria.ORDENIMPRESION;
                 _subcategoriaRepository.Update(objCategoriaModel.SubCategoria);
             }
             else
@@ -224,6 +246,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
 
+                var listaCategoria = _subcategoriaRepository.GetBy(s => s.Categoria.IDECATEGORIA == Convert.ToInt32(model.Categoria.IDECATEGORIA));
+                int maxOrdenImp = 0;
+                if (listaCategoria != null && listaCategoria.Count>0)
+                {
+                    maxOrdenImp = (listaCategoria.Select(d => d.ORDENIMPRESION).Max()) == null ? 0 : (listaCategoria.Select(d => d.ORDENIMPRESION).Max());
+                }
+                maxOrdenImp = maxOrdenImp + 1;
+
+                objCategoriaModel.SubCategoria.ORDENIMPRESION = maxOrdenImp;
 
                 _subcategoriaRepository.Add(objCategoriaModel.SubCategoria);
             }
@@ -537,7 +568,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     id = item.IDECATEGORIA.ToString(),
                     cell = new string[]
                             {
-                                "",
+                                "1",
+                                item.ESTACTIVO,
                                 item.IDECATEGORIA.ToString(),
                                 item.NOMCATEGORIA,
                                 item.DESCCATEGORIA,
@@ -644,7 +676,107 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View("Edit", model);
         }
 
-        
+
+        /// <summary>
+        /// ActivarDesactivar Activa y desactiva las cartegorias
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="estado"></param>
+        /// <returns></returns>
+        public ActionResult ActivarDesactivar(string id, string estado)
+        {
+            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+            if (IndicadorActivo.Activo.Equals(estado))
+            {
+                objCategoria.ESTACTIVO = IndicadorActivo.Inactivo;
+            }
+            else
+            {
+                objCategoria.ESTACTIVO = IndicadorActivo.Activo;
+            }
+
+            _categoriaRepository.Update(objCategoria);
+
+            CategoriaViewModel model = new CategoriaViewModel();
+            model.Categoria = new Categoria();
+            model = InicializarCategoriaIndex();
+
+            return View("Index", model); ;
+        }
+
+        /// <summary>
+        /// EliminarCategoria Elimina la categoria seleccionada
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult EliminarCategoria(string id)
+        {
+            CategoriaViewModel model = new CategoriaViewModel();
+            model.Categoria = new Categoria();
+
+            model = InicializarCategoriaIndex();
+            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+            _categoriaRepository.Remove(objCategoria);
+            return View("Index", model);
+
+        }
+
+        /// <summary>
+        /// EliminarSubCategoria elimina sub categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codSub"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarSubCategoria(string id, string codSub)
+        {
+
+            var jsonMessage = new JsonMessage();
+
+           
+            var ListaCriterios = _criterioPorSubcategoriaRepository.GetBy(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub));
+
+            if (ListaCriterios != null && ListaCriterios.Count>0)
+            {
+                jsonMessage.Mensaje = "Existen " + ListaCriterios.Count + " criterios asociados a la subcategoria";
+                jsonMessage.Resultado = false;
+            }
+            else
+            {
+                jsonMessage.Resultado = true;
+
+                var objSubCategoria = _subcategoriaRepository.GetSingle(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)
+                                                                   && x.IDESUBCATEGORIA == Convert.ToInt32(codSub));
+                _subcategoriaRepository.Remove(objSubCategoria);
+            }
+
+            return Json(jsonMessage);
+        }
+
+
+        /// <summary>
+        /// EliminarCritxSub Elimina los criterios asociados a las subcategorias
+        /// </summary>
+        /// <param name="id">id Criterio</param>
+        /// <param name="codSub">id de subcategoria</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarCritxSub(string id, string codSub)
+        {
+
+            var jsonMessage = new JsonMessage();
+
+
+            var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub) 
+                                                                          && s.Criterio.IdeCriterio == Convert.ToInt32(id));
+
+            jsonMessage.Mensaje = "Se elimino el criterio";
+            jsonMessage.Resultado = true;
+            _criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+         
+            return Json(jsonMessage);
+        }
 
 
     }

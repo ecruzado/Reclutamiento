@@ -41,6 +41,11 @@
                    .Keyed<IValidator>(typeof(IValidator<Alternativa>))
                    .As<IValidator>();
 
+            builder.RegisterType<SubCategoriaValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<SubCategoria>))
+                   .As<IValidator>();
+
+
             builder.RegisterType<CategoriaValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Categoria>))
                 .As<IValidator>();

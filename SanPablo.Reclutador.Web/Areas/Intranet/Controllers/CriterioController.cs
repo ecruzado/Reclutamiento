@@ -114,6 +114,8 @@
             criterioViewModel.Alternativa = new Alternativa();
             criterioViewModel.Alternativa.Criterio = new Criterio();
 
+            DateTime Hoy = DateTime.Today;
+
             AlternativaValidator validator = new AlternativaValidator();
             ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
 
@@ -145,7 +147,7 @@
 
             }
             */
-
+            
 
             if (model.Alternativa.IdeAlternativa != 0 && model.Alternativa.IdeAlternativa != null)
             {
@@ -154,10 +156,9 @@
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
 
-                /*if (imagen.FileName.Length > 0)
-                {
-                    alter.Image = model.Alternativa.Image;
-                }*/
+                model.Alternativa.FechaMod = Hoy;
+                model.Alternativa.UsrMod = "Prueba 02";
+                
 
                 _alternativaRepository.Update(alter);
 
@@ -165,6 +166,8 @@
             }
             else
             {
+                model.Alternativa.FechaCreacion = Hoy;
+                model.Alternativa.UsrCreacion = "Prueba 01";
                 _alternativaRepository.Add(model.Alternativa);
             }
 
@@ -423,6 +426,14 @@
             {
                 model.Criterio.FechaCreacion = DateTime.Now;
                 model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
+
+
+                var objCriterio = _criterioRepository.All();
+                int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
+
+                maxOrdenImp = maxOrdenImp + 1;
+
+                model.Criterio.OrdenImpresion = maxOrdenImp;
 
                 _criterioRepository.Add(model.Criterio);
             }
