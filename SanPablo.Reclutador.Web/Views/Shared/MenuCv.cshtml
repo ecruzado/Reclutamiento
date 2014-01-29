@@ -1,6 +1,6 @@
 ﻿ @using SanPablo.Reclutador.Web.Models
-    <div class="alert alert-info">
-        <a class="close">×</a>
+    <div class="alert alert-info" id="alerta">
+        <a class="close" onclick="hide('alerta')" >×</a>
         Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos
     </div>
       
@@ -25,7 +25,13 @@
 </ul>
 <script>
     
-        //barra de progreso
+    function hide(obj) {
+        var el = document.getElementById(obj);
+        el.style.display = 'none';
+
+    }
+
+    //barra de progreso
     function actualizarBarra() {
         var porc = $('#indicadorRegistroCompleto').val();
         var porcentaje = '0'
@@ -48,6 +54,8 @@
         var progresso = 'Tu CV esta completo al ' + porcentaje + '%';
         document.getElementById("progressBar").style.width = porcentaje + '%';
         document.getElementById("progreso").firstChild.nodeValue = progresso;
-        //document.getElementById("#checkInfo").style = "visibility: visible";
+        
+        var varios = document.getElementsByClassName("icon-ok");
+        varios[0].style.visibility = "visible";
     }
 </script>

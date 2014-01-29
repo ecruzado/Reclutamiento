@@ -28,6 +28,10 @@
             Map(x => x.NumeroAnexoInstitucionReferente, "NUMANEXOINST");
             Map(x => x.EstadoActivo, "ESTACTIVO");
 
+            Map(x => x.DescripcionCargoTrabajo).Formula("(select CASE TIPCARGOTRABAJO WHEN '99'THEN NOMCARGOTRABAJO ELSE DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCargo + " AND DG.VALOR = TIPCARGOTRABAJO)");
+            Map(x => x.DescripcionMotivoCese).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoMotivoCese + " AND DG.VALOR = TIPMOTIVOCESE)");
+            Map(x => x.DescripcionCargoReferente).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCargoReferente + " AND DG.VALOR = TIPCARGOTRABAJOREF)");
+
             Table("EXP_POSTULANTE");
         }
 

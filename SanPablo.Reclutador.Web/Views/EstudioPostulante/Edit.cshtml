@@ -6,16 +6,16 @@
 
         $(document).ready(function () {
             $('.datepicker').datepicker({});
-            $("#fechainicio").datepicker({});
-            $("#fechafin").datepicker({});
+            $("#Estudio_FechaEstudioInicio").datepicker({});
+            $("#Estudio_FechaEstudioFin").datepicker({});
 
             var indActual = $('#chbIndEstudiando').is(":checked");
             if (indActual == true) {
-                $('#fechafin').val("");
-                $('#fechafin').attr("disabled", "disabled");
+                $('#Estudio_FechaEstudioFin').val("");
+                $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
             }
             else {
-                $('#fechafin').removeAttr("disabled");
+                $('#Estudio_FechaEstudioFin').removeAttr("disabled");
             }
 
 
@@ -44,31 +44,37 @@
             //Habilitar texto Otro 
             $('select#nombreInstituciones').change(function () {
                 var tipoNombre = $(this).val();
-                if (tipoNombre == '99') {
-                    $('#NombreInstitucion_otro').removeAttr('disabled');
-                }
-                else {
-                    $('#NombreInstitucion_otro').attr('disabled', 'disabled');
-                }
+                habilitarTextOtro(tipoNombre);
             })
+
+            //DETERMINAR AL CARGAR LA PAGINA
+            var tipoNombre = $('#nombreInstituciones').val();
+            habilitarTextOtro(tipoNombre);
 
             //Actualmente Estudiando
 
             $('#chbIndEstudiando').change(function () {
                 if ($(this).is(":checked")) {
-                    $('#fechafin').val('');
-                    $('#fechafin').attr("disabled", "disabled");
+                    $('#Estudio_FechaEstudioFin').val('');
+                    $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
                     
                 }
                 else {
-                    $('#fechafin').removeAttr("disabled");
+                    $('#Estudio_FechaEstudioFin').removeAttr("disabled");
                 }
 
             })
 
         });
               
-
+        function habilitarTextOtro(tipoNombre) {
+            if (tipoNombre == '99') {
+                $('#NombreInstitucion_otro').removeAttr('disabled');
+            }
+            else {
+                $('#NombreInstitucion_otro').attr('disabled', 'disabled');
+            }
+        }
         $(function () {
             $.datepicker.regional['es'] =
             {
@@ -167,7 +173,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Inicio <span class="text-error">*</span></label>
             </td>
             <td class="colInput" id="txtfechainicio">
-                @Html.TextBoxFor(model => model.Estudio.FechaEstudioInicio,"{0:d}", new { @class = "datepicker",@id="fechainicio" })
+                @Html.EditorFor(model => model.Estudio.FechaEstudioInicio, new { @class = "datepicker" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
                 </div>
@@ -178,7 +184,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Fin </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Estudio.FechaEstudioFin,"{0:d}", new { @class = "datepicker", @id="fechafin" })
+                @Html.EditorFor(model => model.Estudio.FechaEstudioFin, new { @class = "datepicker"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioFin)
                 </div>

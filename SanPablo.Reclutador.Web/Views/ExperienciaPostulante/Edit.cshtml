@@ -5,45 +5,46 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $('.datepicker').datepicker({});
-            $("#fechaTrabajoInicio").datepicker({});
-            $("#fechaTrabajoFin").datepicker({});
+            $("#Experiencia_FechaTrabajoInicio").datepicker({});
+            $("#Experiencia_FechaTrabajoFin").datepicker({});
             //
             var indActual = $('#indActuaTrabajando').is(":checked");
-            if (indActual == true) {
-                $('#fechaTrabajoFin').val("");
-                $('#fechaTrabajoFin').attr("disabled", "disabled");
-            }
-            else {
-                $('#fechaTrabajoFin').removeAttr("disabled");
-            }
+            habilitarFecha(indActual);
+
+            var tipoNombre = $('#Experiencia_TipoCargoTrabajo').val();
+            habilitarOtro(tipoNombre);
+
             //Habilitar texto Otro 
-            $('select#tipoCargo').change(function () {
+            $('select#Experiencia_TipoCargoTrabajo').change(function () {
                 var tipoNombre = $(this).val();
-                if (tipoNombre == '99') {
-                    $('#NombreCargo_otro').removeAttr('disabled');
-                }
-                else {
-                    $('#NombreCargo_otro').attr('disabled', 'disabled');
-                }
+                habilitarOtro(tipoNombre);
             })
 
 
             //actualmente trabajando
             $('#indActuaTrabajando').change(function () {
-                if ($(this).is(":checked")) {
-                    $('#fechaTrabajoFin').val('');
-                    $('#fechaTrabajoFin').attr("disabled", "disabled");
-
-                }
-                else {
-                    $('#fechaTrabajoFin').removeAttr("disabled");
-                }
-
+                habilitarFecha($(this).is(":checked"));
             })
-
         });
-                
+            
+        function habilitarOtro(tipoNombre) {
+            if (tipoNombre == '99') {
+                $('#NombreCargo_otro').removeAttr('disabled');
+            }
+            else {
+                $('#NombreCargo_otro').attr('disabled', 'disabled');
+            }
+        }
+        function habilitarFecha(opcion)
+        {
+            if (opcion == true){
+                $('#Experiencia_FechaTrabajoFin').val('');
+                $('#Experiencia_FechaTrabajoFin').attr("disabled", "disabled");
+            }
+            else {
+                $('#Experiencia_FechaTrabajoFin').removeAttr("disabled");
+            }
+        }
         $(function () {
             $.datepicker.regional['es'] =
             {
@@ -87,7 +88,7 @@
                 <label class="etiquetaFormulario" >Cargo <span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                    @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajo, new SelectList(Model.TipoCargos, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajo), new { @id = "Tipocargo"})
+                    @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajo, new SelectList(Model.TipoCargos, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajo))
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
                 </div>
@@ -109,7 +110,7 @@
                 <label class="etiquetaFormulario" > Fecha Inicio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker", @id = "fechaTrabajoInicio"})
+                @Html.EditorFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
                 </div>
@@ -120,7 +121,7 @@
                 <label class="etiquetaFormulario" > Fecha Fin </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker", @id = "fechaTrabajoFin"})
+                @Html.EditorFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
                 </div>

@@ -15,5 +15,6 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionDiscapacidad { get; set; }
         public virtual string EstadoActivo { get; set; }
 
+        public virtual string DescripcionTipoDiscapacidad { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace SanPablo.Reclutador.Entity
         //public virtual string TipoTabla { get; set; }
         public virtual string Valor { get; set; }
         public virtual string Descripcion { get; set; }
+        public virtual string Referencia { get; set; }
         public virtual string IndicadorActivo { get; set; }
 
         public override bool Equals(object obj)

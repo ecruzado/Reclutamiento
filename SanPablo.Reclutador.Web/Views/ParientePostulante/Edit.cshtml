@@ -85,7 +85,7 @@
                 <label class="etiquetaFormulario"> Fecha de Nacimiento </label>
             </td>
             <td class="colInput" >
-                @Html.TextBoxFor(model => model.Pariente.FechaNacimiento,"{0:d}", new { @class = "datepicker",@id="fechaNacimiento" })
+                @Html.EditorFor(model => model.Pariente.FechaNacimiento,"{0:d}", new { @class = "datepicker",@id="fechaNacimiento" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Pariente.FechaNacimiento)
                 </div>

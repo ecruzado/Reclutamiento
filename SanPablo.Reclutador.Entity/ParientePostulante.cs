@@ -1,4 +1,5 @@
 ﻿using SanPablo.Reclutador.Entity.Validation;
+using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ApellidoMaterno { get; set; }
         public virtual string Nombres { get; set; }
         public virtual string TipoDeVinculo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaNacimiento { get; set; }
         public virtual string EstadoActivo { get; set; }
+
+        public virtual string DescripcionVinculo { get; set; }
     }
 }

@@ -22,6 +22,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndicadorCertificacion { get; set; }
         public virtual string EstadoActivo { get; set; }
 
+        public virtual string DescripcionConocimientoOfimatica { get; set; }
+        public virtual string DescripcionNombreOfimatica { get; set; }
+        public virtual string DescripcionIdioma { get; set; }
+        public virtual string DescripcionConocimientoIdioma { get; set; }
+        public virtual string DescripcionNombreConocimientoGeneral { get; set; }
+        public virtual string DescripcionNivelConocimiento { get; set; }
+        public virtual string DescripcionConocimientoGeneral { get; set; }
 
         public virtual bool Certificacion
         {

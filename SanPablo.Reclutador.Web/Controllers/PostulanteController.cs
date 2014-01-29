@@ -13,6 +13,8 @@
     using FluentValidation;
     using System.IO;
     using System;
+    using System.Drawing;
+
 
     public class PostulanteController :  BaseController
     {
@@ -35,6 +37,9 @@
         {
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Postulante = new Postulante();
+
+            postulanteGeneralViewModel.directorioImagen = "user4.png";
+
             postulanteGeneralViewModel.TipoDocumentos = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
             postulanteGeneralViewModel.TipoDocumentos.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -72,6 +77,7 @@
             if (IdePostulante != 0)
             {
                 postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+               // postulanteGeneralViewModel.directorioImagen = Bytes_A_Imagen(postulanteGeneralViewModel.Postulante.FotoPostulante);
                 mostrarUbigeo(postulanteGeneralViewModel);
             }
             return View(postulanteGeneralViewModel);
@@ -114,6 +120,7 @@
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
+                    model.Postulante.IndicadorRegistroCompleto = "A";
                     _postulanteRepository.Add(model.Postulante);
 
                 }
@@ -163,21 +170,24 @@
             } 
         }
         
-        [HttpPost]
-        public ActionResult obtenerImagen()
+        public String Bytes_A_Imagen(Byte[] ImgBytes)
         {
-            ActionResult result = null;
-            if (IdePostulante != 0)
+            var rutaImagen = Server.MapPath(@"~/Content/images");
+            Guid clave = Guid.NewGuid();
+            String DirTemp = rutaImagen + "\\" + clave.ToString()+".jpg";
+
+            if (ImgBytes != null)
             {
-                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                result = Json(postulante.FotoPostulante);
+                //String DirTemp = Path.
+                Bitmap imagen = null;
+                Byte[] bytes = (Byte[])(ImgBytes);
+                MemoryStream ms = new MemoryStream(bytes);
+                imagen = new Bitmap(ms);
+                imagen.Save(DirTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
-            else
-            {
-                result = Json(false);
-            }
-            return result;
+            return clave.ToString() + ".jpg";
         }
+
         #endregion
 
 

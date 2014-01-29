@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ApellidoMaterno { get; set; }
         public virtual string PrimerNombre { get; set; }
         public virtual string SegundoNombre { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaNacimiento { get; set; }
         public virtual string NumeroLicencia { get; set; }
         public virtual string IndicadorSexo { get; set; }

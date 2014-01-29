@@ -15,6 +15,9 @@
             Map(x => x.TipoDiscapacidad, "TIPODISCAPACIDAD");
             Map(x => x.DescripcionDiscapacidad, "DESDISCAPACIDAD");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+
+            Map(x => x.DescripcionTipoDiscapacidad).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoDiscapacidad + " AND DG.VALOR = TIPODISCAPACIDAD)");
+
             Table("DISCAPACIDAD_POSTULANTE");
         }
     }

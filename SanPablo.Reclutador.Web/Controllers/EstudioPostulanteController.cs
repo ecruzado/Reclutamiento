@@ -54,11 +54,11 @@
                         id = item.IdeEstudiosPostulante.ToString(),
                         cell = new string[]
                             {
-                                item.TipTipoInstitucion,
-                                item.NombreInstitucion,
-                                datosDetalle(item.TipoArea,Convert.ToInt32(TipoTabla.TipoArea)),
-                                datosDetalle(item.TipoEducacion,Convert.ToInt32(TipoTabla.TipoEducacion)),
-                                datosDetalle(item.TipoNivelAlcanzado,Convert.ToInt32(TipoTabla.NivelAlcanzado)),
+                                item.DescripcionTipoInstitucion,
+                                item.DescripcionNombreInstitucion,
+                                item.DescripcionArea,
+                                item.DescripcionEducacion,
+                                item.DescripcionNivelAlcanzado,
                                 item.FechaEstudioInicio.ToString(),
                                 item.FechaEstudioFin.ToString()
                             }
@@ -111,6 +111,7 @@
                 var postulante = new Postulante();
                 postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarEstudio(estudioPostulante);
+                estudioPostulante.Postulante.IndicadorRegistroCompleto = "B";
                 _estudioPostulanteRepository.Add(estudioPostulante);
             }
             else
@@ -118,15 +119,14 @@
                 var estudioEdit = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == estudioPostulante.IdeEstudiosPostulante);
                 estudioEdit.TipTipoInstitucion = estudioPostulante.TipTipoInstitucion;
                 estudioEdit.TipoNombreInstitucion = estudioPostulante.TipoNombreInstitucion;
-                estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNombreInstitucion;
+                estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNivelAlcanzado;
                 estudioEdit.TipoEducacion = estudioPostulante.TipoEducacion;
                 estudioEdit.TipoArea = estudioPostulante.TipoArea;
                 estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
                 estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
                 estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
                 estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
-                estudioEdit.EstadoActivo = estudioPostulante.EstadoActivo;
-
+                
                 _estudioPostulanteRepository.Update(estudioEdit);
             }
             return Json(new {msj = true}, JsonRequestBehavior.DenyGet);
@@ -179,18 +179,20 @@
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
 
-            switch (tipoInstituto)
-            {
-                case TipoInstitucion.TipoUniversidad: //es Universidad
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-                    break;
-                case TipoInstitucion.TipoInstituto: // es Instituto
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-                    break;
-                case TipoInstitucion.TipoColegio: // es Colegio
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
-                    break;
-            }
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion,tipoInstituto));
+
+            //switch (tipoInstituto)
+            //{
+            //    case TipoInstitucion.TipoUniversidad: //es Universidad
+            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
+            //        break;
+            //    case TipoInstitucion.TipoInstituto: // es Instituto
+            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+            //        break;
+            //    case TipoInstitucion.TipoColegio: // es Colegio
+            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
+            //        break;
+            //}
             result = Json(listaResultado);
             return result;
         }
