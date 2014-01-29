@@ -58,6 +58,8 @@
     <Compile Include="DetalleGeneralRepository.cs" />
     <Compile Include="DiscapacidadPostulanteRepository.cs" />
     <Compile Include="EstudioPostulanteRepository.cs" />
+    <Compile Include="ExamenPorCategoriaRepository.cs" />
+    <Compile Include="ExamenRepository.cs" />
     <Compile Include="ExperienciaPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
     <Compile Include="Interface\ICriterioPorSubcategoriaRepository.cs" />
@@ -68,6 +70,8 @@
     <Compile Include="Interface\ICriterioRepository.cs" />
     <Compile Include="Interface\IDetalleGeneralRepository.cs" />
     <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
+    <Compile Include="Interface\IExamenPorCategoriaRepository.cs" />
+    <Compile Include="Interface\IExamenRepository.cs" />
     <Compile Include="Interface\IExperienciaPostulanteRepository.cs" />
     <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IParientePostulanteRepository.cs" />

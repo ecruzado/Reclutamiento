@@ -52,6 +52,14 @@
 
             builder.RegisterType<DiscapacidadPostulanteRepository>()
                 .As<IDiscapacidadPostulanteRepository>();
+
+            builder.RegisterType<ExamenRepository>()
+               .As<IExamenRepository>();
+
+            builder.RegisterType<ExamenPorCategoriaRepository>()
+               .As<IExamenPorCategoriaRepository>();
+
+
         }
     }
 }

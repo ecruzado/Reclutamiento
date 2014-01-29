@@ -428,12 +428,13 @@
                 model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
 
 
-                var objCriterio = _criterioRepository.All();
-                int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
+                //var objCriterio = _criterioRepository.All();
+                //int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
 
-                maxOrdenImp = maxOrdenImp + 1;
+                //maxOrdenImp = maxOrdenImp + 1;
 
-                model.Criterio.OrdenImpresion = maxOrdenImp;
+                //model.Criterio.OrdenImpresion = maxOrdenImp;
+                model.Criterio.OrdenImpresion = 0;
 
                 _criterioRepository.Add(model.Criterio);
             }
@@ -677,8 +678,8 @@
             int codSubCategoria = Convert.ToInt32(subCategoria);
             int codCriterio=0;
             DateTime Hoy = DateTime.Today;
-
-
+            
+            int maxOrdenImp = 0;
 
             CriterioPorSubcategoria objCriterioxSubCategoria;
 
@@ -708,7 +709,18 @@
                    }
                    else
                    {
-                       objCriterioxSubCategoria.PRIORIDAD = objCriterio.OrdenImpresion;
+
+                       var listaCriterios = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == codSubCategoria);
+                       if (listaCriterios!=null && listaCriterios.Count>0)
+                       {
+                           maxOrdenImp = (listaCriterios.Select(d => d.PRIORIDAD).Max()) == null ? 0 : (listaCriterios.Select(d => d.PRIORIDAD).Max());
+                       }
+                       
+                       maxOrdenImp = maxOrdenImp + 1;
+
+                       objCriterioxSubCategoria.PRIORIDAD = maxOrdenImp;
+
+
                        objCriterioxSubCategoria.SubCategoria.IDESUBCATEGORIA = codSubCategoria;
 
                        objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
@@ -720,6 +732,8 @@
                        objCriterioxSubCategoria.FECMODIFICA = Hoy;
 
                        _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
+
+
                    }
 
                     

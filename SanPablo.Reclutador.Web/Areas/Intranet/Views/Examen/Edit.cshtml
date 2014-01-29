@@ -1,6 +1,10 @@
-﻿@{
-    ViewBag.Title = "Listado Categoría";
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ExamenViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
+    ViewBag.Title = "Listado de Examenes";
 }
+
 @section Head{
 }
 
@@ -8,9 +12,89 @@
 
 <script type="text/javascript">
     //Table initialisation 
-    $(document).ready(function () {
-        jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaCategoria", "Categoria")',
+
+    $('#btnAgregarCategoria').click(function () {
+        var codigoExamen = $("#Examen_IdeExamen").val();
+
+        if (codigoExamen == null && codigoExamen <= 0) {
+            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return;
+        }
+
+        mostrarCategoria(codigoExamen);
+
+    });
+
+    $('#categoriaDialog').dialog({
+        autoOpen: false,
+        width: 750,
+        height: 750,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Grabar": function () {
+                $.ajax({
+                    data: { 
+                        selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
+                        codExamen: $('#Examen_IdeExamen').val()
+                    },
+                    type: "POST",
+                    url: '@Url.Action("GetListaCategoria", "Examen")',
+                    traditional: true,
+                    success: function () {
+                        // $(this).dialog("close");
+                        $('#grdListaCategoria').trigger('reloadGrid');
+
+
+                    }
+                });
+
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    jQuery("#grdListaCatxExamen").jqGrid({
+        url: '@Url.Action("ListaCatxExamen", "Categoria")' + '?id=' + $("#Examen_IdeExamen").val(),
+         datatype: 'json',
+         mtype: 'POST',
+         colNames: ['', 'Nombre', 'Descripción', 'Detalle'],
+         colModel: [
+                 { name: 'IdeExamenxCategoria', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
+                 { name: 'Nombre', index: 'Nombre', align: 'left', editable: false },
+                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false },
+                 { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 20, sortable: false, formatter: DetalleFormatter },
+                   
+         ],
+         rownumbers: true,
+         sortname: 'IdeExamenxCategoria',
+         sortorder: 'desc',
+         viewrecords: true,
+         cellEdit: true,
+         rules: true ,
+         height: 160,
+         autowidth: true,
+         cellsubmit: 'clientArray',
+         hidegrid: false,
+         rowNum: 10,
+         autowidth: true,
+         shrinkToFit: false,
+
+         postData: {
+         },
+         loadComplete: function (data) {
+
+         }
+
+
+     });
+
+
+   @* $(document).ready(function () {
+        jQuery("#grdListaCatxExamen").jqGrid({
+            url: '@Url.Action("ListaCatxExamen", "Categoria")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Código', 'Nombre', 'Descripción', 'Detalle'],
@@ -29,7 +113,7 @@
             /*caption: 'Lista Referencias',*/
             height: 160,
             width: 736,
-            rowNum: 0,
+            rowNum: 10,
             cellsubmit: 'clientArray',
             hidegrid: false,
             postData: {
@@ -38,7 +122,7 @@
             loadComplete: function (data) {
 
             }
-        });
+        });*@
 
     });
     function RadioFormatter(cellvalue, options, rowObject) {
@@ -52,8 +136,28 @@
         return strImg;
     }
 
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+
+    function mostrarCategoria(id) {
+        var dialogDiv = $('#categoriaDialog');
+        $.get("/Intranet/Categoria/IniciaPopupCategoria/" + id, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#categoriaDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+
 </script>
 }
+
+@using (Html.BeginForm("Edit", "Examen", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExamen" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -64,75 +168,76 @@
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                 </div>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Código</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
-                            </div>
-                        </div>
+            <table class="formulario-busqueda">
+               <tr class="formulario-fila">
+                    <td class="span5">
+                        
+                    <label class="control-label" for="inputSuccess">Código</label>
+                    <div class="controles">
+                        <input id="Examen_IdeExamen" name="Examen.IdeExamen" type="text" value="@Model.Examen.IdeExamen" readonly="readonly"> 
                     </div>
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                <input type="text" class="input-small" id="txtnombre" value="" disabled="disabled">
+                                @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20" }) 
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                       
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
-                                <input type="text" class="input-large" id="txtDescripcion" value="" disabled="disabled">
+                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" }) 
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                    <td class="span5">
+                      
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                <select id="sedepartamento" class="select-large" disabled="disabled">
-                                    <option>Seleccionar</option>
-                                </select>
+                                @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen)) 
                             </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                      
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
                             <label class="control-label" for="inputSuccess">Duración</label>
                             <div class="controles">
-                                <input type="text" class="input-large" id="txtDuracion" value="" disabled="disabled">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                              <input  id="Examen_Duracion" maxlength="20" name="Examen.Duracion" type="text" value="@Model.Examen.Duracion" readonly="readonly"> 
+                           </div>
+                     </td>
+                </tr>
+            </table>
 
             <div class="grilla-opciones">
                 <h6>Categorías vinculadas</h6>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                    <a  id="btnAgregarCategoria" class ="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a  id="btnEliminarCategoria" class ="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                 </div>
                 <div style="clear:both"></div>
             </div>
             <div class="tabla-datos">
-                <table id="grdList">
+                <table id="grdListaCatxExamen">
                 </table>
                 <div id="grdPager"></div>
             </div>
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index","Examen",new { area = "Intranet"})"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="reset" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
+                <button type="submit"  id="btnGrabarExamen"  class ="btn btn-info"><i class=" icon-hdd icon-white"></i>Grabar</button>
             </div>
 
         </div>
     </div>
 </div>
+}
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+<div id="categoriaDialog" title="Buscar Categoria"></div>

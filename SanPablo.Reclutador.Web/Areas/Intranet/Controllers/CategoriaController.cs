@@ -379,7 +379,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Criterio.IdeCriterio.ToString(),
                                 item.Criterio.Pregunta,
                                 item.PUNTAMAXIMO.ToString(),
-                                item.Criterio.OrdenImpresion.ToString(),
+                                item.PRIORIDAD.ToString(),
                                 item.Criterio.TipoCalificacion.ToString()
                                 //item.FECCREACION.ToString(),
                                 //item.USRCREACION,
@@ -733,8 +733,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             var jsonMessage = new JsonMessage();
+            int i = 1; 
+          
 
-           
             var ListaCriterios = _criterioPorSubcategoriaRepository.GetBy(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub));
 
             if (ListaCriterios != null && ListaCriterios.Count>0)
@@ -749,6 +750,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var objSubCategoria = _subcategoriaRepository.GetSingle(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)
                                                                    && x.IDESUBCATEGORIA == Convert.ToInt32(codSub));
                 _subcategoriaRepository.Remove(objSubCategoria);
+
+
+                var listaActualizar = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)).OrderBy(x => x.ORDENIMPRESION);
+
+
+                foreach (SubCategoria item in listaActualizar)
+                {
+                    item.ORDENIMPRESION = i++;
+                    _subcategoriaRepository.Update(item);
+                }
+
+
             }
 
             return Json(jsonMessage);
@@ -778,6 +791,188 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(jsonMessage);
         }
 
+        /// <summary>
+        /// IniciaPopupCategoria Inicializa los datos del Popup de busqueda de categorias
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ViewResult IniciaPopupCategoria(int id)
+        {
+
+            CategoriaViewModel objCategoria = new CategoriaViewModel();
+            objCategoria.Categoria = new Categoria();
+            objCategoria = InicializarCategoriaIndex();
+            objCategoria.Examen = new Examen();
+
+
+            if (id != null && id > 0)
+            {
+                objCategoria.Examen.IdeExamen = id;
+            }
+            return View("PopupCategoria", objCategoria);
+           
+        }
+
+
+
+        /// <summary>
+        /// ListaPopupCategoria busqueda de categorias por popup
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListaPopupCategoria(GridTable grid)
+        {
+            try
+            {
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                   )
+                {
+                    where = DetachedCriteria.For<Categoria>();
+
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+                        where.Add(Expression.Eq("TIPCATEGORIA", grid.rules[1].data));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+                    {
+                        where.Add(Expression.Eq("ESTACTIVO", grid.rules[2].data));
+                    }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Like("DESCCATEGORIA", '%' + grid.rules[3].data + '%'));
+                    }
+
+                }
+
+                var generic = Listar(_categoriaRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDECATEGORIA.ToString(),
+                    cell = new string[]
+                            {
+                                "1",
+                                item.ESTACTIVO,
+                                item.IDECATEGORIA.ToString(),
+                                item.NOMCATEGORIA,
+                                item.DESCCATEGORIA,
+                                item.TIPCATEGORIA
+                               
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult OrdenarSubCategorias(int ideCategoria, int ideSubcategoria, string accion)
+        {
+
+            var jsonMessage = new JsonMessage();
+            var listaActualizar = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == ideCategoria).OrderBy(x=>x.ORDENIMPRESION);
+            
+            var subCategoriaActual = listaActualizar.Single(x => x.IDESUBCATEGORIA == ideSubcategoria);
+            var ordenImpresionActual = subCategoriaActual.ORDENIMPRESION;
+            
+            int ordenImpresionContiguo = 0;
+            if (accion == "Subir")
+                ordenImpresionContiguo = ordenImpresionActual - 1;
+            else 
+                ordenImpresionContiguo = ordenImpresionActual + 1;
+
+
+            try 
+	        {	        
+		        var subCategoriaContiguo = listaActualizar.Single(x => x.ORDENIMPRESION == ordenImpresionContiguo);
+
+                subCategoriaContiguo.ORDENIMPRESION = ordenImpresionActual;
+                subCategoriaActual.ORDENIMPRESION = ordenImpresionContiguo;
+
+                _subcategoriaRepository.Update(subCategoriaActual);
+                _subcategoriaRepository.Update(subCategoriaContiguo);
+	        }
+	        catch (Exception ex)
+	        {
+		
+		        jsonMessage.Mensaje = "Se elimino el criterio";
+	        }
+               
+         
+           
+
+            //var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)
+            //                                                              && s.Criterio.IdeCriterio == Convert.ToInt32(id));
+
+            jsonMessage.Mensaje = "Se elimino el criterio";
+            jsonMessage.Resultado = true;
+            //_criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+
+            return Json(jsonMessage);
+        }
+
+       
+        [HttpPost]
+        public ActionResult OrdenarCriterios(int ideCategoria, int ideSubcategoria, int ideCriterio,string accion)
+        {
+
+            var jsonMessage = new JsonMessage();
+            var listaActualizar = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == ideSubcategoria).OrderBy(x => x.PRIORIDAD);
+
+            var critxCategoriaActual = listaActualizar.Single(x => x.Criterio.IdeCriterio == ideCriterio);
+            var ordenImpresionActual = critxCategoriaActual.PRIORIDAD;
+            
+            int ordenImpresionContiguo = 0;
+            if (accion == "Subir")
+                ordenImpresionContiguo = ordenImpresionActual - 1;
+            else 
+                ordenImpresionContiguo = ordenImpresionActual + 1;
+
+
+            try 
+	        {	        
+		        var critxCategoriaContiguo = listaActualizar.Single(x => x.PRIORIDAD == ordenImpresionContiguo);
+
+                critxCategoriaContiguo.PRIORIDAD = ordenImpresionActual;
+                critxCategoriaActual.PRIORIDAD = ordenImpresionContiguo;
+
+                _criterioPorSubcategoriaRepository.Update(critxCategoriaActual);
+                _criterioPorSubcategoriaRepository.Update(critxCategoriaContiguo);
+	        }
+	        catch (Exception ex)
+	        {
+		
+		        jsonMessage.Mensaje = "Se elimino el criterio";
+	        }
+               
+         
+           
+
+            //var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)
+            //                                                              && s.Criterio.IdeCriterio == Convert.ToInt32(id));
+
+            jsonMessage.Mensaje = "Se elimino el criterio";
+            jsonMessage.Resultado = true;
+            //_criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+
+            return Json(jsonMessage);
+        }
+
+        
 
     }
 }

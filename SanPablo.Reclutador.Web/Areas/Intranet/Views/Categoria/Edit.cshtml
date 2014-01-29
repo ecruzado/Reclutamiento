@@ -16,6 +16,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        var flag = 0;
+        var flag2 = 0;
 
         var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
           {
@@ -106,6 +108,107 @@
             }
         });
 
+        $('#btnSubirSubCategoria').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var gridArr = $('#grdList').getDataIDs();
+
+            if (selr != null && selr > 0) {
+                
+                $.ajax({
+                    data: {
+                        ideCategoria: codigoCategoria,
+                        ideSubcategoria: selr,
+                        accion: "Subir",
+
+                    },
+                    type: "POST",
+                    url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    traditional: true,
+                    success: function () {
+                        flag = selr;
+                        $('#grdList').trigger('reloadGrid');
+                    }
+                });
+
+
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+
+
+        $('#btnBajarSubCategoria').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var gridArr = $('#grdList').getDataIDs();
+
+            if (selr != null && selr > 0) {
+                
+
+                $.ajax({
+                    data: {
+                        ideCategoria: codigoCategoria,
+                        ideSubcategoria: selr,
+                        accion: "Bajar",
+                    },
+                    type: "POST",
+                    url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    traditional: true,
+                    success: function (data) {
+                      
+                        flag = selr;
+                        
+                        $('#grdList').trigger('reloadGrid');
+                       
+                    }
+                });
+
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+
+
+        $('#btnSubirCriterio').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            
+            var selr = jQuery('#grdListCriterio').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selr);
+          
+
+            if (rowData.CodigoCrit != null && rowData.CodigoCrit > 0) {
+
+                $.ajax({
+                    data: {
+                        ideCategoria: codigoCategoria,
+                        ideSubcategoria: selrSub,
+                        ideCriterio: rowData.CodigoCrit,
+                        accion: "Subir",
+
+                    },
+                    type: "POST",
+                    url: "/Intranet/Categoria/OrdenarCriterios",
+                    traditional: true,
+                    success: function (data) {
+                        flag2 = selrCrit;
+                        $('#grdListCriterio').trigger('reloadGrid');
+                    }
+                });
+
+
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+        
+
+
+
 
         $('#btnAgregarCriterio').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
@@ -145,10 +248,7 @@
                         function (data) {
                             $("#updateDialog").html(data);
                             $('#grdList').trigger('reloadGrid');
-                            //$(this).data('bob').text($(this).find("textarea").val();
-                            //$('#grdList').trigger('reloadGrid');
-                           // $("#updateDialog").dialog("close");
-                            //$(data).find(".dfdf");
+                           
                         }
                     );
 
@@ -214,7 +314,7 @@
             rowNum: 10,
             rowList: [10, 30, 50],
             autowidth: true,
-            sortname: 'IDESUBCATEGORIA',
+            sortname: 'ORDENIMPRESION',
             sortorder: 'desc',
             viewrecords: true,
             height: 120,
@@ -224,8 +324,10 @@
             rownumbers: false,
             shrinkToFit: false,
             onSelectRow: function (rowid, status) {
-                if (rowid!=null) {
+                if (rowid != null) {
+                    $("#grdListCriterio").setSelection($("#grdListCriterio").getDataIDs()[0], true);
                     $('#grdListCriterio').trigger('reloadGrid');
+                    $('#grdListCriterioxAlternativa').trigger('reloadGrid');
                 }
             },
 
@@ -233,8 +335,18 @@
 
             },
             loadComplete: function (data) {
-                $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
-                $('#grdListCriterio').trigger('reloadGrid');
+               // $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
+                // $("#grdList").jqGrid('resetSelection');
+                if (flag == 0) {
+                    $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
+                    
+                } else {
+                    $('#grdList').resetSelection().setSelection(flag, true);
+
+                }
+                $("#grdListCriterio").trigger('reloadGrid');
+                $('#grdListCriterioxAlternativa').trigger('reloadGrid');
+                
                
             }
         });
@@ -285,8 +397,8 @@
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
                 migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sortField;
-                migrilla.sord = postdata.sortOrder;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
@@ -333,7 +445,7 @@
             rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
-            sortname: 'IDECRITERIOXSUBCATEGORIA',
+            sortname: 'PRIORIDAD',
             sortorder: 'desc',
             viewrecords: true,
             height: 120,
@@ -350,7 +462,14 @@
             postData: {
             },loadComplete: function (data) {
                 
-                $("#grdListCriterio").setSelection($("#grdList").getDataIDs()[0], true);
+                if (flag2 == 0) {
+                    $("#grdListCriterio").setSelection($("#grdListCriterio").getDataIDs()[0], true);
+
+                } else {
+                    $('#grdListCriterio').resetSelection().setSelection(flag, true);
+
+                }
+               
                 $('#grdListCriterioxAlternativa').trigger('reloadGrid');
             }
         });
@@ -365,8 +484,8 @@
                 var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selr);
                 migrilla.page = postdata.page;
                 migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sortField;
-                migrilla.sord = postdata.sortOrder;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
 
@@ -502,7 +621,9 @@
             success: function (data) {
                 if (data.Resultado) {
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                    $('#grdList').trigger('reloadGrid');
+                    $('#grdListCriterio').trigger('reloadGrid');
+
+
                 }
             }
         });

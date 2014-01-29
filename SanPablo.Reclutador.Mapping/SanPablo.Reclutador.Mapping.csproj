@@ -59,6 +59,8 @@
     <Compile Include="DetalleGeneralMap.cs" />
     <Compile Include="DiscapacidadPostulanteMap.cs" />
     <Compile Include="EstudioPostulanteMap.cs" />
+    <Compile Include="ExamenMap.cs" />
+    <Compile Include="ExamenxCategoriaMap.cs" />
     <Compile Include="ExperienciaPostulanteMap.cs" />
     <Compile Include="GeneralMap.cs" />
     <Compile Include="ParientesPostulanteMap.cs" />
