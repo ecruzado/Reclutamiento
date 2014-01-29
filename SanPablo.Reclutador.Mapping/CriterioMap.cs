@@ -22,6 +22,7 @@
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
             Map(x => x.IMAGENCRIT, "IMAGENCRIT");
+            Map(x => x.TipoMedicionDescripcion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.Medicion + " AND DG.VALOR = TIPMEDICION)");
             Table("CRITERIO");
 
         }

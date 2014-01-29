@@ -78,5 +78,14 @@ namespace SanPablo.Reclutador.Test.Repository
             }
 
         }
+
+        [TestMethod]
+        public void Test_formula()
+        {
+            var repository = new CriterioRepository(NHibernateHelper.OpenSession());
+
+            var lista = repository.GetPaging("IdeCriterio", true, 0, 100, null);
+
+        }
     }
 }
