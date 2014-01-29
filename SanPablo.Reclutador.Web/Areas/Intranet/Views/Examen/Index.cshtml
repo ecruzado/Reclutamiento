@@ -71,6 +71,16 @@
         return strImg;
     }
 
+    $('#btnNuevoExamen').click(function () {
+        var selr = 0;
+        if (selr != null) {
+            window.location = '@Url.Action("Nuevo", "Examen")';
+            } else {
+                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+    });
+
+
 </script>
 }
 <div class="row">
@@ -129,7 +139,7 @@
                 <div id="grdPager"></div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a  id="btnNuevoExamen"    class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-pencil icon-white"></i> Editar</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>

@@ -83,6 +83,7 @@
     <Compile Include="Validation\DiscapacidadPostulanteValidaton.cs" />
     <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />
+    <Compile Include="Validation\ExamenValidator.cs" />
     <Compile Include="Validation\ExperienciaPostulanteValitator.cs" />
     <Compile Include="Validation\ParientePostulanteValidaton.cs" />
     <Compile Include="Validation\PostulanteValidator.cs" />
