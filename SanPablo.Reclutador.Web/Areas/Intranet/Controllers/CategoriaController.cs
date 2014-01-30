@@ -199,7 +199,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             categoriaViewModel.Categoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
             categoriaViewModel.image = model.image;
 
-            return View("Edit", categoriaViewModel);
+            //return View("Edit", categoriaViewModel);
+            //JsonMessage objJsonMessage = new JsonMessage();
+            //objJsonMessage.Objeto = categoriaViewModel.Categoria;
+
+
+            //if (Accion.Nuevo.Equals(Session["AccionCategoria"]))
+            //{
+            //    objJsonMessage.Resultado = true;
+            //    objJsonMessage.Mensaje = "Se genero la categoría: " + model.Categoria.IDECATEGORIA;
+            //}
+            //else
+            //{
+            //    objJsonMessage.Resultado = true;
+            //    objJsonMessage.Mensaje = "Se actualizo la categoría: " + model.Categoria.IDECATEGORIA;
+            //}
+
+            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
+
+            //return Json(objJsonMessage);
+
 
         }
 
@@ -779,14 +798,33 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             var jsonMessage = new JsonMessage();
+            int i = 1;
 
-
+           
             var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub) 
                                                                           && s.Criterio.IdeCriterio == Convert.ToInt32(id));
 
+            _criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+            
+            var lista = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)).OrderBy(x => x.PRIORIDAD);
+
+            if (lista != null)
+            {
+                foreach (CriterioPorSubcategoria item in lista)
+                {
+                    
+                    var objeto = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == item.SubCategoria.IDESUBCATEGORIA
+                                                                          && s.Criterio.IdeCriterio == item.Criterio.IdeCriterio);
+
+                    objeto.PRIORIDAD = i++;
+
+                    _criterioPorSubcategoriaRepository.Update(objeto);
+                }
+            }
+            
             jsonMessage.Mensaje = "Se elimino el criterio";
             jsonMessage.Resultado = true;
-            _criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+           
          
             return Json(jsonMessage);
         }

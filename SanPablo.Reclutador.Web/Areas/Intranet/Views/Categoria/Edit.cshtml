@@ -108,6 +108,31 @@
             }
         });
 
+
+
+       
+        
+        //$('#btnGuardar').click(function () {
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Intranet/Categoria/Edit",
+        //        data: $("#frmCategoria").serialize(),
+        //        success: function (data) {
+        //            if (data.Resultado) {
+        //               // $("#Categoria_IDECATEGORIA").val(data.Objeto.IDECATEGORIA);
+        //               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        
+                        
+        //            }
+                    
+        //        }
+        //    });
+
+        // });
+        
+        
+
+
         $('#btnSubirSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -194,7 +219,8 @@
                     url: "/Intranet/Categoria/OrdenarCriterios",
                     traditional: true,
                     success: function (data) {
-                        flag2 = selrCrit;
+                        flag2 = selr;
+                       
                         $('#grdListCriterio').trigger('reloadGrid');
                     }
                 });
@@ -206,6 +232,39 @@
         });
 
         
+        $('#btnBajarCriterio').click(function () {
+            var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
+            var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+
+            var selr = jQuery('#grdListCriterio').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selr);
+
+
+            if (rowData.CodigoCrit != null && rowData.CodigoCrit > 0) {
+
+                $.ajax({
+                    data: {
+                        ideCategoria: codigoCategoria,
+                        ideSubcategoria: selrSub,
+                        ideCriterio: rowData.CodigoCrit,
+                        accion: "Bajar",
+
+                    },
+                    type: "POST",
+                    url: "/Intranet/Categoria/OrdenarCriterios",
+                    traditional: true,
+                    success: function (data) {
+                        flag2 = selr;
+                        
+                        $('#grdListCriterio').trigger('reloadGrid');
+                    }
+                });
+
+
+            } else {
+                MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
 
 
 
@@ -234,6 +293,10 @@
 
         });
         
+
+
+
+
 
         $('#updateDialog').dialog({
             autoOpen: false,
@@ -344,7 +407,8 @@
                     $('#grdList').resetSelection().setSelection(flag, true);
 
                 }
-                $("#grdListCriterio").trigger('reloadGrid');
+               // $("#grdListCriterio").trigger('reloadGrid');
+                $('#grdListCriterio').trigger('reloadGrid');
                 $('#grdListCriterioxAlternativa').trigger('reloadGrid');
                 
                
@@ -458,18 +522,31 @@
                 if (rowid != null) {
                     $('#grdListCriterioxAlternativa').trigger('reloadGrid');
                 }
+                
             },
             postData: {
             },loadComplete: function (data) {
-                
+               
                 if (flag2 == 0) {
                     $("#grdListCriterio").setSelection($("#grdListCriterio").getDataIDs()[0], true);
 
                 } else {
-                    $('#grdListCriterio').resetSelection().setSelection(flag, true);
+                    $('#grdListCriterio').resetSelection().setSelection(flag2, true);
 
                 }
                
+                $('#grdListCriterioxAlternativa').trigger('reloadGrid');
+            },
+            gridComplete: function () {
+               
+                if (flag2 == 0) {
+                    $("#grdListCriterio").setSelection($("#grdListCriterio").getDataIDs()[0], true);
+
+                } else {
+                    $('#grdListCriterio').resetSelection().setSelection(flag2, true);
+                   
+                }
+               // $("#grdListCriterioxAlternativa tr").eq(1).trigger("click");
                 $('#grdListCriterioxAlternativa').trigger('reloadGrid');
             }
         });
@@ -620,6 +697,7 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
+
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     $('#grdListCriterio').trigger('reloadGrid');
 
@@ -896,7 +974,7 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" id="btnGuardar" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
+                <button  type="submit" id="btnGuardar" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
             </div>
         </div>
     </div>

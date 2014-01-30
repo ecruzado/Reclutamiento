@@ -49,10 +49,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _examenPorCategoriaRepository = examenPorCategoriaRepository;
         }
 
-
+        /// <summary>
+        /// Nuevo :  regitra un examen
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Nuevo()
         {
-
+            
             ExamenViewModel model = new ExamenViewModel();
 
             model = InicializarExamenEdit();
@@ -62,11 +65,48 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View("Edit", model);
         }
 
+        
+        /// <summary>
+        /// Edicion : Edita un examen seleccionado
+        /// </summary>
+        /// <returns></returns>
+       
+        public ActionResult Edicion(string id)
+        {
+            ExamenViewModel model = new ExamenViewModel();
+            model = InicializarExamenEdit();
+            model.Examen = new Examen();
+            model.Examen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
+            
+            Session["Accion"] = Accion.Editar;
+
+            return View("Edit",model);
+        }
+
+        /// <summary>
+        /// Consulta : se muestran todos los campos desabilitados
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Consulta(string id)
+        {
+            ExamenViewModel model = new ExamenViewModel();
+            model = InicializarExamenEdit();
+            model.Examen = new Examen();
+            model.Examen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
+            
+            Session["Accion"] = Accion.Consultar;
+
+            return View("Edit",model);
+        }
+
+        
 
 
         private ExamenViewModel InicializarExamenEdit()
         {
             ExamenViewModel objExamenViewModel = new ExamenViewModel();
+            objExamenViewModel.Examen = new Examen();
 
             objExamenViewModel.TipoExamen =
                 new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
@@ -75,20 +115,71 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return objExamenViewModel;
         }
 
+        /// <summary>
+        /// Inicializa los campos de la ventana inicial
+        /// </summary>
+        /// <returns></returns>
+          private ExamenViewModel InicializarExamenIndex()
+        {
+            ExamenViewModel objExamenViewModel = new ExamenViewModel();
+            objExamenViewModel.Examen = new Examen();
+
+            objExamenViewModel.TipoExamen =
+                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCriterio));
+            objExamenViewModel.TipoExamen.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+           
+
+            objExamenViewModel.TipoEstado =
+              new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            objExamenViewModel.TipoEstado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            
+
+            return objExamenViewModel;
+        }
+
+        
 
         public ActionResult Index()
         {
-            return View();
+
+            ExamenViewModel model = new ExamenViewModel();
+
+            //model.Examen = new Examen();
+            model = InicializarExamenIndex();
+            model.Examen = new Examen();
+
+            return View(model);
         }
 
-        public ActionResult Edit()
-        {
-            return View();
-        }
 
 
         [HttpPost]
-        public ActionResult Edit(ExamenViewModel model)
+        public ActionResult Index(ExamenViewModel model)
+        {
+
+            ExamenViewModel objExamenModel = new ExamenViewModel();
+
+            objExamenModel = InicializarExamenIndex();
+            objExamenModel.Examen = new Examen();
+            objExamenModel.Categoria = new Categoria();
+
+            objExamenModel.Examen.TipExamen = model.Examen.TipExamen;
+            objExamenModel.Examen.EstActivo = model.Examen.EstActivo;
+            objExamenModel.Examen.DescExamen = model.Examen.DescExamen;
+
+            return View(objExamenModel);
+
+        }
+
+
+        /// <summary>
+        /// Edicion : Guarda los datos del Examen Asignado
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        public ActionResult Edicion(ExamenViewModel model)
         {
 
             ValidationResult result;
@@ -96,6 +187,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ExamenViewModel objExamenViewModal= new ExamenViewModel();
             objExamenViewModal.Examen = new Examen();
             DateTime Hoy = DateTime.Today;
+            JsonMessage ObjJsonMessage = new JsonMessage();
 
             result = objExamenValid.Validate(model.Examen, "DescExamen", "NomExamen", "TipExamen");
 
@@ -109,6 +201,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objExamenViewModal.Examen.DescExamen = model.Examen.DescExamen;
             objExamenViewModal.Examen.NomExamen = model.Examen.NomExamen;
 
+            var dato = Session["Accion"];
             if ( Accion.Nuevo.Equals(Session["Accion"]))
             {
                 
@@ -118,71 +211,95 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objExamenViewModal.Examen.EstRegistro = "A";
 
                 _examenRepository.Add(objExamenViewModal.Examen);
-                
+                Session["Accion"] = Accion.Editar;
             }
             else
             {
-                objExamenViewModal.Examen.FechaModificacion = Hoy;
-                objExamenViewModal.Examen.UsrModificacion = "Prueba 02";
-                _examenRepository.Update(objExamenViewModal.Examen);
+                if (model.Examen.IdeExamen != null && model.Examen.IdeExamen>0)
+                {
+                    var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == model.Examen.IdeExamen);
+                    objExamen.FecModificacion = Hoy;
+                    objExamen.UsrModificacion = "Prueba 02";
+                    objExamen.TipExamen = model.Examen.TipExamen;
+                    objExamen.DescExamen = model.Examen.DescExamen;
+                    objExamen.NomExamen = model.Examen.DescExamen;
+                    _examenRepository.Update(objExamen);  
+                    objExamenViewModal.Examen.IdeExamen = model.Examen.IdeExamen;
+                      
+                }
+                
             }
 
-            return View("Edit", objExamenViewModal);
+            
 
+            return RedirectToAction("Edicion", "Examen", new { id = objExamenViewModal.Examen.IdeExamen });
         }
 
 
 
 
         [HttpPost]
-        public ActionResult ListaExamen(string sidx, string sord, int page, int rows)
+        public ActionResult ListaExamen(GridTable grid)
         {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
+            try
             {
-                id = 1,
-                cell = new string[]
-        {
-          "250001",
-          "250001",
-          "Exa01",
-          "Examen 01",
-          "Evaluación",
-          "20",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin",
-          "Activo",
-          ""
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                   )
+                {
+                    where = DetachedCriteria.For<Examen>();
+
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+                        where.Add(Expression.Eq("TipExamen", grid.rules[1].data));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+                    {
+                        where.Add(Expression.Eq("EstActivo", grid.rules[2].data));
+                    }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Like("DescExamen", '%' + grid.rules[3].data + '%'));
+                    }
+
+                }
+
+                var generic = Listar(_examenRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeExamen.ToString(),
+                    cell = new string[]
+                            {
+                                "1",
+                                item.EstActivo,
+                                item.IdeExamen.ToString(),
+                                item.NomExamen,
+                                item.DescExamen,
+                                item.TipExamen,
+                                "1",
+                                item.FecCreacion.ToString(),
+                                item.UsrCreacion,
+                                item.FecModificacion.ToString(),
+                                item.UsrModificacion
+                            }
+
+
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
             {
-                id = 2,
-                cell = new string[]
-        {
-          "250002",
-          "250002",
-          "Exa02",
-          "Examen 02",
-          "Entrevista",
-          "30",
-          "01/01/2013",
-          "Admin",
-          "10/10/2013",
-          "Admin",
-          "Activo",
-          ""
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
         }
 
 
@@ -290,6 +407,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         cell = new string[]
                             {
                                 item.IdeExamenxCategoria.ToString(),
+                                item.Categoria.IDECATEGORIA.ToString(),
                                 item.Categoria.NOMCATEGORIA,
                                 item.Categoria.DESCCATEGORIA,
                                 ""
@@ -304,6 +422,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
                 return MensajeError();
             }
+        }
+
+        
+        /// <summary>
+        /// EliminarCategoriaxExamen Elimina la categoria del examen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codCat"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarCategoriaxExamen(string id, string codCat)
+        {
+            var jsonMessage = new JsonMessage();
+            jsonMessage.Resultado = true;
+            try
+            {
+                var objExamenxCat = _examenPorCategoriaRepository.GetSingle(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(codCat)
+                                                               && x.Examen.IdeExamen == Convert.ToInt32(id));
+
+                _examenPorCategoriaRepository.Remove(objExamenxCat);
+            }
+            catch (Exception)
+            {
+
+                jsonMessage.Resultado = false;
+                jsonMessage.Mensaje = "Error : No se permite eliminar la categoría";
+            }
+           
+
+            
+            return Json(jsonMessage);
         }
 
     }
