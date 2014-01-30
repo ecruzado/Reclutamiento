@@ -59,7 +59,7 @@
                                 item.ApellidoPaterno,
                                 item.ApellidoMaterno,
                                 item.Nombres,
-                                item.TipoDeVinculo,
+                                item.DescripcionVinculo,
                                 item.FechaNacimiento.ToString()
                             }
                     }).ToArray();
@@ -105,6 +105,7 @@
                 parientePostulante.EstadoActivo = IndicadorActivo.Activo;
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarPariente(parientePostulante);
+                parientePostulante.Postulante.IndicadorRegistroCompleto = "E";
                 _parientePostulanteRepository.Add(parientePostulante);
             }
             else

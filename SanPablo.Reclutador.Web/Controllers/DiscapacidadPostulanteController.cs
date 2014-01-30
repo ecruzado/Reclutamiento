@@ -55,7 +55,7 @@
                         id = item.IdeDiscapacidadPostulante.ToString(),
                         cell = new string[]
                             {
-                                item.TipoDiscapacidad,
+                                item.DescripcionTipoDiscapacidad,
                                 item.DescripcionDiscapacidad,
                               
                             }

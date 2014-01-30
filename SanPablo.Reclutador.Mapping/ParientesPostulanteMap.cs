@@ -18,6 +18,9 @@
             Map(x => x.TipoDeVinculo, "TIPVINCULO");
             Map(x => x.FechaNacimiento, "FECNACIMIENTO");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+
+            Map(x => x.DescripcionVinculo).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoVinculo + " AND DG.VALOR = TIPVINCULO)");
+
             Table("PARIENTES_POSTULANTE");
         }
     }

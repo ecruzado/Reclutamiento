@@ -31,20 +31,9 @@
     $(document).ready(function () {
 
 
-        $('.datepicker').datepicker({});
-        $("#fechanacimiento").datepicker({});
-
+        $('#Postulante_FechaNacimiento').datepicker({});
+    
         actualizarBarra();
-
-        //Cargar imagen
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("obtenerImagen","Postulante")',
-            success: function (respuesta) {
-                alert(respuesta);
-                leerImagen(respuesta);
-                }
-        });
 
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
@@ -86,15 +75,6 @@
             });
         })
 
-        function leerImagen(file) {
-            if (file.type.indexOf("image") == 0) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById("imgSalida").src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
         //MOSTRAR IMAGEN
         $(function () {
             $('#FotoPostulante').change(function (e) {
@@ -181,7 +161,8 @@
                         </td>
                         <td rowspan="7" colspan="3" style="text-align:center; width:300px"> 
                                             
-                            <img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>
+                            @*<img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>*@
+                            <img src="@Url.Content("~/Content/images/"+Model.directorioImagen)"  alt="" id ="imgSalida"  width="40%" height="40%"/>
                             <br />
                             
                              @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
@@ -256,7 +237,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", @id = "fechanacimiento" })
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
@@ -449,33 +430,15 @@
                 <div class="formulario-accion">
                     <div class="opciones">
                         <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                        @*<a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>*@
-                        <button type="reset" class="btn">Cancelar</button>
-                        <a class="btn btn-info" href="@Url.Action("Estudios", "Postulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                       
+                        
+                         <button type="reset" class="btn">Cancelar</button>
+                        <a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                     </div>
                 </div>
                 <div style="clear:both"></div>
             </div>
      }
     </div>
-</div>
-
-<div id="dlgsubirFoto">
-    <table style="width: 100%">      
-        <tr>
-            <td style="height: 30px; vertical-align: central;">Sólo se permiten archivos con extensión JPG, GIF. Tamaño máximo del archivo 1MB. El archivo debe tener 32px de ancho y 32 px de Largo</td>
-        </tr>
-          <tr>
-            <td style="height: 10px;"></td>
-        </tr> 
-        <tr>
-            <td>
-             @*<input class="input-file" id="fileInput" type="file"></td>*@
-            
-        </tr>
-        <tr>
-            <td style="height: 10px;"></td>
-        </tr>       
-    </table>
 </div>
 

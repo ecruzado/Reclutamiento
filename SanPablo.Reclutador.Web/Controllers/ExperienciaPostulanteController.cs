@@ -56,14 +56,14 @@
                         cell = new string[]
                             {
                                 item.NombreEmpresa,
-                                item.TipoCargoTrabajo,
+                                item.DescripcionCargoTrabajo,
                                 item.FechaTrabajoInicio.ToString(),
                                 item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
                                 item.TiempoDeServicio,
-                                item.TipoMotivoCese,
+                                item.DescripcionMotivoCese,
                                 item.NombreReferente,
-                                item.TipoCargoTrabajoReferente,
+                                item.DescripcionCargoReferente,
                                 item.NumeroMovilReferencia.ToString(),
                                 item.NumeroFijoInstitucionReferente.ToString(),
                                 item.NumeroAnexoInstitucionReferente.ToString()
@@ -109,6 +109,7 @@
                 var postulante = new Postulante();
                 postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarExperiencia(experienciaPostulante);
+                experienciaPostulante.Postulante.IndicadorRegistroCompleto = "C";
                 _experienciaPostulanteRepository.Add(experienciaPostulante);
             }
             else

@@ -1,4 +1,5 @@
 ﻿using SanPablo.Reclutador.Entity.Validation;
+using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreEmpresa { get; set; }
         public virtual string TipoCargoTrabajo { get; set; }
         public virtual string NombreCargoTrabajo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaTrabajoInicio { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaTrabajoFin { get; set; }
         public virtual string IndicadorActualmenteTrabajo { get; set; }
         public virtual string TiempoDeServicio { get; set; }
@@ -26,6 +29,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual int NumeroFijoInstitucionReferente { get; set; }
         public virtual int NumeroAnexoInstitucionReferente { get; set; }
         public virtual string EstadoActivo { get; set; }
+
+        public virtual string DescripcionCargoTrabajo { get; set; }
+        public virtual string DescripcionMotivoCese { get; set; } 
+        public virtual string DescripcionCargoReferente { get; set; } 
+
 
         public virtual bool ActualmenteTrabajando
         {

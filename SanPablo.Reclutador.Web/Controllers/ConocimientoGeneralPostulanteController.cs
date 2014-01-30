@@ -60,9 +60,9 @@
                         cell = new string[]
                             {
                                 item.IdeConocimientoGeneralPostulante.ToString(),
-                                item.TipoConocimientoOfimatica,
-                                item.TipoNombreOfimatica,
-                                item.TipoNivelConocimiento,
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica,
+                                item.DescripcionNivelConocimiento,
                                 item.Certificacion.ToString()
                                 
                             }
@@ -100,9 +100,9 @@
                         cell = new string[]
                             {
                                 item.IdeConocimientoGeneralPostulante.ToString(),
-                                item.TipoIdioma,
-                                item.TipoConocimientoIdioma,
-                                item.TipoNivelConocimiento,
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento,
                                 item.Certificacion.ToString()
                                 
                             }
@@ -139,9 +139,9 @@
                         cell = new string[]
                             {
                                 item.IdeConocimientoGeneralPostulante.ToString(),
-                                item.TipoConocimientoGeneral,
-                                item.TipoNombreConocimientoGeneral,
-                                item.TipoNivelConocimiento,
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento,
                                 item.Certificacion.ToString()
                                 
                             }
@@ -344,6 +344,7 @@
                 conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                conocimientoGeneralPostulante.Postulante.IndicadorRegistroCompleto = "D";
                 _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
             }
             else
@@ -383,36 +384,14 @@
         {
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
-            switch (tipoConocimiento)
-            {
-                case "01": //es software
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGSoftware));
-                    break;
-                case "02": // es primeros auxilios
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGPrimerosAux));
-                    break;
-                case "03": // es Contabilidad
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGContabilidad));
-                    break;
-            }
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, tipoConocimiento));
             result = Json(listaResultado);
             return result;
         }
         public void actualizarOtrosConocimientos(ConocimientoPostulanteGeneralViewModel conocimientoModel)
         {
             var listaResultado = new List<DetalleGeneral>();
-            switch (conocimientoModel.ConocimientoGeneral.TipoConocimientoGeneral)
-            {
-                case "01": //es software
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGSoftware));
-                    break;
-                case "02": // es primeros auxilios
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGPrimerosAux));
-                    break;
-                case "03": // es Contabilidad
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCGContabilidad));
-                    break;
-            }
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimientoModel.ConocimientoGeneral.TipoConocimientoGeneral.ToString()));
             conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
 
         }

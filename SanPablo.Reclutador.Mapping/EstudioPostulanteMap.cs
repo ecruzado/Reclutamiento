@@ -22,6 +22,13 @@
             Map(x => x.FechaEstudioFin, "FECESTUDIOFIN");
             Map(x => x.IndicadorActualmenteEstudiando, "INDESTACTUALMENTE");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+
+            Map(x => x.DescripcionTipoInstitucion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoInstitucion + " AND DG.VALOR = TIPTIPOINSTITUCION)");
+            Map(x => x.DescripcionNombreInstitucion).Formula("(select CASE TIPNOMINSTITUCION WHEN '99'THEN NOMINSTITUCION ELSE DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoInstitucion + " AND DG.VALOR = TIPNOMINSTITUCION)");
+            Map(x => x.DescripcionNivelAlcanzado).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.NivelAlcanzado + " AND DG.VALOR = TIPNIVELALCANZADO)");
+            Map(x => x.DescripcionEducacion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoEducacion + " AND DG.VALOR = TIPEDUCACION)");
+            Map(x => x.DescripcionArea).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoArea + " AND DG.VALOR = TIPAREA)");
+
             Table("ESTUDIOS_POSTULANTE");
         }
     }
