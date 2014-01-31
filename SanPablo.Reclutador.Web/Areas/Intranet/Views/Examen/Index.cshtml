@@ -14,6 +14,48 @@
     $(document).ready(function () {
 
         
+        $("#spanActivarDesactivar").html("¿Desea Activar/Desactivar el registro?")
+        $('#divActivarDesactivar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+                    var estado = rowData.CodigoEstado;
+                    if (selr != null) {
+                        ActivarDesactivarExamen(selr,estado);
+                    } else {
+                        MostrarMensaje('Seleccione un Examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#spanEliminar").html("¿Desea eliminar el registro?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+                    var estado = rowData.CodigoEstado;
+                    if (selr != null) {
+                        EliminarExamen(selr, estado);
+                    } else {
+                        MostrarMensaje('Seleccione un Examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        
+
         jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -93,11 +135,39 @@
             var selr = 0;
             if (selr != null) {
                 window.location = '@Url.Action("Nuevo", "Examen")';
-        } else {
-            MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
          });
+
+        $('#btnActivarDesactivar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+              
+                $('#divActivarDesactivar').dialog('open');
+               
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $('#btnEliminar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $('#divEliminar').dialog('open');
+
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+        
+        
 
 
         $('#btnConsultarExamen').click(function () {
@@ -138,22 +208,56 @@
         return strRdo;
     }
 
-   @* function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar"
-        if (rowObject[14] == "Activo") {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        } else {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        }
 
-        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-        return strImg;
-    }*@
+    function ActivarDesactivarExamen(selr,estado) {
 
+        $.ajax({
+            data: {
+                id: selr,
+                codEstado : estado
+            },
+            type: "POST",
+            url: "@Url.Action("ActivarDesactivar", "Examen")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
+    function EliminarExamen(selr, estado) {
+
+        $.ajax({
+            data: {
+                id: selr
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarExamen", "Examen")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
+    
+
+
+   
+
+   
    
     
 
@@ -220,8 +324,8 @@
                 <a  id="btnNuevoExamen"    class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a  id ="btnConsultarExamen" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a  id ="btnEditarExamen" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>
@@ -231,3 +335,5 @@
         <span id="spnMensaje"></span>
 </div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="divActivarDesactivar"><span id="spanActivarDesactivar"></span></div>
+<div id="divEliminar"><span id="spanEliminar"></span></div>

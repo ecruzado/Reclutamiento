@@ -108,7 +108,7 @@
         }
 
         [HttpPost]
-        public ActionResult PopupCriterio(CriterioViewModel model, HttpPostedFileBase ImagenAlternativa)
+        public ActionResult PopupCriterio(CriterioViewModel model, HttpPostedFileBase imagenAlternativa)
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Alternativa = new Alternativa();
@@ -227,6 +227,7 @@
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Actualizar.ToString();
+            model.Criterio.IMAGENCRIT = objCriterio.IMAGENCRIT;
             model.IndVisual = Visualicion.SI;
 
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
@@ -267,15 +268,39 @@
             return View("Index", model); ;
         }
 
+
+        /// <summary>
+        /// EliminarCriterio : Elimina el criterio
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResult EliminarCriterio(string id)
         {
             CriterioViewModel model = new CriterioViewModel();
+            JsonMessage objJsonMessage = new JsonMessage();
             model.Criterio = new Criterio();
 
             model = InicializarCriteriosIndex();
-            var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
-            _criterioRepository.Remove(objCriterio);
-            return View("Index", model);
+
+
+            var objCriterioxSubCategoria = _criterioPorSubcategoriaRepository.GetBy(x => x.Criterio.IdeCriterio == Convert.ToInt32(id));
+            if (objCriterioxSubCategoria != null && objCriterioxSubCategoria.Count>0)
+            {
+                objJsonMessage.Mensaje = "El criterio esta asociado a una Subcategoria";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            else
+            {
+                var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+                _criterioRepository.Remove(objCriterio);
+                objJsonMessage.Mensaje = "Se elemino el criterio correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+                
+            }
+
 
         }
 
@@ -402,10 +427,7 @@
 
             if (model.image != null)
             {
-                //string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.image.FileName));
-                //model.image.SaveAs(filePath);
-               
-
+                
                 using (Stream inputStream = model.image.InputStream)
                 {
                     MemoryStream memoryStream = inputStream as MemoryStream;
@@ -742,6 +764,25 @@
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult GetImage(int id)
+        {
+            var firstOrDefault = _criterioRepository.GetSingle(c => c.IdeCriterio == id);
+            if (firstOrDefault.IMAGENCRIT != null)
+            {
+                byte[] image = firstOrDefault.IMAGENCRIT;
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
         }
        
     }

@@ -204,15 +204,27 @@
         return false;
     }
 
+   
+
     function EliminarCriterio(selr, rowData) {
-        $.post("@Url.Action("EliminarCriterio", "Criterio")?id=" + selr,
-             function (data) {
-                 $('#grdList').trigger('reloadGrid');
-             }
-         );
-         return false;
-     }
-    
+
+        $.ajax({
+            data: {
+                id: selr
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarCriterio", "Criterio")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
 
 </script>
 }
