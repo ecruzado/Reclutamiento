@@ -10,6 +10,7 @@
 <script>
     $(document).ready(function () {
 
+        mostrarAlerta();
         //verficar el radio button
         actualizarBarra();
 
@@ -20,10 +21,11 @@
         $("input[id='rad-btn-comoEntero']").click(function () {
             var selectedRadio = $("#rad-btn-comoEntero:checked").val();
             if (selectedRadio == '04') {
-                $('#txtotros').removeAttr('disabled');
+                $('#Postulante_DescripcionOtroMedio').removeAttr('disabled');
             }
             else {
-                $('#txtotros').attr('disabled', 'disabled');
+                $('#Postulante_DescripcionOtroMedio').val("");
+                $('#Postulante_DescripcionOtroMedio').attr('disabled', 'disabled');
             }
         })
 
@@ -63,7 +65,7 @@
             <div class="widget-title">
                 <h5>Datos Complementarios</h5>
             </div>
-               @Html.HiddenFor(model => model.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
+              @Html.HiddenFor(model=>model.porcentaje)
             <div class="grilla-opciones">
                 <div class="opciones">
                 </div>
@@ -142,7 +144,7 @@
                         <label class="etiquetaFormulario" for="input01">Nombre del pariente</label>
                     </td>
                     <td class="colInput">
-                         @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario" })
+                         @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario" , @style = "text-transform: uppercase"})
                     </td>
                 </tr>
                 <tr>
@@ -150,7 +152,7 @@
                         <label class="etiquetaFormulario" for="input01">Cargo</label>
                     </td>
                     <td class="colInput">
-                         @Html.TextBoxFor(model => model.Postulante.ParienteCargo, new { @class = "textoFormulario" })
+                         @Html.TextBoxFor(model => model.Postulante.ParienteCargo, new { @class = "textoFormulario" ,  @style = "text-transform: uppercase"})
                     </td>
                 </tr>
                 <tr>
@@ -171,7 +173,7 @@
                                  @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"03", new { @id = "rad-btn-comoEntero" }) @Html.Label("Amigos/Familiares", new { @style = "display: inline-block" }) &nbsp;&nbsp;&nbsp;
                                  @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero, "04", new { @id = "rad-btn-comoEntero" }) @Html.Label("Otros", new { @style = "display: inline-block" })
                                 </td>
-                                <td>@Html.TextBoxFor(model => model.Postulante.DescripcionOtroMedio, new { @class = "input-medium"})
+                                <td>@Html.TextBoxFor(model => model.Postulante.DescripcionOtroMedio, new { @class = "input-medium", @style = "disabled:disabled"})
                                     @*<input type="text" class="input-medium" id="txtotros" disabled="disabled"></td>*@
                             </tr>
                             <tr>

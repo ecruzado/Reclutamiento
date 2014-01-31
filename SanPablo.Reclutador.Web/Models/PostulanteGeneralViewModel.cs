@@ -11,6 +11,7 @@
         public Postulante Postulante { get; set; }
 
         public string directorioImagen { get; set; }
+        public int porcentaje { get; set; }
         public virtual IList<DetalleGeneral> TipoDocumentos { get; set; }
         public virtual IList<DetalleGeneral> Nacionalidad { get; set; }
         public virtual IList<DetalleGeneral> Sexo { get; set; }

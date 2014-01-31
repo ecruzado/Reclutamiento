@@ -55,7 +55,7 @@
                         cell = new string[]
                             {
                                 item.DescripcionTipoInstitucion,
-                                item.DescripcionNombreInstitucion,
+                                item.DescripcionNombreInstitucion.ToUpper(),
                                 item.DescripcionArea,
                                 item.DescripcionEducacion,
                                 item.DescripcionNivelAlcanzado,
@@ -69,7 +69,7 @@
             catch (Exception ex)
             {
                 //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
-                return MensajeError();
+                return MensajeError("ERROR: "+ex.Message);
             }
         }
         public string datosDetalle(string codigo, int tipoDato)
@@ -84,59 +84,76 @@
             var estudioGeneralViewModel = InicializarEstudio();
             if (id == "0")
             {
-                return View(estudioGeneralViewModel);
+               return View(estudioGeneralViewModel);
             }
             else
             {
-                var estudioResultado = new EstudioPostulante();
-                estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == Convert.ToInt32(id));
-                estudioGeneralViewModel.Estudio = estudioResultado;
-                estudioGeneralViewModel = actualizarDatos(estudioGeneralViewModel, estudioResultado);
-                return View(estudioGeneralViewModel);
-            }
+               var estudioResultado = new EstudioPostulante();
+               estudioResultado = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == Convert.ToInt32(id));
+               estudioGeneralViewModel.Estudio = estudioResultado;
+               estudioGeneralViewModel = actualizarDatos(estudioGeneralViewModel, estudioResultado);
+               return View(estudioGeneralViewModel);
+           }
+           
         }
 
 
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                
-                return Json(new {msj = false },JsonRequestBehavior.DenyGet);
-            }
-            if (estudioPostulante.IdeEstudiosPostulante == 0)
-            {
-                estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = new Postulante();
-                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarEstudio(estudioPostulante);
-                estudioPostulante.Postulante.IndicadorRegistroCompleto = "B";
-                _estudioPostulanteRepository.Add(estudioPostulante);
-            }
-            else
-            {
-                var estudioEdit = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == estudioPostulante.IdeEstudiosPostulante);
-                estudioEdit.TipTipoInstitucion = estudioPostulante.TipTipoInstitucion;
-                estudioEdit.TipoNombreInstitucion = estudioPostulante.TipoNombreInstitucion;
-                estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNivelAlcanzado;
-                estudioEdit.TipoEducacion = estudioPostulante.TipoEducacion;
-                estudioEdit.TipoArea = estudioPostulante.TipoArea;
-                estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
-                estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
-                estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
-                estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
-                
-                _estudioPostulanteRepository.Update(estudioEdit);
-            }
-            return Json(new {msj = true}, JsonRequestBehavior.DenyGet);
+                if (!ModelState.IsValid)
+                {
 
+                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                }
+                if (estudioPostulante.IdeEstudiosPostulante == 0)
+                {
+                    estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = new Postulante();
+                    postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarEstudio(estudioPostulante);
+                    _estudioPostulanteRepository.Add(estudioPostulante);
+                    int nroEstudiosIngresados = _estudioPostulanteRepository.CountByExpress(x=>x.Postulante == postulante) ;
+                    if (nroEstudiosIngresados == 1)
+                    { int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                        Session["Progreso"] = porcentaje + 20; }
+                }
+                else
+                {
+                    var estudioEdit = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == estudioPostulante.IdeEstudiosPostulante);
+                    estudioEdit.TipTipoInstitucion = estudioPostulante.TipTipoInstitucion;
+                    estudioEdit.TipoNombreInstitucion = estudioPostulante.TipoNombreInstitucion;
+                    estudioEdit.TipoNivelAlcanzado = estudioPostulante.TipoNivelAlcanzado;
+                    estudioEdit.TipoEducacion = estudioPostulante.TipoEducacion;
+                    estudioEdit.TipoArea = estudioPostulante.TipoArea;
+                    estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
+                    estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
+                    estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
+                    estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
+
+                    _estudioPostulanteRepository.Update(estudioEdit);
+                }
+                return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
+            }
+            catch (Exception ex)
+            {
+                string error = string.Format("Error : {0}", ex.Message);
+                Response.StatusCode = 500;
+                Response.Write(error);
+                return Json(new { msj = false, e = error }, JsonRequestBehavior.DenyGet);
+            }
+            
         }
 
         public EstudioPostulanteGeneralViewModel InicializarEstudio()
         {
             var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
             estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
+
+            estudioPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
+
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
@@ -180,19 +197,6 @@
             var listaResultado = new List<DetalleGeneral>();
 
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion,tipoInstituto));
-
-            //switch (tipoInstituto)
-            //{
-            //    case TipoInstitucion.TipoUniversidad: //es Universidad
-            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-            //        break;
-            //    case TipoInstitucion.TipoInstituto: // es Instituto
-            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-            //        break;
-            //    case TipoInstitucion.TipoColegio: // es Colegio
-            //        listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
-            //        break;
-            //}
             result = Json(listaResultado);
             return result;
         }
@@ -201,20 +205,9 @@
         {
              if (estudioPostulante != null)
             {
-                string tipTipoInst = estudioPostulante.TipTipoInstitucion;
-                switch (tipTipoInst)
-                {
-                    case TipoInstitucion.TipoUniversidad:
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-                        break;
-                    case TipoInstitucion.TipoInstituto:
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-                        break;
-                    case TipoInstitucion.TipoColegio:
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
-                        break;
-                }
-
+                var listaResultado = new List<DetalleGeneral>();
+                listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, estudioPostulante.TipTipoInstitucion));
+                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = listaResultado;
             }
              return estudioPostulanteGeneralViewModel;
         }

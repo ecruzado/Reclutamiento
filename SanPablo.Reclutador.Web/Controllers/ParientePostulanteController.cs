@@ -56,9 +56,9 @@
                         cell = new string[]
                             {
                                 //item.IdeParientePostulante.ToString(),
-                                item.ApellidoPaterno,
-                                item.ApellidoMaterno,
-                                item.Nombres,
+                                item.ApellidoPaterno.ToUpper(),
+                                item.ApellidoMaterno.ToUpper(),
+                                item.Nombres.ToUpper(),
                                 item.DescripcionVinculo,
                                 item.FechaNacimiento.ToString()
                             }
@@ -105,8 +105,13 @@
                 parientePostulante.EstadoActivo = IndicadorActivo.Activo;
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarPariente(parientePostulante);
-                parientePostulante.Postulante.IndicadorRegistroCompleto = "E";
                 _parientePostulanteRepository.Add(parientePostulante);
+                int nroParientesIngresados = _parientePostulanteRepository.CountByExpress(x => x.Postulante == postulante);
+                if (nroParientesIngresados == 1)
+                {
+                    int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                    Session["Progreso"] = porcentaje + 10;
+                }
             }
             else
             {
@@ -127,6 +132,8 @@
         {
             var parientePostulanteGeneralViewModel = new ParientePostulanteGeneralViewModel();
             parientePostulanteGeneralViewModel.Pariente = new ParientePostulante();
+
+            parientePostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             parientePostulanteGeneralViewModel.TipoVinculos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVinculo));
             parientePostulanteGeneralViewModel.TipoVinculos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });

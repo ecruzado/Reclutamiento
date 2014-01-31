@@ -30,9 +30,8 @@
 
     $(document).ready(function () {
 
-
-        $('#Postulante_FechaNacimiento').datepicker({});
-    
+        mostrarAlerta();
+            
         actualizarBarra();
 
         //Cargar las Provincias del Departamento elegido
@@ -103,28 +102,6 @@
 
 
   });
-
-
-    $(function () {
-        $.datepicker.regional['es'] =
-           {
-               closeText: 'Cerrar',
-               prevText: 'Previo',
-               nextText: 'Próximo',
-               monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-               monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-               monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
-               dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-               dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
-               dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-               dateFormat: 'dd/mm/yy', firstDay: 0,
-               initStatus: 'Selecciona la fecha', isRTL: false
-           };
-        $.datepicker.setDefaults($.datepicker.regional['es']);
-        $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
-    });
 </script>
 }
 <div class="row">
@@ -152,7 +129,7 @@
                 <table style="margin-left:120px;">
                     <tr>
                         <td class="colEtiqueta">
-                            @Html.HiddenFor(model=>model.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
+                            @Html.HiddenFor(model=>model.porcentaje)
                             <label class="etiquetaFormulario" for="setipodocumento">Tipo Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
@@ -174,7 +151,7 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario", @style="text-transform: uppercase" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>
@@ -185,7 +162,7 @@
                             <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido Paterno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario", @style="text-transform: uppercase" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoPaterno)
                             </div>
@@ -196,7 +173,7 @@
                             <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido Materno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" , @style="text-transform: uppercase"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoMaterno)
                             </div>
@@ -207,7 +184,7 @@
                             <label class="etiquetaFormulario" for="txtprimernombre">Primer Nombre <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario", @style="text-transform: uppercase" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.PrimerNombre)
                             </div>
@@ -218,7 +195,7 @@
                             <label class="etiquetaFormulario" for="txtsegundonombre">Segundo Nombre</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.SegundoNombre)
                             </div>
@@ -237,7 +214,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" })
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
@@ -258,7 +235,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -322,7 +299,7 @@
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de Vía</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
                         </td>
                     </tr>
                     <tr>
@@ -359,7 +336,7 @@
                             <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , @style="text-transform: uppercase"})
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
                             @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" })
                         </td>
@@ -369,7 +346,7 @@
                             <label class="etiquetaFormulario" for="txtemail">Email</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Correo, new { @class = "textoFormulario" })
+                            @Html.TextBoxFor(model => model.Postulante.Correo, new { @class = "textoFormulario" , @style="text-transform: uppercase"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Correo)
                             </div>
@@ -379,9 +356,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", @style="text-transform: uppercase" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", @style="text-transform: uppercase" })
                         </td>
                     </tr>
                     <tr>
@@ -411,7 +388,7 @@
                             <label class="etiquetaFormulario" for="setipozona">Nombre Zona</label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.NombreZona)
+                             @Html.TextBoxFor(model => model.Postulante.NombreZona, new { @style="text-transform: uppercase"})
                         </td>
                     </tr>
                     <tr>

@@ -6,6 +6,7 @@
     public class DiscapacidadPostulanteGeneralViewModel
     {
         public  DiscapacidadPostulante  Discapacidad { get; set; }
+        public int porcentaje { get; set; }       
         public virtual IList<DetalleGeneral> TipoDiscapacidades { get; set; }
     }
 }

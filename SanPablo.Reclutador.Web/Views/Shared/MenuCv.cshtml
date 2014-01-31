@@ -1,5 +1,5 @@
 ﻿ @using SanPablo.Reclutador.Web.Models
-    <div class="alert alert-info" id="alerta">
+    <div class="alert alert-info" id="alerta" style="display:none" >
         <a class="close" onclick="hide('alerta')" >×</a>
         Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos
     </div>
@@ -17,45 +17,68 @@
     @Html.MenuItem("2. Estudios", "Index", "EstudioPostulante")
     @Html.MenuItem("3. Experiencia", "Index", "ExperienciaPostulante")
     @Html.MenuItem("4. Conocimientos", "Index", "ConocimientoGeneralPostulante")
-@*    @Html.MenuItem("Referencias", "Referencias", "Postulante")*@
     @Html.MenuItem("5. Complementarios", "DatosComplementarios", "Postulante")
     @Html.MenuItem("6. Parientes", "Index", "ParientePostulante")
     @Html.MenuItem("7. Discapacidad", "Index", "DiscapacidadPostulante")
-@*    @Html.MenuItem("Reclutamientos", "Reclutamientos", "Postulante")*@
+
 </ul>
 <script>
+   
+    function mostrarAlerta() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("mostrarAlerta","Postulante")',
+            success: function (respuesta) {
+                var alerta = document.getElementById("alerta");
+                if (respuesta == "X") {
+                    alerta.style.display = "none";
+                }
+                else { alerta.style.display = "block";}
+            },
+            error: function (e) {
+                alert(e);
+            }
+         });
+    }
     
     function hide(obj) {
         var el = document.getElementById(obj);
         el.style.display = 'none';
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("actualizarAlerta","Postulante")'
+        });
 
     }
 
     //barra de progreso
     function actualizarBarra() {
-        var porc = $('#indicadorRegistroCompleto').val();
-        var porcentaje = '0'
-        if (porc == 'A') { porcentaje = '20'; }
-        else {
-            if (porc == 'B') { porcentaje = '40'; }
-            else {
-                if (porc == 'C') { porcentaje = '50'; }
-                else {
-                    if (porc == 'D') { porcentaje = '70'; }
-                    else {
-                        if (porc == 'E') { porcentaje = '80'; }
-                        else {
-                            if (porc == 'F') { porcentaje = '100'; }
-                        }
-                    }
-                }
-            }
-        }
+        var porcentaje = $('#porcentaje').val();
         var progresso = 'Tu CV esta completo al ' + porcentaje + '%';
         document.getElementById("progressBar").style.width = porcentaje + '%';
         document.getElementById("progreso").firstChild.nodeValue = progresso;
-        
         var varios = document.getElementsByClassName("icon-ok");
-        varios[0].style.visibility = "visible";
+        // determinar pestañas activas
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("pestañasActivas","Postulante")',
+            success: function (respuesta){
+                $.each(respuesta, function (i, items) {
+                    varios[items].style.visibility = "visible";
+                    
+                });
+            },
+            error: function (e) {
+                  alert(e);
+            }
+        });
+
+        
+        //for (var indice in varios)
+        //{
+        //    if (indice <= varios.length - 1) {
+        //        varios[indice].style.visibility = "visible";
+        //    }
+        //}
     }
 </script>

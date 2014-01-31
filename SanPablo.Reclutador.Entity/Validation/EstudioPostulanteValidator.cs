@@ -1,6 +1,7 @@
 ﻿namespace SanPablo.Reclutador.Entity.Validation
 {
     using FluentValidation;
+    using System.Globalization;
     using System;
 
     public class EstudioPostulanteValidator : AbstractValidator<EstudioPostulante>
@@ -38,6 +39,12 @@
                 .GreaterThan(new DateTime(1950, 01, 01))
                 .WithMessage("Ingresar Fecha de Inicio Válido");
 
+
+            RuleFor(x => x.FechaEstudioFin)
+                .GreaterThan(x => x.FechaEstudioInicio)
+                .When(x => x.ActualmenteEstudiando.Equals(false))
+                .WithMessage("Ingresar una fecha final válida");
+            
             When(x => x.ActualmenteEstudiando.Equals(false), () =>
             {
                 RuleFor(x => x.FechaEstudioFin)
@@ -47,5 +54,7 @@
             
 
         }
+
+ 
     }
 }

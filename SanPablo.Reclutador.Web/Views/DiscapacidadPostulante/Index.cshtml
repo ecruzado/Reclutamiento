@@ -11,6 +11,7 @@
 
         $(document).ready(function () {
 
+            mostrarAlerta();
             actualizarBarra();
 
             jQuery("#grdList").jqGrid({
@@ -54,14 +55,15 @@
                         {
                             $.post("/DiscapacidadPostulante/Edit",
                                 $("#discapacidadPostulanteForm").serialize(),
-                                function (msj) {
-                                    if (msj) {
+                                function (respuesta) {
+                                    if (respuesta.msj) {
                                         $("#updateDialog").dialog("close");
                                         location.reload(true);
                                         
                                     }
                                     else {
-                                            alert("ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos");
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
                                          }
                                 }
                             );
@@ -149,7 +151,7 @@
             <div class="widget-title">
                 <h5>Nivel Académico</h5>
             </div>
-            @Html.HiddenFor(model => model.Discapacidad.Postulante.IndicadorRegistroCompleto, new { @id = "indicadorRegistroCompleto"})
+            @Html.HiddenFor(model=>model.porcentaje)
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  

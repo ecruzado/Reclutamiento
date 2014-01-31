@@ -35,6 +35,8 @@
 
         int CountBy();
 
+        int CountByExpress(Expression<Func<TEntity, bool>> condition);
+
        
     }
 }
