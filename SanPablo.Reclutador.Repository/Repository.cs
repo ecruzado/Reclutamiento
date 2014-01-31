@@ -92,7 +92,17 @@
                     .RowCount();
 
         }
-      
+
+        public List<int> actualizarPestanas(int idePostulante)
+        {
+            List<int> list = new List<int>();
+            int[] lista = new int[7];
+             _session.CreateQuery("EXEC PR_EXTRANET.SP_ACTUALIZACION")
+                .SetParameter("p_idePostulante", idePostulante)
+                .SetParameterList("p_estados", lista);
+             lista[5] = 0; 
+             return list;               
+        }
 
     }
 

@@ -64,7 +64,11 @@
             url: '@Url.Action("pestañasActivas","Postulante")',
             success: function (respuesta){
                 $.each(respuesta, function (i, items) {
-                    varios[items].style.visibility = "visible";
+                    if (items == 9)
+                    { varios[0].style.visibility = "visible"; }
+                    if (items >= 0) {
+                        varios[items].style.visibility = "visible";
+                    }
                     
                 });
             },
@@ -72,13 +76,7 @@
                   alert(e);
             }
         });
-
+       
         
-        //for (var indice in varios)
-        //{
-        //    if (indice <= varios.length - 1) {
-        //        varios[indice].style.visibility = "visible";
-        //    }
-        //}
     }
 </script>

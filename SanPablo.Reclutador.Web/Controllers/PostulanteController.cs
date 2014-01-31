@@ -22,6 +22,11 @@
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IUbigeoRepository _ubigeoRepository;
+        private IExperienciaPostulanteRepository _experienciaGeneralRepository;
+        private IConocimientoGeneralPostulanteRepository _conocimientoGeneralRepository;
+        private IParientePostulanteRepository _parienteGeneralRepository;
+        private IDiscapacidadPostulanteRepository _discapacidadGeneralRepository;
+
         private PostulanteGeneralViewModel postulanteModel = new PostulanteGeneralViewModel();
                 
         public PostulanteController(IPostulanteRepository postulanteRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
@@ -185,6 +190,8 @@
                 MemoryStream ms = new MemoryStream(bytes);
                 imagen = new Bitmap(ms);
                 imagen.Save(DirTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
+                ms.Dispose();
+
             }
             return clave.ToString() + ".jpg";
         }
@@ -195,32 +202,20 @@
             List<int> pestanas = new List<int>();
             if (IdePostulante != 0)
             {
-                pestanas.Add(0);
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                if (postulante.Estudios != null)
-                {
-                   pestanas.Add(1);
-                }
-                if (postulante.Experiencias != null)
-                {
-                    pestanas.Add(2);
-                }
-                if (postulante.Conocimientos != null)
-                {
-                    pestanas.Add(3);
-                }
+                if (_estudioPostulanteRepository.CountByExpress(x => x.Postulante == postulante) > 0)
+                { pestanas.Add(1); }
+                if (_experienciaGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
+                { pestanas.Add(1); }
+                if (_conocimientoGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
+                { pestanas.Add(1); }
                 if (postulante.TipoSalario != null)
-                {
-                    pestanas.Add(4);
-                }
-                if (postulante.Parientes != null)
-                {
-                    pestanas.Add(5);
-                }
-                if (postulante.Discapacidades != null)
-                {
-                    pestanas.Add(6);
-                }
+                { pestanas.Add(1); }
+                if (_parienteGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
+                { pestanas.Add(1); }
+                if (_discapacidadGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
+                { pestanas.Add(1); }
+                  pestanas.Add(9);
             }
 
 
@@ -282,6 +277,7 @@
 
             return postulanteGeneralViewModel;
         }
+
         public ViewResult DatosComplementarios()
         {
             var postulanteGeneralViewModel = inicializarDatosComplementarios();
@@ -336,6 +332,7 @@
             return departamentos;
             
         }
+
         [HttpPost]
         public ActionResult  listarUbigeos (int ideUbigeoPadre)
         {

@@ -16,10 +16,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCargoTrabajo { get; set; }
         public virtual string NombreCargoTrabajo { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaTrabajoInicio { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaTrabajoFin { get; set; }
         public virtual string IndicadorActualmenteTrabajo { get; set; }
         public virtual string TiempoDeServicio { get; set; }

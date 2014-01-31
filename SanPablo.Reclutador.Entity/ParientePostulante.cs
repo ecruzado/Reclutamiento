@@ -17,7 +17,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Nombres { get; set; }
         public virtual string TipoDeVinculo { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaNacimiento { get; set; }
         public virtual string EstadoActivo { get; set; }
 

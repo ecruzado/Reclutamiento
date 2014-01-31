@@ -55,14 +55,14 @@
                         id = item.IdeExperienciaPostulante.ToString(),
                         cell = new string[]
                             {
-                                item.NombreEmpresa,
-                                item.DescripcionCargoTrabajo,
+                                item.NombreEmpresa.ToUpper(),
+                                item.DescripcionCargoTrabajo.ToUpper(),
                                 item.FechaTrabajoInicio.ToString(),
                                 item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
                                 item.TiempoDeServicio,
                                 item.DescripcionMotivoCese,
-                                item.NombreReferente,
+                                item.NombreReferente.ToUpper(),
                                 item.DescripcionCargoReferente,
                                 item.NumeroMovilReferencia.ToString(),
                                 item.NumeroFijoInstitucionReferente.ToString(),

@@ -18,10 +18,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoEducacion { get; set; }
         public virtual string TipoNivelAlcanzado { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaEstudioInicio { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime FechaEstudioFin { get; set; }
         public virtual string IndicadorActualmenteEstudiando { get; set; }
         public virtual string EstadoActivo { get; set; }
