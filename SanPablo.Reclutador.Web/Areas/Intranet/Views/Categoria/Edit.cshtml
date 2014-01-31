@@ -110,27 +110,6 @@
 
 
 
-       
-        
-        //$('#btnGuardar').click(function () {
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/Intranet/Categoria/Edit",
-        //        data: $("#frmCategoria").serialize(),
-        //        success: function (data) {
-        //            if (data.Resultado) {
-        //               // $("#Categoria_IDECATEGORIA").val(data.Objeto.IDECATEGORIA);
-        //               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                        
-                        
-        //            }
-                    
-        //        }
-        //    });
-
-        // });
-        
-        
 
 
         $('#btnSubirSubCategoria').click(function () {
@@ -194,7 +173,6 @@
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
-
 
 
         $('#btnSubirCriterio').click(function () {
@@ -335,7 +313,7 @@
                         data: {
                             test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
                             subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
-
+                            
                         },
                         type: "POST",
                         url: "/Intranet/Criterio/GetListaCriterio",

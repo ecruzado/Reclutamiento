@@ -183,8 +183,10 @@
         });
     });
 
+   
+
     function Edicion_Criterio(selr) {
-        $.post("/Intranet/Criterio/EdicionCriterio?selr=" + selr,
+        $.post('@Url.Action("EdicionCriterio", "Criterio")'+'?selr=' + selr,
            function (data) {
            }
        );

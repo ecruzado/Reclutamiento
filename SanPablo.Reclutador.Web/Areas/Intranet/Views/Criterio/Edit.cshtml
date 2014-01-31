@@ -23,10 +23,7 @@
     $(document).ready(function () {
         
      
-      //  $(".grilla-opciones").hide();
-      //  $("#btnbuscaimagen").hide();
-
-       // $("#Criterio_CodigoCriterio").attr('disabled', true);
+     
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
             $("#image").hide();
@@ -65,8 +62,9 @@
                 "Grabar": function () {
                     $.ajax({
                         type: "POST",
-                        url: "/Intranet/Criterio/PopupCriterio",
-                        data: $("#frmPopupCriterio").serialize(),
+                        
+                        url: '@Url.Action("PopupCriterio", "Criterio")',
+                        data: $("#frmPopupCriterio").serializeAll(),
                         traditional: true,
                         success: function (data) {
                             $("#updateDialog").html(data);
@@ -75,17 +73,6 @@
                         }
                     });
 
-                    
-                    //$.post("/Intranet/Criterio/PopupCriterio",
-                    //$("#frmPopupCriterio").serialize(),
-                    //    function (data) {
-                    //        $("#updateDialog").html(data);
-                    //        //$(this).data('bob').text($(this).find("textarea").val();
-                    //        $('#grdList').trigger('reloadGrid');
-                    //       // $("#updateDialog").dialog("close");
-                    //        //$(data).find(".dfdf");
-                    //    }
-                    //);
                 },
                  "Cancelar": function () {
                  $(this).dialog("close");
@@ -114,10 +101,13 @@
                 
         });
 
+
+        
+
         $('#btnGuardar').click(function () {
             $.ajax({
                 type: "POST",
-                url: "/Intranet/Criterio/Edit",
+                url: '@Url.Action("Edit", "Criterio")',
                 data: $("#frmCriterio").serialize(),
                 success: function (data) {
                    // $('#grdListaCatxExamen').trigger('reloadGrid');
@@ -127,8 +117,6 @@
         });
         
        
-       
-
        
         $("#spanConfirmacion").html("¿Desea eliminar el registro?")
         $('#confirmacion').dialog({
@@ -153,12 +141,6 @@
         });
 
 
-        /*
-        $('#btnGuardar').click(function () {
-            $(".tabla-datos").show();
-            $(".grilla-opciones").show();
-        });
-        */
 
         (function ($) {
             $.fn.serializeAll = function () {
@@ -231,9 +213,6 @@
 
         });
 
-
-
-
         var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
            {
                autoOpen: false,
@@ -261,9 +240,9 @@
         return strRdo;
     }
 
-
+    
     function eliminarAlternativa(selr, codCriterio) {
-        $.post("/Intranet/Criterio/Eliminar?ideAlternativa=" + selr + "&codigoCriterio=" + codCriterio,
+        $.post('@Url.Action("Eliminar", "Criterio")'+'?ideAlternativa=' + selr + '&codigoCriterio=' + codCriterio,
         function (data) {
             $('#grdList').trigger('reloadGrid');
             }
@@ -293,9 +272,13 @@
         $("#dlgsubirarchivoimagen").dialog('open');
     }
 
+
+    
+   
     function mostrarAgregarEstudios(id, codCriterio) {
         var dialogDiv = $('#updateDialog');
-        $.get("/Intranet/Criterio/PopupCriterio/" + id + "?codCriterio=" +codCriterio, function (data) {
+        
+        $.get('@Url.Action("PopupCriterio", "Criterio")?id=' + id + "&codCriterio=" + codCriterio, function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialog"));

@@ -107,8 +107,14 @@
             }
         }
 
+        /// <summary>
+        /// PopupCriterio: obtiene los datos del Popup y los guarda en la DB
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="imagenAlternativa"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult PopupCriterio(CriterioViewModel model, HttpPostedFileBase imagenAlternativa)
+        public ActionResult PopupCriterio(CriterioViewModel model)
         {
             var criterioViewModel = new CriterioViewModel();
             criterioViewModel.Alternativa = new Alternativa();
@@ -124,50 +130,40 @@
                 return View(criterioViewModel);
             }
 
-            /*HttpPostedFileBase imagen = Request.Files[model.Alternativa.RutaDeImagen];
-
-
-            if (imagen != null)
+            if (model.imagen2!=null)
             {
-                //string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.image.FileName));
-                //model.image.SaveAs(filePath);
-                byte[] data;
+                string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.imagen2));
+                Stream s = System.IO.File.OpenRead(filePath);
+                byte[] buffer = new byte[s.Length];
+                s.Read(buffer, 0, (int)s.Length);
+                int len = (int)s.Length;
+                s.Dispose();
+                s.Close();
 
-                using (Stream inputStream = imagen.InputStream)
-                {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    data = memoryStream.ToArray();
-                }
-                model.Alternativa.Image = data;
-
+                model.Alternativa.Image = buffer;    
             }
-            */
             
-
             if (model.Alternativa.IdeAlternativa != 0 && model.Alternativa.IdeAlternativa != null)
             {
 
                 var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
-
                 model.Alternativa.FechaMod = Hoy;
                 model.Alternativa.UsrMod = "Prueba 02";
-                
-
+                if (model.Alternativa.Image!=null)
+                {
+                    alter.Image = model.Alternativa.Image;     
+                }
+               
                 _alternativaRepository.Update(alter);
-
 
             }
             else
             {
                 model.Alternativa.FechaCreacion = Hoy;
                 model.Alternativa.UsrCreacion = "Prueba 01";
+               
                 _alternativaRepository.Add(model.Alternativa);
             }
 
@@ -338,7 +334,12 @@
             return View("Edit", model);
 
         }
-
+        /// <summary>
+        /// Inicializa el los datos del Popup Criterio para mostrar las alternativas
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codCriterio"></param>
+        /// <returns></returns>
         public ViewResult PopupCriterio(int id, int codCriterio)
         {
 
@@ -767,7 +768,7 @@
         }
 
         /// <summary>
-        /// 
+        /// GetImage Muestra la Imagen en el criterio
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -784,6 +785,27 @@
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// GetImagePopup Muestra la Imagen de la alternativa
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult GetImageAlternativa(int id)
+        {
+            var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
+            if (firstOrDefault.Image != null)
+            {
+                byte[] image = firstOrDefault.Image;
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
+        }
+
        
     }
 }
