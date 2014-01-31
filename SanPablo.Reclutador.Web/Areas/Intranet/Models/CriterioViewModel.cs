@@ -23,6 +23,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public virtual List<DetalleGeneral> TipoCalificacion { get; set; }
         public HttpPostedFileBase image { get; set; }
         public HttpPostedFileBase ImagenAlternativa { get; set; }
-                
+        public virtual string imagen2 { get; set; }
+        
     }
 }

@@ -21,6 +21,8 @@
                 
         
     });
+
+  
    
 </script>
 
@@ -63,7 +65,22 @@
         </tr>
         <tr>
           <td colspan="2">
-            @Html.TextBoxFor(model => model.Alternativa.RutaDeImagen, new { type = "file" })
+            @Html.TextBoxFor(model => model.imagen2, new { type = "file"})
+            
+             @if (Model.Alternativa.Image!=null)
+                {
+                    <table>
+                        <tr>
+                            <td style="width:80px;"></td>
+                                                
+                                            
+                            <td class ="colInput" colspan="2">
+                                <img id="ImgAlternativa"  height ="150" width="150" src="@Url.Action("GetImageAlternativa", "Criterio",new { id = Model.Alternativa.IdeAlternativa })" /> 
+                            </td>
+                    </tr>
+                    </table>    
+                }
+
           </td>
            
         </tr>
