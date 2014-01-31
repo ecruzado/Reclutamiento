@@ -455,5 +455,81 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(jsonMessage);
         }
 
+
+        /// <summary>
+        /// ActivarDesactivar : activa y desactiva el estado del examen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codEstado"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ActivarDesactivar(string id, string codEstado)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            Examen objExamen = new Examen();
+            try
+            {
+                objExamen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
+
+                if (IndicadorActivo.Activo.Equals(codEstado))
+                {
+                    objExamen.EstActivo = IndicadorActivo.Inactivo;
+                    objJsonMessage.Mensaje = "Se desactivado el examen";
+                }
+                else
+                {
+                    objExamen.EstActivo = IndicadorActivo.Activo;
+                    objJsonMessage.Mensaje = "Se activo el examen";
+                }
+
+                objJsonMessage.Resultado = true;
+                
+               
+             }
+             catch (Exception)
+            {
+
+                objJsonMessage.Resultado = false;
+                objJsonMessage.Mensaje = "Error en actualizar el estado";
+            }
+            
+            _examenRepository.Update(objExamen);
+
+            return Json(objJsonMessage);
+        }
+
+        /// <summary>
+        /// EliminarExamen : Elimina el examen seleccionado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarExamen(string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            Examen objExamen = new Examen();
+            try
+            {
+                objExamen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
+                _examenRepository.Remove(objExamen);
+                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "Se elimino el registro";
+
+               
+             }
+             catch (Exception)
+            {
+
+                objJsonMessage.Resultado = false;
+                objJsonMessage.Mensaje = "Error al eliminar el registro";
+            }
+            
+           
+
+            return Json(objJsonMessage);
+        }
+
+        
+
     }
 }
