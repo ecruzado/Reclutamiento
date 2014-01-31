@@ -40,6 +40,8 @@
 
             postulanteGeneralViewModel.directorioImagen = "user4.png";
 
+            postulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
+
             postulanteGeneralViewModel.TipoDocumentos = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
             postulanteGeneralViewModel.TipoDocumentos.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -84,7 +86,6 @@
         }
 
         [HttpPost]
-        //public ActionResult General([Bind(Prefix = "Postulante")]Postulante postulante, HttpPostedFileBase fotoPostulante)
         public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
         {
             try
@@ -120,8 +121,8 @@
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
-                    model.Postulante.IndicadorRegistroCompleto = "A";
                     _postulanteRepository.Add(model.Postulante);
+                    Session["Progreso"] = 20;
 
                 }
                 else
@@ -188,6 +189,69 @@
             return clave.ToString() + ".jpg";
         }
 
+        public ActionResult pestañasActivas()
+        {
+            ActionResult result = null;
+            List<int> pestanas = new List<int>();
+            if (IdePostulante != 0)
+            {
+                pestanas.Add(0);
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                if (postulante.Estudios != null)
+                {
+                   pestanas.Add(1);
+                }
+                if (postulante.Experiencias != null)
+                {
+                    pestanas.Add(2);
+                }
+                if (postulante.Conocimientos != null)
+                {
+                    pestanas.Add(3);
+                }
+                if (postulante.TipoSalario != null)
+                {
+                    pestanas.Add(4);
+                }
+                if (postulante.Parientes != null)
+                {
+                    pestanas.Add(5);
+                }
+                if (postulante.Discapacidades != null)
+                {
+                    pestanas.Add(6);
+                }
+            }
+
+
+            result = Json(pestanas);
+            return result;
+        }
+        
+        [HttpPost]
+        public ActionResult mostrarAlerta()
+        {
+            ActionResult result = null;
+            string indicador = "N";
+            if (IdePostulante != 0) 
+            {
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                indicador = postulante.IndicadorRegistroCompleto;
+            }
+            result = Json(indicador);
+            return result;
+        }
+        
+        [HttpPost]
+        public void actualizarAlerta()
+        {
+            if (IdePostulante != 0)
+            {
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                _postulanteRepository.Update(postulante);                
+            }
+            
+        }
         #endregion
 
 
@@ -241,6 +305,11 @@
                 return View("DatosComplementarios", postulanteModel);
             }
             var postulanteEdit = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            if (postulante.TipoSalario != null)
+            {
+                int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                Session["Progreso"] = porcentaje + 10;
+            }
             postulanteEdit.TipoSalario = postulante.TipoSalario;
             postulanteEdit.TipoDisponibilidadTrabajo = postulante.TipoDisponibilidadTrabajo;
             postulanteEdit.TipoDisponibilidadHorario = postulante.TipoDisponibilidadHorario;

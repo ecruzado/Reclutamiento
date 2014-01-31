@@ -7,6 +7,7 @@
     {
         public  ConocimientoGeneralPostulante  ConocimientoGeneral { get; set; }
 
+        public int porcentaje { get; set; }       
         public virtual IList<DetalleGeneral> TiposConocimientoOfimatica { get; set; }
         public virtual IList<DetalleGeneral> TipoNombresOfimatica { get; set; }
         public virtual IList<DetalleGeneral> TipoNivelesConocimiento { get; set; }

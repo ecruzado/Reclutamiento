@@ -9,7 +9,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using System.Linq;
-
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
@@ -188,6 +187,11 @@
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarConocimiento(conocimientoGeneralPostulante);
                 _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
+                if (nroConocimientoIngresados == 1)
+                {   int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                    Session["Progreso"] = porcentaje + 20;
+                }
             }
             else
             {
@@ -205,6 +209,8 @@
         public ConocimientoPostulanteGeneralViewModel InicializarConocimiento()
         {
             var conocimientoPostulanteGeneralViewModel = new ConocimientoPostulanteGeneralViewModel();
+
+            conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
 
             conocimientoPostulanteGeneralViewModel.TiposConocimientoOfimatica = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoOfimatica));
@@ -270,6 +276,12 @@
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarConocimiento(conocimientoGeneralPostulante);
                     _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                    int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
+                    if (nroConocimientoIngresados == 1)
+                    {
+                        int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                        Session["Progreso"] = porcentaje + 20;
+                    }
                    
                 }
                 else
@@ -292,6 +304,8 @@
         {
             var conocimientoPostulanteGeneralViewModel = new ConocimientoPostulanteGeneralViewModel();
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
+
+            conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             conocimientoPostulanteGeneralViewModel.TipoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
             conocimientoPostulanteGeneralViewModel.TipoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -344,8 +358,13 @@
                 conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                conocimientoGeneralPostulante.Postulante.IndicadorRegistroCompleto = "D";
                 _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
+                if (nroConocimientoIngresados == 1)
+                {
+                    int porcentaje = Convert.ToInt32(Session["Progreso"]);
+                    Session["Progreso"] = porcentaje + 20;
+                }
             }
             else
             {
@@ -365,6 +384,8 @@
         public ConocimientoPostulanteGeneralViewModel InicializarOtroConocimiento()
         {
             var conocimientoPostulanteGeneralViewModel = new ConocimientoPostulanteGeneralViewModel();
+
+            conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
 
             conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));

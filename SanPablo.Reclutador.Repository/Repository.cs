@@ -85,7 +85,13 @@
                     .Value;
         }
 
+        public int CountByExpress(Expression<Func<TEntity, bool>> condition)
+        {
+            return _session.QueryOver<TEntity>()
+                    .Where(condition)
+                    .RowCount();
 
+        }
       
 
     }

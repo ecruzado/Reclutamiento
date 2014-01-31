@@ -6,6 +6,7 @@
     public class EstudioPostulanteGeneralViewModel
     {
         public EstudioPostulante Estudio { get; set; }
+        public int porcentaje { get; set; }       
         public virtual IList<DetalleGeneral> TipoTipoInstituciones { get; set; }
         public virtual IList<DetalleGeneral> TipoNombreInstituciones { get; set; }
         public virtual IList<DetalleGeneral> AreasEstudio { get; set; }

@@ -10,10 +10,15 @@
 @using (Html.BeginForm("Idiomas", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "idiomasForm" }))
     {
     @Html.ValidationSummary(true)
-   
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    
     <table style="margin-left:30px;">
          <tr>
             <td class="colEtiqueta">
+                @Html.HiddenFor(model=>model.porcentaje)
                  @Html.HiddenFor(model=>model.ConocimientoGeneral.IdeConocimientoGeneralPostulante)
                 <label class="etiquetaFormulario" for="setInstitucion">Descripcion <span class="text-error">*</span></label>
             </td>

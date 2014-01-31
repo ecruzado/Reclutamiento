@@ -6,6 +6,7 @@
     public class ParientePostulanteGeneralViewModel
     {
         public  ParientePostulante  Pariente { get; set; }
+        public int porcentaje { get; set; }       
         public virtual IList<DetalleGeneral> TipoVinculos { get; set; }
     }
 }

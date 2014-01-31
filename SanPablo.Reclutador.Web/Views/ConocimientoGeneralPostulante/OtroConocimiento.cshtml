@@ -4,7 +4,9 @@
 }
     <script type="text/javascript">
         $(document).ready(function () {
-
+            //
+            var tipoNombre = $('#nombreConocimiento').val();
+            habilitarTextOtro(tipoNombre);
             //ELEGIR EL TIPO DE CONOCIMIENTO
             $('select#tipoConocimientoGral').change(function () {
                 var tipoConocimiento = $(this).val();
@@ -28,25 +30,31 @@
             })
             $('select#nombreConocimiento').change(function () {
                 var tipoNombre = $(this).val();
-                if (tipoNombre == "99") {
-                    $('#nombreOtroConocimiento').removeAttr("disabled");
-                }
-                else {
-                    $('#nombreOtroConocimiento').attr("disabled","disabled");
-                }
-                
+                habilitarTextOtro(tipoNombre);
             });
         });
-           
+        function habilitarTextOtro(tipoNombre)
+        {
+            if ((tipoNombre == "X1") || (tipoNombre == "X2") || (tipoNombre == "X3")) {
+                $('#nombreOtroConocimiento').removeAttr("disabled");
+            }
+            else {
+                $('#nombreOtroConocimiento').attr("disabled", "disabled");
+            }
+        }
 
     </script>
 @using (Html.BeginForm("OtroConocimiento", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "otroConocimientoForm" }))
     {
     @Html.ValidationSummary(true)
-   
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
+                @Html.HiddenFor(model=>model.porcentaje)
                  @Html.HiddenFor(model=>model.ConocimientoGeneral.IdeConocimientoGeneralPostulante)
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
             </td>
@@ -73,7 +81,7 @@
                 <label class="etiquetaFormulario">Otro </label>
             </td>
             <td class="colInput;input-xxlarge">
-                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @id="nombreOtroConocimiento", @disabled="disabled"})
+                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @id="nombreOtroConocimiento", @disabled="disabled", @style="text-transform: uppercase"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral)
                 </div>

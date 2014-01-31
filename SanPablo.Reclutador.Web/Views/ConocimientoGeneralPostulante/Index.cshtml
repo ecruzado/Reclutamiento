@@ -12,6 +12,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            mostrarAlerta();
             actualizarBarra();
 
             jQuery("#grdListOfimatica").jqGrid({
@@ -124,21 +125,15 @@
                         if (result) {
                             $.post("/ConocimientoGeneralPostulante/Ofimatica",
                                 $("#ofimaticaForm").serialize(),
-                                function (msj) {
-                                    if (msj) {
+                                function (respuesta) {
+                                    if (respuesta.msj) {
                                         $("#updateDialog").dialog("close");
                                         location.reload(true);
 
                                     }
                                     else {
-                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
-                                        $("#divMensaje").dialog({
-                                            title: 'SAN PABLO',
-                                            modal: true,
-                                            buttons: {
-                                                "Ok": function () { $(this).dialog("close"); }
-                                            }
-                                        });
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
                                     }
                                 }
                             );
@@ -163,21 +158,15 @@
                         if (result) {
                             $.post("/ConocimientoGeneralPostulante/Idiomas",
                                 $("#idiomasForm").serialize(),
-                                function (msj) {
-                                    if (msj) {
+                                function (respuesta) {
+                                    if (respuesta.msj) {
                                         $("#updateDialogIdiomas").dialog("close");
                                         location.reload(true);
 
                                     }
                                     else {
-                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
-                                        $("#divMensaje").dialog({
-                                            title: 'SAN PABLO',
-                                            modal: true,
-                                            buttons: {
-                                                "Ok": function () { $(this).dialog("close"); }
-                                            }
-                                        });
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
                                     }
                                 }
                             );
@@ -201,21 +190,15 @@
                         if (result) {
                             $.post("/ConocimientoGeneralPostulante/OtroConocimiento",
                                 $("#otroConocimientoForm").serialize(),
-                                function (msj) {
-                                    if (msj) {
+                                function (respuesta) {
+                                    if (respuesta.msj) {
                                         $("#updateDialogOtro").dialog("close");
                                         location.reload(true);
 
                                     }
                                     else {
-                                        $("#spanMensaje").html('ERROR: No se guardaron los datos, verique que todos los datos ingresados sean válidos');
-                                        $("#divMensaje").dialog({
-                                            title: 'SAN PABLO',
-                                            modal: true,
-                                            buttons: {
-                                                "Ok": function () { $(this).dialog("close"); }
-                                            }
-                                        });
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
                                     }
                                 }
                             );
