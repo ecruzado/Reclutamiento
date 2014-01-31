@@ -474,9 +474,9 @@
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
-           
 
-            return View("Edit",criterioViewModel);
+            return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+            //return View("Edit",criterioViewModel);
 
         }
 

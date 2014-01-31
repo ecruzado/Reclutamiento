@@ -111,6 +111,19 @@
                 
         });
 
+        $('#btnGuardar').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Intranet/Criterio/Edit",
+                data: $("#frmCriterio").serialize(),
+                success: function (data) {
+                   // $('#grdListaCatxExamen').trigger('reloadGrid');
+                }
+            });
+
+        });
+        
+       
        
 
        
@@ -478,7 +491,7 @@
                   }
                   else
                   {
-                    <button type="submit" id="btnGuardar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>  
+                    <button  type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>  
                   }    
             </div>
            

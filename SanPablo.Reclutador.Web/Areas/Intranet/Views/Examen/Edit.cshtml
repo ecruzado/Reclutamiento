@@ -9,25 +9,92 @@
 }
 
 @section Scripts{
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
     //Table initialisation 
 
+   
+    $(document).ready(function () {
+    
     $('#btnAgregarCategoria').click(function () {
         var codigoExamen = $("#Examen_IdeExamen").val();
-
-        if (codigoExamen == null && codigoExamen <= 0) {
+        
+        if (codigoExamen != null && codigoExamen > 0) {
+            mostrarCategoria(codigoExamen);
+        } else {
             MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
-            return;
         }
-
-        mostrarCategoria(codigoExamen);
 
     });
 
+
+    $('#btnEliminarCategoria').click(function () {
+        var codigoExamen = $("#Examen_IdeExamen").val();
+        var codigoCategoria = jQuery('#grdListaCatxExamen').jqGrid('getGridParam', 'selrow');
+       
+        if (codigoCategoria != null && codigoCategoria > 0) {
+            $('#confirmacion').dialog('open');
+        } else {
+            MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
+    
+    //$('#btnGrabarExamen').click(function () {
+
+    //    $("#frmExamenEdicion").validate();
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/Intranet/Examen/Editar",
+    //        data: $("#frmExamenEdicion").serialize(),
+    //        success: function (data) {
+    //            $("#Examen_IdeExamen").val(data.Objeto.IdeExamen);
+    //            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+    //            $('#grdListaCatxExamen').trigger('reloadGrid');
+    //        }
+    //    });
+
+    //});
+
+
+   
+
+
+    $("#spanConfirmacion").html("¿Desea eliminar el registro?")
+    $('#confirmacion').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+                var codigoExamen = $("#Examen_IdeExamen").val();
+
+                var selr = jQuery('#grdListaCatxExamen').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListaCatxExamen').jqGrid('getRowData', selr);
+                var codigoCategoria = rowData.IDECATEGORIA;
+
+                if (codigoCategoria != null && codigoCategoria > 0) {
+                    EliminarCategoria(codigoExamen, codigoCategoria);
+                } else {
+                    MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+                $(this).dialog("close");
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+    
+
+       
+
     $('#categoriaDialog').dialog({
         autoOpen: false,
-        width: 750,
+        width: 800,
         height: 750,
         resizable: false,
         modal: true,
@@ -42,8 +109,8 @@
                     url: '@Url.Action("GetListaCategoria", "Examen")',
                     traditional: true,
                     success: function () {
-                        // $(this).dialog("close");
-                        $('#grdListaCategoria').trigger('reloadGrid');
+                       
+                        $('#grdListaCatxExamen').trigger('reloadGrid');
 
 
                     }
@@ -57,17 +124,19 @@
     });
 
     jQuery("#grdListaCatxExamen").jqGrid({
-        url: '@Url.Action("ListaCatxExamen", "Categoria")' + '?id=' + $("#Examen_IdeExamen").val(),
+         url: '@Url.Action("ListaCatxExamen", "Examen")' + '?id=' + $("#Examen_IdeExamen").val(),
          datatype: 'json',
          mtype: 'POST',
-         colNames: ['', 'Nombre', 'Descripción', 'Detalle'],
+         colNames: ['','', 'Nombre', 'Descripción', 'Detalle'],
          colModel: [
-                 { name: 'IdeExamenxCategoria', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                 { name: 'Nombre', index: 'Nombre', align: 'left', editable: false },
-                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false },
-                 { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 20, sortable: false, formatter: DetalleFormatter },
+                 { name: 'IdeExamenxCategoria', index: 'IdeExamenxCategoria', align: 'center', editable: false, sortable: false, hidden: true },
+                 { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'left', editable: false, hidden: true },
+                 { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, width: 350 },
+                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, width: 450 },
+                 { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 50, sortable: false, formatter: DetalleFormatter },
                    
          ],
+         pager: jQuery('#grdPager'),
          rownumbers: true,
          sortname: 'IdeExamenxCategoria',
          sortorder: 'desc',
@@ -92,43 +161,8 @@
      });
 
 
-   @* $(document).ready(function () {
-        jQuery("#grdListaCatxExamen").jqGrid({
-            url: '@Url.Action("ListaCatxExamen", "Categoria")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Nombre', 'Descripción', 'Detalle'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'left', editable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false },
-                    { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 20, sortable: false, formatter: DetalleFormatter },
-                   
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            autowidth: true,
-            cellEdit: true,
-            /*caption: 'Lista Referencias',*/
-            height: 160,
-            width: 736,
-            rowNum: 10,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            }
-        });*@
-
     });
-    function RadioFormatter(cellvalue, options, rowObject) {
-        var strRdo = '<input type ="radio" name = "codigo">';
-        return strRdo;
-    }
+
     function DetalleFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
@@ -152,10 +186,32 @@
     }
 
 
+    function EliminarCategoria(codigoExamen, codigoCategoria) {
+
+        $.ajax({
+            data: {
+                id: codigoExamen,
+                codCat: codigoCategoria
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarCategoriaxExamen", "Examen")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#grdListaCatxExamen').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
+
 </script>
 }
 
-@using (Html.BeginForm("Edit", "Examen", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExamen" }))
+@using (Html.BeginForm("Edicion", "Examen", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExamenEdicion" }))
 {
     @Html.ValidationSummary(true)
 <div class="row">
@@ -174,7 +230,9 @@
                         
                     <label class="control-label" for="inputSuccess">Código</label>
                     <div class="controles">
-                        <input id="Examen_IdeExamen" name="Examen.IdeExamen" type="text" value="@Model.Examen.IdeExamen" readonly="readonly"> 
+                        <input id="Examen_IdeExamen" name="Examen.IdeExamen" type="text" value="@Model.Examen.IdeExamen" readonly="readonly" > 
+                    
+                    
                     </div>
                         
                     </td>
@@ -182,7 +240,17 @@
                        
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20" }) 
+                                
+                                @if (Accion.Consultar.Equals(Session["Accion"]))
+                                {
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled"}) 
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20" })     
+                                }
+
+                                
                             </div>
                        
                     </td>
@@ -192,7 +260,14 @@
                         
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" }) 
+                                 @if (Accion.Consultar.Equals(Session["Accion"]))
+                                 {
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled" }) 
+                                 }
+                                 else
+                                 {
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" })  
+                                 }
                             </div>
                         
                     </td>
@@ -200,7 +275,16 @@
                       
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen)) 
+                                
+                                 @if (Accion.Consultar.Equals(Session["Accion"]))
+                                 {
+                                     @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen), new { disabled = "disabled"}) 
+                                 }
+                                 else
+                                 {
+                                     @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen)) 
+                                 }
+                                
                             </div>
                       
                     </td>
@@ -213,26 +297,40 @@
                            </div>
                      </td>
                 </tr>
+               
             </table>
 
-            <div class="grilla-opciones">
-                <h6>Categorías vinculadas</h6>
-                <div class="opciones">
-                    <a  id="btnAgregarCategoria" class ="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a  id="btnEliminarCategoria" class ="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="tabla-datos">
-                <table id="grdListaCatxExamen">
-                </table>
-                <div id="grdPager"></div>
-            </div>
-            <div class="form-actions">
-                <a class="btn" href="@Url.Action("Index","Examen",new { area = "Intranet"})"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit"  id="btnGrabarExamen"  class ="btn btn-info"><i class=" icon-hdd icon-white"></i>Grabar</button>
-            </div>
+            @if (Session["Accion"].Equals(Accion.Editar) || Session["Accion"].Equals(Accion.Consultar))
+            {
 
+                if (Session["Accion"].Equals(Accion.Consultar))
+                {
+                    <div></div>
+                }
+                else
+                {
+                    <div class="grilla-opciones">
+                        <h6>Categorías vinculadas</h6>
+                        <div class="opciones">
+                            <a  id="btnAgregarCategoria" class ="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                            <a  id="btnEliminarCategoria" class ="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>     
+                }
+               
+                <div class="tabla-datos">
+                    <table id="grdListaCatxExamen">
+                    </table>
+                    <div id="grdPager"></div>
+                </div>
+            }
+
+            <div class="form-actions">
+            <a class="btn" href="@Url.Action("Index", "Examen", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <button   type="submit"  class ="btn btn-info"><i class=" icon-hdd icon-white"></i>Grabar</button>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -241,3 +339,4 @@
         <span id="spnMensaje"></span>
 </div>
 <div id="categoriaDialog" title="Buscar Categoria"></div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>

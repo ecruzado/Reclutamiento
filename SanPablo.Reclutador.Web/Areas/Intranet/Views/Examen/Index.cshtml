@@ -1,25 +1,67 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ExamenViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
     ViewBag.Title = "Listado Examen";
 }
 @section Head{
 }
 
 @section Scripts{
-
+    <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
     //Table initialisation 
     $(document).ready(function () {
 
+        
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaExamen", "Examen")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Estado', 'Codigo', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Duraci&oacuten (min)', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idExamen', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                       { field: 'tipExamen', data: $("#Examen_TipExamen").val() },
+                       { field: 'estado', data: $("#Examen_EstActivo").val() },
+                       { field: 'descrip', data: $("#Examen_DescExamen").val() }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaExamen", "Examen")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Estado','','', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Duraci&oacuten (min)', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'left'},
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left'},
+                    { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', sortable: false, width: 50,hidden: true },
+                    { name: 'IdeExamen', index: 'IdeExamen', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left' },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left' },
                     { name: 'Tipo', index: 'Tipo', align: 'left' },
                     { name: 'Duracion', index: 'Duracion', align: 'left' },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
@@ -27,35 +69,76 @@
                     { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
                     { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
             ],
-            pager: jQuery('#grdPager'),
-            rowNum: 10,
-            rowList: [10, 30, 50],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            autowidth:true,
-            viewrecords: true,
-            /*caption: 'Lista Referencias',*/
-            height: 350,
-            width: 736,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
+             pager: jQuery('#grdPager'),
+             rowNum: 10,
+             rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IdeExamen',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 350,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
 
-            },
-            loadComplete: function (data) {
+             postData: {
+             }, loadComplete: function (data) {
+             }
+         });
 
+
+        $('#btnNuevoExamen').click(function () {
+            var selr = 0;
+            if (selr != null) {
+                window.location = '@Url.Action("Nuevo", "Examen")';
+        } else {
+            MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
+
+         });
+
+
+        $('#btnConsultarExamen').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+
+            if (selr != null) {
+                window.location = '@Url.Action("Consulta", "Examen")' + '/' + selr;
+
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+        
+
+
+        $('#btnEditarExamen').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+           
+            if (selr != null) {
+                 window.location = '@Url.Action("Edicion", "Examen")' + '/' + selr;
+                
+        } else {
+            MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
         });
 
     });
+
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
     }
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
+   @* function HabilitarFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'enabled.png';
         var title = "Habilitar"
@@ -69,70 +152,65 @@
 
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;
-    }
+    }*@
 
-    $('#btnNuevoExamen').click(function () {
-        var selr = 0;
-        if (selr != null) {
-            window.location = '@Url.Action("Nuevo", "Examen")';
-            } else {
-                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
-    });
+   
+    
 
 
 </script>
 }
+
+@using (Html.BeginForm("Index", "Examen", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmExamenIndex" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
                 <h5>Examen</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                <select id="selectTipo">
-                                    <option>Seleccionar</option>
-                                    <option>Examen</option>
-                                    <option>Evaluación</option>
-                                    <option>Entrevista</option>
-                                    <option>Examen Medico</option>                                
-                                </select>
+                                @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen),new { data_val = "false" }) 
                             </div>
                         </div>
-                    </div>
-                    <div class="span5">
+                    </td>
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Descripcion</label>
                             <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-large">
+                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false"}) 
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-
-                    <div class="span5">
+                    </td>
+                 </tr>
+                 <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
+                               @Html.DropDownListFor(model => model.Examen.EstActivo, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Examen.EstActivo),new { data_val = "false" }) 
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+                    </td>
+                </tr>
+                <tr class="formulario-accion offset9">
+                    <td>
+                    <button id="btnBuscarExamen" type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button id ="btnLimpiarExamen" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
             <div class="tabla-datos">
                 <table id="grdList">
                 </table>
@@ -140,11 +218,16 @@
             </div>
             <div class="form-actions">
                 <a  id="btnNuevoExamen"    class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit","Examen",new { area = "Intranet"})"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a  id ="btnConsultarExamen" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a  id ="btnEditarExamen" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
         </div>
     </div>
 </div>
+}
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>

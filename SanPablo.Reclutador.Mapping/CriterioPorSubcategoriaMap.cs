@@ -19,6 +19,8 @@
             Map(x => x.FECCREACION, "FECCREACION");
             Map(x => x.USRMODIFICA, "USRMODIFICA");
             Map(x => x.FECMODIFICA, "FECMODIFICA");
+            
+           
             Table("CRITERIO_X_SUBCATEGORIA");
 
         }
