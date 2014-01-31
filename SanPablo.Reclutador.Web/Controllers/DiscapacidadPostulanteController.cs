@@ -56,7 +56,7 @@
                         cell = new string[]
                             {
                                 item.DescripcionTipoDiscapacidad,
-                                item.DescripcionDiscapacidad,
+                                item.DescripcionDiscapacidad.ToUpper(),
                               
                             }
                     }).ToArray();
@@ -100,10 +100,17 @@
             }
             if (discapacidadPostulante.IdeDiscapacidadPostulante == 0)
             {
-                discapacidadPostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarDiscapacidad(discapacidadPostulante);
-                _discapacidadPostulanteRepository.Add(discapacidadPostulante);
+                if (IdePostulante != 0)
+                {
+                    discapacidadPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarDiscapacidad(discapacidadPostulante);
+                    _discapacidadPostulanteRepository.Add(discapacidadPostulante);
+                }
+                else
+                {
+                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                }
             }
             else
             {

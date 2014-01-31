@@ -28,7 +28,7 @@
                 rowList: [10, 30, 50],
                 sortname: 'IdeDiscapacidadPostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 autowidth: true,
                 height: 300,
                 width: 736,
@@ -53,7 +53,7 @@
                         var result = $('form').valid();
                         if (result)
                         {
-                            $.post("/DiscapacidadPostulante/Edit",
+                            $.post('@Url.Action("Edit", "DiscapacidadPostulante")',
                                 $("#discapacidadPostulanteForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -112,7 +112,7 @@
         function mostrarEditarDiscapacidad(id) {
             var dialogDiv = $('#updateDialog');
             //var id = parseInt(ideEstudioEdit);
-            $.get("/DiscapacidadPostulante/Edit/"+id, function (data) {
+            $.get('@Url.Action("Edit", "DiscapacidadPostulante")', {id : id}, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -131,7 +131,7 @@
 
         function mostrarAgregarDiscapacidad() {
             var dialogDiv = $('#updateDialog');
-            $.get("/DiscapacidadPostulante/Edit/"+"0", function (data) {
+            $.get('@Url.Action("Edit", "DiscapacidadPostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');

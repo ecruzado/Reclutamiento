@@ -29,12 +29,23 @@
 
         private PostulanteGeneralViewModel postulanteModel = new PostulanteGeneralViewModel();
                 
-        public PostulanteController(IPostulanteRepository postulanteRepository,IEstudioPostulanteRepository estudioPostulanteRepository,IUbigeoRepository ubigeoRepository, IDetalleGeneralRepository detalleGeneralRepository)
+        public PostulanteController(IPostulanteRepository postulanteRepository,
+                                    IEstudioPostulanteRepository estudioPostulanteRepository,
+                                    IUbigeoRepository ubigeoRepository, 
+                                    IDetalleGeneralRepository detalleGeneralRepository,
+                                    IExperienciaPostulanteRepository experienciaGeneralRepository,
+                                    IConocimientoGeneralPostulanteRepository conocimientoGeneralRepository,
+                                    IParientePostulanteRepository parienteGeneralRepository,
+                                    IDiscapacidadPostulanteRepository discapacidadGeneralRepository)
         {
             _postulanteRepository = postulanteRepository;
             _estudioPostulanteRepository = estudioPostulanteRepository;
             _ubigeoRepository = ubigeoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _experienciaGeneralRepository = experienciaGeneralRepository;
+            _conocimientoGeneralRepository = conocimientoGeneralRepository;
+            _parienteGeneralRepository = parienteGeneralRepository;
+            _discapacidadGeneralRepository = discapacidadGeneralRepository;
                         
         }
         #region General
@@ -44,6 +55,7 @@
             postulanteGeneralViewModel.Postulante = new Postulante();
 
             postulanteGeneralViewModel.directorioImagen = "user4.png";
+            postulanteGeneralViewModel.Postulante.FechaNacimiento = DateTime.Now;
 
             postulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
@@ -127,8 +139,6 @@
                 if (IdePostulante == 0)
                 {
                     _postulanteRepository.Add(model.Postulante);
-                    Session["Progreso"] = 20;
-
                 }
                 else
                 {
@@ -195,6 +205,20 @@
             }
             return clave.ToString() + ".jpg";
         }
+        
+        public ActionResult GetImage(int id)
+        {
+            var firstOrDefault = _postulanteRepository.GetSingle(x => x.IdePostulante == id);
+            if (firstOrDefault.FotoPostulante != null)
+            {
+                byte[] image = firstOrDefault.FotoPostulante;
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public ActionResult pestañasActivas()
         {
@@ -206,15 +230,15 @@
                 if (_estudioPostulanteRepository.CountByExpress(x => x.Postulante == postulante) > 0)
                 { pestanas.Add(1); }
                 if (_experienciaGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
-                { pestanas.Add(1); }
+                { pestanas.Add(2); }
                 if (_conocimientoGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
-                { pestanas.Add(1); }
+                { pestanas.Add(3); }
                 if (postulante.TipoSalario != null)
-                { pestanas.Add(1); }
+                { pestanas.Add(4); }
                 if (_parienteGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
-                { pestanas.Add(1); }
+                { pestanas.Add(5); }
                 if (_discapacidadGeneralRepository.CountByExpress(x => x.Postulante == postulante) > 0)
-                { pestanas.Add(1); }
+                { pestanas.Add(6); }
                   pestanas.Add(9);
             }
 
@@ -300,25 +324,23 @@
                 postulanteModel.Postulante = postulante;
                 return View("DatosComplementarios", postulanteModel);
             }
-            var postulanteEdit = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-            if (postulante.TipoSalario != null)
+            if (IdePostulante != 0)
             {
-                int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                Session["Progreso"] = porcentaje + 10;
+                var postulanteEdit = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulanteEdit.TipoSalario = postulante.TipoSalario;
+                postulanteEdit.TipoDisponibilidadTrabajo = postulante.TipoDisponibilidadTrabajo;
+                postulanteEdit.TipoDisponibilidadHorario = postulante.TipoDisponibilidadHorario;
+                postulanteEdit.TipoComoSeEntero = postulante.TipoComoSeEntero;
+                postulanteEdit.TipoParienteSede = postulante.TipoParienteSede;
+                postulanteEdit.TipoHorario = postulante.TipoHorario;
+                postulanteEdit.ParienteCargo = postulante.ParienteCargo;
+                postulanteEdit.ParienteNombre = postulante.ParienteNombre;
+                postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
+                postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
+                postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
+
+                _postulanteRepository.Update(postulanteEdit);
             }
-            postulanteEdit.TipoSalario = postulante.TipoSalario;
-            postulanteEdit.TipoDisponibilidadTrabajo = postulante.TipoDisponibilidadTrabajo;
-            postulanteEdit.TipoDisponibilidadHorario = postulante.TipoDisponibilidadHorario;
-            postulanteEdit.TipoComoSeEntero = postulante.TipoComoSeEntero;
-            postulanteEdit.TipoParienteSede = postulante.TipoParienteSede;
-            postulanteEdit.TipoHorario = postulante.TipoHorario;
-            postulanteEdit.ParienteCargo = postulante.ParienteCargo;
-            postulanteEdit.ParienteNombre = postulante.ParienteNombre;
-            postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
-            postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
-            postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
-                       
-            _postulanteRepository.Update(postulanteEdit);
             return RedirectToAction("../ParientePostulante/Index");
         }
 

@@ -110,15 +110,16 @@
                 }
                 if (estudioPostulante.IdeEstudiosPostulante == 0)
                 {
-                    estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
-                    var postulante = new Postulante();
-                    postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                    postulante.agregarEstudio(estudioPostulante);
-                    _estudioPostulanteRepository.Add(estudioPostulante);
-                    int nroEstudiosIngresados = _estudioPostulanteRepository.CountByExpress(x=>x.Postulante == postulante) ;
-                    if (nroEstudiosIngresados == 1)
-                    { int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                        Session["Progreso"] = porcentaje + 20; }
+                    if (IdePostulante != 0)
+                    {
+                        estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        var postulante = new Postulante();
+                        postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                        postulante.agregarEstudio(estudioPostulante);
+                        _estudioPostulanteRepository.Add(estudioPostulante);
+                    }
+                    else
+                    { return Json(new { msj = false }, JsonRequestBehavior.DenyGet); }
                 }
                 else
                 {
@@ -152,6 +153,9 @@
             var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
             estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
 
+            estudioPostulanteGeneralViewModel.Estudio.FechaEstudioInicio = DateTime.Now;
+            estudioPostulanteGeneralViewModel.Estudio.FechaEstudioFin = DateTime.Now;
+
             estudioPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
@@ -180,10 +184,7 @@
 
             var estudioEliminar = new EstudioPostulante();
             estudioEliminar = _estudioPostulanteRepository.GetSingle(x => x.IdeEstudiosPostulante == ideEstudio);
-            int antes = _estudioPostulanteRepository.CountBy();
             _estudioPostulanteRepository.Remove(estudioEliminar);
-            int despues = _estudioPostulanteRepository.CountBy();
-
             return result;
         }
 

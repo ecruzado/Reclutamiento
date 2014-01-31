@@ -196,7 +196,7 @@ namespace SanPablo.Reclutador.Web.Core
             get
             {
                 //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
-                return 53;
+                return 55;
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdePostulante, value); }
         }

@@ -105,16 +105,17 @@
             }
             if (experienciaPostulante.IdeExperienciaPostulante == 0)
             {
-                experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = new Postulante();
-                postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarExperiencia(experienciaPostulante);
-                _experienciaPostulanteRepository.Add(experienciaPostulante);
-                int nroExperienciaIngresados = _experienciaPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
-                if (nroExperienciaIngresados == 1)
+                if (IdePostulante != 0)
                 {
-                    int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                    Session["Progreso"] = porcentaje + 20;
+                    experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = new Postulante();
+                    postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarExperiencia(experienciaPostulante);
+                    _experienciaPostulanteRepository.Add(experienciaPostulante);
+                }
+                else
+                {
+                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
                 }
             }
             else
@@ -146,7 +147,10 @@
             experienciaPostulanteGeneralViewModel.Experiencia = new ExperienciaPostulante();
 
             experienciaPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
-            
+
+            experienciaPostulanteGeneralViewModel.Experiencia.FechaTrabajoInicio = DateTime.Now;
+            experienciaPostulanteGeneralViewModel.Experiencia.FechaTrabajoFin = DateTime.Now;
+
             experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
             experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 

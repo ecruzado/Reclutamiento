@@ -155,7 +155,7 @@
                 <label class="etiquetaFormulario" for="setAreaEstudio"> Fecha de Inicio <span class="text-error">*</span></label>
             </td>
             <td class="colInput" id="txtfechainicio">
-                @Html.EditorFor(model => model.Estudio.FechaEstudioInicio)
+                @Html.EditorFor(model => model.Estudio.FechaEstudioInicio, new { @value = ""})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
                 </div>

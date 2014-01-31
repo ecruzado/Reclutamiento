@@ -37,7 +37,7 @@
                 rowList: [10, 30, 50],
                 sortname: 'IdeExperienciaPostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 height: 300,
                 width: 736,
                 rowNum: 0,
@@ -64,7 +64,7 @@
                      e.preventDefault();
                      var result = $('form').valid();
                      if (result) {
-                         $.post("/ExperienciaPostulante/Edit",
+                         $.post('@Url.Action("Edit", "ExperienciaPostulante")',
                          $("#experienciaPostulanteForm").serialize(),
                          function (respuesta) {
                              if (respuesta.msj) {
@@ -119,7 +119,7 @@
         function mostrarEditarExperiencia(id) {
             var dialogDiv = $('#updateDialog');
             //var id = parseInt(ideEstudioEdit);
-            $.get("/ExperienciaPostulante/Edit/" + id, function (data) {
+            $.get('@Url.Action("Edit", "ExperienciaPostulante")',{id : id}, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -141,7 +141,7 @@
 
         function mostrarAgregarExperiencia() {
             var dialogDiv = $('#updateDialog');
-            $.get("/ExperienciaPostulante/Edit/"+0, function (data) {
+            $.get('@Url.Action("Edit", "ExperienciaPostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');

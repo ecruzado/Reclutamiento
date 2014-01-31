@@ -30,7 +30,7 @@
                 rowList: [10, 30, 50],
                 sortname: 'IdeParientePostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 autowidth: true,
                 height: 300,
                 width: 736,
@@ -54,7 +54,7 @@
                         e.preventDefault();
                         var result = $('form').valid();
                         if (result) {
-                            $.post("/ParientePostulante/Edit",
+                            $.post('@Url.Action("Edit", "ParientePostulante")',
                                 $("#parientePostulanteForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -129,7 +129,7 @@
 
         function mostrarEditarPariente(id) {
             var dialogDiv = $('#updateDialog');
-            $.get("/ParientePostulante/Edit/" + id, function (data) {
+            $.get('@Url.Action("Edit", "ParientePostulante")', { id: id }, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -148,7 +148,7 @@
 
         function mostrarAgregarPariente() {
             var dialogDiv = $('#updateDialog');
-            $.get("/ParientePostulante/Edit/" + "0", function (data) {
+            $.get('@Url.Action("Edit", "ParientePostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');

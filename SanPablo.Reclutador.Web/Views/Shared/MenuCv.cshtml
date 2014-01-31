@@ -1,7 +1,7 @@
 ﻿ @using SanPablo.Reclutador.Web.Models
     <div class="alert alert-info" id="alerta" style="display:none" >
         <a class="close" onclick="hide('alerta')" >×</a>
-        Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos
+        Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos, ingrese primero sus datos personales en la pestaña Datos
     </div>
       
     
@@ -53,10 +53,7 @@
 
     //barra de progreso
     function actualizarBarra() {
-        var porcentaje = $('#porcentaje').val();
-        var progresso = 'Tu CV esta completo al ' + porcentaje + '%';
-        document.getElementById("progressBar").style.width = porcentaje + '%';
-        document.getElementById("progreso").firstChild.nodeValue = progresso;
+        var progreso= 0;
         var varios = document.getElementsByClassName("icon-ok");
         // determinar pestañas activas
         $.ajax({
@@ -65,18 +62,37 @@
             success: function (respuesta){
                 $.each(respuesta, function (i, items) {
                     if (items == 9)
-                    { varios[0].style.visibility = "visible"; }
-                    if (items >= 0) {
+                    {
+                        varios[0].style.visibility = "visible";
+                        progreso = progreso + 20;
+                    }
+                    if ((items >= 0) && (items < 7)) {
                         varios[items].style.visibility = "visible";
+                        if ((items == 1) || (items == 2) || (items == 3)) {
+                            progreso = progreso + 20;
+                        }
+                        else {
+                            if ((items == 4) || (items == 5)) {
+                                progreso = progreso + 10;
+                            }
+                        }
+                        
+                        
                     }
                     
                 });
+                var porcentaje = $('#porcentaje').val();
+                var progresso = 'Tu CV esta completo al ' + progreso + '%';
+                document.getElementById("progressBar").style.width = progreso + '%';
+                document.getElementById("progreso").firstChild.nodeValue = progresso;
             },
             error: function (e) {
                   alert(e);
             }
+
+            
         });
        
-        
+
     }
 </script>

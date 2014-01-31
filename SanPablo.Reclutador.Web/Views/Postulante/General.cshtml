@@ -139,9 +139,28 @@
                         <td rowspan="7" colspan="3" style="text-align:center; width:300px"> 
                                             
                             @*<img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>*@
-                            <img src="@Url.Content("~/Content/images/"+Model.directorioImagen)"  alt="" id ="imgSalida"  width="40%" height="40%"/>
-                            <br />
-                            
+                            @*<img src="@Url.Content("~/Content/images/"+Model.directorioImagen)"  alt="" id ="imgSalida"  width="40%" height="40%"/>
+                           *@
+                             @if (Model.Postulante.FotoPostulante!=null)
+                                 {
+                                     <table>
+                                         <tr>
+                                             <td style="width:80px;"></td>
+                                                
+                                            
+                                              <td class ="colInput" colspan="3">
+                                                 <img id="imgSalida"  height ="150" width="150" src="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
+                                              </td>
+                                        </tr>
+                                     </table>    
+                                 }
+                            else
+                            {
+                                 <img src="~/Content/images/user4.png"  alt="" id ="imgSalida"  width="40%" height="40%"/>
+                             }
+
+                             <br />
+                             
                              @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
                                   
                         </td>

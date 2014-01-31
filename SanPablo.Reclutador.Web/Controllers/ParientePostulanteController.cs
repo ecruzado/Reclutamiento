@@ -102,16 +102,18 @@
             }
             if (parientePostulante.IdeParientePostulante == 0)
             {
-                parientePostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarPariente(parientePostulante);
-                _parientePostulanteRepository.Add(parientePostulante);
-                int nroParientesIngresados = _parientePostulanteRepository.CountByExpress(x => x.Postulante == postulante);
-                if (nroParientesIngresados == 1)
+                if (IdePostulante != 0)
                 {
-                    int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                    Session["Progreso"] = porcentaje + 10;
+                    parientePostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarPariente(parientePostulante);
+                    _parientePostulanteRepository.Add(parientePostulante);
                 }
+                else
+                {
+                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                }
+                
             }
             else
             {
@@ -134,6 +136,8 @@
             parientePostulanteGeneralViewModel.Pariente = new ParientePostulante();
 
             parientePostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
+
+            parientePostulanteGeneralViewModel.Pariente.FechaNacimiento = DateTime.Now;
 
             parientePostulanteGeneralViewModel.TipoVinculos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVinculo));
             parientePostulanteGeneralViewModel.TipoVinculos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });

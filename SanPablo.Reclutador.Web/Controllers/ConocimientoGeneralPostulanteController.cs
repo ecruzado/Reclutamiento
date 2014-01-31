@@ -187,11 +187,6 @@
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarConocimiento(conocimientoGeneralPostulante);
                 _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
-                if (nroConocimientoIngresados == 1)
-                {   int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                    Session["Progreso"] = porcentaje + 20;
-                }
             }
             else
             {
@@ -276,13 +271,7 @@
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarConocimiento(conocimientoGeneralPostulante);
                     _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                    int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
-                    if (nroConocimientoIngresados == 1)
-                    {
-                        int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                        Session["Progreso"] = porcentaje + 20;
-                    }
-                   
+                                      
                 }
                 else
                 {
@@ -359,12 +348,7 @@
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                 postulante.agregarConocimiento(conocimientoGeneralPostulante);
                 _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                int nroConocimientoIngresados = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante == postulante);
-                if (nroConocimientoIngresados == 1)
-                {
-                    int porcentaje = Convert.ToInt32(Session["Progreso"]);
-                    Session["Progreso"] = porcentaje + 20;
-                }
+                
             }
             else
             {

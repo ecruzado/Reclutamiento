@@ -32,7 +32,7 @@
                 rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 autowidth: true,
                 /*caption: 'Lista Referencias',*/
                 height: 120,
@@ -65,7 +65,7 @@
                 rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 autowidth: true,
                 /*caption: 'Lista Referencias',*/
                 height: 120,
@@ -94,11 +94,11 @@
                         { name: 'Certificacion', index: 'Nivel', align: 'left', formatter: CheckFormatter, sortable: false }
                 ],
                 pager: jQuery('#grdPager3'),
-                rownumbers: true,
+                rownumbers: false,
                 rowList: [10, 30, 50],
                 sortname: 'IdeConocimientoGeneralPostulante',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 autowidth: true,
                 /*caption: 'Lista Referencias',*/
                 height: 120,
@@ -123,7 +123,7 @@
                         e.preventDefault();
                         var result = $('form').valid();
                         if (result) {
-                            $.post("/ConocimientoGeneralPostulante/Ofimatica",
+                            $.post( '@Url.Action("Ofimatica", "ConocimientoGeneralPostulante")',
                                 $("#ofimaticaForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -156,7 +156,7 @@
                         e.preventDefault();
                         var result = $('form').valid();
                         if (result) {
-                            $.post("/ConocimientoGeneralPostulante/Idiomas",
+                            $.post('@Url.Action("Idiomas", "ConocimientoGeneralPostulante")',
                                 $("#idiomasForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -188,7 +188,7 @@
                         e.preventDefault();
                         var result = $('form').valid();
                         if (result) {
-                            $.post("/ConocimientoGeneralPostulante/OtroConocimiento",
+                            $.post('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante")',
                                 $("#otroConocimientoForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -328,7 +328,7 @@
 
         function mostrarEditarOfimatica(id) {
             var dialogDiv = $('#updateDialog');
-            $.get("/ConocimientoGeneralPostulante/Ofimatica/" + id, function (data) {
+            $.get('@Url.Action("Ofimatica", "ConocimientoGeneralPostulante")', {id : id}, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -338,7 +338,7 @@
 
         function mostrarEditarIdioma(id) {
             var dialogDiv = $('#updateDialogIdiomas');
-            $.get("/ConocimientoGeneralPostulante/Idiomas/" + id, function (data) {
+            $.get('@Url.Action("Idiomas", "ConocimientoGeneralPostulante")', {id : id}, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialogIdioma"));
                 dialogDiv.dialog('open');
@@ -348,7 +348,7 @@
 
         function mostrarEditarOtroConocimiento(id) {
             var dialogDiv = $('#updateDialogOtro');
-            $.get("/ConocimientoGeneralPostulante/OtroConocimiento/" + id, function (data) {
+            $.get('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante")', {id : id}, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialogOtro"));
                 dialogDiv.dialog('open');
@@ -367,7 +367,7 @@
 
         function mostrarAgregarOfimatica() {
             var dialogDiv = $('#updateDialog');
-            $.get("/ConocimientoGeneralPostulante/Ofimatica/" + "0", function (data) {
+            $.get('@Url.Action("Ofimatica", "ConocimientoGeneralPostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
@@ -377,7 +377,7 @@
 
         function mostrarAgregarIdioma() {
             var dialogDiv = $('#updateDialogIdiomas');
-            $.get("/ConocimientoGeneralPostulante/Idiomas/" + "0", function (data) {
+            $.get('@Url.Action("Idiomas", "ConocimientoGeneralPostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialogIdiomas"));
                 dialogDiv.dialog('open');
@@ -387,7 +387,7 @@
 
         function mostrarAgregarOtro() {
             var dialogDiv = $('#updateDialogOtro');
-            $.get("/ConocimientoGeneralPostulante/OtroConocimiento/" + "0", function (data) {
+            $.get('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante", new { id = "0"})', function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialogOtro"));
                 dialogDiv.dialog('open');
