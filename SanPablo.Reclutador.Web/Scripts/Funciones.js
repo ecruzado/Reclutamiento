@@ -1,38 +1,62 @@
-﻿Number.prototype.formatMoney = function (c, d, t) {
-    var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-};
-
-Funciones = {
-    //------------------------------------------------------
-    //Efectos
-    //------------------------------------------------------
-    ShowElement: function (elemento) {
-        $(elemento).slideDown(200).animate({ opacity: 1 }, 300);
+﻿Funciones = {
+    Mayuscula: function (e, elemento) {
+        elemento.value = elemento.value.toUpperCase();
     },
 
-    HideElement: function (elemento) {
-        $(elemento).animate({
-            opacity: 0.25
-        }, 300, function () {
-            $(elemento).slideUp(200);
-        });
-    },
-
-    GetYearRange: function (anioInicio, anioFin) {
-        var i = 0;
-        var opcionesAnios = "";
-
-        for (i = anioInicio; i <= anioFin; i = i + 1) {
-            opcionesAnios += "<option value=\"" + i.toString() + "\">" + i.toString() + "</option>";
+    Completar: function (ctrl, len) {
+        var numero = ctrl.value;
+        if (numero.length == len || numero.length == 0) return true;
+        for (var i = 1; numero.length < len; i++) {
+            numero = '0' + numero;
         }
-
-        return opcionesAnios;
+        ctrl.value = numero;
+        return true;
     },
 
-    TrimString: function (cadena) {
-        var trimmed = cadena.replace(/^\s+|\s+$/g, '');
-        return trimmed;
+    PadLeft: function (value, len, character) {
+        len = len - value.length;
+        for (var i = 1; i <= len; i++) {
+            value = character + value;
+        }
+        return value;
+    },
+
+    Ajax: function (url, parameters, async) {
+        var rsp;
+        $.ajax({
+            type: "POST",
+            url: url,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: async,
+            data: JSON.stringify(parameters),
+            success: function (response) {
+                rsp = response;
+            },
+            failure: function (msg) {
+                rsp = -1;
+            }
+        });
+        return rsp;
+    },
+
+    AjaxJson: function (type, url, parameters, async, methodSuccess) {
+        var rsp;
+        $.ajax({
+            type: type,
+            url: url,
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: async,
+            data: JSON.stringify(parameters),
+            success: methodSuccess,
+            failure: function (msg) {
+                rsp = -1;
+            }
+        });
+        return rsp;
     },
 
     ParseDate: function (date) {
@@ -41,452 +65,446 @@ Funciones = {
         return fecha.getTime();
     },
 
-    ParsearFechaJSON: function (jsonDate) {
-        if (jsonDate == "Sin Especificar")
-            return "";
-
-        var fechaActual = new Date(parseInt(jsonDate.slice(6, -2)));
-
-        return Belcorp.PadLeft(fechaActual.getDate(), 2, '0') + "/" + Belcorp.PadLeft((fechaActual.getMonth() + 1), 2, '0') + "/" + fechaActual.getFullYear();
-    },
-
-    ParsearFecha: function (jsonDate) {
-        if (jsonDate == "Sin Especificar")
-            return "";
-
-        var fechaActual = $.datepicker.parseDate("dd/mm/yy", jsonDate);
-
-        return Funciones.PadLeft(fechaActual.getDate(), 2, '0') + "/" + Funciones.PadLeft((fechaActual.getMonth() + 1), 2, '0') + "/" + fechaActual.getFullYear();
-    },
-
-    PadLeft: function (i, l, s) {
-        var o = i.toString();
-        if (!s) { s = '0'; }
-        while (o.length < l) {
-            o = s + o;
-        }
-        return o;
-    },
-
-    ValidarCombo: function (comboName) {
-        var combo = jQuery('#' + comboName);
-        var valor = combo.val();
+    ValidarCombo: function (args) {
         var isvalid = true;
+        $.each(args, function (index, item) {
+            var combo = jQuery('#' + item);
+            var valor = combo.val();
 
-        if (valor == 0 || valor == null) {
-            var padre = combo.parent();
-            var haySpan = padre.find("span").length;
+            if (valor == 0 || valor == null) {
+                var padre = combo.parent();
+                var haySpan = padre.find("span").length;
 
-            if (haySpan == 0) {
-                padre.append("<span class='error'>*</span>");
+                if (haySpan == 0) {
+                    padre.append("<span class='error'>*</span>");
+                }
+                isvalid = false;
             }
-
-            isvalid = false;
-        }
-
+        });
         return isvalid;
     },
 
-    AsignarRangosDatePicker: function (DateStartPicker, DateEndPicker) {
-
-        var fechaMaxima = jQuery("#" + DateEndPicker).datetimepicker('getDate');
-        if (fechaMaxima != null)
-            jQuery("#" + DateStartPicker).datetimepicker('option', 'maxDate', new Date(fechaMaxima.getTime()));
-
-        var fechaMinima = jQuery("#" + DateStartPicker).datetimepicker('getDate');
-        if (fechaMinima != null)
-            jQuery("#" + DateEndPicker).datetimepicker('option', 'minDate', new Date(fechaMinima.getTime()));
-    },
-
-    DatePickerRange: function (DateStartPicker, DateEndPicker, dialogError) {
-
-        var popupError = jQuery("#" + dialogError);
-
-        popupError.dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 100,
-            width: 380,
-            title: '',
-            modal: true
-        });
-
-        jQuery("#" + DateStartPicker.Id).datetimepicker({
-            onClose: function (dateText, inst) {
-                var endDateTextBox = $('#' + DateEndPicker.Id);
-                if (endDateTextBox.val() != '') {
-                    var testStartDate = new Date(dateText);
-                    var testEndDate = new Date(endDateTextBox.val());
-
-                    if (testStartDate > testEndDate) {
-                        endDateTextBox.val(dateText);
-                        popupError.html("La Fecha de Inicio no Debe ser Mayor a la Fecha Fin. <br/>Los valores de las Fechas seran intercambiados");
-                        popupError.dialog('open');
-                    }
-                }
-                else {
-                    if (DateStartPicker.OverrideSelect == null && !DateStartPicker.OverrideSelect) {
-                        endDateTextBox.val(dateText);
-                    }
-
-                    if (DateEndPicker.SelectFunction != null)
-                        DateEndPicker.SelectFunction();
-                }
-            },
-            onSelect: function (selectedDateTime) {
-                var start = $(this).datetimepicker('getDate');
-                $('#' + DateEndPicker.Id).datetimepicker('option', 'minDate', new Date(start.getTime()));
-
-                if (DateStartPicker.SelectFunction != null)
-                    DateStartPicker.SelectFunction();
-            }
-        });
-        jQuery("#" + DateEndPicker.Id).datetimepicker({
-            onClose: function (dateText, inst) {
-                var startDateTextBox = $('#' + DateStartPicker.Id);
-                if (startDateTextBox.val() != '') {
-                    var testStartDate = new Date(startDateTextBox.val());
-                    var testEndDate = new Date(dateText);
-
-                    if (testStartDate > testEndDate) {
-                        startDateTextBox.val(dateText);
-
-                        popupError.html("La Fecha de Inicio no Debe ser Mayor a la Fecha Fin. <br/>Los valores de las Fechas seran intercambiados");
-                        popupError.dialog('open');
-                    }
-                }
-                else {
-                    if (DateEndPicker.OverrideSelect == null && !DateEndPicker.OverrideSelect) {
-                        startDateTextBox.val(dateText);
-                    }
-
-                    if (DateStartPicker.SelectFunction != null)
-                        DateStartPicker.SelectFunction();
-                }
-            },
-            onSelect: function (selectedDateTime) {
-                var end = $('#' + DateStartPicker.Id).datetimepicker('getDate');
-                $('#' + DateStartPicker.Id).datetimepicker('option', 'maxDate', new Date(end.getTime()));
-
-                if (DateEndPicker.SelectFunction != null)
-                    DateEndPicker.SelectFunction();
-            }
-        });
-    },
-
-    OperacionNormal: function (dialog, url, parameters) {
+    ObtenerFormulario: function (url, contenedorInformacion) {
         $.ajax({
-            type: "post",
             url: url,
-            data: parameters,
-            success: function (response) {
-                if (response == "success") {
-                    $("#mensajeExito").show().fadeOut(4000);
-                }
-                else {
-                    $("#mensajeFalla").show().fadeOut(4000);
-                }
-
-                $("#" + dialog).dialog("close");
+            cache: false,
+            dataType: 'html',
+            success: function (result) {
+                $('#' + contenedorInformacion).show();
+                $('#' + contenedorInformacion).html(result);
             },
-            failure: function (msg) {
-                $("#" + dialog).dialog("close");
-                $('#mensajeFalla').show().fadeOut(4000);
+            error: function (request, status, error) {
+                $('#' + contenedorInformacion).hide();
+                alert(request.responseText);
             }
         });
     },
 
-    Operacion: function (grilla, dialog, url, parameters) {
+    MostrarInformacion: function (url, contenedorInformacion) {
         $.ajax({
-            type: "post",
             url: url,
-            data: parameters,
-            success: function (response) {
-                if (response == "success") {
-                    $("#" + grilla).trigger("reloadGrid");
-                    $("#mensajeExito").show().fadeOut(4000);
-                }
-                else {
-                    $("#mensajeFalla").show().fadeOut(4000);
-                }
-
-                $("#" + dialog).dialog("close");
+            cache: false,
+            dataType: 'html',
+            success: function (result) {
+                $('#' + contenedorInformacion).show();
+                $('#' + contenedorInformacion).html(result);
             },
-            failure: function (msg) {
-                $("#" + dialog).dialog("close");
-                $('#mensajeFalla').show().fadeOut(4000);
+            error: function (request, status, error) {
+                $('#' + contenedorInformacion).hide();
+                alert(request.responseText);
             }
         });
     },
 
-    OperacionCallBack: function (grilla, dialog, url, parameters, callBackFunction) {
+    MostrarInformacionPopup: function (url, contenedorInformacion) {
         $.ajax({
-            type: "post",
             url: url,
-            data: parameters,
-            success: function (response) {
-                if (response.Mensaje == "success") {
-                    if (typeof (callBackFunction) != typeof (undefined))
-                        callBackFunction(response.ObjetoRespuesta);
-
-                    $("#" + grilla).trigger("reloadGrid");
-                    $("#mensajeExito").show().fadeOut(4000);
-                }
-                else {
-                    $("#mensajeFalla").show().fadeOut(4000);
-                }
-
-                $("#" + dialog).dialog("close");
+            dataType: 'html',
+            async: false,
+            cache: false,
+            success: function (result) {
+                $('#' + contenedorInformacion).html(result);
+                $.validator.unobtrusive.parse($('#' + contenedorInformacion));
+                $('#' + contenedorInformacion).dialog("open");
             },
-            failure: function (msg) {
-                $("#" + dialog).dialog("close");
-                $('#mensajeFalla').show().fadeOut(4000);
+            error: function (request, status, error) {
+                alert(request.responseText);
             }
         });
     },
 
-    LoadDropDownListText: function (name, url, parameters, selected, disabled) {
-        return $.ajax({
-            type: "POST",
-            url: url,
-            data: parameters,
-            beforeSend: function () {
-                var combo = document.getElementById(name);
-                combo.options.length = 0;
-                combo.options[0] = new Option("Cargando...");
-                combo.selectedIndex = 0;
-                combo.disabled = true;
+    GrillaCompleta: function (grilla, pager, height, width, caption, urlListar, id, colsNames, colsModel, sortName, opciones, metodoNuevo, metodoEditar, metodoEliminar) {
+        var grid = jQuery('#' + grilla);
+        var estadoSubGrid = false;
+
+        if (opciones.sort == null) {
+            opciones.sort = 'desc';
+        }
+
+        if (opciones.subGrid != null) {
+            estadoSubGrid = true;
+        }
+
+        if (opciones.rowNumber == null) {
+            opciones.rowNumber = 15;
+        }
+
+        if (opciones.rowList == null) {
+            opciones.rowList = [opciones.rowNumber, 20, 50, 100, 150];
+        }
+
+        if (opciones.rules == null) {
+            opciones.rules = false;
+        }
+
+        if (opciones.dialogDelete == null) {
+            opciones.dialogDelete = 'dialog-delete';
+        }
+
+        if (opciones.dialogAlert == null) {
+            opciones.dialogAlert = 'dialog-alert';
+        }
+
+        if (opciones.search == null) {
+            opciones.search = false;
+        }
+
+        if (opciones.multiselect == null) {
+            opciones.multiselect = false;
+        }
+
+        var rowKey;
+        $('#' + grilla).jqGrid({
+            prmNames: {
+                search: 'isSearch',
+                nd: null,
+                rows: 'rows',
+                page: 'page',
+                sort: 'sortField',
+                order: 'sortOrder',
+                filters: 'filters'
             },
-            success: function (items) {
-                $.each(items, function (index, item) {
-                    combo.options[index] = new Option(item.Nombre, item.Valor);
+
+            postData: { searchString: '', searchField: '', searchOper: '', filters: '' },
+            jsonReader: {
+                root: 'rows',
+                page: 'page',
+                total: 'total',
+                records: 'records',
+                cell: 'cell',
+                id: id, //index of the column with the PK in it
+                userdata: 'userdata',
+                repeatitems: true
+            },
+            rowNum: opciones.rowNumber,
+            rowList: opciones.rowList,
+            pager: '#' + pager,
+            sortname: sortName,
+            viewrecords: true,
+            multiselect: opciones.multiselect,
+            rownumbers: true,
+            sortorder: opciones.sort,
+            height: height,
+            width: width,
+            colNames: colsNames,
+            colModel: colsModel,
+            caption: caption,
+            //shrinkToFit: false,
+            subGrid: estadoSubGrid,
+            subGridRowColapsed: function (subgrid_id, row_id) {
+                var subgrid_table_id, pager_id;
+                subgrid_table_id = subgrid_id + "_t";
+                pager_id = "p_" + subgrid_table_id;
+                jQuery("#" + subgrid_table_id).remove();
+                jQuery("#" + pager_id).remove();
+            },
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var subGrid = opciones.subGrid;
+
+                var subgrid_table_id, pager_id;
+                subgrid_table_id = subgrid_id + "_t";
+                pager_id = "p_" + subgrid_table_id;
+
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table><div id='" + pager_id + "' class='scroll'></div>");
+
+                var parameters = { cDocNro: row_id };
+                $.ajax({
+                    type: "POST",
+                    url: subGrid.Url,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(parameters),
+                    success: function (rsp) {
+                        var data = (typeof rsp.d) == 'string' ? eval('(' + rsp.d + ')') : rsp.d;
+
+                        $("#" + subgrid_table_id).jqGrid({
+                            datatype: "local",
+                            colNames: subGrid.ColNames,
+                            colModel: subGrid.ColModels,
+                            rowNum: 10,
+                            rowList: [10, 20, 50, 100],
+                            sortorder: "desc",
+                            viewrecords: true,
+                            rownumbers: true,
+                            pager: "#" + pager_id,
+                            loadonce: true,
+                            sortable: true,
+                            height: subGrid.Height,
+                            width: subGrid.Width
+                        });
+
+                        for (var i = 0; i <= data.length; i++)
+                            jQuery("#" + subgrid_table_id).jqGrid('addRowData', i + 1, data[i]);
+
+                        $("#" + subgrid_table_id).trigger("reloadGrid");
+                    },
+                    failure: function (msg) {
+                        $('#mensajeFalla').show().fadeOut(8000);
+                    }
                 });
-
-                if (disabled != null)
-                    combo.disabled = disabled;
-                else
-                    combo.disabled = false;
-
-                if (selected == undefined) selected = '';
-                $('#' + name).val(selected);
             },
-            error: function () {
-                var combo = document.getElementById(name);
-                combo.options[0] = new Option("Error al cargar.");
+
+            ondblClickRow: function (rowid) {
+                if (opciones.search) {
+                    var ret = grid.getRowData(rowid);
+                    SelectRow(ret);
+                }
+            },
+            onSelectRow: function () {
+                rowKey = grid.getGridParam('selrow');
+
+                if (opciones.cambiarFila) {
+                    cambiarFila(rowKey);
+                }
+            },
+            gridComplete: function () {
+                $('.loading').hide();
+                if ($('#' + grilla).getGridParam('records') == 0) {
+                    //BI.ShowAlert("dialog-alert", "Sin Registro");
+                }
+            },
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                if (opciones.rules != false) {
+                    migrilla.Rules = GetRules();
+                }
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: urlListar,
+                    type: 'post',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#' + grilla)[0];
+                            if (jq != undefined) {
+                                jq.addJSONData(data);
+                            }
+                        }
+                    },
+                    error: function () {
+                        //alert('Error with AJAX callback');
+                    }
+                });
             }
-        });
+        }).navGrid("#" + pager, { edit: false, add: false, del: false, search: opciones.search },
+            {}, // use default settings for edit
+            {}, // use default settings for add
+            {}, // delete instead that del:false we need this
+            {
+                multipleSearch: true,
+                beforeShowSearch: function () {
+                    $(".ui-reset").trigger("click");
+                    return true;
+                }
+            });
+
+        if (opciones.eliminar) {
+            $('#' + grilla).navButtonAdd('#' + pager, {
+                caption: 'Eliminar',
+                title: 'Eliminar',
+                buttonicon: 'ui-icon-trash',
+                position: 'first',
+                onClickButton: function () {
+                    if (rowKey != null) {
+                        $("#" + opciones.dialogDelete).dialog({
+                            resizable: false,
+                            title: "Eliminar",
+                            height: "150",
+                            width: "380",
+                            modal: true,
+                            buttons: [
+                                    {
+                                        text: "Eliminar",
+                                        click: function () {
+                                            metodoEliminar(rowKey);
+                                        }
+                                    },
+                                    {
+                                        text: "Cancelar",
+                                        click: function () {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                            ]
+                        });
+                    } else {
+                        //BI.ShowAlert(opciones.dialogAlert, "Seleccione Un Registro");
+                    }
+                }
+            });
+        }
+
+        if (opciones.editar) {
+            $('#' + grilla).navButtonAdd('#' + pager, {
+                caption: opciones.nombreEditar == null ? 'Editar' : opciones.nombreEditar,
+                title: opciones.nombreEditar == null ? 'Editar' : opciones.nombreEditar,
+                buttonicon: 'ui-icon-pencil',
+                position: 'first',
+                onClickButton: function () {
+                    if (rowKey != null) {
+                        metodoEditar(rowKey);
+                    } else {
+                        //BI.ShowAlert(opciones.dialogAlert, "Seleccione Un Registro");
+                    }
+                }
+            });
+        }
+
+        if (opciones.nuevo) {
+            $('#' + grilla).navButtonAdd('#' + pager, {
+                caption: 'Nuevo',
+                title: 'Nuevo',
+                buttonicon: 'ui-icon-plus',
+                position: 'first',
+                onClickButton: function () {
+                    metodoNuevo();
+                }
+            });
+        }
     },
 
-    LoadDropDownList: function (name, url, parameters, selected, disabled, valueMember, displayMember) {
+    LoadDropDownList: function (name, url, parameters, selected) {
         var combo = document.getElementById(name);
+        combo.options.length = 0;
+        combo.options[0] = new Option("");
+        combo.selectedIndex = 0;
 
-        return $.ajax({
+        $.ajax({
             type: "POST",
             url: url,
-            data: parameters,
-            beforeSend: function () {
-                combo.options.length = 0;
-                combo.options[0] = new Option("-Seleccionar-", 0);
-                combo.selectedIndex = 0;
-            },
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(parameters),
             success: function (items) {
-                $.each(items, function (index, item) {
-                    combo.options[index + 1] = new Option(item[displayMember], item[valueMember]);
-                });
+                var list = (typeof items.d) == 'string' ? eval('(' + items.d + ')') : items.d;
 
-                if (selected == undefined) selected = 0;
-                $('#' + name).val(selected);
-            },
-            error: function () {
-                var combo = document.getElementById(name);
-                combo.options[0] = new Option("Error al cargar.");
-            }
-        });
-    },
-
-    LoadDropDownListByEstado: function (name, url, parameters, selected, estado) {
-        return $.ajax({
-            type: "POST",
-            url: url,
-            data: parameters,
-            beforeSend: function () {
-                var combo = document.getElementById(name);
-                combo.options.length = 0;
-                combo.options[0] = new Option("Cargando...");
-                combo.selectedIndex = 0;
-                combo.disabled = true;
-            },
-            success: function (items) {
-                $.each(items, function (index, item) {
+                $.each(list, function (index, item) {
                     combo.options[index] = new Option(item.Nombre, item.IdComun);
                 });
-                if (estado == 'true') {
-                    combo.disabled = true;
-                }
-                else {
-                    combo.disabled = false;
-                }
                 if (selected == undefined) selected = 0;
                 $('#' + name).val(selected);
-            },
-            error: function () {
-                var combo = document.getElementById(name);
-                combo.options[0] = new Option("Error al cargar.");
             }
         });
     },
 
-    ClearChildren: function (divName) {
-        $('#' + divName + ' select').children().remove();
-        // iterate over all of the inputs for the form
-        // element that was passed in
-        var elemt = $('#' + divName);
-        $(':input', elemt).each(function () {
-            var type = this.type;
-            var tag = this.tagName.toLowerCase(); // normalize case
-            // it's ok to reset the value attr of text inputs,
-            // password inputs, and textareas
-            if (type == 'text' || type == 'password' || tag == 'textarea')
-                this.value = "";
-                // checkboxes and radios need to have their checked state cleared
-                // but should *not* have their 'value' changed
-            else if (type == 'checkbox' || type == 'radio')
-                this.checked = false;
-                // select elements need to have their 'selectedIndex' property set to -1
-                // (this works for both single and multiple select elements)
-            else if (tag == 'select')
-                this.selectedIndex = -1;
+    LoadDropDownListItems: function (name, url, parameters, selected) {
+        var combo = document.getElementById(name);
+        combo.options.length = 0;
+        combo.options[0] = new Option("");
+        combo.selectedIndex = 0;
+        combo.disabled = true;
+
+        var resultado = BI.Ajax(url, parameters, false);
+
+        $.each(resultado, function (index, item) {
+            combo.options[index] = new Option(item.Text, item.Value);
         });
+        combo.disabled = false;
+        if (selected == undefined) selected = 0;
+        $('#' + name).val(selected);
     },
-    Alert: function (selectorDiv, selectorSpan, msg,titulo) {
-        $('#' + selectorSpan).html(msg);
-        $('#' + selectorDiv).dialog({
-            title: titulo,
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-        $('#' + selectorDiv).dialog('open');
-    },
+
     Clear: function (divName) {
         $('#' + divName + ' select').children().remove();
-        // iterate over all of the inputs for the form
-        // element that was passed in
         var elemt = $('#' + divName);
         $(':input', elemt).each(function () {
             var type = this.type;
-            var tag = this.tagName.toLowerCase(); // normalize case
-            // it's ok to reset the value attr of text inputs,
-            // password inputs, and textareas
+            var tag = this.tagName.toLowerCase();
             if (type == 'text' || type == 'password' || tag == 'textarea')
                 this.value = "";
-                // checkboxes and radios need to have their checked state cleared
-                // but should *not* have their 'value' changed
             else if (type == 'checkbox' || type == 'radio')
                 this.checked = false;
-                // select elements need to have their 'selectedIndex' property set to -1
-                // (this works for both single and multiple select elements)
             else if (tag == 'select')
                 this.selectedIndex = -1;
         });
     },
-    Busqueda: function (selectorDiv, selectorFrame, urlFrame, titulo) {
-        $('#' + selectorFrame).attr("src", urlFrame);
-        $('#' + selectorDiv).dialog({
-            title: titulo,
+
+    Regresar: function Regresar(tabla, contenedorListado, contenedorInformacion) {
+        try {
+            $('#' + tabla)[0].clearToolbar();
+        } catch (e) { }
+        $('#' + tabla).trigger('reloadGrid');
+        $('#' + contenedorListado).show();
+        $('#' + contenedorInformacion).html('');
+        $('#' + contenedorInformacion).hide();
+    },
+
+    RegresarPopup: function Regresar(contenedorInformacion) {
+        $('#' + contenedorInformacion).dialog("close");
+        Refrescar();
+    },
+
+    ValidarDecimal: function (numero) {
+        var patron = /^([0-9])*[.]?[0-9]*$/;
+        if (patron.test(numero))
+            return true;
+        return false;
+    },
+
+    ValidarFecha: function (fecha) {
+        var patron = /^((([0][1-9]|[12][\d])|[3][01])[-\/]([0][13578]|[1][02])[-\/][1-9]\d\d\d)|((([0][1-9]|[12][\d])|[3][0])[-\/]([0][13456789]|[1][012])[-\/][1-9]\d\d\d)|(([0][1-9]|[12][\d])[-\/][0][2][-\/][1-9]\d([02468][048]|[13579][26]))|(([0][1-9]|[12][0-8])[-\/][0][2][-\/][1-9]\d\d\d)$/;
+        if (patron.test(fecha))
+            return true;
+        return false;
+    },
+
+    ValidarEntero: function (numero) {
+        var patron = /^\d+$/;
+        if (patron.test(numero))
+            return true;
+        return false;
+    },
+
+    CrearPopup: function (nombre) {
+        $('#' + nombre).dialog("destroy");
+        $('#' + nombre).dialog({
+            width: 'auto',
+            resizable: false,
             modal: true,
-            height: '550',
-            width: '500',
-            close: function () {
-                $('#' + selectorFrame).attr("src", "");
-                $('#' + selectorDiv).dialog('destroy');
-            }
-        });
-    },
-    Numeros: function (selector) {
-        var $this = $('#' + selector);
-        $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
-        });
-    },
-    Letras: function (selector) {
-        var $this = $('#' + selector);
-        $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^a-zA-Z]/g)) return false;
-        });
-    },
-    Alfanumerico: function (selector) {
-        var $this = $('#' + selector);
-        $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z]/g)) return false;
-        });
-    },
-    MensajeSiNo: function (selectorDiv, selectorSpan, mensaje, callBackFunction) {
-        $('#' + selectorSpan).html(mensaje);
-        $('#' + selectorDiv).dialog({
-            title: 'Confirmación',
-            modal: true,
+            autoOpen: false,
+            closeOnEscape: false,
             open: function (event, ui) {
-                $(".ui-dialog-titlebar-close").hide();
+                $(this).parent().appendTo("form");
+                $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
             },
-            close: function () {
-                $('#' + selectorDiv).dialog('destroy');
-            },
-            buttons: {
-                "Aceptar": function () {
-                    if (typeof (callBackFunction) != typeof (undefined))
-                        callBackFunction();
-                    $('#' + selectorDiv).dialog('destroy');
-                },
-                "Cancelar": function () {
-                    $('#' + selectorDiv).dialog('destroy');
-                }
-            }
-        });
-    },
-    HabilitarCheckBoxs: function (selectorTabla, selectorChkColTabla, selectorCssRow) {
-        var $chkCol = $('#' + selectorChkColTabla);
-        var $this = $('#' + selectorTabla + ' tr.' + selectorCssRow + ' input[type=checkbox]');
-
-        $chkCol.bind('click', function () {
-            if ($this.length > 0) {
-                if ($chkCol.is(":checked")) {
-                    $this.each(function () {
-                        $this.attr("checked", "checked");
-                    });
-                } else {
-                    $this.each(function () {
-                        $this.removeAttr("checked");
-                    });
-                }
-            }
-        });
-
-    },
-    isNumberKey: function (evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    },
-    isDecimalKey: function (evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            if (charCode == 46)
-                return true;
-            else
-                return false;
-        }
-        return true;
-    },
-    Importes: function (selector) {
-        var $this = $('#' + selector);
-        $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9.]/g)) return false;
+            close: function () { }
         });
     }
 };

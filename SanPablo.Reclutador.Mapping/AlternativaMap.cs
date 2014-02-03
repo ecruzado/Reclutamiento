@@ -14,10 +14,10 @@
            Map(x => x.NombreAlternativa, "ALTERNATIVA");
            Map(x => x.Peso, "PESO");
            Map(x => x.RutaDeImagen, "RUTAIMAGEN");
-           Map(x => x.UsrCreacion, "USRCREACION");
+           Map(x => x.UsuarioCreacion, "USRCREACION");
            Map(x => x.FechaCreacion, "FECCREACION");
-           Map(x => x.UsrMod, "USRMODIFICACION");
-           Map(x => x.FechaMod, "FECMODIFICACION");
+           Map(x => x.UsuarioModificacion, "USRMODIFICACION");
+           Map(x => x.FechaModificacion, "FECMODIFICACION");
            Map(x => x.Image, "IMAGE");
            Table("ALTERNATIVA");
         }

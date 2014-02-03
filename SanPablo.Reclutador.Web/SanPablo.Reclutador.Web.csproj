@@ -140,6 +140,7 @@
     <Compile Include="App_Start\NHibernateConfigurator.cs" />
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
+    <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CategoriaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CriterioController.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Controllers\SeguridadController.cs" />
     <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\ConstanteSesion.cs" />
+    <Compile Include="Core\ImageFile.cs" />
     <Compile Include="Core\JsonResponse.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="Global.asax.cs">
@@ -275,6 +278,7 @@
     <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\PopupListaCriterio.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\PopupCategoria.cshtml" />
+    <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -349,6 +353,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Archivos\Imagenes\" />
     <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>

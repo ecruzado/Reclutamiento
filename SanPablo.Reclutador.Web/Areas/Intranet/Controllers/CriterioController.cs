@@ -2,6 +2,7 @@
 {
     using FluentValidation;
     using FluentValidation.Results;
+    using Newtonsoft.Json;
     using NHibernate.Criterion;
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Entity.Validation;
@@ -11,6 +12,7 @@
     using SanPablo.Reclutador.Web.Models.JQGrid;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -149,8 +151,8 @@
                 var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
-                model.Alternativa.FechaMod = Hoy;
-                model.Alternativa.UsrMod = "Prueba 02";
+                model.Alternativa.FechaModificacion = Hoy;
+                model.Alternativa.UsuarioModificacion = "Prueba 02";
                 if (model.Alternativa.Image!=null)
                 {
                     alter.Image = model.Alternativa.Image;     
@@ -162,7 +164,7 @@
             else
             {
                 model.Alternativa.FechaCreacion = Hoy;
-                model.Alternativa.UsrCreacion = "Prueba 01";
+                model.Alternativa.UsuarioCreacion = "Prueba 01";
                
                 _alternativaRepository.Add(model.Alternativa);
             }
@@ -806,6 +808,50 @@
             }
         }
 
-       
+        public string Upload(HttpPostedFileBase file, FormCollection forms)
+        {
+            var jsonResponse = new JsonResponse { Success = false };
+            try
+            {
+                string[] extensiones = forms.Get("ext").Split(';');
+
+                string extensionArchivo = Path.GetExtension(file.FileName);
+
+                if (extensiones.Contains(extensionArchivo.ToLower()))
+                {
+                    var content = new byte[file.ContentLength];
+                    file.InputStream.Read(content, 0, file.ContentLength);
+                    var indexOfLastDot = file.FileName.LastIndexOf('.');
+                    var extension = file.FileName.Substring(indexOfLastDot + 1, file.FileName.Length - indexOfLastDot - 1);
+                    var name = file.FileName.Substring(0, indexOfLastDot);
+
+                    var fileUpload = new ImageFile
+                    {
+                        Id = string.Format("_{0}", DateTime.Now.ToString("M_dd_yyyy_H_M_s")),
+                        Name = name,
+                        DirectoryPath = ConfigurationManager.AppSettings["ImageFilePath"],
+                        ApplicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath,
+                        Extension = extension,
+                        Data = content
+                    };
+
+                    jsonResponse.Data = fileUpload.RelativePath;
+                    jsonResponse.Success = true;
+                }
+                else
+                {
+                    jsonResponse.Success = false;
+                    jsonResponse.Message = "0";
+                }
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                jsonResponse.Message = "Ocurrio un error, por favor intente de nuevo o más tarde.";
+            }
+
+            return JsonConvert.SerializeObject(jsonResponse);
+        }
+
     }
 }
