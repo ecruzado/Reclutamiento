@@ -37,7 +37,7 @@
         public ActionResult Editar(int ideCriterio, int ideAlternativa, string tipo)
         {
             AlternativaViewModel modelo = new AlternativaViewModel();
-            modelo.NombreTemporalArchivo = "test";
+           
             modelo.Alternativa = new Alternativa();
             modelo.Alternativa.Criterio = new Criterio();
             modelo.tipoModel = tipo;
@@ -80,11 +80,11 @@
                 return View(model);
             }
 
-            if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
+            if (!string.IsNullOrEmpty(model.NombImagenAlternativa))
             {
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = "Archivos\\Imagenes\\";
-                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombImagenAlternativa));
 
                 using (Stream s = System.IO.File.OpenRead(fullPath))
                 {

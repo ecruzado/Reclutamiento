@@ -26,9 +26,7 @@
      
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
-            //$("#image").hide();
-            //$("#divImagen").hide();
-            //$("#ImgCriterio").css("display", "none");
+           
 
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
@@ -39,17 +37,13 @@
             
         }
         if (dato == "I") {
-            //$("#image").show();
-            //$("#divImagen").show();
-            //$("#ImgCriterio").css("display", "block");
+          
             $("#nombreImagen").show();
             $("#selecImagen").show();
             $("#verImagen").show();
         }
         if (dato == "T") {
-            //$("#divImagen").hide();
-            ////$("#image").hide();
-            //$("#ImgCriterio").css("display", "none");
+          
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
             $("#verImagen").hide();
@@ -59,20 +53,14 @@
             var vvalor = $(this).val();
 
             if (vvalor == "02") {
-                //$("#image").show();
-                //$("#ImgCriterio").show();
-                //$("#divImagen").css("display", "block");
-                //$("#ImgCriterio").css("display", "block");
+              
                 $("#nombreImagen").show();
                 $("#selecImagen").show();
                 $("#verImagen").show();
 
             }
             else {
-                ////$("#image").hide();
-                ////$("#ImgCriterio").hide();
-                //$("#divImagen").css("display", "none");
-                //$("#ImgCriterio").css("display", "none");
+              
                 $("#nombreImagen").hide();
                 $("#selecImagen").hide();
                 $("#verImagen").hide();

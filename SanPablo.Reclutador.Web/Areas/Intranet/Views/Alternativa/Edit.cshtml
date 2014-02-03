@@ -59,7 +59,8 @@
                 </td>
                 <td>
                     <input type="file" name="fileAlternativa" id="fileAlternativa" />
-                    @Html.HiddenFor(model => model.NombreTemporalArchivo)
+                   
+                     @Html.TextBoxFor(model => model.NombImagenAlternativa,  new { style = "display: none;" })
                 </td>
                 <td></td>
             </tr>
@@ -176,7 +177,7 @@
                     case 'png':
                         break;
                     default:
-                        MotoTravel.ShowAlert('', "extensión no válida");
+                        //Funciones.ShowAlert('', "extensión no válida");
                         $("#fileInput").uploadifyCancel(q);
                         $("#fileInput").uploadifyClearQueue();
                         estado = false;
@@ -191,8 +192,9 @@
                 var rsp = jQuery.parseJSON(response);
 
                 if (rsp.Success == true) {
+                   
                     $("#Alternativa_RutaDeImagen").val(rsp.Data.NombreArchivo);
-                    $("#NombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+                    $("#NombImagenAlternativa").val(rsp.Data.NombreTemporalArchivo);
                    
                          
                 }

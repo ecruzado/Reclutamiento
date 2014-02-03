@@ -226,6 +226,7 @@
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Actualizar.ToString();
             model.Criterio.IMAGENCRIT = objCriterio.IMAGENCRIT;
+            model.Criterio.rutaImagen = objCriterio.rutaImagen;
             model.IndVisual = Visualicion.SI;
 
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
@@ -466,7 +467,7 @@
                     int len = (int)s.Length;
                     s.Close();
                     model.Criterio.IMAGENCRIT = buffer;
-                   
+                    model.Criterio.rutaImagen = model.Criterio.rutaImagen;
                 }
             }
 
@@ -514,6 +515,7 @@
 	        {
                 Session["TipoModo"] = "I";
                 criterioViewModel.image = model.image;
+                criterioViewModel.Criterio.rutaImagen = model.Criterio.rutaImagen;
 	        }
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
