@@ -8,7 +8,8 @@
     @Html.ValidationSummary(true)
     @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
     @Html.TextBoxFor(model => model.Alternativa.IdeAlternativa,  new { style = "display: none;" })
-    @Html.Hidden(Model.tipoModel)
+    @Html.TextBoxFor(model => model.tipoModel,  new { style = "display: none;" })
+       
 
     <table style="margin-left:30px;">
         <tr >

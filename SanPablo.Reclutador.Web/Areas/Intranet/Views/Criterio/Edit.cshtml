@@ -26,37 +26,128 @@
      
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
-            $("#image").hide();
+            //$("#image").hide();
+            //$("#divImagen").hide();
+            //$("#ImgCriterio").css("display", "none");
+
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
+          
+
+
             
         }
         if (dato == "I") {
-            $("#image").show();
-           
-
+            //$("#image").show();
+            //$("#divImagen").show();
+            //$("#ImgCriterio").css("display", "block");
+            $("#nombreImagen").show();
+            $("#selecImagen").show();
+            $("#verImagen").show();
         }
         if (dato == "T") {
-            $("#image").hide();
-            
-
+            //$("#divImagen").hide();
+            ////$("#image").hide();
+            //$("#ImgCriterio").css("display", "none");
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
         }
                 
         $("#Criterio_TipoModo").change(function () {
             var vvalor = $(this).val();
 
             if (vvalor == "02") {
-                $("#image").show();
-                $("#ImgCriterio").show();
-              
+                //$("#image").show();
+                //$("#ImgCriterio").show();
+                //$("#divImagen").css("display", "block");
+                //$("#ImgCriterio").css("display", "block");
+                $("#nombreImagen").show();
+                $("#selecImagen").show();
+                $("#verImagen").show();
 
             }
             else {
-                $("#image").hide();
-                $("#ImgCriterio").hide();
-              
+                ////$("#image").hide();
+                ////$("#ImgCriterio").hide();
+                //$("#divImagen").css("display", "none");
+                //$("#ImgCriterio").css("display", "none");
+                $("#nombreImagen").hide();
+                $("#selecImagen").hide();
+                $("#verImagen").hide();
             }
         });
 
        
+        $("#image").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+            'script': '@Url.Action("Upload", "Criterio")',
+            'scriptData': { ext: '.jpeg;.jpg;.gif;.bmp;.png' },
+            'fileDataName': 'file',
+            'buttonText': 'Subir',
+            'fileDesc': 'Image Files',
+            'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+            'multi': false,
+            'auto': true,
+            'queueSizeLimit': '90',
+            'sizeLimit': 2147483647,
+            'removeCompleted': true,
+            'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
+
+                    'onError': function (a, b, c, d) {
+                        if (d.status == 404)
+                            alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                        else if (d.type === "HTTP")
+                            alert("error " + d.type + ": " + d.status);
+                        else if (d.type === "File Size")
+                            alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                        else
+                            alert("error " + d.type + ": " + d.text);
+                    },
+                    'onSelect': function (e, q, f) {
+                        var estado = true;
+                        var fileName = f.name;
+                        var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                        switch (fileNameExt) {
+                            case 'jpeg':
+                                break;
+                            case 'jpg':
+                                break;
+                            case 'gif':
+                                break;
+                            case 'bmp':
+                                break;
+                            case 'png':
+                                break;
+                            default:
+                                MotoTravel.ShowAlert('', "extensión no válida");
+                                $("#fileInput").uploadifyCancel(q);
+                                $("#fileInput").uploadifyClearQueue();
+                                estado = false;
+                                break;
+                        }
+
+                        return estado;
+
+                    },
+                    'onComplete': function (event, queueId, fileObj, response, data) {
+
+                        var rsp = jQuery.parseJSON(response);
+
+                        if (rsp.Success == true) {
+                            $("#Criterio_rutaImagen").val(rsp.Data.NombreArchivo);
+                            $("#NombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+                            
+
+                        }
+                        else {
+
+                        }
+                    }
+        });
+
+
 
         $('#updateDialog').dialog({
             autoOpen: false,
@@ -278,6 +369,13 @@
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
     
+
+
+
+
+
+
+
 </script>
 }
 
@@ -404,35 +502,58 @@
                             </div>
                           </td>
                        
-                    </tr>
-                    <tr>
-                        <td colspan="5">
+                             </tr>
+                   
+                            
                              @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                              { 
                               <span></span>
                              }
                              else
                              {
-
-                                 if (Model.Criterio.IMAGENCRIT!=null)
-                                 {
-                                     <table>
-                                         <tr>
-                                             <td style="width:80px;"></td>
-                                                
-                                            
-                                              <td class ="colInput" colspan="3">
-                                                 <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio",new { id = Model.Criterio.IdeCriterio })" /> 
-                                              </td>
-                                        </tr>
-                                     </table>    
-                                 }
-                                 @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })      
+                               
+                                <tr id="nombreImagen">
+                                   
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
+                                    </td>
+                                    <td class="colInput;input-xxlarge">
+                                        @Html.TextBoxFor(model => model.Criterio.rutaImagen, new { @class = "textoFormulario" , @readonly = "readonly"})
+                                    </td>
+                                    
+                                    <td>
                                  
-                             }   
-                         </td>
-                        
-                    </tr>
+                                </tr>
+       
+                                <tr id="selecImagen">
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario">Imagen</label>
+                                    </td>
+                                    <td >
+                                        <div id="divImagen">
+
+                                        <input type="file" name="image" id="image" />
+                                       
+                                        @Html.TextBoxFor(model => model.NombreTemporalArchivo,  new { style = "display: none;" })
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                 <tr id="verImagen">
+                                   @if (Model.Criterio.IMAGENCRIT != null)
+                                   {
+                                        <td class="colEtiqueta"></td>
+                                                  <td class ="colInput" >
+                                                     <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
+                                                  </td>
+                                            
+                                   }
+                                 </tr>
+                                 
+                                       
+                             } 
+                                 
+                       
                     <tr>
                         <td>
                             &nbsp;
@@ -449,7 +570,7 @@
                 {
                     <div class="opciones"></div>
                 }
-                else if(@Accion.Nuevo.Equals(Model.Criterio.IndPagina))
+                else if (@Accion.Nuevo.Equals(Model.Criterio.IndPagina))
                 {
                     <div class="opciones">
                     <a id="Agregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 

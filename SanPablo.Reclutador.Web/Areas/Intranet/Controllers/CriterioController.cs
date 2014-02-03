@@ -415,11 +415,18 @@
             }
         }
 
+        /// <summary>
+        /// Guarda los datos del criterio
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase image)
+        public ActionResult Edit(CriterioViewModel model)
         {
             var criterioViewModel = InicializarCriteriosEdit();
-            byte[] data; 
+           // byte[] data;
+            string fullPath = null;
             if (!ModelState.IsValid){
                 criterioViewModel.Criterio = model.Criterio;
                 return View(criterioViewModel);
@@ -428,23 +435,41 @@
            
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
 
-            if (model.image != null)
+            //if (model.image != null)
+            //{
+                
+            //    using (Stream inputStream = model.image.InputStream)
+            //    {
+            //        MemoryStream memoryStream = inputStream as MemoryStream;
+            //        if (memoryStream == null)
+            //        {
+            //            memoryStream = new MemoryStream();
+            //            inputStream.CopyTo(memoryStream);
+            //        }
+            //        data = memoryStream.ToArray();
+            //    }
+            //    model.Criterio.IMAGENCRIT = data;
+
+            //}
+
+            if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
             {
                 
-                using (Stream inputStream = model.image.InputStream)
-                {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    data = memoryStream.ToArray();
-                }
-                model.Criterio.IMAGENCRIT = data;
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = "Archivos\\Imagenes\\";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
 
+                using (Stream s = System.IO.File.OpenRead(fullPath))
+                {
+                    byte[] buffer = new byte[s.Length];
+                    s.Read(buffer, 0, (int)s.Length);
+                    int len = (int)s.Length;
+                    s.Close();
+                    model.Criterio.IMAGENCRIT = buffer;
+                   
+                }
             }
-            
+
             
             
             if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
@@ -452,13 +477,6 @@
                 model.Criterio.FechaCreacion = DateTime.Now;
                 model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
 
-
-                //var objCriterio = _criterioRepository.All();
-                //int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
-
-                //maxOrdenImp = maxOrdenImp + 1;
-
-                //model.Criterio.OrdenImpresion = maxOrdenImp;
                 model.Criterio.OrdenImpresion = 0;
 
                 _criterioRepository.Add(model.Criterio);
@@ -478,6 +496,7 @@
                 if ("02".Equals(model.Criterio.TipoModo))
                 {
                     objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
+                    objCriterio.rutaImagen = model.Criterio.rutaImagen;
                 }
                 
                 _criterioRepository.Update(objCriterio);
@@ -789,11 +808,19 @@
         }
 
 
-        
 
+
+        /// <summary>
+        /// Subida de imagen a la carpeta temporal
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="forms"></param>
+        /// <returns></returns>
+        [HttpPost]
         public string Upload(HttpPostedFileBase file, FormCollection forms)
         {
             var jsonResponse = new JsonResponse { Success = false };
+
             try
             {
                 string[] extensiones = forms.Get("ext").Split(';');
@@ -804,27 +831,33 @@
                 {
                     var content = new byte[file.ContentLength];
                     file.InputStream.Read(content, 0, file.ContentLength);
+
                     var indexOfLastDot = file.FileName.LastIndexOf('.');
                     var extension = file.FileName.Substring(indexOfLastDot + 1, file.FileName.Length - indexOfLastDot - 1);
                     var name = file.FileName.Substring(0, indexOfLastDot);
 
-                    var fileUpload = new ImageFile
-                    {
-                        Id = string.Format("_{0}", DateTime.Now.ToString("M_dd_yyyy_H_M_s")),
-                        Name = name,
-                        DirectoryPath = ConfigurationManager.AppSettings["ImageFilePath"],
-                        ApplicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath,
-                        Extension = extension,
-                        Data = content
-                    };
+                    string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                    string directoryPath = ConfigurationManager.AppSettings["ImageFilePath"];
+                    string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                    string fullPath = Path.Combine(applicationPath, string.Format("{0}{1}{2}", directoryPath, nombreTemporalArchivo, extensionArchivo));
 
-                    jsonResponse.Data = fileUpload.RelativePath;
+                    System.IO.File.WriteAllBytes(fullPath, content);
+
+
+
+                    jsonResponse.Data = new
+                    {
+                        NombreArchivo = file.FileName,
+                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo)
+                    };
                     jsonResponse.Success = true;
+
                 }
                 else
                 {
                     jsonResponse.Success = false;
                     jsonResponse.Message = "0";
+
                 }
             }
             catch (Exception ex)
