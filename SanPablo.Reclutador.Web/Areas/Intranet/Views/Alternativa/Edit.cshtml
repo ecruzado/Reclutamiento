@@ -8,6 +8,7 @@
     @Html.ValidationSummary(true)
     @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
     @Html.TextBoxFor(model => model.Alternativa.IdeAlternativa,  new { style = "display: none;" })
+    @Html.Hidden(Model.tipoModel)
 
     <table style="margin-left:30px;">
         <tr >
@@ -21,6 +22,7 @@
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
                 </div>
             </td>
+            <td></td>
         </tr>
         <tr>
             <td class="colEtiqueta">
@@ -32,7 +34,11 @@
                 @Html.ValidationMessageFor(model => model.Alternativa.Peso)
                 </div>
             </td>
+            <td></td>
         </tr>
+        
+        @if ("02".Equals(Model.tipoModel))
+        {
         <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
@@ -43,32 +49,46 @@
                     @Html.ValidationMessageFor(model => model.Alternativa.RutaDeImagen)
                 </div>
             </td>
+            <td></td>
         </tr>
-        <tr>
-            <td class="colEtiqueta">
-                <label class="etiquetaFormulario">Imagen</label>
-            </td>
-            <td>
-                <input type="file" name="fileAlternativa" id="fileAlternativa" />
-                @Html.HiddenFor(model => model.NombreTemporalArchivo)
-            </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            @if (Model.Alternativa.Image != null)
-            {
-                <table>
-                    <tr>
-                        <td style="width:80px;"></td>
-                        <td class ="colInput" colspan="2">
-                            <img id="ImgAlternativa"  height ="150" width="150" src="@Url.Action("GetImageAlternativa", "Criterio",new { id = Model.NombreTemporalArchivo })" /> 
-                        </td>
-                    </tr>
-                </table>    
-            }
+       
+            <tr>
+                <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Imagen</label>
+                </td>
+                <td>
+                    <input type="file" name="fileAlternativa" id="fileAlternativa" />
+                    @Html.HiddenFor(model => model.NombreTemporalArchivo)
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+               <td >
+               </td>
 
-          </td>
-        </tr>
+              <td colspan="2">
+             
+                @if (Model.Alternativa.Image != null && "02".Equals(Model.tipoModel))
+                {
+                    <table>
+                        <tr>
+                       
+                            <td class ="colInput"  style="text-align:center">
+                                <img id="ImgAlternativa"  height ="150" width="150" src="@Url.Action("GetImageAlternativa", "Alternativa",new { id = Model.Alternativa.IdeAlternativa })" /> 
+                            </td>
+                        </tr>
+                    </table>    
+                }
+
+              </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td></td>
+            </tr>
+        }
         <tr>
             <td>
                 &nbsp;
@@ -76,11 +96,11 @@
         </tr>
         <tr>
             <td></td>
-            <td style="text-align:right"><a id="btnGuardarAlternativa" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</a></td>
+            <td style="text-align:right" colspan="4"><a id="btnGuardarAlternativa" class="btn btn-info" ><i class="icon-hdd icon-white"></i> Guardar</a></td>
         </tr>
 
     </table>
-}
+    }
 
 
 <script type="text/javascript">
@@ -105,6 +125,11 @@
                 data: $("#frmAlternativa").serialize(),
                 traditional: true,
                 success: function (data) {
+                    if (data.Resultado) {
+                        parent.$('#grdList').trigger('reloadGrid');
+                    }
+                    
+                   
                 }
             });
         });
@@ -167,6 +192,8 @@
                 if (rsp.Success == true) {
                     $("#Alternativa_RutaDeImagen").val(rsp.Data.NombreArchivo);
                     $("#NombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+                   
+                         
                 }
                 else {
 

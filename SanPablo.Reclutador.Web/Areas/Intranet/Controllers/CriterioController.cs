@@ -789,24 +789,7 @@
         }
 
 
-        /// <summary>
-        /// GetImagePopup Muestra la Imagen de la alternativa
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ActionResult GetImageAlternativa(int id)
-        {
-            var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
-            if (firstOrDefault.Image != null)
-            {
-                byte[] image = firstOrDefault.Image;
-                return File(image, "image/jpg");
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
 
         public string Upload(HttpPostedFileBase file, FormCollection forms)
         {

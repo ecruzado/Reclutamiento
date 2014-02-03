@@ -10,10 +10,14 @@
     using SanPablo.Reclutador.Web.Core;
     using System;
     using System.Configuration;
+    using System.Collections.Generic;
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using System.Linq;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
+
+   
 
     public class AlternativaController : BaseController
     {
@@ -30,12 +34,13 @@
         /// <param name="id"></param>
         /// <param name="codCriterio"></param>
         /// <returns></returns>
-        public ActionResult Editar(int ideCriterio,int ideAlternativa)
+        public ActionResult Editar(int ideCriterio, int ideAlternativa, string tipo)
         {
             AlternativaViewModel modelo = new AlternativaViewModel();
             modelo.NombreTemporalArchivo = "test";
             modelo.Alternativa = new Alternativa();
             modelo.Alternativa.Criterio = new Criterio();
+            modelo.tipoModel = tipo;
             if (ideAlternativa == 0)
             {
 
@@ -48,7 +53,7 @@
                 modelo.Alternativa.Criterio.IdeCriterio = ideCriterio;
                 modelo.Alternativa.IdeAlternativa = ideAlternativa;
                 modelo.Alternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == ideAlternativa);
-
+               
                 return View("Edit",modelo);
 
             }
@@ -68,7 +73,8 @@
 
             AlternativaValidator validator = new AlternativaValidator();
             ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
-
+            JsonMessage objJsonMensage = new JsonMessage();
+            string fullPath = null;
             if (!result.IsValid)
             {
                 return View(model);
@@ -78,7 +84,7 @@
             {
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = "Archivos\\Imagenes\\";
-                string fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
 
                 using (Stream s = System.IO.File.OpenRead(fullPath))
                 {
@@ -104,7 +110,7 @@
                 }
 
                 _alternativaRepository.Update(alter);
-
+                objJsonMensage.Resultado = true;
             }
             else
             {
@@ -112,21 +118,31 @@
                 model.Alternativa.UsuarioCreacion = "Prueba 01";
 
                 _alternativaRepository.Add(model.Alternativa);
+                objJsonMensage.Resultado = true;
             }
 
-            //criterioViewModel.Alternativa.Criterio.IdeCriterio = model.Alternativa.Criterio.IdeCriterio;
-            //criterioViewModel.Alternativa.IdeAlternativa = model.Alternativa.IdeAlternativa;
-            //criterioViewModel.Alternativa.NombreAlternativa = model.Alternativa.NombreAlternativa;
-            //criterioViewModel.Alternativa.Peso = model.Alternativa.Peso;
+            if (fullPath!=null)
+            {
+                System.IO.File.Delete(fullPath);    
+            }
+            
 
-            //return View(criterioViewModel);
-            return View();
+                return Json(objJsonMensage);
+            
         }
 
+
+        /// <summary>
+        /// Subida de imagen a la carpeta temporal
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="forms"></param>
+        /// <returns></returns>
         [HttpPost]
         public string Upload(HttpPostedFileBase file, FormCollection forms)
         {
             var jsonResponse = new JsonResponse { Success = false };
+           
             try
             {
                 string[] extensiones = forms.Get("ext").Split(';');
@@ -149,16 +165,20 @@
 
                     System.IO.File.WriteAllBytes(fullPath, content);
 
+                   
+                  
                     jsonResponse.Data = new { 
                         NombreArchivo = file.FileName, 
-                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo) 
+                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo)
                     };
                     jsonResponse.Success = true;
+                   
                 }
                 else
                 {
                     jsonResponse.Success = false;
                     jsonResponse.Message = "0";
+                   
                 }
             }
             catch (Exception ex)
@@ -170,6 +190,25 @@
             return JsonConvert.SerializeObject(jsonResponse);
         }
 
+
+        /// <summary>
+        /// GetImagePopup Muestra la Imagen de la alternativa
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult GetImageAlternativa(int id)
+        {
+            var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
+            if (firstOrDefault.Image != null)
+            {
+                byte[] image = firstOrDefault.Image;
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
+        }
 
     }
 }

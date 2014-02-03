@@ -6,5 +6,6 @@
     {
         public Alternativa Alternativa { get; set; }
         public string NombreTemporalArchivo { get; set; }
+        public string tipoModel { get; set; }
     }
 }

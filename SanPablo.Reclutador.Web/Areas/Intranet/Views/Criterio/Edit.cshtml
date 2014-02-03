@@ -27,12 +27,17 @@
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
             $("#image").hide();
+            
         }
         if (dato == "I") {
             $("#image").show();
+           
+
         }
         if (dato == "T") {
             $("#image").hide();
+            
+
         }
                 
         $("#Criterio_TipoModo").change(function () {
@@ -41,12 +46,13 @@
             if (vvalor == "02") {
                 $("#image").show();
                 $("#ImgCriterio").show();
-               // $(".Imagen").show();
+              
+
             }
             else {
                 $("#image").hide();
                 $("#ImgCriterio").hide();
-               // $(".Imagen").hide();
+              
             }
         });
 
@@ -54,30 +60,11 @@
 
         $('#updateDialog').dialog({
             autoOpen: false,
-            width: 600,
-            height: 300,
+            width: 400,
+            height: 400,
             resizable: false,
-            modal: true,
-            buttons: {
-                "Grabar": function () {
-                    $.ajax({
-                        type: "POST",
-                        
-                        url: '@Url.Action("PopupCriterio", "Criterio")',
-                        data: $("#frmPopupCriterio").serializeAll(),
-                        traditional: true,
-                        success: function (data) {
-                            $("#updateDialog").html(data);
-                            //$(this).data('bob').text($(this).find("textarea").val();
-                            $('#grdList').trigger('reloadGrid');
-                        }
-                    });
-
-                },
-                 "Cancelar": function () {
-                 $(this).dialog("close");
-                }
-            }
+            modal: true
+          
         });
 
         $('#Agregar').click(function () {
@@ -278,7 +265,7 @@
     function mostrarAgregarEstudios(id, codCriterio) {
         var dialogDiv = $('#updateDialog');
         
-        $.get('@Url.Action("PopupCriterio", "Criterio")?id=' + id + "&codCriterio=" + codCriterio, function (data) {
+        $.get('@Url.Action("Editar", "Alternativa")?ideAlternativa=' + id + "&ideCriterio=" + codCriterio + "&tipo=" + $("#Criterio_TipoModo").val(), function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialog"));
