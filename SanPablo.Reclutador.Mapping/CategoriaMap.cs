@@ -23,7 +23,7 @@
             Map(x => x.TIPOEJEMPLO, "TIPOEJEMPLO");
             Map(x => x.IMAGENEJEMPLO, "IMAGENEJEMPLO");
             Map(x => x.TEXTOEJEMPLO, "TEXTOEJEMPLO");
-
+            Map(x => x.TIPCATEGORIADES).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCategoria + ",TIPCATEGORIA) from dual)");
             
            /* HasManyToMany(x => x.ExamenesCategoria)
                 .Cascade.All()

@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string USRMODIFICA { get; set;}
         public virtual DateTime FECMODIFICA { get; set; }
         public virtual string PuntajeMax { get; set; }
+        public virtual string PUNTAJECAL { get; set; }
+        
 
     }
 }

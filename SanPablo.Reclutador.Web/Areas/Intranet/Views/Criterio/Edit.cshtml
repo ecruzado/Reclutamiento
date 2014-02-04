@@ -27,7 +27,11 @@
         if (mensaje!=null && mensaje.length>0) {
             MostrarMensaje(mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
         }
-
+        
+        @if (true)
+	    {
+            Session["MensajeVal"] = null;
+	    }
 
      
         var dato = '@Session["TipoModo"]';
@@ -357,9 +361,9 @@
         }
         
         return test;
-       
-       
+      
     }
+
     function mostrarsubirarchivoimagen() {
         $("#dlgsubirarchivoimagen").dialog('open');
     }

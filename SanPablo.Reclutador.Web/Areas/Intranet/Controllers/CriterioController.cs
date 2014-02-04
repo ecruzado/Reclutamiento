@@ -665,14 +665,26 @@
                     id = item.IdeCriterio.ToString(),
                     cell = new string[]
                             {
-                                "",
+                                //"",
+                                //item.IndicadorActivo,
+                                //item.IndicadorActivo,
+                                //item.Pregunta,
+                                //item.TipoMedicion,
+                                //item.TipoCriterio,
+                                //item.TipoModo,
+                                //item.TipoCalificacion
+                               "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
+                                item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
+                                item.TipoCriterioDes,
+                                item.TipoCalificacion,
+                                item.TipoCalificacionDes,
                                 item.TipoModo,
-                                item.TipoCalificacion
+                                item.TipoModoDes
                                
                             }
                 }).ToArray();

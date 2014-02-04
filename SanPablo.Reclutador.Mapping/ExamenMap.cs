@@ -21,6 +21,8 @@
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsrModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.TipExamenDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCriterio + ",TIPEXAMEN) from dual)");
+
             Table("EXAMEN");
 
         }

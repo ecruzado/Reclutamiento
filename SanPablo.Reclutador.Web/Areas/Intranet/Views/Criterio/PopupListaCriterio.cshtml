@@ -59,18 +59,35 @@
                 });
             },
 
-            colNames: ['Estado', '', '', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación'],
-            colModel: [
-                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
-                { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
-                { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 250 },
-                { name: 'Medicion', index: 'Medicion', align: 'left', width: 150 },
-                { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
-                { name: 'Tipo', index: 'Tipo', align: 'left', width: 150 },
-                { name: 'Modo', index: 'Modo', align: 'left', width: 150 }
+        //    colNames: ['Estado', '', '', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación'],
+        //    colModel: [
+        //        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+        //        { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
+        //        { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
+        //        { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 250 },
+        //        { name: 'Medicion', index: 'Medicion', align: 'left', width: 150 },
+        //        { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
+        //        { name: 'Tipo', index: 'Tipo', align: 'left', width: 150 },
+        //        { name: 'Modo', index: 'Modo', align: 'left', width: 150 }
                
-        ],
+            //],
+            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Calificación', '', 'Modo'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
+                    { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
+                    { name: 'TipoMedicionDes', index: 'TipoMedicionDes', align: 'left' },
+                    { name: 'Medicion', index: 'Medicion', align: 'left', hidden: true },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
+                    { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150 },
+                    { name: 'Calificacion', index: 'Calificacion', align: 'left', hidden: true },
+                    { name: 'TipoCalificacionDes', index: 'TipoCalificacionDes', align: 'left', width: 200 },
+                    { name: 'Modo', index: 'Modo', align: 'left', hidden: true },
+                    { name: 'TipoModoDes', index: 'TipoModoDes', align: 'left', width: 150 }
+                    
+            ],
+
         pager: jQuery('#grdPagerCriterios'),
         rowNum: 10,
         rules: true,
