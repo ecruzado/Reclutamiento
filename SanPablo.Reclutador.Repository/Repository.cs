@@ -77,6 +77,8 @@
                     .List<TEntity>();
         }
 
+
+
         public int CountBy()
         {
             return _session.QueryOver<TEntity>()
@@ -103,6 +105,11 @@
              lista[5] = 0; 
              return list;               
         }
+
+
+
+
+
 
     }
 

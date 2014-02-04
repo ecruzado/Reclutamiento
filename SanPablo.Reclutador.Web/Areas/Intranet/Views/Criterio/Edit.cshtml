@@ -22,7 +22,13 @@
 
     $(document).ready(function () {
         
-     
+        var mensaje = '@Session["MensajeVal"]';
+       
+        if (mensaje!=null && mensaje.length>0) {
+            MostrarMensaje(mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+
      
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
@@ -31,7 +37,7 @@
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
             $("#verImagen").hide();
-          
+            
 
 
             
@@ -41,12 +47,14 @@
             $("#nombreImagen").show();
             $("#selecImagen").show();
             $("#verImagen").show();
+           
         }
         if (dato == "T") {
           
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
             $("#verImagen").hide();
+            
         }
                 
         $("#Criterio_TipoModo").change(function () {
@@ -243,13 +251,14 @@
             url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")' + '?idCriterio=' + $("#Criterio_IdeCriterio").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['','Alternativa', 'Peso', 'Imagen'],
+            colNames: ['','Alternativa', 'Peso', 'Imagen',''],
             colModel: [
     
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 600, editable: false, sortable: false },
-                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 300, editable: false, formatter: ImagenFormatter },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 650, editable: false, sortable: false },
+                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 100, editable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter },
+                    { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden:true },
             ],
             rownumbers: true,
             sortname: 'IdeAlternativa',
@@ -260,7 +269,7 @@
             rules: true ,
             height: 160,
             autowidth: true,
-            rowNum: 0,
+            
             cellsubmit: 'clientArray',
             hidegrid: false,
             rowNum: 10,
@@ -268,16 +277,22 @@
             //rowList: [10, 30, 50],
             shrinkToFit: false,
 
-
-
             postData: {
             },
             loadComplete: function (data) {
-
+                var cTipo = $("#Criterio_TipoModo").val();
+                if ("01" != cTipo) {
+                    $("#grdList").showCol("RutaDeImagen")
+                } else {
+                    $("#grdList").hideCol("RutaDeImagen")
+                }
             }
 
 
         });
+
+
+
 
         var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
            {
@@ -307,6 +322,11 @@
     }
 
     
+    function CerrarPopupAlternativa() {
+        $('#updateDialog').dialog('close');
+        $('#grdList').trigger('reloadGrid');
+    }
+
     function eliminarAlternativa(selr, codCriterio) {
         $.post('@Url.Action("Eliminar", "Criterio")'+'?ideAlternativa=' + selr + '&codigoCriterio=' + codCriterio,
         function (data) {
@@ -329,10 +349,16 @@
 
 
     function ImagenFormatter(cellvalue, options, rowObject) {
-
-        var strboton = '<input type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" />';
-        return strboton;
-
+        var tipo = rowObject[4] == null ? "" : rowObject[4];
+        var test = "";
+        var idAlter = cellvalue;
+        if ("01"!=tipo) {
+            test = "<img height ='50' width='50' src='@Url.Action("ObtenerSubImagen", "Criterio")/" + idAlter + "' />";
+        }
+        
+        return test;
+       
+       
     }
     function mostrarsubirarchivoimagen() {
         $("#dlgsubirarchivoimagen").dialog('open');

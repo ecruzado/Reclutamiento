@@ -25,6 +25,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string NombreTemporalArchivo { get; set; }
         public HttpPostedFileBase ImagenAlternativa { get; set; }
         public virtual string imagen2 { get; set; }
+        public virtual string MensajeVal{ get; set; }
         
     }
 }

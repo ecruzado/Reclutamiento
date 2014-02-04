@@ -89,14 +89,19 @@
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
+                                item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
-                                item.TipoModo,
+                                item.TipoCriterioDes,
                                 item.TipoCalificacion,
+                                item.TipoCalificacionDes,
+                                item.TipoModo,
+                                item.TipoModoDes,
                                 item.FechaCreacion == DateTime.MinValue? "": item.FechaCreacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioCreacion,
                                 item.FechaModificacion == DateTime.MinValue? "": item.FechaModificacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioModificacion
+                   
                             }
                     }).ToArray();
 
@@ -403,7 +408,8 @@
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
-                                ""
+                                item.IdeAlternativa.ToString(),
+                                item.Criterio.TipoModo
                             }
                     }).ToArray();
 
@@ -426,32 +432,30 @@
         public ActionResult Edit(CriterioViewModel model)
         {
             var criterioViewModel = InicializarCriteriosEdit();
-           // byte[] data;
+           
             string fullPath = null;
             if (!ModelState.IsValid){
                 criterioViewModel.Criterio = model.Criterio;
                 return View(criterioViewModel);
             }
 
+            if ("02".Equals(model.Criterio.TipoModo))
+            {
+                if (model.NombreTemporalArchivo == null)
+                {
+                    Session["MensajeVal"] = "Ingrese una imagen";
+                    return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+                }
+                else
+                {
+                    Session["MensajeVal"] = null;
+                }
+              
+            }
+
            
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
 
-            //if (model.image != null)
-            //{
-                
-            //    using (Stream inputStream = model.image.InputStream)
-            //    {
-            //        MemoryStream memoryStream = inputStream as MemoryStream;
-            //        if (memoryStream == null)
-            //        {
-            //            memoryStream = new MemoryStream();
-            //            inputStream.CopyTo(memoryStream);
-            //        }
-            //        data = memoryStream.ToArray();
-            //    }
-            //    model.Criterio.IMAGENCRIT = data;
-
-            //}
 
             if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
             {
@@ -790,6 +794,7 @@
             return null;
         }
 
+
         /// <summary>
         /// GetImage Muestra la Imagen en el criterio
         /// </summary>
@@ -869,6 +874,27 @@
             }
 
             return JsonConvert.SerializeObject(jsonResponse);
+        }
+
+        /// <summary>
+        /// obtiene sub Imagen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult ObtenerSubImagen(int id)
+        {
+            var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
+            
+                if (firstOrDefault!=null && firstOrDefault.Image != null)
+                {
+                    byte[] image = firstOrDefault.Image;
+                    return File(image, "image/jpg");
+                }
+                else
+                {
+                    return null;
+                }     
+            
         }
 
     }

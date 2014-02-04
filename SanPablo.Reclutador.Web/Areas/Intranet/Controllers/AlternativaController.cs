@@ -41,6 +41,8 @@
             modelo.Alternativa = new Alternativa();
             modelo.Alternativa.Criterio = new Criterio();
             modelo.tipoModel = tipo;
+
+            
             if (ideAlternativa == 0)
             {
 
@@ -75,10 +77,22 @@
             ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
             JsonMessage objJsonMensage = new JsonMessage();
             string fullPath = null;
+
+
             if (!result.IsValid)
             {
-                return View(model);
+                return Json(objJsonMensage);
             }
+
+
+            if ("02".Equals(model.tipoModel))
+            {
+
+                objJsonMensage.Mensaje = "Ingrese una imagen";
+                objJsonMensage.Resultado= false;
+                return Json(objJsonMensage);
+            }
+
 
             if (!string.IsNullOrEmpty(model.NombImagenAlternativa))
             {
@@ -111,6 +125,7 @@
 
                 _alternativaRepository.Update(alter);
                 objJsonMensage.Resultado = true;
+                objJsonMensage.Mensaje = "Se actualizo el registro correctamente";
             }
             else
             {
@@ -119,6 +134,7 @@
 
                 _alternativaRepository.Add(model.Alternativa);
                 objJsonMensage.Resultado = true;
+                objJsonMensage.Mensaje = "Se registro el registro correctamente";
             }
 
             if (fullPath!=null)

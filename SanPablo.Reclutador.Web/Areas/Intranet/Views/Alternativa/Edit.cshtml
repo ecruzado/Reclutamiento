@@ -61,6 +61,7 @@
                     <input type="file" name="fileAlternativa" id="fileAlternativa" />
                    
                      @Html.TextBoxFor(model => model.NombImagenAlternativa,  new { style = "display: none;" })
+                    
                 </td>
                 <td></td>
             </tr>
@@ -121,19 +122,30 @@
         }
 
         $("#btnGuardarAlternativa").click(function () {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("Editar", "Alternativa")',
-                data: $("#frmAlternativa").serialize(),
-                traditional: true,
-                success: function (data) {
-                    if (data.Resultado) {
-                        parent.$('#grdList').trigger('reloadGrid');
+            if ($("#frmAlternativa").validate().form()) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Editar", "Alternativa")',
+                    data: $("#frmAlternativa").serialize(),
+                    traditional: true,
+                    success: function (data) {
+                        
+                        if (data.Resultado) {
+                           
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            parent.CerrarPopupAlternativa();
+                           
+                        }
+                        if (!data.Resultado) {
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        }
+
+                        
+
+
                     }
-                    
-                   
-                }
-            });
+                });
+            };
         });
         
         $("#fileAlternativa").uploadify({
