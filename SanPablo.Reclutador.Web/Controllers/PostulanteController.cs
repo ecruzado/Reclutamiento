@@ -90,6 +90,7 @@
                       
             return postulanteGeneralViewModel;
         }
+
         public ViewResult General()
         {
             var postulanteGeneralViewModel = inicializarPostulante();
@@ -131,14 +132,16 @@
                             inputStream.CopyTo(memoryStream);
                         }
                         data = memoryStream.ToArray();
+                        memoryStream.Dispose();
                     }
                     model.Postulante.FotoPostulante = data;
-
+                    
                 }
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
                     _postulanteRepository.Add(model.Postulante);
+                    
                 }
                 else
                 {
@@ -167,7 +170,10 @@
                     postulanteEdit.InteriorDireccion = postulante.InteriorDireccion;
                     postulanteEdit.IndicadorSexo = postulante.IndicadorSexo;
                     postulanteEdit.IdeUbigeo = postulante.IdeUbigeo;
-                    postulanteEdit.FotoPostulante = postulante.FotoPostulante;
+                    if (fotoPostulante != null)
+                    {
+                        postulanteEdit.FotoPostulante = postulante.FotoPostulante;
+                    }
                     postulanteEdit.FechaNacimiento = postulante.FechaNacimiento;
                     postulanteEdit.Etapa = postulante.Etapa;
                     postulanteEdit.Correo = postulante.Correo;
@@ -267,6 +273,7 @@
             if (IdePostulante != 0)
             {
                 var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                postulante.IndicadorRegistroCompleto = "X";
                 _postulanteRepository.Update(postulante);                
             }
             
@@ -363,6 +370,17 @@
              var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
             result = Json(listaResultado);
             return result;
+        }
+        [HttpPost]
+        public ViewResult subirFoto()
+        {
+            var postulanteGeneralViewModel = inicializarPostulante();
+            
+            if (IdePostulante != 0)
+            {
+                postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            }
+            return View(postulanteGeneralViewModel);
         }
 
         public void mostrarUbigeo(PostulanteGeneralViewModel model)

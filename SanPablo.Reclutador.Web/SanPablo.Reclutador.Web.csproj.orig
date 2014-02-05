@@ -151,7 +151,11 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+<<<<<<< HEAD
+    <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+=======
     <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
+>>>>>>> cc6786bedf2d5afad8b4bd37de6c1aaa2964dd55
     <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
@@ -278,8 +282,11 @@
     <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\PopupListaCriterio.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\PopupCategoria.cshtml" />
+<<<<<<< HEAD
     <Content Include="Areas\Intranet\Views\Cargo\Competencias.cshtml" />
+=======
     <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
+>>>>>>> cc6786bedf2d5afad8b4bd37de6c1aaa2964dd55
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

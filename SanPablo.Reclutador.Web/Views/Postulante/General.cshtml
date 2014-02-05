@@ -55,6 +55,10 @@
             });
         })
 
+        $('#btnSubirFoto').click(function () {
+            mostrarAgregarFoto();
+        });
+
         //Cargar Distritos
         $('select#Provincias').change(function () {
             var ideProvincia = $(this).val();
@@ -96,12 +100,17 @@
                 var result = e.target.result;
                 $('#imgSalida').attr("src", result);
             }
-
-           
         });
 
-
-  });
+    });
+    function mostrarAgregarFoto() {
+        var dialogDiv = $('#updateDialog');
+        $.get('@Url.Action("subirFoto", "Postulante")', function (data) {
+             dialogDiv.html(data);
+             dialogDiv.dialog('open');
+         });
+         return false;
+    }
 </script>
 }
 <div class="row">
@@ -160,7 +169,7 @@
                              }
 
                              <br />
-                             
+                             @* <a id="btnSubirFoto" class="btn btn-info" > Subir Foto</a>*@
                              @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
                                   
                         </td>
@@ -426,8 +435,7 @@
                 <div class="formulario-accion">
                     <div class="opciones">
                         <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                       
-                        
+                                  
                          <button type="reset" class="btn">Cancelar</button>
                         <a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                     </div>
@@ -436,5 +444,11 @@
             </div>
      }
     </div>
+
 </div>
+
+<div id="updateDialog" title="Agregar Experiencia" ></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>
 

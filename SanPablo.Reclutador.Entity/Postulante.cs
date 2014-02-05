@@ -35,7 +35,15 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Correo { get; set; }
         public virtual string Observacion { get; set; }
         public virtual int TelefonoMovil { get; set; }
-        public virtual int TelefonoFijo { get; set; }
+
+        //[DataType(DataType.PhoneNumber)]
+        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
+        //
+
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Número no válido")]
+        [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
+        public virtual string TelefonoFijo { get; set; }
         public virtual string TipoZona { get; set; }
         public virtual string NombreZona { get; set; }
         public virtual int IdeUbigeo { get; set; }

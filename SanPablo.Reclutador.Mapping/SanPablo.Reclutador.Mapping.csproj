@@ -54,6 +54,13 @@
     <Compile Include="AlternativaMap.cs" />
     <Compile Include="CategoriaMap.cs" />
     <Compile Include="ConocimientoGeneralPostulanteMap.cs" />
+    <Compile Include="CargoMap.cs" />
+    <Compile Include="CentroEstudioMap.cs" />
+    <Compile Include="CompetenciaCargoMap.cs" />
+    <Compile Include="UbigeoCargoMap.cs" />
+    <Compile Include="NivelAcademicoMap.cs" />
+    <Compile Include="ExperienciaCargoMap.cs" />
+    <Compile Include="DiscapacidadCargoMap.cs" />
     <Compile Include="CriterioMap.cs" />
     <Compile Include="CriterioPorSubcategoriaMap.cs" />
     <Compile Include="DetalleGeneralMap.cs" />
@@ -63,6 +70,7 @@
     <Compile Include="ExamenxCategoriaMap.cs" />
     <Compile Include="ExperienciaPostulanteMap.cs" />
     <Compile Include="GeneralMap.cs" />
+    <Compile Include="HorarioCargoMap.cs" />
     <Compile Include="ParientesPostulanteMap.cs" />
     <Compile Include="PostulanteMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

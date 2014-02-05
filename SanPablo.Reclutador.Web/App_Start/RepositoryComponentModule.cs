@@ -59,6 +59,18 @@
             builder.RegisterType<ExamenPorCategoriaRepository>()
                .As<IExamenPorCategoriaRepository>();
 
+            builder.RegisterType<CargoRepository>()
+                .As<ICargoRepository>();
+
+            builder.RegisterType<CompetenciasCargoRepository>()
+                .As<ICompetenciaCargoRepository>();
+
+            builder.RegisterType<NivelAcademicoCargoRepository>()
+                .As<INivelAcademicoCargoRepository>();
+
+            builder.RegisterType<CentroEstudioCargoRepository>()
+                .As<ICentroEstudioCargoRepository>();
+
 
         }
     }

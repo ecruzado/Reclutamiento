@@ -41,6 +41,7 @@
 .ui-helper-clearfix:after {
 	content: "";
 	display: table;
+    color:white;
 	border-collapse: collapse;
 }
 
@@ -1426,6 +1427,8 @@ button.ui-button::-moz-focus-inner {
 	font-size: 14px;
 	text-decoration: none;
 	background: none;
+    background-color:#772953;
+    color:white;
 	-webkit-border-bottom-right-radius: 0; /* Safari 4 */
 	-moz-border-radius-bottomright: 0; /* Firefox 3.6 */
 	border-bottom-right-radius: 0;
@@ -1436,7 +1439,7 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-dialog .ui-dialog-title {
 	float: left;
-	color: #404040;
+	color: white;
 	font-weight: bold;
 	margin-top: 0px;
 	margin-bottom: 0px;

@@ -1,15 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
+﻿namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Repository.Interface;
+    using SanPablo.Reclutador.Web.Core;
+    using SanPablo.Reclutador.Web.Areas.Intranet.Models;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using System.Linq;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using NHibernate.Criterion;
+
     public class CargoController : Controller
     {
         //
         // GET: /Intranet/Cargo/
+        private ICargoRepository _cargoRepository;
+        private INivelAcademicoCargoRepository _nivelAcademicoCargoRepository;
+        private ICentroEstudioCargoRepository _centroEstudioCargoRepository;
+        private IDetalleGeneralRepository _detalleGeneralRepository;
+
+        public CargoController(ICargoRepository cargoRepository,
+                                INivelAcademicoCargoRepository nivelAcademicoRepository,
+                                ICentroEstudioCargoRepository centroEstudiosRepository,
+                                IDetalleGeneralRepository detalleGeneralRepository)
+        {
+            _cargoRepository = cargoRepository;
+            _nivelAcademicoCargoRepository = nivelAcademicoRepository;
+            _centroEstudioCargoRepository = centroEstudiosRepository;
+            _detalleGeneralRepository = detalleGeneralRepository;
+        }
 
         public ActionResult Index()
         {
@@ -212,5 +234,29 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             };
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
+
+        #region Competencia
+        public ViewResult Competencia()
+        {
+            var cargoViewModel = InicializarCompetencias();
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            cargoViewModel.Competencia.Cargo = cargo;
+            return View(cargoViewModel);
+            
+        }
+
+        public CargoViewModel InicializarCompetencias()
+        {
+            var cargoViewModel = new CargoViewModel();
+            cargoViewModel.Competencia = new CompetenciaCargo();
+
+            cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
+            cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
+
+            return cargoViewModel;
+        }
+
+        #endregion
     }
 }
