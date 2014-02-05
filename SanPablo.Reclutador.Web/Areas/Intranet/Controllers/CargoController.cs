@@ -235,28 +235,28 @@
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
 
-        #region Competencia
-        public ViewResult Competencia()
-        {
-            var cargoViewModel = InicializarCompetencias();
-            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
-            cargoViewModel.Competencia.Cargo = cargo;
-            return View(cargoViewModel);
+        //#region Competencia
+        //public ViewResult Competencia()
+        //{
+        //    var cargoViewModel = InicializarCompetencias();
+        //    var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+        //    cargoViewModel.Competencia.Cargo = cargo;
+        //    return View(cargoViewModel);
             
-        }
+        //}
 
-        public CargoViewModel InicializarCompetencias()
-        {
-            var cargoViewModel = new CargoViewModel();
-            cargoViewModel.Competencia = new CompetenciaCargo();
+        //public CargoViewModel InicializarCompetencias()
+        //{
+        //    var cargoViewModel = new CargoViewModel();
+        //    cargoViewModel.Competencia = new CompetenciaCargo();
 
-            cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
-            cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+        //    cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
+        //    cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
 
-            return cargoViewModel;
-        }
+        //    return cargoViewModel;
+        //}
 
-        #endregion
+        //#endregion
     }
 }
