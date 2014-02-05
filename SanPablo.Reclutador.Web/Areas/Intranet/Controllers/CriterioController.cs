@@ -439,19 +439,19 @@
                 return View(criterioViewModel);
             }
 
-            if ("02".Equals(model.Criterio.TipoModo))
-            {
-                if (model.NombreTemporalArchivo == null)
-                {
-                    Session["MensajeVal"] = "Ingrese una imagen";
-                    return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
-                }
-                else
-                {
-                    Session["MensajeVal"] = null;
-                }
+            //if ("02".Equals(model.Criterio.TipoModo))
+            //{
+            //    if (model.NombreTemporalArchivo == null)
+            //    {
+            //        Session["MensajeVal"] = "Ingrese una imagen";
+            //        return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+            //    }
+            //    else
+            //    {
+            //        Session["MensajeVal"] = null;
+            //    }
               
-            }
+            //}
 
            
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;

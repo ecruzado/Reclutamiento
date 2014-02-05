@@ -86,44 +86,44 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return View(categoriaViewModel);
             }
 
-            if ("02".Equals(model.Categoria.TIPOEJEMPLO))
-            {
+            //if ("02".Equals(model.Categoria.TIPOEJEMPLO))
+            //{
 
-                if (model.image == null)
-                {
-                    Session["MensajeVal"] = "Ingrese una imagen de ejemplo";
-                    if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-                    {
-                        return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
-                    }
-                    else {
-                        return RedirectToAction("Nuevo", "Categoria");
-                    }
+            //    if (model.image == null)
+            //    {
+            //        Session["MensajeVal"] = "Ingrese una imagen de ejemplo";
+            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
+            //        {
+            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
+            //        }
+            //        else {
+            //            return RedirectToAction("Nuevo", "Categoria");
+            //        }
                     
-                }
+            //    }
                 
-            }
-            else if ("01".Equals(model.Categoria.TIPOEJEMPLO))
-            {
+            //}
+            //else if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+            //{
                
-                    Session["MensajeVal"] = "Ingrese una texto de ejemplo";
-                    if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-                    {
-                        return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
-                    }
-                    else
-                    {
-                        return RedirectToAction("Nuevo", "Categoria");
+            //        Session["MensajeVal"] = "Ingrese una texto de ejemplo";
+            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
+            //        {
+            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
+            //        }
+            //        else
+            //        {
+            //            return RedirectToAction("Nuevo", "Categoria");
 
-                    }
+            //        }
                     
                
                 
-            }
-            else
-            {
-                Session["MensajeVal"] = null;
-            }
+            //}
+            //else
+            //{
+            //    Session["MensajeVal"] = null;
+            //}
 
             if (model.image != null)
             {

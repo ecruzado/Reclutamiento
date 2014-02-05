@@ -22,16 +22,17 @@
 
     $(document).ready(function () {
         
-        var mensaje = '@Session["MensajeVal"]';
+        @*var mensaje = '@Session["MensajeVal"]';
        
-        if (mensaje!=null && mensaje.length>0) {
+        if (mensaje != null && mensaje.length > 0) {
+           
             MostrarMensaje(mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
         }
         
         @if (true)
 	    {
-            Session["MensajeVal"] = null;
-	    }
+            Session.Remove("MensajeVal");
+	    }*@
 
      
         var dato = '@Session["TipoModo"]';
