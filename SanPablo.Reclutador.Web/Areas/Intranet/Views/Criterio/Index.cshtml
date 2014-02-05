@@ -71,7 +71,7 @@
                 <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
                 <a id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>
+                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>
@@ -87,35 +87,90 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var busqueda = [
-            {field: 'tipCriterio', data: $("#Criterio_TipoCriterio").val()},
-            {field: 'tipMed', data: $("#Criterio_TipoMedicion").val()},
-            {field: 'pregunta', data: $("#Criterio_Pregunta").val()},
-            {field: 'estado', data: $("#Criterio_IndicadorActivo").val()}
-        ];
+       
 
-        $("#grdList").grilla('@Url.Action("ListaCriterio", "Criterio")',busqueda, {
-            colNames: ['Estado', '', '', 'Pregunta', 'Medición', 'Tipo', 'Modo', 'Calificación', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+        jQuery("#grdList").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'tipCriterio', data: $("#Criterio_TipoCriterio").val() },
+                       { field: 'tipMed', data: $("#Criterio_TipoMedicion").val() },
+                       { field: 'pregunta', data: $("#Criterio_Pregunta").val() },
+                       { field: 'estado', data: $("#Criterio_IndicadorActivo").val() }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaCriterio", "Criterio")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Calificación', '', 'Modo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
-                    { name: 'Medicion', index: 'Medicion', align: 'left', width: 150 },
-                    { name: 'Calificacion', index: 'Calificacion', align: 'left', width: 50 },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 150 },
-                    { name: 'Modo', index: 'Modo', align: 'left', width: 150 },
+                    { name: 'TipoMedicionDes', index: 'TipoMedicionDes', align: 'left' },
+                    { name: 'Medicion', index: 'Medicion', align: 'left', hidden: true },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
+                    { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150 },
+                    { name: 'Calificacion', index: 'Calificacion', align: 'left', hidden: true },
+                    { name: 'TipoCalificacionDes', index: 'TipoCalificacionDes', align: 'left', width: 200 },
+                    { name: 'Modo', index: 'Modo', align: 'left', hidden: true },
+                    { name: 'TipoModoDes', index: 'TipoModoDes', align: 'left', width: 150 },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },
                     { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 250 },
                     { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150 },
                     { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 250 }
-            ],
-            pager: '#grdPager',
-            sortname: 'IdeCriterio',
-            rowNum: 10,
-            rownumbers: true
+             ],
+             pager: jQuery('#grdPager'),
+             rowNum: 10,
+             rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IdeCriterio',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 350,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
 
-        });
+             postData: {
+             }, loadComplete: function (data) {
+             }
+         });
+
+
+       
+
 
         $('#btnBuscar').click(function () {
             $('#grdList').trigger('reloadGrid');
@@ -160,6 +215,19 @@
                     $(this).dialog("close");
                 }
             }
+        });
+
+
+        $('#btnEliminar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $('#divEliminar').dialog('open');
+
+            } else {
+                MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
         });
 
 

@@ -133,14 +133,15 @@
                     }
                 });
             },
-            colNames: ['Estado','','','Nombre', 'Descripci&oacuten', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado','','','Nombre', 'Descripci&oacuten','', 'Tipo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left' ,hidden:true},
                     { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
                     { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 90 },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', hidden:true },
+                    { name: 'TIPCATEGORIADES', index: 'TIPCATEGORIADES', align: 'left', width: 150 },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },
                     { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 150 },
                     { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150 },

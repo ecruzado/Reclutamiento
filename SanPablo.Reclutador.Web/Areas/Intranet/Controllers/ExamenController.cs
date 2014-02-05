@@ -283,11 +283,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NomExamen,
                                 item.DescExamen,
                                 item.TipExamen,
+                                item.TipExamenDes,
                                 "1",
-                                item.FecCreacion.ToString(),
+                                item.FecCreacion == DateTime.MinValue? "": item.FecCreacion.ToString("dd/MM/yyyy"),
                                 item.UsrCreacion,
-                                item.FecModificacion.ToString(),
+                                item.FecModificacion == DateTime.MinValue? "": item.FecModificacion.ToString("dd/MM/yyyy"),
                                 item.UsrModificacion
+                                
+                               
                             }
 
 

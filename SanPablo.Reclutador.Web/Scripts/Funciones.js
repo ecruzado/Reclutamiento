@@ -4,9 +4,7 @@
 };
 
 Funciones = {
-    //------------------------------------------------------
-    //Efectos
-    //------------------------------------------------------
+   
     ShowElement: function (elemento) {
         $(elemento).slideDown(200).animate({ opacity: 1 }, 300);
     },
@@ -107,7 +105,7 @@ Funciones = {
             resizable: false,
             height: 100,
             width: 380,
-            title: '',
+            title: 'Alerta',
             modal: true
         });
 
@@ -358,10 +356,11 @@ Funciones = {
                 this.selectedIndex = -1;
         });
     },
-    Alert: function (selectorDiv, selectorSpan, msg,titulo) {
+
+    Alert: function (selectorDiv, selectorSpan, msg, title) {
         $('#' + selectorSpan).html(msg);
         $('#' + selectorDiv).dialog({
-            title: titulo,
+            title: title,
             autoOpen: false,
             modal: true,
             buttons: {

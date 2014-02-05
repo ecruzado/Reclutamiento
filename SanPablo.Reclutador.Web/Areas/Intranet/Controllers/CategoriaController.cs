@@ -66,26 +66,64 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             CategoriaValidator validator = new CategoriaValidator();
             CategoriaViewModel categoriaViewModel = new CategoriaViewModel();
             categoriaViewModel.Categoria = new Categoria();
+            JsonMessage objJsonMessage = new JsonMessage();
             DateTime Hoy = DateTime.Today;
             string fecha_actual = Hoy.ToString("DD/MM/YYYY");
 
+            result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
             if ("02".Equals(model.Categoria.TIPOEJEMPLO))
             {
-                result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
                 Session["Tipo"] = "I";
             }
             if ("01".Equals(model.Categoria.TIPOEJEMPLO))
             {
-                result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "TEXTOEJEMPLO", "INSTRUCCIONES");
                 Session["Tipo"] = "T";
-            }else{
-                result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
             }
+
             categoriaViewModel = InicializarCategoriaEdit();
             if (!result.IsValid)
             {
                 return View(categoriaViewModel);
             }
+
+            //if ("02".Equals(model.Categoria.TIPOEJEMPLO))
+            //{
+
+            //    if (model.image == null)
+            //    {
+            //        Session["MensajeVal"] = "Ingrese una imagen de ejemplo";
+            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
+            //        {
+            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
+            //        }
+            //        else {
+            //            return RedirectToAction("Nuevo", "Categoria");
+            //        }
+                    
+            //    }
+                
+            //}
+            //else if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+            //{
+               
+            //        Session["MensajeVal"] = "Ingrese una texto de ejemplo";
+            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
+            //        {
+            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
+            //        }
+            //        else
+            //        {
+            //            return RedirectToAction("Nuevo", "Categoria");
+
+            //        }
+                    
+               
+                
+            //}
+            //else
+            //{
+            //    Session["MensajeVal"] = null;
+            //}
 
             if (model.image != null)
             {
@@ -397,13 +435,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.SubCategoria.IDESUBCATEGORIA.ToString(),
                                 item.Criterio.IdeCriterio.ToString(),
                                 item.Criterio.Pregunta,
-                                item.PUNTAMAXIMO.ToString(),
+                                item.PUNTAJECAL.ToString(),
                                 item.PRIORIDAD.ToString(),
                                 item.Criterio.TipoCalificacion.ToString()
-                                //item.FECCREACION.ToString(),
-                                //item.USRCREACION,
-                                //item.FECMODIFICACION.ToString(),
-                                //item.USRMODIFICACION
+                               
                                 
                             }
                 }).ToArray();
@@ -510,10 +545,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         cell = new string[]
                             {
                                 
+                                //item.IdeAlternativa.ToString(),
+                                //item.NombreAlternativa.ToString(),
+                                //item.Peso.ToString(),
+                                //""
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
-                                ""
+                                item.IdeAlternativa.ToString(),
+                                item.Criterio.TipoModo
                             }
                     }).ToArray();
 
@@ -593,6 +633,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NOMCATEGORIA,
                                 item.DESCCATEGORIA,
                                 item.TIPCATEGORIA,
+                                item.TIPCATEGORIADES,
                                 item.FECCREACION.ToString(),
                                 item.USRCREACION,
                                 item.FECMODIFICA.ToString(),
@@ -623,7 +664,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
             model = InicializarCategoriaEdit();
-
+            model.Categoria = new Categoria();
             var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
             model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
@@ -903,7 +944,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.IDECATEGORIA.ToString(),
                                 item.NOMCATEGORIA,
                                 item.DESCCATEGORIA,
-                                item.TIPCATEGORIA
+                                item.TIPCATEGORIA,
+                                item.TIPCATEGORIADES
                                
                             }
                 }).ToArray();

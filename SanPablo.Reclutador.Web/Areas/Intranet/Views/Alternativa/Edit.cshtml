@@ -1,0 +1,223 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.AlternativaViewModel
+@{
+    Layout = "";
+}
+
+@using (Html.BeginForm("Edit", "Alternativa", FormMethod.Post, new {  id = "frmAlternativa" }))
+    {
+    @Html.ValidationSummary(true)
+    @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.Alternativa.IdeAlternativa,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.tipoModel,  new { style = "display: none;" })
+       
+
+    <table style="margin-left:30px;">
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Alternativa<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+               
+               @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa, new { @maxlength = "150"})
+                <div class="tex-error" style="font-size:12px;color:red">    
+               @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
+                </div>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Peso<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                @Html.TextBoxFor(model => model.Alternativa.Peso, new { @maxlength = "2", @class="input-mini" })
+                <div class="tex-error" style="font-size:12px;color:red">   
+                @Html.ValidationMessageFor(model => model.Alternativa.Peso)
+                </div>
+            </td>
+            <td></td>
+        </tr>
+        
+        @if ("02".Equals(Model.tipoModel))
+        {
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                @Html.TextBoxFor(model => model.Alternativa.RutaDeImagen, new { @class = "textoFormulario" , @readonly = "readonly"})
+                <div class="tex-error" style="font-size:12px;color:red">   
+                    @Html.ValidationMessageFor(model => model.Alternativa.RutaDeImagen)
+                </div>
+            </td>
+            <td></td>
+        </tr>
+       
+            <tr>
+                <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Imagen</label>
+                </td>
+                <td>
+                    <input type="file" name="fileAlternativa" id="fileAlternativa" />
+                   
+                     @Html.TextBoxFor(model => model.NombImagenAlternativa,  new { style = "display: none;" })
+                    
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+               <td >
+               </td>
+
+              <td colspan="2">
+             
+                @if (Model.Alternativa.Image != null && "02".Equals(Model.tipoModel))
+                {
+                    <table>
+                        <tr>
+                       
+                            <td class ="colInput"  style="text-align:center">
+                                <img id="ImgAlternativa"  height ="150" width="150" src="@Url.Action("GetImageAlternativa", "Alternativa",new { id = Model.Alternativa.IdeAlternativa })" /> 
+                            </td>
+                        </tr>
+                    </table>    
+                }
+
+              </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td></td>
+            </tr>
+        }
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align:right" colspan="4"><a id="btnGuardarAlternativa" class="btn btn-info" ><i class="icon-hdd icon-white"></i> Guardar</a></td>
+        </tr>
+
+    </table>
+    }
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#Alternativa_Peso").numerico();
+
+        var dato = '@Session["TipoModo"]';
+        if (dato == 1) {
+            $("#Alternativa_RutaDeImagen").hide();
+        }
+        if (dato == "I") {
+            $("#Alternativa_RutaDeImagen").show();
+        }
+        if (dato == "T") {
+            $("#Alternativa_RutaDeImagen").hide();
+        }
+
+        $("#btnGuardarAlternativa").click(function () {
+            if ($("#frmAlternativa").validate().form()) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Editar", "Alternativa")',
+                    data: $("#frmAlternativa").serialize(),
+                    traditional: true,
+                    success: function (data) {
+                        
+                        if (data.Resultado) {
+                           
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            parent.CerrarPopupAlternativa();
+                           
+                        }
+                        if (!data.Resultado) {
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        }
+
+                        
+
+
+                    }
+                });
+            };
+        });
+        
+        $("#fileAlternativa").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+                    'script': '@Url.Action("Upload")',
+                    'scriptData': { ext: '.jpeg;.jpg;.gif;.bmp;.png' },
+                    'fileDataName': 'file',
+                    'buttonText': 'Subir',
+                    'fileDesc': 'Image Files',
+                    'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+                    'multi': false,
+                    'auto': true,
+                    'queueSizeLimit': '90',
+                    'sizeLimit': 2147483647,
+                    'removeCompleted': true,
+                    'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
+
+            'onError': function (a, b, c, d) {
+                if (d.status == 404)
+                    alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                else if (d.type === "HTTP")
+                    alert("error " + d.type + ": " + d.status);
+                else if (d.type === "File Size")
+                    alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                else
+                    alert("error " + d.type + ": " + d.text);
+            },
+            'onSelect': function (e, q, f) {
+                var estado = true;
+                var fileName = f.name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                switch (fileNameExt) {
+                    case 'jpeg':
+                        break;
+                    case 'jpg':
+                        break;
+                    case 'gif':
+                        break;
+                    case 'bmp':
+                        break;
+                    case 'png':
+                        break;
+                    default:
+                        //Funciones.ShowAlert('', "extensión no válida");
+                        $("#fileInput").uploadifyCancel(q);
+                        $("#fileInput").uploadifyClearQueue();
+                        estado = false;
+                        break;
+                }
+
+                return estado;
+
+            },
+            'onComplete': function (event, queueId, fileObj, response, data) {
+
+                var rsp = jQuery.parseJSON(response);
+
+                if (rsp.Success == true) {
+                   
+                    $("#Alternativa_RutaDeImagen").val(rsp.Data.NombreArchivo);
+                    $("#NombImagenAlternativa").val(rsp.Data.NombreTemporalArchivo);
+                   
+                         
+                }
+                else {
+
+                }
+            }
+        });
+
+    });
+
+</script>
+
+

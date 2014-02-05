@@ -22,9 +22,13 @@
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
             Map(x => x.IMAGENCRIT, "IMAGENCRIT");
-            Map(x => x.TipoMedicionDescripcion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.Medicion + " AND DG.VALOR = TIPMEDICION)");
+            Map(x => x.rutaImagen, "NOMIMAGEN");
+            Map(x => x.TipoMedicionDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.Medicion + ",TIPMEDICION) from dual)");
+            Map(x => x.TipoCriterioDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCriterio + ",TIPCRITERIO) from dual)");
+            Map(x => x.TipoModoDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.Modo + ",TIPMODO) from dual)");
+            Map(x => x.TipoCalificacionDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCalificacion + ",TIPCALIFICACION) from dual)");
             Table("CRITERIO");
-
+            
         }
     }
 }

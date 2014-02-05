@@ -97,14 +97,15 @@
                     }
                 });
             },
-            colNames: ['Estado','','', 'Nombre', 'Descripci&oacuten', 'Tipo', 'Duraci&oacuten (min)', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado','','', 'Nombre', 'Descripci&oacuten', '','Tipo', 'Duraci&oacuten (min)', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', sortable: false, width: 50,hidden: true },
                     { name: 'IdeExamen', index: 'IdeExamen', align: 'center', sortable: false, hidden: true },
                     { name: 'Nombre', index: 'Nombre', align: 'left' },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left' },
-                    { name: 'Tipo', index: 'Tipo', align: 'left' },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
+                    { name: 'TipExamenDes', index: 'TipExamenDes', align: 'left', width: 150 },
                     { name: 'Duracion', index: 'Duracion', align: 'left' },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
                     { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },

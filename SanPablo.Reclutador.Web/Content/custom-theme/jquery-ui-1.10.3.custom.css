@@ -1424,7 +1424,7 @@ button.ui-button::-moz-focus-inner {
 	border: 0 0 0 1px solid;
 	border-color: white;
 	padding: 5px 15px;
-	font-size: 18px;
+	font-size: 14px;
 	text-decoration: none;
 	background: none;
     background-color:#772953;
@@ -1441,8 +1441,8 @@ button.ui-button::-moz-focus-inner {
 	float: left;
 	color: white;
 	font-weight: bold;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 	padding: 5px;
 	text-overflow: ellipsis;
 	overflow: hidden;

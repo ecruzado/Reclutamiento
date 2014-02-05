@@ -22,62 +22,141 @@
 
     $(document).ready(function () {
         
-     
+        @*var mensaje = '@Session["MensajeVal"]';
+       
+        if (mensaje != null && mensaje.length > 0) {
+           
+            MostrarMensaje(mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+        
+        @if (true)
+	    {
+            Session.Remove("MensajeVal");
+	    }*@
+
      
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
-            $("#image").hide();
+           
+
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
+            
+
+
+            
         }
         if (dato == "I") {
-            $("#image").show();
+          
+            $("#nombreImagen").show();
+            $("#selecImagen").show();
+            $("#verImagen").show();
+           
         }
         if (dato == "T") {
-            $("#image").hide();
+          
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
+            
         }
                 
         $("#Criterio_TipoModo").change(function () {
             var vvalor = $(this).val();
 
             if (vvalor == "02") {
-                $("#image").show();
-                $("#ImgCriterio").show();
-               // $(".Imagen").show();
+              
+                $("#nombreImagen").show();
+                $("#selecImagen").show();
+                $("#verImagen").show();
+
             }
             else {
-                $("#image").hide();
-                $("#ImgCriterio").hide();
-               // $(".Imagen").hide();
+              
+                $("#nombreImagen").hide();
+                $("#selecImagen").hide();
+                $("#verImagen").hide();
             }
         });
 
        
+        $("#image").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+            'script': '@Url.Action("Upload", "Criterio")',
+            'scriptData': { ext: '.jpeg;.jpg;.gif;.bmp;.png' },
+            'fileDataName': 'file',
+            'buttonText': 'Subir',
+            'fileDesc': 'Image Files',
+            'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+            'multi': false,
+            'auto': true,
+            'queueSizeLimit': '90',
+            'sizeLimit': 2147483647,
+            'removeCompleted': true,
+            'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
+
+                    'onError': function (a, b, c, d) {
+                        if (d.status == 404)
+                            alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                        else if (d.type === "HTTP")
+                            alert("error " + d.type + ": " + d.status);
+                        else if (d.type === "File Size")
+                            alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                        else
+                            alert("error " + d.type + ": " + d.text);
+                    },
+                    'onSelect': function (e, q, f) {
+                        var estado = true;
+                        var fileName = f.name;
+                        var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                        switch (fileNameExt) {
+                            case 'jpeg':
+                                break;
+                            case 'jpg':
+                                break;
+                            case 'gif':
+                                break;
+                            case 'bmp':
+                                break;
+                            case 'png':
+                                break;
+                            default:
+                                MotoTravel.ShowAlert('', "extensión no válida");
+                                $("#fileInput").uploadifyCancel(q);
+                                $("#fileInput").uploadifyClearQueue();
+                                estado = false;
+                                break;
+                        }
+
+                        return estado;
+
+                    },
+                    'onComplete': function (event, queueId, fileObj, response, data) {
+
+                        var rsp = jQuery.parseJSON(response);
+
+                        if (rsp.Success == true) {
+                            $("#Criterio_rutaImagen").val(rsp.Data.NombreArchivo);
+                            $("#NombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+                            
+
+                        }
+                        else {
+
+                        }
+                    }
+        });
+
+
 
         $('#updateDialog').dialog({
             autoOpen: false,
-            width: 600,
-            height: 300,
+            width: 400,
+            height: 400,
             resizable: false,
-            modal: true,
-            buttons: {
-                "Grabar": function () {
-                    $.ajax({
-                        type: "POST",
-                        
-                        url: '@Url.Action("PopupCriterio", "Criterio")',
-                        data: $("#frmPopupCriterio").serializeAll(),
-                        traditional: true,
-                        success: function (data) {
-                            $("#updateDialog").html(data);
-                            //$(this).data('bob').text($(this).find("textarea").val();
-                            $('#grdList').trigger('reloadGrid');
-                        }
-                    });
-
-                },
-                 "Cancelar": function () {
-                 $(this).dialog("close");
-                }
-            }
+            modal: true
+          
         });
 
         $('#Agregar').click(function () {
@@ -177,13 +256,14 @@
             url: '@Url.Action("ListaAlternativaxCriterio", "Criterio")' + '?idCriterio=' + $("#Criterio_IdeCriterio").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['','Alternativa', 'Peso', 'Imagen'],
+            colNames: ['','Alternativa', 'Peso', 'Imagen',''],
             colModel: [
     
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 600, editable: false, sortable: false },
-                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 300, editable: false, formatter: ImagenFormatter },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 650, editable: false, sortable: false },
+                    { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 100, editable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter },
+                    { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden:true },
             ],
             rownumbers: true,
             sortname: 'IdeAlternativa',
@@ -194,7 +274,7 @@
             rules: true ,
             height: 160,
             autowidth: true,
-            rowNum: 0,
+            
             cellsubmit: 'clientArray',
             hidegrid: false,
             rowNum: 10,
@@ -202,16 +282,22 @@
             //rowList: [10, 30, 50],
             shrinkToFit: false,
 
-
-
             postData: {
             },
             loadComplete: function (data) {
-
+                var cTipo = $("#Criterio_TipoModo").val();
+                if ("01" != cTipo) {
+                    $("#grdList").showCol("RutaDeImagen")
+                } else {
+                    $("#grdList").hideCol("RutaDeImagen")
+                }
             }
 
 
         });
+
+
+
 
         var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
            {
@@ -241,6 +327,11 @@
     }
 
     
+    function CerrarPopupAlternativa() {
+        $('#updateDialog').dialog('close');
+        $('#grdList').trigger('reloadGrid');
+    }
+
     function eliminarAlternativa(selr, codCriterio) {
         $.post('@Url.Action("Eliminar", "Criterio")'+'?ideAlternativa=' + selr + '&codigoCriterio=' + codCriterio,
         function (data) {
@@ -263,11 +354,17 @@
 
 
     function ImagenFormatter(cellvalue, options, rowObject) {
-
-        var strboton = '<input type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" />';
-        return strboton;
-
+        var tipo = rowObject[4] == null ? "" : rowObject[4];
+        var test = "";
+        var idAlter = cellvalue;
+        if ("01"!=tipo) {
+            test = "<img height ='50' width='50' src='@Url.Action("ObtenerSubImagen", "Criterio")/" + idAlter + "' />";
+        }
+        
+        return test;
+      
     }
+
     function mostrarsubirarchivoimagen() {
         $("#dlgsubirarchivoimagen").dialog('open');
     }
@@ -278,7 +375,7 @@
     function mostrarAgregarEstudios(id, codCriterio) {
         var dialogDiv = $('#updateDialog');
         
-        $.get('@Url.Action("PopupCriterio", "Criterio")?id=' + id + "&codCriterio=" + codCriterio, function (data) {
+        $.get('@Url.Action("Editar", "Alternativa")?ideAlternativa=' + id + "&ideCriterio=" + codCriterio + "&tipo=" + $("#Criterio_TipoModo").val(), function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialog"));
@@ -291,6 +388,13 @@
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
     
+
+
+
+
+
+
+
 </script>
 }
 
@@ -417,35 +521,58 @@
                             </div>
                           </td>
                        
-                    </tr>
-                    <tr>
-                        <td colspan="5">
+                             </tr>
+                   
+                            
                              @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                              { 
                               <span></span>
                              }
                              else
                              {
-
-                                 if (Model.Criterio.IMAGENCRIT!=null)
-                                 {
-                                     <table>
-                                         <tr>
-                                             <td style="width:80px;"></td>
-                                                
-                                            
-                                              <td class ="colInput" colspan="3">
-                                                 <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio",new { id = Model.Criterio.IdeCriterio })" /> 
-                                              </td>
-                                        </tr>
-                                     </table>    
-                                 }
-                                 @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })      
+                               
+                                <tr id="nombreImagen">
+                                   
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
+                                    </td>
+                                    <td class="colInput;input-xxlarge">
+                                        @Html.TextBoxFor(model => model.Criterio.rutaImagen, new { @class = "textoFormulario" , @readonly = "readonly"})
+                                    </td>
+                                    
+                                    <td>
                                  
-                             }   
-                         </td>
-                        
-                    </tr>
+                                </tr>
+       
+                                <tr id="selecImagen">
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario">Imagen</label>
+                                    </td>
+                                    <td >
+                                        <div id="divImagen">
+
+                                        <input type="file" name="image" id="image" />
+                                       
+                                        @Html.TextBoxFor(model => model.NombreTemporalArchivo,  new { style = "display: none;" })
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                 <tr id="verImagen">
+                                   @if (Model.Criterio.IMAGENCRIT != null)
+                                   {
+                                        <td class="colEtiqueta"></td>
+                                                  <td class ="colInput" >
+                                                     <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
+                                                  </td>
+                                            
+                                   }
+                                 </tr>
+                                 
+                                       
+                             } 
+                                 
+                       
                     <tr>
                         <td>
                             &nbsp;
@@ -462,7 +589,7 @@
                 {
                     <div class="opciones"></div>
                 }
-                else if(@Accion.Nuevo.Equals(Model.Criterio.IndPagina))
+                else if (@Accion.Nuevo.Equals(Model.Criterio.IndPagina))
                 {
                     <div class="opciones">
                     <a id="Agregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 

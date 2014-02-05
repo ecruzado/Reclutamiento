@@ -17,10 +17,16 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionCriterio { get; set; }
         public virtual string IndicadorActivo { get; set; }
         public virtual string IndPagina { get; set; }
+        public virtual string rutaImagen { get; set; }
         public virtual byte[] IMAGENCRIT { get; set; }
         public virtual IList<SubCategoria> SubCategorias { get; set; }
         
-        public virtual string TipoMedicionDescripcion { get; set; }
+        public virtual string TipoMedicionDes { get; set; }
+        public virtual string TipoCriterioDes { get; set; }
+        public virtual string TipoModoDes { get; set; }
+        public virtual string TipoCalificacionDes { get; set; }
+        public virtual string EstadoDes { get; set; }
+        
 
         public Criterio()
         {

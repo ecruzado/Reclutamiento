@@ -2,6 +2,7 @@
 {
     using FluentValidation;
     using FluentValidation.Results;
+    using Newtonsoft.Json;
     using NHibernate.Criterion;
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Entity.Validation;
@@ -11,6 +12,7 @@
     using SanPablo.Reclutador.Web.Models.JQGrid;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -87,14 +89,19 @@
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
+                                item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
-                                item.TipoModo,
+                                item.TipoCriterioDes,
                                 item.TipoCalificacion,
+                                item.TipoCalificacionDes,
+                                item.TipoModo,
+                                item.TipoModoDes,
                                 item.FechaCreacion == DateTime.MinValue? "": item.FechaCreacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioCreacion,
                                 item.FechaModificacion == DateTime.MinValue? "": item.FechaModificacion.ToString("dd/MM/yyyy"),
                                 item.UsuarioModificacion
+                   
                             }
                     }).ToArray();
 
@@ -149,8 +156,8 @@
                 var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
-                model.Alternativa.FechaMod = Hoy;
-                model.Alternativa.UsrMod = "Prueba 02";
+                model.Alternativa.FechaModificacion = Hoy;
+                model.Alternativa.UsuarioModificacion = "Prueba 02";
                 if (model.Alternativa.Image!=null)
                 {
                     alter.Image = model.Alternativa.Image;     
@@ -162,7 +169,7 @@
             else
             {
                 model.Alternativa.FechaCreacion = Hoy;
-                model.Alternativa.UsrCreacion = "Prueba 01";
+                model.Alternativa.UsuarioCreacion = "Prueba 01";
                
                 _alternativaRepository.Add(model.Alternativa);
             }
@@ -224,6 +231,7 @@
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Actualizar.ToString();
             model.Criterio.IMAGENCRIT = objCriterio.IMAGENCRIT;
+            model.Criterio.rutaImagen = objCriterio.rutaImagen;
             model.IndVisual = Visualicion.SI;
 
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
@@ -400,7 +408,8 @@
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
-                                ""
+                                item.IdeAlternativa.ToString(),
+                                item.Criterio.TipoModo
                             }
                     }).ToArray();
 
@@ -413,36 +422,59 @@
             }
         }
 
+        /// <summary>
+        /// Guarda los datos del criterio
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult Edit(CriterioViewModel model, HttpPostedFileBase image)
+        public ActionResult Edit(CriterioViewModel model)
         {
             var criterioViewModel = InicializarCriteriosEdit();
-            byte[] data; 
+           
+            string fullPath = null;
             if (!ModelState.IsValid){
                 criterioViewModel.Criterio = model.Criterio;
                 return View(criterioViewModel);
             }
 
+            //if ("02".Equals(model.Criterio.TipoModo))
+            //{
+            //    if (model.NombreTemporalArchivo == null)
+            //    {
+            //        Session["MensajeVal"] = "Ingrese una imagen";
+            //        return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+            //    }
+            //    else
+            //    {
+            //        Session["MensajeVal"] = null;
+            //    }
+              
+            //}
+
            
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
 
-            if (model.image != null)
+
+            if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
             {
                 
-                using (Stream inputStream = model.image.InputStream)
-                {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    data = memoryStream.ToArray();
-                }
-                model.Criterio.IMAGENCRIT = data;
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = "Archivos\\Imagenes\\";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
 
+                using (Stream s = System.IO.File.OpenRead(fullPath))
+                {
+                    byte[] buffer = new byte[s.Length];
+                    s.Read(buffer, 0, (int)s.Length);
+                    int len = (int)s.Length;
+                    s.Close();
+                    model.Criterio.IMAGENCRIT = buffer;
+                    model.Criterio.rutaImagen = model.Criterio.rutaImagen;
+                }
             }
-            
+
             
             
             if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
@@ -450,13 +482,6 @@
                 model.Criterio.FechaCreacion = DateTime.Now;
                 model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
 
-
-                //var objCriterio = _criterioRepository.All();
-                //int maxOrdenImp = (objCriterio.Select(d => d.OrdenImpresion).Max()) == null ? 0 : (objCriterio.Select(d => d.OrdenImpresion).Max());
-
-                //maxOrdenImp = maxOrdenImp + 1;
-
-                //model.Criterio.OrdenImpresion = maxOrdenImp;
                 model.Criterio.OrdenImpresion = 0;
 
                 _criterioRepository.Add(model.Criterio);
@@ -476,6 +501,7 @@
                 if ("02".Equals(model.Criterio.TipoModo))
                 {
                     objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
+                    objCriterio.rutaImagen = model.Criterio.rutaImagen;
                 }
                 
                 _criterioRepository.Update(objCriterio);
@@ -493,6 +519,7 @@
 	        {
                 Session["TipoModo"] = "I";
                 criterioViewModel.image = model.image;
+                criterioViewModel.Criterio.rutaImagen = model.Criterio.rutaImagen;
 	        }
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
@@ -638,14 +665,26 @@
                     id = item.IdeCriterio.ToString(),
                     cell = new string[]
                             {
-                                "",
+                                //"",
+                                //item.IndicadorActivo,
+                                //item.IndicadorActivo,
+                                //item.Pregunta,
+                                //item.TipoMedicion,
+                                //item.TipoCriterio,
+                                //item.TipoModo,
+                                //item.TipoCalificacion
+                               "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
                                 item.Pregunta,
+                                item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
+                                item.TipoCriterioDes,
+                                item.TipoCalificacion,
+                                item.TipoCalificacionDes,
                                 item.TipoModo,
-                                item.TipoCalificacion
+                                item.TipoModoDes
                                
                             }
                 }).ToArray();
@@ -767,6 +806,7 @@
             return null;
         }
 
+
         /// <summary>
         /// GetImage Muestra la Imagen en el criterio
         /// </summary>
@@ -787,25 +827,87 @@
         }
 
 
+
+
         /// <summary>
-        /// GetImagePopup Muestra la Imagen de la alternativa
+        /// Subida de imagen a la carpeta temporal
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="forms"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string Upload(HttpPostedFileBase file, FormCollection forms)
+        {
+            var jsonResponse = new JsonResponse { Success = false };
+
+            try
+            {
+                string[] extensiones = forms.Get("ext").Split(';');
+
+                string extensionArchivo = Path.GetExtension(file.FileName);
+
+                if (extensiones.Contains(extensionArchivo.ToLower()))
+                {
+                    var content = new byte[file.ContentLength];
+                    file.InputStream.Read(content, 0, file.ContentLength);
+
+                    var indexOfLastDot = file.FileName.LastIndexOf('.');
+                    var extension = file.FileName.Substring(indexOfLastDot + 1, file.FileName.Length - indexOfLastDot - 1);
+                    var name = file.FileName.Substring(0, indexOfLastDot);
+
+                    string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                    string directoryPath = ConfigurationManager.AppSettings["ImageFilePath"];
+                    string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                    string fullPath = Path.Combine(applicationPath, string.Format("{0}{1}{2}", directoryPath, nombreTemporalArchivo, extensionArchivo));
+
+                    System.IO.File.WriteAllBytes(fullPath, content);
+
+
+
+                    jsonResponse.Data = new
+                    {
+                        NombreArchivo = file.FileName,
+                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo)
+                    };
+                    jsonResponse.Success = true;
+
+                }
+                else
+                {
+                    jsonResponse.Success = false;
+                    jsonResponse.Message = "0";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                jsonResponse.Message = "Ocurrio un error, por favor intente de nuevo o más tarde.";
+            }
+
+            return JsonConvert.SerializeObject(jsonResponse);
+        }
+
+        /// <summary>
+        /// obtiene sub Imagen
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult GetImageAlternativa(int id)
+        public ActionResult ObtenerSubImagen(int id)
         {
             var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
-            if (firstOrDefault.Image != null)
-            {
-                byte[] image = firstOrDefault.Image;
-                return File(image, "image/jpg");
-            }
-            else
-            {
-                return null;
-            }
+            
+                if (firstOrDefault!=null && firstOrDefault.Image != null)
+                {
+                    byte[] image = firstOrDefault.Image;
+                    return File(image, "image/jpg");
+                }
+                else
+                {
+                    return null;
+                }     
+            
         }
 
-       
     }
 }

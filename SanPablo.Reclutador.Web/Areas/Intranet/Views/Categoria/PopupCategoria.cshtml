@@ -54,14 +54,15 @@
                         }
                     });
                 },
-             colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', 'Tipo'],
+             colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', '','Tipo'],
              colModel: [
                      { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                      { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left', hidden: true },
                      { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
                      { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
-                     { name: 'Tipo', index: 'Tipo', align: 'left', width: 90 }
+                     { name: 'Tipo', index: 'Tipo', align: 'left', width: 90, hidden:true },
+                     { name: 'TipoDes', index: 'TipoDes', align: 'left', width: 90 }
 
              ],
              pager: jQuery('#grdPagerCategoriaPopup'),
