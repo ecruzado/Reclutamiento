@@ -88,9 +88,13 @@
             if ("02".Equals(model.tipoModel))
             {
 
-                objJsonMensage.Mensaje = "Ingrese una imagen";
-                objJsonMensage.Resultado= false;
-                return Json(objJsonMensage);
+                if (model.Alternativa.RutaDeImagen == null)
+                {
+                    objJsonMensage.Mensaje = "Ingrese una imagen";
+                    objJsonMensage.Resultado = false;
+                    return Json(objJsonMensage);     
+                }
+               
             }
 
 
