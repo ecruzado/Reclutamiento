@@ -21,11 +21,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public Examen Examen { get; set; }
         public SubCategoria SubCategoria { get; set; }
         public string IndVisual { get; set; }
+        
         public Alternativa Alternativa { get; set; }
         public List<DetalleGeneral> TipoCategoria { get; set; }
         public List<DetalleGeneral> TipoEjemplo { get; set; }
         public List<DetalleGeneral> TipoCriterio { get; set; }
         public List<DetalleGeneral> TipoEstado { get; set; }
+
+        public string NombreTempImgCategoria { get; set; }
 
         public HttpPostedFileBase image { get; set; }
     }
