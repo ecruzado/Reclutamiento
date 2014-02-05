@@ -7,6 +7,8 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -30,8 +32,7 @@
                                 function (respuesta) {
                                     if (respuesta.msj) {
                                         $("#updateDialog").dialog("close");
-                                        location.reload(true);
-
+                                        $('#grdListCompetencias').trigger('reloadGrid');
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
@@ -52,6 +53,32 @@
 $(function(){    
     $("#txtfechainicio").datepicker();
     $("#txtfechafin").datepicker();
+
+    jQuery("#grdListCompetencias").jqGrid({
+        url: '@Url.Action("ListarCompetencias", "Cargo")',
+        datatype: 'json',
+        mtype: 'POST',
+        colNames: ['Descripci&oacuten'],
+        colModel: [
+                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
+        ],
+        sortname: 'DescripcionCompetencia',
+        sortorder: 'desc',
+        viewrecords: true,
+        cellEdit: true,
+        height: 120,
+        width: 898,
+        rowNum: 0,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        postData: {
+
+        },
+        loadComplete: function (data) {
+
+        }
+    });
+
 
     jQuery("#grdListFunciones").jqGrid({
         url: '@Url.Action("ListaFunciones", "SolicitudCargo")',
@@ -81,32 +108,7 @@ $(function(){
         }
     });
 
-    jQuery("#grdListCompetencias").jqGrid({
-        url: '@Url.Action("ListaCompetencias", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Descripci&oacuten'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                                                
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 120,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
-
-        },
-        loadComplete: function (data) {
-
-        }
-    });
+    
 
     jQuery("#grdListOfrecemos").jqGrid({
         url: '@Url.Action("ListaOfrecemos", "SolicitudCargo")',

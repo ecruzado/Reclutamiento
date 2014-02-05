@@ -22,8 +22,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int EdadInicio { get; set; }
         public virtual int EdadFin { get; set; }
         public virtual int PuntajeEdad { get; set; }
-        public virtual int SalarioInicial { get; set; }
-        public virtual int SalarioFin { get; set; }
+        public virtual int TipoRangoSalarial { get; set; }
         public virtual string TipoMoneda { get; set; }
         public virtual int PuntajeSalario { get; set; }
         public virtual string IndicadorVerSalario { get; set; }
@@ -53,8 +52,6 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual int PuntajeTotalConocimientoGeneral { get; set; }
         public virtual int PuntajeMinimoConocimientoGeneral { get; set; }
-        public virtual int PuntajeTotalConocimientoIdioma { get; set; }
-        public virtual int PuntajeMinimoConocimientoIdioma { get; set; }
         public virtual int PuntajeTotalDiscapacidad { get; set; }
         public virtual int PuntajeMinimoDiscapacidad { get; set; }
         public virtual int PuntajeTotalHorario { get; set; }
@@ -65,21 +62,19 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntajeMinimoExamen { get; set; }
         public virtual int CantidadPreseleccionados { get; set; }
                
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public virtual DateTime FechaPublicacion { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public virtual DateTime FechaExpiracion { get; set; }
-
         public virtual string EstadoActivo { get; set; }
 
 
         public Cargo()
         {
+            Competencias = new List<CompetenciaCargo>();
             
-            
+        }
+
+        public virtual void agregarCompetencia(CompetenciaCargo competenciaCargo)
+        {
+            competenciaCargo.Cargo = this;
+            Competencias.Add(competenciaCargo);
         }
             
     }

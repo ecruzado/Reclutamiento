@@ -3,7 +3,7 @@
     Layout = "";
 }
 
-@using (Html.BeginForm("Edit", "Cargo", FormMethod.Post, new { @id = "competenciasForm" }))
+@using (Html.BeginForm("Competencias", "Cargo", FormMethod.Post, new { @id = "competenciasForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
