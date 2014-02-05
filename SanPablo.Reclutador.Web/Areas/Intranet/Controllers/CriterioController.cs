@@ -534,7 +534,10 @@
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
-
+            if (fullPath != null)
+            {
+                System.IO.File.Delete(fullPath);
+            }
             //return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
             return Json(objJsonMessage);
 
