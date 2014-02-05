@@ -15,8 +15,8 @@
             Map(x => x.EstadoActivo, "ESTACTIVO");
 
             Map(x => x.DescripcionCompetencia).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCompetencia + " AND DG.VALOR = TIPCOMPETEN AND DG.ESTACTIVO = 'A' )");
-            
-            Table("CATEGORIA");
+
+            Table("COMPETENCIAS_CARGO");
 
         }
     }

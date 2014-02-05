@@ -22,13 +22,15 @@
         private ICentroEstudioCargoRepository _centroEstudioCargoRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private ICompetenciaCargoRepository _competenciaCargoRepository;
+        private IOfrecemosCargoRepository _ofrecemosCargoRepository;
         
 
         public CargoController(ICargoRepository cargoRepository,
                                 INivelAcademicoCargoRepository nivelAcademicoRepository,
                                 ICentroEstudioCargoRepository centroEstudiosRepository,
                                 IDetalleGeneralRepository detalleGeneralRepository,
-                                ICompetenciaCargoRepository competenciaCargoRepository)
+                                ICompetenciaCargoRepository competenciaCargoRepository,
+                                IOfrecemosCargoRepository ofrecemosCargoRepository)
         {
             _cargoRepository = cargoRepository;
             _nivelAcademicoCargoRepository = nivelAcademicoRepository;
@@ -329,18 +331,19 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                DetachedCriteria where = DetachedCriteria.For<CompetenciaCargo>();
+                DetachedCriteria where = DetachedCriteria.For<OfrecemosCargo>();
                 where.Add(Expression.Eq("Cargo.IdeCargo", 1));
 
-                var generic = Listar(_competenciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var generic = Listar(_ofrecemosCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.IdeCompetenciaCargo.ToString(),
+                        id = item.IdeOfrecemosCargo.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionCompetencia,
+                                item.IdeOfrecemosCargo.ToString(),
+                                item.DescripcionOfrecimiento,
                             }
                     }).ToArray();
 
@@ -352,40 +355,40 @@
             }
         }
 
-        public ViewResult Competencia()
-        {
-            var cargoViewModel = InicializarCompetencias();
-            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
-            cargoViewModel.Competencia.Cargo = cargo;
-            return View(cargoViewModel);
+        //public ViewResult Ofrecemos()
+        //{
+        //    var cargoViewModel = InicializarOfrecimientos();
+        //    var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+        //    cargoViewModel.Competencia.Cargo = cargo;
+        //    return View(cargoViewModel);
 
-        }
+        //}
 
-        public CargoViewModel InicializarCompetencias()
-        {
-            var cargoViewModel = new CargoViewModel();
-            cargoViewModel.Competencia = new CompetenciaCargo();
+        //public CargoViewModel InicializarOfrecimientos()
+        //{
+        //    var cargoViewModel = new CargoViewModel();
+        //    cargoViewModel.Competencia = new CompetenciaCargo();
 
-            cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCompetencia));
-            cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+        //    cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCompetencia));
+        //    cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
 
-            return cargoViewModel;
-        }
+        //    return cargoViewModel;
+        //}
 
-        [HttpPost]
-        public ActionResult Competencia([Bind(Prefix = "Competencia")]CompetenciaCargo competenciaCargo)
-        {
-            if (!ModelState.IsValid)
-            {
-                var competenciaViewModel = InicializarCompetencias();
-                competenciaViewModel.Competencia = competenciaCargo;
-                return View("Competencia", competenciaViewModel);
-            }
-            _competenciaCargoRepository.Add(competenciaCargo);
-            return View();
+        //[HttpPost]
+        //public ActionResult Competencia([Bind(Prefix = "Competencia")]CompetenciaCargo competenciaCargo)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var competenciaViewModel = InicializarCompetencias();
+        //        competenciaViewModel.Competencia = competenciaCargo;
+        //        return View("Competencia", competenciaViewModel);
+        //    }
+        //    _competenciaCargoRepository.Add(competenciaCargo);
+        //    return View();
 
-        }
+        //}
         #endregion
     }
 }

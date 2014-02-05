@@ -79,6 +79,32 @@ $(function(){
         }
     });
 
+    jQuery("#grdListOfrecemos").jqGrid({
+        url: '@Url.Action("ListaOfrecemos", "Cargo")',
+        datatype: 'json',
+        mtype: 'POST',
+        colNames: ['Codigo', 'Descripci&oacuten'],
+        colModel: [
+                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
+                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+        ],
+        sortname: 'DescripcionOfrecemos',
+        sortorder: 'desc',
+        viewrecords: true,
+        cellEdit: true,
+        height: 120,
+        width: 898,
+        rowNum: 0,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        postData: {
+
+        },
+        loadComplete: function (data) {
+
+        }
+    });
+
 
     jQuery("#grdListFunciones").jqGrid({
         url: '@Url.Action("ListaFunciones", "SolicitudCargo")',
@@ -110,32 +136,8 @@ $(function(){
 
     
 
-    jQuery("#grdListOfrecemos").jqGrid({
-        url: '@Url.Action("ListaOfrecemos", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Descripci&oacuten'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                                                
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 120,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
+    
 
-        },
-        loadComplete: function (data) {
-
-        }
-    });
 
     jQuery("#grdListHorario").jqGrid({
         url: '@Url.Action("ListaHorario", "SolicitudCargo")',
@@ -732,14 +734,6 @@ $(function(){
                                             </select>
 
                                         </td>
-                                       <!-- <td> <label class="control-label" for="input01">Publicación Sexo</label></td>
-                                        <td>
-                                            <select id="sesexo" class="input-medium">
-                                                <option>Indistinto</option>
-                                                <option>Masculino</option>
-                                                <option>Femenino</option>
-                                            </select> 
-                                        </td> -->
                                         <td>
                                         </td>
                                         <td></td>
@@ -1227,6 +1221,10 @@ $(function(){
         <span id="spanMensaje"></span>
     </div>
 
+<div id="updateDialog2" title="Agregar Ofrecimiento"></div>
+    <div id="divMensaje2">
+        <span id="spanMensaje2"></span>
+    </div>
 
 <div id="modalAprobarRechazar" class="modal hide fade">
     <div class="modal-header">

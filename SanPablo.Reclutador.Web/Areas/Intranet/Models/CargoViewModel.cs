@@ -18,8 +18,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     {
         public Cargo Cargo { get; set; }
         public CompetenciaCargo Competencia { get; set; }
+        public OfrecemosCargo Ofrecimiento { get; set; }
         public NivelAcademicoCargo NivelAcademico { get; set; }
         public CentroEstudioCargo CentroEstudio { get; set; }
         public List<DetalleGeneral> Competencias { get; set; }
+        public List<OfrecemosCargo> Ofrecimientos { get; set; }
     }
 }

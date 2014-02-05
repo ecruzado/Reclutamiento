@@ -283,6 +283,7 @@
       <BrowseToURL>~/Intranet/Cargo/Competencia</BrowseToURL>
     </Content>
     <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Ofrecemos.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
