@@ -46,8 +46,7 @@
                     traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
-                            //RedireccionaCriterio(data.IdDato);
-                            information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                            information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato,data.Accion);
                         }
                         if (!data.Resultado) {
                            
@@ -417,11 +416,16 @@
     
 
 
-    function RedireccionaCriterio(selr) {
+    function RedireccionaCriterio(selr,Accion) {
         var loc = window.location.href
         console.log(loc);
         @*window.location.assign('@Url.Action("Edicion", "Criterio")' + '/' + selr)*@
-        window.location = '@Url.Action("Edicion", "Criterio")';
+        if ("S" == Accion) {
+            window.location = '@Url.Action("Edicion", "Criterio")';
+        } else if ("N" == Accion) {
+            window.location = '@Url.Action("Edicion", "Criterio")' + '/' + selr;
+        }
+       
         @*$.post('@Url.Action("Edicion", "Criterio")'+'?selr=' + selr,
           function (data) {
           }
@@ -442,7 +446,7 @@
     }
    
 
-    function information(selectorDiv, selectorSpan, msg, title, selr) {
+    function information(selectorDiv, selectorSpan, msg, title, selr,accion) {
         $('#' + selectorSpan).html(msg);
         $('#' + selectorDiv).dialog({
             title: title,
@@ -451,7 +455,7 @@
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
-                    RedireccionaCriterio(selr);
+                    RedireccionaCriterio(selr, accion);
                 }
             }
         });

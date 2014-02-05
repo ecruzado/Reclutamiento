@@ -241,7 +241,7 @@
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
 
-        #region Competencia
+        //#region Competencia
 
         [HttpPost]
         public virtual JsonResult ListarCompetencias(GridTable grid)
@@ -283,14 +283,20 @@
             cargoViewModel.Competencia.Cargo = cargo;
             return View(cargoViewModel);
             
+        //}
         }
 
+        //public CargoViewModel InicializarCompetencias()
+        //{
+        //    var cargoViewModel = new CargoViewModel();
+        //    cargoViewModel.Competencia = new CompetenciaCargo();
         public CargoViewModel InicializarCompetencias()
         {
             var cargoViewModel = new CargoViewModel();
             cargoViewModel.Competencia = new CompetenciaCargo();
 
             cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCompetencia));
+        //    cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
 

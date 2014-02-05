@@ -485,9 +485,11 @@
                 model.Criterio.OrdenImpresion = 0;
 
                 _criterioRepository.Add(model.Criterio);
+                objJsonMessage.Accion = "N";
                 objJsonMessage.Resultado = true;
                 objJsonMessage.Mensaje = "Se registro el criterio correctamente";
                 objJsonMessage.IdDato = model.Criterio.IdeCriterio;
+                
             }
             else
             {
@@ -512,6 +514,7 @@
                 }
                 
                 _criterioRepository.Update(objCriterio);
+                objJsonMessage.Accion = "S";
                 objJsonMessage.Resultado = true;
                 objJsonMessage.Mensaje = "Se actualizó el criterio correctamente";
                 objJsonMessage.IdDato = objCriterio.IdeCriterio;
