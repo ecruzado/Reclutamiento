@@ -92,6 +92,10 @@
             RuleFor(x => x.TipoComoSeEntero)
                 .NotEmpty()
                 .WithMessage("Seleccionar como se entero de la convocatoria");
+
+            //RuleFor(x => x.TelefonoFijo)
+            //    .Must()
+            //    .withMessage("Ingresar un número telefonico válido");
         }
     }
 }

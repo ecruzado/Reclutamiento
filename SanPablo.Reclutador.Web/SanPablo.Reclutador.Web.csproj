@@ -150,6 +150,7 @@
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
@@ -275,6 +276,7 @@
     <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\PopupListaCriterio.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\PopupCategoria.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Competencias.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -346,6 +348,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\NotAccess.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Postulante\AgregarFoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

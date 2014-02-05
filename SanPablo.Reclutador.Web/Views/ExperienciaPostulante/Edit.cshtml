@@ -37,9 +37,13 @@
             if (opcion == true){
                 $('#Experiencia_FechaTrabajoFin').val('');
                 $('#Experiencia_FechaTrabajoFin').attr("disabled", "disabled");
+                $('#Experiencia_TiempoDeServicio').attr("disabled", "disabled");
+                $('#Experiencia_TipoMotivoCese').attr("disabled", "disabled");
             }
             else {
                 $('#Experiencia_FechaTrabajoFin').removeAttr("disabled");
+                $('#Experiencia_TiempoDeServicio').removeAttr("disabled");
+                $('#Experiencia_TipoMotivoCese').removeAttr("disabled");
             }
         }
         </script>
@@ -50,22 +54,26 @@
         <a class="close" onclick="hide('mensajeError')" >×</a>
          <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
     </div>
-    <table style="margin-left:30px;">
+    <table style="margin-left:20px;">
         <tr>
             <td class="colEtiqueta">
                 @Html.HiddenFor(model => model.Experiencia.IdeExperienciaPostulante)
-                <label class="etiquetaFormulario" style="width:130px">Empresa <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" style="width:160px">Empresa <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { @style="text-transform: uppercaseM; width:350px"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
                 </div>
             </td>
-        </tr>
+         </tr>
+    </table>
+    
+    <table style="margin-left:20px;">
+      
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" >Cargo <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" style="width:160px">Cargo <span class="text-error" >*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
                     @Html.DropDownListFor(model => model.Experiencia.TipoCargoTrabajo, new SelectList(Model.TipoCargos, "Valor", "Descripcion", Model.Experiencia.TipoCargoTrabajo))
@@ -73,46 +81,42 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.TipoCargoTrabajo )
                 </div>
             </td>
-        </tr> 
-        <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario"> Otro </label>
+                <label class="etiquetaFormulario" style="width:160px"> Otro </label>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id="NombreCargo_otro",@disabled = "disabled", @style="text-transform: uppercase"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreCargoTrabajo )
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="colEtiqueta">
+          </td>
+          <tr>
+              <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Fecha Inicio <span class="text-error">*</span></label>
-            </td>
-            <td class="colInput">
-                @Html.EditorFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker"})
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                    @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="colEtiqueta">
+              </td>
+              <td class="colInput">
+                  @Html.EditorFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker"})
+                  <div class="tex-error" style="font-size:12px;color:red"> 
+                      @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
+                  </div>
+              </td>
+              <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Fecha Fin </label>
-            </td>
-            <td class="colInput">
-                @Html.EditorFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker"})
-                <div class="tex-error" style="font-size:12px;color:red"> 
+              </td>
+              <td class="colInput">
+                  @Html.EditorFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker"})
+                  <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
-                </div>
-            </td>
-            <td>
-                <Label style="display:inline-block; font-size:10pt" for="estudiando">   Actualmente Trabajando</Label>
-                @Html.CheckBoxFor(model => model.Experiencia.ActualmenteTrabajando, new { @id="indActuaTrabajando"})
+                  </div>
+              </td>
+              <td>
+                  <Label style="display:inline-block; font-size:10pt" for="estudiando">   Trabajando</Label>
+                  @Html.CheckBoxFor(model => model.Experiencia.ActualmenteTrabajando, new { @id="indActuaTrabajando"})
                 
-            </td>
-        </tr>
+              </td>
+        </tr> 
         <tr>
+            
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Tiempo de Servicio </label>
             </td>
@@ -122,8 +126,6 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
                 </div>
             </td>
-        </tr>
-        <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Motivo de Cese </label>
             </td>
@@ -133,14 +135,19 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.TipoMotivoCese)
                 </div>
             </td>
-            
         </tr>
+
+        <tr>
+           
+        </tr>
+       
         </table>
+    <section>
         <div>
             <h5> Datos de Referencia</h5>
         </div>
-    
-        <table>
+        <table style="margin-left:20px;">
+       
         <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" style="width:160px" > Nombre de Referencia <span class="text-error">*</span></label>
@@ -151,8 +158,6 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
                 </div>
             </td>
-        </tr>
-        <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" style="width:160px" > Cargo <span class="text-error">*</span></label>
             </td>
@@ -163,6 +168,7 @@
                 </div>
             </td>
         </tr>
+        
         <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Celular de Referencia  </label>
@@ -173,9 +179,6 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
                 </div>
             </td>
-            
-        </tr>
-        <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Correo de Referencia  </label>
             </td>
@@ -185,7 +188,6 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.CorreoReferente)
                 </div>
             </td>
-            
         </tr>
         <tr>
             <td class="colEtiqueta">
@@ -209,4 +211,5 @@
             
         </tr>
         </table>
+        </section>
 }

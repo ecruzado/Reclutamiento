@@ -49,8 +49,15 @@
     <Compile Include="Area.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Categoria.cs" />
+    <Compile Include="CompetenciaCargo.cs" />
     <Compile Include="ConfiguracionAprobacion.cs" />
     <Compile Include="ConocimientoGeneralPostulante.cs" />
+    <Compile Include="Cargo.cs" />
+    <Compile Include="CentroEstudioCargo.cs" />
+    <Compile Include="ConocimientoGeneralCargo.cs" />
+    <Compile Include="UbigeoCargo.cs" />
+    <Compile Include="ExperienciaCargo.cs" />
+    <Compile Include="DiscapacidadCargo.cs" />
     <Compile Include="DiscapacidadPostulante.cs" />
     <Compile Include="Enumeraciones.cs" />
     <Compile Include="Criterio.cs" />
@@ -64,7 +71,9 @@
     <Compile Include="ExamenPorCategoria.cs" />
     <Compile Include="ExperienciaPostulante.cs" />
     <Compile Include="General.cs" />
+    <Compile Include="HorarioCargo.cs" />
     <Compile Include="ItemTabla.cs" />
+    <Compile Include="NivelAcademicoCargo.cs" />
     <Compile Include="NotificacionDeAprobacion.cs" />
     <Compile Include="Opcion.cs" />
     <Compile Include="ParientePostulante.cs" />

@@ -1,0 +1,124 @@
+DROP TABLE CARGO CASCADE CONSTRAINTS
+;
+CREATE TABLE CARGO
+(
+	IDECARGO           NUMBER(8), 
+	IDESEDE            NUMBER(3),
+	NOMCARGO           VARCHAR2(50), 
+	DESCARGO           VARCHAR2(100), 
+	IDEAREA            NUMBER(3), 
+	NUMPOSICION        NUMBER(3), 
+	PUNTPOSTUINTE      NUMBER(2), 
+	SEXO               VARCHAR2(1), 
+	INDSEXO            VARCHAR2(1), 
+	EDADINICIO         NUMBER(8),
+	EDADFIN            NUMBER(2), 
+	PUNTEDAD           NUMBER(2), 
+	SALARIOINICIAL     NUMBER(6,2), 
+	SALARIOFIN         NUMBER(6,2), 
+	TIPMONEDA          VARCHAR2(3), 
+	PUNTSALARIO        NUMBER(2), 
+	INDVERSALARIO      VARCHAR2(1), 
+	INDSEXMASCU        VARCHAR2(1), 
+	INDSEXFEMEN        VARCHAR2(1), 
+	OBJETIVOS          VARCHAR2(255),
+	FUNCIONES          VARCHAR2(255),
+	OBSERVACION        VARCHAR2(255), 
+	PUNTTOTPOSTUINTE   NUMBER(2), 
+	PUNTMINPOSTUINTE   NUMBER(2), 
+	PUNTTOTEDAD        NUMBER(2), 
+	PUNTMINEDAD        NUMBER(2), 
+	PUNTTOTSEXO        NUMBER(2), 
+	PUNTMINSEXO        NUMBER(2), 
+	PUNTTOTSALARIO     NUMBER(2), 
+	PUNTMINSALARIO     NUMBER(2), 
+	PUNTTOTNIVELEST    NUMBER(2), 
+	PUNTMINNIVELEST    NUMBER(2), 
+	PUNTTOTCENTROEST   NUMBER(2), 
+	PUNTMINCENTROEST   NUMBER(2), 
+	PUNTTOTEXPLABORAL  NUMBER(2), 
+	PUNTMINEXPLABORAL  NUMBER(2), 
+	PUNTTOTFUNDESE     NUMBER(2), 
+	PUNTMINFUNDESE     NUMBER(2), 
+	PUNTTOTCONOGEN     NUMBER(2), 
+	PUNTMINCONOGEN     NUMBER(2), 
+	PUNTTOTDISCAPA     NUMBER(2), 
+	PUNTMINDISCAPA     NUMBER(2), 
+	PUNTTOTHORARIO     NUMBER(2), 
+	PUNTMINHORARIO     NUMBER(2), 
+	PUNTTOTUBIGEO      NUMBER(2), 
+	PUNTMINUBIGEO      NUMBER(2), 
+	PUNTTOTEXAMEN      NUMBER(3), 
+	PUNTMINEXAMEN      NUMBER(3), 
+	CANTPRESELEC       NUMBER(3), 
+	FECPUBLICACION     DATE, 
+	FECEXPIRACACION    DATE, 
+	ESTACTIVO          VARCHAR2(1),  
+	USRCREACION        VARCHAR2(15), 
+	FECCREACION        DATE, 
+	USRMODIFICA        VARCHAR2(15),  
+	FECMODIFICA        DATE
+)
+;
+
+COMMENT ON TABLE CARGO IS 'Tabla de cargos';
+COMMENT ON COLUMN CARGO.IDECARGO           IS 'Código identificador del cargo';
+COMMENT ON COLUMN CARGO.IDESEDE            IS 'Identificador de la sede.';
+COMMENT ON COLUMN CARGO.NOMCARGO           IS 'Nombre corto del cargo.';
+COMMENT ON COLUMN CARGO.DESCARGO           IS 'Nombre largo del cargo.';
+COMMENT ON COLUMN CARGO.IDEAREA            IS 'Código del área';
+COMMENT ON COLUMN CARGO.NUMPOSICION        IS 'Número de posiciones del cargo';
+COMMENT ON COLUMN CARGO.PUNTPOSTUINTE      IS 'Puntaje para el postulante interno';
+COMMENT ON COLUMN CARGO.SEXO               IS 'Puntaje para sexo';
+COMMENT ON COLUMN CARGO.INDSEXO            IS 'Indicador de sexo masculino';
+COMMENT ON COLUMN CARGO.EDADFIN            IS 'Rango de edad final para el cargo';
+COMMENT ON COLUMN CARGO.PUNTEDAD           IS 'Puntaje para el rango de edad';
+COMMENT ON COLUMN CARGO.SALARIOINICIAL     IS 'Rango salarial inicial';
+COMMENT ON COLUMN CARGO.SALARIOFIN         IS 'Rango salarial final';
+COMMENT ON COLUMN CARGO.TIPMONEDA          IS 'Código de la moneda del salario (tabla general)';
+COMMENT ON COLUMN CARGO.PUNTSALARIO        IS 'Puntaje correspondiente al rango de salario indicado';
+COMMENT ON COLUMN CARGO.INDVERSALARIO      IS 'Indicador de visualización del salario';
+COMMENT ON COLUMN CARGO.INDSEXMASCU        IS 'Indicador de sexo masculino';
+COMMENT ON COLUMN CARGO.INDSEXFEMEN        IS 'Indicador de sexo femenino';
+COMMENT ON COLUMN CARGO.OBSERVACION        IS 'Observaciones del puesto (sección General)';
+COMMENT ON COLUMN CARGO.PUNTTOTPOSTUINTE   IS 'Puntaje total del postulante interno';
+COMMENT ON COLUMN CARGO.PUNTMINPOSTUINTE   IS 'Puntaje mínimo del postulante interno';
+COMMENT ON COLUMN CARGO.PUNTTOTEDAD        IS 'Puntaje total por la edad';
+COMMENT ON COLUMN CARGO.PUNTMINEDAD        IS 'Puntaje mínimo por la edad';
+COMMENT ON COLUMN CARGO.PUNTTOTSEXO        IS 'Puntaje total por sexo';
+COMMENT ON COLUMN CARGO.PUNTMINSEXO        IS 'Puntaje mínimo para el sexo';
+COMMENT ON COLUMN CARGO.PUNTTOTSALARIO     IS 'Puntaje total rango salarial';
+COMMENT ON COLUMN CARGO.PUNTMINSALARIO     IS 'Puntaje mínimo rango salarial';
+COMMENT ON COLUMN CARGO.PUNTTOTNIVELEST    IS 'Puntaje total nivel de estudios';
+COMMENT ON COLUMN CARGO.PUNTMINNIVELEST    IS 'Puntaje mínimo nivel de estudios';
+COMMENT ON COLUMN CARGO.PUNTTOTCENTROEST   IS 'Puntaje total centro de estudios';
+COMMENT ON COLUMN CARGO.PUNTMINCENTROEST   IS 'Puntaje mínimo centro de estudios';
+COMMENT ON COLUMN CARGO.PUNTTOTEXPLABORAL  IS 'Puntaje total por experiencia laboral';
+COMMENT ON COLUMN CARGO.PUNTMINEXPLABORAL  IS 'Puntaje mínimo por experiencia laboral';
+COMMENT ON COLUMN CARGO.PUNTTOTFUNDESE     IS 'Puntaje total funciones desempeñadas';
+COMMENT ON COLUMN CARGO.PUNTMINFUNDESE     IS 'Puntaje mínimo funciones desempeñadas';
+COMMENT ON COLUMN CARGO.PUNTTOTCONOGEN     IS 'Puntaje total conocimientos generales';
+COMMENT ON COLUMN CARGO.PUNTMINCONOGEN     IS 'Puntaje mínimo conocimientos generales';
+COMMENT ON COLUMN CARGO.PUNTTOTDISCAPA     IS 'Puntaje total discapacidades';
+COMMENT ON COLUMN CARGO.PUNTMINDISCAPA     IS 'Puntaje mínimo discapacidades';
+COMMENT ON COLUMN CARGO.PUNTTOTHORARIO     IS 'Puntaje total horario';
+COMMENT ON COLUMN CARGO.PUNTMINHORARIO     IS 'Puntaje mínimo horario';
+COMMENT ON COLUMN CARGO.PUNTTOTUBIGEO      IS 'Puntaje total ubicación geográfica';
+COMMENT ON COLUMN CARGO.PUNTMINUBIGEO      IS 'Puntaje mínimo ubicación geográfica';
+COMMENT ON COLUMN CARGO.PUNTTOTEXAMEN      IS 'Puntaje total examen';
+COMMENT ON COLUMN CARGO.PUNTMINEXAMEN      IS 'Puntaje mínimo examen';
+COMMENT ON COLUMN CARGO.CANTPRESELEC       IS 'Cantidad de postulantes pre-seleccionados';
+COMMENT ON COLUMN CARGO.FECPUBLICACION     IS 'Fecha de publicación';
+COMMENT ON COLUMN CARGO.FECEXPIRACACION    IS 'Fecha de expiración';
+COMMENT ON COLUMN CARGO.ESTACTIVO          IS 'Estado del Registro ';
+COMMENT ON COLUMN CARGO.USRCREACION        IS 'Usuario que creó el registro';
+COMMENT ON COLUMN CARGO.FECCREACION        IS 'Fecha de creación del registro';
+COMMENT ON COLUMN CARGO.USRMODIFICA        IS 'Usuario que modificó el ';
+
+ALTER TABLE CARGO ADD CONSTRAINT CARGO_PK PRIMARY KEY (IDECARGO);
+
+ALTER TABLE CARGO MODIFY IDECARGO CONSTRAINT CARGO_IDECARGO_NN NOT NULL;
+
+ALTER TABLE CARGO MODIFY IDESEDE  CONSTRAINT CARGO_IDESEDE_NN NOT NULL;
+
+CREATE INDEX CARGO_IDX_1 ON CARGO(IDESEDE);

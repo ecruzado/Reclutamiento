@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
     ViewBag.Title = "Mantenimiento de Cargo";
 }
 @section Head{
@@ -7,6 +8,46 @@
 @section Scripts{
 
 <script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnAgregarCompetencia').click(function () {
+            mostrarAgregarCompetencia();
+        });
+
+
+        $('#updateDialog').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Competencia", "Cargo")',
+                                $("#competenciasForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialog").dialog("close");
+                                        location.reload(true);
+
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+        });
+    });
+
 
 $(function(){    
     $("#txtfechainicio").datepicker();
@@ -392,6 +433,16 @@ $(function(){
 
 });
 
+    function mostrarAgregarCompetencia() {
+        var dialogDiv = $('#updateDialog');
+        $.get('@Url.Action("Competencia", "Cargo")', function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+    }
+
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
@@ -440,6 +491,9 @@ $(function(){
     }
 </script>
 }
+@using (Html.BeginForm("Edit", "Cargo", FormMethod.Post, new { @id = "CargoForm" }))
+    {
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -553,7 +607,7 @@ $(function(){
                             <h6>Objetivos</h6>
                             <div style="clear:both"></div>
                         </div>
-                        <textarea style="width:900px;margin-left:8px;" id="taobjetivos" rows="3" disabled="disabled"></textarea>
+                       @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style="margin: 10px 10px 10px; width: 890px; height: 54px;"})
                         <div class="espacio-division-entre-fieldset"></div>
                         <div class="grilla-opciones">
                             <h6>Funciones</h6>
@@ -561,12 +615,12 @@ $(function(){
                             </div>
                             <div style="clear:both"></div>
                         </div>
-                        <textarea style="width:900px;margin-left:8px;" id="taFunciones" rows="3" disabled="disabled"></textarea>
+                        @Html.TextAreaFor(model => model.Cargo.FuncionCargo,  new { @style="margin: 10px 10px 10px; width: 890px; height: 54px;"})
                         <div class="grilla-opciones">
                             <h6>Competencias</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                                <a id="btnAgregarCompetencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEliminarCompetencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -1163,6 +1217,14 @@ $(function(){
         </div>
     </div>
 </div>
+    
+}
+
+<div id="updateDialog" title="Agregar Competencia"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>
+
 
 <div id="modalAprobarRechazar" class="modal hide fade">
     <div class="modal-header">

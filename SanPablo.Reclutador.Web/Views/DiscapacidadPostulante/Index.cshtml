@@ -85,26 +85,44 @@
                     mostrarEditarDiscapacidad(ideDiscapacidad);
                 }
                 else {
-                    alert("Seleccionar un item a editar");
+                    $("#spanMensaje").html('Seleccionar un item a editar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
                 }
             });
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideDiscapacidad = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-           
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                if (ideDiscapacidad != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
-                $("#divMensaje").dialog({
-                    title: 'CONVOCATORIAS SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); location.reload(true) },
-                        "Cancel": function () { $(this).dialog("close"); }
-                    }
-                });
+                    $("#divMensaje").dialog({
+                        title: 'CONVOCATORIAS SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); location.reload(true) },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
 
-                return false;
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccionar un item a eliminar');
+                    $("#divMensaje").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
         });
