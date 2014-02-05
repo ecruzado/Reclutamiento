@@ -10,5 +10,6 @@ namespace SanPablo.Reclutador.Web.Models.JQGrid
         public bool Resultado { get; set; }
         public string Mensaje { get; set; }
         public object Objeto { get; set; }
+        public int IdDato { get; set; }
     }
 }

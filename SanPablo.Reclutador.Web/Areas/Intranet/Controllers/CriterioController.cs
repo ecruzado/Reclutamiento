@@ -422,6 +422,9 @@
             }
         }
 
+
+        
+
         /// <summary>
         /// Guarda los datos del criterio
         /// </summary>
@@ -432,27 +435,24 @@
         public ActionResult Edit(CriterioViewModel model)
         {
             var criterioViewModel = InicializarCriteriosEdit();
-           
+            JsonMessage objJsonMessage = new JsonMessage();
+
             string fullPath = null;
             if (!ModelState.IsValid){
                 criterioViewModel.Criterio = model.Criterio;
                 return View(criterioViewModel);
             }
 
-            //if ("02".Equals(model.Criterio.TipoModo))
-            //{
-            //    if (model.NombreTemporalArchivo == null)
-            //    {
-            //        Session["MensajeVal"] = "Ingrese una imagen";
-            //        return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
-            //    }
-            //    else
-            //    {
-            //        Session["MensajeVal"] = null;
-            //    }
-              
-            //}
-
+            if ("02".Equals(model.Criterio.TipoModo))
+            {
+                if (model.Criterio.rutaImagen == null)
+                {
+                    objJsonMessage.Resultado = false;
+                    objJsonMessage.Mensaje = "Ingrese una imagen";
+                    return Json(objJsonMessage);
+                }
+            }
+          
            
             model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
 
@@ -485,6 +485,9 @@
                 model.Criterio.OrdenImpresion = 0;
 
                 _criterioRepository.Add(model.Criterio);
+                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "Se registro el criterio correctamente";
+                objJsonMessage.IdDato = model.Criterio.IdeCriterio;
             }
             else
             {
@@ -500,11 +503,18 @@
 
                 if ("02".Equals(model.Criterio.TipoModo))
                 {
-                    objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
-                    objCriterio.rutaImagen = model.Criterio.rutaImagen;
+                    if ( model.Criterio.IMAGENCRIT!=null)
+                    {
+                        objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
+                        objCriterio.rutaImagen = model.Criterio.rutaImagen;     
+                    }
+                   
                 }
                 
                 _criterioRepository.Update(objCriterio);
+                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "Se actualizó el criterio correctamente";
+                objJsonMessage.IdDato = objCriterio.IdeCriterio;
             }
 
             criterioViewModel.IndVisual = Visualicion.SI;
@@ -525,8 +535,8 @@
             criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
 
-            return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
-            //return View("Edit",criterioViewModel);
+            //return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+            return Json(objJsonMessage);
 
         }
 

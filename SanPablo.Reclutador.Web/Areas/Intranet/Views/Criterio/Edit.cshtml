@@ -19,7 +19,7 @@
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
-
+   
     $(document).ready(function () {
         
         @*var mensaje = '@Session["MensajeVal"]';
@@ -34,7 +34,36 @@
             Session.Remove("MensajeVal");
 	    }*@
 
-     
+        
+
+
+        $("#btnGuardarCriterio").click(function () {
+            if ($("#frmCriterio").validate().form()) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Edit", "Criterio")',
+                    data: $("#frmCriterio").serialize(),
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado) {
+                            //RedireccionaCriterio(data.IdDato);
+                            information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                        }
+                        if (!data.Resultado) {
+                           
+                            notificacionExito(data.Mensaje);
+                        }
+
+                    }
+                });
+            };
+          });
+
+
+
+
+
+
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
            
@@ -370,8 +399,6 @@
     }
 
 
-    
-   
     function mostrarAgregarEstudios(id, codCriterio) {
         var dialogDiv = $('#updateDialog');
         
@@ -390,9 +417,46 @@
     
 
 
+    function RedireccionaCriterio(selr) {
+        var loc = window.location.href
+        console.log(loc);
+        @*window.location.assign('@Url.Action("Edicion", "Criterio")' + '/' + selr)*@
+        window.location = '@Url.Action("Edicion", "Criterio")';
+        @*$.post('@Url.Action("Edicion", "Criterio")'+'?selr=' + selr,
+          function (data) {
+          }
+           );
+        return false;*@
+       @* $.ajax({
+            data: {
+                id: selr
+            },
+            type: "POST",
+            url: "@Url.Action("Edicion", "Criterio")",
+            traditional: true,
+            success: function (data) {
 
+            }
+        });*@
 
+    }
+   
 
+    function information(selectorDiv, selectorSpan, msg, title, selr) {
+        $('#' + selectorSpan).html(msg);
+        $('#' + selectorDiv).dialog({
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaCriterio(selr);
+                }
+            }
+        });
+        $('#' + selectorDiv).dialog('open');
+    }
 
 
 </script>
@@ -421,7 +485,9 @@
                          <label class="etiquetaFormulario">Código</label>
                     </td>
                     <td class="colInput">
-                          @Html.HiddenFor(model => model.Criterio.IndPagina)
+                          
+                         @Html.TextBoxFor(model => model.Criterio.IndPagina,  new { style = "display: none;" })
+
                           @*@Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario"})                       *@
                         <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.Criterio.IdeCriterio" readonly="readonly">
                     </td>
@@ -619,7 +685,7 @@
                   }
                   else
                   {
-                    <button  type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>  
+                    <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</a>  
                   }    
             </div>
            
