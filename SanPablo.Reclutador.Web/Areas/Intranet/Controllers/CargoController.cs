@@ -13,7 +13,7 @@
     using FluentValidation.Results;
     using NHibernate.Criterion;
 
-    public class CargoController : Controller
+    public class CargoController : BaseController
     {
         //
         // GET: /Intranet/Cargo/
@@ -21,16 +21,20 @@
         private INivelAcademicoCargoRepository _nivelAcademicoCargoRepository;
         private ICentroEstudioCargoRepository _centroEstudioCargoRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ICompetenciaCargoRepository _competenciaCargoRepository;
+        
 
         public CargoController(ICargoRepository cargoRepository,
                                 INivelAcademicoCargoRepository nivelAcademicoRepository,
                                 ICentroEstudioCargoRepository centroEstudiosRepository,
-                                IDetalleGeneralRepository detalleGeneralRepository)
+                                IDetalleGeneralRepository detalleGeneralRepository,
+                                ICompetenciaCargoRepository competenciaCargoRepository)
         {
             _cargoRepository = cargoRepository;
             _nivelAcademicoCargoRepository = nivelAcademicoRepository;
             _centroEstudioCargoRepository = centroEstudiosRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _competenciaCargoRepository = competenciaCargoRepository;
         }
 
         public ActionResult Index()
@@ -236,27 +240,152 @@
         }
 
         //#region Competencia
-        //public ViewResult Competencia()
-        //{
-        //    var cargoViewModel = InicializarCompetencias();
-        //    var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
-        //    cargoViewModel.Competencia.Cargo = cargo;
-        //    return View(cargoViewModel);
+
+        [HttpPost]
+        public virtual JsonResult ListarCompetencias(GridTable grid)
+        {
+            try
+            {
+                
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                //DetachedCriteria where = DetachedCriteria.For<CompetenciaCargo>();
+                //where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+
+                var generic = Listar(_competenciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaCargo.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        public ViewResult Competencia()
+        {
+            var cargoViewModel = InicializarCompetencias();
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            cargoViewModel.Competencia.Cargo = cargo;
+            return View(cargoViewModel);
             
         //}
+        }
 
         //public CargoViewModel InicializarCompetencias()
         //{
         //    var cargoViewModel = new CargoViewModel();
         //    cargoViewModel.Competencia = new CompetenciaCargo();
+        public CargoViewModel InicializarCompetencias()
+        {
+            var cargoViewModel = new CargoViewModel();
+            cargoViewModel.Competencia = new CompetenciaCargo();
 
-        //    cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
+            cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCompetencia));
         //    cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
 
-        //    return cargoViewModel;
-        //}
+            return cargoViewModel;
+        }
 
-        //#endregion
+        [HttpPost]
+        public ActionResult Competencia([Bind(Prefix = "Competencia")]CompetenciaCargo competenciaCargo)
+        {
+            if (!ModelState.IsValid)
+            {
+                var competenciaViewModel = InicializarCompetencias();
+                competenciaViewModel.Competencia = competenciaCargo;
+                return View("Competencia", competenciaViewModel);
+            }
+                _competenciaCargoRepository.Add(competenciaCargo);
+                return View();
+            
+        }
+
+        #endregion
+
+        #region OfrecemosCargo
+
+        [HttpPost]
+        public virtual JsonResult ListarOfrecemos(GridTable grid)
+        {
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<CompetenciaCargo>();
+                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+
+                var generic = Listar(_competenciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaCargo.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        public ViewResult Competencia()
+        {
+            var cargoViewModel = InicializarCompetencias();
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            cargoViewModel.Competencia.Cargo = cargo;
+            return View(cargoViewModel);
+
+        }
+
+        public CargoViewModel InicializarCompetencias()
+        {
+            var cargoViewModel = new CargoViewModel();
+            cargoViewModel.Competencia = new CompetenciaCargo();
+
+            cargoViewModel.Competencias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCompetencia));
+            cargoViewModel.Competencias.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
+
+            return cargoViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult Competencia([Bind(Prefix = "Competencia")]CompetenciaCargo competenciaCargo)
+        {
+            if (!ModelState.IsValid)
+            {
+                var competenciaViewModel = InicializarCompetencias();
+                competenciaViewModel.Competencia = competenciaCargo;
+                return View("Competencia", competenciaViewModel);
+            }
+            _competenciaCargoRepository.Add(competenciaCargo);
+            return View();
+
+        }
+        #endregion
     }
 }

@@ -20,14 +20,13 @@
             Map(x => x.EdadInicio, "EDADINICIO");
             Map(x => x.EdadFin, "EDADFIN");
             Map(x => x.PuntajeEdad, "PUNTEDAD");
-            Map(x => x.SalarioInicial, "SALARIOINICIAL");
-            Map(x => x.SalarioFin, "SALARIOFIN");
+            Map(x => x.TipoRangoSalarial, "TIPRANGOSALARIO");
             Map(x => x.TipoMoneda, "TIPMONEDA");
             Map(x => x.PuntajeSalario, "PUNTSALARIO");
             Map(x => x.IndicadorVerSalario, "INDVERSALARIO");
-            Map(x => x.ObjetivoCargo, "OBJETIVOS");
-            Map(x => x.FuncionCargo, "FUNCIONES");
-            Map(x => x.ObservacionCargo, "OBSERVACION");
+            Map(x => x.ObjetivoCargo, "OBJETIVOSCARGO");
+            Map(x => x.FuncionCargo, "FUNCIONESCARGO");
+            Map(x => x.ObservacionCargo, "OBSERVACIONCARGO");
 
             Map(x => x.PuntajeTotalPostulanteInterno, "PUNTTOTPOSTUINTE");
             Map(x => x.PuntajeMinimoPostulanteInterno, "PUNTMINPOSTUINTE");
@@ -38,9 +37,9 @@
             Map(x => x.PuntajeTotalSalario, "PUNTTOTSEXO");
             Map(x => x.PuntajeMinimoSalario, "PUNTMINSALARIO");
 
-            //HasMany(x => x.Estudios)
-            //        .Inverse()
-            //        .Cascade.All();
+            HasMany(x => x.Competencias)
+                    .Inverse()
+                    .Cascade.All();
             //HasMany(x => x.Experiencias)
             //        .Inverse()
             //        .Cascade.All();
@@ -71,8 +70,6 @@
             Map(x => x.PuntajeTotalExamen, "PUNTTOTEXAMEN");
             Map(x => x.PuntajeMinimoExamen, "PUNTMINEXAMEN");
             Map(x => x.CantidadPreseleccionados, "CANTPRESELEC");
-            Map(x => x.FechaPublicacion, "FECPUBLICACION");
-            Map(x => x.FechaExpiracion, "FECPUBLICACION");
             Map(x => x.EstadoActivo, "ESTACTIVO");
 
             Table("CARGO");

@@ -51,7 +51,12 @@
         EstadoMant = 3,
         Modo=4,
         TipoCalificacion = 5,
-        TipoCategoria = 1
+        TipoCategoria = 1,
+
+
+        //MANTENIMIENTO CARGO
+
+        TipoCompetencia = 39
 
 
     }
