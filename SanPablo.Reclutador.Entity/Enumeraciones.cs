@@ -56,7 +56,8 @@
 
         //MANTENIMIENTO CARGO
 
-        TipoCompetencia = 39
+        TipoCompetencia = 39,
+        TipoOfrecimiento = 40
 
 
     }

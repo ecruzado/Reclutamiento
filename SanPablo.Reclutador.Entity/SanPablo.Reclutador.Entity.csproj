@@ -55,6 +55,7 @@
     <Compile Include="Cargo.cs" />
     <Compile Include="CentroEstudioCargo.cs" />
     <Compile Include="ConocimientoGeneralCargo.cs" />
+    <Compile Include="OfrecemosCargo.cs" />
     <Compile Include="UbigeoCargo.cs" />
     <Compile Include="ExperienciaCargo.cs" />
     <Compile Include="DiscapacidadCargo.cs" />

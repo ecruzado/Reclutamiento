@@ -3,20 +3,20 @@
     using FluentNHibernate.Mapping;
     using SanPablo.Reclutador.Entity;
 
-    public class CompetenciaCargoMap : ClassMap<CompetenciaCargo>
+    public class OfrecemosCargoMap : ClassMap<OfrecemosCargo>
     {
-        public CompetenciaCargoMap()
+        public OfrecemosCargoMap()
         {
-            Id(x => x.IdeCompetenciaCargo, "IDECOMPETENCIACARGO")
+            Id(x => x.IdeOfrecemosCargo, "IDECOMPETENCIACARGO")
               .GeneratedBy
               .Sequence("IDECOMPETENCIACARGO_SQ");
             References(x => x.Cargo, "IDECARGO");
-            Map(x => x.TipoCompetencia, "TIPCOMPETEN");
+            Map(x => x.TipoOfrecimiento, "TIPOFRECIMIENTO");
             Map(x => x.EstadoActivo, "ESTACTIVO");
 
-            Map(x => x.DescripcionCompetencia).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCompetencia + " AND DG.VALOR = TIPCOMPETEN AND DG.ESTACTIVO = 'A' )");
-            
-            Table("CATEGORIA");
+            Map(x => x.DescripcionOfrecimiento).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoOfrecimiento + " AND DG.VALOR = TIPOFRECIMIENTO AND DG.ESTACTIVO = 'A' )");
+
+            Table("OFRECEMOS_CARGO");
 
         }
     }

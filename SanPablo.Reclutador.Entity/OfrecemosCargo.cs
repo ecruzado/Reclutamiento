@@ -11,6 +11,6 @@ namespace SanPablo.Reclutador.Entity
         public virtual Cargo Cargo { get; set; }
         public virtual string TipoOfrecimiento { get; set; }
         public virtual string EstadoActivo { get; set; }
-        
+        public virtual string DescripcionOfrecimiento { get; set; }
     }
 }
