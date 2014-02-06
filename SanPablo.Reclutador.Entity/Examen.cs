@@ -21,6 +21,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string UsrModificacion { get; set; }
         public virtual DateTime FecModificacion { get; set; }
         public virtual int Duracion { get; set; }
+        public virtual Categoria Categoria { get; set; }
         public virtual IList<Categoria> Categorias { get; set; }
 
         public Examen()

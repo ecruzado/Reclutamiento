@@ -135,7 +135,7 @@
             {
                 model.Alternativa.FechaCreacion = Hoy;
                 model.Alternativa.UsuarioCreacion = "Prueba 01";
-
+                model.Alternativa.ESTACTIVO = "A";
                 _alternativaRepository.Add(model.Alternativa);
                 objJsonMensage.Resultado = true;
                 objJsonMensage.Mensaje = "Se registro el registro correctamente";

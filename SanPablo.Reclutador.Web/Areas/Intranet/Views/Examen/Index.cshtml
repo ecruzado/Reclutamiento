@@ -140,7 +140,9 @@
                 MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
-         });
+        });
+
+
 
         $('#btnActivarDesactivar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -169,6 +171,29 @@
 
         
         
+
+        $('#btnGetPDF').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $.ajax({
+                    data: {
+                        id: selr
+                    },
+                    type: "POST",
+                    url: "@Url.Action("GetExamenPDF", "Examen")",
+                    traditional: true,
+                    success: function (data) {
+                       
+                    }
+                });
+
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
 
 
         $('#btnConsultarExamen').click(function () {
@@ -327,6 +352,7 @@
                 <a  id ="btnEditarExamen" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
                 <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                <a id="btnGetPDF" class="btn btn-danger"><i class="icon-remove icon-white"></i> GetPDF</a>
             </div>
         </div>
     </div>

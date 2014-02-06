@@ -28,13 +28,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ISubcategoriaRepository _subcategoriaRepository;
         private ICriterioRepository _criterioRepository;
         private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
+        private IExamenRepository _examenRepository;
 
         public CategoriaController(ICategoriaRepository categoriaRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
             IAlternativaRepository alternativaRepository,
             ISubcategoriaRepository subcategoriaRepository,
             ICriterioRepository criterioRepository,
-            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository,
+            IExamenRepository examenRepository
             )
         {
             _categoriaRepository = categoriaRepository;
@@ -43,6 +45,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _subcategoriaRepository = subcategoriaRepository;
             _criterioRepository = criterioRepository;
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
+            _examenRepository = examenRepository;
         }
         
         
@@ -849,7 +852,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (id != null && id > 0)
             {
                 objCategoria.Examen.IdeExamen = id;
+                var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == objCategoria.Examen.IdeExamen);
+                objCategoria.Categoria.TipoCriterio = objExamen.TipExamen;
+                
             }
+
+            
+
+
             return View("PopupCategoria", objCategoria);
            
         }

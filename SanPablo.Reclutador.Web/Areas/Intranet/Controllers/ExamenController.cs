@@ -541,12 +541,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult GetExamenPDF(string id)
         {
             JsonMessage objJsonMessage = new JsonMessage();
-            
+
+            Examen objExamen;
+            Categoria objCategoria;
+            SubCategoria objSubCategoria;
+            Criterio objCriterio;
+            Alternativa objAlternativa;
+
             try
             {
-                var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
-                 // _examenRepository.Remove(objExamen);
-               
+                //var objListaExamen = _examenRepository.GetBy(x => x.IdeExamen == Convert.ToInt32(id));
+                // // _examenRepository.Remove(objExamen);
+                //foreach (Examen listaExamen in objListaExamen)
+                //{
+                //    var objListaExamenxCat = _examenPorCategoriaRepository.GetBy(ec => ec.IdeExamenxCategoria == listaExamen.IdeExamen);
+
+                //    foreach (ExamenPorCategoria listaExamenxCategoria in objListaExamenxCat)
+                //    {
+                //        var objListaSubCat = _subcategoriaRepository.GetBy()
+                //    }
+
+                //}
                 
                 
                 objJsonMessage.Resultado = true;
