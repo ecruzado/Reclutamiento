@@ -17,6 +17,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Data;
+    using System.Configuration;
+    using CrystalDecisions.Shared;
+    using CrystalDecisions.CrystalReports.Engine;
+    using CrystalDecisions.CrystalReports;
+    using CrystalDecisions.Web;
 
     public class ExamenController : BaseController
     {
@@ -533,52 +539,46 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         /// <summary>
-        /// obtiene el examen en formato PDF
+        /// obtiene el archivo PDF
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+     
         public ActionResult GetExamenPDF(string id)
         {
             JsonMessage objJsonMessage = new JsonMessage();
-
-            Examen objExamen;
-            Categoria objCategoria;
-            SubCategoria objSubCategoria;
-            Criterio objCriterio;
-            Alternativa objAlternativa;
+            string fullPath = null;
+            ReportDocument rep = new ReportDocument();
+            MemoryStream mem;
+            //Examen objExamen;
+            //Categoria objCategoria;
+            //SubCategoria objSubCategoria;
+            //Criterio objCriterio;
+            //Alternativa objAlternativa;
 
             try
             {
-                //var objListaExamen = _examenRepository.GetBy(x => x.IdeExamen == Convert.ToInt32(id));
-                // // _examenRepository.Remove(objExamen);
-                //foreach (Examen listaExamen in objListaExamen)
-                //{
-                //    var objListaExamenxCat = _examenPorCategoriaRepository.GetBy(ec => ec.IdeExamenxCategoria == listaExamen.IdeExamen);
+               
+                DataTable dtResultado = _examenRepository.getDataRepExamen(Convert.ToInt32(id));
 
-                //    foreach (ExamenPorCategoria listaExamenxCategoria in objListaExamenxCat)
-                //    {
-                //        var objListaSubCat = _subcategoriaRepository.GetBy()
-                //    }
-
-                //}
                 
-                
-                objJsonMessage.Resultado = true;
-                objJsonMessage.Mensaje = "Se elimino el registro";
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ExamenReport.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
 
+                rep.Load(fullPath);
+                rep.Database.Tables["DtExamen"].SetDataSource(dtResultado);
 
+                mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+             
             }
             catch (Exception)
             {
-
-                objJsonMessage.Resultado = false;
-                objJsonMessage.Mensaje = "Error al eliminar el registro";
+                return MensajeError();
             }
-
-
-
-            return Json(objJsonMessage);
+            return File(mem, "application/pdf");   
+           
         }
 
         

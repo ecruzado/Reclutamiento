@@ -385,6 +385,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Archivos\Imagenes\" />
+    <Folder Include="Archivos\Pdf\" />
     <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>
