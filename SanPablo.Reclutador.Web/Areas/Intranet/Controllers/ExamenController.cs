@@ -532,6 +532,40 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJsonMessage);
         }
 
+        /// <summary>
+        /// obtiene el examen en formato PDF
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetExamenPDF(string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            
+            try
+            {
+                var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
+                 // _examenRepository.Remove(objExamen);
+               
+                
+                
+                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "Se elimino el registro";
+
+
+            }
+            catch (Exception)
+            {
+
+                objJsonMessage.Resultado = false;
+                objJsonMessage.Mensaje = "Error al eliminar el registro";
+            }
+
+
+
+            return Json(objJsonMessage);
+        }
+
         
 
     }
