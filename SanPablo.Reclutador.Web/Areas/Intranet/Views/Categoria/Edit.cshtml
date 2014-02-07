@@ -279,10 +279,6 @@
         });
         
 
-
-
-
-
         $('#updateDialog').dialog({
             autoOpen: false,
             width: 600,
@@ -291,16 +287,18 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $.post("/Intranet/Categoria/PopupSubCategoria",
-                    $("#frmPopupSubCategoria").serialize(),
-                        function (data) {
-                            $("#updateDialog").dialog("close");
-                            $("#updateDialog").html(data);
-                            $("#Categoria_TIEMPO").val(data.IdDato);
-                            $('#grdList').trigger('reloadGrid');
+                    $('#ValSubCat').dialog('open');
+                    //$.post("/Intranet/Categoria/PopupSubCategoria",
+                    //$("#frmPopupSubCategoria").serialize(),
+                    //    function (data) {
+                    //        $("#updateDialog").dialog("close");
+                    //        $("#updateDialog").html(data);
+                    //        $("#Categoria_TIEMPO").val(data.IdDato);
+                    //        $('#grdList').trigger('reloadGrid');
                             
-                        }
-                    );
+                    //    }
+                    //);
+
 
                 },
                 "Cancelar": function () {
@@ -308,6 +306,34 @@
                 }
             }
         });
+
+
+        $("#spanValSubCat").html("¿Desea agregar la subCategoría?")
+        $('#ValSubCat').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    $.post("/Intranet/Categoria/PopupSubCategoria",
+                    $("#frmPopupSubCategoria").serialize(),
+                        function (data) {
+                            $("#ValSubCat").dialog("close");
+                            $("#updateDialog").dialog("close");
+                            $("#updateDialog").html(data);
+                            $("#Categoria_TIEMPO").val(data.IdDato);
+                            $('#grdList').trigger('reloadGrid');
+
+                        }
+                    );
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
 
 
         $('#criterioDialog').dialog({
@@ -318,22 +344,23 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $.ajax({
-                        data: {
-                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
-                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+                    $('#ValCriterio').dialog('open');
+                    //$.ajax({
+                    //    data: {
+                    //        test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                    //        subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
                             
-                        },
-                        type: "POST",
-                        url: "/Intranet/Criterio/GetListaCriterio",
-                        traditional: true,
-                        success: function(){
-                           // $(this).dialog("close");
-                             $('#grdListCriterio').trigger('reloadGrid');
+                    //    },
+                    //    type: "POST",
+                    //    url: "/Intranet/Criterio/GetListaCriterio",
+                    //    traditional: true,
+                    //    success: function(){
+                    //       // $(this).dialog("close");
+                    //         $('#grdListCriterio').trigger('reloadGrid');
                             
                            
-                        }
-                    });
+                    //    }
+                    //});
 
                 },
                 "Cancelar": function () {
@@ -341,6 +368,39 @@
                 }
             }
         });
+
+
+        $("#spanValCriterio").html("¿Desea agregar los criterios?")
+        $('#ValCriterio').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    $.ajax({
+                        data: {
+                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+
+                        },
+                        type: "POST",
+                        url: "/Intranet/Criterio/GetListaCriterio",
+                        traditional: true,
+                        success: function () {
+                            $('#ValCriterio').dialog("close");
+                            $('#criterioDialog').dialog("close");
+                            $('#grdListCriterio').trigger('reloadGrid');
+
+
+                        }
+                    });
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
 
 
         jQuery("#grdList").jqGrid({
@@ -1170,6 +1230,18 @@
 <div id="divMensaje">
         <span id="spnMensaje"></span>
 </div>
+
+
+<div id="ValSubCat">
+        <span id="spanValSubCat"></span>
+</div>
+
+<div id="ValCriterio">
+        <span id="spanValCriterio"></span>
+</div>
+
+
+
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
 <div id="dlgsubirarchivoimagen">
     <table style="width: 100%">      
