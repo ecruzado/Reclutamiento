@@ -346,14 +346,15 @@
                     competenciaViewModel.Competencia = competenciaCargo;
                     return View("Competencia", competenciaViewModel);
                 }
-                var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+                //var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
                 competenciaCargo.EstadoActivo = "A";
                 competenciaCargo.FechaCreacion = FechaCreacion;
                 competenciaCargo.UsuarioCreacion = "YO";
                 competenciaCargo.FechaModificacion = FechaCreacion;
-                //competenciaCargo.Cargo = new Cargo();
-                //competenciaCargo.Cargo.IdeCargo = 1;
-                cargo.agregarCompetencia(competenciaCargo);
+                competenciaCargo.Cargo = new Cargo();
+                competenciaCargo.Cargo.IdeCargo = IdeCargo;
+
+                //cargo.agregarCompetencia(competenciaCargo);
                 _competenciaCargoRepository.Add(competenciaCargo);
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -368,7 +369,20 @@
             }
         }
 
-       // #endregion
+        
+        [HttpPost]
+        public ActionResult eliminarCompetencia(int ideCompetencia)
+        {
+            ActionResult result = null;
+
+            var competenciaEliminar = new CompetenciaCargo();
+            competenciaEliminar = _competenciaCargoRepository.GetSingle(x => x.IdeCompetenciaCargo == ideCompetencia);
+            _competenciaCargoRepository.Remove(competenciaEliminar);
+            
+            return result;
+        }
+
+        #endregion
 
         #region OFRECEMOS CARGO
 
@@ -427,18 +441,53 @@
         }
 
         [HttpPost]
-        public ActionResult Ofrecemos([Bind(Prefix = "Ofrecemos")]OfrecemosCargo ofrecemosCargo)
+        public ActionResult Ofrecemos([Bind(Prefix = "Ofrecimiento")]OfrecemosCargo ofrecemosCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var OfrecemosViewModel = InicializarOfrecimientos();
-                OfrecemosViewModel.Ofrecimiento = ofrecemosCargo;
-                return View("Ofrecemos", OfrecemosViewModel);
+                if (!ModelState.IsValid)
+                {
+                    var OfrecemosViewModel = InicializarOfrecimientos();
+                    OfrecemosViewModel.Ofrecimiento = ofrecemosCargo;
+                    return View("Ofrecemos", OfrecemosViewModel);
+                }
+                ofrecemosCargo.EstadoActivo = "A";
+                ofrecemosCargo.FechaCreacion = FechaCreacion;
+                ofrecemosCargo.UsuarioCreacion = "YO";
+                ofrecemosCargo.FechaModificacion = FechaCreacion;
+                ofrecemosCargo.Cargo = new Cargo();
+                ofrecemosCargo.Cargo.IdeCargo = IdeCargo;
+
+                //cargo.agregarCompetencia(competenciaCargo);
+                _ofrecemosCargoRepository.Add(ofrecemosCargo);
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
             }
-            _ofrecemosCargoRepository.Add(ofrecemosCargo);
-            return View();
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
+
+        [HttpPost]
+        public ActionResult eliminarOfrecimiento(int ideOfrecimiento)
+        {
+            ActionResult result = null;
+
+            var ofrecimientoEliminar = new OfrecemosCargo();
+            ofrecimientoEliminar = _ofrecemosCargoRepository.GetSingle(x => x.IdeOfrecemosCargo == ideOfrecimiento);
+            _ofrecemosCargoRepository.Remove(ofrecimientoEliminar);
+
+            return result;
+        }
+
         #endregion
 
         #region HORARIOS
@@ -464,7 +513,7 @@
                         id = item.IdeHorarioCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoHorario,
+                                item.DescripcionHorario,
                                 item.PuntajeHorario.ToString(),
                             }
                     }).ToArray();
@@ -477,24 +526,61 @@
             }
         }
 
-        public ActionResult Horario()
+        public ActionResult Horario(string id)
         {
             var horariosViewModel = inicializarHorarios();
+            if (id != "0")
+            {
+                var horarioCargo =   _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == Convert.ToInt32(id));              
+                horariosViewModel.Horario = horarioCargo;
+            }
             return View(horariosViewModel);
         }
 
         [HttpPost]
         public ActionResult Horario([Bind(Prefix = "Horario")]HorarioCargo horarioCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var horarioViewModel = inicializarHorarios();
-                horarioViewModel.Horario = horarioCargo;
-                return View("Horario", horarioViewModel);
-            }
-            _horarioCargoRepository.Add(horarioCargo);
+                if (!ModelState.IsValid)
+                {
+                    var horarioViewModel = inicializarHorarios();
+                    horarioViewModel.Horario = horarioCargo;
+                    return View("Horario", horarioViewModel);
+                }
+                if (horarioCargo.IdeHorarioCargo == 0)
+                {
+                    horarioCargo.EstadoActivo = "A";
+                    horarioCargo.FechaCreacion = FechaCreacion;
+                    horarioCargo.UsuarioCreacion = "YO";
+                    horarioCargo.FechaModificacion = FechaCreacion;
+                    horarioCargo.Cargo = new Cargo();
+                    horarioCargo.Cargo.IdeCargo = IdeCargo;
 
-            return View();
+                    _horarioCargoRepository.Add(horarioCargo);
+                }
+                else
+                {
+                    var horarioCargoActualizar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == horarioCargo.IdeHorarioCargo);
+                    horarioCargoActualizar.TipoHorario = horarioCargo.TipoHorario;
+                    horarioCargoActualizar.PuntajeHorario = horarioCargo.PuntajeHorario;
+                    horarioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    horarioCargoActualizar.FechaModificacion = FechaModificacion;
+                    _horarioCargoRepository.Update(horarioCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
         public CargoViewModel inicializarHorarios()
@@ -507,6 +593,19 @@
 
             return cargoViewModel;
         }
+
+        [HttpPost]
+        public ActionResult eliminarHorario(int ideHorario)
+        {
+            ActionResult result = null;
+
+            var horarioEliminar = new HorarioCargo();
+            horarioEliminar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == ideHorario);
+            _horarioCargoRepository.Remove(horarioEliminar);
+
+            return result;
+        }
+
 
         #endregion
 
@@ -548,30 +647,68 @@
             }
         }
 
-        public ActionResult Ubigeo()
+        public ActionResult Ubigeo(string id)
         {
             var ubigeoViewModel = inicializarUbigeos();
+            if (id != "0")
+            {
+                ubigeoViewModel.Ubigeo = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeo == Convert.ToInt32(id));
+            }
             return View(ubigeoViewModel);
         }
 
         [HttpPost]
-        public ActionResult Ubigeo([Bind(Prefix = "Ubigeo")]UbigeoCargo ubigeoCargo)
+        //public ActionResult Ubigeo([Bind(Prefix = "Ubigeo")]UbigeoCargo ubigeoCargo)
+        public ActionResult Ubigeo(UbigeoViewModel ubigeoCargo)
         {
-            if (!ModelState.IsValid)
-            {
-                var ubigeoViewModel = inicializarUbigeos();
-                ubigeoViewModel.Ubigeo = ubigeoCargo;
-                return View("Ubigeo", ubigeoViewModel);
-            }
-            _ubigeoCargoRepository.Add(ubigeoCargo);
+            return null;
+            //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            //JsonMessage objJsonMessage = new JsonMessage();
+            //try
+            //{
+            //    if (!ModelState.IsValid)
+            //    {
+            //        var ubigeoViewModel = inicializarUbigeos();
+            //        ubigeoViewModel.Ubigeo = ubigeoCargo;
+            //        return View("Ubigeo", ubigeoViewModel);
+            //    }
+            //    if (ubigeoCargo.IdeUbigeoCargo == 0)
+            //    {
+            //        ubigeoCargo.EstadoActivo = "A";
+            //        ubigeoCargo.FechaCreacion = FechaCreacion;
+            //        ubigeoCargo.UsuarioCreacion = "YO";
+            //        ubigeoCargo.FechaModificacion = FechaCreacion;
+            //        ubigeoCargo.Cargo = new Cargo();
+            //        ubigeoCargo.Cargo.IdeCargo = IdeCargo;
 
-            return View();
+            //        _ubigeoCargoRepository.Add(ubigeoCargo);
+            //    }
+            //    else
+            //    {
+            //        var ubigeoCargoActualizar = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeoCargo == ubigeoCargo.IdeUbigeoCargo);
+            //        ubigeoCargoActualizar.IdeUbigeo = ubigeoCargo.IdeUbigeo;
+            //        ubigeoCargoActualizar.PuntajeUbigeo = ubigeoCargo.PuntajeUbigeo;
+            //        ubigeoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+            //        ubigeoCargoActualizar.FechaModificacion = FechaModificacion;
+            //        _ubigeoCargoRepository.Update(ubigeoCargoActualizar);
+            //    }
+
+            //    objJsonMessage.Mensaje = "Agregado Correctamente";
+            //    objJsonMessage.Resultado = true;
+            //    return Json(objJsonMessage);
+            //}
+            //catch (Exception ex)
+            //{
+            //    objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+            //    objJsonMessage.Resultado = false;
+            //    return Json(objJsonMessage);
+            //}
 
         }
-        public CargoViewModel inicializarUbigeos()
+        public UbigeoViewModel inicializarUbigeos()
         {
-            var cargoViewModel = new CargoViewModel();
-            cargoViewModel.Cargo = new Cargo();
+            var cargoViewModel = new UbigeoViewModel();
+            //cargoViewModel.Cargo = new Cargo();
             cargoViewModel.Ubigeo = new UbigeoCargo();
 
             cargoViewModel.Departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x=>x.IdeUbigeoPadre == null));
@@ -596,6 +733,17 @@
             return result;
         }
 
+        [HttpPost]
+        public ActionResult eliminarUbigeo(int ideUbigeo)
+        {
+            ActionResult result = null;
+
+            var ubigeoEliminar = new UbigeoCargo();
+            ubigeoEliminar = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeo == ideUbigeo);
+            _ubigeoCargoRepository.Remove(ubigeoEliminar);
+
+            return result;
+        }
         #endregion
 
         #region NIVEL ACADEMICO

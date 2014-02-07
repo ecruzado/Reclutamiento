@@ -162,6 +162,7 @@
     <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
     <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />

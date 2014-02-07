@@ -25,7 +25,7 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#competenciasForm').valid();
                     if (result) {
                         $.post('@Url.Action("Competencia", "Cargo")',
                                 $("#competenciasForm").serialize(),
@@ -35,18 +35,53 @@
                                         $('#grdListCompetencias').trigger('reloadGrid');
                                     }
                                     else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                        notificacionError(respuesta.Mensaje);
                                     }
                                 }
                             );
-                        }
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+                        
+                    }
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
                 }
         });
+
+        // btn Eliminar
+        $('#btnEliminarCompetencia').click(function () {
+            var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
+            alert(ideCompetencia);
+            if (ideCompetencia != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+
 
         $('#btnAgregarOfrecimiento').click(function () {
             mostrarAgregarOfrecimiento();
@@ -61,21 +96,25 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#ofrecemosForm').valid();
                     if (result) {
                         $.post('@Url.Action("Ofrecemos", "Cargo")',
                                 $("#ofrecemosForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog2").dialog("close");
                                         $('#grdListOfrecemos').trigger('reloadGrid');
                                     }
                                     else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                        notificacionError(respuesta.Mensaje)
+                                        
                                     }
                                 }
                             );
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+
                     }
                 },
                 "Cancelar": function () {
@@ -83,6 +122,34 @@
                 }
             }
         });
+
+        $('#btnEliminarOfrecimiento').click(function () {
+            var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
+            if (ideOfrecimiento != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
 
         $('#btnAgregarHorario').click(function () {
             mostrarAgregarHorario();
@@ -97,21 +164,24 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#horariosForm').valid();
                     if (result) {
                         $.post('@Url.Action("Horario", "Cargo")',
                                 $("#horariosForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialogHorario").dialog("close");
                                         $('#grdListHorario').trigger('reloadGrid');
                                     }
                                     else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                        notificacionError(respuesta.Mensaje);
                                     }
                                 }
                             );
+                    }
+                    else {
+                        notificacionError("Seleccionar un Horario");
+
                     }
                 },
                 "Cancelar": function () {
@@ -120,12 +190,59 @@
             }
         });
 
-        $('#btnAgregarUbigeo').click(function () {
+
+        $('#btnEditarHorario').click(function () {
+            var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
+            if (ideHorario != null) {
+                mostrarEditarHorario(ideHorario);
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a editar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarHorario').click(function () {
+            var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
+            if (ideHorario != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarHorario(ideHorario); $(this).dialog("close"); $('#grdListHorario').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+       $('#btnAgregarUbigeo').click(function () {
             mostrarAgregarUbigeo();
         });
 
 
-        $('#updateDialogUbigeo').dialog({
+       $('#updateDialogUbigeo').dialog({
             autoOpen: false,
             width: 600,
             resizable: false,
@@ -133,26 +250,73 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#ubigeosForm').valid();
                     if (result) {
                         $.post('@Url.Action("Ubigeo", "Cargo")',
                                 $("#ubigeosForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialogUbigeo").dialog("close");
                                         $('#grdListUbigeo').trigger('reloadGrid');
                                     }
                                     else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                        notificacionError(respuesta.Mensaje);
                                     }
                                 }
                             );
+                    }
+                    else {
+                        notificacionError("Ingresar todos los datos");
                     }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
+            }
+        });
+
+        $('#btnEditarUbigeo').click(function () {
+            var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
+            if (ideUbigeo != null) {
+                mostrarEditarUbigeo(ideUbigeo);
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a editar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarUbigeo').click(function () {
+            var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
+            if (ideUbigeo != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
             }
         });
 
@@ -473,7 +637,7 @@ $(function(){
             colNames: ['Descripci&oacuten', 'Puntaje'],
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: true },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: false },
 
             ],
             sortname: 'IdeHorarioCargo',
@@ -502,7 +666,7 @@ $(function(){
                 { name: 'Departamento', index: 'Departamento', align: 'left', editable: false, sortable: false },
                 { name: 'Provincia', index: 'Provincia', align: 'left', editable: false, sortable: false },
                 { name: 'Distrito', index: 'Distrito', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
         ],
         sortname: 'IdeUbigeoCargo',
         sortorder: 'desc',
@@ -762,6 +926,14 @@ $(function(){
             return false;
     }
 
+    function eliminarCompetencia(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarCompetencia","Cargo")',
+                data: { ideCompetencia: id },
+            });
+    }
 
     function mostrarAgregarOfrecimiento() {
         var dialogDiv = $('#updateDialog2');
@@ -773,9 +945,18 @@ $(function(){
         return false;
     }
 
+    function eliminarOfrecimiento(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarOfrecimiento","Cargo")',
+            data: { ideOfrecimiento: id },
+        });
+    }
+
     function mostrarAgregarHorario() {
         var dialogDiv = $('#updateDialogHorario');
-        $.get('@Url.Action("Horario", "Cargo")', function (data) {
+        $.get('@Url.Action("Horario", "Cargo", new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogHorario"));
             dialogDiv.dialog('open');
@@ -783,14 +964,52 @@ $(function(){
         return false;
     }
 
+    function mostrarEditarHorario(ideHorario) {
+        var dialogDiv = $('#updateDialogHorario');
+        $.get('@Url.Action("Horario", "Cargo")', {id : ideHorario},  function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarHorario(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarHorario","Cargo")',
+                data: { ideHorario: id },
+            });
+        }
+
     function mostrarAgregarUbigeo() {
         var dialogDiv = $('#updateDialogUbigeo');
-        $.get('@Url.Action("Ubigeo", "Cargo")', function (data) {
+        $.get('@Url.Action("Ubigeo", "Cargo", new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogUbigeo"));
             dialogDiv.dialog('open');
         });
         return false;
+    }
+
+    function mostrarEditarUbigeo(ideUbigeo) {
+        var dialogDiv = $('#updateDialogUbigeo');
+        $.get('@Url.Action("Ubigeo", "Cargo")', { id: ideUbigeo }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogUbigeo"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarUbigeo(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarUbigeo","Cargo")',
+            data: { ideUbigeo: id },
+        });
     }
 
     function mostrarAgregarNivelAcademico() {

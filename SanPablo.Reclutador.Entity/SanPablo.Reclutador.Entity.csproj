@@ -90,6 +90,10 @@
     <Compile Include="Validation\AlternativaValidator.cs" />
     <Compile Include="Validation\CategoriaValidator.cs" />
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
+    <Compile Include="Validation\CompetenciaCargoValidator.cs" />
+    <Compile Include="Validation\UbigeoCargoValidator.cs" />
+    <Compile Include="Validation\HorarioCargoValidator.cs" />
+    <Compile Include="Validation\OfrecemosCargoValidator.cs" />
     <Compile Include="Validation\DiscapacidadPostulanteValidaton.cs" />
     <Compile Include="Validation\CriterioValidator.cs" />
     <Compile Include="Validation\EstudioPostulanteValidator.cs" />

@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UbigeoViewModel
 @{
     Layout = "";
 }
@@ -8,7 +8,6 @@
                
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
-            alert(ideDepartamento);
             $("select#Ubigeo_IdeUbigeo").empty();
             $("select#Ubigeo_IdeUbigeo").append("<option value='00'> Seleccionar </option>");
             $.ajax({
@@ -60,14 +59,12 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                @Html.HiddenFor(model => model.Ubigeo.IdeUbigeoCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Departamento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos))
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
-                </div>
+                
             </td>
         </tr>
         <tr>
@@ -76,9 +73,7 @@
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias))
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
-                </div>
+                
             </td>
         </tr>
         <tr>
@@ -88,7 +83,7 @@
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Ubigeo.IdeUbigeo, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Ubigeo.IdeUbigeo))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.Ubigeo.IdeUbigeo)
                 </div>
             </td>
        </tr>
@@ -97,7 +92,10 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
-                @Html.TextBoxFor(model => model.Horario.PuntajeHorario, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.Ubigeo.PuntajeUbigeo, new {@class="input-xxmini" })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Ubigeo.PuntajeUbigeo)
+                </div>
            </td>
        </tr>  
     </table>
