@@ -13,8 +13,12 @@
 @using (Html.BeginForm("PopupSubCategoria", "Categoria", FormMethod.Post, new { id = "frmPopupSubCategoria" }))
 {
     @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.Categoria.IDECATEGORIA)
-    @Html.HiddenFor(model => model.SubCategoria.IDESUBCATEGORIA)
+    @Html.TextBoxFor(model => model.Categoria.IDECATEGORIA, new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.SubCategoria.IDESUBCATEGORIA, new { style = "display: none;" })
+
+    
+    
+    
 
     <table style="margin-left:30px;">
         <tr >
@@ -38,6 +42,18 @@
                @Html.TextBoxFor(model => model.SubCategoria.DESCSUBCATEGORIA, new { @maxlength = "100" })
                <div class="tex-error" style="font-size:12px;color:red">   
                @Html.ValidationMessageFor(model => model.SubCategoria.DESCSUBCATEGORIA)
+               </div>
+            </td>
+        </tr>
+         <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setDesc">Duración(Min)<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+
+               @Html.TextBoxFor(model => model.SubCategoria.TIEMPO, new { @maxlength = "5" })
+               <div class="tex-error" style="font-size:12px;color:red">   
+               @Html.ValidationMessageFor(model => model.SubCategoria.TIEMPO)
                </div>
             </td>
         </tr>

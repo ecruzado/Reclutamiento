@@ -12,7 +12,7 @@
   <xs:element name="dsExamen" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsExamen" msprop:Generator_UserDSName="dsExamen">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="DtExamen" msprop:Generator_TableClassName="DtExamenDataTable" msprop:Generator_TableVarName="tableDtExamen" msprop:Generator_TablePropName="DtExamen" msprop:Generator_RowDeletingName="DtExamenRowDeleting" msprop:Generator_RowChangingName="DtExamenRowChanging" msprop:Generator_RowEvHandlerName="DtExamenRowChangeEventHandler" msprop:Generator_RowDeletedName="DtExamenRowDeleted" msprop:Generator_UserTableName="DtExamen" msprop:Generator_RowChangedName="DtExamenRowChanged" msprop:Generator_RowEvArgName="DtExamenRowChangeEvent" msprop:Generator_RowClassName="DtExamenRow">
+        <xs:element name="DtExamen" msprop:Generator_TableClassName="DtExamenDataTable" msprop:Generator_TableVarName="tableDtExamen" msprop:Generator_RowChangedName="DtExamenRowChanged" msprop:Generator_TablePropName="DtExamen" msprop:Generator_RowDeletingName="DtExamenRowDeleting" msprop:Generator_RowChangingName="DtExamenRowChanging" msprop:Generator_RowEvHandlerName="DtExamenRowChangeEventHandler" msprop:Generator_RowDeletedName="DtExamenRowDeleted" msprop:Generator_RowClassName="DtExamenRow" msprop:Generator_UserTableName="DtExamen" msprop:Generator_RowEvArgName="DtExamenRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="IDEEXAMEN" msprop:Generator_ColumnVarNameInTable="columnIDEEXAMEN" msprop:Generator_ColumnPropNameInRow="IDEEXAMEN" msprop:Generator_ColumnPropNameInTable="IDEEXAMENColumn" msprop:Generator_UserColumnName="IDEEXAMEN" type="xs:string" minOccurs="0" />
@@ -40,6 +40,10 @@
               <xs:element name="IMAGE" msprop:Generator_ColumnVarNameInTable="columnIMAGE" msprop:Generator_ColumnPropNameInRow="IMAGE" msprop:Generator_ColumnPropNameInTable="IMAGEColumn" msprop:Generator_UserColumnName="IMAGE" type="xs:base64Binary" minOccurs="0" />
               <xs:element name="ALTERNATIVA" msprop:Generator_ColumnVarNameInTable="columnALTERNATIVA" msprop:Generator_ColumnPropNameInRow="ALTERNATIVA" msprop:Generator_ColumnPropNameInTable="ALTERNATIVAColumn" msprop:Generator_UserColumnName="ALTERNATIVA" type="xs:string" minOccurs="0" />
               <xs:element name="ESTACTIVO" msprop:Generator_ColumnVarNameInTable="columnESTACTIVO" msprop:Generator_ColumnPropNameInRow="ESTACTIVO" msprop:Generator_ColumnPropNameInTable="ESTACTIVOColumn" msprop:Generator_UserColumnName="ESTACTIVO" type="xs:string" minOccurs="0" />
+              <xs:element name="ORDENSUB" msprop:Generator_ColumnVarNameInTable="columnORDENSUB" msprop:Generator_ColumnPropNameInRow="ORDENSUB" msprop:Generator_ColumnPropNameInTable="ORDENSUBColumn" msprop:Generator_UserColumnName="ORDENSUB" type="xs:string" minOccurs="0" />
+              <xs:element name="ORDENCRIT" msprop:Generator_ColumnVarNameInTable="columnORDENCRIT" msprop:Generator_ColumnPropNameInRow="ORDENCRIT" msprop:Generator_ColumnPropNameInTable="ORDENCRITColumn" msprop:Generator_UserColumnName="ORDENCRIT" type="xs:string" minOccurs="0" />
+              <xs:element name="TIEMPOCAT" msprop:Generator_ColumnVarNameInTable="columnTIEMPOCAT" msprop:Generator_ColumnPropNameInRow="TIEMPOCAT" msprop:Generator_ColumnPropNameInTable="TIEMPOCATColumn" msprop:Generator_UserColumnName="TIEMPOCAT" type="xs:int" minOccurs="0" />
+              <xs:element name="TIMPOEXAMEN" msprop:Generator_ColumnVarNameInTable="columnTIMPOEXAMEN" msprop:Generator_ColumnPropNameInRow="TIMPOEXAMEN" msprop:Generator_ColumnPropNameInTable="TIMPOEXAMENColumn" msprop:Generator_UserColumnName="TIMPOEXAMEN" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

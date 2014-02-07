@@ -14,7 +14,7 @@
 
     public interface IExamenRepository : IRepository<Examen>
     {
-
+        int getTiempoExamen(int idExamen);
         DataTable getDataRepExamen(int idExamen);
     }
 }

@@ -17,6 +17,13 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.DESCSUBCATEGORIA)
                 .NotEmpty()
                 .WithMessage("Ingresar descripción subCategoría");
+
+            RuleFor(x => x.TIEMPO)
+                .NotEqual(0)
+                .WithMessage("Ingresar el periodo de duracíon");
+
+       
+            
            
         }
 

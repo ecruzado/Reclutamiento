@@ -329,6 +329,14 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             private global::System.Data.DataColumn columnESTACTIVO;
             
+            private global::System.Data.DataColumn columnORDENSUB;
+            
+            private global::System.Data.DataColumn columnORDENCRIT;
+            
+            private global::System.Data.DataColumn columnTIEMPOCAT;
+            
+            private global::System.Data.DataColumn columnTIMPOEXAMEN;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DtExamenDataTable() {
@@ -564,6 +572,38 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ORDENSUBColumn {
+                get {
+                    return this.columnORDENSUB;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ORDENCRITColumn {
+                get {
+                    return this.columnORDENCRIT;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TIEMPOCATColumn {
+                get {
+                    return this.columnTIEMPOCAT;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TIMPOEXAMENColumn {
+                get {
+                    return this.columnTIMPOEXAMEN;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -624,7 +664,11 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         byte[] IMAGENCRIT, 
                         byte[] IMAGE, 
                         string ALTERNATIVA, 
-                        string ESTACTIVO) {
+                        string ESTACTIVO, 
+                        string ORDENSUB, 
+                        string ORDENCRIT, 
+                        int TIEMPOCAT, 
+                        int TIMPOEXAMEN) {
                 DtExamenRow rowDtExamenRow = ((DtExamenRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         IDEEXAMEN,
@@ -651,7 +695,11 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         IMAGENCRIT,
                         IMAGE,
                         ALTERNATIVA,
-                        ESTACTIVO};
+                        ESTACTIVO,
+                        ORDENSUB,
+                        ORDENCRIT,
+                        TIEMPOCAT,
+                        TIMPOEXAMEN};
                 rowDtExamenRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDtExamenRow);
                 return rowDtExamenRow;
@@ -699,6 +747,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 this.columnIMAGE = base.Columns["IMAGE"];
                 this.columnALTERNATIVA = base.Columns["ALTERNATIVA"];
                 this.columnESTACTIVO = base.Columns["ESTACTIVO"];
+                this.columnORDENSUB = base.Columns["ORDENSUB"];
+                this.columnORDENCRIT = base.Columns["ORDENCRIT"];
+                this.columnTIEMPOCAT = base.Columns["TIEMPOCAT"];
+                this.columnTIMPOEXAMEN = base.Columns["TIMPOEXAMEN"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -754,6 +806,14 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnALTERNATIVA);
                 this.columnESTACTIVO = new global::System.Data.DataColumn("ESTACTIVO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnESTACTIVO);
+                this.columnORDENSUB = new global::System.Data.DataColumn("ORDENSUB", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnORDENSUB);
+                this.columnORDENCRIT = new global::System.Data.DataColumn("ORDENCRIT", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnORDENCRIT);
+                this.columnTIEMPOCAT = new global::System.Data.DataColumn("TIEMPOCAT", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIEMPOCAT);
+                this.columnTIMPOEXAMEN = new global::System.Data.DataColumn("TIMPOEXAMEN", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIMPOEXAMEN);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1296,6 +1356,70 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ORDENSUB {
+                get {
+                    try {
+                        return ((string)(this[this.tableDtExamen.ORDENSUBColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ORDENSUB\' in table \'DtExamen\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtExamen.ORDENSUBColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ORDENCRIT {
+                get {
+                    try {
+                        return ((string)(this[this.tableDtExamen.ORDENCRITColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ORDENCRIT\' in table \'DtExamen\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtExamen.ORDENCRITColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int TIEMPOCAT {
+                get {
+                    try {
+                        return ((int)(this[this.tableDtExamen.TIEMPOCATColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIEMPOCAT\' in table \'DtExamen\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtExamen.TIEMPOCATColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int TIMPOEXAMEN {
+                get {
+                    try {
+                        return ((int)(this[this.tableDtExamen.TIMPOEXAMENColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIMPOEXAMEN\' in table \'DtExamen\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtExamen.TIMPOEXAMENColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIDEEXAMENNull() {
                 return this.IsNull(this.tableDtExamen.IDEEXAMENColumn);
             }
@@ -1592,6 +1716,54 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetESTACTIVONull() {
                 this[this.tableDtExamen.ESTACTIVOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsORDENSUBNull() {
+                return this.IsNull(this.tableDtExamen.ORDENSUBColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetORDENSUBNull() {
+                this[this.tableDtExamen.ORDENSUBColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsORDENCRITNull() {
+                return this.IsNull(this.tableDtExamen.ORDENCRITColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetORDENCRITNull() {
+                this[this.tableDtExamen.ORDENCRITColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTIEMPOCATNull() {
+                return this.IsNull(this.tableDtExamen.TIEMPOCATColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIEMPOCATNull() {
+                this[this.tableDtExamen.TIEMPOCATColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTIMPOEXAMENNull() {
+                return this.IsNull(this.tableDtExamen.TIMPOEXAMENColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIMPOEXAMENNull() {
+                this[this.tableDtExamen.TIMPOEXAMENColumn] = global::System.Convert.DBNull;
             }
         }
         

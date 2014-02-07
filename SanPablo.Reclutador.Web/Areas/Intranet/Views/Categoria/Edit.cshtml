@@ -22,6 +22,8 @@
     $(document).ready(function () {
 
 
+       
+
 
        @* var cMensajeVal = '@Session["MensajeVal"]';
         if (cMensajeVal != null && cMensajeVal.length > 0) {
@@ -299,9 +301,11 @@
                     $.post("/Intranet/Categoria/PopupSubCategoria",
                     $("#frmPopupSubCategoria").serialize(),
                         function (data) {
+                            $("#updateDialog").dialog("close");
                             $("#updateDialog").html(data);
+                            $("#Categoria_TIEMPO").val(data.IdDato);
                             $('#grdList').trigger('reloadGrid');
-                           
+                            
                         }
                     );
 
@@ -350,7 +354,7 @@
             url: '@Url.Action("ListaSubCategoria", "Categoria")' + '?idCategoria=' + $("#Categoria_IDECATEGORIA").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión','Duración(Min)','Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
 
                     { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
@@ -358,6 +362,7 @@
                     { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 200 },
                     { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
                     { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
+                    { name: 'TIEMPO', index: 'TIEMPO', align: 'left', sortable: false, width: 110 },
                     { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false , width: 110},
                     { name: 'USRCREACION', index: 'USRCREACION', align: 'left', sortable: false, width: 180 },
                     { name: 'FECMODIFICACION', index: 'FECMODIFICACION', align: 'left', sortable: false, width: 130 },
@@ -388,8 +393,7 @@
 
             },
             loadComplete: function (data) {
-               // $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
-                // $("#grdList").jqGrid('resetSelection');
+               
                 if (flag == 0) {
                     $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
                     
@@ -397,15 +401,17 @@
                     $('#grdList').resetSelection().setSelection(flag, true);
 
                 }
-               // $("#grdListCriterio").trigger('reloadGrid');
+               
                 $('#grdListCriterio').trigger('reloadGrid');
                 $('#grdListCriterioxAlternativa').trigger('reloadGrid');
+
+                
                 
                
             }
         });
 
-        //$("#Categoria_TEXTOEJEMPLO").hide();
+       
         
         var dato = '@Session["Tipo"]';
         if (dato == 1) {
@@ -1006,7 +1012,14 @@
                             </div>
                         
                     </td>
-                    </tr>
+                     <td class="span5">
+                            <label class="control-label" for="inputSuccess">Duración(Min)</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" })  
+                            </div>
+                    </td>
+                    
+                </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                             

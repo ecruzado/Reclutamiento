@@ -19,6 +19,7 @@
             Map(x => x.FECCREACION,      "FECCREACION");
             Map(x => x.USRMODIFICACION,  "USRMODIFICACION");
             Map(x => x.FECMODIFICACION,  "FECMODIFICACION");
+            Map(x => x.TIEMPO, "TIEMPO");
             Table("SUBCATEGORIA");
            
         }

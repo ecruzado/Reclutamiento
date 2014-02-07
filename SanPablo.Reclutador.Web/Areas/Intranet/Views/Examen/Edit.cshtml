@@ -134,7 +134,7 @@
          postData: {
          },
          loadComplete: function (data) {
-
+             getTiempoExamen();
          }
 
 
@@ -146,9 +146,29 @@
     function DetalleFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
-        var strImg = '<a href="../Archivos/Categoria.pdf"><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver detalle" alt="Ver detalle"></a>';
-        return strImg;
+        var strImg = '<a target="_blank" href=' + '@Url.Action("GetExamenPDF", "Examen")' + '/' + rowObject[0] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver detalle" alt="Ver detalle"></a>';
+         return strImg;
+
     }
+
+    function getTiempoExamen() {
+        var codigoExamen = $("#Examen_IdeExamen").val();
+
+        $.ajax({
+            data: {
+                id: codigoExamen
+            },
+            type: "POST",
+            url: "@Url.Action("getTiempoExamen", "Examen")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    $("#Examen_Duracion").val(data.IdDato);
+                }
+            }
+        });
+    }
+
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -211,8 +231,7 @@
                     <label class="control-label" for="inputSuccess">Código</label>
                     <div class="controles">
                         <input id="Examen_IdeExamen" name="Examen.IdeExamen" type="text" value="@Model.Examen.IdeExamen" readonly="readonly" > 
-                    
-                    
+                   
                     </div>
                         
                     </td>

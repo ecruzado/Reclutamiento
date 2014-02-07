@@ -218,6 +218,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 System.IO.File.Delete(fullPath);
             }
 
+            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == categoriaViewModel.Categoria.IDECATEGORIA);
+            int contTiempo = 0;
+            if (objLista != null)
+            {
+                foreach (SubCategoria item in objLista)
+                {
+                    contTiempo = contTiempo + item.TIEMPO;
+                }
+            }
+            
+            categoriaViewModel.Categoria.TIEMPO = contTiempo;
+
             return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
 
 
@@ -229,7 +241,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             
             SubCategoriaValidator objSubCategoriaValidate = new SubCategoriaValidator();
-            ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA");
+            ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA","TIEMPO");
+            JsonMessage objJsonMessge = new JsonMessage();
+
 
             if (!result.IsValid)
             {
@@ -251,6 +265,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
                 objCategoriaModel.SubCategoria.ORDENIMPRESION = model.SubCategoria.ORDENIMPRESION;
+                objCategoriaModel.SubCategoria.TIEMPO = model.SubCategoria.TIEMPO;
                 _subcategoriaRepository.Update(objCategoriaModel.SubCategoria);
             }
             else
@@ -265,6 +280,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
+                objCategoriaModel.SubCategoria.TIEMPO = model.SubCategoria.TIEMPO;
 
                 var listaCategoria = _subcategoriaRepository.GetBy(s => s.Categoria.IDECATEGORIA == Convert.ToInt32(model.Categoria.IDECATEGORIA));
                 int maxOrdenImp = 0;
@@ -279,7 +295,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 _subcategoriaRepository.Add(objCategoriaModel.SubCategoria);
             }
 
-            return View(objCategoriaModel);
+            
+            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == objCategoriaModel.SubCategoria.Categoria.IDECATEGORIA);
+            int contTiempo = 0;
+            if (objLista!=null)
+            {
+                foreach (SubCategoria item in objLista)
+                {
+                    contTiempo = contTiempo + item.TIEMPO;
+                }
+            }
+
+            objJsonMessge.IdDato = contTiempo;
+
+            return Json(objJsonMessge);
            
         }
 
@@ -335,18 +364,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             {
                                
                                 item.IDESUBCATEGORIA.ToString(),
-                                item.ESTACTIVO,
-                                item.NOMSUBCATEGORIA,
-                                item.DESCSUBCATEGORIA,
-                                item.ORDENIMPRESION.ToString(),
-                                item.FECCREACION.ToString(),
-                                item.USRCREACION,
-                                item.FECMODIFICACION.ToString(),
-                                item.USRMODIFICACION
+                                item.ESTACTIVO==null?"":item.ESTACTIVO,
+                                item.NOMSUBCATEGORIA==null?"":item.NOMSUBCATEGORIA,
+                                item.DESCSUBCATEGORIA==null?"":item.DESCSUBCATEGORIA,
+                                item.ORDENIMPRESION==null?"":item.ORDENIMPRESION.ToString(),
+                                item.TIEMPO==null?"":item.TIEMPO.ToString(),
+                                item.FECCREACION==null?"":item.FECCREACION.ToString(),
+                                item.USRCREACION==null?"":item.USRCREACION.ToString(),
+                                item.FECMODIFICACION==null?"":item.FECMODIFICACION.ToString(),
+                                item.USRMODIFICACION==null?"":item.FECMODIFICACION.ToString()
                                 
                             }
                 }).ToArray();
 
+                
+                
+                
                 return Json(generic.Value);
             }
             catch (Exception ex)
@@ -625,7 +658,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             CategoriaViewModel model;
             model = new CategoriaViewModel();
-
+           
 
             model = InicializarCategoriaEdit();
             model.Categoria = new Categoria();
@@ -638,6 +671,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
             model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
             model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
+
+            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+            int contTiempo = 0;
+            if (objLista != null)
+            {
+                foreach (SubCategoria item in objLista)
+                {
+                    contTiempo = contTiempo + item.TIEMPO;
+                }
+            }
+
+            model.Categoria.TIEMPO = contTiempo;
             
             Session["AccionCategoria"] = Accion.Editar;
             Session["Tabla1"] = Grilla.Tabla1;
