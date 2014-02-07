@@ -1,0 +1,66 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
+    Layout = "";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+               
+        
+    });
+</script>
+
+
+
+@using (Html.BeginForm("Ofimatica", "Cargo", FormMethod.Post, new { @id = "ofimaticaForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Conocimiento.TipoConocimientoOfimatica, new SelectList(Model.TipoConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoConocimientoOfimatica))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                </div>
+            </td> 
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Descripción <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                 @Html.DropDownListFor(model => model.Conocimiento.TipoNombreOfimatica, new SelectList(Model.DescripcionConocimiento, "Valor", "Descripcion", Model.Conocimiento.TipoNombreOfimatica))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Nivel de Conocimiento <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                 @Html.DropDownListFor(model => model.Conocimiento.TipoNivelConocimiento, new SelectList(Model.NivelesConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoNivelConocimiento))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                </div>
+            </td>
+        </tr>
+       <tr>
+           <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+           </td>
+           <td>
+                @Html.TextBoxFor(model => model.Conocimiento.PuntajeConocimiento, new {@class="input-xxmini" })
+           </td>
+       </tr>  
+    </table>
+}

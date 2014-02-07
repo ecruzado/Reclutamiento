@@ -13,8 +13,8 @@
             References(x => x.Cargo, "IDECARGO");
             Map(x => x.TipoHorario, "TIPHORARIO");
             Map(x => x.PuntajeHorario, "PUNTHORARIO");
-            Map(x => x.EstadoACtivo, "ESTACTIVO");
-            Table("CRITERIO");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
+            Table("HORARIO_CARGO");
 
         }
     }

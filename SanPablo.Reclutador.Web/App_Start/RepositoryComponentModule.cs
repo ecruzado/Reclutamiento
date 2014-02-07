@@ -71,6 +71,23 @@
             builder.RegisterType<CentroEstudioCargoRepository>()
                 .As<ICentroEstudioCargoRepository>();
 
+            builder.RegisterType<OfrecemosCargoRepository>()
+                .As<IOfrecemosCargoRepository>();
+
+            builder.RegisterType<HorarioCargoRepository>()
+                .As<IHorarioCargoRepository>();
+
+            builder.RegisterType<UbigeoCargoRepository>()
+                .As<IUbigeoCargoRepository>();
+
+            builder.RegisterType<ConocimientoGeneralCargoRepository>()
+                .As<IConocimientoGeneralCargoRepository>();
+
+            builder.RegisterType<ExperienciaCargoRepository>()
+                .As<IExperienciaCargoRepository>();
+
+            builder.RegisterType<DiscapacidadCargoRepository>()
+                .As<IDiscapacidadCargoRepository>();
 
         }
     }

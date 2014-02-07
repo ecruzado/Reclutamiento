@@ -23,7 +23,8 @@
             Map(x => x.TipoRangoSalarial, "TIPRANGOSALARIO");
             Map(x => x.TipoMoneda, "TIPMONEDA");
             Map(x => x.PuntajeSalario, "PUNTSALARIO");
-            Map(x => x.IndicadorVerSalario, "INDVERSALARIO");
+            Map(x => x.PuntajeSexo, "PUNTSEXO");
+            Map(x => x.IndicadorSalario, "INDVERSALARIO");
             Map(x => x.ObjetivoCargo, "OBJETIVOSCARGO");
             Map(x => x.FuncionCargo, "FUNCIONESCARGO");
             Map(x => x.ObservacionCargo, "OBSERVACIONCARGO");
@@ -40,15 +41,15 @@
             HasMany(x => x.Competencias)
                     .Inverse()
                     .Cascade.All();
-            //HasMany(x => x.Experiencias)
-            //        .Inverse()
-            //        .Cascade.All();
-            //HasMany(x => x.Parientes)
-            //        .Inverse()
-            //        .Cascade.All();
-            //HasMany(x => x.Discapacidades)
-            //        .Inverse()
-            //        .Cascade.All();
+            HasMany(x => x.Ofrecimientos)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.Horarios)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.Ubigeos)
+                    .Inverse()
+                    .Cascade.All();
 
             Map(x => x.PuntajeTotalNivelEstudio, "PUNTTOTNIVELEST");
             Map(x => x.PuntajeMinimoNivelEstudio, "PUNTMINNIVELEST");

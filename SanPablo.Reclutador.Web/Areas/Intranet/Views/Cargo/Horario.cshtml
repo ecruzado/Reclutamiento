@@ -3,7 +3,7 @@
     Layout = "";
 }
 
-@using (Html.BeginForm("Competencias", "Cargo", FormMethod.Post, new { @id = "competenciasForm" }))
+@using (Html.BeginForm("Horario", "Cargo", FormMethod.Post, new { @id = "horariosForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
@@ -13,14 +13,17 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @Html.HiddenFor(model => model.Competencia.IdeCompetenciaCargo)
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Competencias <span class="text-error">*</span></label>
+                @Html.HiddenFor(model => model.Cargo.IdeCargo)
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Horarios <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Competencia.TipoCompetencia, new SelectList(Model.Competencias, "Valor", "Descripcion", Model.Competencia.TipoCompetencia))
+                @Html.DropDownListFor(model => model.Horario.TipoHorario, new SelectList(Model.Horarios, "Valor", "Descripcion", Model.Horario.TipoHorario))
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
                 </div>
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Horario.PuntajeHorario, new {@class="input-xxmini" })
             </td>
         </tr>  
     </table>

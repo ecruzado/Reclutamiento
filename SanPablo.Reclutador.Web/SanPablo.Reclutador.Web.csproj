@@ -63,6 +63,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -284,6 +287,15 @@
     </Content>
     <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Cargo\Ofrecemos.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Horario.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Ubigeo.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\NivelAcademico.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\CentroEstudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Ofimatica.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Idioma.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\OtrosConocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\Cargo\Discapacidad.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

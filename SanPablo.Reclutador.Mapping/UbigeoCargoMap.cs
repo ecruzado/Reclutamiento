@@ -7,7 +7,9 @@
     {
         public UbigeoCargoMap()
         {
-            Id(m => m.IdeUbigeoCargo, "IDEUBIGEOCARGO");
+            Id(m => m.IdeUbigeoCargo, "IDEUBIGEOCARGO")
+                .GeneratedBy
+                .Sequence("IDEUBIGEOCARGO_SQ");
             References(x => x.Cargo, "IDECARGO");
             Map(x => x.IdeUbigeo, "IDEUBIGEO");
             Map(x => x.PuntajeUbigeo, "PUNTUBIGEO");
