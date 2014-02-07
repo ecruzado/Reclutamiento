@@ -82,10 +82,23 @@ namespace SanPablo.Reclutador.Test.Repository
         [TestMethod]
         public void Test_formula()
         {
-            var repository = new CriterioRepository(NHibernateHelper.OpenSession());
+            //var repository = new CriterioRepository(NHibernateHelper.OpenSession());
 
-            var lista = repository.GetPaging("IdeCriterio", true, 0, 100, null);
+            //var lista = repository.GetPaging("IdeCriterio", true, 0, 100, null);
+            var repository = new CompetenciasCargoRepository(NHibernateHelper.OpenSession());
+            var cargoRepository = new CargoRepository(NHibernateHelper.OpenSession());
+            var cargo = cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            CompetenciaCargo competenciaCargo = new CompetenciaCargo();
+            competenciaCargo.EstadoActivo = "A";
+            competenciaCargo.FechaCreacion = DateTime.Now;
+            competenciaCargo.UsuarioCreacion = "YO";
+            //competenciaCargo.Cargo = new Cargo();
+            //competenciaCargo.Cargo.IdeCargo = 1;
+            //competenciaCargo.Cargo = cargo;
+            cargo.agregarCompetencia(competenciaCargo);
 
+            
+            repository.Add(competenciaCargo);
         }
 
         [TestMethod]

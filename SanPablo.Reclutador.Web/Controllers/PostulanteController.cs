@@ -371,6 +371,7 @@
             result = Json(listaResultado);
             return result;
         }
+
         [HttpPost]
         public ViewResult subirFoto()
         {

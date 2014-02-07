@@ -7,7 +7,7 @@ using System.Web;
 
 namespace SanPablo.Reclutador.Entity
 {
-    public class CentroEstudioCargo
+    public class CentroEstudioCargo : BaseEntity
     {
         public virtual int IdeCentroEstudioCargo { get; set; }
         public virtual Cargo Cargo { get; set; }

@@ -22,13 +22,19 @@ namespace SanPablo.Reclutador.Entity
         public virtual int EdadInicio { get; set; }
         public virtual int EdadFin { get; set; }
         public virtual int PuntajeEdad { get; set; }
+        public virtual int PuntajeSexo { get; set; }
         public virtual int TipoRangoSalarial { get; set; }
         public virtual string TipoMoneda { get; set; }
         public virtual int PuntajeSalario { get; set; }
-        public virtual string IndicadorVerSalario { get; set; }
+        public virtual string IndicadorSalario { get; set; }
+        public virtual string TipoRequerimiento { get; set; }
 
         public virtual IList<CompetenciaCargo> Competencias { get; set; }
-        
+        public virtual IList<OfrecemosCargo> Ofrecimientos { get; set; }
+        public virtual IList<HorarioCargo> Horarios { get; set; }
+        public virtual IList<UbigeoCargo> Ubigeos { get; set; }
+        public virtual IList<ConocimientoGeneralCargo> Conocimientos { get; set; }
+
         public virtual string ObjetivoCargo { get; set; }
         public virtual string FuncionCargo { get; set; }
         public virtual string ObservacionCargo { get; set; }
@@ -64,10 +70,42 @@ namespace SanPablo.Reclutador.Entity
                
         public virtual string EstadoActivo { get; set; }
 
+        public virtual bool IndicadorSexoRanking
+        {
+            get
+            {
+                return IndicadorSexo == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorSexo = Indicador.Si;
+                else
+                    IndicadorSexo = Indicador.No;
+            }
+        }
 
+        public virtual bool IndicadorSalarioRanking
+        {
+            get
+            {
+                return IndicadorSalario == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorSalario = Indicador.Si;
+                else
+                    IndicadorSalario = Indicador.No;
+            }
+        }
         public Cargo()
         {
             Competencias = new List<CompetenciaCargo>();
+            Ofrecimientos = new List<OfrecemosCargo>();
+            Horarios = new List<HorarioCargo>();
+            Ubigeos = new List<UbigeoCargo>();
+            Conocimientos = new List<ConocimientoGeneralCargo>();
             
         }
 
@@ -76,6 +114,29 @@ namespace SanPablo.Reclutador.Entity
             competenciaCargo.Cargo = this;
             Competencias.Add(competenciaCargo);
         }
-            
+
+        public virtual void agregarOfrecimiento(OfrecemosCargo ofrecimientoCargo)
+        {
+            ofrecimientoCargo.Cargo = this;
+            Ofrecimientos.Add(ofrecimientoCargo);
+        }
+
+        public virtual void agregarHorarios(HorarioCargo horarioCargo)
+        {
+            horarioCargo.Cargo = this;
+            Horarios.Add(horarioCargo);
+        }
+
+        public virtual void agregarUbigeo(UbigeoCargo ubigeoCargo)
+        {
+            ubigeoCargo.Cargo = this;
+            Ubigeos.Add(ubigeoCargo);
+        }
+
+        public virtual void agregarConocimiento(ConocimientoGeneralCargo conocimientoCargo)
+        {
+            conocimientoCargo.Cargo = this;
+            Conocimientos.Add(conocimientoCargo);
+        }
     }
 }

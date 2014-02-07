@@ -7,15 +7,16 @@
     {
         public NivelAcademicoMap()
         {
-            Id(m => m.IdeNivelAcademicoCargo, "NIVELACADEMICO_CARGO")
+            Id(m => m.IdeNivelAcademicoCargo, "IDENIVELACADECARGO")
                 .GeneratedBy
-                .Sequence("IDEPARIENTESPOSTULANTE_SQ");
+                .Sequence("IDENIVELACADECARGO_SQ");
             References(x => x.Cargo, "IDECARGO");
-            
-            Map(x => x.TipoNivelEstudios, "TIPNIVESTUDIO");
-            Map(x => x.TipoCarrera, "TIPCARRERA");
+
+            Map(x => x.TipoEducacion, "TIPEDUCACION");
+            Map(x => x.TipoAreaEstudio, "TIPAREAESTUDIO");
             Map(x => x.TipoNivelAlcanzado, "TIPNIVELCANZADO");
             Map(x => x.PuntajeNivelEstudio, "PUNTNIVESTUDIO");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
 
             Table("NIVELACADEMICO_CARGO");
         }

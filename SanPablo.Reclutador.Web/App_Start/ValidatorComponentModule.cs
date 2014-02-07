@@ -52,11 +52,26 @@
             builder.RegisterType<CategoriaValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Categoria>))
                 .As<IValidator>();
+
             builder.RegisterType<DiscapacidadPostulanteValidator>()
                   .Keyed<IValidator>(typeof(IValidator<DiscapacidadPostulante>))
                   .As<IValidator>();
 
+            builder.RegisterType<CompetenciaCargoValidator>()
+                  .Keyed<IValidator>(typeof(IValidator<CompetenciaCargo>))
+                  .As<IValidator>();
 
+            builder.RegisterType<OfrecemosCargoValidator>()
+                  .Keyed<IValidator>(typeof(IValidator<OfrecemosCargo>))
+                  .As<IValidator>();
+
+            builder.RegisterType<HorarioCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<HorarioCargo>))
+                .As<IValidator>();
+
+            builder.RegisterType<UbigeoCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<UbigeoCargo>))
+                .As<IValidator>();
 
         }
     }

@@ -8,18 +8,18 @@
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
         <a class="close" onclick="hide('mensajeError')" >×</a>
-         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+         <strong>ERROR : </strong> 
     </div>
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @Html.HiddenFor(model => model.Cargo.IdeCargo)
+                @Html.HiddenFor(model => model.Competencia.IdeCompetenciaCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Competencias <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Competencia.TipoCompetencia, new SelectList(Model.Competencias, "Valor", "Descripcion", Model.Competencia.TipoCompetencia))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.Competencia.TipoCompetencia)
                 </div>
             </td>
         </tr>  

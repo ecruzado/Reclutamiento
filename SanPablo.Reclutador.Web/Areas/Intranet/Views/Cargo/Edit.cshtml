@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        //PERFIL PUESTO
         $('#btnAgregarCompetencia').click(function () {
             mostrarAgregarCompetencia();
         });
@@ -25,14 +25,322 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#competenciasForm').valid();
                     if (result) {
                         $.post('@Url.Action("Competencia", "Cargo")',
                                 $("#competenciasForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
                                         $('#grdListCompetencias').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+                        
+                    }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarCompetencia').click(function () {
+            var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
+            alert(ideCompetencia);
+            if (ideCompetencia != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+
+
+        $('#btnAgregarOfrecimiento').click(function () {
+            mostrarAgregarOfrecimiento();
+        });
+
+
+        $('#updateDialog2').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#ofrecemosForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Ofrecemos", "Cargo")',
+                                $("#ofrecemosForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialog2").dialog("close");
+                                        $('#grdListOfrecemos').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje)
+                                        
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnEliminarOfrecimiento').click(function () {
+            var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
+            if (ideOfrecimiento != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+        $('#btnAgregarHorario').click(function () {
+            mostrarAgregarHorario();
+        });
+
+
+        $('#updateDialogHorario').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#horariosForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Horario", "Cargo")',
+                                $("#horariosForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialogHorario").dialog("close");
+                                        $('#grdListHorario').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Seleccionar un Horario");
+
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+        $('#btnEditarHorario').click(function () {
+            var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
+            if (ideHorario != null) {
+                mostrarEditarHorario(ideHorario);
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a editar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarHorario').click(function () {
+            var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
+            if (ideHorario != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarHorario(ideHorario); $(this).dialog("close"); $('#grdListHorario').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+       $('#btnAgregarUbigeo').click(function () {
+            mostrarAgregarUbigeo();
+        });
+
+
+       $('#updateDialogUbigeo').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#ubigeosForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Ubigeo", "Cargo")',
+                                $("#ubigeosForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialogUbigeo").dialog("close");
+                                        $('#grdListUbigeo').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Ingresar todos los datos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnEditarUbigeo').click(function () {
+            var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
+            if (ideUbigeo != null) {
+                mostrarEditarUbigeo(ideUbigeo);
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a editar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarUbigeo').click(function () {
+            var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
+            if (ideUbigeo != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        $('#btnAgregarNivelAcademico').click(function () {
+            mostrarAgregarNivelAcademico();
+        });
+
+
+        $('#updateDialogNivelAcademico').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("NivelAcademico", "Cargo")',
+                                $("#nivelAcademicoForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogNivelAcademico").dialog("close");
+                                        $('#grdListNivelAcademico').trigger('reloadGrid');
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
@@ -40,13 +348,230 @@
                                     }
                                 }
                             );
-                        }
-                    },
-                    "Cancelar": function () {
-                        $(this).dialog("close");
                     }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
                 }
+            }
         });
+
+        $('#btnAgregarCentroEstudio').click(function () {
+            mostrarAgregarCentroEstudio();
+        });
+
+
+        $('#updateDialogCentroEstudio').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("CentroEstudio", "Cargo")',
+                                $("#centroEstudioForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogCentroEstudio").dialog("close");
+                                        $('#grdListCentroEstudios').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarOfimatica').click(function () {
+            mostrarAgregarOfimatica();
+        });
+
+
+        $('#updateDialogOfimatica').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Ofimatica", "Cargo")',
+                                $("#ofimaticaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogOfimatica").dialog("close");
+                                        $('#grdListOfimatica').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarIdioma').click(function () {
+            mostrarAgregarIdioma();
+        });
+
+
+        $('#updateDialogIdioma').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Idioma", "Cargo")',
+                                $("#IdiomaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogIdioma").dialog("close");
+                                        $('#grdListIdioma').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarOtrosConocimientos').click(function () {
+            mostrarAgregarOtrosConocimientos();
+        });
+
+
+        $('#updateDialogOtrosConocimientos').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("OtrosConocimientos", "Cargo")',
+                                $("#otrosConocimientosForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogOtrosConocimientos").dialog("close");
+                                        $('#grdListOtrosConocimientos').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarExperiencia').click(function () {
+            mostrarAgregarExperiencia();
+        });
+
+
+        $('#updateDialogExperiencia').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Experiencia", "Cargo")',
+                                $("#experienciaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogExperiencia").dialog("close");
+                                        $('#grdListExperiencia').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarDiscapacidad').click(function () {
+            mostrarAgregarDiscapacidad();
+        });
+
+
+        $('#updateDialogDiscapacidad').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Discapacidad", "Cargo")',
+                                $("#discapacidadForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogDiscapacidad").dialog("close");
+                                        $('#grdListDiscapacidad').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
     });
 
 
@@ -80,7 +605,7 @@ $(function(){
     });
 
     jQuery("#grdListOfrecemos").jqGrid({
-        url: '@Url.Action("ListaOfrecemos", "Cargo")',
+        url: '@Url.Action("ListarOfrecemos", "Cargo")',
         datatype: 'json',
         mtype: 'POST',
         colNames: ['Codigo', 'Descripci&oacuten'],
@@ -88,7 +613,7 @@ $(function(){
                 { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
         ],
-        sortname: 'DescripcionOfrecemos',
+        sortname: 'DescripcionOfrecimiento',
         sortorder: 'desc',
         viewrecords: true,
         cellEdit: true,
@@ -105,56 +630,20 @@ $(function(){
         }
     });
 
-
-    jQuery("#grdListFunciones").jqGrid({
-        url: '@Url.Action("ListaFunciones", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Descripci&oacuten', 'Puntaje'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false },                        
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 60,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
-
-        },
-        loadComplete: function (data) {
-
-        }
-    });
-
-    
-
-    
-
-
     jQuery("#grdListHorario").jqGrid({
-        url: '@Url.Action("ListaHorario", "SolicitudCargo")',
+        url: '@Url.Action("ListaHorario", "Cargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Codigo', 'Descripci&oacuten', 'Puntaje'],
+            colNames: ['Descripci&oacuten', 'Puntaje'],
             colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: true },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: false },
 
             ],
-            sortname: 'Codigo',
+            sortname: 'IdeHorarioCargo',
             sortorder: 'desc',
             viewrecords: true,
             cellEdit: true,
-            /*caption: 'Horario de Trabajo',*/
             height: 60,
             width: 898,
             rowNum: 0,
@@ -169,22 +658,20 @@ $(function(){
         });
 
     jQuery("#grdListUbigeo").jqGrid({
-        url: '@Url.Action("ListaUbigeo", "SolicitudCargo")',
+        url: '@Url.Action("ListaUbigeo", "Cargo")',
         datatype: 'json',
         mtype: 'POST',
-        colNames: ['Codigo', 'Departamento', 'Provincia', 'Distrito', 'Puntaje'],
+        colNames: ['Departamento', 'Provincia', 'Distrito', 'Puntaje'],
         colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                 { name: 'Departamento', index: 'Departamento', align: 'left', editable: false, sortable: false },
                 { name: 'Provincia', index: 'Provincia', align: 'left', editable: false, sortable: false },
                 { name: 'Distrito', index: 'Distrito', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
         ],
-        sortname: 'Codigo',
+        sortname: 'IdeUbigeoCargo',
         sortorder: 'desc',
         viewrecords: true,
         cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
         height: 60,
         width: 898,
         rowNum: 0,
@@ -199,51 +686,47 @@ $(function(){
     });
 
     jQuery("#grdListNivelAcademico").jqGrid({
-        url: '@Url.Action("ListaEstudios", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Puntaje'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'GradoEstudios', index: 'GradoEstudios', align: 'left', editable: false, sortable: false },
-                { name: 'Carrera', index: 'Carrera', align: 'left', editable: false, sortable: false },
-                { name: 'Estado', index: 'Estado', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 60,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
+        url: '@Url.Action("ListaNivelAcademico", "Cargo")',
+         datatype: 'json',
+         mtype: 'POST',
+         colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Puntaje'],
+         colModel: [
+                 { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', editable: false, sortable: false },
+                 { name: 'AreaEstudio', index: 'AreaEstudio', align: 'left', editable: false, sortable: false },
+                 { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
+                 { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+         ],
+         sortname: 'IdeNivelAcademicoCargo',
+         sortorder: 'desc',
+         viewrecords: true,
+         cellEdit: true,
+         height: 60,
+         width: 898,
+         rowNum: 0,
+         cellsubmit: 'clientArray',
+         hidegrid: false,
+         postData: {
 
-        },
-        loadComplete: function (data) {
+         },
+         loadComplete: function (data) {
 
-        }
-    });
+         }
+     });
 
     jQuery("#grdListCentroEstudios").jqGrid({
-        url: '@Url.Action("ListaCentroEstudios", "SolicitudCargo")',
+        url: '@Url.Action("ListaCentroEstudio", "Cargo")',
         datatype: 'json',
         mtype: 'POST',
-        colNames: ['Codigo','Tipo de Institución', 'Institución', 'Puntaje'],
+        colNames: ['Tipo de Institución', 'Institución', 'Puntaje'],
         colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Tipo', Tipo: 'Codigo', align: 'center', editable: false, sortable: false},
+                { name: 'Tipo', Tipo: 'Codigo', align: 'center', editable: false, sortable: false },
                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                 { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
         ],
-        sortname: 'Codigo',
+        sortname: 'IdeCentroEstudioCargo',
         sortorder: 'desc',
         viewrecords: true,
         cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
         height: 60,
         width: 898,
         rowNum: 0,
@@ -257,83 +740,49 @@ $(function(){
         }
     });
 
+    jQuery("#grdListOfimatica").jqGrid({
+        url: '@Url.Action("ListaOfimatica", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            sortname: 'IdeConocimientoGeneralCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 60,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
 
-    jQuery("#grdListExperienciaLaboral").jqGrid({
-        url: '@Url.Action("ListaExperienciaLaboral", "SolicitudCargo")',
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+    jQuery("#grdListIdioma").jqGrid({
+        url: '@Url.Action("ListaIdioma", "Cargo")',
         datatype: 'json',
         mtype: 'POST',
-        colNames: ['Codigo', 'Cargo', 'Años', 'Puntaje'],
+        colNames: ['Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
         colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false },
-                { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 60,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
-
-        },
-        loadComplete: function (data) {
-
-        }
-    });
-
-    jQuery("#grdListConocimientosGenerales").jqGrid({
-        url: '@Url.Action("ListaConocimientosGeneralaes", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
-                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-        ],
-        sortname: 'Codigo',
-        sortorder: 'desc',
-        viewrecords: true,
-        cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
-        height: 60,
-        width: 898,
-        rowNum: 0,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        postData: {
-
-        },
-        loadComplete: function (data) {
-
-        }
-    });
-
-    jQuery("#grdListConocimientosIdiomas").jqGrid({
-        url: '@Url.Action("ListaConocimientosIdiomas", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Codigo', 'Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
-        colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                 { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
                 { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
                 { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
         ],
-        sortname: 'Codigo',
+        sortname: 'IdeConocimientoGeneralCargo',
         sortorder: 'desc',
         viewrecords: true,
         cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
         height: 60,
         width: 898,
         rowNum: 0,
@@ -348,49 +797,20 @@ $(function(){
     });
 
     jQuery("#grdListOtrosConocimientos").jqGrid({
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Codigo', 'Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            cellEdit: true,
-            /*caption: 'Horario de Trabajo',*/
-            height: 60,
-            width: 898,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            }
-        });
-    jQuery("#grdListDiscapacidades").jqGrid({
-        url: '@Url.Action("ListaDiscapacidades", "SolicitudCargo")',
+        url: '@Url.Action("ListaOtrosConocimientos", "Cargo")',
         datatype: 'json',
         mtype: 'POST',
-        colNames: ['Codigo', 'Tipo', 'Descripci&oacuten', 'Puntaje'],
+        colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
         colModel: [
-                { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                 { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, hidden: true },
+                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
                 { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
         ],
-        sortname: 'Codigo',
+        sortname: 'IdeConocimientoGeneralCargo',
         sortorder: 'desc',
         viewrecords: true,
         cellEdit: true,
-        /*caption: 'Horario de Trabajo',*/
         height: 60,
         width: 898,
         rowNum: 0,
@@ -403,6 +823,65 @@ $(function(){
 
         }
     });
+
+
+
+    jQuery("#grdListExperiencia").jqGrid({
+        url: '@Url.Action("ListaExperiencia", "Cargo")',
+        datatype: 'json',
+        mtype: 'POST',
+        colNames: ['Cargo', 'Años', 'Puntaje'],
+        colModel: [
+                { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false },
+                { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false },
+                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+        ],
+        sortname: 'IdeExperienciaCargo',
+        sortorder: 'desc',
+        viewrecords: true,
+        cellEdit: true,
+        height: 60,
+        width: 898,
+        rowNum: 0,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        postData: {
+
+        },
+        loadComplete: function (data) {
+
+        }
+    });
+
+
+
+    jQuery("#grdListDiscapacidad").jqGrid({
+        url: '@Url.Action("ListaDiscapacidad", "Cargo")',
+        datatype: 'json',
+        mtype: 'POST',
+        colNames: ['Tipo', 'Descripci&oacuten', 'Puntaje'],
+        colModel: [
+                { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, hidden: true },
+                { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+        ],
+        sortname: 'IdeDiscapacidadCargo',
+        sortorder: 'desc',
+        viewrecords: true,
+        cellEdit: true,
+        height: 60,
+        width: 898,
+        rowNum: 0,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        postData: {
+
+        },
+        loadComplete: function (data) {
+
+        }
+    });
+
 
     jQuery("#grdListEvaluacion").jqGrid({
         url: '@Url.Action("ListaEvaluacionesPerfil", "SolicitudCargo")',
@@ -445,6 +924,162 @@ $(function(){
                 dialogDiv.dialog('open');
             });
             return false;
+    }
+
+    function eliminarCompetencia(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarCompetencia","Cargo")',
+                data: { ideCompetencia: id },
+            });
+    }
+
+    function mostrarAgregarOfrecimiento() {
+        var dialogDiv = $('#updateDialog2');
+        $.get('@Url.Action("Ofrecemos", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog2"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarOfrecimiento(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarOfrecimiento","Cargo")',
+            data: { ideOfrecimiento: id },
+        });
+    }
+
+    function mostrarAgregarHorario() {
+        var dialogDiv = $('#updateDialogHorario');
+        $.get('@Url.Action("Horario", "Cargo", new { id = "0"})', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarEditarHorario(ideHorario) {
+        var dialogDiv = $('#updateDialogHorario');
+        $.get('@Url.Action("Horario", "Cargo")', {id : ideHorario},  function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarHorario(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarHorario","Cargo")',
+                data: { ideHorario: id },
+            });
+        }
+
+    function mostrarAgregarUbigeo() {
+        var dialogDiv = $('#updateDialogUbigeo');
+        $.get('@Url.Action("Ubigeo", "Cargo", new { id = "0"})', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogUbigeo"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarEditarUbigeo(ideUbigeo) {
+        var dialogDiv = $('#updateDialogUbigeo');
+        $.get('@Url.Action("Ubigeo", "Cargo")', { id: ideUbigeo }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogUbigeo"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarUbigeo(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarUbigeo","Cargo")',
+            data: { ideUbigeo: id },
+        });
+    }
+
+    function mostrarAgregarNivelAcademico() {
+        var dialogDiv = $('#updateDialogNivelAcademico');
+        $.get('@Url.Action("NivelAcademico", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogNivelAcademico"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarCentroEstudio() {
+        var dialogDiv = $('#updateDialogCentroEstudio');
+        $.get('@Url.Action("CentroEstudio", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogCentroEstudio"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarOfimatica() {
+        var dialogDiv = $('#updateDialogOfimatica');
+        $.get('@Url.Action("Ofimatica", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOfimatica"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarIdioma() {
+        var dialogDiv = $('#updateDialogIdioma');
+        $.get('@Url.Action("Idioma", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogIdioma"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarOtrosConocimientos() {
+        var dialogDiv = $('#updateDialogOtrosConocimientos');
+        $.get('@Url.Action("OtrosConocimientos", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOtrosConocimientos"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarExperiencia() {
+        var dialogDiv = $('#updateDialogExperiencia');
+        $.get('@Url.Action("Experiencia", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogExperiencia"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarDiscapacidad() {
+        var dialogDiv = $('#updateDialogDiscapacidad');
+        $.get('@Url.Action("Discapacidad", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogDiscapacidad"));
+            dialogDiv.dialog('open');
+        });
+        return false;
     }
 
     function RadioFormatter(cellvalue, options, rowObject) {
@@ -496,11 +1131,12 @@ $(function(){
 </script>
 }
 @using (Html.BeginForm("Edit", "Cargo", FormMethod.Post, new { @id = "CargoForm" }))
-    {
+{
     @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
+
             <div class="widget-title">
                 <h5>Cargo</h5>
                 <div class="opciones">
@@ -508,28 +1144,24 @@ $(function(){
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                 </div>
             </div>
+       
             <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Código</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Dependencia</label>
-                            <div class="controles">
-                                <select id="sedependencia" class="select-large" disabled="disabled">
-                                    <option>Seleccionar</option>
-                                    <option selected="selected">Gerencia Médica</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <table>
+                    <tr>
+                
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Código</label>
+                        <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
+                    </td>
+                    <td class="span5">
+                        <label class="control-label" for="selectError">Dependencia</label>
+                            <select id="sedependencia" class="select-large" disabled="disabled">
+                            <option>Seleccionar</option>
+                            <option selected="selected">Gerencia Médica</option>
+                            </select>
+                    </td>
+              
+                   </tr>
                 <div class="formulario-fila">
                     <div class="span5">
                         <div class="">
@@ -590,8 +1222,11 @@ $(function(){
                         </div>
                     </div>
                 </div>
+                </table>
             </form>
+       
             <h5>Perfil</h5>
+            
             <ul class="nav nav-tabs" data-tabs="tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
                 <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
@@ -600,9 +1235,10 @@ $(function(){
                 <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
                 <li class=""><a href="#E" data-toggle="tab">Conocimientos</a></li>
                 <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
-                <li><a href="#G" data-toggle="tab">Evaluación</a></li>
+                <li class=""><a href="#G" data-toggle="tab">Evaluación</a></li>
                 <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
             </ul>
+            
             <div class="tabbable">
                 <div class="tab-content">
                     <!--Puesto Inicio -->
@@ -611,7 +1247,7 @@ $(function(){
                             <h6>Objetivos</h6>
                             <div style="clear:both"></div>
                         </div>
-                       @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style="margin: 10px 10px 10px; width: 890px; height: 54px;"})
+                            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
                         <div class="espacio-division-entre-fieldset"></div>
                         <div class="grilla-opciones">
                             <h6>Funciones</h6>
@@ -619,7 +1255,7 @@ $(function(){
                             </div>
                             <div style="clear:both"></div>
                         </div>
-                        @Html.TextAreaFor(model => model.Cargo.FuncionCargo,  new { @style="margin: 10px 10px 10px; width: 890px; height: 54px;"})
+                            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
                         <div class="grilla-opciones">
                             <h6>Competencias</h6>
                             <div class="opciones">
@@ -635,8 +1271,8 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Ofrecemos</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                                <a id="btnAgregarOfrecimiento" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                                <a id="btnEliminarOfrecimiento" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -669,8 +1305,7 @@ $(function(){
                                 <tbody>
                                     <tr>
                                         <td style="width:40px"></td>
-                                        <td style="width:350px">
-                                        </td>
+                                        <td style="width:350px"></td>
                                         <td>
                                             Ptje.
                                         </td>
@@ -691,18 +1326,17 @@ $(function(){
                                             <label class="control-label" for="input01">Postulante Interno</label>
                                         </td>
                                         <td>
-                                            <input type="text" class="input-xxmini" value="15">
+                                            @Html.TextBoxFor(model => model.Cargo.PuntajePostulanteInterno, new { @class = "input-xxmini" })
                                         </td>
                                         <td></td>
                                         <td>
                                             <label class="control-label" for="input01">Rango Edad</label>
                                         </td>
                                         <td>
-                                              
-                                            <input id="txtEdadInicial" type="text" class="input-xmini" value="22"> - <input id="txtEdadFinal" type="text" class="input-xmini" value="35">
+                                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" }) -  @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini" })
                                         </td>
                                         <td>
-                                            <input type="text" class="input-xxmini" value="10">
+                                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" })
                                         </td>
                                         <td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>
               
@@ -710,29 +1344,17 @@ $(function(){
                                     <tr>
                                         <td></td>
                                         <td class="td-label">
-                                            <label class="control-label" for="input01">Sexo
-                                                <select class="input-medium">
-                                                    <option>Ambos</option>
-                                                    <option>Masculino</option>
-                                                    <option>Femenino</option>
-                                                </select>                                             
-                                            </label>
+                                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
+                                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style="width: 150px; display:inline-block"})
                                         </td>
                                         <td style="width:80px" >
-                                            <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
+                                            @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
+                                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
                                         </td>                                       
                                         <td></td>
                                         <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
-                                        <td>                                         
-                                            <select class="input-large">
-                                                <option>Jefe Corporativo Administrativo</option>
-                                                <option>Personal Administrativo</option>
-                                                <option>Personal Asistencial</option>
-                                                <option>Personal de Contacto</option>
-                                                <option>Personal Operativo</option>
-                                            </select>
-
+                                        <td> 
+                                            @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
                                         </td>
                                         <td>
                                         </td>
@@ -751,21 +1373,13 @@ $(function(){
                                     </tr>   
                                     <tr>
                                         <td></td>
-                                        <td>
-                                            <label class="control-label" for="input01">Rango Salarial Bruto (S/.)                                             <select class="input-medium">
-                                                <option>Menos de 1000</option>
-                                                <option>De 1000 a 2000</option>
-                                                <option>De 2000 a 3000</option>
-                                                <option>De 3000 a 4000</option>
-                                                <option>De 4000 a 5000</option>
-                                                <option>De 5000 a 6000</option>
-                                                <option>De 6000 a más</option>
-                                            </select>
-</label>
+                                        <td style =" width:450px" >
+                                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
+                                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style ="display:inline-block; width:170px"})
                                         </td>
                                         <td style="width:80px">
-                                            <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
+                                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
+                                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
                                         </td>
                                         <td></td>                                     
                                         <td></td>
@@ -784,9 +1398,9 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Horario</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -797,9 +1411,9 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Ubigeo</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -825,9 +1439,9 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Nivel Académico</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarNivelAcademico" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarNivelAcademico" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarNivelAcademico" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -839,9 +1453,9 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Centro Estudios</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarCentroEstudio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarCentroEstudio" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarCentroEstudio" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -864,14 +1478,14 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Experiencia Laboral</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id ="btnAgregarExperiencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id ="btnEditarExperiencia" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id ="btnEliminarExperiencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
                         <div class="tabla-datos">
-                            <table id="grdListExperienciaLaboral">
+                            <table id="grdListExperiencia">
                             </table>
                         </div>
                         <div class="formulario-accion">   
@@ -888,35 +1502,35 @@ $(function(){
                         <div class="grilla-opciones">
                             <h6>Ofimática</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarOfimatica" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarOfimatica" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarOfimatica" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
                         <div class="tabla-datos">
-                            <table id="grdListConocimientosGenerales">
+                            <table id="grdListOfimatica">
                             </table>
                         </div>
                         <div class="grilla-opciones">
                             <h6>Idiomas</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+                                <a id="btnAgregarIdioma" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                                <a id="btnEditarIdioma" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarIdioma" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
                             </div>
                             <div style="clear:both"></div>
                         </div>
                         <div class="tabla-datos">
-                            <table id="grdListConocimientosIdiomas">
+                            <table id="grdListIdioma">
                             </table>
                         </div>
                         <div class="grilla-opciones">
                             <h6>Otros Conocimientos</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id ="btnAgregarOtrosConocimientos" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id ="btnEditarOtrosConocimientos" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id ="btnEliminarOtrosConocimientos" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
@@ -935,17 +1549,17 @@ $(function(){
 
                     <div class="tab-pane" id="F">
                         <div class="grilla-opciones">
-                            <h6></h6>
+                            <h6>Discapacidad</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                                <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                                <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                                <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
                             </div>
                             <div style="clear:both"></div>
                         </div>
 
                         <div class="tabla-datos">
-                            <table id="grdListDiscapacidades">
+                            <table id="grdListDiscapacidad">
                             </table>
                         </div>
                         
@@ -1194,27 +1808,31 @@ $(function(){
                         <div class="formulario-accion">
                             <div class="opciones">
                                 <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
-                                <a class="btn" href="#" onclick="irATab('G');"><i class="icon-arrow-left icon-cog"></i> Atras</a>
+                                <a class="btn" href="#" onclick="irATab('G');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                             </div>
                         </div>
                     </div>
 
                     <!--Conf. Perfil Fin-->
 
+               </div>
 
-                </div>
             </div>
+
             <div class="form-actions">     
-                <a class="btn" href="@Url.Action("Index","Cargo",new { area = "Intranet"})"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn" href="@Url.Action("Index", "Cargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
                 <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
+       
+            
+            
         </div>
     </div>
 </div>
-    
 }
+
 
 <div id="updateDialog" title="Agregar Competencia"></div>
     <div id="divMensaje">
@@ -1225,6 +1843,53 @@ $(function(){
     <div id="divMensaje2">
         <span id="spanMensaje2"></span>
     </div>
+
+<div id="updateDialogHorario" title="Agregar Horario"></div>
+    <div id="divMensaje3">
+        <span id="spanMensaje3"></span>
+    </div>
+
+<div id="updateDialogUbigeo" title="Agregar Ubigeo"></div>
+    <div id="divMensaje4">
+        <span id="spanMensaje4"></span>
+    </div>
+
+<div id="updateDialogNivelAcademico" title="Agregar Nivel Académico"></div>
+    <div id="divMensaje5">
+        <span id="spanMensaje5"></span>
+    </div>
+
+<div id="updateDialogCentroEstudio" title="Agregar Centro de Estudio"></div>
+    <div id="divMensaje6">
+        <span id="spanMensaje6"></span>
+    </div>
+
+<div id="updateDialogOfimatica" title="Agregar Conocimiento Ofimatica"></div>
+    <div id="divMensaje7">
+        <span id="spanMensaje7"></span>
+    </div>
+
+<div id="updateDialogIdioma" title="Agregar Conocimiento Idioma"></div>
+    <div id="divMensaje8">
+        <span id="spanMensaje8"></span>
+    </div>
+
+<div id="updateDialogOtrosConocimientos" title="Agregar Otros Conocimientos"></div>
+    <div id="divMensaje9">
+        <span id="spanMensaje9"></span>
+    </div>
+
+<div id="updateDialogExperiencia" title="Agregar Experiencia"></div>
+    <div id="divMensaje10">
+        <span id="spanMensaje10"></span>
+    </div>
+
+<div id="updateDialogDiscapacidad" title="Agregar Discapacidad"></div>
+    <div id="divMensaje11">
+        <span id="spanMensaje11"></span>
+    </div>
+
+
 
 <div id="modalAprobarRechazar" class="modal hide fade">
     <div class="modal-header">
