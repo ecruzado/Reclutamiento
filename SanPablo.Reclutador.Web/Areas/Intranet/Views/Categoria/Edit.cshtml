@@ -1078,11 +1078,13 @@
                             
                                 <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
                                 <div class="controles">
-                                
-                                    @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                    {
-                                      @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
-                                     
+                                    
+                                        @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                                {
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
+                                        }else{
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly"}) 
+                                        }
                                         @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>
                                             <tr id="nombreImagen">
@@ -1096,6 +1098,8 @@
                                  
                                             </tr>
        
+                                             @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                            {
                                             <tr id="selecImagen">
                                               <td class="colEtiqueta">
                                                 <label class="etiquetaFormulario">Imagen</label>
@@ -1110,6 +1114,7 @@
                                               <td>
                                               </td>
                                             </tr>
+                                             }
                                             <tr id="verImagen">
                                             @if (Model.Categoria.IMAGENEJEMPLO != null)
                                             {
@@ -1121,13 +1126,13 @@
                                             }
                                             </tr>
                                        </table> 
-                                    }
+                                   @* }
                                     else
                                     {
                                       @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", @readonly = "readonly", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
                                      
-                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" }) *@
-                                    }    
+                                       
+                                    }    *@
                                
                                 
                                 </div>
@@ -1210,9 +1215,11 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
+               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                {
+                 <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
                 <input id="btnGuardar" type="submit" style="visibility: hidden" />
-
+                }
 
             </div>
         </div>

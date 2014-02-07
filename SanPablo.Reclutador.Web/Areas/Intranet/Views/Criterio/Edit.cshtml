@@ -594,14 +594,14 @@
                              </tr>
                    
                             
-                             @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                             @*@if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                              { 
                               <span></span>
                              }
                              else
                              {
                                
-                                <tr id="nombreImagen">
+                                *@<tr id="nombreImagen">
                                    
                                     <td class="colEtiqueta">
                                         <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
@@ -613,21 +613,22 @@
                                     <td>
                                  
                                 </tr>
-       
+                                 @if (!@Accion.Consultar.Equals(Model.Criterio.IndPagina)){
                                 <tr id="selecImagen">
                                     <td class="colEtiqueta">
                                         <label class="etiquetaFormulario">Imagen</label>
                                     </td>
                                     <td >
                                         <div id="divImagen">
-
+                                           
                                         <input type="file" name="image" id="image" />
-                                       
+                                        
                                         @Html.TextBoxFor(model => model.NombreTemporalArchivo,  new { style = "display: none;" })
                                         </div>
                                     </td>
                                     <td></td>
                                 </tr>
+                                 }
                                  <tr id="verImagen">
                                    @if (Model.Criterio.IMAGENCRIT != null)
                                    {
@@ -640,7 +641,7 @@
                                  </tr>
                                  
                                        
-                             } 
+                            @* } *@
                                  
                        
                     <tr>

@@ -328,6 +328,8 @@
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
             model.Criterio.Pregunta = objCriterio.Pregunta;
             model.Criterio.IndPagina = Accion.Consultar;
+            model.Criterio.rutaImagen = objCriterio.rutaImagen;
+            model.Criterio.IMAGENCRIT = objCriterio.IMAGENCRIT;
             model.IndVisual = Visualicion.SI;
             var objAlternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(id));
             model.Alternativa = objAlternativa;

@@ -737,11 +737,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
               Session["Tipo"]  = "I";
               model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+              model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
             }
             else
             {
                 Session["Tipo"] = 1;
             }
+
+            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+            int contTiempo = 0;
+            if (objLista != null)
+            {
+                foreach (SubCategoria item in objLista)
+                {
+                    contTiempo = contTiempo + item.TIEMPO;
+                }
+            }
+
+            model.Categoria.TIEMPO = contTiempo;
 
             return View("Edit", model);
         }
