@@ -18,7 +18,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string USRMODIFICACION { get; set; }
         public virtual DateTime FECMODIFICACION { get; set; }
         public virtual IList<Criterio> Criterios { get; set; }
+        public virtual int TIEMPO { get; set; }
 
+        
 
 
         

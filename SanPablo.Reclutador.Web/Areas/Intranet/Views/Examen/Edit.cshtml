@@ -80,7 +80,8 @@
         modal: true,
         buttons: {
             "Grabar": function () {
-                $.ajax({
+                $('#confSelc').dialog('open');
+                @*$.ajax({
                     data: { 
                         selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
                         codExamen: $('#Examen_IdeExamen').val()
@@ -94,7 +95,7 @@
 
 
                     }
-                });
+                });*@
 
             },
             "Cancelar": function () {
@@ -102,6 +103,40 @@
             }
         }
     });
+
+    
+    $("#spanConfSelc").html("¿Desea agregar las categorías?")
+    $('#confSelc').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+                  $.ajax({
+                    data: { 
+                        selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
+                        codExamen: $('#Examen_IdeExamen').val()
+                    },
+                    type: "POST",
+                    url: '@Url.Action("GetListaCategoria", "Examen")',
+                    traditional: true,
+                    success: function () {
+                        $('#confSelc').dialog("close");
+                        $('#categoriaDialog').dialog("close");
+                        $('#grdListaCatxExamen').trigger('reloadGrid');
+
+                    }
+                });
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
+
+
 
     jQuery("#grdListaCatxExamen").jqGrid({
          url: '@Url.Action("ListaCatxExamen", "Examen")' + '?id=' + $("#Examen_IdeExamen").val(),
@@ -134,7 +169,7 @@
          postData: {
          },
          loadComplete: function (data) {
-
+             getTiempoExamen();
          }
 
 
@@ -146,9 +181,29 @@
     function DetalleFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
-        var strImg = '<a href="../Archivos/Categoria.pdf"><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver detalle" alt="Ver detalle"></a>';
-        return strImg;
+        var strImg = '<a target="_blank" href=' + '@Url.Action("GetExamenPDF", "Examen")' + '/' + rowObject[0] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver detalle" alt="Ver detalle"></a>';
+         return strImg;
+
     }
+
+    function getTiempoExamen() {
+        var codigoExamen = $("#Examen_IdeExamen").val();
+
+        $.ajax({
+            data: {
+                id: codigoExamen
+            },
+            type: "POST",
+            url: "@Url.Action("getTiempoExamen", "Examen")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    $("#Examen_Duracion").val(data.IdDato);
+                }
+            }
+        });
+    }
+
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -211,8 +266,7 @@
                     <label class="control-label" for="inputSuccess">Código</label>
                     <div class="controles">
                         <input id="Examen_IdeExamen" name="Examen.IdeExamen" type="text" value="@Model.Examen.IdeExamen" readonly="readonly" > 
-                    
-                    
+                   
                     </div>
                         
                     </td>
@@ -320,3 +374,6 @@
 </div>
 <div id="categoriaDialog" title="Buscar Categoria"></div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
+
+<div id="confSelc"><span id="spanConfSelc"></span></div>
+

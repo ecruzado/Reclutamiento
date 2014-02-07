@@ -15,11 +15,11 @@ namespace SanPablo.Reclutador.Mapping
                 .Sequence("IDEEXAMENXCATEGORIA_SQ");
             References(m => m.Categoria, "IDECATEGORIA");
             References(m => m.Examen,   "IDEEXAMEN");
-            Map(x => x.EstActivo,       "ESTACTIVO");
-            Map(x => x.UsrCreacion,     "USRCREACION");
-            Map(x => x.FecCreacion,     "FECCREACION");
-            Map(x => x.UsrModifica,     "USRMODIFICA");
-            Map(x => x.FecModifica,     "FECMODIFICA");
+            Map(m => m.EstActivo, "ESTACTIVO");
+            Map(m => m.UsrCreacion, "USRCREACION");
+            Map(m => m.FecCreacion, "FECCREACION");
+            Map(m => m.UsrModifica, "USRMODIFICA");
+            Map(m => m.FecModifica, "FECMODIFICA");
             Table("EXAMEN_X_CATEGORIA");
 
         }

@@ -24,8 +24,41 @@
             : base(session)
         { 
         }
+        /// <summary>
+        /// obtiene el tiempo del examen
+        /// </summary>
+        /// <param name="idExamen"></param>
+        /// <returns></returns>
+        public int getTiempoExamen(int idExamen) {
 
+           
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                OracleCommand cmd = new OracleCommand("PR_INTRANET.FN_DURACIONEXAMEN");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
 
+                cmd.Parameters.Add("p_nidexamen", OracleType.Int32).Value = idExamen;
+                cmd.Parameters.Add("p_rRetVal", OracleType.Number).Direction = ParameterDirection.ReturnValue;
+                cmd.ExecuteNonQuery();
+                return Convert.ToInt32(cmd.Parameters[cmd.Parameters.IndexOf("p_rRetVal")].Value);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+        /// <summary>
+        /// otbtiene los datos para la impresion del examen
+        /// </summary>
+        /// <param name="idExamen"></param>
+        /// <returns></returns>
         public DataTable getDataRepExamen(int idExamen)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));

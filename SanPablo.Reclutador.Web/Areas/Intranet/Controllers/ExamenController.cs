@@ -396,7 +396,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 //obtiene el valor del criterio
-
+             
+              
 
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
@@ -503,6 +504,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             
             _examenRepository.Update(objExamen);
+
+            return Json(objJsonMessage);
+        }
+
+
+        /// <summary>
+        /// obtiene el tiempo del examen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult getTiempoExamen(string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            Examen objExamen = new Examen();
+            int tiempo;
+            try
+            {
+               tiempo = _examenRepository.getTiempoExamen(Convert.ToInt32(id));
+               objJsonMessage.Resultado = true;
+               objJsonMessage.IdDato = tiempo;
+               
+             }
+             catch (Exception)
+            {
+
+                objJsonMessage.Resultado = false;
+                objJsonMessage.Mensaje = "Error al eliminar el registro";
+            }
+            
+           
 
             return Json(objJsonMessage);
         }

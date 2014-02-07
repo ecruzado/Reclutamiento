@@ -23,11 +23,6 @@
 
 
 
-       @* var cMensajeVal = '@Session["MensajeVal"]';
-        if (cMensajeVal != null && cMensajeVal.length > 0) {
-            MostrarMensaje(cMensajeVal, "Sistema de Reclutamiento Y Seleccion de Personal");
-        }*@
-
         var flag = 0;
         var flag2 = 0;
 
@@ -284,10 +279,6 @@
         });
         
 
-
-
-
-
         $('#updateDialog').dialog({
             autoOpen: false,
             width: 600,
@@ -296,14 +287,18 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $.post("/Intranet/Categoria/PopupSubCategoria",
-                    $("#frmPopupSubCategoria").serialize(),
-                        function (data) {
-                            $("#updateDialog").html(data);
-                            $('#grdList').trigger('reloadGrid');
-                           
-                        }
-                    );
+                    $('#ValSubCat').dialog('open');
+                    //$.post("/Intranet/Categoria/PopupSubCategoria",
+                    //$("#frmPopupSubCategoria").serialize(),
+                    //    function (data) {
+                    //        $("#updateDialog").dialog("close");
+                    //        $("#updateDialog").html(data);
+                    //        $("#Categoria_TIEMPO").val(data.IdDato);
+                    //        $('#grdList').trigger('reloadGrid');
+                            
+                    //    }
+                    //);
+
 
                 },
                 "Cancelar": function () {
@@ -311,6 +306,34 @@
                 }
             }
         });
+
+
+        $("#spanValSubCat").html("¿Desea agregar la subCategoría?")
+        $('#ValSubCat').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    $.post("/Intranet/Categoria/PopupSubCategoria",
+                    $("#frmPopupSubCategoria").serialize(),
+                        function (data) {
+                            $("#ValSubCat").dialog("close");
+                            $("#updateDialog").dialog("close");
+                            $("#updateDialog").html(data);
+                            $("#Categoria_TIEMPO").val(data.IdDato);
+                            $('#grdList').trigger('reloadGrid');
+
+                        }
+                    );
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
 
 
         $('#criterioDialog').dialog({
@@ -321,22 +344,23 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $.ajax({
-                        data: {
-                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
-                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+                    $('#ValCriterio').dialog('open');
+                    //$.ajax({
+                    //    data: {
+                    //        test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                    //        subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
                             
-                        },
-                        type: "POST",
-                        url: "/Intranet/Criterio/GetListaCriterio",
-                        traditional: true,
-                        success: function(){
-                           // $(this).dialog("close");
-                             $('#grdListCriterio').trigger('reloadGrid');
+                    //    },
+                    //    type: "POST",
+                    //    url: "/Intranet/Criterio/GetListaCriterio",
+                    //    traditional: true,
+                    //    success: function(){
+                    //       // $(this).dialog("close");
+                    //         $('#grdListCriterio').trigger('reloadGrid');
                             
                            
-                        }
-                    });
+                    //    }
+                    //});
 
                 },
                 "Cancelar": function () {
@@ -346,11 +370,44 @@
         });
 
 
+        $("#spanValCriterio").html("¿Desea agregar los criterios?")
+        $('#ValCriterio').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    $.ajax({
+                        data: {
+                            test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
+                            subCategoria: $('#CriterioPorSubcategoria_IDESUBCATEGORIA').val()
+
+                        },
+                        type: "POST",
+                        url: "/Intranet/Criterio/GetListaCriterio",
+                        traditional: true,
+                        success: function () {
+                            $('#ValCriterio').dialog("close");
+                            $('#criterioDialog').dialog("close");
+                            $('#grdListCriterio').trigger('reloadGrid');
+
+
+                        }
+                    });
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
         jQuery("#grdList").jqGrid({
             url: '@Url.Action("ListaSubCategoria", "Categoria")' + '?idCategoria=' + $("#Categoria_IDECATEGORIA").val(),
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión','Duración(Min)','Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
 
                     { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
@@ -358,6 +415,7 @@
                     { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 200 },
                     { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
                     { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
+                    { name: 'TIEMPO', index: 'TIEMPO', align: 'left', sortable: false, width: 110 },
                     { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false , width: 110},
                     { name: 'USRCREACION', index: 'USRCREACION', align: 'left', sortable: false, width: 180 },
                     { name: 'FECMODIFICACION', index: 'FECMODIFICACION', align: 'left', sortable: false, width: 130 },
@@ -388,8 +446,7 @@
 
             },
             loadComplete: function (data) {
-               // $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
-                // $("#grdList").jqGrid('resetSelection');
+               
                 if (flag == 0) {
                     $("#grdList").setSelection($("#grdList").getDataIDs()[0], true);
                     
@@ -397,15 +454,17 @@
                     $('#grdList').resetSelection().setSelection(flag, true);
 
                 }
-               // $("#grdListCriterio").trigger('reloadGrid');
+               
                 $('#grdListCriterio').trigger('reloadGrid');
                 $('#grdListCriterioxAlternativa').trigger('reloadGrid');
+
+                
                 
                
             }
         });
 
-        //$("#Categoria_TEXTOEJEMPLO").hide();
+       
         
         var dato = '@Session["Tipo"]';
         if (dato == 1) {
@@ -1006,17 +1065,26 @@
                             </div>
                         
                     </td>
-                    </tr>
+                     <td class="span5">
+                            <label class="control-label" for="inputSuccess">Duración(Min)</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" })  
+                            </div>
+                    </td>
+                    
+                </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                             
                                 <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
                                 <div class="controles">
-                                
-                                    @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                    {
-                                      @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
-                                     
+                                    
+                                        @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                                {
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
+                                        }else{
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly"}) 
+                                        }
                                         @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>
                                             <tr id="nombreImagen">
@@ -1030,6 +1098,8 @@
                                  
                                             </tr>
        
+                                             @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                            {
                                             <tr id="selecImagen">
                                               <td class="colEtiqueta">
                                                 <label class="etiquetaFormulario">Imagen</label>
@@ -1044,24 +1114,25 @@
                                               <td>
                                               </td>
                                             </tr>
+                                             }
                                             <tr id="verImagen">
                                             @if (Model.Categoria.IMAGENEJEMPLO != null)
                                             {
                                             <td class="colEtiqueta"></td>
                                             <td class ="colInput" >
-                                                <img id="ImgCategoria"  height ="150" width="150" src="@Url.Action("GetImage", "Categoria", new { id = Model.Categoria.IDECATEGORIA })" /> 
+                                                <img id="ImgCategoria"  height ="150" width="150" onmouseover="this.width=500;this.height=400;" onmouseout="this.width=150;this.height=150;" src="@Url.Action("GetImage", "Categoria", new { id = Model.Categoria.IDECATEGORIA })" /> 
                                             </td>
                                             
                                             }
                                             </tr>
                                        </table> 
-                                    }
+                                   @* }
                                     else
                                     {
                                       @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", @readonly = "readonly", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
                                      
-                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" }) *@
-                                    }    
+                                       
+                                    }    *@
                                
                                 
                                 </div>
@@ -1144,9 +1215,11 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
+               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                {
+                 <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
                 <input id="btnGuardar" type="submit" style="visibility: hidden" />
-
+                }
 
             </div>
         </div>
@@ -1164,6 +1237,18 @@
 <div id="divMensaje">
         <span id="spnMensaje"></span>
 </div>
+
+
+<div id="ValSubCat">
+        <span id="spanValSubCat"></span>
+</div>
+
+<div id="ValCriterio">
+        <span id="spanValCriterio"></span>
+</div>
+
+
+
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
 <div id="dlgsubirarchivoimagen">
     <table style="width: 100%">      
