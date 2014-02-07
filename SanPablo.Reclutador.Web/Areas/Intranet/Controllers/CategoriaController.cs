@@ -17,6 +17,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Configuration;
+    using Newtonsoft.Json;
 
     public class CategoriaController : BaseController
     {
@@ -26,13 +28,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ISubcategoriaRepository _subcategoriaRepository;
         private ICriterioRepository _criterioRepository;
         private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
+        private IExamenRepository _examenRepository;
 
         public CategoriaController(ICategoriaRepository categoriaRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
             IAlternativaRepository alternativaRepository,
             ISubcategoriaRepository subcategoriaRepository,
             ICriterioRepository criterioRepository,
-            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository,
+            IExamenRepository examenRepository
             )
         {
             _categoriaRepository = categoriaRepository;
@@ -41,6 +45,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _subcategoriaRepository = subcategoriaRepository;
             _criterioRepository = criterioRepository;
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
+            _examenRepository = examenRepository;
         }
         
         
@@ -60,7 +65,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
-        public ActionResult Edit(CategoriaViewModel model, HttpPostedFileBase image)
+        public ActionResult Edit(CategoriaViewModel model)
         {
             ValidationResult result = null;
             CategoriaValidator validator = new CategoriaValidator();
@@ -86,62 +91,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return View(categoriaViewModel);
             }
 
-            //if ("02".Equals(model.Categoria.TIPOEJEMPLO))
-            //{
-
-            //    if (model.image == null)
-            //    {
-            //        Session["MensajeVal"] = "Ingrese una imagen de ejemplo";
-            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-            //        {
-            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
-            //        }
-            //        else {
-            //            return RedirectToAction("Nuevo", "Categoria");
-            //        }
-                    
-            //    }
-                
-            //}
-            //else if ("01".Equals(model.Categoria.TIPOEJEMPLO))
-            //{
-               
-            //        Session["MensajeVal"] = "Ingrese una texto de ejemplo";
-            //        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-            //        {
-            //            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = model.Categoria.IDECATEGORIA });
-            //        }
-            //        else
-            //        {
-            //            return RedirectToAction("Nuevo", "Categoria");
-
-            //        }
-                    
-               
-                
-            //}
-            //else
-            //{
-            //    Session["MensajeVal"] = null;
-            //}
-
-            if (model.image != null)
+           
+            string fullPath = null;
+            if (!string.IsNullOrEmpty(model.NombreTempImgCategoria))
             {
-                //string filePath = Path.Combine(Server.MapPath("~/App_Data"), Path.GetFileName(model.image.FileName));
-                //model.image.SaveAs(filePath);
-                byte[] data;
-                using (Stream inputStream = model.image.InputStream)
-                {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
-                    {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
-                    }
-                    data = memoryStream.ToArray();
-                }
-                model.Categoria.IMAGENEJEMPLO = data;
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = "Archivos\\Imagenes\\";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTempImgCategoria));
 
+                using (Stream s = System.IO.File.OpenRead(fullPath))
+                {
+                    byte[] buffer = new byte[s.Length];
+                    s.Read(buffer, 0, (int)s.Length);
+                    int len = (int)s.Length;
+                    s.Close();
+                    model.Categoria.IMAGENEJEMPLO = buffer;
+                }
             }
 
 
@@ -164,9 +129,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     {
                         objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
                     }
-                    else
+                    else if (("02".Equals(model.Categoria.TIPOEJEMPLO)))
                     {
-                        objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                        if (model.NombreTempImgCategoria != null)
+                        {
+                            objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                            objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
+                        }
+                        
                     }
                     _categoriaRepository.Update(objCategoria);
                     
@@ -218,9 +188,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     {
                         objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
                     }
-                    else
+                    else if ("02".Equals(model.Categoria.TIPOEJEMPLO))
                     {
-                        objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                        if (model.NombreTempImgCategoria!=null)
+                        {
+                            objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                            objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;    
+                        }
+                        
                     }
                     _categoriaRepository.Update(objCategoria);
                     
@@ -235,27 +210,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             categoriaViewModel.Categoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
             categoriaViewModel.Categoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
             categoriaViewModel.Categoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
+            categoriaViewModel.Categoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
             categoriaViewModel.image = model.image;
 
-            //return View("Edit", categoriaViewModel);
-            //JsonMessage objJsonMessage = new JsonMessage();
-            //objJsonMessage.Objeto = categoriaViewModel.Categoria;
-
-
-            //if (Accion.Nuevo.Equals(Session["AccionCategoria"]))
-            //{
-            //    objJsonMessage.Resultado = true;
-            //    objJsonMessage.Mensaje = "Se genero la categoría: " + model.Categoria.IDECATEGORIA;
-            //}
-            //else
-            //{
-            //    objJsonMessage.Resultado = true;
-            //    objJsonMessage.Mensaje = "Se actualizo la categoría: " + model.Categoria.IDECATEGORIA;
-            //}
+            if (fullPath != null)
+            {
+                System.IO.File.Delete(fullPath);
+            }
 
             return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
-
-            //return Json(objJsonMessage);
 
 
         }
@@ -432,12 +395,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     cell = new string[]
                             {
                                 item.IDECRITERIOXSUBCATEGORIA.ToString(),
-                                item.SubCategoria.IDESUBCATEGORIA.ToString(),
-                                item.Criterio.IdeCriterio.ToString(),
-                                item.Criterio.Pregunta,
-                                item.PUNTAJECAL.ToString(),
-                                item.PRIORIDAD.ToString(),
-                                item.Criterio.TipoCalificacion.ToString()
+                                item.SubCategoria.IDESUBCATEGORIA==null?"":item.SubCategoria.IDESUBCATEGORIA.ToString(),
+                                item.Criterio.IdeCriterio==null?"":item.Criterio.IdeCriterio.ToString(),
+                                item.Criterio.Pregunta== null?"":item.Criterio.Pregunta,
+                                item.PUNTAJECAL== null? "":item.PUNTAJECAL.ToString(),
+                                item.PRIORIDAD==null?"":item.PRIORIDAD.ToString(),
+                                item.Criterio.TipoCalificacion==null?"":item.Criterio.TipoCalificacion.ToString()
+                                
                                
                                 
                             }
@@ -673,6 +637,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
             model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
             model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
+            model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
             
             Session["AccionCategoria"] = Accion.Editar;
             Session["Tabla1"] = Grilla.Tabla1;
@@ -887,7 +852,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (id != null && id > 0)
             {
                 objCategoria.Examen.IdeExamen = id;
+                var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == objCategoria.Examen.IdeExamen);
+                objCategoria.Categoria.TipoCriterio = objExamen.TipExamen;
+                
             }
+
+            
+
+
             return View("PopupCategoria", objCategoria);
            
         }
@@ -1052,7 +1024,84 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(jsonMessage);
         }
 
-        
+        /// <summary>
+        /// Subida de imagen a la carpeta temporal
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="forms"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string Upload(HttpPostedFileBase file, FormCollection forms)
+        {
+            var jsonResponse = new JsonResponse { Success = false };
+
+            try
+            {
+                string[] extensiones = forms.Get("ext").Split(';');
+
+                string extensionArchivo = Path.GetExtension(file.FileName);
+
+                if (extensiones.Contains(extensionArchivo.ToLower()))
+                {
+                    var content = new byte[file.ContentLength];
+                    file.InputStream.Read(content, 0, file.ContentLength);
+
+                    var indexOfLastDot = file.FileName.LastIndexOf('.');
+                    var extension = file.FileName.Substring(indexOfLastDot + 1, file.FileName.Length - indexOfLastDot - 1);
+                    var name = file.FileName.Substring(0, indexOfLastDot);
+
+                    string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                    string directoryPath = ConfigurationManager.AppSettings["ImageFilePath"];
+                    string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                    string fullPath = Path.Combine(applicationPath, string.Format("{0}{1}{2}", directoryPath, nombreTemporalArchivo, extensionArchivo));
+
+                    System.IO.File.WriteAllBytes(fullPath, content);
+
+
+
+                    jsonResponse.Data = new
+                    {
+                        NombreArchivo = file.FileName,
+                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo)
+                    };
+                    jsonResponse.Success = true;
+
+                }
+                else
+                {
+                    jsonResponse.Success = false;
+                    jsonResponse.Message = "0";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                jsonResponse.Message = "Ocurrio un error, por favor intente de nuevo o más tarde.";
+            }
+
+            return JsonConvert.SerializeObject(jsonResponse);
+        }
+
+
+        /// <summary>
+        /// GetImage Muestra la Imagen en el criterio
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult GetImage(int id)
+        {
+            var firstOrDefault = _categoriaRepository.GetSingle(c => c.IDECATEGORIA == id);
+            if (firstOrDefault.IMAGENEJEMPLO != null)
+            {
+                byte[] image = firstOrDefault.IMAGENEJEMPLO;
+                return File(image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
+        }
 
     }
 }

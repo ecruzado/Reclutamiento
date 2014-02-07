@@ -8,12 +8,17 @@
 
 
 @section Head{
+     <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
 }
 
 @section Scripts{
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
+
+
     $(document).ready(function () {
 
 
@@ -406,17 +411,23 @@
         if (dato == 1) {
             $("#ejemplo").hide();
             $("#Categoria_TEXTOEJEMPLO").hide();
-            $("#image").hide();
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
         }
         if (dato == "I") {
             $("#ejemplo").show();
             $("#Categoria_TEXTOEJEMPLO").hide();
-            $("#image").show();
+            $("#nombreImagen").show();
+            $("#selecImagen").show();
+            $("#verImagen").show();
         }
         if (dato == "T") {
             $("#ejemplo").show();
             $("#Categoria_TEXTOEJEMPLO").show();
-            $("#image").hide();
+            $("#nombreImagen").hide();
+            $("#selecImagen").hide();
+            $("#verImagen").hide();
         }
 
        
@@ -427,17 +438,24 @@
             if (vvalor == "01") {
                 $("#ejemplo").show();
                 $("#Categoria_TEXTOEJEMPLO").show();
-                $("#image").hide();
+                $("#nombreImagen").hide();
+                $("#selecImagen").hide();
+                $("#verImagen").hide();
             }
             else if (vvalor == "02") {
                 $("#ejemplo").show();
                 $("#Categoria_TEXTOEJEMPLO").hide();
-                $("#image").show();
+               
+                $("#nombreImagen").show();
+                $("#selecImagen").show();
+                $("#verImagen").show();
             }
             else {
                 $("#ejemplo").hide();
                 $("#Categoria_TEXTOEJEMPLO").hide();
-                $("#image").hide();
+                $("#nombreImagen").hide();
+                $("#selecImagen").hide();
+                $("#verImagen").hide();
             }
         });
 
@@ -611,7 +629,73 @@
              }
          });
 
+        $("#fileCategoria").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+             'script': '@Url.Action("Upload","Categoria")',
+             'scriptData': { ext: '.jpeg;.jpg;.gif;.bmp;.png' },
+             'fileDataName': 'file',
+             'buttonText': 'Subir',
+             'fileDesc': 'Image Files',
+             'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+             'multi': false,
+             'auto': true,
+             'queueSizeLimit': '90',
+             'sizeLimit': 2147483647,
+             'removeCompleted': true,
+             'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
 
+                    'onError': function (a, b, c, d) {
+                        if (d.status == 404)
+                            alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                        else if (d.type === "HTTP")
+                            alert("error " + d.type + ": " + d.status);
+                        else if (d.type === "File Size")
+                            alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                        else
+                            alert("error " + d.type + ": " + d.text);
+                    },
+                    'onSelect': function (e, q, f) {
+                        var estado = true;
+                        var fileName = f.name;
+                        var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                        switch (fileNameExt) {
+                            case 'jpeg':
+                                break;
+                            case 'jpg':
+                                break;
+                            case 'gif':
+                                break;
+                            case 'bmp':
+                                break;
+                            case 'png':
+                                break;
+                            default:
+                                //Funciones.ShowAlert('', "extensión no válida");
+                                $("#fileInput").uploadifyCancel(q);
+                                $("#fileInput").uploadifyClearQueue();
+                                estado = false;
+                                break;
+                        }
+
+                        return estado;
+
+                    },
+                    'onComplete': function (event, queueId, fileObj, response, data) {
+
+                        var rsp = jQuery.parseJSON(response);
+
+                        if (rsp.Success == true) {
+
+                            $("#Categoria_NOMBREIMAGEN").val(rsp.Data.NombreArchivo);
+                            $("#NombreTempImgCategoria").val(rsp.Data.NombreTemporalArchivo);
+
+
+                        }
+                        else {
+
+                        }
+                    }
+         });
 
 
     
@@ -630,6 +714,43 @@
 
     }
 
+    function validacion() {
+
+        var nombreTem = $('#NombreTempImgCategoria').val();
+        var tipo = $('#Categoria_TIPOEJEMPLO').val();
+        var texto = $('#Categoria_TEXTOEJEMPLO').val();
+        var nombreImagen = $('#Categoria_NOMBREIMAGEN').val();
+        
+
+        if ("02" == tipo) {
+            if (nombreImagen.length > 0) {
+
+                $('#btnGuardar').trigger('click');
+            } else {
+                MostrarMensaje("Ingrese una imagen de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+            
+        }
+        if ("01" == tipo) {
+            
+            if (texto.length > 0) {
+                $('#btnGuardar').trigger('click');
+            } else {
+                MostrarMensaje("Ingrese una texto de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        }
+        
+        if (tipo==0) {
+            MostrarMensaje("Ingrese una tipo de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+        
+        
+
+        
+
+       
+    
+    }
 
     function ImagenFormatter(cellvalue, options, rowObject) {
         var tipo = rowObject[4] == null ? "" : rowObject[4];
@@ -672,7 +793,7 @@
                     codSub: idSubCategoria
                   },
             type: "POST",
-            url: "@Url.Action("EliminarSubCategoria", "Categoria")",
+            url: '@Url.Action("EliminarSubCategoria", "Categoria")',
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
@@ -704,7 +825,6 @@
 
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     $('#grdListCriterio').trigger('reloadGrid');
-
 
                 }
             }
@@ -785,12 +905,13 @@
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
                                 
-                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                {
                                   @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" , @readonly = "readonly"})    
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10", @readonly = "readonly" })    
                                 }
                                 
                                 <div class="tex-error" style="font-size:12px;color:red">    
@@ -805,10 +926,13 @@
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
                                 
-                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                {
                                   @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" }) 
-                                }else{
-                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" ,@readonly = "readonly" }) 
+                                }
+                                else
+                                {
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255", @readonly = "readonly" }) 
                                 }
                                 
                                  <div class="tex-error" style="font-size:12px;color:red"> 
@@ -822,12 +946,13 @@
                         
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                 @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                 {
                                   @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA)) 
                                  }
                                  else
                                  {
-                                  @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA),new {disabled = "disabled"})       
+                                  @Html.DropDownListFor(model => model.Categoria.TIPCATEGORIA, new SelectList(Model.TipoCategoria, "Valor", "Descripcion", Model.Categoria.TIPCATEGORIA), new { disabled = "disabled" })       
                                  }
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Categoria.TIPCATEGORIA)
@@ -839,34 +964,18 @@
                 </tr>
 
                 <tr class="formulario-fila">
-                   @* <td class="span5">
-                        
-                            <label class="control-label" for="inputSuccess">Tipo Ejemplo </label>
-                            <div class="controles">
-                               
-                                 @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
-                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO)) 
-                                 }
-                                 else{
-                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO), new { disabled = "disabled"}) 
-                                 } 
-                                     <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Categoria.TIPOEJEMPLO)
-                                </div>
-                            </div>
-                        
-                    </td>*@
-
+                  
                     <td >
                         <label class="control-label" for="inputSuccess" id="lblInstrucciones">Insruccciones</label>
                         <div class="controles">
                          
-                            @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255"}) 
+                            @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                            {
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
                             }
                             else
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255",@readonly = "readonly"}) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly" }) 
                             }
                              <div class="tex-error" style="font-size:12px;color:red">  
                              @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
@@ -874,65 +983,22 @@
                         </div>
                     </td>
                    
-                  @*  <td class="span5">
-                            
-                            <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
-                            <div class="controles">
-                                
-                                @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
-                                  @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150" }) 
-                                  @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })
-                                }
-                                else
-                                {
-                                  @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @class = "textoFormulario", @maxlength = "150", @readonly = "readonly"}) 
-                                  @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" })
-                                }    
-                               
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-
-                              @if ("01".Equals(Model.Categoria.TIPOEJEMPLO))
-                                {
-                                 @Html.ValidationMessageFor(model => model.Categoria.TEXTOEJEMPLO)
-                                }
-                                else
-                                {
-                                <span></span>
-                                }
-                                 </div>
-                            </div>
-
-                        
-                    </td>*@
-
+                
                 </tr>
                 <tr class="formulario-fila">
-                  @*  <td class="span12" >
-                    <label class="control-label" for="inputSuccess" id="lblInstrucciones">Insruccciones</label>
-                    <div class="controles">
-                         
-                        @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
-                          @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255"}) 
-                        }
-                        else
-                        {
-                          @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10 , style="margin: 0px 0px 10px; width: 598px; height: 70px;",maxlength="255",@readonly = "readonly"}) 
-                        }
-                         <div class="tex-error" style="font-size:12px;color:red">  
-                         @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
-                         </div>
-                    </div>
-                    </td>*@
+                  
                      <td class="span5">
                         
                             <label class="control-label" for="inputSuccess">Tipo Ejemplo </label>
                             <div class="controles">
                                
-                                 @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                 {
                                    @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO)) 
                                  }
-                                 else{
-                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO), new { disabled = "disabled"}) 
+                                 else
+                                 {
+                                   @Html.DropDownListFor(model => model.Categoria.TIPOEJEMPLO, new SelectList(Model.TipoEjemplo, "Valor", "Descripcion", Model.Categoria.TIPOEJEMPLO), new { disabled = "disabled" }) 
                                  } 
                                      <div class="tex-error" style="font-size:12px;color:red"> 
                                 @*@Html.ValidationMessageFor(model => model.Categoria.TIPOEJEMPLO)*@
@@ -947,27 +1013,57 @@
                                 <label class="control-label" for="inputSuccess" id="ejemplo">Ejemplo</label>
                                 <div class="controles">
                                 
-                                    @if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
-                                      @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new {  @maxlength = "150", rows = 4, cols = 10,style="margin: 0px 0px 10px; width: 598px; height: 70px;" , data_val = "false"}) 
-                                      @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })
+                                    @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                                    {
+                                      @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
+                                     
+                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
+                                        <table>
+                                            <tr id="nombreImagen">
+                                   
+                                                <td class="colEtiqueta">
+                                                  <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
+                                                </td>
+                                                <td class="colInput;input-xxlarge">
+                                                  @Html.TextBoxFor(model => model.Categoria.NOMBREIMAGEN, new { @class = "textoFormulario", @readonly = "readonly" })
+                                                </td>
+                                 
+                                            </tr>
+       
+                                            <tr id="selecImagen">
+                                              <td class="colEtiqueta">
+                                                <label class="etiquetaFormulario">Imagen</label>
+                                              </td>
+                                              <td >
+                                              <div id="divImagen">
+                                                  <input type="file" name="fileCategoria" id="fileCategoria" />
+                                       
+                                              @Html.TextBoxFor(model => model.NombreTempImgCategoria, new { style = "display: none;" })
+                                              </div>
+                                              </td>
+                                              <td>
+                                              </td>
+                                            </tr>
+                                            <tr id="verImagen">
+                                            @if (Model.Categoria.IMAGENEJEMPLO != null)
+                                            {
+                                            <td class="colEtiqueta"></td>
+                                            <td class ="colInput" >
+                                                <img id="ImgCategoria"  height ="150" width="150" src="@Url.Action("GetImage", "Categoria", new { id = Model.Categoria.IDECATEGORIA })" /> 
+                                            </td>
+                                            
+                                            }
+                                            </tr>
+                                       </table> 
                                     }
                                     else
                                     {
-                                      @Html.TextBoxFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", @readonly = "readonly",rows = 4, cols = 10,style="margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false"}) 
-                                      @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" })
+                                      @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", @readonly = "readonly", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
+                                     
+                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*", @readonly = "readonly" }) *@
                                     }    
                                
-                                  @*  <div class="tex-error" style="font-size:12px;color:red"> 
-
-                                  @if ("01".Equals(Model.Categoria.TIPOEJEMPLO))
-                                    {
-                                     @Html.ValidationMessageFor(model => model.Categoria.TEXTOEJEMPLO)
-                                    }
-                                    else
-                                    {
-                                    <span></span>
-                                    }
-                                     </div>*@
+                                
                                 </div>
 
                         
@@ -982,7 +1078,8 @@
 
             @if (Grilla.Tabla1.Equals(Session["Tabla1"]))
             {
-                if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+                if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                {
                     <div class="grilla-opciones">
                         <h6>Subcategorías</h6>
                         <div class="opciones">
@@ -1006,9 +1103,10 @@
                
             } 
             @if (Grilla.Tabla2.Equals(Session["Tabla2"]))
-            {  
-            
-                if(!Accion.Consultar.Equals(Session["AccionCategoria"])){
+            {
+
+                if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+                {
                     <div class="grilla-opciones">
                     <h6>Criterio</h6>
                         <div class="opciones">
@@ -1046,7 +1144,10 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button  type="submit" id="btnGuardar" class="btn btn-info"><i class=" icon-hdd icon-white"></i> Grabar</button>
+                <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
+                <input id="btnGuardar" type="submit" style="visibility: hidden" />
+
+
             </div>
         </div>
     </div>

@@ -114,7 +114,7 @@
                 <label class="etiquetaFormulario" for="inputSuccess">Tipo</label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Categoria.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Categoria.TipoCriterio),new { data_val = "false" })
+                @Html.DropDownListFor(model => model.Categoria.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Categoria.TipoCriterio),new { data_val = "false" ,@disabled = "disabled"})
             </td>
             <td style="width:40px;"></td> 
         <td class="colEtiqueta">

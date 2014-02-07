@@ -25,6 +25,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TEXTOEJEMPLO { get; set; }
         public virtual string TipoCriterio { get; set; }
         public virtual string TIPCATEGORIADES { get; set; }
+        public virtual string NOMBREIMAGEN { get; set; }
+        
        
 
         public virtual IList<Examen> ExamenesCategoria { get; set; }

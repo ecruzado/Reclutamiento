@@ -100,5 +100,12 @@ namespace SanPablo.Reclutador.Test.Repository
             
             repository.Add(competenciaCargo);
         }
+
+        [TestMethod]
+        public void test_sub_categoria_por_criterio() 
+        {
+            var repository = new CriterioPorSubcategoriaRepository(NHibernateHelper.OpenSession());
+            var lista = repository.GetPaging("IDECRITERIOXSUBCATEGORIA", true, 0, 100);
+        }
     }
 }

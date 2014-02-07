@@ -24,17 +24,20 @@
         private IAlternativaRepository _alternativaRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
+        private ICategoriaRepository _categoriaRepository;
 
         public CriterioController(ICriterioRepository criterioRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
             IAlternativaRepository alternativaRepository,
-            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository
+            ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository,
+            ICategoriaRepository categoriaRepository
             )
         {
             _criterioRepository = criterioRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _alternativaRepository = alternativaRepository;
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
+            _categoriaRepository = categoriaRepository;
         }
         
         public ActionResult Index()
@@ -728,6 +731,12 @@
             return View(objCriterioModel);
         }
 
+        /// <summary>
+        /// Inicializa el popup de la lista de criterios
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="idSubCategoria"></param>
+        /// <returns></returns>
         public ViewResult PopupListaCriterio(int id, string idSubCategoria)
         {
             try
@@ -736,7 +745,11 @@
                 objCriterioModel = InicializarCriteriosIndex();
                 objCriterioModel.CriterioPorSubcategoria = new CriterioPorSubcategoria();
                 objCriterioModel.CriterioPorSubcategoria.IDESUBCATEGORIA = Convert.ToInt32(idSubCategoria);
-                
+                objCriterioModel.Criterio = new Criterio();
+
+                var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == id);
+                objCriterioModel.Criterio.TipoCriterio = objCategoria.TIPCATEGORIA;
+
                 return View(objCriterioModel);
                 
             }

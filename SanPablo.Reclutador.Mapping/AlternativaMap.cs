@@ -19,6 +19,8 @@
            Map(x => x.UsuarioModificacion, "USRMODIFICACION");
            Map(x => x.FechaModificacion, "FECMODIFICACION");
            Map(x => x.Image, "IMAGE");
+           Map(x => x.ESTACTIVO, "ESTACTIVO");
+            
            Table("ALTERNATIVA");
         }
     }

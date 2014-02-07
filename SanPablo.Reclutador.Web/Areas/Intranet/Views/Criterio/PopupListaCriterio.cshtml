@@ -158,7 +158,7 @@
             </td>
             <td class="colInput">
                               
-                @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { data_val = "false" })
+                @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { data_val = "false" ,@disabled ="disabled"})
 	        </td>
             <td style="width:40px;"></td>
             <td class="colEtiqueta">

@@ -7,6 +7,7 @@
         public virtual string NombreAlternativa { get; set; }
         public virtual int Peso { get; set; }
         public virtual string RutaDeImagen { get; set; }
+        public virtual string ESTACTIVO { get; set; }
         public virtual byte[] Image { get; set; }
 
     }
