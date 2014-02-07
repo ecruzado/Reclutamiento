@@ -1,0 +1,119 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
+    ViewBag.Title = "Discapacidad";
+    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+@section Scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnAgregarDiscapacidad').click(function () {
+            mostrarAgregarDiscapacidad();
+        });
+
+        $('#updateDialogDiscapacidad').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Discapacidad", "Cargo")',
+                            $("#discapacidadForm").serialize(),
+                            function (respuesta) {
+                                if (respuesta.msj) {
+                                    $("#updateDialogDiscapacidad").dialog("close");
+                                    $('#grdListDiscapacidad').trigger('reloadGrid');
+                                }
+                                else {
+                                    var mensj = document.getElementById("mensajeError");
+                                    mensj.style.display = "block";
+                                }
+                            }
+                        );
+                }
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+                }
+            }
+         });
+
+    });
+
+    $(function () {
+       
+        jQuery("#grdListDiscapacidad").jqGrid({
+            url: '@Url.Action("ListaDiscapacidad", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo', 'Descripci&oacuten', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, hidden: true },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            sortname: 'IdeDiscapacidadCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 60,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+    });
+
+    function mostrarAgregarDiscapacidad() {
+        var dialogDiv = $('#updateDialogDiscapacidad');
+        $.get('@Url.Action("Discapacidad", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogDiscapacidad"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+</script>
+}
+
+<div class="span12">
+    @Html.Partial("Edit")
+</div>
+<!--CONOCIMEINTOS -->
+    <div class="tab-pane" id="F">
+        <div class="grilla-opciones">
+            <h6>Discapacidad</h6>
+            <div class="opciones">
+                <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+        <div class="tabla-datos">
+            <table id="grdListDiscapacidad">
+            </table>
+        </div>
+                        
+        <div class="formulario-accion">               
+            <div class="opciones">
+            <a class="btn" href="#" onclick="irATab('E');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="#" onclick="irATab('G');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
+            </div>
+        </div> 
+    </div>
+
+    <!--CONOCIMIENTOS FIN-->

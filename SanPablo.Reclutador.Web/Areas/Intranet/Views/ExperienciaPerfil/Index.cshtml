@@ -1,0 +1,124 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
+    ViewBag.Title = "Estudios";
+    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+@section Scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $('#btnAgregarExperiencia').click(function () {
+            mostrarAgregarExperiencia();
+        });
+
+
+        $('#updateDialogExperiencia').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("Experiencia", "Cargo")',
+                                $("#experienciaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogExperiencia").dialog("close");
+                                        $('#grdListExperiencia').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+    $(function () {
+        $("#txtfechainicio").datepicker();
+        $("#txtfechafin").datepicker();
+
+
+
+        jQuery("#grdListExperiencia").jqGrid({
+            url: '@Url.Action("ListaExperiencia", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Cargo', 'Años', 'Puntaje'],
+            colModel: [
+                    { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false },
+                    { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            sortname: 'IdeExperienciaCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 60,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+    });
+
+
+    function mostrarAgregarExperiencia() {
+        var dialogDiv = $('#updateDialogExperiencia');
+        $.get('@Url.Action("Experiencia", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogExperiencia"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+    </script>
+}
+
+<div class="span12">
+    @Html.Partial("Edit")
+</div>
+<!--EXPERIENCIA -->
+    <div class="tab-pane" id="D">
+        <div class="grilla-opciones">
+            <h6>Experiencia Laboral</h6>
+            <div class="opciones">
+                <a id ="btnAgregarExperiencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id ="btnEditarExperiencia" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id ="btnEliminarExperiencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListExperiencia">
+            </table>
+        </div>
+        <div class="formulario-accion">   
+            <div class="opciones">
+            <a class="btn" href="#" onclick="irATab('C');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="#" onclick="irATab('E');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
+            </div>
+                                        
+        </div>
+    </div>
+    <!--EXPERIENCIA FIN-->

@@ -1,0 +1,294 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
+    ViewBag.Title = "Conocimientos";
+    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+ 
+            $('#btnAgregarOfimatica').click(function () {
+                mostrarAgregarOfimatica();
+            });
+
+
+            $('#updateDialogOfimatica').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post('@Url.Action("Ofimatica", "Cargo")',
+                                $("#ofimaticaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogOfimatica").dialog("close");
+                                        $('#grdListOfimatica').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnAgregarIdioma').click(function () {
+                mostrarAgregarIdioma();
+            });
+
+
+            $('#updateDialogIdioma').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post('@Url.Action("Idioma", "Cargo")',
+                                    $("#IdiomaForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.msj) {
+                                            $("#updateDialogIdioma").dialog("close");
+                                            $('#grdListIdioma').trigger('reloadGrid');
+                                        }
+                                        else {
+                                            var mensj = document.getElementById("mensajeError");
+                                            mensj.style.display = "block";
+                                        }
+                                    }
+                                );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnAgregarOtrosConocimientos').click(function () {
+                mostrarAgregarOtrosConocimientos();
+            });
+
+
+            $('#updateDialogOtrosConocimientos').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('form').valid();
+                        if (result) {
+                            $.post('@Url.Action("OtrosConocimientos", "Cargo")',
+                                    $("#otrosConocimientosForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.msj) {
+                                            $("#updateDialogOtrosConocimientos").dialog("close");
+                                            $('#grdListOtrosConocimientos').trigger('reloadGrid');
+                                        }
+                                        else {
+                                            var mensj = document.getElementById("mensajeError");
+                                            mensj.style.display = "block";
+                                        }
+                                    }
+                                );
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        $(function () {
+           
+            jQuery("#grdListOfimatica").jqGrid({
+                url: '@Url.Action("ListaOfimatica", "Cargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: true,
+                height: 60,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdListIdioma").jqGrid({
+                url: '@Url.Action("ListaIdioma", "Cargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: true,
+                height: 60,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdListOtrosConocimientos").jqGrid({
+                url: '@Url.Action("ListaOtrosConocimientos", "Cargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: true,
+                height: 60,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+        });
+
+        function mostrarAgregarOfimatica() {
+            var dialogDiv = $('#updateDialogOfimatica');
+            $.get('@Url.Action("Ofimatica", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOfimatica"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarIdioma() {
+        var dialogDiv = $('#updateDialogIdioma');
+        $.get('@Url.Action("Idioma", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogIdioma"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarOtrosConocimientos() {
+        var dialogDiv = $('#updateDialogOtrosConocimientos');
+        $.get('@Url.Action("OtrosConocimientos", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOtrosConocimientos"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+</script>
+}
+
+<div class="span12">
+    @Html.Partial("Edit")
+</div>
+<!--CONOCIMEINTOS -->
+      <div class="tab-pane" id="E">
+        <div class="grilla-opciones">
+            <h6>Ofimática</h6>
+            <div class="opciones">
+                <a id="btnAgregarOfimatica" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarOfimatica" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarOfimatica" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListOfimatica">
+            </table>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Idiomas</h6>
+            <div class="opciones">
+                <a id="btnAgregarIdioma" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                <a id="btnEditarIdioma" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarIdioma" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListIdioma">
+            </table>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Otros Conocimientos</h6>
+            <div class="opciones">
+                <a id ="btnAgregarOtrosConocimientos" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id ="btnEditarOtrosConocimientos" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id ="btnEliminarOtrosConocimientos" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListOtrosConocimientos">
+            </table>
+        </div>                        <div class="formulario-accion">   
+            <div class="opciones">
+            <a class="btn" href="#" onclick="irATab('D');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="#" onclick="irATab('F');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
+            </div>
+                                        
+        </div>                    
+    </div>
+
+    <!--CONOCIMIENTOS FIN-->

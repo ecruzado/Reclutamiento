@@ -14,6 +14,11 @@
             Map(x => x.IdeUbigeo, "IDEUBIGEO");
             Map(x => x.PuntajeUbigeo, "PUNTUBIGEO");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+
+            Map(x => x.Departamento).Formula("");
+            Map(x => x.Provincia).Formula("");
+            Map(x => x.Distrito).Formula("");
+
             Table("UBIGEO_CARGO");
         }
     }

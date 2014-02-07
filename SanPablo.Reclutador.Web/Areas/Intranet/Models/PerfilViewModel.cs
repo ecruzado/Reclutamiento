@@ -14,7 +14,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     using System.Web;
     using SanPablo.Reclutador.Entity;
 
-    public class CargoViewModel
+    public class PerfilViewModel
     {
         public Cargo Cargo { get; set; }
         public CompetenciaCargo Competencia { get; set; }

@@ -1,9 +1,9 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.HorarioCargoViewModel
 @{
     Layout = "";
 }
 
-@using (Html.BeginForm("Horario", "Cargo", FormMethod.Post, new { @id = "horariosForm" }))
+@using (Html.BeginForm("Edit", "HorarioCargo", FormMethod.Post, new { @id = "horariosForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >

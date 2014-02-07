@@ -1,0 +1,209 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+@{
+    ViewBag.Title = "Estudios";
+    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+@section Scripts{
+<script type="text/javascript">
+     $(document).ready(function () {
+        $('#btnAgregarNivelAcademico').click(function () {
+            mostrarAgregarNivelAcademico();
+        });
+
+        $('#updateDialogNivelAcademico').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("NivelAcademico", "Cargo")',
+                            $("#nivelAcademicoForm").serialize(),
+                            function (respuesta) {
+                                if (respuesta.msj) {
+                                    $("#updateDialogNivelAcademico").dialog("close");
+                                    $('#grdListNivelAcademico').trigger('reloadGrid');
+                                }
+                                else {
+                                    var mensj = document.getElementById("mensajeError");
+                                    mensj.style.display = "block";
+                                }
+                            }
+                        );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnAgregarCentroEstudio').click(function () {
+            mostrarAgregarCentroEstudio();
+        });
+
+
+        $('#updateDialogCentroEstudio').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('form').valid();
+                    if (result) {
+                        $.post('@Url.Action("CentroEstudio", "Cargo")',
+                                $("#centroEstudioForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.msj) {
+                                        $("#updateDialogCentroEstudio").dialog("close");
+                                        $('#grdListCentroEstudios').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        var mensj = document.getElementById("mensajeError");
+                                        mensj.style.display = "block";
+                                    }
+                                }
+                            );
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+     });
+
+    $(function () {
+        $("#txtfechainicio").datepicker();
+        $("#txtfechafin").datepicker();
+
+
+        jQuery("#grdListNivelAcademico").jqGrid({
+            url: '@Url.Action("ListaNivelAcademico", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Puntaje'],
+            colModel: [
+                    { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', editable: false, sortable: false },
+                    { name: 'AreaEstudio', index: 'AreaEstudio', align: 'left', editable: false, sortable: false },
+                    { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            sortname: 'IdeNivelAcademicoCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 60,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListCentroEstudios").jqGrid({
+            url: '@Url.Action("ListaCentroEstudio", "Cargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo de Institución', 'Institución', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', Tipo: 'Codigo', align: 'center', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            sortname: 'IdeCentroEstudioCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 60,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+    });
+
+    function mostrarAgregarNivelAcademico() {
+        var dialogDiv = $('#updateDialogNivelAcademico');
+        $.get('@Url.Action("NivelAcademico", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogNivelAcademico"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarAgregarCentroEstudio() {
+        var dialogDiv = $('#updateDialogCentroEstudio');
+        $.get('@Url.Action("CentroEstudio", "Cargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogCentroEstudio"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+</script>
+}
+
+<div class="span12">
+    @Html.Partial("Edit")
+</div>
+<!--ESTUDIOS -->
+  
+    <div class="tab-pane" id="C">
+        <div class="grilla-opciones">
+            <h6>Nivel Académico</h6>
+            <div class="opciones">
+                <a id="btnAgregarNivelAcademico" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarNivelAcademico" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarNivelAcademico" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListNivelAcademico">
+            </table>
+        </div>
+                        
+        <div class="grilla-opciones">
+            <h6>Centro Estudios</h6>
+            <div class="opciones">
+                <a id="btnAgregarCentroEstudio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarCentroEstudio" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarCentroEstudio" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListCentroEstudios">
+            </table>
+        </div>
+                                            
+        <div class="formulario-accion">       
+            <div class="opciones">
+            <a class="btn" href="#" onclick="irATab('B');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="#" onclick="irATab('D');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
+            </div>
+                                    
+        </div>                    
+    </div>
+    <!--ESTUDIOS FIN-->

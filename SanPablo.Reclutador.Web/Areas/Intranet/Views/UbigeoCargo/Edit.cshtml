@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UbigeoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UbigeoCargoViewModel
 @{
     Layout = "";
 }
@@ -12,7 +12,7 @@
             $("select#Ubigeo_IdeUbigeo").append("<option value='00'> Seleccionar </option>");
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("listarUbigeos","Cargo")',
+                url: '@Url.Action("listarUbigeos","UbigeoCargo")',
                 data: { ideUbigeoPadre: ideDepartamento },
                 success: function (respuesta) {
                     $("select#Provincias").empty();
@@ -31,7 +31,7 @@
             var ideProvincia = $(this).val();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("listarUbigeos","Cargo")',
+                url: '@Url.Action("listarUbigeos","UbigeoCargo")',
                 data: { ideUbigeoPadre: ideProvincia },
                 success: function (respuesta) {
                     $("select#Ubigeo_IdeUbigeo").empty();
@@ -49,7 +49,7 @@
 
 
 
-@using (Html.BeginForm("Ubigeo", "Cargo", FormMethod.Post, new { @id = "ubigeosForm" }))
+@using (Html.BeginForm("Edit", "UbigeoCargo", FormMethod.Post, new { @id = "ubigeosForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >

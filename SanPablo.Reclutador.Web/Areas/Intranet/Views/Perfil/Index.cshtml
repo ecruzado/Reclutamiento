@@ -1,0 +1,317 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@{
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/_LayoutIntranet.cshtml";
+    
+}
+@section Head{
+}
+@section Scripts{
+    
+<script type="text/javascript">
+    $(document).ready(function () {
+        //PERFIL PUESTO
+        $('#btnAgregarCompetencia').click(function () {
+            mostrarAgregarCompetencia();
+        });
+
+
+        $('#updateDialog').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#competenciasForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "CompetenciaCargo")',
+                                $("#competenciasForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialog").dialog("close");
+                                        $('#grdListCompetencias').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+                        
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // btn Eliminar
+        $('#btnEliminarCompetencia').click(function () {
+            var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
+            alert(ideCompetencia);
+            if (ideCompetencia != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+
+
+
+        $('#btnAgregarOfrecimiento').click(function () {
+            mostrarAgregarOfrecimiento();
+        });
+
+
+        $('#updateDialog2').dialog({
+            autoOpen: false,
+            width: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#ofrecemosForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "OfrecimientoCargo")',
+                                $("#ofrecemosForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialog2").dialog("close");
+                                        $('#grdListOfrecemos').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje)
+                                        
+                                    }
+                                }
+                            );
+                    }
+                    else {
+                        notificacionError("Seleccionar una competencia");
+
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#btnEliminarOfrecimiento').click(function () {
+            var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
+            if (ideOfrecimiento != null) {
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje").html('Seleccionar un item a eliminar');
+                $("#divMensaje").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+    });
+    $(function () {
+        
+        jQuery("#grdListCompetencias").jqGrid({
+            url: '@Url.Action("ListarCompetencias", "CompetenciaCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
+            ],
+            sortname: 'DescripcionCompetencia',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 120,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            },
+            loadError: function (xhr, st, err) {
+                
+            }
+        });
+
+        jQuery("#grdListOfrecemos").jqGrid({
+            url: '@Url.Action("ListarOfrecemos", "OfrecimientoCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Descripci&oacuten'],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'DescripcionOfrecimiento',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 120,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+    });
+    function mostrarAgregarCompetencia() {
+        var dialogDiv = $('#updateDialog');
+        $.get('@Url.Action("Edit", "CompetenciaCargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarCompetencia(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarCompetencia","CompetenciaCargo")',
+            data: { ideCompetencia: id },
+        });
+    }
+
+    function mostrarAgregarOfrecimiento() {
+        var dialogDiv = $('#updateDialog2');
+        $.get('@Url.Action("Edit", "OfrecimientoCargo")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog2"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarOfrecimiento(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarOfrecimiento","OfrecimientoCargo")',
+            data: { ideOfrecimiento: id },
+        });
+    }
+
+  </script>
+}
+
+
+
+<div class="span12">
+    @Html.Partial("PerfilCargo")
+</div>
+
+@using (Html.BeginForm("Index", "Perfil", FormMethod.Post, new { @id = "puestoPerfilForm" }))
+{
+<!--PUESTO -->
+    <div class="tab-pane active" id="A">
+        <div class="grilla-opciones" style="margin-top:0px;">
+            <h6>Objetivos</h6>
+            <div style="clear:both"></div>
+        </div>
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+        <div class="espacio-division-entre-fieldset"></div>
+        <div class="grilla-opciones">
+            <h6>Funciones</h6>
+            <div class="opciones">
+            </div>
+            <div style="clear:both"></div>
+        </div>
+            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+        <div class="grilla-opciones">
+            <h6>Competencias</h6>
+            <div class="opciones">
+                <a id="btnAgregarCompetencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEliminarCompetencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListCompetencias">
+            </table>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Ofrecemos</h6>
+            <div class="opciones">
+                <a id="btnAgregarOfrecimiento" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                <a id="btnEliminarOfrecimiento" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListOfrecemos">
+            </table>
+        </div>
+                        
+        <div class="formulario-accion">                                          
+            <div class="opciones">
+                <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
+                <a class="btn btn-info" href="#" onclick="irATab('B');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+            </div>
+                            
+        </div>
+    </div>
+}
+<!--PUESTO FIN -->
+
+<div id="updateDialog" title="Agregar Competencia"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>
+
+<div id="updateDialog2" title="Agregar Ofrecimiento"></div>
+    <div id="divMensaje2">
+        <span id="spanMensaje2"></span>
+    </div>
