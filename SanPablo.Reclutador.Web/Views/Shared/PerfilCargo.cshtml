@@ -1,4 +1,6 @@
-﻿@*@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿ @using SanPablo.Reclutador.Web.Models
+
+@*@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
 
 @using (Html.BeginForm("Edit", "Cargo", FormMethod.Post, new { @id = "CargoForm" }))
 {
@@ -97,7 +99,7 @@
        
             <h5>Perfil</h5>
             
-            <ul class="nav nav-tabs" data-tabs="tabs">
+@*            <ul class="nav nav-tabs" data-tabs="tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
                 <li class="active"><a href='@Url.Action("Index","Perfil")' data-toggle="tab">Puesto</a></li>
                 <li class=""><a href='@Url.Action("General","Perfil")' data-toggle="tab">General</a></li>
@@ -107,6 +109,20 @@
                 <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
                 <li class=""><a href="#G" data-toggle="tab">Evaluación</a></li>
                 <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
+            </ul>*@
+
+
+            @*<ul class="nav nav-pills">*@
+            <ul class="nav nav-tabs" data-tabs="tabs">
+                @Html.MenuIntranet("Puesto", "Index", "Perfil")
+                @Html.MenuIntranet("General", "General", "Perfil")
+                @Html.MenuIntranet("Estudios", "Estudio", "Perfil")
+                @Html.MenuIntranet("Experiencia", "Experiencia", "Perfil")
+                @Html.MenuIntranet("Conocimientos", "Conocimientos", "Perfil")
+                @Html.MenuIntranet("Discapacidad", "Discapacidad", "Perfil")
+                @Html.MenuIntranet("Evaluación", "Index", "Perfil")
+                @Html.MenuIntranet("Conf. Perfil", "ConfiguracionPerfil", "Perfil")
+
             </ul>
             
             <div class="tabbable">
@@ -168,15 +184,7 @@
 
 
 
-<div id="updateDialogNivelAcademico" title="Agregar Nivel Académico"></div>
-    <div id="divMensaje5">
-        <span id="spanMensaje5"></span>
-    </div>
 
-<div id="updateDialogCentroEstudio" title="Agregar Centro de Estudio"></div>
-    <div id="divMensaje6">
-        <span id="spanMensaje6"></span>
-    </div>
 
 <div id="updateDialogOfimatica" title="Agregar Conocimiento Ofimatica"></div>
     <div id="divMensaje7">

@@ -1,0 +1,17 @@
+﻿ @using SanPablo.Reclutador.Web.Models
+    <div class="alert alert-info" id="alerta" style="display:none" >
+        <a class="close" onclick="hide('alerta')" >×</a>
+        Para poder <strong>postular</strong> a una posición Ud. debe completar sus Datos, Estudios, Experiencia y Conocimientos, ingrese primero sus datos personales en la pestaña Datos
+    </div>
+      
+<ul class="nav nav-pills">
+    @Html.MenuIntranet("Puesto", "Index", "Perfil")
+    @Html.MenuIntranet("General", "General", "Perfil")
+    @Html.MenuIntranet("Estudios", "Index", "Perfil")
+    @Html.MenuIntranet("Experiencia", "Index", "Perfil")
+    @Html.MenuIntranet("Conocimientos", "Index", "Perfil")
+    @Html.MenuIntranet("Discapacidad", "Index", "Perfil")
+    @Html.MenuIntranet("Evaluación", "Index", "Perfil")
+    @Html.MenuIntranet("Conf. Perfil", "Index", "Perfil")
+
+</ul>

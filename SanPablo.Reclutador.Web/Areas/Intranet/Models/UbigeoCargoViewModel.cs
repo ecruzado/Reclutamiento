@@ -1,11 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using NHibernate.Criterion;
-using SanPablo.Reclutador.Entity;
-using SanPablo.Reclutador.Entity.Validation;
-using SanPablo.Reclutador.Repository.Interface;
-
-
+﻿
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 {
     using System;

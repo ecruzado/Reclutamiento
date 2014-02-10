@@ -168,6 +168,9 @@
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
     <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\NivelAcademicoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\HorarioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\OfrecimientoViewModel.cs" />
@@ -195,6 +198,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ConocimientoPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\MenuIntranet.cs" />
     <Compile Include="Models\EstudioPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\ExperienciaPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\GenericDouble.cs" />
@@ -317,20 +321,20 @@
     <Content Include="Areas\Intranet\Views\OfrecimientoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\HorarioCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\UbigeoCargo\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\NivelAcademicoCargo\NivelAcademico.cshtml" />
-    <Content Include="Areas\Intranet\Views\CentroEstudioCargo\CentroEstudio.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoPerfil\Ofimatica.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoPerfil\Idioma.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoPerfil\OtrosConocimientos.cshtml" />
-    <Content Include="Areas\Intranet\Views\ExperienciaPerfil\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\DiscapacidadPerfil\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\NivelAcademicoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\CentroEstudioCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientoCargo\Ofimatica.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientoCargo\Idioma.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientoCargo\OtrosConocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\ExperienciaCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\DiscapacidadCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\General.cshtml" />
-    <Content Include="Areas\Intranet\Views\EstudiosPerfil\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\ExperienciaPerfil\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoPerfil\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\DiscapacidadPerfil\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConfiguracionPerfil\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\ConfiguracionPerfil.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -414,6 +418,7 @@
     <Content Include="Views\Shared\NotAccess.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Postulante\AgregarFoto.cshtml" />
+    <Content Include="Views\Shared\MenuPerfil.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

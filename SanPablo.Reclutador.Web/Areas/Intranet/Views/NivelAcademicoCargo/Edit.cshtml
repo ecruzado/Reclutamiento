@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.NivelAcademicoViewModel
 @{
     Layout = "";
 }
@@ -12,7 +12,7 @@
 
 
 
-@using (Html.BeginForm("NivelAcademico", "Cargo", FormMethod.Post, new { @id = "nivelAcademicoForm" }))
+@using (Html.BeginForm("Edit", "NivelAcademicoCargo", FormMethod.Post, new { @id = "nivelAcademicoForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >

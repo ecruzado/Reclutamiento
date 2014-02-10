@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CentroEstudioViewModel
 @{
     Layout = "";
 }
@@ -12,7 +12,7 @@
 
 
 
-@using (Html.BeginForm("CentroEstudio", "Cargo", FormMethod.Post, new { @id = "centroEstudioForm" }))
+@using (Html.BeginForm("Index", "CentroEstudioCargo", FormMethod.Post, new { @id = "centroEstudioForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
@@ -48,7 +48,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
-                @Html.TextBoxFor(model => model.NivelAcademico.PuntajeNivelEstudio, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.CentroEstudio.PuntajeCentroEstudios, new {@class="input-xxmini" })
            </td>
        </tr>  
     </table>
