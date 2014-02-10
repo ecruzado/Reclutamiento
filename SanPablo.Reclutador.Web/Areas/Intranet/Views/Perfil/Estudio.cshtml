@@ -20,7 +20,7 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#nivelAcademicoForm').valid();
                     if (result) {
                         $.post('@Url.Action("Edit", "NivelAcademicoCargo")',
                             $("#nivelAcademicoForm").serialize(),
@@ -56,7 +56,7 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#centroEstudioForm').valid();
                     if (result) {
                         $.post('@Url.Action("Edit", "CentroEstudioCargo")',
                                 $("#centroEstudioForm").serialize(),
@@ -78,6 +78,60 @@
                 }
             }
         });
+
+         $('#btnEliminarNivelAcademico').click(function () {
+             var ideHorario = jQuery('#grdListNivelAcademico').jqGrid('getGridParam', 'selrow');
+             if (ideHorario != null) {
+                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                 $("#divMensaje").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Eliminar": function () { eliminarNivelAcademico(ideNivelAcademico); $(this).dialog("close"); $('#grdListNivelAcademico').trigger('reloadGrid'); },
+                         "Cancel": function () { $(this).dialog("close"); }
+                     }
+                 });
+
+                 return false;
+             }
+             else {
+                 $("#spanMensaje").html('Seleccionar un item a eliminar');
+                 $("#divMensaje").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
+             }
+         });
+
+         $('#btnEliminarCentroEstudio').click(function () {
+             var ideHorario = jQuery('#grdListCentroEstudio').jqGrid('getGridParam', 'selrow');
+             if (ideHorario != null) {
+                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                 $("#divMensaje").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Eliminar": function () { eliminarCentroEstudio(ideCentroEstudio); $(this).dialog("close"); $('#grdListCentroEstudio').trigger('reloadGrid'); },
+                         "Cancel": function () { $(this).dialog("close"); }
+                     }
+                 });
+
+                 return false;
+             }
+             else {
+                 $("#spanMensaje").html('Seleccionar un item a eliminar');
+                 $("#divMensaje").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
+             }
+         });
      });
 
     $(function () {
@@ -113,7 +167,7 @@
             }
         });
 
-        jQuery("#grdListCentroEstudios").jqGrid({
+        jQuery("#grdListCentroEstudio").jqGrid({
             url: '@Url.Action("ListaCentroEstudio", "CentroEstudioCargo")',
             datatype: 'json',
             mtype: 'POST',
@@ -162,23 +216,41 @@
     }
 
     function mostrarEditarNivelAcademico(ideNivelAcademico) {
-        var dialogDiv = $('#updateDialogHorario');
+        var dialogDiv = $('#updateDialogNivelAcademico');
         $.get('@Url.Action("Edit", "NivelAcademicoCargo")', { id: ideNivelAcademico }, function (data) {
             dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            $.validator.unobtrusive.parse($("#updateDialogNivelAcademico"));
             dialogDiv.dialog('open');
         });
         return false;
     }
 
     function mostrarEditarCentroEstudios(idecentroEstudios) {
-        var dialogDiv = $('#updateDialogNivelAcademico');
+        var dialogDiv = $('#updateDialogCentroEstudio');
         $.get('@Url.Action("Edit", "CentroEstudioCargo")', { id: ideHorario }, function (data) {
             dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            $.validator.unobtrusive.parse($("#updateDialogCentroEstudio"));
             dialogDiv.dialog('open');
         });
         return false;
+    }
+
+    function eliminarNivelAcademico(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarNivelAcademico","NivelAcademicoCargo")',
+            data: { ideUbigeo: id },
+        });
+    }
+
+    function eliminarUbigeo(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarCentroEstudio","CentroEstudioCargo")',
+            data: { ideUbigeo: id },
+        });
     }
 </script>
 }
@@ -217,7 +289,7 @@
             <div style="clear:both"></div>
         </div>
         <div class="tabla-datos">
-            <table id="grdListCentroEstudios">
+            <table id="grdListCentroEstudio">
             </table>
         </div>
                                             
