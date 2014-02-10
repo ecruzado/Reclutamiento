@@ -32,36 +32,6 @@
             _detalleGeneralRepository = detalleGeneralRepository;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            Session["CargoIde"] = 1;
-            var cargoViewModel = inicializarCargo();
-            return View(cargoViewModel);
-        }
-
-        public PerfilViewModel inicializarCargo()
-        {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
-            cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
-            cargoViewModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-            cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-
-            return cargoViewModel;
-        }
-
         #region NIVEL ACADEMICO
 
         [HttpPost]
@@ -100,43 +70,95 @@
             }
         }
 
-        public ActionResult NivelAcademico()
+        public ActionResult Edit(string id)
         {
             var nivelAcademicoViewModel = inicializarNivelAcademico();
+            if (id != "0")
+            {
+                var nivelAcademico = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == Convert.ToInt32(id));
+                nivelAcademicoViewModel.NivelAcademico = nivelAcademico;
+            }
             return View(nivelAcademicoViewModel);
+
         }
 
         [HttpPost]
-        public ActionResult NivelAcademico([Bind(Prefix = "NivelAcademico")]NivelAcademicoCargo nivelAcademicoCargo)
-        {
-            if (!ModelState.IsValid)
+        public ActionResult Edit([Bind(Prefix = "NivelAcademico")]NivelAcademicoCargo nivelAcademicoCargo)
+        { 
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var nivelAcademicoViewModel = inicializarNivelAcademico();
-                nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
-                return View("NivelAcademico", nivelAcademicoViewModel);
-            }
-            _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
+                if (!ModelState.IsValid)
+                {
+                    var nivelAcademicoViewModel = inicializarNivelAcademico();
+                    nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
+                    return View("NivelAcademico", nivelAcademicoViewModel);
+                }
+                if (nivelAcademicoCargo.IdeNivelAcademicoCargo == 0)
+                {
+                    nivelAcademicoCargo.EstadoActivo = "A";
+                    nivelAcademicoCargo.FechaCreacion = FechaCreacion;
+                    nivelAcademicoCargo.UsuarioCreacion = "YO";
+                    nivelAcademicoCargo.FechaModificacion = FechaCreacion;
+                    nivelAcademicoCargo.Cargo = new Cargo();
+                    nivelAcademicoCargo.Cargo.IdeCargo = IdeCargo;
 
-            return View();
+                    _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
+                }
+                else
+                {
+                    var nivelAcedemicoCargoActualizar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == nivelAcademicoCargo.IdeNivelAcademicoCargo);
+                    nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
+                    nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
+                    nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
+                    nivelAcedemicoCargoActualizar.PuntajeNivelEstudio = nivelAcademicoCargo.PuntajeNivelEstudio;
+                    nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;
+                    _nivelAcademicoCargoRepository.Update(nivelAcedemicoCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
 
-        public PerfilViewModel inicializarNivelAcademico()
+        public NivelAcademicoViewModel inicializarNivelAcademico()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.NivelAcademico = new NivelAcademicoCargo();
+            var nivelAcademicoViewModel = new NivelAcademicoViewModel();
+            nivelAcademicoViewModel.Cargo = new Cargo();
+            nivelAcademicoViewModel.NivelAcademico = new NivelAcademicoCargo();
 
-            cargoViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEducacion));
-            cargoViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            nivelAcademicoViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEducacion));
+            nivelAcademicoViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
-            cargoViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            nivelAcademicoViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
+            nivelAcademicoViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.NivelAlcanzado));
-            cargoViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            nivelAcademicoViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.NivelAlcanzado));
+            nivelAcademicoViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return nivelAcademicoViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarNivelAcademico(int ideNivelAcademico)
+        {
+            ActionResult result = null;
+
+            var nivelAcademicoEliminar = new NivelAcademicoCargo();
+            nivelAcademicoEliminar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == ideNivelAcademico);
+            _nivelAcademicoCargoRepository.Remove(nivelAcademicoEliminar);
+
+            return result;
         }
 
         #endregion

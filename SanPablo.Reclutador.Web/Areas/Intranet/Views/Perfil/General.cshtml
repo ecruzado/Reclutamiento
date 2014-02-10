@@ -274,7 +274,7 @@
         return false;
     }
 
-    function mostrarEditarUbigeo(ideUbigeo) {
+        function mostrarEditarUbigeo(ideUbigeo) {
         var dialogDiv = $('#updateDialogUbigeo');
         $.get('@Url.Action("Edit", "UbigeoCargo")', { id: ideUbigeo }, function (data) {
             dialogDiv.html(data);
@@ -297,6 +297,11 @@
 
 <div class="span12">
     @Html.Partial("PerfilCargo")
+</div>
+
+<div class="span12">
+    @Html.Partial("MenuPerfil")
+
 </div>
 
 @using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))

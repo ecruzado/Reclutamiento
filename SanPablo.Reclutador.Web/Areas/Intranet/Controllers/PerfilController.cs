@@ -271,5 +271,22 @@
             return (ActionResult)this.Json((object)fAnonymousType3);
         }
 
+        public ActionResult Estudio()
+        {
+            (Session["CargoIde"]) = 1;
+            var estudioCargoViewModel = inicializarEstudio();
+            return View(estudioCargoViewModel);
+        }
+
+        public  PerfilViewModel inicializarEstudio()
+        {
+            var estudioCargoViewModel = new PerfilViewModel();
+            estudioCargoViewModel.Cargo = new Cargo();
+            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
+            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
+
+            return estudioCargoViewModel;
+        }
+
     }
 }

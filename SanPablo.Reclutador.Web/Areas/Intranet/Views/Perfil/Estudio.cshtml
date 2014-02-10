@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
     ViewBag.Title = "Estudios";
     //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
@@ -22,7 +22,7 @@
                     e.preventDefault();
                     var result = $('form').valid();
                     if (result) {
-                        $.post('@Url.Action("NivelAcademico", "Cargo")',
+                        $.post('@Url.Action("Edit", "NivelAcademicoCargo")',
                             $("#nivelAcademicoForm").serialize(),
                             function (respuesta) {
                                 if (respuesta.msj) {
@@ -58,7 +58,7 @@
                     e.preventDefault();
                     var result = $('form').valid();
                     if (result) {
-                        $.post('@Url.Action("CentroEstudio", "Cargo")',
+                        $.post('@Url.Action("Edit", "CentroEstudioCargo")',
                                 $("#centroEstudioForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.msj) {
@@ -86,7 +86,7 @@
 
 
         jQuery("#grdListNivelAcademico").jqGrid({
-            url: '@Url.Action("ListaNivelAcademico", "Cargo")',
+            url: '@Url.Action("ListaNivelAcademico", "NivelAcademicoCargo")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Puntaje'],
@@ -114,7 +114,7 @@
         });
 
         jQuery("#grdListCentroEstudios").jqGrid({
-            url: '@Url.Action("ListaCentroEstudio", "Cargo")',
+            url: '@Url.Action("ListaCentroEstudio", "CentroEstudioCargo")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Tipo de Institución', 'Institución', 'Puntaje'],
@@ -143,7 +143,7 @@
 
     function mostrarAgregarNivelAcademico() {
         var dialogDiv = $('#updateDialogNivelAcademico');
-        $.get('@Url.Action("NivelAcademico", "Cargo")', function (data) {
+        $.get('@Url.Action("Edit", "NivelAcademicoCargo", new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogNivelAcademico"));
             dialogDiv.dialog('open');
@@ -153,9 +153,29 @@
 
     function mostrarAgregarCentroEstudio() {
         var dialogDiv = $('#updateDialogCentroEstudio');
-        $.get('@Url.Action("CentroEstudio", "Cargo")', function (data) {
+        $.get('@Url.Action("Edit", "CentroEstudioCargo", new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogCentroEstudio"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarEditarNivelAcademico(ideNivelAcademico) {
+        var dialogDiv = $('#updateDialogHorario');
+        $.get('@Url.Action("Edit", "NivelAcademicoCargo")', { id: ideNivelAcademico }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogHorario"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function mostrarEditarCentroEstudios(idecentroEstudios) {
+        var dialogDiv = $('#updateDialogNivelAcademico');
+        $.get('@Url.Action("Edit", "CentroEstudioCargo")', { id: ideHorario }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogHorario"));
             dialogDiv.dialog('open');
         });
         return false;
@@ -164,8 +184,12 @@
 }
 
 <div class="span12">
-    @Html.Partial("Edit")
+    @Html.Partial("PerfilCargo")
 </div>
+
+@using (Html.BeginForm("Estudio", "Perfil", FormMethod.Post, new { @id = "estudioCargoForm" }))
+{
+
 <!--ESTUDIOS -->
   
     <div class="tab-pane" id="C">
@@ -207,3 +231,14 @@
         </div>                    
     </div>
     <!--ESTUDIOS FIN-->
+}
+
+<div id="updateDialogNivelAcademico" title="Agregar Nivel Académico"></div>
+    <div id="divMensaje5">
+        <span id="spanMensaje5"></span>
+    </div>
+
+<div id="updateDialogCentroEstudio" title="Agregar Centro de Estudio"></div>
+    <div id="divMensaje6">
+        <span id="spanMensaje6"></span>
+    </div>

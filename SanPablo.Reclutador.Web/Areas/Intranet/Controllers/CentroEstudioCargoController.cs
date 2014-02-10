@@ -31,36 +31,6 @@
             
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            Session["CargoIde"] = 1;
-            var cargoViewModel = inicializarCargo();
-            return View(cargoViewModel);
-        }
-
-        public PerfilViewModel inicializarCargo()
-        {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
-            cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
-            cargoViewModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-            cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-
-            return cargoViewModel;
-        }
-
         #region CENTRO ESTUDIOS
 
         [HttpPost]
@@ -98,39 +68,88 @@
             }
         }
 
-        public ActionResult CentroEstudio()
+        public ActionResult Edit(string id)
         {
             var centroEstudioViewModel = inicializarCentroEstudio();
+            if (id != "0")
+            {
+                var centroEstudio = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == Convert.ToInt32(id));
+                centroEstudioViewModel.CentroEstudio = centroEstudio;
+            }
             return View(centroEstudioViewModel);
         }
 
         [HttpPost]
-        public ActionResult CentroEstudio([Bind(Prefix = "CentroEstudio")]CentroEstudioCargo centroEstudioCargo)
+        public ActionResult Edit([Bind(Prefix = "CentroEstudio")]CentroEstudioCargo centroEstudioCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var centroEstudioViewModel = inicializarCentroEstudio();
-                centroEstudioViewModel.CentroEstudio = centroEstudioCargo;
-                return View("CentroEstudio", centroEstudioViewModel);
+                if (!ModelState.IsValid)
+                {
+                    var centroEstudioViewModel = inicializarCentroEstudio();
+                    centroEstudioViewModel.CentroEstudio = centroEstudioCargo;
+                    return View("CentroEstudio", centroEstudioViewModel);
+                }
+                if (centroEstudioCargo.IdeCentroEstudioCargo == 0)
+                {
+                    centroEstudioCargo.EstadoActivo = "A";
+                    centroEstudioCargo.FechaCreacion = FechaCreacion;
+                    centroEstudioCargo.UsuarioCreacion = "YO";
+                    centroEstudioCargo.FechaModificacion = FechaCreacion;
+                    centroEstudioCargo.Cargo = new Cargo();
+                    centroEstudioCargo.Cargo.IdeCargo = IdeCargo;
+
+                    _centroEstudioCargoRepository.Add(centroEstudioCargo);
+                }
+                else
+                {
+                    var centroEstudioCargoActualizar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == centroEstudioCargo.IdeCentroEstudioCargo);
+                    centroEstudioCargoActualizar.TipoCentroEstudio = centroEstudioCargo.TipoCentroEstudio;
+                    centroEstudioCargoActualizar.TipoNombreCentroEstudio = centroEstudioCargo.TipoNombreCentroEstudio;
+                    centroEstudioCargoActualizar.PuntajeCentroEstudios = centroEstudioCargo.PuntajeCentroEstudios;
+                    centroEstudioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    centroEstudioCargoActualizar.FechaModificacion = FechaModificacion;
+                    _centroEstudioCargoRepository.Update(centroEstudioCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
             }
-            _centroEstudioCargoRepository.Add(centroEstudioCargo);
-
-            return View();
-
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
         }
-        public PerfilViewModel inicializarCentroEstudio()
+        public CentroEstudioViewModel inicializarCentroEstudio()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.CentroEstudio = new CentroEstudioCargo();
+            var centroEstudioViewModel = new CentroEstudioViewModel();
+            centroEstudioViewModel.Cargo = new Cargo();
+            centroEstudioViewModel.CentroEstudio = new CentroEstudioCargo();
 
-            cargoViewModel.TiposInstitucion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
-            cargoViewModel.TiposInstitucion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            centroEstudioViewModel.TiposInstitucion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
+            centroEstudioViewModel.TiposInstitucion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.Instituciones = new List<DetalleGeneral>();
-            cargoViewModel.Instituciones.Add(new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            centroEstudioViewModel.Instituciones = new List<DetalleGeneral>();
+            centroEstudioViewModel.Instituciones.Add(new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return centroEstudioViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarCentroEstudio(int ideCentroEstudio)
+        {
+            ActionResult result = null;
+
+            var centroEstudioEliminar = new CentroEstudioCargo();
+            centroEstudioEliminar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == ideCentroEstudio);
+            _centroEstudioCargoRepository.Remove(centroEstudioEliminar);
+
+            return result;
         }
 
         #endregion

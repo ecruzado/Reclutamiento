@@ -6,13 +6,13 @@
     using System.Web;
     using SanPablo.Reclutador.Entity;
 
-    public class CompetenciaCargoViewModel
+    public class EstudioCargoViewModel
     {
         public Cargo Cargo { get; set; }
-        public CompetenciaCargo Competencia { get; set; }
-        
-        public List<DetalleGeneral> Competencias { get; set; }
-        
+        public CentroEstudioCargo CentroEstudio { get; set; }
+        public NivelAcademicoCargo NivelAcademico { get; set; }
+
+             
 
     }
 }

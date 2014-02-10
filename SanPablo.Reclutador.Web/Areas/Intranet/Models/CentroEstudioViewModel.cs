@@ -7,12 +7,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     using System.Web;
     using SanPablo.Reclutador.Entity;
 
-    public class OfrecimientoViewModel
+    public class CentroEstudioViewModel
     {
         public Cargo Cargo { get; set; }
-        public OfrecemosCargo Ofrecimiento { get; set; }
-        
-        public List<DetalleGeneral> Ofrecimientos { get; set; }
-        
+        public CentroEstudioCargo CentroEstudio { get; set; }
+       
+        public List<DetalleGeneral> TiposInstitucion { get; set; }
+        public List<DetalleGeneral> Instituciones { get; set; }
+
     }
 }
