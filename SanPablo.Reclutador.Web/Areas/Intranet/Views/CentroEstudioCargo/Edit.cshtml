@@ -22,13 +22,13 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                @Html.HiddenFor(model => model.CentroEstudio.IdeCentroEstudioCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Institución <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.CentroEstudio.TipoCentroEstudio, new SelectList(Model.TiposInstitucion, "Valor", "Descripcion", Model.CentroEstudio.TipoCentroEstudio))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.CentroEstudio.TipoCentroEstudio)
                 </div>
             </td> 
         </tr>
@@ -39,7 +39,7 @@
             <td class="colInput">
                  @Html.DropDownListFor(model => model.CentroEstudio.TipoNombreCentroEstudio, new SelectList(Model.Instituciones, "Valor", "Descripcion", Model.CentroEstudio.TipoNombreCentroEstudio))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.CentroEstudio.TipoNombreCentroEstudio)
                 </div>
             </td>
         </tr>
@@ -49,6 +49,9 @@
            </td>
            <td>
                 @Html.TextBoxFor(model => model.CentroEstudio.PuntajeCentroEstudios, new {@class="input-xxmini" })
+               <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.CentroEstudio.PuntajeCentroEstudios)
+                </div>
            </td>
        </tr>  
     </table>

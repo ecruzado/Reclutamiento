@@ -17,18 +17,18 @@
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
         <a class="close" onclick="hide('mensajeError')" >×</a>
-         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+         <strong>ERROR : </strong> 
     </div>
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                @Html.HiddenFor(model => model.NivelAcademico.IdeNivelAcademicoCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo Educación <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.NivelAcademico.TipoEducacion, new SelectList(Model.TiposEducacion, "Valor", "Descripcion", Model.NivelAcademico.TipoEducacion))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.NivelAcademico.TipoEducacion)
                 </div>
             </td> 
         </tr>
@@ -39,7 +39,7 @@
             <td class="colInput">
                  @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.NivelAcademico.TipoAreaEstudio)
                 </div>
             </td>
         </tr>
@@ -50,7 +50,7 @@
             <td class="colInput">
                  @Html.DropDownListFor(model => model.NivelAcademico.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Valor", "Descripcion", Model.NivelAcademico.TipoNivelAlcanzado))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.NivelAcademico.TipoNivelAlcanzado)
                 </div>
             </td>
        </tr>
@@ -60,6 +60,9 @@
            </td>
            <td>
                 @Html.TextBoxFor(model => model.NivelAcademico.PuntajeNivelEstudio, new {@class="input-xxmini" })
+               <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.NivelAcademico.PuntajeNivelEstudio)
+                </div>
            </td>
        </tr>  
     </table>

@@ -288,5 +288,39 @@
             return estudioCargoViewModel;
         }
 
+        public ActionResult Experiencia()
+        {
+            (Session["CargoIde"]) = 1;
+            var experienciaCargoViewModel = inicializarExperiencia();
+            return View(experienciaCargoViewModel);
+        }
+
+        public PerfilViewModel inicializarExperiencia()
+        {
+            var experienciaCargoViewModel = new PerfilViewModel();
+            experienciaCargoViewModel.Cargo = new Cargo();
+            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
+            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
+
+            return experienciaCargoViewModel;
+        }
+
+        public ActionResult Conocimientos()
+        {
+            (Session["CargoIde"]) = 1;
+            var conocimientosCargoViewModel = inicializarConocimientos();
+            return View(conocimientosCargoViewModel);
+        }
+
+        public PerfilViewModel inicializarConocimientos()
+        {
+            var experienciaCargoViewModel = new PerfilViewModel();
+            experienciaCargoViewModel.Cargo = new Cargo();
+            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
+            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
+
+            return experienciaCargoViewModel;
+        }
+
     }
 }

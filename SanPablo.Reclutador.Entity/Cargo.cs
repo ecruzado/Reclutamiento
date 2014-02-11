@@ -34,6 +34,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual IList<HorarioCargo> Horarios { get; set; }
         public virtual IList<UbigeoCargo> Ubigeos { get; set; }
         public virtual IList<ConocimientoGeneralCargo> Conocimientos { get; set; }
+        public virtual IList<CentroEstudioCargo> CentrosEstudios { get; set; }
+        public virtual IList<NivelAcademicoCargo> NivelesAcademicos { get; set; }
+        public virtual IList<ExperienciaCargo> Experiencias { get; set; }
 
         public virtual string ObjetivoCargo { get; set; }
         public virtual string FuncionCargo { get; set; }
@@ -106,6 +109,9 @@ namespace SanPablo.Reclutador.Entity
             Horarios = new List<HorarioCargo>();
             Ubigeos = new List<UbigeoCargo>();
             Conocimientos = new List<ConocimientoGeneralCargo>();
+            CentrosEstudios = new List<CentroEstudioCargo>();
+            NivelesAcademicos = new List<NivelAcademicoCargo>();
+            Experiencias = new List<ExperienciaCargo>();
             
         }
 

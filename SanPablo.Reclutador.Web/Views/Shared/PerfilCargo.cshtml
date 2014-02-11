@@ -19,32 +19,31 @@
        
             <form class="formulario-busqueda">
                 <table>
-                    <tr>
-                
-                    <td class="span5">
-                        <label class="control-label" for="inputSuccess">Código</label>
-                        <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
+                    <tr class="formulario-fila">
+                    <td class="td-label">
+                        <td class="td-label">
+                            <label class="control-label" for="inputSuccess">Código</label>
+                        <td>
+                        <td class="td-label">
+                            <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
+                        <td>
                     </td>
-                    <td class="span5">
+                    <td class="td-label">
                         <label class="control-label" for="selectError">Dependencia</label>
                             <select id="sedependencia" class="select-large" disabled="disabled">
                             <option>Seleccionar</option>
                             <option selected="selected">Gerencia Médica</option>
                             </select>
                     </td>
-              
-                   </tr>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                    </tr>
+                    <tr class="formulario-fila">
+                    <td class="td-label">
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
                                 <input type="text" class="input-small" id="txtnombre" value="Técnico en Enfermería " disabled="disabled">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                    </td>
+                    <td class="td-label">
                             <label class="control-label" for="selectError">Departamento</label>
                             <div class="controles">
                                 <select id="sedepartamento" class="select-large" disabled="disabled">
@@ -52,68 +51,42 @@
                                     <option selected="selected">Enfermería</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                    </td>
+                    </tr>
+                    <tr class="formulario-fila">
+                    <td class="td-label">
                             <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
                                 <input type="text" class="input-large" disabled="disabled" value="Técnico en Enfermería " id="txtdescripcion">
                             </div>
+                    </td>
+                    <td class="td-label">
+                        <label class="control-label" for="selectError">Área</label>
+                        <div class="controles">
+                             <select id="searea" class="select-large" disabled="disabled">
+                                 <option>Seleccionar</option>
+                                 <option selected="selected">Cuidados Intensivos</option>
+                             </select>
                         </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Área</label>
-                            <div class="controles">
-                                <select id="searea" class="select-large" disabled="disabled">
-                                    <option>Seleccionar</option>
-                                    <option selected="selected">Cuidados Intensivos</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Nro Posiciones</label>
-                            <div class="controles">
-                                <input type="text" class="input-mini" id="txtnroposiciones" disabled="disabled">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Código de Cargo</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" disabled="disabled">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="td-label">
+                        <label class="control-label" for="inputSuccess">Nro Posiciones</label>
+                             <input type="text" class="input-mini" id="txtnroposiciones" disabled="disabled">
+                    </td>
+                    <td class="td-label">
+                        <label class="control-label" for="inputSuccess">Código de Cargo</label>
+                        <input type="text" class="input-small" disabled="disabled">
+                    </td>
+                </tr>
                 </table>
             </form>
        
             <h5>Perfil</h5>
             
-@*            <ul class="nav nav-tabs" data-tabs="tabs">
-                <li><div style="width:110px;display:inline-block"></div></li>
-                <li class="active"><a href='@Url.Action("Index","Perfil")' data-toggle="tab">Puesto</a></li>
-                <li class=""><a href='@Url.Action("General","Perfil")' data-toggle="tab">General</a></li>
-                <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
-                <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
-                <li class=""><a href="#E" data-toggle="tab">Conocimientos</a></li>
-                <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
-                <li class=""><a href="#G" data-toggle="tab">Evaluación</a></li>
-                <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
-            </ul>*@
-
-
-            @*<ul class="nav nav-pills">*@
             <ul class="nav nav-tabs" data-tabs="tabs">
+            <li><div style="width:110px;display:inline-block"></div></li>
                 @Html.MenuIntranet("Puesto", "Index", "Perfil")
                 @Html.MenuIntranet("General", "General", "Perfil")
                 @Html.MenuIntranet("Estudios", "Estudio", "Perfil")
@@ -186,25 +159,8 @@
 
 
 
-<div id="updateDialogOfimatica" title="Agregar Conocimiento Ofimatica"></div>
-    <div id="divMensaje7">
-        <span id="spanMensaje7"></span>
-    </div>
 
-<div id="updateDialogIdioma" title="Agregar Conocimiento Idioma"></div>
-    <div id="divMensaje8">
-        <span id="spanMensaje8"></span>
-    </div>
 
-<div id="updateDialogOtrosConocimientos" title="Agregar Otros Conocimientos"></div>
-    <div id="divMensaje9">
-        <span id="spanMensaje9"></span>
-    </div>
-
-<div id="updateDialogExperiencia" title="Agregar Experiencia"></div>
-    <div id="divMensaje10">
-        <span id="spanMensaje10"></span>
-    </div>
 
 <div id="updateDialogDiscapacidad" title="Agregar Discapacidad"></div>
     <div id="divMensaje11">

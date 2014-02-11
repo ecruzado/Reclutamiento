@@ -169,6 +169,8 @@
     <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\NivelAcademicoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
@@ -323,9 +325,9 @@
     <Content Include="Areas\Intranet\Views\UbigeoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\NivelAcademicoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\CentroEstudioCargo\Edit.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoCargo\Ofimatica.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoCargo\Idioma.cshtml" />
-    <Content Include="Areas\Intranet\Views\ConocimientoCargo\OtrosConocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Ofimatica.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Idioma.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\OtrosConocimientos.cshtml" />
     <Content Include="Areas\Intranet\Views\ExperienciaCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\DiscapacidadCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Index.cshtml" />

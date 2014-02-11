@@ -31,38 +31,7 @@
             _conocimientoCargoRepository = conocimientoCargoRepository;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            Session["CargoIde"] = 1;
-            var cargoViewModel = inicializarCargo();
-            return View(cargoViewModel);
-        }
-
-        public PerfilViewModel inicializarCargo()
-        {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
-            cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
-            cargoViewModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-            cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-
-            return cargoViewModel;
-        }
-
-
-        #region OFIMATICA
+         #region OFIMATICA
 
         [HttpPost]
         public virtual JsonResult ListaOfimatica(GridTable grid)
@@ -75,6 +44,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
+                where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
                 where.Add(Expression.Eq("Cargo.IdeCargo", 1));
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -100,43 +70,96 @@
             }
         }
 
-        public ActionResult Ofimatica()
+        public ActionResult Ofimatica(string id)
         {
             var ofimaticaViewModel = inicializarOfimatica();
+            if (id != "0")
+            {
+                var ofimatica = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == Convert.ToInt32(id));
+                ofimaticaViewModel.Conocimiento = ofimatica;
+            }
             return View(ofimaticaViewModel);
         }
 
         [HttpPost]
         public ActionResult Ofimatica([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo conocimientoGeneralCargo)
         {
-            if (!ModelState.IsValid)
+            
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var conocimientoCargoViewModel = inicializarOfimatica();
-                conocimientoCargoViewModel.Conocimiento = conocimientoGeneralCargo;
-                return View("Conocimiento", conocimientoGeneralCargo);
-            }
-            _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
+                if (!ModelState.IsValid)
+                {
+                    var conocimientoCargoViewModel = inicializarOfimatica();
+                    conocimientoCargoViewModel.Conocimiento = conocimientoGeneralCargo;
+                    return View(conocimientoCargoViewModel);
+                }
+                if (conocimientoGeneralCargo.IdeConocimientoGeneralCargo == 0)
+                {
+                    conocimientoGeneralCargo.EstadoActivo = "A";
+                    conocimientoGeneralCargo.FechaCreacion = FechaCreacion;
+                    conocimientoGeneralCargo.UsuarioCreacion = "YO";
+                    conocimientoGeneralCargo.FechaModificacion = FechaCreacion;
+                    conocimientoGeneralCargo.Cargo = new Cargo();
+                    conocimientoGeneralCargo.Cargo.IdeCargo = IdeCargo;
 
-            return View();
+                    _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
+                }
+                else
+                {
+                    var ofimaticaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoGeneralCargo.IdeConocimientoGeneralCargo);
+                    ofimaticaCargoActualizar.TipoConocimientoOfimatica = conocimientoGeneralCargo.TipoConocimientoOfimatica;
+                    ofimaticaCargoActualizar.TipoNombreOfimatica = conocimientoGeneralCargo.TipoNombreOfimatica;
+                    ofimaticaCargoActualizar.TipoNivelConocimiento = conocimientoGeneralCargo.TipoNivelConocimiento;
+                    ofimaticaCargoActualizar.PuntajeConocimiento = conocimientoGeneralCargo.PuntajeConocimiento;
+                    ofimaticaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    ofimaticaCargoActualizar.FechaModificacion = FechaModificacion;
+                    _conocimientoCargoRepository.Update(ofimaticaCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+
 
         }
 
-        public PerfilViewModel inicializarOfimatica()
+        public ConocimientoCargoViewModel inicializarOfimatica()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
+            var conocimientoCargoViewModel = new ConocimientoCargoViewModel();
+            conocimientoCargoViewModel.Cargo = new Cargo();
+            conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
-            cargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoOfimatica));
-            cargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoOfimatica));
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica));
-            cargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica));
+            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            cargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return conocimientoCargoViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarOfimatica(int ideOfimatica)
+        {
+            ActionResult result = null;
+
+            var ofimaticaEliminar = new ConocimientoGeneralCargo();
+            ofimaticaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOfimatica);
+            _conocimientoCargoRepository.Remove(ofimaticaEliminar);
+
+            return result;
         }
 
         #endregion
@@ -155,6 +178,7 @@
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
                 where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.IsNotNull("TipoIdioma"));
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -179,43 +203,93 @@
             }
         }
 
-        public ActionResult Idioma()
+        public ActionResult Idioma(string id)
         {
             var idiomaViewModel = inicializarIdioma();
+            if (id != "0")
+            {
+                var idioma = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == Convert.ToInt32(id));
+                idiomaViewModel.Conocimiento = idioma;
+            }
             return View(idiomaViewModel);
         }
 
         [HttpPost]
-        public ActionResult Idioma([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo conocimientoCargo)
+        public ActionResult Idioma([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo idiomaCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var idiomaViewModel = inicializarIdioma();
-                idiomaViewModel.Conocimiento = conocimientoCargo;
-                return View("Conocimiento", idiomaViewModel);
+                if (!ModelState.IsValid)
+                {
+                    var idiomaCargoViewModel = inicializarIdioma();
+                    idiomaCargoViewModel.Conocimiento = idiomaCargo;
+                    return View(idiomaCargoViewModel);
+                }
+                if (idiomaCargo.IdeConocimientoGeneralCargo == 0)
+                {
+                    idiomaCargo.EstadoActivo = "A";
+                    idiomaCargo.FechaCreacion = FechaCreacion;
+                    idiomaCargo.UsuarioCreacion = "YO";
+                    idiomaCargo.FechaModificacion = FechaCreacion;
+                    idiomaCargo.Cargo = new Cargo();
+                    idiomaCargo.Cargo.IdeCargo = IdeCargo;
+
+                    _conocimientoCargoRepository.Add(idiomaCargo);
+                }
+                else
+                {
+                    var idiomaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == idiomaCargo.IdeConocimientoGeneralCargo);
+                    idiomaCargoActualizar.TipoConocimientoIdioma = idiomaCargo.TipoConocimientoIdioma;
+                    idiomaCargoActualizar.TipoIdioma = idiomaCargo.TipoIdioma;
+                    idiomaCargoActualizar.TipoNivelConocimiento = idiomaCargo.TipoNivelConocimiento;
+                    idiomaCargoActualizar.PuntajeConocimiento = idiomaCargo.PuntajeConocimiento;
+                    idiomaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    idiomaCargoActualizar.FechaModificacion = FechaModificacion;
+                    _conocimientoCargoRepository.Update(idiomaCargo);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
             }
-            _conocimientoCargoRepository.Add(conocimientoCargo);
-
-            return View();
-
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
         }
 
-        public PerfilViewModel inicializarIdioma()
+        public ConocimientoCargoViewModel inicializarIdioma()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
+            var conocimientoCargoViewModel = new ConocimientoCargoViewModel();
+            conocimientoCargoViewModel.Cargo = new Cargo();
+            conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
-            cargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
-            cargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
+            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma));
-            cargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma));
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            cargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return conocimientoCargoViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarIdioma(int ideIdioma)
+        {
+            ActionResult result = null;
+
+            var idiomaEliminar = new ConocimientoGeneralCargo();
+            idiomaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideIdioma);
+            _conocimientoCargoRepository.Remove(idiomaEliminar);
+
+            return result;
         }
 
         #endregion
@@ -233,7 +307,9 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
+                where.Add(Expression.IsNotNull("TipoConocimientoGeneral"));
                 where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -258,45 +334,95 @@
             }
         }
 
-        public ActionResult OtrosConocimientos()
+        public ActionResult OtrosConocimientos(string id)
         {
-            var otrosConocimientodViewModel = inicializarOtrosConocimientos();
-            return View(otrosConocimientodViewModel);
+            var otrosConocimientosViewModel = inicializarOtrosConocimientos();
+            if (id != "0")
+            {
+                var otrosConocimientos = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == Convert.ToInt32(id));
+                otrosConocimientosViewModel.Conocimiento = otrosConocimientos;
+            }
+            return View(otrosConocimientosViewModel);
         }
 
         [HttpPost]
         public ActionResult OtrosConocimientos([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo conocimientoCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var otrosConocimientodViewModel = inicializarOtrosConocimientos();
-                otrosConocimientodViewModel.Conocimiento = conocimientoCargo;
-                return View("NivelAcademico", otrosConocimientodViewModel);
+                if (!ModelState.IsValid)
+                {
+                    var otrosConocimientosViewModel = inicializarOtrosConocimientos();
+                    otrosConocimientosViewModel.Conocimiento = conocimientoCargo;
+                    return View(otrosConocimientosViewModel);
+                }
+                if (conocimientoCargo.IdeConocimientoGeneralCargo == 0)
+                {
+                    conocimientoCargo.EstadoActivo = "A";
+                    conocimientoCargo.FechaCreacion = FechaCreacion;
+                    conocimientoCargo.UsuarioCreacion = "YO";
+                    conocimientoCargo.FechaModificacion = FechaCreacion;
+                    conocimientoCargo.Cargo = new Cargo();
+                    conocimientoCargo.Cargo.IdeCargo = IdeCargo;
+
+                    _conocimientoCargoRepository.Add(conocimientoCargo);
+                }
+                else
+                {
+                    var otrosConocimientosActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoCargo.IdeConocimientoGeneralCargo);
+                    otrosConocimientosActualizar.TipoConocimientoGeneral = conocimientoCargo.TipoConocimientoGeneral;
+                    otrosConocimientosActualizar.TipoNombreConocimientoGeneral = conocimientoCargo.TipoNombreConocimientoGeneral;
+                    otrosConocimientosActualizar.TipoNivelConocimiento = conocimientoCargo.TipoNivelConocimiento;
+                    otrosConocimientosActualizar.PuntajeConocimiento = conocimientoCargo.PuntajeConocimiento;
+                    otrosConocimientosActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    otrosConocimientosActualizar.FechaModificacion = FechaModificacion;
+                    _conocimientoCargoRepository.Update(otrosConocimientosActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
             }
-            _conocimientoCargoRepository.Add(conocimientoCargo);
-
-            return View();
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
 
-        public PerfilViewModel inicializarOtrosConocimientos()
+        public ConocimientoCargoViewModel inicializarOtrosConocimientos()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
+            var conocimientoCargoViewModel = new ConocimientoCargoViewModel();
+            conocimientoCargoViewModel.Cargo = new Cargo();
+            conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
-            cargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));
-            cargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>();
-            cargoViewModel.DescripcionConocimiento.Add(new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>();
+            conocimientoCargoViewModel.DescripcionConocimiento.Add(new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            cargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            cargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return conocimientoCargoViewModel;
         }
 
+        [HttpPost]
+        public ActionResult eliminarOtrosConocimientos(int ideOtrosConocimientos)
+        {
+            ActionResult result = null;
+
+            var otrosConocimientosEliminar = new ConocimientoGeneralCargo();
+            otrosConocimientosEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOtrosConocimientos);
+            _conocimientoCargoRepository.Remove(otrosConocimientosEliminar);
+
+            return result;
+        }
         #endregion
 
     }
