@@ -104,8 +104,18 @@ namespace SanPablo.Reclutador.Test.Repository
         [TestMethod]
         public void test_sub_categoria_por_criterio() 
         {
-            var repository = new CriterioPorSubcategoriaRepository(NHibernateHelper.OpenSession());
-            var lista = repository.GetPaging("IDECRITERIOXSUBCATEGORIA", true, 0, 100);
+            var repository = new RolRepository(NHibernateHelper.OpenSession());
+            //var where = DetachedCriteria.For<RolOpcion>();
+            //where.Add(Expression.Eq("Rol.IdRol", 1));
+
+            //var lista = repository.GetPaging("IDROLOPCION", true, 0, 100,where);
+            Rol entidad = new Rol();
+            entidad.FlgEstado = "A";
+            entidad.FlgSede = "S";
+            entidad.FechaCreacion = DateTime.Today;
+            entidad.UsuarioCreacion = "system";
+            entidad.CodRol = "roltest";
+            repository.Add(entidad);
         }
     }
 }

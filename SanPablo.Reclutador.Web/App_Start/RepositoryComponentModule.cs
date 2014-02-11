@@ -89,6 +89,12 @@
             builder.RegisterType<DiscapacidadCargoRepository>()
                 .As<IDiscapacidadCargoRepository>();
 
+            builder.RegisterType<RolRepository>()
+               .As<IRolRepository>();
+
+            builder.RegisterType<RolOpcionRepository>()
+              .As<IRolOpcionRepository>();
+
         }
     }
 }

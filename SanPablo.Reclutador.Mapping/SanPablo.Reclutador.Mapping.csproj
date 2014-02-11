@@ -59,6 +59,9 @@
     <Compile Include="CompetenciaCargoMap.cs" />
     <Compile Include="ConocimientoGeneralCargoMap.cs" />
     <Compile Include="OfrecemosCargoMap.cs" />
+    <Compile Include="OpcionMap.cs" />
+    <Compile Include="RolMap.cs" />
+    <Compile Include="RolOpcionMap.cs" />
     <Compile Include="UbigeoCargoMap.cs" />
     <Compile Include="NivelAcademicoMap.cs" />
     <Compile Include="ExperienciaCargoMap.cs" />
