@@ -64,3 +64,9 @@ UCosmic.Www.Mvc.Publish.xml
 
 #Ignore private folder
 /Private/
+
+#ignorar archivos de log
+*.log
+
+#ignorar archivos temporales
+SanPablo.Reclutador.Web/Archivos/
