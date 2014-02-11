@@ -30,41 +30,7 @@
             _experienciaCargoRepository = experienciaCargoRepository;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            Session["CargoIde"] = 1;
-            var cargoViewModel = inicializarCargo();
-            return View(cargoViewModel);
-        }
-
-        public PerfilViewModel inicializarCargo()
-        {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
-            cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
-            cargoViewModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-            cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-
-            return cargoViewModel;
-        }
-
-
-
-
-
-
+        
         #region EXPERIENCIA
 
         [HttpPost]
@@ -103,37 +69,89 @@
             }
         }
 
-        public ActionResult Experiencia()
+        public ActionResult Edit(string id)
         {
             var experienciaViewModel = inicializarExperiencia();
+            if (id != "0")
+            {
+                var experiencia = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == Convert.ToInt32(id));
+                experienciaViewModel.Experiencia = experiencia;
+            }
             return View(experienciaViewModel);
         }
 
         [HttpPost]
-        public ActionResult Idioma([Bind(Prefix = "Experiencia")]ExperienciaCargo experienciaCargo)
+        public ActionResult Edit([Bind(Prefix = "Experiencia")]ExperienciaCargo experienciaCargo)
         {
-            if (!ModelState.IsValid)
+            
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var experienciaViewModel = inicializarExperiencia();
-                experienciaViewModel.Experiencia = experienciaCargo;
-                return View("Experiencia", experienciaViewModel);
-            }
-            _experienciaCargoRepository.Add(experienciaCargo);
+                if (!ModelState.IsValid)
+                {
+                    var experienciaViewModel = inicializarExperiencia();
+                    experienciaViewModel.Experiencia = experienciaCargo;
+                    return View(experienciaViewModel);
+                }
+                if (experienciaCargo.IdeExperienciaCargo == 0)
+                {
+                    experienciaCargo.EstadoActivo = "A";
+                    experienciaCargo.FechaCreacion = FechaCreacion;
+                    experienciaCargo.UsuarioCreacion = "YO";
+                    experienciaCargo.FechaModificacion = FechaCreacion;
+                    experienciaCargo.Cargo = new Cargo();
+                    experienciaCargo.Cargo.IdeCargo = IdeCargo;
 
-            return View();
+                    _experienciaCargoRepository.Add(experienciaCargo);
+                }
+                else
+                {
+                    var experienciaCargoActualizar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == experienciaCargo.IdeExperienciaCargo);
+                    experienciaCargoActualizar.TipoExperiencia = experienciaCargo.TipoExperiencia;
+                    experienciaCargoActualizar.CantidadAnhosExperiencia = experienciaCargo.CantidadAnhosExperiencia;
+                    experienciaCargoActualizar.CantidadMesesExperiencia = experienciaCargo.CantidadMesesExperiencia;
+                    experienciaCargoActualizar.PuntajeExperiencia = experienciaCargo.PuntajeExperiencia;
+                    experienciaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    experienciaCargoActualizar.FechaModificacion = FechaModificacion;
+                    _experienciaCargoRepository.Update(experienciaCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
 
-        public PerfilViewModel inicializarExperiencia()
+        public ExperienciaCargoViewModel inicializarExperiencia()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.Experiencia = new ExperienciaCargo();
+            var experienciaViewModel = new ExperienciaCargoViewModel();
+            experienciaViewModel.Cargo = new Cargo();
+            experienciaViewModel.Experiencia = new ExperienciaCargo();
 
-            cargoViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
-            cargoViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            experienciaViewModel.TiposCargo = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
+            experienciaViewModel.TiposCargo.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return experienciaViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarExperiencia(int ideExperiencia)
+        {
+            ActionResult result = null;
+
+            var experienciaEliminar = new ExperienciaCargo();
+            experienciaEliminar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == ideExperiencia);
+            _experienciaCargoRepository.Remove(experienciaEliminar);
+
+            return result;
         }
 
         #endregion

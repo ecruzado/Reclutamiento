@@ -50,6 +50,15 @@
             HasMany(x => x.Ubigeos)
                     .Inverse()
                     .Cascade.All();
+            HasMany(x => x.CentrosEstudios)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.NivelesAcademicos)
+                    .Inverse()
+                    .Cascade.All();
+            HasMany(x => x.Experiencias)
+                    .Inverse()
+                    .Cascade.All();
 
             Map(x => x.PuntajeTotalNivelEstudio, "PUNTTOTNIVELEST");
             Map(x => x.PuntajeMinimoNivelEstudio, "PUNTMINNIVELEST");

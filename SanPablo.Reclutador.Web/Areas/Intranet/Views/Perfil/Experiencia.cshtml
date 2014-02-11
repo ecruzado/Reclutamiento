@@ -1,6 +1,6 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Estudios";
+    ViewBag.Title = "Experiencia";
     //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
@@ -23,26 +23,72 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#experienciaForm').valid();
                     if (result) {
-                        $.post('@Url.Action("Experiencia", "Cargo")',
+                        $.post('@Url.Action("Edit", "ExperienciaCargo")',
                                 $("#experienciaForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialogExperiencia").dialog("close");
                                         $('#grdListExperiencia').trigger('reloadGrid');
                                     }
                                     else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                        notificacionError(respuesta.Mensaje);
                                     }
                                 }
                             );
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
                     }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
+            }
+        });
+
+        $('#btnEliminarExperiencia').click(function () {
+            var ideExperiencia = jQuery('#grdListExperiencia').jqGrid('getGridParam', 'selrow');
+            if (ideExperiencia != null) {
+                $("#spanMensaje10").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje10").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); $('#grdListExperiencia').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje10").html('Seleccionar un item a eliminar');
+                $("#divMensaje10").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        $('#btnEditarExperiencia').click(function () {
+            var ideExperiencia = jQuery('#grdListExperiencia').jqGrid('getGridParam', 'selrow');
+            if (ideExperiencia != null) {
+                mostrarEditarExperiencia(ideExperiencia);
+            }
+            else {
+                $("#spanMensaje10").html('Seleccionar un item a editar');
+                $("#divMensaje10").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
             }
         });
     });
@@ -54,7 +100,7 @@
 
 
         jQuery("#grdListExperiencia").jqGrid({
-            url: '@Url.Action("ListaExperiencia", "Cargo")',
+            url: '@Url.Action("ListaExperiencia", "ExperienciaCargo")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Cargo', 'Años', 'Puntaje'],
@@ -84,18 +130,38 @@
 
     function mostrarAgregarExperiencia() {
         var dialogDiv = $('#updateDialogExperiencia');
-        $.get('@Url.Action("Experiencia", "Cargo")', function (data) {
+        $.get('@Url.Action("Edit", "ExperienciaCargo",new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogExperiencia"));
             dialogDiv.dialog('open');
         });
         return false;
     }
+
+
+    function mostrarEditarExperiencia(ideExperiencia) {
+        var dialogDiv = $('#updateDialogExperiencia');
+        $.get('@Url.Action("Edit", "ExperienciaCargo")', { id: ideExperiencia }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogExperiencia"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarExperiencia(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarExperiencia","ExperienciaCargo")',
+            data: { ideExperiencia: id },
+        });
+    }
     </script>
 }
 
 <div class="span12">
-    @Html.Partial("Edit")
+    @Html.Partial("PerfilCargo")
 </div>
 <!--EXPERIENCIA -->
     <div class="tab-pane" id="D">
@@ -122,3 +188,9 @@
         </div>
     </div>
     <!--EXPERIENCIA FIN-->
+
+
+<div id="updateDialogExperiencia" title="Agregar Experiencia"></div>
+    <div id="divMensaje10">
+        <span id="spanMensaje10"></span>
+    </div>

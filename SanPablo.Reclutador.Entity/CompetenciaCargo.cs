@@ -7,7 +7,7 @@ using System.Web;
 
 namespace SanPablo.Reclutador.Entity
 {
-    public class CompetenciaCargo:BaseEntity
+    public class CompetenciaCargo : BaseEntity
     {
         public virtual int IdeCompetenciaCargo { get; set; }
         public virtual Cargo Cargo { get; set; }

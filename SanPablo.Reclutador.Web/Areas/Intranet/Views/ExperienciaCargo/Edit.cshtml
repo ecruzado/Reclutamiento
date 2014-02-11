@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ExperienciaCargoViewModel
 @{
     Layout = "";
 }
@@ -12,7 +12,7 @@
 
 
 
-@using (Html.BeginForm("Experiencia", "Cargo", FormMethod.Post, new { @id = "experienciaForm" }))
+@using (Html.BeginForm("Edit", "ExperienciaCargo", FormMethod.Post, new { @id = "experienciaForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
@@ -22,31 +22,41 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                @Html.HiddenFor(model => model.Experiencia.IdeExperienciaCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion"> Cargo <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Experiencia.TipoExperiencia, new SelectList(Model.TipoCargos, "Valor", "Descripcion", Model.Experiencia.TipoExperiencia))
+                @Html.DropDownListFor(model => model.Experiencia.TipoExperiencia, new SelectList(Model.TiposCargo, "Valor", "Descripcion", Model.Experiencia.TipoExperiencia))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.Experiencia.TipoExperiencia)
                 </div>
             </td> 
         </tr>
+    </table>
+    <table>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tiempo de Experiencia <span class="text-error">*</span></label>
+                <label style="width:160px" class="etiquetaFormulario" for="setipoInstitucion">Tiempo de Experiencia <span class="text-error">*</span></label>
             </td>
+            
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.Experiencia.CantidadAnhosExperiencia)
+                 @Html.TextBoxFor(model => model.Experiencia.CantidadAnhosExperiencia, new {@class="input-mini" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.Experiencia.CantidadAnhosExperiencia)
                 </div>
             </td>
+            <td class="colEtiqueta">
+                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">AÑOS <span class="text-error">*</span></label>
+            </td>
+           
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.Experiencia.CantidadMesesExperiencia)
+                 @Html.TextBoxFor(model => model.Experiencia.CantidadMesesExperiencia, new {@class="input-mini" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                 @Html.ValidationMessageFor(model => model.Experiencia.CantidadMesesExperiencia)
                 </div>
+            </td>
+             <td class="colEtiqueta">
+                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">MESES <span class="text-error">*</span></label>
             </td>
         </tr>
         <tr>
@@ -55,7 +65,11 @@
            </td>
            <td>
                 @Html.TextBoxFor(model => model.Experiencia.PuntajeExperiencia, new {@class="input-xxmini" })
+               <div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Experiencia.PuntajeExperiencia)
+                </div>
            </td>
+
        </tr>  
     </table>
 }

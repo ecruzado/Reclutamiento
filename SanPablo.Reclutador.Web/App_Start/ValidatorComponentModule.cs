@@ -76,10 +76,22 @@
             builder.RegisterType<RolValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Rol>))
                 .As<IValidator>();
+            builder.RegisterType<NivelAcademicoCargoValidator>()
+               .Keyed<IValidator>(typeof(IValidator<NivelAcademicoCargo>))
+               .As<IValidator>();
 
 
-           
+            builder.RegisterType<CentroEstudioCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<CentroEstudioCargo>))
+                .As<IValidator>();
 
+            builder.RegisterType<ExperienciaCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<ExperienciaCargo>))
+                .As<IValidator>();
+
+            builder.RegisterType<ConocimientoGeneralCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<ConocimientoGeneralCargo>))
+                .As<IValidator>();
         }
     }
 }
