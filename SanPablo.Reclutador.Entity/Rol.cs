@@ -12,7 +12,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string FlgSede { get; set; }
         public virtual string FlgEstado { get; set; }
         public virtual int IdRol { get; set; }
+        public virtual string DescSede { get; set; }
 
+        
         //public virtual IList<Opcion> Opciones { get; set; }
        
         //public Rol()

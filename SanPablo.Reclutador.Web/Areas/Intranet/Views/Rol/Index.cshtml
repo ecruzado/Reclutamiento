@@ -8,45 +8,172 @@
 }
 
 @section Scripts{
-
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('#btnBuscar').click(function () {
+            $('#grdListRol').trigger('reloadGrid');
+        });
+        
 
 
         $('#btnNuevo').click(function () {
             window.location = '@Url.Action("Nuevo", "Rol")';
+        });
+
+        $('#btnEditar').click(function () {
+            var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                window.location = '@Url.Action("Edicion", "Rol")' + '/' + selr;
+            } else {
+                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+        $('#btnConsultar').click(function () {
+            var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
+
+            if (selr != null) {
+                window.location = '@Url.Action("Consulta", "Rol")' + '/' + selr;
+
+            } else {
+                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
          });
 
-        //jQuery("#grdList").jqGrid({
 
-        //    datatype: 'json',
-        //    mtype: 'POST',
-        //    colNames: ['Codigo', 'Nombre', 'Estado', "", ""],
-        //    colModel: [
-        //            { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
-        //            { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
-        //            { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
-        //            { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
-        //            { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
-        //    ],
-        //    sortname: 'Codigo',
-        //    sortorder: 'desc',
-        //    viewrecords: true,
-        //    /*caption: 'Lista Referencias',*/
-        //    height: 120,
-        //    autowidth: true,
-        //    rowNum: 0,
-        //    cellsubmit: 'clientArray',
-        //    hidegrid: false,
-        //    postData: {
+        $('#btnEliminar').click(function () {
+            var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
 
-        //    },
-        //    loadComplete: function (data) {
+                $('#divEliminar').dialog('open');
 
-        //    }
-        //});
+            } else {
+                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+
+        $("#spanEliminar").html("¿Desea Eliminar el registro?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = $('#grdListRol').jqGrid('getGridParam', 'selrow');
+                    var rowData = $('#grdListRol').jqGrid('getRowData', selr);
+                    if (selr != null) {
+                        EliminarRol(selr, rowData);
+                    } else {
+                        MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+
+        jQuery("#grdListRol").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'nombRol', data: $("#rol_CodRol").val() },
+                       { field: 'descRol', data: $("#rol_DscRol").val() },
+                       { field: 'indSede', data: $("#rol_FlgSede").val() }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("getListaRol", "Rol")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListRol')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+             colNames: ['','Nombre', 'Descripción', '','Solicita sede'],
+             colModel: [
+                     { name: 'IDROL', index: 'IDROL', align: 'center',hidden: true, sortable: false },
+                     { name: 'CODROL', index: 'CODROL', align: 'left', width: 250, sortable: false },
+                     { name: 'DSCROL', index: 'DSCROL', align: 'left', width: 450, sortable: false },
+                     { name: 'FLGSEDE', index: 'FLGSEDE', align: 'left', width: 150, sortable: false ,hidden:true},
+                     { name: 'DESCSEDE', index: 'DESCSEDE', align: 'left', width: 150, sortable: false }
+                     
+             ],
+             pager: jQuery('#grdPagerRol'),
+             rowNum: 10,
+             rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IDROL',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 350,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
+
+             postData: {
+             }, loadComplete: function (data) {
+             }
+        });
+
+
 
     });
+
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+
+    function EliminarRol(selr, rowData) {
+
+        $.ajax({
+            data: {
+                id: selr
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarRol", "Rol")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListRol').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
 
     //function EditarFormatter(cellvalue, options, rowObject) {
     //    var imgPath = '/Intranet/Content/images/';
@@ -74,40 +201,74 @@
 @using (Html.BeginForm("Index", "Rol", FormMethod.Post))
 {
     @Html.ValidationSummary(true)
-<div class="row">
-    <div class="span12">
-        <div class="widget-box">
+ <div class="span12">
+       <div class="widget-box">
             <div class="widget-title">
-                <h5>Rol</h5>
+                <h5>Criterio</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Nombre</label>
-                            <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-large">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
-            @*<div class="tabla-datos">
-                <table id="grdList">
+            <table style="margin-left:120px;">
+                <tr>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario" for="inputSuccess">Nombre</label>
+                    </td>
+                    <td class="colInput">
+                        @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,data_val = "false" })  
+                    </td>
+                     <td style="width:40px;"></td>
+                     <td class="colEtiqueta">
+                        <label class="etiquetaFormulario" for="selectError">Descripción</label>
+                     </td>   
+                     <td class="colInput">
+                         @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario" ,data_val = "false" })  
+                     </td>
+                <tr/>
+                 <tr>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario" for="inputSuccess">Solicita Sede</label>
+                    </td>
+                    <td class="colInput">
+                       @Html.DropDownListFor(model => model.rol.FlgSede, new SelectList(Model.listaIndSede, "Valor", "Descripcion", Model.rol.FlgSede), new { data_val="false"})  
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                        
+                    </td>
+                    <td >
+                        
+                    </td>
+                  </tr>
+           </table>
+            <table>
+                <tr>
+                  <td  class="formulario-accion offset9">
+                     <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
+                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                   </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+            <div class="tabla-datos">
+                <table id="grdListRol">
                 </table>
-                <div id="grdPager"></div>
-            </div>*@
+                <div id="grdPagerRol">
+                </div>
+            </div>
             <div class="form-actions">
                 <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnEditar" class="btn btn-info" ><i class="icon-plus icon-white"></i> Editar</a>
-                <a id="btnConsultar" class="btn btn-info" ><i class="icon-plus icon-white"></i> Consultar</a>
-                <a id="btnEliminar" class="btn btn-info" ><i class="icon-plus icon-white"></i> Eliminar</a>
+                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>
-</div>
 }
+<div id="divEliminar"><span id="spanEliminar"></span></div>
+<div id="divMensaje"><span id="spnMensaje"></span></div>
+

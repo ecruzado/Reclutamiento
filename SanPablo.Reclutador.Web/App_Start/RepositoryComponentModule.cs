@@ -95,6 +95,9 @@
             builder.RegisterType<RolOpcionRepository>()
               .As<IRolOpcionRepository>();
 
+            builder.RegisterType<OpcionRepository>()
+             .As<IOpcionRepository>();
+
         }
     }
 }

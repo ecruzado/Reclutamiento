@@ -18,5 +18,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string USRMODIFICACION { get; set; }
         public virtual DateTime FECMODIFICACION { get; set; }
 
+        public virtual string NombreOpcion { get; set; }
+        public virtual string DescOpcion { get; set; }
+
     }
 }
