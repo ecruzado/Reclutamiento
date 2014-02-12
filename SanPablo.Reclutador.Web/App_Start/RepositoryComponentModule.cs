@@ -89,6 +89,9 @@
             builder.RegisterType<DiscapacidadCargoRepository>()
                 .As<IDiscapacidadCargoRepository>();
 
+            builder.RegisterType<EvaluacionCargoRepository>()
+                .As<IEvaluacionCargoRepository>();
+
         }
     }
 }

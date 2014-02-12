@@ -88,6 +88,14 @@
             builder.RegisterType<ConocimientoGeneralCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<ConocimientoGeneralCargo>))
                 .As<IValidator>();
+
+            builder.RegisterType<DiscapacidadCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<DiscapacidadCargo>))
+                .As<IValidator>();
+
+            builder.RegisterType<EvaluacionCargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<EvaluacionCargo>))
+                .As<IValidator>();
         }
     }
 }

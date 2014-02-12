@@ -16,6 +16,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int CantidadMesesExperiencia { get; set; }
         public virtual int PuntajeExperiencia { get; set; }
         public virtual string EstadoActivo { get; set; }
+
+        public virtual string DescripcionExperiencia { get; set; }
         
     }
 }

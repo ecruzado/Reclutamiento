@@ -31,36 +31,6 @@
             _discapacidadCargoRepository = discapacidadCargoRepository;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            Session["CargoIde"] = 1;
-            var cargoViewModel = inicializarCargo();
-            return View(cargoViewModel);
-        }
-
-        public PerfilViewModel inicializarCargo()
-        {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
-            cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-            cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
-            cargoViewModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-            cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
-
-
-            return cargoViewModel;
-        }
-
 
         #region DISCAPACIDAD
 
@@ -85,7 +55,7 @@
                         id = item.IdeDiscapacidadCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoDiscapacidad.ToString(),
+                                item.DescripcionTipoDiscapacidad,
                                 item.PuntajeDiscapacidad.ToString(),
                             }
                     }).ToArray();
@@ -98,38 +68,88 @@
             }
         }
 
-        public ActionResult Discapacidad()
+        public ActionResult Edit(string id)
         {
             var discapacidadViewModel = inicializarDiscapacidad();
+            if (id != "0")
+            {
+                var discapacidadCargo = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == Convert.ToInt32(id));
+                discapacidadViewModel.Discapacidad = discapacidadCargo;
+            }
             return View(discapacidadViewModel);
         }
 
         [HttpPost]
-        public ActionResult Discapacidad([Bind(Prefix = "Discapacidad")]DiscapacidadCargo discapacidadCargo)
+        public ActionResult Edit([Bind(Prefix = "Discapacidad")]DiscapacidadCargo discapacidadCargo)
         {
-            if (!ModelState.IsValid)
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                var discapacidadViewModel = inicializarDiscapacidad();
-                discapacidadViewModel.Discapacidad = discapacidadCargo;
-                return View("Discapacidad", discapacidadViewModel);
+                if (!ModelState.IsValid)
+                {
+                    var discapacidadViewModel = inicializarDiscapacidad();
+                    discapacidadViewModel.Discapacidad = discapacidadCargo;
+                    return View(discapacidadViewModel);
+                }
+                if (discapacidadCargo.IdeDiscapacidadCargo == 0)
+                {
+                    discapacidadCargo.EstadoActivo = "A";
+                    discapacidadCargo.FechaCreacion = FechaCreacion;
+                    discapacidadCargo.UsuarioCreacion = "YO";
+                    discapacidadCargo.FechaModificacion = FechaCreacion;
+                    discapacidadCargo.Cargo = new Cargo();
+                    discapacidadCargo.Cargo.IdeCargo = IdeCargo;
+
+                    _discapacidadCargoRepository.Add(discapacidadCargo);
+                }
+                else
+                {
+                    var discapacidadCargoActualizar = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == discapacidadCargo.IdeDiscapacidadCargo);
+                    discapacidadCargoActualizar.TipoDiscapacidad = discapacidadCargo.TipoDiscapacidad;
+                    discapacidadCargoActualizar.PuntajeDiscapacidad = discapacidadCargo.PuntajeDiscapacidad;
+                    discapacidadCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    discapacidadCargoActualizar.FechaModificacion = FechaModificacion;
+                    _discapacidadCargoRepository.Update(discapacidadCargoActualizar);
+                }
+
+                objJsonMessage.Mensaje = "Agregado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
             }
-            _discapacidadCargoRepository.Add(discapacidadCargo);
-
-            return View();
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
 
         }
 
-        public PerfilViewModel inicializarDiscapacidad()
+        public DiscapacidadCargoViewModel inicializarDiscapacidad()
         {
-            var cargoViewModel = new PerfilViewModel();
-            cargoViewModel.Cargo = new Cargo();
-            cargoViewModel.Discapacidad = new DiscapacidadCargo();
+            var discapacidadViewModel = new DiscapacidadCargoViewModel();
+            discapacidadViewModel.Cargo = new Cargo();
+            discapacidadViewModel.Discapacidad = new DiscapacidadCargo();
 
-            cargoViewModel.TipoDiscapacidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
-            cargoViewModel.TipoDiscapacidad.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            discapacidadViewModel.TipoDiscapacidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
+            discapacidadViewModel.TipoDiscapacidad.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            return cargoViewModel;
+            return discapacidadViewModel;
         }
+
+        [HttpPost]
+        public ActionResult eliminarDiscapacidad(int ideDiscapacidad)
+        {
+            ActionResult result = null;
+
+            var discapacidadCargo = new DiscapacidadCargo();
+            discapacidadCargo = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == ideDiscapacidad);
+            _discapacidadCargoRepository.Remove(discapacidadCargo);
+
+            return result;
+        }
+
 
         #endregion
 

@@ -55,9 +55,9 @@
                         id = item.IdeConocimientoGeneralCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoConocimientoOfimatica.ToString(),
-                                item.TipoNombreOfimatica.ToString(),
-                                item.TipoNivelConocimiento.ToString(),
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica,
+                                item.DescripcionNivelConocimiento,
                                 item.PuntajeConocimiento.ToString(),
                             }
                     }).ToArray();
@@ -188,9 +188,9 @@
                         id = item.IdeConocimientoGeneralCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoIdioma.ToString(),
-                                item.TipoConocimientoIdioma.ToString(),
-                                item.TipoNivelConocimiento.ToString(),
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento,
                                 item.PuntajeConocimiento.ToString(),
                             }
                     }).ToArray();
@@ -319,9 +319,9 @@
                         id = item.IdeConocimientoGeneralCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoConocimientoGeneral.ToString(),
-                                item.TipoNombreConocimientoGeneral.ToString(),
-                                item.TipoNivelConocimiento.ToString(),
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento,
                                 item.PuntajeConocimiento.ToString(),
                             }
                     }).ToArray();
@@ -341,6 +341,7 @@
             {
                 var otrosConocimientos = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == Convert.ToInt32(id));
                 otrosConocimientosViewModel.Conocimiento = otrosConocimientos;
+                actualizarOtrosConocimientos(otrosConocimientosViewModel);
             }
             return View(otrosConocimientosViewModel);
         }
@@ -422,6 +423,23 @@
             _conocimientoCargoRepository.Remove(otrosConocimientosEliminar);
 
             return result;
+        }
+
+        public ActionResult listarNombreConocimiento(string tipoConocimiento)
+        {
+            ActionResult result = null;
+            var listaResultado = new List<DetalleGeneral>();
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, tipoConocimiento));
+            result = Json(listaResultado);
+            return result;
+        }
+
+        public void actualizarOtrosConocimientos(ConocimientoCargoViewModel conocimientoModel)
+        {
+            var listaResultado = new List<DetalleGeneral>();
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimientoModel.Conocimiento.TipoConocimientoGeneral.ToString()));
+            conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
+
         }
         #endregion
 

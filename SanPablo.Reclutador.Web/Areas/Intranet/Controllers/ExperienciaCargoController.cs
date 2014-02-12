@@ -54,7 +54,7 @@
                         id = item.IdeExperienciaCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoExperiencia.ToString(),
+                                item.DescripcionExperiencia,
                                 item.CantidadAnhosExperiencia.ToString(),
                                 item.CantidadMesesExperiencia.ToString(),
                                 item.PuntajeExperiencia.ToString(),

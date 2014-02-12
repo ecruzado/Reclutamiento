@@ -58,9 +58,9 @@
                         id = item.IdeUbigeo.ToString(),
                         cell = new string[]
                             {
-                                item.IdeUbigeo.ToString(),
-                                item.IdeUbigeo.ToString(),
-                                item.IdeUbigeo.ToString(),
+                                item.Departamento,
+                                item.Provincia,
+                                item.Distrito,
                                 item.PuntajeUbigeo.ToString(),
                             }
                     }).ToArray();

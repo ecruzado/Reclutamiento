@@ -1,12 +1,10 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Conocimientos";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
-    <script type="text/javascript">
+@section Scripts{ 
+<script type="text/javascript">
         $(document).ready(function () {
  
             $('#btnAgregarOfimatica').click(function () {
@@ -269,11 +267,12 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
                 ],
+                pager: jQuery('#grdPagerOfimatica'),
                 sortname: 'IdeConocimientoGeneralCargo',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 cellEdit: true,
-                height: 60,
+                height: 200,
                 width: 898,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
@@ -297,11 +296,12 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
                 ],
+                pager: jQuery('#grdPagerIdioma'),
                 sortname: 'IdeConocimientoGeneralCargo',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 cellEdit: true,
-                height: 60,
+                height: 200,
                 width: 898,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
@@ -325,11 +325,12 @@
                         { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
                 ],
+                pager: jQuery('#grdPagerOtrosConocimientos'),
                 sortname: 'IdeConocimientoGeneralCargo',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 cellEdit: true,
-                height: 60,
+                height: 200,
                 width: 898,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
@@ -382,7 +383,7 @@
         return false;
         }
 
-        function mostrarEditarCentroEstudio(ideIdioma) {
+        function mostrarEditarIdioma(ideIdioma) {
             var dialogDiv = $('#updateDialogIdioma');
             $.get('@Url.Action("Idioma", "ConocimientosCargo")', { id: ideIdioma }, function (data) {
                 dialogDiv.html(data);
@@ -421,7 +422,7 @@
             return false;
         }
 
-        function eliminarNivelAcademico(id) {
+        function eliminarOtrosConocimientos(id) {
             $.ajax({
                 async: false,
                 type: "POST",
@@ -433,9 +434,6 @@
 </script>
 }
 
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
 <!--CONOCIMIENTOS -->
       <div class="tab-pane" id="E">
         <div class="grilla-opciones">
@@ -450,6 +448,8 @@
         <div class="tabla-datos">
             <table id="grdListOfimatica">
             </table>
+            <div id="grdPagerOfimatica">
+            </div>
         </div>
         <div class="grilla-opciones">
             <h6>Idiomas</h6>
@@ -463,6 +463,8 @@
         <div class="tabla-datos">
             <table id="grdListIdioma">
             </table>
+            <div id="grdPagerIdioma">
+            </div>
         </div>
         <div class="grilla-opciones">
             <h6>Otros Conocimientos</h6>
@@ -476,7 +478,10 @@
         <div class="tabla-datos">
             <table id="grdListOtrosConocimientos">
             </table>
-        </div>                        <div class="formulario-accion">   
+            <div id="grdPagerOtrosConocimientos">
+            </div>
+        </div>                        
+        <div class="formulario-accion">   
             <div class="opciones">
             <a class="btn" href="#" onclick="irATab('D');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             <a class="btn btn-info" href="#" onclick="irATab('F');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>

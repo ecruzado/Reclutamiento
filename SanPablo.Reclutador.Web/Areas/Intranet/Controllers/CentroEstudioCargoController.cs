@@ -54,8 +54,8 @@
                         id = item.IdeCentroEstudioCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoCentroEstudio,
-                                item.TipoNombreCentroEstudio,
+                                item.DescripcionTipoCentroEstudio,
+                                item.DescripcionNombreCentroEstudio,
                                 item.PuntajeCentroEstudios.ToString(),
                             }
                     }).ToArray();
@@ -75,6 +75,8 @@
             {
                 var centroEstudio = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == Convert.ToInt32(id));
                 centroEstudioViewModel.CentroEstudio = centroEstudio;
+                centroEstudioViewModel = actualizarDatos(centroEstudioViewModel, centroEstudio);
+                
             }
             return View(centroEstudioViewModel);
         }
@@ -150,6 +152,29 @@
             _centroEstudioCargoRepository.Remove(centroEstudioEliminar);
 
             return result;
+        }
+
+
+        [HttpPost]
+        public ActionResult listarNombreInstitucion(string tipoInstituto)
+        {
+            ActionResult result = null;
+            var listaResultado = new List<DetalleGeneral>();
+
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, tipoInstituto));
+            result = Json(listaResultado);
+            return result;
+        }
+
+        public CentroEstudioViewModel actualizarDatos(CentroEstudioViewModel centroEstudioViewModel, CentroEstudioCargo centroEstudioCargo)
+        {
+            if (centroEstudioCargo != null)
+            {
+                var listaResultado = new List<DetalleGeneral>();
+                listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, centroEstudioCargo.TipoCentroEstudio));
+                centroEstudioViewModel.Instituciones = listaResultado;
+            }
+            return centroEstudioViewModel;
         }
 
         #endregion

@@ -57,6 +57,8 @@
     <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
+    <Compile Include="EvaluacionCargoRepository.cs" />
+    <Compile Include="Interface\IEvaluacionCargoRepository.cs" />
     <Compile Include="OfrecemosCargoRepository.cs" />
     <Compile Include="Interface\OfrecemosCargoRepository.cs" />
     <Compile Include="UbigeoCargoRepository.cs" />

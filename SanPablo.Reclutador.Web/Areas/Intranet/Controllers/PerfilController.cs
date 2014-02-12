@@ -58,8 +58,52 @@
         public ActionResult General()
         {
             (Session["CargoIde"]) = 1;
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var perfilViewModel = inicializarGeneral();
+            if (IdeCargo != 0)
+            {
+                var cargo = _cargoRepository.GetSingle(x=>x.IdeCargo == IdeCargo);
+                perfilViewModel.Cargo = cargo;
+            }
+            
             return View(perfilViewModel);
+        }
+       
+        [HttpPost]
+        public ActionResult General([Bind(Prefix = "Cargo")]Cargo cargo)
+        {
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);  
+            var cargoViewModel = inicializarGeneral();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    cargoViewModel.Cargo = cargo;
+                    return View(cargoViewModel);
+                }
+                             
+                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.FechaModificacion = FechaCreacion;
+                cargoEditar.PuntajePostulanteInterno = cargo.PuntajePostulanteInterno;
+                cargoEditar.EdadInicio = cargo.EdadInicio;
+                cargoEditar.EdadFin = cargo.EdadFin;
+                cargoEditar.PuntajeEdad = cargo.PuntajeEdad;
+                cargoEditar.Sexo = cargo.Sexo;
+                cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
+                cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
+                cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+                cargoEditar.PuntajeSalario = cargo.PuntajeSalario;
+                _cargoRepository.Update(cargoEditar);
+
+                return RedirectToAction("../Perfil/Estudio");
+            }
+            catch (Exception ex)
+            {
+                cargoViewModel.Cargo = cargo;
+                return View(cargoViewModel);
+            }
+
         }
 
         public PerfilViewModel inicializarGeneral()
@@ -79,6 +123,7 @@
 
             return cargoViewModel;
         }
+        
         [HttpPost]
         public ActionResult ListaCargo(string sidx, string sord, int page, int rows)
         {
@@ -274,53 +319,51 @@
         public ActionResult Estudio()
         {
             (Session["CargoIde"]) = 1;
-            var estudioCargoViewModel = inicializarEstudio();
+            var estudioCargoViewModel = inicializarDatosCargo();
             return View(estudioCargoViewModel);
         }
-
-        public  PerfilViewModel inicializarEstudio()
-        {
-            var estudioCargoViewModel = new PerfilViewModel();
-            estudioCargoViewModel.Cargo = new Cargo();
-            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
-            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
-
-            return estudioCargoViewModel;
-        }
-
+        
         public ActionResult Experiencia()
         {
             (Session["CargoIde"]) = 1;
-            var experienciaCargoViewModel = inicializarExperiencia();
+            var experienciaCargoViewModel = inicializarDatosCargo();
             return View(experienciaCargoViewModel);
-        }
-
-        public PerfilViewModel inicializarExperiencia()
-        {
-            var experienciaCargoViewModel = new PerfilViewModel();
-            experienciaCargoViewModel.Cargo = new Cargo();
-            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
-            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
-
-            return experienciaCargoViewModel;
         }
 
         public ActionResult Conocimientos()
         {
             (Session["CargoIde"]) = 1;
-            var conocimientosCargoViewModel = inicializarConocimientos();
+            var conocimientosCargoViewModel = inicializarDatosCargo();
             return View(conocimientosCargoViewModel);
         }
 
-        public PerfilViewModel inicializarConocimientos()
+        public ActionResult Discapacidad()
         {
-            var experienciaCargoViewModel = new PerfilViewModel();
-            experienciaCargoViewModel.Cargo = new Cargo();
-            //estudioCargoViewModel.NivelAcademico = new NivelAcademicoCargo();
-            //estudioCargoViewModel.CentroEstudio = new CentroEstudioCargo();
-
-            return experienciaCargoViewModel;
+            (Session["CargoIde"]) = 1;
+            var discapacidadCargoViewModel = inicializarDatosCargo();
+            return View(discapacidadCargoViewModel);
         }
 
+        public ActionResult ConfiguracionPerfil()
+        {
+            (Session["CargoIde"]) = 1;
+            var discapacidadCargoViewModel = inicializarDatosCargo();
+            return View(discapacidadCargoViewModel);
+        }
+        
+        public PerfilViewModel inicializarDatosCargo()
+        {
+            var discapacidadCargoViewModel = new PerfilViewModel();
+            discapacidadCargoViewModel.Cargo = new Cargo();
+            return discapacidadCargoViewModel;
+        }
+
+        public ActionResult Evaluacion()
+        {
+            (Session["CargoIde"]) = 1;
+            var evaluacionCargoViewModel = inicializarDatosCargo();
+            return View(evaluacionCargoViewModel);
+        }
+        
     }
 }

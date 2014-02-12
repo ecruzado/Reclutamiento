@@ -1,13 +1,11 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Perfil";
-    Layout = "~/Views/Shared/_LayoutIntranet.cshtml";
-    
+       ViewBag.Title = "Perfil";
+       Layout = "~/Views/Shared/LayoutCargo.cshtml";  
 }
-@section Head{
-}
-@section Scripts{
-    
+
+@section Scripts{ 
+
 <script type="text/javascript">
     $(document).ready(function () {
         //PERFIL PUESTO
@@ -160,11 +158,12 @@
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
             ],
+            pager: jQuery('#grdPagerCompetencia'),
             sortname: 'DescripcionCompetencia',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 120,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -189,11 +188,12 @@
                     { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
             ],
+            pager: jQuery('#grdPagerOfrecemos'),
             sortname: 'DescripcionOfrecimiento',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 120,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -220,7 +220,7 @@
         $.ajax({
             async: false,
             type: "POST",
-            url: '@Url.Action("eliminarCompetencia","CompetenciaCargo")',
+            url: '@Url.Action("eliminarCompetencia", "CompetenciaCargo")',
             data: { ideCompetencia: id },
         });
     }
@@ -239,26 +239,13 @@
         $.ajax({
             async: false,
             type: "POST",
-            url: '@Url.Action("eliminarOfrecimiento","OfrecimientoCargo")',
+            url: '@Url.Action("eliminarOfrecimiento", "OfrecimientoCargo")',
             data: { ideOfrecimiento: id },
         });
     }
 
   </script>
 }
-
-
-
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-
-</div>
-
-<div class="span12">
-    @Html.Partial("MenuPerfil")
-
-</div>
-
 @using (Html.BeginForm("Index", "Perfil", FormMethod.Post, new { @id = "puestoPerfilForm" }))
 {
 <!--PUESTO -->
@@ -287,7 +274,10 @@
         <div class="tabla-datos">
             <table id="grdListCompetencias">
             </table>
+            <div id="grdPagerCompetencia">
+            </div>
         </div>
+
         <div class="grilla-opciones">
             <h6>Ofrecemos</h6>
             <div class="opciones">
@@ -299,6 +289,8 @@
         <div class="tabla-datos">
             <table id="grdListOfrecemos">
             </table>
+            <div id="grdPagerOfrecemos">
+            </div>
         </div>
                         
         <div class="formulario-accion">                                          

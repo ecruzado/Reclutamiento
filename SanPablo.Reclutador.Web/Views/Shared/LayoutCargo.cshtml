@@ -1,8 +1,13 @@
-﻿ @using SanPablo.Reclutador.Web.Models
+﻿@using SanPablo.Reclutador.Web.Models
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@{
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/_LayoutIntranet.cshtml";
+}
+
 <div class="row">
     <div class="span12">
         <div class="widget-box">
-
             <div class="widget-title">
                 <h5>Cargo</h5>
                 <div class="opciones">
@@ -10,7 +15,7 @@
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                 </div>
             </div>
-       
+
             <form class="formulario-busqueda">
                 <table>
                     <tr class="formulario-fila">
@@ -76,9 +81,8 @@
                 </tr>
                 </table>
             </form>
-       
+
             <h5>Perfil</h5>
-            
             <ul class="nav nav-tabs" data-tabs="tabs">
             <li><div style="width:110px;display:inline-block"></div></li>
                 @Html.MenuIntranet("Puesto", "Index", "Perfil")
@@ -87,58 +91,28 @@
                 @Html.MenuIntranet("Experiencia", "Experiencia", "Perfil")
                 @Html.MenuIntranet("Conocimientos", "Conocimientos", "Perfil")
                 @Html.MenuIntranet("Discapacidad", "Discapacidad", "Perfil")
-                @Html.MenuIntranet("Evaluación", "Index", "Perfil")
+                @Html.MenuIntranet("Evaluación", "Evaluacion", "Perfil")
                 @Html.MenuIntranet("Conf. Perfil", "ConfiguracionPerfil", "Perfil")
-
             </ul>
-            
- 
-
+            <div class="container">
+            @RenderBody() 
+            </div>
             <div class="form-actions">     
                 <a class="btn" href="@Url.Action("Index", "Cargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
                 <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
-       
-            
-            
         </div>
     </div>
 </div>
-@*}*@
-
-
-
-
-<div id="modalAprobarRechazar" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h5>Aprobación/Rechazo</h5>
-    </div>
-    <div class="modal-body">
-        <label>Comentarios</label>
-        <textarea class="input-porce" id="taobservacionaprobacion" rows="3"></textarea>
-        <br />
-        <input type="radio" /><span> Aprobar</span> 
-        <input type="radio" /><span> Rechazar</span>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" onclick="ocultarAprobarDesaprobar();">Cancelar</a>
-        <a href="#" class="btn btn-info">Enviar</a>
-    </div>
-</div>
-
-<div id="modalConfirmacion" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h5>Mensaje</h5>
-    </div>
-    <div class="modal-body">
-        <p>¿Está seguro de enviar la solicitud?</p>            
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" onclick="ocultarConfirmacion();">Cancelar</a>
-        <a href="#" class="btn btn-info">Aceptar</a>
-    </div>
-</div>
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-migrate-1.2.1.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/grid.locale-es.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.conastec.js")" type="text/javascript"></script>
+    @RenderSection("Scripts", required: false)
