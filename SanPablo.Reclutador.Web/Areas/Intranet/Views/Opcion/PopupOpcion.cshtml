@@ -1,0 +1,163 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.OpcionViewModel
+@{
+    Layout = "";
+}
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $('#btnBuscarOpcion').click(function () {
+        $('#grdListaOpcionPopup').trigger('reloadGrid');
+    });
+
+    $(document).ready(function () {
+
+        @*jQuery("#grdListaOpcionPopup").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idExamen', data: $("#Examen_IdeExamen").val() },
+                       { field: 'tipCriterio', data: $("#Categoria_TipoCriterio").val() },
+                       { field: 'estado', data: $("#Categoria_ESTACTIVO").val() },
+                       { field: 'descrip', data: $("#Categoria_DESCCATEGORIA").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaPopupCategoria", "Categoria")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListaCategoriaPopup')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', '', 'Tipo'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left', hidden: true },
+                    { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 90, hidden: true },
+                    { name: 'TipoDes', index: 'TipoDes', align: 'left', width: 90 }
+
+            ],
+            pager: jQuery('#grdPagerCategoriaPopup'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IDECATEGORIA',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 350,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            autowidth: true,
+            multiselect: true,
+            onSelectAll: function (aRowids, status) {
+
+                completeRow = aRowids;
+                CompleteStatus = status;
+            },
+            onSelectRow: function (rowid, status) {
+                SelectRowdata = rowid;
+                SelectedRowStatus = status;
+            },
+
+
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });*@
+
+    });
+
+</script>
+
+@using (Html.BeginForm("PopupOpcion", "Opcion", FormMethod.Post, new { id = "frmPopupOpcion", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    
+  <table style="margin-left:120px;">
+        <tr>
+            <td colspan="8">&nbsp;</td>
+        </tr>
+      
+       @Html.TextBoxFor(model => model.IdRoll, new { style = "display: none;" })
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="inputSuccess">Nombre</label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.opcion.DSCOPCION, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false"}) 
+            </td>
+            <td style="width:40px;"></td> 
+            <td class="colEtiqueta">
+            <label class="etiquetaFormulario" for="inputSuccess">Descripción</label>
+            </td>   
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.opcion.DESCRIPCION, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false"}) 
+            </td>
+        </tr>
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.opcion.FLGHABILITADO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.opcion.FLGHABILITADO),new { data_val = "false" })
+            </td>
+        </tr>
+
+        <tr >
+            <td class="opciones" style="text-align:right" colspan="6">
+                <a id="btnBuscarOpcion" class="btn btn-small btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                <a id="btnLimpiarOpcion" class="btn btn-small btn-info"><i class="icon-trash"></i> Limpiar</a>
+                 <div style="clear:both"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+              
+    </table>
+        
+    
+        <div class="tabla-datos">
+        <table id="grdListaOpcionPopup">
+        </table>
+        <div id="grdPagerOpcionPopup">
+        </div>
+
+
+    </div>
+        
+  
+}

@@ -73,9 +73,13 @@
                 .Keyed<IValidator>(typeof(IValidator<UbigeoCargo>))
                 .As<IValidator>();
 
+            builder.RegisterType<RolValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Rol>))
+                .As<IValidator>();
             builder.RegisterType<NivelAcademicoCargoValidator>()
                .Keyed<IValidator>(typeof(IValidator<NivelAcademicoCargo>))
                .As<IValidator>();
+
 
             builder.RegisterType<CentroEstudioCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<CentroEstudioCargo>))

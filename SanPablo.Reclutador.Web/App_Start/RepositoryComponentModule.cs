@@ -91,6 +91,11 @@
 
             builder.RegisterType<EvaluacionCargoRepository>()
                 .As<IEvaluacionCargoRepository>();
+            builder.RegisterType<RolRepository>()
+               .As<IRolRepository>();
+
+            builder.RegisterType<RolOpcionRepository>()
+              .As<IRolOpcionRepository>();
 
         }
     }

@@ -59,9 +59,11 @@
         TipoCompetencia = 39,
         TipoOfrecimiento = 40,
         TipoRequerimiento = 41,
-        TipoSexos = 42
+        TipoSexos = 42,
 
+        //MANTENIMIENTO DE ROL
 
+        TipoSede = 43
     }
 
     public sealed class IndicadorActivo

@@ -148,6 +148,7 @@
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CategoriaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CentroEstudioCargoController.cs" />
@@ -176,6 +177,8 @@
     <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\NivelAcademicoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\OpcionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\RolViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\HorarioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\OfrecimientoViewModel.cs" />
@@ -340,6 +343,8 @@
     <Content Include="Areas\Intranet\Views\Perfil\Conocimientos.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Discapacidad.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\Rol\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Opcion\PopupOpcion.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
