@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilController.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
@@ -277,7 +279,6 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Views\Shared\PerfilCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
@@ -297,7 +298,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaNuevo.cshtml" />
@@ -347,6 +348,8 @@
     <Content Include="Areas\Intranet\Views\Opcion\PopupOpcion.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -430,7 +433,6 @@
     <Content Include="Views\Shared\NotAccess.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Postulante\AgregarFoto.cshtml" />
-    <Content Include="Views\Shared\MenuPerfil.cshtml" />
     <Content Include="Views\Shared\LayoutCargo.cshtml" />
   </ItemGroup>
   <ItemGroup>

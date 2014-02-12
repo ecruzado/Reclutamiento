@@ -54,10 +54,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaRepository.cs" />
+    <Compile Include="AreaRepository.cs" />
     <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
+    <Compile Include="Interface\ISolicitudNuevoCargoRepository.cs" />
+    <Compile Include="SolicitudNuevoCargoRepository.cs" />
+    <Compile Include="DepartamentoRepository.cs" />
+    <Compile Include="DependenciaRepository.cs" />
     <Compile Include="EvaluacionCargoRepository.cs" />
+    <Compile Include="Interface\IAreaRepository.cs" />
+    <Compile Include="Interface\IDepartamentoRepository.cs" />
+    <Compile Include="Interface\IDependenciaRepository.cs" />
     <Compile Include="Interface\IEvaluacionCargoRepository.cs" />
     <Compile Include="Interface\IRolOpcionRepository.cs" />
     <Compile Include="Interface\IRolRepository.cs" />

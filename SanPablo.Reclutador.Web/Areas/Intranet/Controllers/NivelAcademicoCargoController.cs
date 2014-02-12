@@ -58,6 +58,7 @@
                                 item.DescripcionTipoEducacion,
                                 item.DescripcionAreaEstudio,
                                 item.DescripcionNivelAlcanzado,
+                                item.CicloSemestre.ToString(),
                                 item.PuntajeNivelEstudio.ToString(),
                             }
                     }).ToArray();
@@ -112,6 +113,7 @@
                     nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
                     nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
                     nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
+                    nivelAcedemicoCargoActualizar.CicloSemestre = nivelAcademicoCargo.CicloSemestre;
                     nivelAcedemicoCargoActualizar.PuntajeNivelEstudio = nivelAcademicoCargo.PuntajeNivelEstudio;
                     nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;

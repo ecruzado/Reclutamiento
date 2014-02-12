@@ -42,7 +42,10 @@
       <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,27 +54,56 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaRepository.cs" />
-<<<<<<< HEAD
+    <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
-=======
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
->>>>>>> a00a13ed7b1b0088a0997341d1f2b8bed8e18e8f
+<<<<<<< HEAD
+    <Compile Include="EvaluacionCargoRepository.cs" />
+    <Compile Include="Interface\IEvaluacionCargoRepository.cs" />
+=======
+    <Compile Include="Interface\IRolOpcionRepository.cs" />
+    <Compile Include="Interface\IRolRepository.cs" />
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
+    <Compile Include="OfrecemosCargoRepository.cs" />
+    <Compile Include="Interface\OfrecemosCargoRepository.cs" />
+    <Compile Include="RolOpcionRepository.cs" />
+    <Compile Include="RolRepository.cs" />
+    <Compile Include="UbigeoCargoRepository.cs" />
+    <Compile Include="NivelAcademicoCargoRepository.cs" />
+    <Compile Include="HorarioCargoRepository.cs" />
+    <Compile Include="ExperienciaCargoRepository.cs" />
+    <Compile Include="DiscapacidadCargoRepository.cs" />
+    <Compile Include="ConocimientoGeneralCargoRepository.cs" />
+    <Compile Include="CompetenciasCargoRepository.cs" />
+    <Compile Include="CentroEstudioCargoRepository.cs" />
+    <Compile Include="CriterioPorSubcategoriaRepository.cs" />
     <Compile Include="CriterioRepository.cs" />
     <Compile Include="DetalleGeneralRepository.cs" />
     <Compile Include="DiscapacidadPostulanteRepository.cs" />
     <Compile Include="EstudioPostulanteRepository.cs" />
+    <Compile Include="ExamenPorCategoriaRepository.cs" />
+    <Compile Include="ExamenRepository.cs" />
     <Compile Include="ExperienciaPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
+    <Compile Include="Interface\IUbigeoCargoRepository.cs" />
+    <Compile Include="Interface\INivelAcademicoCargoRepository.cs" />
+    <Compile Include="Interface\IHorarioCargoRepository.cs" />
+    <Compile Include="Interface\IExperienciaCargoRepository.cs" />
+    <Compile Include="Interface\IDiscapacidadCargoRepository.cs" />
+    <Compile Include="Interface\IConocimientoGeneralCargoRepository.cs" />
+    <Compile Include="Interface\ICompetenciaCargoRepository.cs" />
+    <Compile Include="Interface\ICentroEstudioCargoRepository.cs" />
+    <Compile Include="Interface\ICargoRepository.cs" />
+    <Compile Include="Interface\ICriterioPorSubcategoriaRepository.cs" />
     <Compile Include="Interface\IDiscapacidadPostulanteRepository.cs" />
     <Compile Include="Interface\IAlternativaRepository.cs" />
-<<<<<<< HEAD
     <Compile Include="Interface\ICategoriaRepository.cs" />
-=======
     <Compile Include="Interface\IConocimientoGeneralPostulanteRepository.cs" />
->>>>>>> a00a13ed7b1b0088a0997341d1f2b8bed8e18e8f
     <Compile Include="Interface\ICriterioRepository.cs" />
     <Compile Include="Interface\IDetalleGeneralRepository.cs" />
     <Compile Include="Interface\IEstudioPostulanteRepository.cs" />
+    <Compile Include="Interface\IExamenPorCategoriaRepository.cs" />
+    <Compile Include="Interface\IExamenRepository.cs" />
     <Compile Include="Interface\IExperienciaPostulanteRepository.cs" />
     <Compile Include="Interface\IGeneralRepository.cs" />
     <Compile Include="Interface\IParientePostulanteRepository.cs" />

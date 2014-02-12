@@ -13,6 +13,7 @@
             Map(x => x.IdeSede, "IDESEDE");
             Map(x => x.NombreCargo, "NOMCARGO");
             Map(x => x.DescripcionCargo, "DESCARGO");
+            Map(x => x.CodigoCargo, "CODCARGO");
             Map(x => x.IdeArea, "IDEAREA");
             Map(x => x.NumeroPosiciones, "NUMPOSICION");
             Map(x => x.PuntajePostulanteInterno, "PUNTPOSTUINTE");
@@ -67,7 +68,7 @@
             Map(x => x.PuntajeMinimoEdad, "PUNTMINEDAD");
             Map(x => x.PuntajeTotalSexo, "PUNTTOTSEXO");
             Map(x => x.PuntajeMinimoSexo, "PUNTMINSEXO");
-            Map(x => x.PuntajeTotalSalario, "PUNTTOTSEXO");
+            Map(x => x.PuntajeTotalSalario, "PUNTTOTSALARIO");
             Map(x => x.PuntajeMinimoSalario, "PUNTMINSALARIO");
 
            

@@ -30,7 +30,14 @@
         public ActionResult Index()
         {
             (Session["CargoIde"]) = 1;
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var perfilViewModel = inicializarPerfil();
+            if (IdeCargo != 0)
+            {
+                var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+                perfilViewModel.Cargo = cargo;
+            }
+            
             return View(perfilViewModel);
         }
 
@@ -54,6 +61,34 @@
             return cargoViewModel;
         }
 
+        [HttpPost]
+        public ActionResult Index([Bind(Prefix = "Cargo")]Cargo cargo)
+        {
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+            var cargoViewModel = inicializarGeneral();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    cargoViewModel.Cargo = cargo;
+                    return View(cargoViewModel);
+                }
+
+                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.FechaModificacion = FechaCreacion;
+                cargoEditar.ObjetivoCargo = cargo.ObjetivoCargo;
+                cargoEditar.FuncionCargo = cargo.FuncionCargo;
+                _cargoRepository.Update(cargoEditar);
+
+                return RedirectToAction("../Perfil/General");
+            }
+            catch (Exception ex)
+            {
+                cargoViewModel.Cargo = cargo;
+                return View(cargoViewModel);
+            }
+        }
 
         public ActionResult General()
         {

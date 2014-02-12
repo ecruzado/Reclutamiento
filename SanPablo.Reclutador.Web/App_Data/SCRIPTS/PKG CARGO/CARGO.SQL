@@ -4,6 +4,7 @@ CREATE TABLE CARGO
 (
   IDECARGO           NUMBER(8), 
   IDESEDE            NUMBER(3), 
+  CODCARGO           VARCHAR() 
   NOMCARGO           VARCHAR2(50), 
   DESCARGO           VARCHAR2(100), 
   IDEAREA            NUMBER(3), 

@@ -47,6 +47,9 @@
     <Reference Include="Autofac.Integration.Mvc">
       <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
@@ -62,6 +65,9 @@
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -141,24 +147,49 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
-    <Compile Include="Areas\Intranet\Controllers\CargoController.cs" />
+<<<<<<< HEAD
+    <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
+=======
+    <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
+    <Compile Include="Areas\Intranet\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CategoriaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CentroEstudioCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CompetenciaCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ConocimientosCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CriterioController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\DiscapacidadCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ExamenController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ExperienciaCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\HorarioCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\NivelAcademicoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\OfrecimientoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\RolController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SeguridadController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\UbigeoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
-<<<<<<< HEAD
-    <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
-=======
     <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
->>>>>>> cc6786bedf2d5afad8b4bd37de6c1aaa2964dd55
+    <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\NivelAcademicoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\OpcionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\RolViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\HorarioCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\OfrecimientoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PerfilViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
     <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />
@@ -178,6 +209,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ConocimientoPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\MenuIntranet.cs" />
     <Compile Include="Models\EstudioPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\ExperienciaPostulanteGeneralViewModel.cs" />
     <Compile Include="Models\GenericDouble.cs" />
@@ -194,6 +226,17 @@
     <Compile Include="Models\PostulanteGeneralViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\dsExamen.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ExamenReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamenReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -237,7 +280,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\Intranet\Views\Cargo\Edit.cshtml" />
+    <Content Include="Views\Shared\PerfilCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
@@ -282,16 +325,50 @@
     <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\PopupListaCriterio.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\PopupCategoria.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Areas\Intranet\Views\Cargo\Competencias.cshtml" />
-=======
+    <Content Include="Areas\Intranet\Views\CompetenciaCargo\Edit.cshtml">
+      <BrowseToURL>~/Intranet/Cargo/Competencia</BrowseToURL>
+    </Content>
     <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
->>>>>>> cc6786bedf2d5afad8b4bd37de6c1aaa2964dd55
+    <Content Include="Areas\Intranet\Views\OfrecimientoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\HorarioCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\UbigeoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\NivelAcademicoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\CentroEstudioCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Ofimatica.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Idioma.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\OtrosConocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\ExperienciaCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\DiscapacidadCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\ConfiguracionPerfil.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
+=======
+    <Content Include="Areas\Intranet\Views\Rol\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Opcion\PopupOpcion.cshtml" />
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
     <Content Include="Scripts\grid.locale-en.js" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
+    <Content Include="Reportes\Intranet\dsExamen.xsc">
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsExamen.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsExamen.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsExamen.xss">
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\grid.locale-es.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -359,10 +436,13 @@
     <Content Include="Views\Shared\NotAccess.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Postulante\AgregarFoto.cshtml" />
+    <Content Include="Views\Shared\MenuPerfil.cshtml" />
+    <Content Include="Views\Shared\LayoutCargo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Archivos\Imagenes\" />
+    <Folder Include="Archivos\Pdf\" />
     <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +470,15 @@
       <Project>{4492ad21-c07e-497d-9214-1024cf2f1a03}</Project>
       <Name>SanPablo.Reclutador.Repository</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ExamenReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ExamenReport.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

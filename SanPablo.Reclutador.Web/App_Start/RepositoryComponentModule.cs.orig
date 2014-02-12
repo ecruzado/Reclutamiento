@@ -89,29 +89,16 @@
             builder.RegisterType<DiscapacidadCargoRepository>()
                 .As<IDiscapacidadCargoRepository>();
 
+<<<<<<< HEAD
             builder.RegisterType<EvaluacionCargoRepository>()
                 .As<IEvaluacionCargoRepository>();
-
+=======
             builder.RegisterType<RolRepository>()
                .As<IRolRepository>();
 
             builder.RegisterType<RolOpcionRepository>()
               .As<IRolOpcionRepository>();
-
-            builder.RegisterType<DependenciaRepository>()
-              .As<IDependenciaRepository>();
-
-            builder.RegisterType<DepartamentoRepository>()
-              .As<IDepartamentoRepository>();
-
-            builder.RegisterType<AreaRepository>()
-              .As<IAreaRepository>();
-
-            builder.RegisterType<SolicitudNuevoCargoRepository>()
-              .As<ISolicitudNuevoCargoRepository>();
-
-
-
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
 
         }
     }
