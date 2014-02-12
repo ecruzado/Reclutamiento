@@ -83,6 +83,7 @@
     <Compile Include="SedeMap.cs" />
     <Compile Include="SubCategoriaMap.cs" />
     <Compile Include="UbigeoMap.cs" />
+    <Compile Include="UsuarioMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Fakes Include="Fakes\FluentNHibernate.fakes" />

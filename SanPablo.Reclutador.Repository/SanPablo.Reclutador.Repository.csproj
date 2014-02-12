@@ -62,6 +62,7 @@
     <Compile Include="Interface\IEvaluacionCargoRepository.cs" />
     <Compile Include="Interface\IRolOpcionRepository.cs" />
     <Compile Include="Interface\IRolRepository.cs" />
+    <Compile Include="Interface\IUsuarioRepository.cs" />
     <Compile Include="OfrecemosCargoRepository.cs" />
     <Compile Include="Interface\OfrecemosCargoRepository.cs" />
     <Compile Include="OpcionRepository.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="SedeRepository.cs" />
     <Compile Include="SubcategoriaRepository.cs" />
     <Compile Include="UbigeoRepository.cs" />
+    <Compile Include="UsuarioRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

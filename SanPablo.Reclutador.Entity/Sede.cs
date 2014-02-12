@@ -15,20 +15,20 @@ namespace SanPablo.Reclutador.Entity
         public virtual IList<Usuario> Usuarios { get; protected set; }
         public virtual IList<Empleado> Empleados { get; protected set; }
 
-        public Sede()
-        {
-            Usuarios = new List<Usuario>();
-            Empleados = new List<Empleado>();
-        }
-        public virtual void AgregarUsuario(Usuario usuario)
-        {
-            usuario.UsuarioDeLasSedes.Add(this);
-            Usuarios.Add(usuario);
-        }
-        public virtual void AgregarEmpleado(Empleado empleado)
-        {
-            empleado.Sede = this;
-            Empleados.Add(empleado);
-        }
+        //public Sede()
+        //{
+        //    Usuarios = new List<Usuario>();
+        //    Empleados = new List<Empleado>();
+        //}
+        //public virtual void AgregarUsuario(Usuario usuario)
+        //{
+        //    usuario.UsuarioDeLasSedes.Add(this);
+        //    Usuarios.Add(usuario);
+        //}
+        //public virtual void AgregarEmpleado(Empleado empleado)
+        //{
+        //    empleado.Sede = this;
+        //    Empleados.Add(empleado);
+        //}
     }
 }

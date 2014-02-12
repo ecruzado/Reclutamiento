@@ -100,6 +100,9 @@
             builder.RegisterType<OpcionRepository>()
              .As<IOpcionRepository>();
 
+            builder.RegisterType<UsuarioRepository>()
+            .As<IUsuarioRepository>();
+
         }
     }
 }

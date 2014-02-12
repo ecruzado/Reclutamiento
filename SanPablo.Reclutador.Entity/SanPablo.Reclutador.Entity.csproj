@@ -111,6 +111,7 @@
     <Compile Include="Validation\PostulanteValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
     <Compile Include="Validation\SubCategoriaValidator.cs" />
+    <Compile Include="Validation\UsuarioValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

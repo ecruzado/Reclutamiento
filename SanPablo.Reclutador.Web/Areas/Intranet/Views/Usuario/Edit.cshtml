@@ -1,0 +1,532 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UsuarioViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
+    ViewBag.Title = "";
+}
+
+
+
+@section Head{
+     <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
+}
+
+@section Scripts{
+  
+
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+    });
+        @*jQuery("#grdListOpciones").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sortField;
+                migrilla.sord = postdata.sortOrder;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idRol', data: $("#rol_IdRol").val() },
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaOpciones", "Rol")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListOpciones')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['', '', '', 'Opcion', 'Descripción'],
+            colModel: [
+                     { name: 'IDROLOPCION', index: 'IDROLOPCION', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IDROL', index: 'IDROL', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IDOPCION', index: 'IDOPCION', align: 'left', sortable: false, editable: false, hidden: true },
+                     { name: 'NombreOpcion', index: 'NombreOpcion', align: 'left', sortable: false, width: 250, editable: false },
+                     { name: 'DescOpcion', index: 'DescOpcion', align: 'left', sortable: false, width: 600, editable: false }
+            ],
+
+            pager: jQuery('#grdPager'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IDROLOPCION',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 250,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
+        });*@
+
+@*        $('#btnNuevo').click(function () {
+            var codRol = $("#rol_IdRol").val();
+
+            if (codRol != null && codRol > 0) {
+                mostrarOpciones(codRol);
+            } else {
+                MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $('#btnEliminar').click(function () {
+
+            var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
+            if (selr != null && selr > 0) {
+                $('#confirmacion').dialog('open');
+            } else {
+                MostrarMensaje('Seleccione una opción', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $("#spanConfirmacion").html("¿Desea eliminar el registro?")
+        $('#confirmacion').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    var codRol = $("#rol_IdRol").val();
+
+                    var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListOpciones').jqGrid('getRowData', selr);
+                    var codOpcion = rowData.IDOPCION;
+
+                    if (codOpcion != null && codOpcion > 0) {
+                        EliminarOpcion(codRol, codOpcion);
+                    } else {
+                        MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+        function EliminarOpcion(codRol, codOpcion) {
+
+            $.ajax({
+                data: {
+                    id: codRol,
+                    codOp: codOpcion
+                },
+                type: "POST",
+                url: '@Url.Action("EliminarOpcion", "Rol")',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        $('#grdListOpciones').trigger('reloadGrid');
+                    }
+                }
+            });
+
+        }
+
+
+        $("#spanConfSelc").html("¿Desea agregar las opciones?")
+        $('#confSelc').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    $.ajax({
+                        data: {
+                            selc: $("#grdListaOpcionPopup").jqGrid('getGridParam', 'selarrrow'),
+                            codRol: $('#IdRoll').val()
+                        },
+                        type: "POST",
+                        url: '@Url.Action("GetListaOpcion", "Opcion")',
+                        traditional: true,
+                        success: function () {
+                            $('#confSelc').dialog("close");
+                            $('#opcionDialog').dialog("close");
+                            $('#grdListOpciones').trigger('reloadGrid');
+
+                        }
+                    });
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#opcionDialog').dialog({
+            autoOpen: false,
+            width: 800,
+            height: 750,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function () {
+                    $('#confSelc').dialog('open');
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+    });
+
+    function mostrarOpciones(id) {
+        var dialogDiv = $('#opcionDialog');
+        $.get("/Intranet/Opcion/PopupOpcion/" + id, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#opcionDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }*@
+
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+    function validacion() {
+       
+        if ($("#frmEdicionUsuario").validate().form()) {
+            var codUsuario = $("#Usuario_CodUsuario").val();
+            $.ajax({
+                data: {
+                    id: codUsuario
+                },
+                type: "POST",
+                url: '@Url.Action("valCodUsuario", "Usuario")',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        //$('#btnGuardarUsuario').trigger('click');
+                        GrabaUsuario();
+                    }
+                }
+            });
+        }
+    }
+
+    function GrabaUsuario() {
+        var idUsuario = $("#Usuario_IdUsuario").val();
+        if ($("#frmEdicionUsuario").validate().form()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edicion", "Usuario")',
+                data: $("#frmEdicionUsuario").serialize(),
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        $("#Usuario_IdUsuario").val(data.IdDato);
+                        information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                       
+                    }
+                }
+            });
+        }
+    }
+
+    function information(selectorDiv, selectorSpan, msg, title, selr) {
+        $('#' + selectorSpan).html(msg);
+        $('#' + selectorDiv).dialog({
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    //RedireccionaUsuario(selr, accion);
+                }
+            }
+        });
+        $('#' + selectorDiv).dialog('open');
+    }
+
+
+</script>
+}
+
+@using (Html.BeginForm("Edit", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmEdicionUsuario" }))
+{
+@Html.ValidationSummary(true)
+
+<div class="span12"> 
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Usuario</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                </div>
+            </div>
+
+            <table style="margin-left:120px;">
+                <tr>
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+                <tr>
+                     <td class="colEtiqueta">
+                         
+                         <label class="etiquetaFormulario">Usuario</label>
+                    </td>
+                    <td class="colInput">
+                    @Html.TextBoxFor(model => model.Usuario.IdUsuario,  new { style = "display: none;" })   
+                       
+
+                    @if (Accion.Consultar.Equals(Model.Accion)) 
+                    { 
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,disabled="disabled"})                      
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" })                     
+                    }
+                        <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.Usuario.CodUsuario)
+                        </div>       
+                    </td>
+                    <td style="width:40px;"></td>
+                   
+                    <td class="colEtiqueta">
+                            <label class="etiquetaFormulario">Contraseña</label>
+                    </td>
+                     <td class="colInput">
+                        
+                          @if (Accion.Consultar.Equals(Model.Accion))
+                          { 
+                            @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "textoFormulario", disabled = "disabled",type = "password" })                      
+                          }
+                          else
+                          {
+                            @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "textoFormulario",type = "password" })                     
+                          }
+                         
+                        
+                         
+                         <div class="tex-error" style="font-size:12px;color:red">    
+                        @Html.ValidationMessageFor(model => model.Usuario.CodContrasena)
+                        </div>
+                    </td>
+                 </tr>
+                 <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Apellido Paterno</label>
+                    </td>
+                   <td class="colInput">
+                       @if (Accion.Consultar.Equals(Model.Accion))
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled" })  
+                       }
+                       else
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" })  
+                       }
+                       
+                       
+                       <div class="tex-error" style="font-size:12px;color:red">         
+                        
+                            @Html.ValidationMessageFor(model => model.Usuario.DscApePaterno)
+                        </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Apellido Materno</label>
+                    </td>
+                    <td class="colInput">
+                        
+                         @if (Accion.Consultar.Equals(Model.Accion))
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" })  
+                         }
+                         else
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" })  
+                         }
+
+                       
+                        <div class="tex-error" style="font-size:12px;color:red">     
+                        @Html.ValidationMessageFor(model => model.Usuario.DscApeMaterno)
+                        </div>
+                    </td>
+
+                  </tr>
+
+                 <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Nombres</label>
+                    </td>
+                   <td class="colInput">
+                       @if (Accion.Consultar.Equals(Model.Accion))
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" })  
+                       }
+                       else
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" })  
+                       }
+                       
+                       <div class="tex-error" style="font-size:12px;color:red">         
+                          @Html.ValidationMessageFor(model => model.Usuario.DscNombres)
+                        </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Email</label>
+                    </td>
+                    <td class="colInput">
+                        
+                         @if (Accion.Consultar.Equals(Model.Accion))
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" })  
+                         }
+                         else
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" })  
+                         }
+
+                        <div class="tex-error" style="font-size:12px;color:red">     
+                        @Html.ValidationMessageFor(model => model.Usuario.Email)
+                        </div>
+                    </td>
+
+                  </tr>
+                
+                   <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Telefono</label>
+                    </td>
+                   <td class="colInput">
+                       @if (Accion.Consultar.Equals(Model.Accion))
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" })  
+                       }
+                       else
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario" })  
+                       }
+                       
+                       <div class="tex-error" style="font-size:12px;color:red">         
+                          @Html.ValidationMessageFor(model => model.Usuario.Telefono)
+                        </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                   
+                    </td>
+                    <td >
+                       
+                    </td>
+
+                  </tr>
+
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+               </table>          
+            
+          
+                @if (Accion.Nuevo.Equals(Model.Accion))
+                {
+		                <span></span>
+                }
+                else
+                {
+                
+              <div class="grilla-opciones">
+                   <h6>Opciones</h6>
+                   <div class="opciones">
+                        @if (Accion.Consultar.Equals(Model.Accion))
+                        {
+                            <span></span>
+                        }
+                        else
+                        {
+                           <a id="btnNuevo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
+                           <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>        
+                        }
+                        
+                    </div>
+                  <div style="clear:both"></div>
+                </div>
+            
+                <div class="tabla-datos" >
+                    <table id="grdListOpciones" >
+                    </table>
+                    <div id="grdPager">
+                    </div>
+                </div>
+                }
+           
+          
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("Index", "Usuario", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                
+                @if (Accion.Consultar.Equals(Model.Accion))
+                {
+                    <span></span>
+                }
+                else
+                {
+                    <a class="btn btn-info"  onclick ="validacion();"><i class=" icon-hdd icon-white"></i> Grabar</a>
+                }
+                
+            </div>
+           
+        </div>
+        </div>
+}
+
+<div id="divMensaje"><span id="spnMensaje"></span></div>
+<div id="opcionDialog" title="Lista de Opciones"></div>
+<div id="confSelc"><span id="spanConfSelc"></span></div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>

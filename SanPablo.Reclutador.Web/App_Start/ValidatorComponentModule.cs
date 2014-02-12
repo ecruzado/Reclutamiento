@@ -100,6 +100,11 @@
             builder.RegisterType<EvaluacionCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<EvaluacionCargo>))
                 .As<IValidator>();
+
+            builder.RegisterType<UsuarioValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Usuario>))
+                .As<IValidator>();
+
         }
     }
 }
