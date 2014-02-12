@@ -8,7 +8,7 @@ using System.Web;
 namespace SanPablo.Reclutador.Entity
 {
     
-    public class Cargo
+    public class Cargo : BaseEntity
     {
         public virtual int IdeCargo { get; set; }
         public virtual int IdeSede { get; set; }
@@ -21,6 +21,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Sexo { get; set; }
         public virtual int EdadInicio { get; set; }
         public virtual int EdadFin { get; set; }
+        public virtual string IndicadorEdad { get; set; } 
         public virtual int PuntajeEdad { get; set; }
         public virtual int PuntajeSexo { get; set; }
         public virtual int TipoRangoSalarial { get; set; }
@@ -33,10 +34,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual IList<OfrecemosCargo> Ofrecimientos { get; set; }
         public virtual IList<HorarioCargo> Horarios { get; set; }
         public virtual IList<UbigeoCargo> Ubigeos { get; set; }
-        public virtual IList<ConocimientoGeneralCargo> Conocimientos { get; set; }
         public virtual IList<CentroEstudioCargo> CentrosEstudios { get; set; }
         public virtual IList<NivelAcademicoCargo> NivelesAcademicos { get; set; }
         public virtual IList<ExperienciaCargo> Experiencias { get; set; }
+        public virtual IList<EvaluacionCargo> Evaluaciones { get; set; }
+        public virtual IList<ConocimientoGeneralCargo> Conocimientos { get; set; }
 
         public virtual string ObjetivoCargo { get; set; }
         public virtual string FuncionCargo { get; set; }
@@ -50,6 +52,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntajeMinimoSexo { get; set; }
         public virtual int PuntajeTotalSalario { get; set; }
         public virtual int PuntajeMinimoSalario { get; set; }
+       
         public virtual int PuntajeTotalNivelEstudio { get; set; }
         public virtual int PuntajeMinimoNivelEstudio { get; set; }
         public virtual int PuntajeTotalCentroEstudio { get; set; }
@@ -59,10 +62,15 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntajeTotalFuncionesDesempeñandas { get; set; }
         public virtual int PuntajeMinimoFuncionesDesempeñandas { get; set; }
 
+        public virtual int PuntajeTotalOfimatica { get; set; }
+        public virtual int PuntajeMinimoOfimatica { get; set; }
+        public virtual int PuntajeTotalIdioma { get; set; }
+        public virtual int PuntajeMinimoIdioma { get; set; }
         public virtual int PuntajeTotalConocimientoGeneral { get; set; }
         public virtual int PuntajeMinimoConocimientoGeneral { get; set; }
         public virtual int PuntajeTotalDiscapacidad { get; set; }
         public virtual int PuntajeMinimoDiscapacidad { get; set; }
+        
         public virtual int PuntajeTotalHorario { get; set; }
         public virtual int PuntajeMinimoHorario { get; set; }
         public virtual int PuntajeTotalUbigeo { get; set; }
@@ -102,6 +110,21 @@ namespace SanPablo.Reclutador.Entity
                     IndicadorSalario = Indicador.No;
             }
         }
+
+        public virtual bool IndicadorEdadRanking
+        {
+            get
+            {
+                return IndicadorEdad == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorEdad = Indicador.Si;
+                else
+                    IndicadorEdad = Indicador.No;
+            }
+        }
         public Cargo()
         {
             Competencias = new List<CompetenciaCargo>();
@@ -112,6 +135,7 @@ namespace SanPablo.Reclutador.Entity
             CentrosEstudios = new List<CentroEstudioCargo>();
             NivelesAcademicos = new List<NivelAcademicoCargo>();
             Experiencias = new List<ExperienciaCargo>();
+            Evaluaciones = new List<EvaluacionCargo>();
             
         }
 

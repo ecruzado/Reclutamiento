@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.DiscapacidadCargoViewModel
 @{
     Layout = "";
 }
@@ -12,7 +12,7 @@
 
 
 
-@using (Html.BeginForm("Discapacidad", "Cargo", FormMethod.Post, new { @id = "discapacidadForm" }))
+@using (Html.BeginForm("Edit", "DiscapacidadCargo", FormMethod.Post, new { @id = "discapacidadForm" }))
 {
     @Html.ValidationSummary(true)
     <div class="alert alert-info" id="mensajeError" style="display:none" >
@@ -22,13 +22,13 @@
     <table style="margin-left:30px;">
         <tr>
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Cargo.IdeCargo)*@
+                @Html.HiddenFor(model => model.Discapacidad.IdeDiscapacidadCargo)
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion"> Tipo de Discapacidad <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Discapacidad.TipoDiscapacidad, new SelectList(Model.TipoDiscapacidad, "Valor", "Descripcion", Model.Discapacidad.TipoDiscapacidad))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @*@Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)*@
+                @Html.ValidationMessageFor(model => model.Discapacidad.TipoDiscapacidad)
                 </div>
             </td> 
         </tr>
@@ -38,6 +38,9 @@
            </td>
            <td>
                 @Html.TextBoxFor(model => model.Discapacidad.PuntajeDiscapacidad, new {@class="input-xxmini" })
+               <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Discapacidad.PuntajeDiscapacidad)
+                </div>
            </td>
        </tr>  
     </table>

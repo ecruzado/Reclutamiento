@@ -1,11 +1,10 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Experiencia";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
+
+@section Scripts{ 
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -103,17 +102,19 @@
             url: '@Url.Action("ListaExperiencia", "ExperienciaCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Cargo', 'Años', 'Puntaje'],
+            colNames: ['Cargo', 'Años','Meses', 'Puntaje'],
             colModel: [
-                    { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false },
-                    { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                    { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false},
+                    { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false, width: 50 },
+                    { name: 'Meses', index: 'Meses', align: 'left', editable: false, sortable: false, width: 50 },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
             ],
+            pager: jQuery('#grdPagerExperiencia'),
             sortname: 'IdeExperienciaCargo',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 60,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -158,11 +159,9 @@
         });
     }
     </script>
-}
+ 
+    }
 
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
 <!--EXPERIENCIA -->
     <div class="tab-pane" id="D">
         <div class="grilla-opciones">
@@ -177,6 +176,8 @@
         <div class="tabla-datos">
             <table id="grdListExperiencia">
             </table>
+            <div id="grdPagerExperiencia">
+            </div>
         </div>
         <div class="formulario-accion">   
             <div class="opciones">

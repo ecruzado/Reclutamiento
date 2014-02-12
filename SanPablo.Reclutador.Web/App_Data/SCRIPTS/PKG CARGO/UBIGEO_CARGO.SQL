@@ -2,25 +2,25 @@ DROP TABLE UBIGEO_CARGO CASCADE CONSTRAINTS;
 
 CREATE TABLE UBIGEO_CARGO
 (
-  IDEUBIGEOCARGO  NUMBER(8), 
-  IDECARGO        NUMBER(8,2), 
-  IDEUBIGEO       NUMBER(6,2), 
-  PUNTUBIGEO      NUMBER(2), 
-  ESTACTIVO       VARCHAR2(1),
-  USRCREACION     VARCHAR2(15), 
-  FECCREACION     DATE, 
-  USRMODIFICA     VARCHAR2(15), 
-  FECMODIFICA     DATE  
+  IDEUBIGEOCARGO    NUMBER(8), 
+  IDECARGO          NUMBER(8,2), 
+  IDEUBIGEO         NUMBER(6,2), 
+  PUNTUBIGEO        NUMBER(2), 
+  ESTACTIVO         VARCHAR2(1),
+  USRCREACION       VARCHAR2(15), 
+  FECCREACION       DATE, 
+  USRMODIFICA   VARCHAR2(15), 
+  FECMODIFICA   DATE  
 )
 ;
 
 COMMENT ON TABLE UBIGEO_CARGO IS 'Tabla de ubicaciones geográficas por cargo';
-COMMENT ON COLUMN UBIGEO_CARGO.IDEUBIGEOCARGO  IS 'Identificador de ubicación geográfica por cargo.';
-COMMENT ON COLUMN UBIGEO_CARGO.IDECARGO        IS 'Identificador del cargo.';
-COMMENT ON COLUMN UBIGEO_CARGO.IDEUBIGEO       IS 'Identificador de ubicación geográfica.';
-COMMENT ON COLUMN UBIGEO_CARGO.PUNTUBIGEO      IS 'Puntaje ubigeo.';
-COMMENT ON COLUMN UBIGEO_CARGO.USRCREACION     IS 'Usuario que creó el registro.';
-COMMENT ON COLUMN UBIGEO_CARGO.FECCREACION     IS 'Fecha de creación del registro';
+COMMENT ON COLUMN UBIGEO_CARGO.IDEUBIGEOCARGO      IS 'Identificador de ubicación geográfica por cargo.';
+COMMENT ON COLUMN UBIGEO_CARGO.IDECARGO            IS 'Identificador del cargo.';
+COMMENT ON COLUMN UBIGEO_CARGO.IDEUBIGEO           IS 'Identificador de ubicación geográfica.';
+COMMENT ON COLUMN UBIGEO_CARGO.PUNTUBIGEO          IS 'Puntaje ubigeo.';
+COMMENT ON COLUMN UBIGEO_CARGO.USRCREACION         IS 'Usuario que creó el registro.';
+COMMENT ON COLUMN UBIGEO_CARGO.FECCREACION         IS 'Fecha de creación del registro';
 COMMENT ON COLUMN UBIGEO_CARGO.USRMODIFICA     IS 'Usuario que modificó el registro';
 COMMENT ON COLUMN UBIGEO_CARGO.FECMODIFICA     IS 'Fecha de modificación del registro';
 

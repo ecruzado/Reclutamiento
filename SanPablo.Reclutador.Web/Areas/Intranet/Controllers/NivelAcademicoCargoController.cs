@@ -55,9 +55,9 @@
                         id = item.IdeNivelAcademicoCargo.ToString(),
                         cell = new string[]
                             {
-                                item.TipoEducacion.ToString(),
-                                item.TipoAreaEstudio.ToString(),
-                                item.TipoNivelAlcanzado.ToString(),
+                                item.DescripcionTipoEducacion,
+                                item.DescripcionAreaEstudio,
+                                item.DescripcionNivelAlcanzado,
                                 item.PuntajeNivelEstudio.ToString(),
                             }
                     }).ToArray();

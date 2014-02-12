@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> TipoConocimientos { get; set; }
         public List<DetalleGeneral> DescripcionConocimiento { get; set; }
         public List<DetalleGeneral> NivelesConocimientos { get; set; }
+        public List<DetalleGeneral> TipoNombresConocimientosGrales { get; set; }
 
 
     }

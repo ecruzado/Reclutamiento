@@ -1,11 +1,9 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Discapacidad";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
+@section Scripts{ 
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnAgregarDiscapacidad').click(function () {
@@ -20,48 +18,94 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('form').valid();
+                    var result = $('#discapacidadForm').valid();
                     if (result) {
-                        $.post('@Url.Action("Discapacidad", "Cargo")',
+                        $.post('@Url.Action("Edit", "DiscapacidadCargo")',
                             $("#discapacidadForm").serialize(),
                             function (respuesta) {
-                                if (respuesta.msj) {
+                                if (respuesta.Resultado) {
                                     $("#updateDialogDiscapacidad").dialog("close");
                                     $('#grdListDiscapacidad').trigger('reloadGrid');
                                 }
                                 else {
-                                    var mensj = document.getElementById("mensajeError");
-                                    mensj.style.display = "block";
+                                    notificacionError(respuesta.Mensaje);
                                 }
                             }
                         );
-                }
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean válidos");
+                    }
             },
             "Cancelar": function () {
                 $(this).dialog("close");
                 }
             }
-         });
+        });
+
+        $('#btnEliminarDiscapacidad').click(function () {
+            var ideDiscapacidad = jQuery('#grdListDiscapacidad').jqGrid('getGridParam', 'selrow');
+            if (ideDiscapacidad != null) {
+                $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensaje11").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },
+                        "Cancel": function () { $(this).dialog("close"); }
+                    }
+                });
+
+                return false;
+            }
+            else {
+                $("#spanMensaje11").html('Seleccionar un item a eliminar');
+                $("#divMensaje11").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
+
+        $('#btnEditarDiscapacidad').click(function () {
+            var ideDiscapacidad = jQuery('#grdListDiscapacidad').jqGrid('getGridParam', 'selrow');
+            if (ideDiscapacidad != null) {
+                mostrarEditarDiscapacidad(ideDiscapacidad);
+            }
+            else {
+                $("#spanMensaje11").html('Seleccionar un item a editar');
+                $("#divMensaje11").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
+            }
+        });
 
     });
 
     $(function () {
        
         jQuery("#grdListDiscapacidad").jqGrid({
-            url: '@Url.Action("ListaDiscapacidad", "Cargo")',
+            url: '@Url.Action("ListaDiscapacidad", "DiscapacidadCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Tipo', 'Descripci&oacuten', 'Puntaje'],
+            colNames: ['Tipo', 'Puntaje'],
             colModel: [
                     { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, hidden: true },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
             ],
+            pager: jQuery('#grdPagerDiscapacidad'),
             sortname: 'IdeDiscapacidadCargo',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 60,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -77,19 +121,35 @@
 
     function mostrarAgregarDiscapacidad() {
         var dialogDiv = $('#updateDialogDiscapacidad');
-        $.get('@Url.Action("Discapacidad", "Cargo")', function (data) {
+        $.get('@Url.Action("Edit", "DiscapacidadCargo", new { id = "0"})', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogDiscapacidad"));
             dialogDiv.dialog('open');
         });
         return false;
     }
+
+    function mostrarEditarDiscapacidad(ideDiscapacidad) {
+        var dialogDiv = $('#updateDialogDiscapacidad');
+        $.get('@Url.Action("Edit", "DiscapacidadCargo")', { id: ideDiscapacidad }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogDiscapacidad"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function eliminarDiscapacidad(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarDiscapacidad","DiscapacidadCargo")',
+            data: { ideDiscapacidad: id },
+        });
+    }
 </script>
 }
 
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
 <!--CONOCIMEINTOS -->
     <div class="tab-pane" id="F">
         <div class="grilla-opciones">
@@ -105,6 +165,8 @@
         <div class="tabla-datos">
             <table id="grdListDiscapacidad">
             </table>
+            <div id="grdPagerDiscapacidad">
+            </div>
         </div>
                         
         <div class="formulario-accion">               
@@ -117,3 +179,10 @@
     </div>
 
     <!--CONOCIMIENTOS FIN-->
+
+
+<div id="updateDialogDiscapacidad" title="Agregar Discapacidad"></div>
+    <div id="divMensaje11">
+        <span id="spanMensaje11"></span>
+    </div>
+

@@ -1,0 +1,99 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.EvaluacionCargoViewModel
+@{
+    Layout = "";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //ACTUALIZAR EL TIPO DE EXAMEN
+        $('select#Evaluacion_Examen_IdeExamen').change(function () {
+            var ideExamen = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getTipoExamen","EvaluacionCargo")',
+                data: { ideExamen: ideExamen },
+                success: function (respuesta) {
+                    if(respuesta.Resultado)
+                    {
+                        $('#descExamen').val(respuesta.Mensaje);
+                        $('#Evaluacion_TipoExamen').val(respuesta.Accion);
+                    }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        })
+        
+    });
+</script>
+
+
+
+@using (Html.BeginForm("Edit", "EvaluacionCargo", FormMethod.Post, new { @id = "evaluacionCargoForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                @Html.HiddenFor(model => model.Evaluacion.IdeEvaluacionCargo)
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Evaluación <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.Evaluacion.Examen.IdeExamen, new SelectList(Model.Examenes, "IdeExamen", "DescExamen", Model.Evaluacion.IdeEvaluacionCargo))
+                @*<div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Conocimiento.TipoConocimientoOfimatica)
+                </div>*@
+            </td> 
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                 @Html.HiddenFor(model => model.Evaluacion.TipoExamen)
+                 @Html.TextBoxFor(model => model.descExamen)
+                @*<div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Conocimiento.TipoNombreOfimatica)
+                </div>*@
+            </td>
+        </tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Area Responsable <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                 @Html.DropDownListFor(model => model.Evaluacion.TipoAreaResponsable, new SelectList(Model.TiposAreasResponsables, "Valor", "Descripcion", Model.Evaluacion.TipoAreaResponsable))
+                @*<div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Conocimiento.TipoNivelConocimiento)
+                </div>*@
+            </td>
+        </tr>
+       <tr>
+           <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+           </td>
+           <td>
+                @Html.TextBoxFor(model => model.Evaluacion.PuntajeExamen, new {@class="input-xxmini" })
+               @*<div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Conocimiento.PuntajeConocimiento)
+                </div>*@
+           </td>
+       </tr>  
+       <tr>
+           <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Nota Mínima <span class="text-error">*</span></label>
+           </td>
+           <td>
+                @Html.TextBoxFor(model => model.Evaluacion.NotaMinimaExamen, new {@class="input-xxmini" })
+               @*<div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Conocimiento.PuntajeConocimiento)
+                </div>*@
+           </td>
+       </tr> 
+    </table>
+}

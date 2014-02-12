@@ -23,7 +23,7 @@
         <tr>
             <td class="colEtiqueta">
                 @Html.HiddenFor(model => model.Conocimiento.IdeConocimientoGeneralCargo)
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Conocimiento.TipoIdioma, new SelectList(Model.DescripcionConocimiento, "Valor", "Descripcion", Model.Conocimiento.TipoIdioma))
@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                  @Html.DropDownListFor(model => model.Conocimiento.TipoConocimientoIdioma, new SelectList(Model.TipoConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoConocimientoIdioma))
@@ -45,7 +45,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Nivel de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Nivel de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                  @Html.DropDownListFor(model => model.Conocimiento.TipoNivelConocimiento, new SelectList(Model.NivelesConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoNivelConocimiento))
@@ -56,7 +56,7 @@
         </tr>
        <tr>
            <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
                 @Html.TextBoxFor(model => model.Conocimiento.PuntajeConocimiento, new {@class="input-xxmini" })

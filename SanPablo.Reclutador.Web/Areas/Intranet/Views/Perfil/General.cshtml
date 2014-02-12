@@ -1,11 +1,9 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    //ViewBag.Title = "Perfil";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+       ViewBag.Title = "Perfil";
+       Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
+@section Scripts{ 
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -189,12 +187,13 @@
                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: false },
 
                 ],
+                pager: jQuery('#grdPagerHorario'),
                 sortname: 'IdeHorarioCargo',
                 sortorder: 'desc',
                 viewrecords: true,
                 cellEdit: true,
-                height: 60,
-                width: 898,
+                height: 200,
+                width: 890,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
                 hidegrid: false,
@@ -217,12 +216,13 @@
                         { name: 'Distrito', index: 'Distrito', align: 'left', editable: false, sortable: false },
                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
                 ],
+                pager: jQuery('#grdPagerUbigeo'),
                 sortname: 'IdeUbigeoCargo',
                 sortorder: 'desc',
-                viewrecords: true,
+                viewrecords: false,
                 cellEdit: true,
-                height: 60,
-                width: 898,
+                height: 200,
+                width: 890,
                 rowNum: 0,
                 cellsubmit: 'clientArray',
                 hidegrid: false,
@@ -237,7 +237,7 @@
 
     function mostrarAgregarHorario() {
         var dialogDiv = $('#updateDialogHorario');
-        $.get('@Url.Action("Edit", "HorarioCargo", new { id = "0"})', function (data) {
+        $.get('@Url.Action("Edit", "HorarioCargo", new { id = "0" })', function (data) {
         dialogDiv.html(data);
         $.validator.unobtrusive.parse($("#updateDialogHorario"));
         dialogDiv.dialog('open');
@@ -259,14 +259,14 @@
         $.ajax({
             async: false,
             type: "POST",
-            url: '@Url.Action("eliminarHorario","HorarioCargo")',
+            url: '@Url.Action("eliminarHorario", "HorarioCargo")',
             data: { ideHorario: id },
         });
     }
 
     function mostrarAgregarUbigeo() {
         var dialogDiv = $('#updateDialogUbigeo');
-        $.get('@Url.Action("Edit", "UbigeoCargo", new { id = "0"})', function (data) {
+        $.get('@Url.Action("Edit", "UbigeoCargo", new { id = "0" })', function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialogUbigeo"));
             dialogDiv.dialog('open');
@@ -288,21 +288,13 @@
         $.ajax({
             async: false,
             type: "POST",
-            url: '@Url.Action("eliminarUbigeo","UbigeoCargo")',
+            url: '@Url.Action("eliminarUbigeo", "UbigeoCargo")',
             data: { ideUbigeo: id },
         });
     }
 </script>
+
 }
-
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
-
-<div class="span12">
-    @Html.Partial("MenuPerfil")
-
-</div>
 
 @using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
 {
@@ -360,7 +352,7 @@
                         <td></td>
                         <td class="td-label">
                             <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
-                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style="width: 150px; display:inline-block"})
+                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
                         </td>
                         <td style="width:80px" >
                             @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
@@ -390,7 +382,7 @@
                         <td></td>
                         <td style =" width:450px" >
                             <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style ="display:inline-block; width:170px"})
+                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
                         </td>
                         <td style="width:80px">
                             @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
@@ -422,6 +414,8 @@
         <div class="tabla-datos">
             <table id="grdListHorario">
             </table>
+            <div id="grdPagerHorario">
+            </div>
         </div>
         <div class="grilla-opciones">
             <h6>Ubigeo</h6>
@@ -435,13 +429,18 @@
         <div class="tabla-datos">
             <table id="grdListUbigeo">
             </table>
+            <div id="grdPagerUbigeo">
+            </div>
         </div>
                                             
         <div class="formulario-accion">
             <div class="opciones">
-                <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
+                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                @*<a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
                 <a class="btn" href="#" onclick="irATab('A');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
 
             </div>
 

@@ -1,11 +1,9 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Estudios";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
+@section Scripts{ 
 <script type="text/javascript">
      $(document).ready(function () {
         $('#btnAgregarNivelAcademico').click(function () {
@@ -65,7 +63,7 @@
                                 function (respuesta) {
                                     if (respuesta.Resultado) {
                                         $("#updateDialogCentroEstudio").dialog("close");
-                                        $('#grdListCentroEstudios').trigger('reloadGrid');
+                                        $('#grdListCentroEstudio').trigger('reloadGrid');
                                     }
                                     else {
                                         notificacionError(respuesta.Mensaje);
@@ -189,11 +187,12 @@
                     { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
                     { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
             ],
+            pager: jQuery('#grdPagerNivelAcademico'),
             sortname: 'IdeNivelAcademicoCargo',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 60,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -216,11 +215,12 @@
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                     { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
             ],
+            pager: jQuery('#grdPagerCentroEstudio'),
             sortname: 'IdeCentroEstudioCargo',
             sortorder: 'desc',
-            viewrecords: true,
+            viewrecords: false,
             cellEdit: true,
-            height: 60,
+            height: 200,
             width: 898,
             rowNum: 0,
             cellsubmit: 'clientArray',
@@ -294,10 +294,6 @@
 </script>
 }
 
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
-
 @using (Html.BeginForm("Estudio", "Perfil", FormMethod.Post, new { @id = "estudioCargoForm" }))
 {
 
@@ -316,6 +312,8 @@
         <div class="tabla-datos">
             <table id="grdListNivelAcademico">
             </table>
+            <div id="grdPagerNivelAcademico">
+            </div>
         </div>
                         
         <div class="grilla-opciones">
@@ -330,6 +328,8 @@
         <div class="tabla-datos">
             <table id="grdListCentroEstudio">
             </table>
+            <div id="grdPagerCentroEstudio">
+            </div>
         </div>
                                             
         <div class="formulario-accion">       

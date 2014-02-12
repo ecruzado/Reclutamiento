@@ -5,7 +5,27 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-               
+        //ELEGIR EL TIPO DE INSTITUCIONES
+        $('select#CentroEstudio_TipoCentroEstudio').change(function () {
+            var tipoInstituto = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listarNombreInstitucion","CentroEstudioCargo")',
+                    data: { tipoInstituto: tipoInstituto },
+                    success: function (respuesta) {
+                        $("select#CentroEstudio_TipoNombreCentroEstudio").empty();
+                        $("select#CentroEstudio_TipoNombreCentroEstudio").append("<option value='00'> Seleccionar </option>");
+                        $.each(respuesta, function (i, items) {
+                            $("select#CentroEstudio_TipoNombreCentroEstudio").append("<option value='"
+                            + items.Valor + "'>" + items.Descripcion + "</option>");
+                        }
+                        );
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            })
         
     });
 </script>

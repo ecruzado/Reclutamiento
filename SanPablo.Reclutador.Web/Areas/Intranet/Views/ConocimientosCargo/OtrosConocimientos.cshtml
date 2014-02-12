@@ -5,7 +5,26 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-               
+        $('select#Conocimiento_TipoConocimientoGeneral').change(function () {
+            var tipoConocimiento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listarNombreConocimiento","ConocimientosCargo")',
+                    data: { tipoConocimiento: tipoConocimiento },
+                    success: function (respuesta) {
+                        $("select#Conocimiento_TipoNombreConocimientoGeneral").empty();
+                        $("select#Conocimiento_TipoNombreConocimientoGeneral").append("<option value='00'> Seleccionar </option>");
+                        $.each(respuesta, function (i, items) {
+                            $("select#Conocimiento_TipoNombreConocimientoGeneral").append("<option value='"
+                            + items.Valor + "'>" + items.Descripcion + "</option>");
+                        }
+                        );
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+                          })
         
     });
 </script>
@@ -23,7 +42,7 @@
         <tr>
             <td class="colEtiqueta">
                 @Html.HiddenFor(model => model.Cargo.IdeCargo)
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Conocimiento.TipoConocimientoGeneral, new SelectList(Model.TipoConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoConocimientoGeneral))
@@ -34,7 +53,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                  @Html.DropDownListFor(model => model.Conocimiento.TipoNombreConocimientoGeneral, new SelectList(Model.DescripcionConocimiento, "Valor", "Descripcion", Model.Conocimiento.TipoNombreConocimientoGeneral))
@@ -45,7 +64,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Nivel de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Nivel de Conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                  @Html.DropDownListFor(model => model.Conocimiento.TipoNivelConocimiento, new SelectList(Model.NivelesConocimientos, "Valor", "Descripcion", Model.Conocimiento.TipoNivelConocimiento))
@@ -56,7 +75,7 @@
         </tr>
        <tr>
            <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
                 @Html.TextBoxFor(model => model.Conocimiento.PuntajeConocimiento, new {@class="input-xxmini" })

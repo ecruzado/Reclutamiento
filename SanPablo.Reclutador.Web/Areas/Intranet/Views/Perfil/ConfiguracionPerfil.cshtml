@@ -1,16 +1,13 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
-    ViewBag.Title = "Configuracion Perfil";
-    //Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+    ViewBag.Title = "Perfil";
+    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Head{
-}
-@section Scripts{
-}
+@section Scripts{ 
+    }
+@using (Html.BeginForm("ConfiguracionPerfil", "Perfil", FormMethod.Post, new { @id = "configuracionPerfilForm" }))
+{
 
-<div class="span12">
-    @Html.Partial("PerfilCargo")
-</div>
 <!--CONFIGURACION PERFIL -->
      
     <div class="tab-pane" id="H">
@@ -41,20 +38,24 @@
                                         <td class="td-label" style="width: 130px;">
                                             <label>Postulante Interno</label></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajePostulanteInterno, new {@Class ="input-xxmini text-right"})</td>
+                                            @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled">*@
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
 
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Edad</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="8" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeEdad, new {@Class ="input-xxmini text-right"})</td>
+                                            @*<input type="text" class="input-xxmini text-right" value="8" disabled="disabled">*@
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
 
                                     </tr>
                                     <tr>
@@ -62,70 +63,98 @@
                                         <td class="td-label">
                                             <label>Sexo</label></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeSexo, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>*@
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0"></td>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Rango Salarial</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeSalario, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="10" disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0"></td>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Nivel de Estudios</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="7" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="7" disabled="disabled"></td>*@ </td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0"></td>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Centro de Estudios</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalCentroEstudio, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="10" disabled="disabled">*@</td>
                                         <td></td>
 
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0"></td>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Experiencia Laboral</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="6" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalExperiencia, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="6" disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0"></td>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td class="td-label">Conoc. Generales</td>
+                                        <td class="td-label">Conoc. Ofimatica</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="3" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalOfimatica, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>*@
                                         <td></td>
-
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@
+                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Idiomas</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalIdioma, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="3" disabled="disabled">*@</td>
+                                        <td></td>
+
+                                        <td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td class="td-label">Conoc. Generales</td>
+                                        <td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalConocimientoGeneral, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="4" disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
 
                                     </tr>
                                     <tr>
@@ -133,31 +162,37 @@
                                         <td class="td-label">
                                             <label>Discapacidades</label></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="9" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalDiscapacidad, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="9" disabled="disabled">*@</td>
                                         <td></td>
 
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
                                     </tr>
 
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Horario</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalHorario, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="4" disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
 
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Ubigeo</td>
                                         <td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalUbigeo, new {@Class ="input-xxmini text-right"})
                                             <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
                                         <td></td>
 
                                         <td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right"})
                                             <input type="text" class="input-xxmini text-right" value="0"></td>
                                     </tr>
                                     <tr>
@@ -188,10 +223,12 @@
                                     <tr>
                                         <td class="td-label" style="width:130px;">Exámenes</td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
+                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalExamen, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="5" disabled="disabled">*@</td>
                                         <td></td>
                                             <td>
-                                            <input type="text" class="input-xxmini text-right" value="0"></td>
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0">*@</td>
 
                                     </tr>                                                       
                                         <tr>
@@ -204,7 +241,7 @@
                                         <td class="td-label" style="width:130px;">
                                             Postulantes Pre-Selec.
                                         </td>
-                                        <td> <input type="text" class="input-xxmini text-right" value="9"></td>
+                                        <td>  @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"}) @*<input type="text" class="input-xxmini text-right" value="9">*@</td>
                                     </tr>
                                         <tr>
                                         <td colspan="2" style="height:40px;">                                                            
@@ -227,3 +264,4 @@
     </div>
 
     <!--CONFIGURACION PERFIL-->
+}
