@@ -103,6 +103,10 @@
             builder.RegisterType<UsuarioRepository>()
             .As<IUsuarioRepository>();
 
+            builder.RegisterType<UsuarioRolSedeRepository>()
+            .As<IUsuarioRolSedeRepository>();
+
+
         }
     }
 }

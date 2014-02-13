@@ -23,8 +23,7 @@
     $(document).ready(function () {
 
 
-    });
-        @*jQuery("#grdListOpciones").jqGrid({
+        jQuery("#grdListUsuario").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -34,7 +33,7 @@
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
-                       { field: 'idRol', data: $("#rol_IdRol").val() },
+                       { field: 'idUsuario', data: $("#Usuario_IdUsuario").val() },
 
                 ];
 
@@ -47,14 +46,14 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("ListaOpciones", "Rol")',
+                    url: '@Url.Action("ListaUsuarioRolSede", "Usuario")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
                     async: false,
                     success: function (data, st) {
                         if (st == 'success') {
-                            var jq = $('#grdListOpciones')[0];
+                            var jq = $('#grdListUsuario')[0];
                             jq.addJSONData(data);
                         }
                     },
@@ -63,21 +62,22 @@
                     }
                 });
             },
-            colNames: ['', '', '', 'Opcion', 'Descripción'],
+            colNames: ['','', 'Sede','','','Rol'],
             colModel: [
-                     { name: 'IDROLOPCION', index: 'IDROLOPCION', align: 'left', editable: false, sortable: false, hidden: true },
-                     { name: 'IDROL', index: 'IDROL', align: 'left', editable: false, sortable: false, hidden: true },
-                     { name: 'IDOPCION', index: 'IDOPCION', align: 'left', sortable: false, editable: false, hidden: true },
-                     { name: 'NombreOpcion', index: 'NombreOpcion', align: 'left', sortable: false, width: 250, editable: false },
-                     { name: 'DescOpcion', index: 'DescOpcion', align: 'left', sortable: false, width: 600, editable: false }
+                     { name: 'IdUsuarolSede', index: 'IdUsuarolSede', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IdSede', index: 'IdSede', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'DescSede', index: 'DescSede', align: 'left', sortable: false, editable: false, width: 350 },
+                     { name: 'IdUsuario', index: 'IdUsuario', align: 'left', sortable: false, editable: false, hidden: true },
+                     { name: 'IdRol', index: 'IdRol', align: 'left', sortable: false,  editable: false, hidden: true },
+                     { name: 'DescRol', index: 'DescOpcion', align: 'left', sortable: false, width: 350, editable: false }
             ],
 
-            pager: jQuery('#grdPager'),
+            pager: jQuery('#grdPagerUsuario'),
             rowNum: 10,
             //rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
-            sortname: 'IDROLOPCION',
+            sortname: 'IdUsuarolSede',
             sortorder: 'desc',
             viewrecords: true,
             height: 250,
@@ -90,7 +90,11 @@
             },
             loadComplete: function (data) {
             }
-        });*@
+        });
+
+
+    });
+        
 
 @*        $('#btnNuevo').click(function () {
             var codRol = $("#rol_IdRol").val();
@@ -280,11 +284,28 @@
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
-                    //RedireccionaUsuario(selr, accion);
+                    Editar(selr);
                 }
             }
         });
         $('#' + selectorDiv).dialog('open');
+    }
+
+
+    function Editar(selr) {
+       
+           $.ajax({
+                type: "POST",
+                url: '@Url.Action("Redirec", "Usuario")',
+                data: {
+                   id: selr
+                 },
+                traditional: true,
+                success: function (data) {
+                   
+                }
+            });
+        
     }
 
 
@@ -498,13 +519,14 @@
                     </div>
                   <div style="clear:both"></div>
                 </div>
-            
+                   
                 <div class="tabla-datos" >
-                    <table id="grdListOpciones" >
+                    <table id="grdListUsuario" >
                     </table>
-                    <div id="grdPager">
+                    <div id="grdPagerUsuario">
                     </div>
                 </div>
+                   
                 }
            
           

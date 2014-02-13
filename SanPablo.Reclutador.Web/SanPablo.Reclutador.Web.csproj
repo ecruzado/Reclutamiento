@@ -349,6 +349,7 @@
     <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

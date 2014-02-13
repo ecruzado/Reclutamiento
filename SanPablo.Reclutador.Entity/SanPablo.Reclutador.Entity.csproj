@@ -87,6 +87,7 @@
     <Compile Include="SubCategoria.cs" />
     <Compile Include="Ubigeo.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioRolSede.cs" />
     <Compile Include="UsuarioSede.cs" />
     <Compile Include="Validation\AlternativaValidator.cs" />
     <Compile Include="Validation\CategoriaValidator.cs" />

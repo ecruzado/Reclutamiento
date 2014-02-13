@@ -28,14 +28,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IRolOpcionRepository _rolOpcionRepository;
         private IUsuarioRepository _usuarioRepository;
+        private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
 
         public UsuarioController(IRolRepository rolRepository, IDetalleGeneralRepository detalleGeneralRepository,
-                             IRolOpcionRepository rolOpcionRepository, IUsuarioRepository usuarioRepository)
+                             IRolOpcionRepository rolOpcionRepository, IUsuarioRepository usuarioRepository,
+                             IUsuarioRolSedeRepository usuarioRolSedeRepository)
         {
             _rolRepository = rolRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _rolOpcionRepository = rolOpcionRepository;
             _usuarioRepository = usuarioRepository;
+            _usuarioRolSedeRepository = usuarioRolSedeRepository;
         }
 
         /// <summary>
@@ -121,6 +124,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 jsonMessage.IdDato = objUsuario.IdUsuario;
                 jsonMessage.Mensaje = "Se actualizo el usuario";
                 jsonMessage.Resultado = true;
+
+
             }
             else
             {
@@ -139,8 +144,96 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return Json(jsonMessage);
         }
-        
 
+
+        /// <summary>
+        /// Editar obtiene los campos de los valores para editar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Edit(string id)
+        {
+
+            UsuarioViewModel model = new UsuarioViewModel();
+            model.Usuario = new Usuario();
+            
+            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(id));
+
+            model.Usuario = objUsuario;
+
+            model.Accion = Accion.Editar;
+
+            return View("Edit", model);
+        }
+
+
+        [HttpPost]
+        public ActionResult Redirec(string id)
+        {
+            return RedirectToAction("Edit", "Usuario", new { id = id });
+            
+        }
+        
+       
+
+         //{ name: 'IdUsuarolSede', index: 'IdUsuarolSede', align: 'left', editable: false, sortable: false, hidden: true },
+         //            { name: 'IdSede', index: 'IdSede', align: 'left', editable: false, sortable: false, hidden: true },
+         //            { name: 'DescSede', index: 'DescSede', align: 'left', sortable: false, editable: false, width: 350 },
+         //            { name: 'IdUsuario', index: 'IdUsuario', align: 'left', sortable: false, editable: false, hidden: true },
+         //            { name: 'IdRol', index: 'IdRol', align: 'left', sortable: false,  editable: false, hidden: true },
+         //            { name: 'DescRol', index: 'DescOpcion', align: 'left', sortable: false, width: 350, editable: false }
+
+
+        [HttpPost]
+        public ActionResult ListaUsuarioRolSede(GridTable grid)
+        {
+
+            UsuarioRolSede rs = new UsuarioRolSede();
+            try
+            {
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                {
+                    where = DetachedCriteria.For<UsuarioRolSede>();
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        int dato = Convert.ToInt32(grid.rules[0].data);
+                        where.Add(Expression.Eq("IdUsuario", dato));
+                    }
+
+                }
+
+                var generic = Listar(_usuarioRolSedeRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdUsuarolSede.ToString(),
+                    cell = new string[]
+                            {
+                               
+                                item.IdUsuarolSede==null?"":item.IdUsuarolSede.ToString(),
+                                item.IdSede==null?"":item.IdSede.ToString(),
+                                "1",
+                                item.IdUsuario==null?"":item.IdUsuario.ToString(),
+                                item.IdRol==null?"":item.IdRol.ToString(),
+                                "1"
+                    
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
 
 
     }
