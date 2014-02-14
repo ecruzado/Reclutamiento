@@ -14,6 +14,13 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual(0)
                 .WithMessage("Seleccionar los datos requeridos ");
 
+            RuleFor(x => x.CodigoCargo)
+                .NotEmpty()
+                .WithMessage("Debe ingresar el codigo del Cargo");
+            RuleFor(x => x.CodigoCargo)
+                .Length(1, 10)
+                .WithMessage("El codigo de cargo debe tener un maximo de 10 caracteres");
+
             RuleFor(x => x.NombreCargo)
                 .Length(3, 50)
                 .WithMessage("Ingresar el nombre con un mínimo de 3 y un máximo de 50 caracteres");

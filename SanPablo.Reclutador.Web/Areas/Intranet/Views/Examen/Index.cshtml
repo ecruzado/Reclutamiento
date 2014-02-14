@@ -200,16 +200,14 @@
         
 
 
-        $('#btnEditarExamen').click(function () {
-            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-           
-            if (selr != null) {
-                 window.location = '@Url.Action("Edicion", "Examen")' + '/' + selr;
-                
-        } else {
-            MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+        $('#btnEditarEvaluacion').click(function () {
+            var ideEvaluacion = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+            if (ideEvaluacion != null) {
+                mostrarEditarEvaluacion(ideEvaluacion);
             }
-
+            else {
+                MostrarMensaje("Seleccionar una solicitud a Editar", "SAN PABLO");
+            }
         });
 
     });

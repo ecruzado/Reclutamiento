@@ -14,6 +14,6 @@
 
     public interface IEvaluacionCargoRepository : IRepository<EvaluacionCargo>
     {
-        
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo);
     }
 }

@@ -4,5 +4,6 @@
 
     public interface INivelAcademicoCargoRepository : IRepository<NivelAcademicoCargo>
     {
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo);
     }
 }

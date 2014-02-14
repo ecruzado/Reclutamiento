@@ -27,17 +27,24 @@
             _detalleGeneralRepository = detalleGeneralRepository;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string ideSolicitud)
         {
-            (Session["CargoIde"]) = 1;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
-            var perfilViewModel = inicializarPerfil();
-            if (IdeCargo != 0)
-            {
-                var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
-                perfilViewModel.Cargo = cargo;
-            }
-            
+            //try
+            //{
+
+                (Session["CargoIde"]) = 1;
+                int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+                var perfilViewModel = inicializarPerfil();
+                if (IdeCargo != 0)
+                {
+                    var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+                    perfilViewModel.Cargo = cargo;
+                }
+            //}
+            //catch (Exception)
+            //{
+ 
+            //}
             return View(perfilViewModel);
         }
 
@@ -382,7 +389,8 @@
         public ActionResult ConfiguracionPerfil()
         {
             (Session["CargoIde"]) = 1;
-            var discapacidadCargoViewModel = inicializarDatosCargo();
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]); 
+            var discapacidadCargoViewModel = inicializarDatosConfig(IdeCargo);
             return View(discapacidadCargoViewModel);
         }
         
@@ -391,6 +399,56 @@
             var discapacidadCargoViewModel = new PerfilViewModel();
             discapacidadCargoViewModel.Cargo = new Cargo();
             return discapacidadCargoViewModel;
+        }
+
+        public PerfilViewModel inicializarDatosConfig(int IdeCargo)
+        {
+            var discapacidadCargoViewModel = new PerfilViewModel();
+            var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+            discapacidadCargoViewModel.Cargo = cargoActual;
+            return discapacidadCargoViewModel;
+        }
+        [HttpPost]
+        public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
+        {
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+            var cargoViewModel = inicializarGeneral();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    cargoViewModel.Cargo = cargo;
+                    return View(cargoViewModel);
+                }
+
+                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.FechaModificacion = FechaCreacion;
+                cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
+                cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
+                cargoEditar.PuntajeMinimoSexo = cargo.PuntajeMinimoSexo;
+                cargoEditar.PuntajeMinimoSalario = cargo.PuntajeMinimoSalario;
+                cargoEditar.PuntajeMinimoNivelEstudio = cargo.PuntajeMinimoNivelEstudio;
+                cargoEditar.PuntajeMinimoCentroEstudio = cargo.PuntajeMinimoCentroEstudio;
+                cargoEditar.PuntajeMinimoExperiencia = cargo.PuntajeMinimoExperiencia;
+                cargoEditar.PuntajeMinimoOfimatica = cargo.PuntajeMinimoOfimatica;
+                cargoEditar.PuntajeMinimoIdioma = cargo.PuntajeMinimoIdioma;
+                cargoEditar.PuntajeMinimoConocimientoGeneral = cargo.PuntajeMinimoConocimientoGeneral;
+                cargoEditar.PuntajeMinimoDiscapacidad = cargo.PuntajeMinimoDiscapacidad;
+                cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
+                cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
+                cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+                _cargoRepository.Update(cargoEditar);
+
+                
+                return View(cargoViewModel);
+            }
+            catch (Exception ex)
+            {
+                cargoViewModel.Cargo = cargo;
+                return View(cargoViewModel);
+            }
+
         }
 
         public ActionResult Evaluacion()

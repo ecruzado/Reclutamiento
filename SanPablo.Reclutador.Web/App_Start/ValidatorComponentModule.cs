@@ -105,6 +105,10 @@
                 .Keyed<IValidator>(typeof(IValidator<SolicitudNuevoCargo>))
                 .As<IValidator>();
 
+            builder.RegisterType<CargoValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Cargo>))
+                .As<IValidator>();
+
         }
     }
 }

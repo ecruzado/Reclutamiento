@@ -59,6 +59,7 @@
     <Compile Include="CentroEstudioMap.cs" />
     <Compile Include="CompetenciaCargoMap.cs" />
     <Compile Include="ConocimientoGeneralCargoMap.cs" />
+    <Compile Include="LogSolicitudNuevoCargoMap.cs" />
     <Compile Include="SolicitudNuevoCargoMap.cs" />
     <Compile Include="DepartamentoMap.cs" />
     <Compile Include="DependenciaMap.cs" />

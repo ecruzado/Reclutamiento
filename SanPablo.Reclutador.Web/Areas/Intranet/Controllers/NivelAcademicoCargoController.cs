@@ -104,12 +104,13 @@
                     nivelAcademicoCargo.FechaModificacion = FechaCreacion;
                     nivelAcademicoCargo.Cargo = new Cargo();
                     nivelAcademicoCargo.Cargo.IdeCargo = IdeCargo;
-
                     _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
+                    _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio,0,IdeCargo);
                 }
                 else
                 {
                     var nivelAcedemicoCargoActualizar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == nivelAcademicoCargo.IdeNivelAcademicoCargo);
+                    int valorAnterior = nivelAcedemicoCargoActualizar.PuntajeNivelEstudio;
                     nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
                     nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
                     nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
@@ -118,6 +119,7 @@
                     nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;
                     _nivelAcademicoCargoRepository.Update(nivelAcedemicoCargoActualizar);
+                    _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio,valorAnterior,IdeCargo);
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -154,11 +156,13 @@
         [HttpPost]
         public ActionResult eliminarNivelAcademico(int ideNivelAcademico)
         {
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             ActionResult result = null;
-
             var nivelAcademicoEliminar = new NivelAcademicoCargo();
             nivelAcademicoEliminar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == ideNivelAcademico);
+            int puntajeEliminar = nivelAcademicoEliminar.PuntajeNivelEstudio;
             _nivelAcademicoCargoRepository.Remove(nivelAcademicoEliminar);
+            _nivelAcademicoCargoRepository.actualizarPuntaje(0,puntajeEliminar,IdeCargo);
 
             return result;
         }

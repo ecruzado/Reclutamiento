@@ -118,7 +118,7 @@
                     ubigeoCargoActualizar.FechaModificacion = FechaModificacion;
                     _ubigeoCargoRepository.Update(ubigeoCargoActualizar);
                 }
-
+                actualizarPuntaje(ubigeoCargo.PuntajeUbigeo,0,IdeCargo);
                 objJsonMessage.Mensaje = "Agregado Correctamente";
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
@@ -191,6 +191,23 @@
 
 
         }
+
+        public void actualizarPuntaje(int puntaje, int puntajeEliminado, int IdeCargo)
+        {
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+
+            if (cargo.PuntajeTotalUbigeo < puntaje)
+            {
+                cargo.PuntajeTotalUbigeo = puntaje;
+            }
+            if (cargo.PuntajeTotalUbigeo == puntajeEliminado)
+            {
+                var puntajeMax = _ubigeoCargoRepository.getMaxValue("PuntajeUbigeo", x => x.Cargo == cargo);
+                cargo.PuntajeTotalUbigeo = puntajeMax;
+            }
+            _cargoRepository.Update(cargo);
+        }
+
         #endregion
 
     }

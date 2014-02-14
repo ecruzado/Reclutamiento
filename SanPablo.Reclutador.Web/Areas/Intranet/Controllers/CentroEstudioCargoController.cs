@@ -102,18 +102,21 @@
                     centroEstudioCargo.FechaModificacion = FechaCreacion;
                     centroEstudioCargo.Cargo = new Cargo();
                     centroEstudioCargo.Cargo.IdeCargo = IdeCargo;
-
                     _centroEstudioCargoRepository.Add(centroEstudioCargo);
+                    _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios,0, IdeCargo);
                 }
                 else
                 {
                     var centroEstudioCargoActualizar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == centroEstudioCargo.IdeCentroEstudioCargo);
+                    int valorEditar = centroEstudioCargoActualizar.PuntajeCentroEstudios;
                     centroEstudioCargoActualizar.TipoCentroEstudio = centroEstudioCargo.TipoCentroEstudio;
                     centroEstudioCargoActualizar.TipoNombreCentroEstudio = centroEstudioCargo.TipoNombreCentroEstudio;
                     centroEstudioCargoActualizar.PuntajeCentroEstudios = centroEstudioCargo.PuntajeCentroEstudios;
                     centroEstudioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     centroEstudioCargoActualizar.FechaModificacion = FechaModificacion;
                     _centroEstudioCargoRepository.Update(centroEstudioCargoActualizar);
+                    _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, valorEditar, IdeCargo);
+                    
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -146,10 +149,12 @@
         public ActionResult eliminarCentroEstudio(int ideCentroEstudio)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var centroEstudioEliminar = new CentroEstudioCargo();
             centroEstudioEliminar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == ideCentroEstudio);
+            int valorEliminar = centroEstudioEliminar.PuntajeCentroEstudios;
             _centroEstudioCargoRepository.Remove(centroEstudioEliminar);
+            _centroEstudioCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 
             return result;
         }

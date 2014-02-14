@@ -4,5 +4,6 @@
 
     public interface ICentroEstudioCargoRepository : IRepository<CentroEstudioCargo>
     {
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo);
     }
 }

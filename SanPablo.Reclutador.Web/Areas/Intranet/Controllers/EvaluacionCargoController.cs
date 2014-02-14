@@ -111,10 +111,12 @@
                     evaluacionCargo.Cargo.IdeCargo = IdeCargo;
 
                     _evaluacionCargoRepository.Add(evaluacionCargo);
+                    _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen,0,IdeCargo);
                 }
                 else
                 {
                     var evaluacionCargoActualizar = _evaluacionCargoRepository.GetSingle(x => x.IdeEvaluacionCargo == evaluacionCargo.IdeEvaluacionCargo);
+                    int valorEditar = evaluacionCargoActualizar.PuntajeExamen;
                     evaluacionCargoActualizar.Examen = evaluacionCargo.Examen;
                     evaluacionCargoActualizar.TipoExamen = evaluacionCargo.TipoExamen;
                     evaluacionCargoActualizar.TipoAreaResponsable = evaluacionCargo.TipoAreaResponsable;
@@ -123,6 +125,7 @@
                     evaluacionCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     evaluacionCargoActualizar.FechaModificacion = FechaModificacion;
                     _evaluacionCargoRepository.Update(evaluacionCargoActualizar);
+                    _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, valorEditar, IdeCargo);
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -156,10 +159,12 @@
         public ActionResult eliminarEvaluacion(int ideEvaluacion)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var evaluacionEliminar = new EvaluacionCargo();
             evaluacionEliminar = _evaluacionCargoRepository.GetSingle(x => x.IdeEvaluacionCargo == ideEvaluacion);
+            int valorEliminar = evaluacionEliminar.PuntajeExamen;
             _evaluacionCargoRepository.Remove(evaluacionEliminar);
+            _evaluacionCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 
             return result;
         }

@@ -7,19 +7,41 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
         $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
         $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
 
+        $("#spanMessage").html("¿Desea Activar/Desactivar el registro?")
+        $('#updateDialog').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+                    var estado = rowData.CodigoActivo;
+                    if (selr != null) {
+                        ActivarDesactivarSolicitud(selr, estado);
+                    } else {
+                        MostrarMensaje('Seleccione una solicitud');
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaSolicitudPersonal", "SolicitudCargo")',
+            url: '@Url.Action("ListaSolicitudes", "SolicitudNuevoCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Estado', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
+            colNames: ['Estado','CodigoActivo', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
             colModel: [
                     { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'CodigoActivo', index: 'CodigoActivo', align: 'center', width: 50 , hidden : true },
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
                     { name: 'Cargo', index: 'Cargo', align: 'left' },
                     { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
@@ -54,30 +76,88 @@
             ExpandColumn: 'Codigo',
         });
 
+        $('#btnActivarDesactivar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                $('#updateDialog').dialog('open');
+            } else {
+                MostrarMensaje('Seleccione una solicitud para Activar/Desactivar');
+            }
+
+        });
+
+
+        $('#btnEditarSolicitud').click(function () {
+            var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (ideSolicitud != null) {
+                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo")' + '/' + ideSolicitud;
+            }
+            else {
+                MostrarMensaje("Seleccione una Solicitud a Editar");
+            }
+
+        });
+        
+        $('#btnPerfil').click(function () {
+            var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (ideSolicitud != null) {
+                window.location = '@Url.Action("Index", "Perfil")' + '/' + ideSolicitud;
+            }
+            else {
+                MostrarMensaje("Seleccione la solicitud asociada al perfil");
+            }
+
+        });
+
     });
+
+    function ActivarDesactivarSolicitud(selr, estado) {
+
+        $.ajax({
+            data: {
+                id: selr,
+                codEstado: estado
+            },
+            type: "POST",
+            url: "@Url.Action("CambiarEstado", "SolicitudNuevoCargo")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje)
+                    
+                } else {
+                    MostrarMensaje(data.Mensaje);
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
     }
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-            var archivo = 'enabled.png';
-            var title = "Habilitar"
-            if (rowObject[14] == "Activo") {
-                archivo = 'enabled.png';
-                var title = "Habilitar"
-            } else {
-                archivo = 'enabled.png';
-                var title = "Habilitar"
+    function MostrarMensaje(mensaje) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
             }
+        });
+    }
 
-            var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-            return strImg;
-        }
+   
+
 </script>
 }
+@using (Html.BeginForm("Index", "SolicitudNuevoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "solicitudNuevoForm" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -90,9 +170,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                <select id="selectCargo">
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.NombreCargo, new SelectList(Model.Cargos, "NombreCargo","NombreCargo",Model.SolicitudNuevoCargo.NombreCargo ))
                             </div>
                         </div>
                     </div>
@@ -111,9 +189,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia","NombreDependencia",Model.Dependencias ))
                             </div>
                         </div>
                     </div>
@@ -121,9 +197,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento","NombreDepartamento",Model.Departamentos ))
                             </div>
                         </div>
                     </div>
@@ -133,9 +207,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
                             </div>
                         </div>
                     </div>
@@ -186,13 +258,16 @@
             <div class="form-actions">
                 <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-user icon-white"></i> Perfil</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo")"><i class="icon-pencil icon-white"></i> Editar</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+                <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
+                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
         </div>
 
     </div>
 </div>
+}
+
+<div id="divMensaje"><span id="spanMensaje"></span></div>

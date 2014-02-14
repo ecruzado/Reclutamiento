@@ -37,10 +37,7 @@
 
         int CountByExpress(Expression<Func<TEntity, bool>> condition);
 
-        List<int> actualizarPestanas(int idePostulante);
-        
-        
-
+        int getMaxValue(string campo, Expression<Func<TEntity, bool>> condition);
        
     }
 }

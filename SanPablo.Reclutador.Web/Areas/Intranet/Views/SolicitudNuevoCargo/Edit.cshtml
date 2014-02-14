@@ -10,6 +10,38 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $('#updateDialogConfirmacion').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                     $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
+                     $("#solicitudNuevoCargoForm").serialize(),
+                     function (respuesta) {
+                         if (respuesta.Resultado) {
+                            $("#updateDialogConfirmacion").dialog("close");
+                            $("#spanMensaje").html("Solicitud enviada exitosamente");
+                            $("#divMensaje").dialog({
+                                title: 'SAN PABLO',
+                                modal: true,
+                                buttons: {
+                                    "Ok": function () {actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
+                                }
+                            });
+                          }
+                          else {
+                             mensajeResultado(respuesta.Mensaje);
+                          }
+                     });
+                 },
+                 "Cancelar": function () {
+                     $(this).dialog("close");
+                  }
+            }
+         });
+
         $('select#Dependencias').change(function () {
             var ideDependencia = $(this).val();
             $("select#SolicitudNuevoCargo_IdeArea").empty();
@@ -65,15 +97,23 @@
     }
 
     function mostrarConfirmacion() {
-        $('#modalConfirmacion').modal('show');
+        var dialogDiv = $('#updateDialogConfirmacion');
+            dialogDiv.dialog('open');
     }
 
     function ocultarAprobarDesaprobar() {
         $('#modalAprobarRechazar').modal('hide');
     }
 
-    function ocultarConfirmacion() {
-        $('#modalConfirmacion').modal('hide');
+    function mensajeResultado(mensaje) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
     }
     function deshabilita() {
         document.getElementById('idB1').style.display = "none";
@@ -87,6 +127,22 @@
         if ($("#solicitudNuevoCargoForm").validate().form()) {
             mostrarConfirmacion();
         }
+    }
+    function actualizarCodigo(codigo) {
+        $.ajax({
+            data: { codigo: codigo },
+            type: "POST",
+            url: '@Url.Action("recuperarCodigoSolicitud", "SolicitudNuevoCargo")',
+            traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val(data.Mensaje);
+                    } else {
+                        mensajeResultado(data.Mensaje);
+                    }
+                }
+        });
+
     }
 
 </script>
@@ -113,7 +169,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Solicitud</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled"})
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled",@style="text-transform: uppercase" })
                                     </div>
                                 </div>
                             </td>
@@ -121,7 +177,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Código de Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small"})
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase" })
                                     </div>
                                 </div>
                             </td>
@@ -133,7 +189,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo)
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { @style="text-transform: uppercase" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NombreCargo)
                                         </div>
@@ -159,7 +215,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Descripción</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { @style="text-transform: uppercase" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
                                         </div>
@@ -226,7 +282,7 @@
                 <div class="grilla-opciones">
                 <h6>Estudios</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
                 </div>
@@ -236,7 +292,7 @@
                 <div class="grilla-opciones">
                 <h6>Competencias</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
                 </div>
@@ -246,7 +302,7 @@
                 <div class="grilla-opciones">
                 <h6>Funciones</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
                 </div>
@@ -256,7 +312,7 @@
                 <div class="grilla-opciones">
                 <h6>Observaciones adicionales</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
                 </div>
@@ -267,9 +323,6 @@
                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
                 <a class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
 
-                @*<a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-screenshot icon-white"></i> Grabar</button>
-                <button type="reset" class="btn">Cancelar</button>*@
                 
                   
             </div>
@@ -301,23 +354,8 @@
 </div>
 
 }    
-<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ></div>
+<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>    
     
-    
-    
-<div id="modalConfirmacion" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h5>Mensaje</h5>
-    </div>
-    <div class="modal-body">
-        <p>¿Está seguro de enviar la solicitud?</p>            
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" onclick="ocultarConfirmacion();">Cancelar</a>
-        <a href="#" class="btn btn-info">Aceptar</a>
-    </div>
-</div>

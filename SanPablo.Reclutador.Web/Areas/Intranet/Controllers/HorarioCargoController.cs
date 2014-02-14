@@ -98,8 +98,9 @@
                     horarioCargo.FechaModificacion = FechaCreacion;
                     horarioCargo.Cargo = new Cargo();
                     horarioCargo.Cargo.IdeCargo = IdeCargo;
-
                     _horarioCargoRepository.Add(horarioCargo);
+                    
+
                 }
                 else
                 {
@@ -109,7 +110,10 @@
                     horarioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     horarioCargoActualizar.FechaModificacion = FechaModificacion;
                     _horarioCargoRepository.Update(horarioCargoActualizar);
+                    
                 }
+
+                actualizarPuntaje(horarioCargo.PuntajeHorario,0,IdeCargo);
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
                 objJsonMessage.Resultado = true;
@@ -138,15 +142,32 @@
         public ActionResult eliminarHorario(int ideHorario)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var horarioEliminar = new HorarioCargo();
             horarioEliminar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == ideHorario);
+            int puntajeEliminar = horarioEliminar.PuntajeHorario;
             _horarioCargoRepository.Remove(horarioEliminar);
-
+            actualizarPuntaje(0, puntajeEliminar, IdeCargo);
+            
             return result;
         }
+        public void actualizarPuntaje(int puntaje, int puntajeEliminado,int IdeCargo)
+        {
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
 
+            if (cargo.PuntajeTotalHorario < puntaje)
+            {
+                cargo.PuntajeTotalHorario = puntaje;
+            }
+            if (cargo.PuntajeTotalHorario == puntajeEliminado)
+            {
+                var puntajeMax = _horarioCargoRepository.getMaxValue("PuntajeHorario", x => x.Cargo == cargo);
+                cargo.PuntajeTotalHorario = puntajeMax;
+            }
+            _cargoRepository.Update(cargo);
+        }
 
+        
         #endregion
     }
 }
