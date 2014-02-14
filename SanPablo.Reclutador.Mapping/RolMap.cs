@@ -18,7 +18,9 @@
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.DescSede).Formula("(select decode(r.flgsede,'S','SI','N','NO') from rol r where r.idrol=IDROL)");
 
+            
             Table("ROL");
 
         }

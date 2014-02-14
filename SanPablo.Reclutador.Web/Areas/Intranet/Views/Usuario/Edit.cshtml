@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.RolViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UsuarioViewModel
 @using SanPablo.Reclutador.Entity
 
 @{
@@ -22,11 +22,9 @@
 
     $(document).ready(function () {
 
-       
 
-
-
-        jQuery("#grdListOpciones").jqGrid({
+    });
+        @*jQuery("#grdListOpciones").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -37,7 +35,7 @@
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
                        { field: 'idRol', data: $("#rol_IdRol").val() },
-                      
+
                 ];
 
                 if (migrilla._search == true) {
@@ -65,10 +63,10 @@
                     }
                 });
             },
-            colNames: ['','','', 'Opcion', 'Descripción'],
+            colNames: ['', '', '', 'Opcion', 'Descripción'],
             colModel: [
-                     { name: 'IDROLOPCION', index: 'IDROLOPCION', align: 'left',  editable: false, sortable: false, hidden: true },
-                     { name: 'IDROL', index: 'IDROL', align: 'left',  editable: false, sortable: false, hidden: true },
+                     { name: 'IDROLOPCION', index: 'IDROLOPCION', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IDROL', index: 'IDROL', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'IDOPCION', index: 'IDOPCION', align: 'left', sortable: false, editable: false, hidden: true },
                      { name: 'NombreOpcion', index: 'NombreOpcion', align: 'left', sortable: false, width: 250, editable: false },
                      { name: 'DescOpcion', index: 'DescOpcion', align: 'left', sortable: false, width: 600, editable: false }
@@ -92,9 +90,9 @@
             },
             loadComplete: function (data) {
             }
-        });
+        });*@
 
-        $('#btnNuevo').click(function () {
+@*        $('#btnNuevo').click(function () {
             var codRol = $("#rol_IdRol").val();
 
             if (codRol != null && codRol > 0) {
@@ -107,7 +105,7 @@
 
 
         $('#btnEliminar').click(function () {
-           
+
             var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
             if (selr != null && selr > 0) {
                 $('#confirmacion').dialog('open');
@@ -116,7 +114,7 @@
             }
 
         });
-        
+
 
         $("#spanConfirmacion").html("¿Desea eliminar el registro?")
         $('#confirmacion').dialog({
@@ -154,17 +152,17 @@
                 },
                 type: "POST",
                 url: '@Url.Action("EliminarOpcion", "Rol")',
-            traditional: true,
-            success: function (data) {
-                if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                } else {
-                    $('#grdListOpciones').trigger('reloadGrid');
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        $('#grdListOpciones').trigger('reloadGrid');
+                    }
                 }
-            }
-        });
+            });
 
-    }
+        }
 
 
         $("#spanConfSelc").html("¿Desea agregar las opciones?")
@@ -181,21 +179,21 @@
                         },
                         type: "POST",
                         url: '@Url.Action("GetListaOpcion", "Opcion")',
-                    traditional: true,
-                    success: function () {
-                        $('#confSelc').dialog("close");
-                        $('#opcionDialog').dialog("close");
-                        $('#grdListOpciones').trigger('reloadGrid');
+                        traditional: true,
+                        success: function () {
+                            $('#confSelc').dialog("close");
+                            $('#opcionDialog').dialog("close");
+                            $('#grdListOpciones').trigger('reloadGrid');
 
-                    }
-                  });
-            },
-            "No": function () {
-                $(this).dialog("close");
+                        }
+                    });
+                },
+                "No": function () {
+                    $(this).dialog("close");
                 }
             }
         });
-     
+
         $('#opcionDialog').dialog({
             autoOpen: false,
             width: 800,
@@ -205,13 +203,13 @@
             buttons: {
                 "Grabar": function () {
                     $('#confSelc').dialog('open');
-              
-            },
-            "Cancelar": function () {
-                $(this).dialog("close");
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
             }
-        }
-         });
+        });
 
 
     });
@@ -224,24 +222,83 @@
             dialogDiv.dialog('open');
         });
         return false;
-    }
+    }*@
 
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
+    function validacion() {
+       
+        if ($("#frmEdicionUsuario").validate().form()) {
+            var codUsuario = $("#Usuario_CodUsuario").val();
+            $.ajax({
+                data: {
+                    id: codUsuario
+                },
+                type: "POST",
+                url: '@Url.Action("valCodUsuario", "Usuario")',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        //$('#btnGuardarUsuario').trigger('click');
+                        GrabaUsuario();
+                    }
+                }
+            });
+        }
+    }
+
+    function GrabaUsuario() {
+        var idUsuario = $("#Usuario_IdUsuario").val();
+        if ($("#frmEdicionUsuario").validate().form()) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edicion", "Usuario")',
+                data: $("#frmEdicionUsuario").serialize(),
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        $("#Usuario_IdUsuario").val(data.IdDato);
+                        information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                       
+                    }
+                }
+            });
+        }
+    }
+
+    function information(selectorDiv, selectorSpan, msg, title, selr) {
+        $('#' + selectorSpan).html(msg);
+        $('#' + selectorDiv).dialog({
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    //RedireccionaUsuario(selr, accion);
+                }
+            }
+        });
+        $('#' + selectorDiv).dialog('open');
+    }
+
+
 </script>
 }
 
-@using (Html.BeginForm("Edit", "Rol", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmRol" }))
+@using (Html.BeginForm("Edit", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmEdicionUsuario" }))
 {
-    @Html.ValidationSummary(true)
+@Html.ValidationSummary(true)
 
 <div class="span12"> 
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Rol</h5>
+                <h5>Usuario</h5>
                 <div class="opciones">
                     <label>Estado</label>
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
@@ -255,80 +312,161 @@
                 <tr>
                      <td class="colEtiqueta">
                          
-                         <label class="etiquetaFormulario">Código Rol</label>
+                         <label class="etiquetaFormulario">Usuario</label>
                     </td>
                     <td class="colInput">
-                          
-                      <input class="textoFormulario" id="rol_IdRol" name="rol.IdRol" type="text" value="@Model.rol.IdRol" readonly="readonly">
-                        
+                    @Html.TextBoxFor(model => model.Usuario.IdUsuario,  new { style = "display: none;" })   
+                       
+
+                    @if (Accion.Consultar.Equals(Model.Accion)) 
+                    { 
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,disabled="disabled"})                      
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" })                     
+                    }
+                        <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.Usuario.CodUsuario)
+                        </div>       
                     </td>
                     <td style="width:40px;"></td>
                    
                     <td class="colEtiqueta">
-                            <label class="etiquetaFormulario">Nombre Rol</label>
+                            <label class="etiquetaFormulario">Contraseña</label>
                     </td>
                      <td class="colInput">
                         
-                          @if (Accion.Consultar.Equals(Model.Accion)) 
+                          @if (Accion.Consultar.Equals(Model.Accion))
                           { 
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled"})                      
+                            @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "textoFormulario", disabled = "disabled",type = "password" })                      
                           }
                           else
                           {
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" })                     
+                            @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "textoFormulario",type = "password" })                     
                           }
                          
                         
                          
                          <div class="tex-error" style="font-size:12px;color:red">    
-                        @Html.ValidationMessageFor(model => model.rol.CodRol)
+                        @Html.ValidationMessageFor(model => model.Usuario.CodContrasena)
                         </div>
                     </td>
                  </tr>
                  <tr>
 
                     <td class="colEtiqueta">
-                      <label class="etiquetaFormulario">Descripción</label>
+                      <label class="etiquetaFormulario">Apellido Paterno</label>
                     </td>
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" })  
                        }
                        
                        
                        <div class="tex-error" style="font-size:12px;color:red">         
                         
-                            @Html.ValidationMessageFor(model => model.rol.DscRol)
+                            @Html.ValidationMessageFor(model => model.Usuario.DscApePaterno)
                         </div>
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
-                    <label class="etiquetaFormulario">Socita Sede</label>
+                    <label class="etiquetaFormulario">Apellido Materno</label>
                     </td>
                     <td class="colInput">
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                           @Html.DropDownListFor(model => model.rol.FlgSede, new SelectList(Model.listaIndSede, "Valor", "Descripcion", Model.rol.FlgSede), new { disabled="disabled"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" })  
                          }
                          else
                          {
-                           @Html.DropDownListFor(model => model.rol.FlgSede, new SelectList(Model.listaIndSede, "Valor", "Descripcion", Model.rol.FlgSede))     
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" })  
                          }
 
                        
                         <div class="tex-error" style="font-size:12px;color:red">     
-                        @Html.ValidationMessageFor(model => model.rol.FlgSede)
+                        @Html.ValidationMessageFor(model => model.Usuario.DscApeMaterno)
+                        </div>
+                    </td>
+
+                  </tr>
+
+                 <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Nombres</label>
+                    </td>
+                   <td class="colInput">
+                       @if (Accion.Consultar.Equals(Model.Accion))
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" })  
+                       }
+                       else
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" })  
+                       }
+                       
+                       <div class="tex-error" style="font-size:12px;color:red">         
+                          @Html.ValidationMessageFor(model => model.Usuario.DscNombres)
+                        </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Email</label>
+                    </td>
+                    <td class="colInput">
+                        
+                         @if (Accion.Consultar.Equals(Model.Accion))
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" })  
+                         }
+                         else
+                         {
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" })  
+                         }
+
+                        <div class="tex-error" style="font-size:12px;color:red">     
+                        @Html.ValidationMessageFor(model => model.Usuario.Email)
                         </div>
                     </td>
 
                   </tr>
                 
+                   <tr>
+
+                    <td class="colEtiqueta">
+                      <label class="etiquetaFormulario">Telefono</label>
+                    </td>
+                   <td class="colInput">
+                       @if (Accion.Consultar.Equals(Model.Accion))
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" })  
+                       }
+                       else
+                       {
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario" })  
+                       }
+                       
+                       <div class="tex-error" style="font-size:12px;color:red">         
+                          @Html.ValidationMessageFor(model => model.Usuario.Telefono)
+                        </div>
+                    </td>
+                    <td style="width:40px;"></td>
+                    <td class="colEtiqueta">
+                   
+                    </td>
+                    <td >
+                       
+                    </td>
+
+                  </tr>
+
                     <tr>
                         <td>
                             &nbsp;
@@ -371,7 +509,7 @@
            
           
             <div class="form-actions">
-                <a class="btn" href="@Url.Action("Index", "Rol", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn" href="@Url.Action("Index", "Usuario", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 
                 @if (Accion.Consultar.Equals(Model.Accion))
                 {
@@ -379,7 +517,7 @@
                 }
                 else
                 {
-                <button id="btnGuardarRol" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</button>      
+                    <a class="btn btn-info"  onclick ="validacion();"><i class=" icon-hdd icon-white"></i> Grabar</a>
                 }
                 
             </div>

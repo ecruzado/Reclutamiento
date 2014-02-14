@@ -4,5 +4,7 @@
 
     public interface IRolOpcionRepository : IRepository<RolOpcion>
     {
+
+        int EliminaOpcion(int idRol, int idOpcion);
     }
 }

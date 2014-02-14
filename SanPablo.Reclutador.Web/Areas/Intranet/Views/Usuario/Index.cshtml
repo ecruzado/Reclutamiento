@@ -9,55 +9,60 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        jQuery("#grdList").jqGrid({
 
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Codigo', 'Usuario', 'Sede', 'Rol', 'Estado', "", ""],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
-                    { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
-                    { name: 'Sede', index: 'Sede', align: 'left', sortable: false },
-                    { name: 'Rol', index: 'Rol', align: 'left', sortable: false },
-                    { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
-                    { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
-                    { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            /*caption: 'Lista Referencias',*/
-            height: 120,
-            autowidth: true,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
+        $('#btnNuevo').click(function () {
+            window.location = '@Url.Action("Nuevo", "Usuario")';
+          });
 
-            },
-            loadComplete: function (data) {
+    //    jQuery("#grdList").jqGrid({
 
-            }
-        });
+    //        datatype: 'json',
+    //        mtype: 'POST',
+    //        colNames: ['Codigo', 'Usuario', 'Sede', 'Rol', 'Estado', "", ""],
+    //        colModel: [
+    //                { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
+    //                { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
+    //                { name: 'Sede', index: 'Sede', align: 'left', sortable: false },
+    //                { name: 'Rol', index: 'Rol', align: 'left', sortable: false },
+    //                { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
+    //                { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
+    //                { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
+    //        ],
+    //        sortname: 'Codigo',
+    //        sortorder: 'desc',
+    //        viewrecords: true,
+    //        /*caption: 'Lista Referencias',*/
+    //        height: 120,
+    //        autowidth: true,
+    //        rowNum: 0,
+    //        cellsubmit: 'clientArray',
+    //        hidegrid: false,
+    //        postData: {
 
-        var dlgregistrousuario = $("#dlgregistrousuario").dialog(
-    {
-        autoOpen: false,
-        modal: true,
-        title: "Registro Usuario",
-        width: 400,
-        height: 220,
-        buttons: {
-            "Grabar": function () {
-                $(this).dialog("close");
-                return true;
-            },
-            "Cancelar": function () {
-                $(this).dialog("close");
-                return false;
-            }
-        }
-    });
+    //        },
+    //        loadComplete: function (data) {
+
+    //        }
+    //    });
+
+    //    var dlgregistrousuario = $("#dlgregistrousuario").dialog(
+    //{
+    //    autoOpen: false,
+    //    modal: true,
+    //    title: "Registro Usuario",
+    //    width: 400,
+    //    height: 220,
+    //    buttons: {
+    //        "Grabar": function () {
+    //            $(this).dialog("close");
+    //            return true;
+    //        },
+    //        "Cancelar": function () {
+    //            $(this).dialog("close");
+    //            return false;
+    //        }
+    //    }
+    //});
 
 
     });
@@ -152,8 +157,10 @@
                 <div id="grdPager"></div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="/Intranet/Examen/Edit"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>

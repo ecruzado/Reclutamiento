@@ -46,6 +46,11 @@
             return View(criterioViewModel);
         }
 
+        /// <summary>
+        /// obtiene la lista de criterios
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ListaCriterio(GridTable grid)
         {

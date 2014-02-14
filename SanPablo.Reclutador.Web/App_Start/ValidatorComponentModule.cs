@@ -104,6 +104,10 @@
             builder.RegisterType<SolicitudNuevoCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<SolicitudNuevoCargo>))
                 .As<IValidator>();
+                
+            builder.RegisterType<UsuarioValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Usuario>))
+                .As<IValidator>();
 
             builder.RegisterType<CargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Cargo>))

@@ -41,7 +41,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            return View();
+
+            RolViewModel rolModel = new RolViewModel();
+            rolModel.rol = new Rol();
+            rolModel = InicializarRolEdit();
+            return View("Index", rolModel);
+
         }
 
         //public ActionResult Edit()
@@ -104,10 +109,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objModel.rol = objRrol;
                 objModel.Accion = Accion.Editar;
 
-                return View("Edit", objModel);
-                //objJson.Resultado = true;
-                //objJson.Mensaje = "Se actualizo el rol sastifactoriamente";
-                //objJson.IdDato = model.rol.IdRol;
+                return RedirectToAction("Edicion", "Rol", new { id = objModel.rol.IdRol });
+                //return View("Edit", objModel);
+               
 
             }
             else
@@ -122,16 +126,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objModel.rol = model.rol;
                 objModel.Accion = Accion.Editar;
-                //objJson.Resultado = true;
-                //objJson.Mensaje = "Se registro el rol sastifactoriamente";
-                //objJson.IdDato = model.rol.IdRol;
-                return View("Edit", objModel);
+               
+                //return View("Edit", objModel);
+                return RedirectToAction("Edicion", "Rol", new { id = objModel.rol.IdRol });
             }
            
         }
 
         /// <summary>
-        /// 
+        /// Muestra las opciones seleccionadas para el rol
         /// </summary>
         /// <param name="grid"></param>
         /// <returns></returns>
@@ -165,24 +168,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     id = item.IDROLOPCION.ToString(),
                     cell = new string[]
                             {
-                                "1",
-                                "",
-                                ""
-                                //item.IndicadorActivo,
-                                //item.IndicadorActivo,
-                                //item.Pregunta,
-                                //item.TipoMedicionDes,
-                                //item.TipoMedicion,
-                                //item.TipoCriterio,
-                                //item.TipoCriterioDes,
-                                //item.TipoCalificacion,
-                                //item.TipoCalificacionDes,
-                                //item.TipoModo,
-                                //item.TipoModoDes,
-                                //item.FechaCreacion == DateTime.MinValue? "": item.FechaCreacion.ToString("dd/MM/yyyy"),
-                                //item.UsuarioCreacion,
-                                //item.FechaModificacion == DateTime.MinValue? "": item.FechaModificacion.ToString("dd/MM/yyyy"),
-                                //item.UsuarioModificacion
+                               
+                                item.IDROLOPCION==null?"":item.IDROLOPCION.ToString(),
+                                item.IDROL==null?"":item.IDROL.ToString(),
+                                item.IDOPCION==null?"":item.IDOPCION.ToString(),
+                                item.NombreOpcion==null?"":item.NombreOpcion,
+                                item.DescOpcion==null?"":item.DescOpcion
+                                
                    
                             }
                 }).ToArray();
@@ -196,6 +188,183 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// Lista de roles
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult getListaRol(GridTable grid)
+        {
+            try
+            {
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null) ||
+                    (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                   )
+                {
+                    where = DetachedCriteria.For<Rol>();
+
+                    if (!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null)
+                    {
+                        where.Add(Expression.Like("CodRol", '%' + grid.rules[0].data + '%'));
+                    }
+                    if (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null)
+                    {
+                        where.Add(Expression.Like("DscRol", '%' + grid.rules[1].data + '%'));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    {
+                        where.Add(Expression.Eq("FlgSede", grid.rules[2].data ));
+                    }
+                   
+                }
+
+                var generic = Listar(_rolRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdRol.ToString(),
+                    cell = new string[]
+                            {
+                                item.IdRol==null?"":item.IdRol.ToString(),
+                                item.CodRol==null?"":item.CodRol,
+                                item.DscRol==null?"":item.DscRol,
+                                item.FlgSede==null?"":item.FlgSede,
+                                item.DescSede==null?"":item.DescSede
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
+        /// <summary>
+        /// Edita el rol
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Edicion(string id)
+        {
+
+            RolViewModel model = new RolViewModel();
+            model.rol = new Rol();
+
+            model = InicializarRolEdit();
+            
+            var objRol = _rolRepository.GetSingle(x => x.IdRol == Convert.ToInt32(id));
+
+            model.rol.IdRol = objRol.IdRol;
+            model.rol.FlgEstado = objRol.FlgEstado;
+            model.rol.FlgSede = objRol.FlgSede;
+            model.rol.CodRol = objRol.CodRol;
+            model.rol.DscRol = objRol.DscRol;
+
+            model.Accion = Accion.Editar;
+
+            return View("Edit", model);
+        }
+
+        /// <summary>
+        /// Elimina el rol seleccionado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarRol(string id)
+        {
+            
+            int resultado=0;
+            JsonMessage objJsonMessage = new JsonMessage();
+
+            RolViewModel model = new RolViewModel();
+            model.rol = new Rol();
+
+            resultado = _rolRepository.EliminaRol(Convert.ToInt32(id));
+            if (resultado>0)
+            {
+                objJsonMessage.Resultado = true;
+
+                objJsonMessage.Mensaje = "Se elemino el rol correctamente";
+            }
+            else
+            {
+                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "El rol no se puede eliminar";
+            }
+
+            return Json(objJsonMessage);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codCat"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminarOpcion(string id, string codOp)
+        {
+            var jsonMessage = new JsonMessage();
+            jsonMessage.Resultado = true;
+            int retorno=0;
+            try
+            {
+                 retorno = _rolOpcionRepository.EliminaOpcion(Convert.ToInt32(id),Convert.ToInt32(codOp));
+                 if (retorno>0)
+                 {
+                     jsonMessage.Resultado = true;
+                     
+                 }
+
+            }
+            catch (Exception)
+            {
+
+                jsonMessage.Resultado = false;
+                jsonMessage.Mensaje = "Error : No se permite eliminar la opción";
+            }
+
+
+
+            return Json(jsonMessage);
+        }
+
+        /// <summary>
+        /// Consulta las opciones del rol
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Consulta(string id)
+        {
+            RolViewModel model = new RolViewModel();
+            model.rol = new Rol();
+
+            model = InicializarRolEdit();
+
+            var objRol = _rolRepository.GetSingle(x => x.IdRol == Convert.ToInt32(id));
+
+            model.rol.IdRol = objRol.IdRol;
+            model.rol.FlgEstado = objRol.FlgEstado;
+            model.rol.FlgSede = objRol.FlgSede;
+            model.rol.CodRol = objRol.CodRol;
+            model.rol.DscRol = objRol.DscRol;
+
+            model.Accion = Accion.Consultar;
+
+            return View("Edit", model);
+        }
+
+
     }
 }

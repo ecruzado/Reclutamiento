@@ -12,7 +12,7 @@
 
     $(document).ready(function () {
 
-        @*jQuery("#grdListaOpcionPopup").jqGrid({
+        jQuery("#grdListaOpcionPopup").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -22,11 +22,9 @@
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
-                       { field: 'idExamen', data: $("#Examen_IdeExamen").val() },
-                       { field: 'tipCriterio', data: $("#Categoria_TipoCriterio").val() },
-                       { field: 'estado', data: $("#Categoria_ESTACTIVO").val() },
-                       { field: 'descrip', data: $("#Categoria_DESCCATEGORIA").val() }
-
+                     { field: 'opNombre', data: $("#opcion_DSCOPCION").val() },
+                     { field: 'opDescripcion', data: $("#opcion_DESCRIPCION").val() },
+                     { field: 'opEstado', data: $("#opcion_FLGHABILITADO").val() }
                 ];
 
                 if (migrilla._search == true) {
@@ -38,14 +36,14 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("ListaPopupCategoria", "Categoria")',
+                    url: '@Url.Action("ListaPopupOpcion", "Opcion")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
                     async: false,
                     success: function (data, st) {
                         if (st == 'success') {
-                            var jq = $('#grdListaCategoriaPopup')[0];
+                            var jq = $('#grdListaOpcionPopup')[0];
                             jq.addJSONData(data);
                         }
                     },
@@ -54,26 +52,26 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', '', 'Tipo'],
+            colNames: ['Estado', '', '', '', 'Nombre', 'Descripción'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left', hidden: true },
-                    { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', width: 90, hidden: true },
-                    { name: 'TipoDes', index: 'TipoDes', align: 'left', width: 90 }
+                    { name: 'FLGHABILITADO', index: 'FLGHABILITADO', align: 'left', hidden: true },
+                    { name: 'IDOPCIONPADRE', index: 'IDOPCIONPADRE', align: 'center', sortable: false, hidden: true },
+                    { name: 'IDOPCION', index: 'IDOPCION', align: 'left', hidden: true },
+                    { name: 'DSCOPCION', index: 'DSCOPCION', align: 'left', width: 250 },
+                    { name: 'DESCRIPCION', index: 'DESCRIPCION', align: 'left', width: 380 }
+                    
 
             ],
-            pager: jQuery('#grdPagerCategoriaPopup'),
+            pager: jQuery('#grdPagerOpcionPopup'),
             rowNum: 10,
-            rowList: [10, 30, 50],
+            //rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
-            sortname: 'IDECATEGORIA',
+            sortname: 'IDOPCIONPADRE',
             sortorder: 'desc',
             viewrecords: true,
-            height: 350,
+            height: 340,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -81,7 +79,6 @@
             autowidth: true,
             multiselect: true,
             onSelectAll: function (aRowids, status) {
-
                 completeRow = aRowids;
                 CompleteStatus = status;
             },
@@ -90,11 +87,10 @@
                 SelectedRowStatus = status;
             },
 
-
             postData: {
             }, loadComplete: function (data) {
             }
-        });*@
+        });
 
     });
 
@@ -108,7 +104,7 @@
         <tr>
             <td colspan="8">&nbsp;</td>
         </tr>
-      
+     
        @Html.TextBoxFor(model => model.IdRoll, new { style = "display: none;" })
         <tr >
             <td class="colEtiqueta">
@@ -132,10 +128,13 @@
             <td class="colInput">
                 @Html.DropDownListFor(model => model.opcion.FLGHABILITADO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.opcion.FLGHABILITADO),new { data_val = "false" })
             </td>
+             <td style="width:40px;"></td> 
+            <td></td>
+            <td></td>
         </tr>
 
         <tr >
-            <td class="opciones" style="text-align:right" colspan="6">
+            <td class="opciones" style="text-align:right" colspan="5">
                 <a id="btnBuscarOpcion" class="btn btn-small btn-info"><i class="icon-search icon-white"></i> Buscar</a>
                 <a id="btnLimpiarOpcion" class="btn btn-small btn-info"><i class="icon-trash"></i> Limpiar</a>
                  <div style="clear:both"></div>
