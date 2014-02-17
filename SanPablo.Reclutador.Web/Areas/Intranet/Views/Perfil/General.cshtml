@@ -299,7 +299,7 @@
 @using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
 {
 <!--General Inicio -->
-
+    @Html.ValidationSummary(true)
     <div class="tab-pane" id="B">
         <form>
             <div class="grilla-opciones" style="margin-top:0px;">
@@ -438,10 +438,7 @@
                 <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
                 <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                @*<a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
-                <a class="btn" href="#" onclick="irATab('A');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
-
+                
             </div>
 
         </div>
@@ -449,12 +446,10 @@
 }
   <!--General Fin-->
 <div id="updateDialogHorario" title="Agregar Horario"></div>
-    <div id="divMensaje3">
-        <span id="spanMensaje3"></span>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
     </div>
 
 <div id="updateDialogUbigeo" title="Agregar Ubigeo"></div>
-    <div id="divMensaje4">
-        <span id="spanMensaje4"></span>
-    </div>
+   
   

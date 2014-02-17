@@ -55,6 +55,9 @@
     <Compile Include="Cargo.cs" />
     <Compile Include="CentroEstudioCargo.cs" />
     <Compile Include="ConocimientoGeneralCargo.cs" />
+    <Compile Include="LogSolicitudNuevoCargo.cs" />
+    <Compile Include="SendMail.cs" />
+    <Compile Include="SolicitudNuevoCargo.cs" />
     <Compile Include="EvaluacionCargo.cs" />
     <Compile Include="OfrecemosCargo.cs" />
     <Compile Include="UbigeoCargo.cs" />
@@ -94,6 +97,8 @@
     <Compile Include="Validation\CategoriaValidator.cs" />
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
     <Compile Include="Validation\CompetenciaCargoValidator.cs" />
+    <Compile Include="Validation\CargoValidator.cs" />
+    <Compile Include="Validation\SolicitudNuevoCargoValidator.cs" />
     <Compile Include="Validation\RolValidator.cs" />
     <Compile Include="Validation\CentroEstudioCargoValidator.cs" />
     <Compile Include="Validation\ConocimientoGeneralCargoValidator.cs" />

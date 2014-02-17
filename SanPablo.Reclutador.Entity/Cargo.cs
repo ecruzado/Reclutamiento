@@ -14,6 +14,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeSede { get; set; }
         public virtual string NombreCargo { get; set; }
         public virtual string DescripcionCargo { get; set; }
+        public virtual string CodigoCargo { get; set; }
         public virtual int IdeArea { get; set; }
         public virtual int NumeroPosiciones { get; set; }
         public virtual int PuntajePostulanteInterno { get; set; }

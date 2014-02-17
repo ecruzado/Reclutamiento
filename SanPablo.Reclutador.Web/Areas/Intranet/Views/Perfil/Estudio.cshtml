@@ -180,11 +180,12 @@
             url: '@Url.Action("ListaNivelAcademico", "NivelAcademicoCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Puntaje'],
+            colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado','Ciclo/Semestre', 'Puntaje'],
             colModel: [
                     { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', editable: false, sortable: false },
                     { name: 'AreaEstudio', index: 'AreaEstudio', align: 'left', editable: false, sortable: false },
                     { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
+                    { name: 'CicloSemestre', index: 'CicloSemestre', align: 'left', editable: false, sortable: false },
                     { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
             ],
             pager: jQuery('#grdPagerNivelAcademico'),

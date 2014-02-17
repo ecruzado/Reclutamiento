@@ -1,0 +1,273 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
+@{
+    ViewBag.Title = "Solicitud Nuevo Cargo";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
+        $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
+
+        $("#spanMessage").html("¿Desea Activar/Desactivar el registro?")
+        $('#updateDialog').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+                    var estado = rowData.CodigoActivo;
+                    if (selr != null) {
+                        ActivarDesactivarSolicitud(selr, estado);
+                    } else {
+                        MostrarMensaje('Seleccione una solicitud');
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        jQuery("#grdList").jqGrid({
+            url: '@Url.Action("ListaSolicitudes", "SolicitudNuevoCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Estado','CodigoActivo', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
+            colModel: [
+                    { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'CodigoActivo', index: 'CodigoActivo', align: 'center', width: 50 , hidden : true },
+                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
+                    { name: 'Cargo', index: 'Cargo', align: 'left' },
+                    { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
+                    { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
+                    { name: 'Area', index: 'Area', align: 'left', width: 110 },
+                    { name: 'Posiciones', index: 'Posiciones', align: 'right', width: 60 },
+                    { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
+                    { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
+                    { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
+                    { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
+                    { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
+                    { name: 'Inicio', index: 'Inicio', align: 'left', width: 60 },
+                    { name: 'Cierre', index: 'Cierre', align: 'left', width: 60 },
+                    { name: 'Responsable', index: 'Responsable', align: 'left', width: 100 },
+                    { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
+                    { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
+                    { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 },
+                    { name: 'Grupo', index: 'Grupo', align: 'center', width: 100 }
+            ],
+            pager: '#grdPager',
+            height: 420,
+            width:930,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            viewrecords: true,
+            hidegrid: false,
+            altRows: true,
+            shrinkToFit: false,
+            treeGrid: true,
+            treeGridModel: 'adjacency',
+            treedatatype: "local",
+            ExpandColumn: 'Codigo',
+        });
+
+        $('#btnActivarDesactivar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                $('#updateDialog').dialog('open');
+            } else {
+                MostrarMensaje('Seleccione una solicitud para Activar/Desactivar');
+            }
+
+        });
+
+
+        $('#btnEditarSolicitud').click(function () {
+            var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (ideSolicitud != null) {
+                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo")' + '/' + ideSolicitud;
+            }
+            else {
+                MostrarMensaje("Seleccione una Solicitud a Editar");
+            }
+
+        });
+        
+        $('#btnPerfil').click(function () {
+            var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (ideSolicitud != null) {
+                window.location = '@Url.Action("Index", "Perfil")' + '/' + ideSolicitud;
+            }
+            else {
+                MostrarMensaje("Seleccione la solicitud asociada al perfil");
+            }
+
+        });
+
+    });
+
+    function ActivarDesactivarSolicitud(selr, estado) {
+
+        $.ajax({
+            data: {
+                id: selr,
+                codEstado: estado
+            },
+            type: "POST",
+            url: "@Url.Action("CambiarEstado", "SolicitudNuevoCargo")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje)
+                    
+                } else {
+                    MostrarMensaje(data.Mensaje);
+                    $('#grdList').trigger('reloadGrid');
+                }
+            }
+        });
+
+    }
+
+
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+
+    function MostrarMensaje(mensaje) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
+    }
+
+   
+
+</script>
+}
+@using (Html.BeginForm("Index", "SolicitudNuevoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "solicitudNuevoForm" }))
+{
+    @Html.ValidationSummary(true)
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Listado Solicitud de Nuevos Cargos</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.NombreCargo, new SelectList(Model.Cargos, "NombreCargo","NombreCargo",Model.SolicitudNuevoCargo.NombreCargo ))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Fecha</label>
+                            <div class="controles">
+                                <input id="fechaInicio" type="text" class="input-small" placeholder=" Inicial"/>
+                                <input id="fechaFin" type="text" class="input-small" placeholder=" Final"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Dependencia</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia","NombreDependencia",Model.Dependencias ))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento","NombreDepartamento",Model.Departamentos ))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Área</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Etapa</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Responsable</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                                <select id="selectEstado">
+                                    <option>Activo</option>                                    
+                                    <option>Inactivo</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion offset9">
+                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                </div>
+            </form>
+            <div class="tabla-datos">
+                <table id="grdList">
+                </table>
+                <div id="grdPager">
+                </div>
+            </div>
+            <div class="form-actions">
+                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
+                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+}
+
+<div id="divMensaje"><span id="spanMensaje"></span></div>

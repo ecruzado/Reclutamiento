@@ -28,6 +28,10 @@
                 .InclusiveBetween(0, 20)
                 .WithMessage("Ingresar un puntaje válido");
 
+            RuleFor(x => x.CicloSemestre)
+               .InclusiveBetween(0, 99)
+               .WithMessage("Ingresar un Ciclo/Semestre válido");
+
          }
 
  

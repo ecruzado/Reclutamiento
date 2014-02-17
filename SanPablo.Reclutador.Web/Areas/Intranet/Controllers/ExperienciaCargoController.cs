@@ -104,10 +104,12 @@
                     experienciaCargo.Cargo.IdeCargo = IdeCargo;
 
                     _experienciaCargoRepository.Add(experienciaCargo);
+                    _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia,0, IdeCargo);
                 }
                 else
                 {
                     var experienciaCargoActualizar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == experienciaCargo.IdeExperienciaCargo);
+                    int valorEditar = experienciaCargoActualizar.PuntajeExperiencia;
                     experienciaCargoActualizar.TipoExperiencia = experienciaCargo.TipoExperiencia;
                     experienciaCargoActualizar.CantidadAnhosExperiencia = experienciaCargo.CantidadAnhosExperiencia;
                     experienciaCargoActualizar.CantidadMesesExperiencia = experienciaCargo.CantidadMesesExperiencia;
@@ -115,6 +117,7 @@
                     experienciaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     experienciaCargoActualizar.FechaModificacion = FechaModificacion;
                     _experienciaCargoRepository.Update(experienciaCargoActualizar);
+                    _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, valorEditar, IdeCargo);
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -146,10 +149,12 @@
         public ActionResult eliminarExperiencia(int ideExperiencia)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var experienciaEliminar = new ExperienciaCargo();
             experienciaEliminar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == ideExperiencia);
+            int valorEliminar = experienciaEliminar.PuntajeExperiencia;
             _experienciaCargoRepository.Remove(experienciaEliminar);
+            _experienciaCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 
             return result;
         }

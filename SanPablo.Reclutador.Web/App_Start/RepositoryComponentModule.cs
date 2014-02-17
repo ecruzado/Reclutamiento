@@ -91,11 +91,27 @@
 
             builder.RegisterType<EvaluacionCargoRepository>()
                 .As<IEvaluacionCargoRepository>();
+
             builder.RegisterType<RolRepository>()
                .As<IRolRepository>();
 
             builder.RegisterType<RolOpcionRepository>()
               .As<IRolOpcionRepository>();
+
+            builder.RegisterType<DependenciaRepository>()
+              .As<IDependenciaRepository>();
+
+            builder.RegisterType<DepartamentoRepository>()
+              .As<IDepartamentoRepository>();
+
+            builder.RegisterType<AreaRepository>()
+              .As<IAreaRepository>();
+
+            builder.RegisterType<SolicitudNuevoCargoRepository>()
+              .As<ISolicitudNuevoCargoRepository>();
+
+
+
 
             builder.RegisterType<OpcionRepository>()
              .As<IOpcionRepository>();

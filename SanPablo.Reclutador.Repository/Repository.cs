@@ -95,17 +95,20 @@
 
         }
 
-        public List<int> actualizarPestanas(int idePostulante)
+        public int getMaxValue(string campo, Expression<Func<TEntity, bool>> condition)
         {
-            List<int> list = new List<int>();
-            int[] lista = new int[7];
-             _session.CreateQuery("EXEC PR_EXTRANET.SP_ACTUALIZACION")
-                .SetParameter("p_idePostulante", idePostulante)
-                .SetParameterList("p_estados", lista);
-             lista[5] = 0; 
-             return list;               
-        }
+            //return _session.QueryOver<TEntity>()
+            //        .Where(condition)
+            //        .Select(Projections.Max(campo))
+            //        .FutureValue<int>()
+            //         .Value;
 
+            return _session.QueryOver<TEntity>()
+                   .Where(condition)
+                   .Select(Projections.Max(campo))
+                   .SingleOrDefault<int>();
+        }
+       
 
 
 

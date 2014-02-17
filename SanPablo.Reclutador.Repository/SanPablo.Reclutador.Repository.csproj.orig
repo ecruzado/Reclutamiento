@@ -58,6 +58,25 @@
     <Compile Include="CategoriaRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
 <<<<<<< HEAD
+    <Compile Include="EvaluacionCargoRepository.cs" />
+    <Compile Include="Interface\IEvaluacionCargoRepository.cs" />
+=======
+    <Compile Include="Interface\IRolOpcionRepository.cs" />
+    <Compile Include="Interface\IRolRepository.cs" />
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
+    <Compile Include="OfrecemosCargoRepository.cs" />
+    <Compile Include="Interface\OfrecemosCargoRepository.cs" />
+    <Compile Include="RolOpcionRepository.cs" />
+    <Compile Include="RolRepository.cs" />
+    <Compile Include="UbigeoCargoRepository.cs" />
+    <Compile Include="NivelAcademicoCargoRepository.cs" />
+    <Compile Include="HorarioCargoRepository.cs" />
+    <Compile Include="ExperienciaCargoRepository.cs" />
+    <Compile Include="DiscapacidadCargoRepository.cs" />
+    <Compile Include="ConocimientoGeneralCargoRepository.cs" />
+    <Compile Include="CompetenciasCargoRepository.cs" />
+    <Compile Include="CentroEstudioCargoRepository.cs" />
+    <Compile Include="CriterioPorSubcategoriaRepository.cs" />
     <Compile Include="Interface\IOpcionRepository.cs" />
 =======
     <Compile Include="EvaluacionCargoRepository.cs" />
@@ -85,8 +104,20 @@
     <Compile Include="EstudioPostulanteRepository.cs" />
     <Compile Include="ExamenPorCategoriaRepository.cs" />
     <Compile Include="ExamenRepository.cs" />
+    <Compile Include="ExamenPorCategoriaRepository.cs" />
+    <Compile Include="ExamenRepository.cs" />
     <Compile Include="ExperienciaPostulanteRepository.cs" />
     <Compile Include="GeneralRepository.cs" />
+    <Compile Include="Interface\IUbigeoCargoRepository.cs" />
+    <Compile Include="Interface\INivelAcademicoCargoRepository.cs" />
+    <Compile Include="Interface\IHorarioCargoRepository.cs" />
+    <Compile Include="Interface\IExperienciaCargoRepository.cs" />
+    <Compile Include="Interface\IDiscapacidadCargoRepository.cs" />
+    <Compile Include="Interface\IConocimientoGeneralCargoRepository.cs" />
+    <Compile Include="Interface\ICompetenciaCargoRepository.cs" />
+    <Compile Include="Interface\ICentroEstudioCargoRepository.cs" />
+    <Compile Include="Interface\ICargoRepository.cs" />
+    <Compile Include="Interface\ICriterioPorSubcategoriaRepository.cs" />
     <Compile Include="Interface\IUbigeoCargoRepository.cs" />
     <Compile Include="Interface\INivelAcademicoCargoRepository.cs" />
     <Compile Include="Interface\IHorarioCargoRepository.cs" />

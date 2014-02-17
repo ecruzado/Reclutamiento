@@ -4,5 +4,6 @@
 
     public interface IExperienciaCargoRepository : IRepository<ExperienciaCargo>
     {
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo);
     }
 }

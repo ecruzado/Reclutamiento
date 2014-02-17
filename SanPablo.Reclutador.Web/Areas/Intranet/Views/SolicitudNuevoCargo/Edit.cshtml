@@ -1,0 +1,361 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
+@{
+    ViewBag.Title = "Solicitud Nuevo Cargo";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#updateDialogConfirmacion').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                     $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
+                     $("#solicitudNuevoCargoForm").serialize(),
+                     function (respuesta) {
+                         if (respuesta.Resultado) {
+                            $("#updateDialogConfirmacion").dialog("close");
+                            $("#spanMensaje").html("Solicitud enviada exitosamente");
+                            $("#divMensaje").dialog({
+                                title: 'SAN PABLO',
+                                modal: true,
+                                buttons: {
+                                    "Ok": function () {actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
+                                }
+                            });
+                          }
+                          else {
+                             mensajeResultado(respuesta.Mensaje);
+                          }
+                     });
+                 },
+                 "Cancelar": function () {
+                     $(this).dialog("close");
+                  }
+            }
+         });
+
+        $('select#Dependencias').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SolicitudNuevoCargo_IdeArea").empty();
+            $("select#SolicitudNuevoCargo_IdeArea").append("<option value='00'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#Departamentos").empty();
+                    $("select#Departamentos").append("<option value='00'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Departamentos").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+        $('select#Departamentos').change(function () {
+            var ideDepartamento = $(this).val();        
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SolicitudNuevoCargo_IdeArea").empty();
+                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='00'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudNuevoCargo_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+        
+    });
+
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
+
+    function irATab(tab) {
+        $('a[href=#' + tab + ']').tab('show');
+    }
+
+    function mostrarAprobarDesaprobar() {
+        $('#modalAprobarRechazar').modal('show');
+    }
+
+    function mostrarConfirmacion() {
+        var dialogDiv = $('#updateDialogConfirmacion');
+            dialogDiv.dialog('open');
+    }
+
+    function ocultarAprobarDesaprobar() {
+        $('#modalAprobarRechazar').modal('hide');
+    }
+
+    function mensajeResultado(mensaje) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
+    }
+    function deshabilita() {
+        document.getElementById('idB1').style.display = "none";
+        //$('#taobservacionaprobacion').modal('hide');
+    }
+    function habilita() {
+        //$('#taobservacionaprobacion').modal('show');
+        document.getElementById('idB1').style.display = "block";
+    }
+    function validarFormulario() {
+        if ($("#solicitudNuevoCargoForm").validate().form()) {
+            mostrarConfirmacion();
+        }
+    }
+    function actualizarCodigo(codigo) {
+        $.ajax({
+            data: { codigo: codigo },
+            type: "POST",
+            url: '@Url.Action("recuperarCodigoSolicitud", "SolicitudNuevoCargo")',
+            traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val(data.Mensaje);
+                    } else {
+                        mensajeResultado(data.Mensaje);
+                    }
+                }
+        });
+
+    }
+
+</script>
+}
+@using (Html.BeginForm("Edit", "SolicitudNuevoCargo", FormMethod.Post, new { @id = "solicitudNuevoCargoForm" }))
+{
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Solicitud Nuevo Cargo</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                   @* @Html.DisplayTextFor(Model=>Model.SolicitudNuevoCargo.EstadoActivo, new {@class="btn btn-primary btn-small disabled", @disabled="disabled"})*@
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                </div>
+            </div>
+            
+                <table  class="formulario-busqueda">
+                    <tbody>
+                        <tr class="formulario-fila">
+                            <td></td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Solicitud</label>
+                                    <div class="controles">
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled",@style="text-transform: uppercase" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Código de Cargo</label>
+                                    <div class="controles">
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase" })
+                                    </div>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="formulario-fila">
+                            <td></td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Cargo</label>
+                                    <div class="controles">
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { @style="text-transform: uppercase" })
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NombreCargo)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="selectError">Dependencia</label>
+                                    <div class="controles">
+                                         @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Dependencias))
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr class="formulario-fila">
+                            <td></td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Descripción</label>
+                                    <div class="controles">
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { @style="text-transform: uppercase" })
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                             <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Departamento</label>
+                                    <div class="controles">
+                                        @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Departamentos))
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="formulario-fila">
+                            <td></td>
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Nro. Posiciones</label>
+                                    <div class="controles">
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class ="input-mini"})
+                                    </div>
+                                </div>
+                            </td> 
+                            <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Área</label>
+                                    <div class="controles">
+                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                        </div>
+                                   </div>
+                                </div>
+                            </td>  
+                                      
+                        </tr>
+                        <tr class="formulario-fila">
+                        <td class="span5">
+                                <div class="">
+                                    <label class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)</label>
+                                    <div class="controles">
+                                        @Html.DropDownListFor(model =>model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion",Model.SolicitudNuevoCargo.TipoRangoSalarial ))
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial)
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>  
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+            <h5>Perfil</h5>
+            
+            <div>
+                <div class="grilla-opciones">
+                <h6>Estudios</h6>
+                <div style="clear:both"></div>
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
+                </div>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Competencias</h6>
+                <div style="clear:both"></div>
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
+                </div>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Funciones</h6>
+                <div style="clear:both"></div>
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
+                </div>
+                </div>
+            </div>
+            <div>
+                <div class="grilla-opciones">
+                <h6>Observaciones adicionales</h6>
+                <div style="clear:both"></div>
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase" })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
+                </div>
+                </div>
+            </div>
+            <div class="form-actions">     
+                <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")" onclick="irATab('G');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
+                <a class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
+
+                
+                  
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="modalAprobarRechazar" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5>Aprobación/Rechazo</h5>
+    </div>
+    
+    <div class="modal-body">
+        <br />
+        <input type="radio" name="Aprob/rech" value="Aprobar"  onclick="deshabilita()"/><span>  Aprobar  </span>
+        <input type="radio" name="Aprob/rech" value="Rechazar" checked onclick="habilita()"/><span>  Rechazar  </span>
+        <div></div>
+        <div class="modal-body" id=idB1>
+        <label>Comentarios</label>
+        <textarea name="comentario"  class="input-porce" id="taobservacionaprobacion" rows="3"  ></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" onclick="ocultarAprobarDesaprobar();">Cancelar</a>
+        <a href="#" class="btn btn-info">Enviar</a>
+    </div>
+</div>
+
+}    
+<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>    
+    

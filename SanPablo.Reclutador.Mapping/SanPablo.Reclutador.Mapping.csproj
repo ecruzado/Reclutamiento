@@ -52,12 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternativaMap.cs" />
+    <Compile Include="AreaMap.cs" />
     <Compile Include="CategoriaMap.cs" />
     <Compile Include="ConocimientoGeneralPostulanteMap.cs" />
     <Compile Include="CargoMap.cs" />
     <Compile Include="CentroEstudioMap.cs" />
     <Compile Include="CompetenciaCargoMap.cs" />
     <Compile Include="ConocimientoGeneralCargoMap.cs" />
+    <Compile Include="LogSolicitudNuevoCargoMap.cs" />
+    <Compile Include="SolicitudNuevoCargoMap.cs" />
+    <Compile Include="DepartamentoMap.cs" />
+    <Compile Include="DependenciaMap.cs" />
     <Compile Include="EvaluacionCargoMap.cs" />
     <Compile Include="OfrecemosCargoMap.cs" />
     <Compile Include="OpcionMap.cs" />

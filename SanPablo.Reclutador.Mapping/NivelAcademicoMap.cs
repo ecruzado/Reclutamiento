@@ -15,6 +15,7 @@
             Map(x => x.TipoEducacion, "TIPEDUCACION");
             Map(x => x.TipoAreaEstudio, "TIPAREAESTUDIO");
             Map(x => x.TipoNivelAlcanzado, "TIPNIVELCANZADO");
+            Map(x => x.CicloSemestre, "CICLOSEMESTRE");
             Map(x => x.PuntajeNivelEstudio, "PUNTNIVESTUDIO");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");

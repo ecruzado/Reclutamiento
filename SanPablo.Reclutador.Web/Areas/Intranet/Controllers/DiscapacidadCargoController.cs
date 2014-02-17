@@ -102,15 +102,18 @@
                     discapacidadCargo.Cargo.IdeCargo = IdeCargo;
 
                     _discapacidadCargoRepository.Add(discapacidadCargo);
+                    _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad,0, IdeCargo);
                 }
                 else
                 {
                     var discapacidadCargoActualizar = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == discapacidadCargo.IdeDiscapacidadCargo);
+                    int valorEditar = discapacidadCargoActualizar.PuntajeDiscapacidad;
                     discapacidadCargoActualizar.TipoDiscapacidad = discapacidadCargo.TipoDiscapacidad;
                     discapacidadCargoActualizar.PuntajeDiscapacidad = discapacidadCargo.PuntajeDiscapacidad;
                     discapacidadCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     discapacidadCargoActualizar.FechaModificacion = FechaModificacion;
                     _discapacidadCargoRepository.Update(discapacidadCargoActualizar);
+                    _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, valorEditar, IdeCargo);
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -142,10 +145,12 @@
         public ActionResult eliminarDiscapacidad(int ideDiscapacidad)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var discapacidadCargo = new DiscapacidadCargo();
             discapacidadCargo = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == ideDiscapacidad);
+            int valorEliminar = discapacidadCargo.PuntajeDiscapacidad;
             _discapacidadCargoRepository.Remove(discapacidadCargo);
+            _discapacidadCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 
             return result;
         }

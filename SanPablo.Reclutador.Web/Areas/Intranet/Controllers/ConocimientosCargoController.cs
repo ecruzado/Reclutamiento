@@ -105,10 +105,12 @@
                     conocimientoGeneralCargo.Cargo.IdeCargo = IdeCargo;
 
                     _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
+                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento,0, IdeCargo, "Ofimatica");
                 }
                 else
                 {
                     var ofimaticaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoGeneralCargo.IdeConocimientoGeneralCargo);
+                    int valorEliminar = ofimaticaCargoActualizar.PuntajeConocimiento;
                     ofimaticaCargoActualizar.TipoConocimientoOfimatica = conocimientoGeneralCargo.TipoConocimientoOfimatica;
                     ofimaticaCargoActualizar.TipoNombreOfimatica = conocimientoGeneralCargo.TipoNombreOfimatica;
                     ofimaticaCargoActualizar.TipoNivelConocimiento = conocimientoGeneralCargo.TipoNivelConocimiento;
@@ -116,6 +118,7 @@
                     ofimaticaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     ofimaticaCargoActualizar.FechaModificacion = FechaModificacion;
                     _conocimientoCargoRepository.Update(ofimaticaCargoActualizar);
+                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Ofimatica");
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -154,10 +157,12 @@
         public ActionResult eliminarOfimatica(int ideOfimatica)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var ofimaticaEliminar = new ConocimientoGeneralCargo();
             ofimaticaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOfimatica);
+            int valorEliminar = ofimaticaEliminar.PuntajeConocimiento;
             _conocimientoCargoRepository.Remove(ofimaticaEliminar);
+            _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Ofimatica");
 
             return result;
         }
@@ -237,10 +242,12 @@
                     idiomaCargo.Cargo.IdeCargo = IdeCargo;
 
                     _conocimientoCargoRepository.Add(idiomaCargo);
+                    _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento,0,IdeCargo, "Idioma");
                 }
                 else
                 {
                     var idiomaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == idiomaCargo.IdeConocimientoGeneralCargo);
+                    int valorEliminar = idiomaCargoActualizar.PuntajeConocimiento;
                     idiomaCargoActualizar.TipoConocimientoIdioma = idiomaCargo.TipoConocimientoIdioma;
                     idiomaCargoActualizar.TipoIdioma = idiomaCargo.TipoIdioma;
                     idiomaCargoActualizar.TipoNivelConocimiento = idiomaCargo.TipoNivelConocimiento;
@@ -248,6 +255,8 @@
                     idiomaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     idiomaCargoActualizar.FechaModificacion = FechaModificacion;
                     _conocimientoCargoRepository.Update(idiomaCargo);
+                    _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Idioma");
+
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -284,10 +293,12 @@
         public ActionResult eliminarIdioma(int ideIdioma)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var idiomaEliminar = new ConocimientoGeneralCargo();
             idiomaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideIdioma);
+            int valorEliminar = idiomaEliminar.PuntajeConocimiento;
             _conocimientoCargoRepository.Remove(idiomaEliminar);
+            _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Idioma");
 
             return result;
         }
@@ -369,10 +380,12 @@
                     conocimientoCargo.Cargo.IdeCargo = IdeCargo;
 
                     _conocimientoCargoRepository.Add(conocimientoCargo);
+                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento,0,IdeCargo, "Otros");
                 }
                 else
                 {
                     var otrosConocimientosActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoCargo.IdeConocimientoGeneralCargo);
+                    int valorEliminar = otrosConocimientosActualizar.PuntajeConocimiento;
                     otrosConocimientosActualizar.TipoConocimientoGeneral = conocimientoCargo.TipoConocimientoGeneral;
                     otrosConocimientosActualizar.TipoNombreConocimientoGeneral = conocimientoCargo.TipoNombreConocimientoGeneral;
                     otrosConocimientosActualizar.TipoNivelConocimiento = conocimientoCargo.TipoNivelConocimiento;
@@ -380,6 +393,8 @@
                     otrosConocimientosActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     otrosConocimientosActualizar.FechaModificacion = FechaModificacion;
                     _conocimientoCargoRepository.Update(otrosConocimientosActualizar);
+                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Otros");
+
                 }
 
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -417,10 +432,12 @@
         public ActionResult eliminarOtrosConocimientos(int ideOtrosConocimientos)
         {
             ActionResult result = null;
-
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var otrosConocimientosEliminar = new ConocimientoGeneralCargo();
             otrosConocimientosEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOtrosConocimientos);
+            int valorEliminar = otrosConocimientosEliminar.PuntajeConocimiento;
             _conocimientoCargoRepository.Remove(otrosConocimientosEliminar);
+            _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Otros");
 
             return result;
         }

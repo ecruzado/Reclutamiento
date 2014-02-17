@@ -1,0 +1,105 @@
+﻿namespace SanPablo.Reclutador.Web.App_Start
+{
+    using Autofac;
+    using SanPablo.Reclutador.Repository;
+    using SanPablo.Reclutador.Repository.Interface;
+
+    public class RepositoryComponentModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<SedeRepository>()
+                .As<ISedeRepository>();
+
+            builder.RegisterType<PostulanteRepository>()
+                .As<IPostulanteRepository>();
+
+            builder.RegisterType<DetalleGeneralRepository>()
+                .As<IDetalleGeneralRepository>();
+
+            builder.RegisterType<EstudioPostulanteRepository>()
+                .As<IEstudioPostulanteRepository>();
+
+            builder.RegisterType<UbigeoRepository>()
+                .As<IUbigeoRepository>();
+
+            builder.RegisterType<CriterioRepository>()
+                .As<ICriterioRepository>();
+
+            builder.RegisterType<AlternativaRepository>()
+                .As<IAlternativaRepository>();
+
+            builder.RegisterType<CategoriaRepository>()
+                .As<ICategoriaRepository>();
+
+            builder.RegisterType<SubcategoriaRepository>()
+                .As<ISubcategoriaRepository>();
+
+            builder.RegisterType<CriterioPorSubcategoriaRepository>()
+                .As<ICriterioPorSubcategoriaRepository>();
+
+            builder.RegisterType<ExperienciaPostulanteRepository>()
+                .As<IExperienciaPostulanteRepository>();
+
+            builder.RegisterType<ParientePostulanteRepository>()
+                .As<IParientePostulanteRepository>();
+
+            builder.RegisterType<ConocimientoGeneralPostulanteRepository>()
+                .As<IConocimientoGeneralPostulanteRepository>();
+
+            builder.RegisterType<ParientePostulanteRepository>()
+                .As<IParientePostulanteRepository>();
+
+            builder.RegisterType<DiscapacidadPostulanteRepository>()
+                .As<IDiscapacidadPostulanteRepository>();
+
+            builder.RegisterType<ExamenRepository>()
+               .As<IExamenRepository>();
+
+            builder.RegisterType<ExamenPorCategoriaRepository>()
+               .As<IExamenPorCategoriaRepository>();
+
+            builder.RegisterType<CargoRepository>()
+                .As<ICargoRepository>();
+
+            builder.RegisterType<CompetenciasCargoRepository>()
+                .As<ICompetenciaCargoRepository>();
+
+            builder.RegisterType<NivelAcademicoCargoRepository>()
+                .As<INivelAcademicoCargoRepository>();
+
+            builder.RegisterType<CentroEstudioCargoRepository>()
+                .As<ICentroEstudioCargoRepository>();
+
+            builder.RegisterType<OfrecemosCargoRepository>()
+                .As<IOfrecemosCargoRepository>();
+
+            builder.RegisterType<HorarioCargoRepository>()
+                .As<IHorarioCargoRepository>();
+
+            builder.RegisterType<UbigeoCargoRepository>()
+                .As<IUbigeoCargoRepository>();
+
+            builder.RegisterType<ConocimientoGeneralCargoRepository>()
+                .As<IConocimientoGeneralCargoRepository>();
+
+            builder.RegisterType<ExperienciaCargoRepository>()
+                .As<IExperienciaCargoRepository>();
+
+            builder.RegisterType<DiscapacidadCargoRepository>()
+                .As<IDiscapacidadCargoRepository>();
+
+<<<<<<< HEAD
+            builder.RegisterType<EvaluacionCargoRepository>()
+                .As<IEvaluacionCargoRepository>();
+=======
+            builder.RegisterType<RolRepository>()
+               .As<IRolRepository>();
+
+            builder.RegisterType<RolOpcionRepository>()
+              .As<IRolOpcionRepository>();
+>>>>>>> 801e162f6f0097535b53b22882662c56394396ac
+
+        }
+    }
+}

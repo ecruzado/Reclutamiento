@@ -4,5 +4,6 @@
 
     public interface IDiscapacidadCargoRepository : IRepository<DiscapacidadCargo>
     {
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo);
     }
 }

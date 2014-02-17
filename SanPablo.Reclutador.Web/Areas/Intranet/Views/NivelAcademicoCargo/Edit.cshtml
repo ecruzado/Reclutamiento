@@ -5,9 +5,24 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-               
+
+        var tipoNivelAcad = $('#NivelAcademico_TipoNivelAlcanzado').val();
+        habilitarTextOtro(tipoNivelAcad);
+
+        $('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
+            var tipoNivelAcad = $(this).val();
+            habilitarTextOtro(tipoNivelAcad);
+        })
         
     });
+    function habilitarTextOtro(tipoNivelAcad) {
+        if ((tipoNivelAcad == '00') || (tipoNivelAcad == '02') ) {
+            $('#NivelAcademico_CicloSemestre').attr('disabled', 'disabled');
+        }
+        else {
+            $('#NivelAcademico_CicloSemestre').removeAttr('disabled');
+        }
+    }
 </script>
 
 
@@ -51,6 +66,17 @@
                  @Html.DropDownListFor(model => model.NivelAcademico.TipoNivelAlcanzado, new SelectList(Model.NivelesAlcanzados, "Valor", "Descripcion", Model.NivelAcademico.TipoNivelAlcanzado))
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.TipoNivelAlcanzado)
+                </div>
+            </td>
+       </tr>
+           <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>
+            </td>
+            <td class="colInput">
+                 @Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini" })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.NivelAcademico.CicloSemestre)
                 </div>
             </td>
        </tr>

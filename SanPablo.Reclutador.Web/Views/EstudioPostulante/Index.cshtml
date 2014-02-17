@@ -57,7 +57,7 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        var result = $('form').valid();
+                        var result = $('#estudioPostulanteForm').valid();
                         if (result)
                         {
                             $.post('@Url.Action("Edit", "EstudioPostulante")',

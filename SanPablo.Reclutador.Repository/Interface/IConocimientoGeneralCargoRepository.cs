@@ -4,5 +4,7 @@
 
     public interface IConocimientoGeneralCargoRepository : IRepository<ConocimientoGeneralCargo>
     {
+        void actualizarPuntaje(int valor, int valorEliminado, int IdeCargo, string tipoConocimiento);
+        
     }
 }
