@@ -66,10 +66,10 @@
             colModel: [
                      { name: 'IdUsuarolSede', index: 'IdUsuarolSede', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'IdSede', index: 'IdSede', align: 'left', editable: false, sortable: false, hidden: true },
-                     { name: 'DescSede', index: 'DescSede', align: 'left', sortable: false, editable: false, width: 350 },
+                     { name: 'DescSede', index: 'DescSede', align: 'left', sortable: false, editable: false, width: 400 },
                      { name: 'IdUsuario', index: 'IdUsuario', align: 'left', sortable: false, editable: false, hidden: true },
                      { name: 'IdRol', index: 'IdRol', align: 'left', sortable: false,  editable: false, hidden: true },
-                     { name: 'DescRol', index: 'DescOpcion', align: 'left', sortable: false, width: 350, editable: false }
+                     { name: 'DescRol', index: 'DescOpcion', align: 'left', sortable: false, width: 400, editable: false }
             ],
 
             pager: jQuery('#grdPagerUsuario'),
@@ -95,138 +95,107 @@
 
     });
         
+    
+    $('#btnEliminar').click(function () {
 
-@*        $('#btnNuevo').click(function () {
-            var codRol = $("#rol_IdRol").val();
-
-            if (codRol != null && codRol > 0) {
-                mostrarOpciones(codRol);
-            } else {
-                MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
-
-        });
-
-
-        $('#btnEliminar').click(function () {
-
-            var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
-            if (selr != null && selr > 0) {
-                $('#confirmacion').dialog('open');
-            } else {
-                MostrarMensaje('Seleccione una opción', "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
-
-        });
-
-
-        $("#spanConfirmacion").html("¿Desea eliminar el registro?")
-        $('#confirmacion').dialog({
-            autoOpen: false,
-            modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
-            buttons: {
-                "Si": function () {
-                    var codRol = $("#rol_IdRol").val();
-
-                    var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
-                    var rowData = jQuery('#grdListOpciones').jqGrid('getRowData', selr);
-                    var codOpcion = rowData.IDOPCION;
-
-                    if (codOpcion != null && codOpcion > 0) {
-                        EliminarOpcion(codRol, codOpcion);
-                    } else {
-                        MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
-                    }
-                    $(this).dialog("close");
-                },
-                "No": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-
-        function EliminarOpcion(codRol, codOpcion) {
-
-            $.ajax({
-                data: {
-                    id: codRol,
-                    codOp: codOpcion
-                },
-                type: "POST",
-                url: '@Url.Action("EliminarOpcion", "Rol")',
-                traditional: true,
-                success: function (data) {
-                    if (data.Resultado == false) {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                    } else {
-                        $('#grdListOpciones').trigger('reloadGrid');
-                    }
-                }
-            });
-
+        var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+        if (selr != null && selr > 0) {
+            $('#confirmacion').dialog('open');
+        } else {
+            MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
         }
-
-
-        $("#spanConfSelc").html("¿Desea agregar las opciones?")
-        $('#confSelc').dialog({
-            autoOpen: false,
-            modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
-            buttons: {
-                "Si": function () {
-                    $.ajax({
-                        data: {
-                            selc: $("#grdListaOpcionPopup").jqGrid('getGridParam', 'selarrrow'),
-                            codRol: $('#IdRoll').val()
-                        },
-                        type: "POST",
-                        url: '@Url.Action("GetListaOpcion", "Opcion")',
-                        traditional: true,
-                        success: function () {
-                            $('#confSelc').dialog("close");
-                            $('#opcionDialog').dialog("close");
-                            $('#grdListOpciones').trigger('reloadGrid');
-
-                        }
-                    });
-                },
-                "No": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $('#opcionDialog').dialog({
-            autoOpen: false,
-            width: 800,
-            height: 750,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Grabar": function () {
-                    $('#confSelc').dialog('open');
-
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
 
     });
 
-    function mostrarOpciones(id) {
-        var dialogDiv = $('#opcionDialog');
-        $.get("/Intranet/Opcion/PopupOpcion/" + id, function (data) {
-            dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#opcionDialog"));
-            dialogDiv.dialog('open');
-        });
-        return false;
-    }*@
+    $("#spanConfirmacion").html("¿Desea eliminar el registro?")
+    $('#confirmacion').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+              
+                var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+              
+                if (selr != null && selr > 0) {
+                    EliminarRolSede(selr);
+                } else {
+                    MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+                $(this).dialog("close");
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
+
+
+    $('#btnNuevo').click(function () {
+        var idUsu = $("#Usuario_IdUsuario").val();
+
+        var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+
+        if (idUsu != null && idUsu > 0) {
+            mostrarPopup(idUsu,0);
+        } else {
+            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
+    $('#popupDialog').dialog({
+        autoOpen: false,
+        width: 400,
+        height: 400,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Grabar": function () {
+                $('#confSelc').dialog('open');
+              
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+            }
+        }
+     });
+
+
+
+    $("#spanConfSelc").html("¿Desea guardar los cambios?")
+    $('#confSelc').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+                if ($("#frmPopupSedeRol").validate().form()) {
+                    $.ajax({
+                        data: $("#frmPopupSedeRol").serialize(),
+                        type: "POST",
+                        url: '@Url.Action("SetPopupSedeRol", "Usuario")',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado) {
+
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                $('#confSelc').dialog("close");
+                                $('#popupDialog').dialog("close");
+                                $('#grdListUsuario').trigger('reloadGrid');
+                            }
+                        }
+                    });
+                }
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
 
 
     function MostrarMensaje(mensaje, titulo) {
@@ -237,9 +206,11 @@
        
         if ($("#frmEdicionUsuario").validate().form()) {
             var codUsuario = $("#Usuario_CodUsuario").val();
+            var codAccion = '@Model.Accion';
             $.ajax({
                 data: {
-                    id: codUsuario
+                    id: codUsuario,
+                    accion: codAccion
                 },
                 type: "POST",
                 url: '@Url.Action("valCodUsuario", "Usuario")',
@@ -293,20 +264,43 @@
 
 
     function Editar(selr) {
+       window.location = '@Url.Action("Edit", "Usuario", new { id = ""})' + '/' + selr;    
        
-           $.ajax({
-                type: "POST",
-                url: '@Url.Action("Redirec", "Usuario")',
-                data: {
-                   id: selr
-                 },
+    }
+
+
+    function mostrarPopup(idUsu, selr) {
+        var dialogDiv = $('#popupDialog');
+
+        $.get('@Url.Action("PopupSedeRol", "Usuario")?id=' + idUsu + "&idSel=" + selr, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+
+    function EliminarRolSede(selc) {
+
+        $.ajax({
+            data: {
+                id: selc
+            },
+            type: "POST",
+            url: '@Url.Action("EliminaRolSede", "Usuario")',
                 traditional: true,
                 success: function (data) {
-                   
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        $('#grdListUsuario').trigger('reloadGrid');
+                    }
                 }
             });
-        
-    }
+
+        }
 
 
 </script>
@@ -552,3 +546,5 @@
 <div id="opcionDialog" title="Lista de Opciones"></div>
 <div id="confSelc"><span id="spanConfSelc"></span></div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="popupDialog" title="Rol"></div>
+

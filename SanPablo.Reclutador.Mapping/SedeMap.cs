@@ -18,6 +18,9 @@
             //HasMany(x => x.Empleados)
             //    .Inverse()
             //    .Cascade.All();
+
+
+
             Table("SEDE");
         }
     }

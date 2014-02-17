@@ -187,6 +187,7 @@
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioRolSedeViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
     <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />

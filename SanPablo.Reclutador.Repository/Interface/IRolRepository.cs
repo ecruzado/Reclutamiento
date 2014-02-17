@@ -16,5 +16,7 @@
     {
 
         int EliminaRol(int idRol);
+
+        IList<Rol> GetByTipRol();
     }
 }

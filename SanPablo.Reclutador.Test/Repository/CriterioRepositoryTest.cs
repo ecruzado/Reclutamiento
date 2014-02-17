@@ -117,5 +117,12 @@ namespace SanPablo.Reclutador.Test.Repository
             entidad.CodRol = "roltest";
             repository.Add(entidad);
         }
+
+        [TestMethod]
+        public void testing()
+        {
+            var repository = new UsuarioVistaRepository(NHibernateHelper.OpenSession());
+            var lista = repository.All();
+        }
     }
 }

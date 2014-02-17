@@ -13,6 +13,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdSede { get; set; }
         public virtual int IdUsuario { get; set; }
         public virtual int IdRol { get; set; }
+        public virtual string RolDes { get; set; }
+        public virtual string SedeDes { get; set; }
     
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="UbigeoMap.cs" />
     <Compile Include="UsuarioMap.cs" />
     <Compile Include="UsuarioRolSedeMap.cs" />
+    <Compile Include="UsuarioVistaMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Fakes Include="Fakes\FluentNHibernate.fakes" />
