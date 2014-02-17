@@ -173,6 +173,7 @@
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />

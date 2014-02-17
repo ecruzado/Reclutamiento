@@ -147,11 +147,9 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
-<<<<<<< HEAD
+    <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
-=======
     <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
->>>>>>> 801e162f6f0097535b53b22882662c56394396ac
     <Compile Include="Areas\Intranet\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CategoriaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\CentroEstudioCargoController.cs" />
@@ -175,6 +173,7 @@
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
@@ -190,6 +189,8 @@
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioRolSedeViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
     <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
     <Compile Include="Controllers\EstudioPostulanteController.cs" />
@@ -280,7 +281,6 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Views\Shared\PerfilCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
@@ -300,7 +300,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaNuevo.cshtml" />
@@ -346,13 +346,17 @@
     <Content Include="Areas\Intranet\Views\Perfil\Conocimientos.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\Discapacidad.cshtml" />
     <Content Include="Areas\Intranet\Views\Perfil\ConfiguracionPerfil.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
-=======
     <Content Include="Areas\Intranet\Views\Rol\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Opcion\PopupOpcion.cshtml" />
->>>>>>> 801e162f6f0097535b53b22882662c56394396ac
+    <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
+=======
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+>>>>>>> 9314dbd8bcf970894e8000ce68d0d562a9416d89
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
