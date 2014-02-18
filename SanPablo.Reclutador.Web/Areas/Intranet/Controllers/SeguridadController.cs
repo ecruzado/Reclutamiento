@@ -277,12 +277,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
             objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim() 
-                                         && x.ClaveUsuario == codPass.Trim());
+                                         && x.CodContrasena == codPass.Trim());
+
             if (objUsuario!=null)
             {
                 if (objUsuario.IdUsuario!=null)
                 {
                     objJsonMensaje.Resultado = true;
+                    objJsonMensaje.IdDato = Convert.ToInt32(codRol);
                 }
             }
 
@@ -290,6 +292,31 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJsonMensaje);
 
         }
+
+
+        /// <summary>
+        /// obtiene el el menu del usuario por el rol
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult GetMenu(string id) {
+
+            SeguridadViewModel objModel = new SeguridadViewModel();
+
+            JsonMessage objMessage = new JsonMessage();
+            MenuItem objMenuItem = new MenuItem();
+
+            objModel.listaMenu =new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id)));
+            objModel.listaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id)));
+
+            Session["ListaMenu"] = objModel.listaMenu;
+            Session["listaPadre"] = objModel.listaPadre;
+            
+            return RedirectToAction("ListaReemplazo", "SolicitudCargo");
+
+        
+        }
+
 
     }
 }

@@ -154,7 +154,7 @@
                     traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
-                           //carga de menus
+                           window.location = '@Url.Action("GetMenu", "Seguridad", new { id = ""})' + '/' + data.IdDato;
                         } else {
                             MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                         }

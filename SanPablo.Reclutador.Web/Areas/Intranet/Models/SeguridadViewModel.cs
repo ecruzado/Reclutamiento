@@ -18,5 +18,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string Accion { get; set; }
         public string Visualicion { get; set; }
         public string IndSede { get; set; }
+        public List<MenuItem> listaMenu { get; set; }
+        public List<MenuPadre> listaPadre { get; set; }
     }
 }
