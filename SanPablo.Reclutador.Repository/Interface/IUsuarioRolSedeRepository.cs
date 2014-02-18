@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Repository.Interface
     public interface IUsuarioRolSedeRepository : IRepository<UsuarioRolSede>
     {
         List<Rol> GetListaRol(int idUsuario);
-
+        List<Sede> GetListaSede(int idUsuario, int codRol);
     }
 
 }

@@ -12,8 +12,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     {
         public Usuario Usuario { get; set; }
         public Rol Rol { get; set; }
+        public Sede Sede { get; set; }
         public virtual List<Rol> listaRol { get; set; }
         public virtual List<Sede> listaSede { get; set; }
         public string Accion { get; set; }
+        public string Visualicion { get; set; }
+        public string IndSede { get; set; }
     }
 }

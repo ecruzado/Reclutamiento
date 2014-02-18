@@ -55,9 +55,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SeguridadViewModel model = new SeguridadViewModel();
             model.Accion = Accion.Nuevo;
             model.listaRol = new List<Rol>();
+            model.listaSede = new List<Sede>();
 
             model.Usuario = new Usuario();
             model.Rol = new Rol();
+            model.Sede = new Sede();
             return View(model);
         }
 
@@ -68,19 +70,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
 
-       
-        //public ActionResult getRol(string model)
-        //{
-        //    JsonMessage objJsonMensaje = new JsonMessage();
-        //    Usuario objUsuario = new Usuario();
-
-
-
-        //    return View();
-        //}
-
-
-       
         public ActionResult getRol(string id)
         {
             JsonMessage objJsonMensaje = new JsonMessage();
@@ -94,7 +83,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (objUsuario!=null)
                 {
 
-                    model = Inicializar(objUsuario);
+                    model = InicializarRol(objUsuario);
                     
                 }
             }
@@ -106,7 +95,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             
         }
 
-        private SeguridadViewModel Inicializar(Usuario objUsuario)
+        private SeguridadViewModel InicializarRol(Usuario objUsuario)
         {
             var objModel = new SeguridadViewModel();
             objModel.Usuario = new Usuario();
@@ -130,8 +119,177 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return objModel;
         }
 
-      
 
+        /// <summary>
+        /// valida que existan sedes para el usuario y el rol
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="codRol"></param>
+        /// <returns></returns>
+        public ActionResult validaSede(string id, string codRol)
+        {
+            JsonMessage objJsonMensaje = new JsonMessage();
+            Usuario objUsuario = new Usuario();
+            SeguridadViewModel model = new SeguridadViewModel();
+
+            if (id != null)
+            {
+
+                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                if (objUsuario != null)
+                {
+
+                    model = InicializarSede(objUsuario, codRol);
+
+                }
+            }
+            if (Visualicion.SI.Equals(model.Visualicion))
+            {
+                objJsonMensaje.Objeto = model.listaSede;
+                objJsonMensaje.Resultado = true;
+            }
+            else
+            {
+                objJsonMensaje.Resultado = false;
+            }
+           
+           
+            return Json(objJsonMensaje);
+
+        }
+
+
+        /// <summary>
+        /// Obtiene las sede por usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult getSede(string id,string codRol)
+        {
+            JsonMessage objJsonMensaje = new JsonMessage();
+            Usuario objUsuario = new Usuario();
+            SeguridadViewModel model = new SeguridadViewModel();
+
+            if (id != null)
+            {
+
+                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                if (objUsuario != null)
+                {
+
+                    model = InicializarSede(objUsuario, codRol);
+
+                }
+            }
+
+            objJsonMensaje.Objeto = model.listaSede;
+            objJsonMensaje.Resultado = true;
+            //return Json(objJsonMensaje);
+            return Json(model.listaSede);
+
+        }
+
+        /// <summary>
+        /// Inicializa las Sede del Usuario
+        /// </summary>
+        /// <param name="objUsuario"></param>
+        /// <returns></returns>
+        private SeguridadViewModel InicializarSede(Usuario objUsuario, string codRol)
+        {
+            var objModel = new SeguridadViewModel();
+            objModel.Usuario = new Usuario();
+
+            objModel.listaSede = new List<Sede>(_usuarioRolSedeRepository.GetListaSede(objUsuario.IdUsuario, Convert.ToInt32(codRol)));
+
+            if (objModel.listaSede.Count > 0)
+            {
+                objModel.Accion = Accion.Editar;
+                objModel.Visualicion = Visualicion.SI;
+            }
+            else
+            {
+                objModel.Accion = Accion.Nuevo;
+                objModel.Visualicion = Visualicion.NO;
+                objModel.listaSede = new List<Sede>();
+            }
+
+            objModel.listaSede.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "Seleccionar" });
+
+            objModel.Sede = new Sede();
+
+            return objModel;
+        }
+
+
+        /// <summary>
+        /// valida el logeo del usaurio
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Logon(string id, string codPass, string codRol, string codSede, string indSede)
+                        
+        {
+            JsonMessage objJsonMensaje = new JsonMessage();
+            Usuario objUsuario = new Usuario();
+            SeguridadViewModel model = new SeguridadViewModel();
+            objJsonMensaje.Resultado = false;
+
+            int reqSede = Convert.ToInt32(indSede);
+
+            if (String.IsNullOrEmpty(id) )
+            {
+                objJsonMensaje.Mensaje = "Ingrese un usuario";
+                return Json(objJsonMensaje);
+            }
+            
+            if (String.IsNullOrEmpty(codPass))
+            {
+                objJsonMensaje.Mensaje = "Ingrese un password";
+                return Json(objJsonMensaje);
+            } 
+            
+            if (String.IsNullOrEmpty(codRol))
+            {
+                objJsonMensaje.Mensaje = "Seleccione un roll";
+                return Json(objJsonMensaje);
+            }
+
+            if (Convert.ToInt32(codRol)==0)
+            {
+                objJsonMensaje.Mensaje = "Seleccione un roll";
+                return Json(objJsonMensaje);
+            }
+            
+
+            if (Convert.ToInt32(codRol) > 0 && reqSede > 0)
+            {
+                if (String.IsNullOrEmpty(codSede))
+                {
+                    objJsonMensaje.Mensaje = "Seleccione una sede";
+                    return Json(objJsonMensaje);
+                }
+                if ("0".Equals(codSede))
+                {
+                    objJsonMensaje.Mensaje = "Seleccione una sede";
+                    return Json(objJsonMensaje);
+                }
+            }
+
+
+            objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim() 
+                                         && x.ClaveUsuario == codPass.Trim());
+            if (objUsuario!=null)
+            {
+                if (objUsuario.IdUsuario!=null)
+                {
+                    objJsonMensaje.Resultado = true;
+                }
+            }
+
+            
+            return Json(objJsonMensaje);
+
+        }
 
     }
 }
