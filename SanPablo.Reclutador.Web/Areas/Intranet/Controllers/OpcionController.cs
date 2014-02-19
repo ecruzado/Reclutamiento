@@ -180,8 +180,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 for (int i = 0; i < selc.Count; i++)
                 {
 
-                    //objRolOpcion = new RolOpcion();
-                    //objRolOpcion.Opcion = new Opcion();
+                    
                     codItem = selc[i] == null ? 0 : selc[i];
 
                     var objOpcion = _opcionRepository.GetSingle(x => x.IDITEM == codItem);
@@ -200,9 +199,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         objRolOpcion = new RolOpcion();
                         objRolOpcion.IDROL = codigo;
                         objRolOpcion.IDOPCION = idOpcion;
-                        objRolOpcion.USRCREACION = "Usuario Session";
+                        objRolOpcion.USRCREACION = UsuarioActual.NombreUsuario;
                         objRolOpcion.FECCREACION = Hoy;
-                        objRolOpcion.USRMODIFICACION = "Usuario Session";
+                        objRolOpcion.USRMODIFICACION = UsuarioActual.NombreUsuario;
                         objRolOpcion.FECMODIFICACION = Hoy;
 
                         _rolOpcionRepository.Add(objRolOpcion);
