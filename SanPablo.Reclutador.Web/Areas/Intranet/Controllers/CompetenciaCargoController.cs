@@ -35,7 +35,7 @@
         [HttpPost]
         public JsonResult ListarCompetencias(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -69,7 +69,7 @@
         public ViewResult Edit()
         {
             var cargoViewModel = InicializarCompetencias();
-            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
             cargoViewModel.Competencia.Cargo = cargo;
             return View(cargoViewModel);
         }
@@ -87,7 +87,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Competencia")]CompetenciaCargo competenciaCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {

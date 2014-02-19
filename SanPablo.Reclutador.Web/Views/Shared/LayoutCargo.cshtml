@@ -102,7 +102,65 @@
         </div>
     </div>
 </div>
+
+<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
+
+<div id="divMensaje">
+    <span id="spanMensaje"></span>
+</div>    
+
 @section Scripts{ 
+
     @RenderSection("ScriptsCargo", required: false)
+
+<script type="text/javascript">
+    $('#updateDialogConfirmacion').dialog({
+        autoOpen: false,
+        width: 300,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Aceptar": function (e) {
+                $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
+                    $("#solicitudNuevoCargoForm").serialize(),
+                    function (respuesta) {
+                        if (respuesta.Resultado) {
+                            $("#updateDialogConfirmacion").dialog("close");
+                            $("#spanMensaje").html("Solicitud enviada exitosamente");
+                            $("#divMensaje").dialog({
+                                title: 'SAN PABLO',
+                                modal: true,
+                                buttons: {
+                                    "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
+                                }
+                            });
+                        }
+                        else {
+                            mensajeResultado(respuesta.Mensaje);
+                        }
+                    });
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+    });
+
+    function mostrarConfirmacion() {
+        var dialogDiv = $('#updateDialogConfirmacion');
+        dialogDiv.dialog('open');
+    }
+
+    function validarFormulario() {
+        if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
+            if ($("#solicitudNuevoCargoForm").validate().form()) {
+                mostrarConfirmacion();
+            }
+        }
+        else {
+            mensajeResultado("Solicitu en estado: 'INACTIVO'");
+        }
+    }
+</script>
 }
 

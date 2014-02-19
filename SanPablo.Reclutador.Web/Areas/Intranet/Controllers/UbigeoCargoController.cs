@@ -40,7 +40,7 @@
         [HttpPost]
         public virtual JsonResult ListaUbigeo(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -89,7 +89,7 @@
         public ActionResult Edit([Bind(Prefix = "Ubigeo")]UbigeoCargo ubigeoCargo)
         {
 
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {

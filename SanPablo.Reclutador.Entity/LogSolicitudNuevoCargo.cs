@@ -14,6 +14,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeSolicitudNuevoCargo { get; set; }
         public virtual string TipoEtapa { get; set; }
         public virtual string TipoSuceso { get; set; }
+        public virtual string RolResponsable { get; set; }
         public virtual string Observacion { get; set; }
   
         public virtual DateTime FechaSuceso { get; set; }

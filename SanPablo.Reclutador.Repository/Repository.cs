@@ -47,14 +47,11 @@
                     .SingleOrDefault();
         }
 
-       
-
         public IList<TEntity> GetBy(Expression<Func<TEntity, bool>> condition)
         {
             return _session.QueryOver<TEntity>()
                     .Where(condition)
                     .List();
-                  
         }
 
         public IList<TEntity> GetPaging(string sortField, bool ascending, int pageIndex, int pageSize)
@@ -71,7 +68,6 @@
                 if (!ascending) criteria.AddOrder(Order.Desc(sortField));
                 else criteria.AddOrder(Order.Asc(sortField));
             }
-
             return criteria.SetFirstResult(pageSize * (pageIndex - 1))
                     .SetMaxResults(pageSize)
                     .List<TEntity>();
@@ -97,22 +93,13 @@
 
         public int getMaxValue(string campo, Expression<Func<TEntity, bool>> condition)
         {
-            //return _session.QueryOver<TEntity>()
-            //        .Where(condition)
-            //        .Select(Projections.Max(campo))
-            //        .FutureValue<int>()
-            //         .Value;
-
             return _session.QueryOver<TEntity>()
                    .Where(condition)
                    .Select(Projections.Max(campo))
                    .SingleOrDefault<int>();
         }
+
        
-
-
-
-
 
     }
 

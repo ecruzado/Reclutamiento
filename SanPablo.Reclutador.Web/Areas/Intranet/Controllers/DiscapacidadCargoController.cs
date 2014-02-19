@@ -37,7 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaDiscapacidad(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -83,7 +83,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Discapacidad")]DiscapacidadCargo discapacidadCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -146,7 +146,7 @@
         public ActionResult eliminarDiscapacidad(int ideDiscapacidad)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var discapacidadCargo = new DiscapacidadCargo();
             discapacidadCargo = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == ideDiscapacidad);
             int valorEliminar = discapacidadCargo.PuntajeDiscapacidad;

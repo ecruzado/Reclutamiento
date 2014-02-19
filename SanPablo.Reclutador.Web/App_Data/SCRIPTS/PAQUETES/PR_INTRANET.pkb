@@ -294,12 +294,75 @@ BEGIN
    END IF;
      
    OPEN  p_cRetCursor FOR
-      SELECT   C.IDECARGO, C.CODCARGO, C.NOMCARGO, C.DESCARGO, AR.NOMAREA, D.NOMDEPARTAMENTO,DE.NOMDEPENDENCIA
+      SELECT   C.IDECARGO, C.CODCARGO, C.NOMCARGO, C.DESCARGO,C.NUMPOSICION, AR.NOMAREA, D.NOMDEPARTAMENTO,DE.NOMDEPENDENCIA
       FROM  CARGO C ,  AREA AR, DEPARTAMENTO D, DEPENDENCIA DE
       WHERE C.CODCARGO = nCodCargo
       AND AR.IDEDEPARTAMENTO = D.IDEDEPARTAMENTO
       AND D.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
       AND AR.IDEAREA = nIdeArea;
+  
+END SP_OBTENER_CARGO;  
+
+/* ------------------------------------------------------------
+    Nombre      : SP_CONSULTAR_DATOS_AREA
+    Proposito   : obtener los datos asociados al area: departamento, dependencia.
+    Referencias : Sistema de Reclutamiento y Selección de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      15/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea  IN AREA.IDEAREA%TYPE,
+                                  p_cRetCursor OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT AR.IDEAREA, AR.NOMAREA, DE.IDEDEPENDENCIA, DE.NOMDEPENDENCIA, DP.IDEDEPARTAMENTO, DP.NOMDEPARTAMENTO
+    FROM AREA AR, DEPENDENCIA DE, DEPARTAMENTO DP
+    WHERE AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
+    AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
+    AND AR.IDEAREA = p_ideArea;
+END SP_CONSULTAR_DATOS_AREA;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_CREAR_CARGO
+    Proposito   : Verificar si el cargo esta creado  o crear el
+                  registro y recuperar datos.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_SUCESOS_SOLCARGO(p_suceso  IN VARCHAR2(25),
+                              p_ideCargo IN CARGO.IDECARGO%TYPE,
+                              p_cRetCursor    OUT SYS_REFCURSOR)IS
+
+nIdeSolicitud  SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE;
+nIdeCargo  CARGO.IDECARGO%TYPE;
+nNomCargo  CARGO.NOMCARGO%TYPE;
+nDescCargo CARGO.DESCARGO%TYPE;
+nIdeArea   CARGO.IDEAREA%TYPE;
+
+BEGIN
+  
+    SELECT SN.IDESOLNUEVOCARGO 
+    INTO nIdeSolicitud
+    FROM SOLNUEVO_CARGO SN, CARGO C  
+    WHERE  C.CODCARGO = SN.CODCARGO
+    AND C.IDECARGO = p_ideCargo;
+  
+    
+    SELECT *
+    FROM LOGSOLNUEVO_CARGO LS
+    WHERE LS.FECSUCESO
+    AND LS.IDESOLNUEVOCARGO = nIdeSolicitud;
+        
+
+  
   
 END SP_OBTENER_CARGO;  
 
@@ -395,12 +458,131 @@ BEGIN
   
 END FN_GET_SEDE;
 
-                        
+
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_ROLXUSUARIO
+    Proposito   : Obtiene los roles por usuario
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+
+PROCEDURE FN_GET_ROLXUSUARIO(
+          p_nIdUsua IN NUMBER,
+           p_cRetVal OUT CUR_CURSOR
+          )IS
+BEGIN
+  OPEN p_cRetVal FOR 
+    SELECT U.IDROL,(SELECT TRIM(R.CODROL) 
+                FROM ROL R 
+                WHERE R.IDROL=U.IDROL)CODIGOROL
+    FROM CHSPRP.USUAROLSEDE U 
+    WHERE U.IDUSUARIO=p_nIdUsua
+    order by U.IDROL;
+
+
+END FN_GET_ROLXUSUARIO; 
+
+
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_SEDEXUSUARIO
+    Proposito   : Obtiene los roles por usuario
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+
+PROCEDURE FN_GET_SEDEXUSUARIO(
+           p_nIdUsua IN NUMBER,
+           p_nIdRol IN NUMBER,
+           p_cRetVal OUT CUR_CURSOR
+          )IS
+BEGIN
+  OPEN p_cRetVal FOR 
+    SELECT E.DESCRIPCION,E.IDESEDE 
+    FROM CHSPRP.USUAROLSEDE S, SEDE E
+    WHERE S.IDESEDE=E.IDESEDE
+    AND S.IDUSUARIO=p_nIdUsua
+    AND S.IDROL = p_nIdRol
+    AND S.IDESEDE<>0
+    AND S.IDESEDE IS NOT NULL
+    AND E.ESTREGISTRO ='A';
+
+
+END FN_GET_SEDEXUSUARIO; 
+
+
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_OPCIONESxROL
+    Proposito   : Obtiene las copciones de menu por rol
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+
+
+PROCEDURE FN_GET_OPCIONESxROL(p_nIdRol IN NUMBER,
+                              p_cRetVal OUT CUR_CURSOR
+          )IS
+BEGIN
+  
+
+     OPEN P_CRETVAL FOR 
+     SELECT OP.IDOPCIONPADRE,OP.IDOPCION,OP.DESCRIPCION,OP.DSCURL,R.IDROL
+     FROM OPCIONES OP,ROLOPCION R
+     WHERE OP.FLGHABILITADO='A'
+     AND R.IDOPCION = OP.IDOPCION
+     AND R.IDROL = P_NIDROL
+     ORDER BY OP.IDOPCIONPADRE,OP.IDOPCION;
+   
+   
+   
+
+END FN_GET_OPCIONESxROL; 
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_OPCIONESPADRExROL
+    Proposito   : Obtiene las opciones padre
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+
+PROCEDURE FN_GET_OPCIONESPADRExROL(p_nIdRol IN NUMBER,
+                                   p_cRetVal OUT CUR_CURSOR
+          )IS
+BEGIN
+  
+ OPEN P_CRETVAL FOR 
+     SELECT DISTINCT OP.IDOPCIONPADRE,(SELECT P.DESCRIPCION 
+                                    FROM OPCIONES P 
+                                    WHERE P.IDOPCIONPADRE=OP.IDOPCIONPADRE
+                                    AND P.IDOPCION IS NULL
+                                    ) DESCRIPCION
+     FROM OPCIONES OP,ROLOPCION R
+     WHERE OP.FLGHABILITADO='A'
+     AND R.IDOPCION = OP.IDOPCION
+     AND R.IDROL = p_nIdRol
+     ORDER BY OP.IDOPCIONPADRE; 
+   
+END FN_GET_OPCIONESPADRExROL; 
+
+
+
+
+
+                      
 
 END PR_INTRANET;
 /
-
-
-SELECT C.IDECARGO 
-   FROM CARGO C
-   WHERE C.CODCARGO = 'de5';

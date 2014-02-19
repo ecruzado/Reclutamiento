@@ -115,14 +115,13 @@
         public const string Hijo = "03";
     }
 
-    public sealed class EtapasSolicitudNuevoCargo
+    public sealed class EtapasSolicitud
     {
-        public const string PendienteAprobacionGerenteArea = "GA";
-        public const string PendienteAprobacionGerenteAdministrativoSede = "GAS";
-        public const string PendienteAprobacionGerenteGeneralAdjunto = "GGA";
-        public const string PendienteAprobacionJefeProcesos = "JP";
-
-        public const string AprobacionRechazo = "AR";
+        public const string PendienteAprobacion = "PA";
+        public const string PendienteAprobacionPerfil = "PAP";
+        public const string ElaboracionPerfil = "EP";
+        public const string PendientePublicacion = "PP";
+        public const string Finalizado = "F";
 
     }
    
@@ -164,6 +163,18 @@
         public const string  ElaboracionPerfil = " Elaborado el perfil para el ";//5
         public const string  AprobacionPerfil = " Aprobado el perfil del ";//6
         public const string  RechazoPerfil = " Rechazado el perfil del ";//6
+    }
+
+    public sealed class Responsable
+    {
+        public const string GerenteArea = "GA";
+        public const string GerenteAdministrativoSede = "GAS";
+        public const string GerenteGeneralAdjunto = "GGA";
+        public const string JefeProcesos = "JP";
+        public const string JefeArea = "JA";
+        public const string EncargadoSeleccion = "ES";
+        public const string AsistenteSeleccion = "AS";
+
     }
 
     

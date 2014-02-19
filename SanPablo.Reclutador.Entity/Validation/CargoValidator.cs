@@ -69,9 +69,9 @@ namespace SanPablo.Reclutador.Entity.Validation
             ////RuleFor(x => x.PuntajeMinimoPostulanteInterno)
             ////    .InclusiveBetween(0, 20)
             ////    .WithMessage("El rango del puntaje es de 0 a 20");
-            RuleFor(x => x.PuntajeMinimoPostulanteInterno)
-                .LessThan(x => x.PuntajePostulanteInterno)
-                .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
+            //RuleFor(x => x.PuntajeMinimoPostulanteInterno)
+            //    .LessThan(x => x.PuntajePostulanteInterno)
+            //    .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
 
         }
 

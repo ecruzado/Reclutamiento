@@ -125,13 +125,20 @@
     }
 
     function mostrarAprobarDesaprobar() {
-        var dialogDiv = $('#updateDialogAprobacion');
-        var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
-        $.get('@Url.Action("Edit", "LogSolicitudNuevoCargo")', { ideSolicitud: ideSolicitud }, function (data) {
-            dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
-            dialogDiv.dialog('open');
-        });
+        var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
+        alert(estado);
+        if (estado == "A") {
+            var dialogDiv = $('#updateDialogAprobacion');
+            var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
+            $.get('@Url.Action("Edit", "LogSolicitudNuevoCargo")', { ideSolicitud: ideSolicitud }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
+                dialogDiv.dialog('open');
+            });
+        }
+        else {
+            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO'");
+        }
         return false;
     }
 
@@ -186,8 +193,13 @@
         document.getElementById('idB1').style.display = "block";
     }
     function validarFormulario() {
-        if ($("#solicitudNuevoCargoForm").validate().form()) {
-            mostrarConfirmacion();
+        if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
+            if ($("#solicitudNuevoCargoForm").validate().form()) {
+                mostrarConfirmacion();
+            }
+        }
+        else {
+            mensajeResultado("Solicitu en estado: 'INACTIVO'");
         }
     }
     function actualizarCodigo(codigo) {
@@ -264,8 +276,9 @@
                             <td class="span5">
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Solicitud</label>
+                                    @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled",@style="text-transform: uppercase" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled" })
                                     </div>
                                 </div>
                             </td>

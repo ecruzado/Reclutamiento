@@ -35,7 +35,7 @@
         [HttpPost]
         public virtual JsonResult ListarOfrecemos(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -70,7 +70,8 @@
         public ViewResult Edit()
         {
             var cargoViewModel = InicializarOfrecimientos();
-            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            int IdeCargo = CargoPerfil.IdeCargo;
+            var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             cargoViewModel.Ofrecimiento.Cargo = cargo;
             return View(cargoViewModel);
 
@@ -90,7 +91,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Ofrecimiento")]OfrecemosCargo ofrecemosCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {

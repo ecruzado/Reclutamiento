@@ -46,31 +46,14 @@
             {
                 LogSolicitudNuevoCargoValidator validator = new LogSolicitudNuevoCargoValidator();
                 ValidationResult result = validator.Validate(model.LogSolicitudNuevoCargo, "Observacion");
-                SendMail enviar = new SendMail();
+                
                 if (!result.IsValid)
                 {
-                    objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo" ;
+                    objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
-                
-                    LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
-                    logSolicitudNuevo.IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
-                    logSolicitudNuevo.FechaSuceso = FechaCreacion;
-                    logSolicitudNuevo.UsuarioSuceso = UsuarioActual.CodUsuario;
-                    logSolicitudNuevo.TipoEtapa = EtapasSolicitudNuevoCargo.AprobacionRechazo;
-                    if (model.Aprobado)
-                    {
-                        logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Aprobado;
-                        _logSolicitudNuevoCargoRepository.Add(logSolicitudNuevo);
-                        enviar.EnviarCorreo(Asunto.Aprobacion, AccionMail.Aprobacion, true, Solicitud.Nuevo);
-                    }
-                    else
-                    {
-                        logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Rechazado;
-                        _logSolicitudNuevoCargoRepository.Add(logSolicitudNuevo);
-                        enviar.EnviarCorreo(Asunto.Rechazo, AccionMail.Rechazo, true, Solicitud.Nuevo);
-                    }
+                aprobarRechazarNuevaSolicitud(model);
                     
                 objJsonMessage.Mensaje = "Enviado Correctamente";
                 objJsonMessage.Resultado = true;
@@ -94,7 +77,46 @@
             return logSolicitudNuevoCargoViewModel;
         }
 
-
+        public void aprobarRechazarNuevaSolicitud(LogSolicitudNuevoCargoViewModel model)
+        {
+            SendMail enviar = new SendMail();
+            try
+            {
+                LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
+                LogSolicitudNuevoCargo logSiguiente = new LogSolicitudNuevoCargo();
+                int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
+                //recuperar datos del estado actual
+                var logSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == IdeSolicitudNuevoCargo);
+                string RolActual = "";
+                if (logSolicitudNuevo.RolResponsable == RolActual)
+                {
+                    if (logSolicitudNuevo.TipoSuceso == EstadoSolicitud.Pendiente)
+                    {
+                        //determinar el usuario y el estado de la solicitud
+                        logSolicitudNuevo.FechaSuceso = FechaModificacion;
+                        logSolicitudNuevo.UsuarioSuceso = UsuarioActual.CodUsuario;
+                        
+                        if (model.Aprobado)
+                        {
+                            logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Aprobado;
+                            _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
+                            enviar.EnviarCorreo(Asunto.Aprobacion, AccionMail.Aprobacion, true, Solicitud.Nuevo);
+                        }
+                        else
+                        {
+                            logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Rechazado;
+                            _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
+                            enviar.EnviarCorreo(Asunto.Rechazo, AccionMail.Rechazo, true, Solicitud.Nuevo);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //manejar el error
+            }
+        }
+        
         
         #endregion
     }

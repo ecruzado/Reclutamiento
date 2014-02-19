@@ -36,7 +36,7 @@
         [HttpPost]
         public virtual JsonResult ListaCentroEstudio(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -85,7 +85,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "CentroEstudio")]CentroEstudioCargo centroEstudioCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -150,7 +150,7 @@
         public ActionResult eliminarCentroEstudio(int ideCentroEstudio)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var centroEstudioEliminar = new CentroEstudioCargo();
             centroEstudioEliminar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == ideCentroEstudio);
             int valorEliminar = centroEstudioEliminar.PuntajeCentroEstudios;

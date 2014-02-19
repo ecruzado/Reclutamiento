@@ -35,7 +35,8 @@
         [HttpPost]
         public virtual JsonResult ListaHorario(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
+            
             try
             {
 
@@ -81,7 +82,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Horario")]HorarioCargo horarioCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -143,7 +144,7 @@
         public ActionResult eliminarHorario(int ideHorario)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var horarioEliminar = new HorarioCargo();
             horarioEliminar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == ideHorario);
             int puntajeEliminar = horarioEliminar.PuntajeHorario;

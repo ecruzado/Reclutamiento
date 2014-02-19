@@ -36,7 +36,7 @@
         [HttpPost]
         public virtual JsonResult ListaExperiencia(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -84,8 +84,8 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Experiencia")]ExperienciaCargo experienciaCargo)
         {
-            
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -150,7 +150,7 @@
         public ActionResult eliminarExperiencia(int ideExperiencia)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var experienciaEliminar = new ExperienciaCargo();
             experienciaEliminar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == ideExperiencia);
             int valorEliminar = experienciaEliminar.PuntajeExperiencia;

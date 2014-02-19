@@ -37,7 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaNivelAcademico(GridTable grid)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -87,7 +87,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "NivelAcademico")]NivelAcademicoCargo nivelAcademicoCargo)
         { 
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -157,7 +157,7 @@
         [HttpPost]
         public ActionResult eliminarNivelAcademico(int ideNivelAcademico)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             ActionResult result = null;
             var nivelAcademicoEliminar = new NivelAcademicoCargo();
             nivelAcademicoEliminar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == ideNivelAcademico);

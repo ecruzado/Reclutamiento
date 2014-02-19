@@ -20,12 +20,15 @@
         // GET: /Intranet/Cargo/
         private ICargoRepository _cargoRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoRepository;
        
         public PerfilController(ICargoRepository cargoRepository,
-                                IDetalleGeneralRepository detalleGeneralRepository)
+                                IDetalleGeneralRepository detalleGeneralRepository,
+                                ILogSolicitudNuevoCargoRepository logSolicitudNuevoRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _logSolicitudNuevoRepository = logSolicitudNuevoRepository;
         }
 
         public ActionResult Index(string ideSolicitud)
@@ -233,21 +236,16 @@
         [HttpPost]
         public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarGeneral();
-            actualizarDatosCargo(cargoViewModel);
+            
             try
             {
                 CargoValidator validation = new CargoValidator();
                 ValidationResult result = validation.Validate(cargo, "PuntajeMinimoPostulanteInterno", "PuntajeMinimoEdad", "PuntajeMinimoSexo", "PuntajeMinimoSalario",
                                                               "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
                                                               "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
-                if (!result.IsValid)
-                {
-                    cargoViewModel.Cargo = cargo;
-                    return View(cargoViewModel);
-                }
 
                 cargoEditar.UsuarioModificacion = "USUA";
                 cargoEditar.FechaModificacion = FechaCreacion;
@@ -265,8 +263,17 @@
                 cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
                 cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
-                _cargoRepository.Update(cargoEditar);
 
+                if (!result.IsValid)
+                {
+                    cargoViewModel.Cargo = cargoEditar;
+                    actualizarDatosCargo(cargoViewModel);
+                    return View(cargoViewModel);
+                }
+                             
+                _cargoRepository.Update(cargoEditar);
+                cargoViewModel.Cargo = cargoEditar;
+                actualizarDatosCargo(cargoViewModel);
                 
                 return View(cargoViewModel);
             }
@@ -296,6 +303,16 @@
             perfilViewModel.Dependencia = CargoPerfil.Dependencia;
             perfilViewModel.Departamento = CargoPerfil.Departamento;
         }
-        
+
+        public void enviarPerfil()
+        {
+            var enviarMail = new SendMail();
+            int IdeCargo = CargoPerfil.IdeCargo;
+            var cargoEnviar = _cargoRepository.GetSingle(x=>x.IdeCargo == IdeCargo);
+           
+            enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado, true, Solicitud.Nuevo);
+           
+        }
+
     }
 }

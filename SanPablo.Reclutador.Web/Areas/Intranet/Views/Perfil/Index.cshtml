@@ -125,7 +125,6 @@
         // btn Eliminar
         $('#btnEliminarCompetencia').click(function () {
             var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
-            alert(ideCompetencia);
             if (ideCompetencia != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
