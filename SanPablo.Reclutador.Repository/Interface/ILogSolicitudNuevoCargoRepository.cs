@@ -3,8 +3,8 @@
     using SanPablo.Reclutador.Entity;
     using System.Data;
 
-    public interface ICargoRepository : IRepository<Cargo>
+    public interface ILogSolicitudNuevoCargoRepository : IRepository<LogSolicitudNuevoCargo>
     {
-        DatosCargo obtenerDatosCargo(int IdeSolicitud);
+        
     }
 }

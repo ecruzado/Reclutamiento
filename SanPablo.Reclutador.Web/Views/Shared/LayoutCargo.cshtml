@@ -19,66 +19,62 @@
             <form class="formulario-busqueda">
                 <table>
                     <tr class="formulario-fila">
-                    <td class="td-label">
-                        <td class="td-label">
-                            <label class="control-label" for="inputSuccess">Código</label>
-                        <td>
-                        <td class="td-label">
-                            <input type="text" class="input-small" id="txtcodigo" value="200003" disabled="disabled">
-                        <td>
-                    </td>
-                    <td class="td-label">
-                        <label class="control-label" for="selectError">Dependencia</label>
-                            <select id="sedependencia" class="select-large" disabled="disabled">
-                            <option>Seleccionar</option>
-                            <option selected="selected">Gerencia Médica</option>
-                            </select>
-                    </td>
+                        <td class="colEtiqueta">
+                           <label class="control-label" for="inputSuccess">Código</label>
+                        </td>
+                        <td class="colInput">
+                            @Html.TextBoxFor(model => model.Cargo.IdeCargo, new { @disabled = "disabled"})
+                        
+                        </td>
+                        <td class="colEtiqueta">
+                            <label class="control-label" for="selectError">Dependencia</label>
+                        </td>
+                        <td class="colInput" >
+                            @Html.TextBoxFor(model =>model.Dependencia,  new { @disabled = "disabled"})
+                        </td>
                     </tr>
                     <tr class="formulario-fila">
-                    <td class="td-label">
-                            <label class="control-label" for="inputSuccess">Cargo</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" id="txtnombre" value="Técnico en Enfermería " disabled="disabled">
-                            </div>
-                    </td>
-                    <td class="td-label">
+                        <td class="colEtiqueta">
+                          <label class="control-label" for="inputSuccess">Cargo</label>
+                       </td>
+                        <td class="colImput">
+                           @Html.TextBoxFor(model=>model.Cargo.NombreCargo,  new { @disabled = "disabled"})
+                       </td>
+                        <td class="colEtiqueta">
                             <label class="control-label" for="selectError">Departamento</label>
-                            <div class="controles">
-                                <select id="sedepartamento" class="select-large" disabled="disabled">
-                                    <option>Seleccionar</option>
-                                    <option selected="selected">Enfermería</option>
-                                </select>
-                            </div>
-                    </td>
+                        </td>
+                        <td class="colImput">
+                             @Html.TextBoxFor(model =>model.Departamento,  new { @disabled = "disabled"})
+                        </td>
                     </tr>
                     <tr class="formulario-fila">
-                    <td class="td-label">
+                        <td class="colEtiqueta">
                             <label class="control-label" for="inputSuccess">Descripción</label>
-                            <div class="controles">
-                                <input type="text" class="input-large" disabled="disabled" value="Técnico en Enfermería " id="txtdescripcion">
-                            </div>
-                    </td>
-                    <td class="td-label">
-                        <label class="control-label" for="selectError">Área</label>
-                        <div class="controles">
-                             <select id="searea" class="select-large" disabled="disabled">
-                                 <option>Seleccionar</option>
-                                 <option selected="selected">Cuidados Intensivos</option>
-                             </select>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="formulario-fila">
-                    <td class="td-label">
-                        <label class="control-label" for="inputSuccess">Nro Posiciones</label>
-                             <input type="text" class="input-mini" id="txtnroposiciones" disabled="disabled">
-                    </td>
-                    <td class="td-label">
-                        <label class="control-label" for="inputSuccess">Código de Cargo</label>
-                        <input type="text" class="input-small" disabled="disabled">
-                    </td>
-                </tr>
+                        </td>
+                        <td class="colImput">
+                                @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo,  new { @disabled = "disabled"})
+                        </td>
+                        <td class="colEtiqueta">
+                          <label class="control-label" for="selectError">Área</label>
+                        </td>
+                        <td class="colImput">
+                            @Html.TextBoxFor(model=>model.Area,  new { @disabled = "disabled"})
+                        </td>
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="colEtiqueta">
+                            <label class="control-label" for="inputSuccess">Nro Posiciones</label>
+                        </td>
+                        <td class="colImput">
+                                @Html.TextBoxFor(model=>model.Cargo.NumeroPosiciones,  new { @disabled = "disabled"})
+                        </td>
+                        <td class="colEtiqueta">
+                            <label class="control-label" for="inputSuccess">Código de Cargo</label>
+                        </td>
+                        <td class ="colImput">
+                            @Html.TextBoxFor(model=>model.Cargo.CodigoCargo,  new { @disabled = "disabled"})
+                        </td>
+                    </tr>
                 </table>
             </form>
 
@@ -106,13 +102,7 @@
         </div>
     </div>
 </div>
-    <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery-migrate-1.2.1.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/grid.locale-es.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.conastec.js")" type="text/javascript"></script>
-    @RenderSection("Scripts", required: false)
+@section Scripts{ 
+    @RenderSection("ScriptsCargo", required: false)
+}
+

@@ -22,18 +22,21 @@
         private IDependenciaRepository _dependenciaRepository;
         private IDepartamentoRepository _departamentoRepository;
         private IAreaRepository _areaRepository;
+        private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
 
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                              IDetalleGeneralRepository detalleGeneralRepository,
                                              IDependenciaRepository dependenciaRepository,
                                              IDepartamentoRepository departamentoRepository,
-                                             IAreaRepository areaRepository)
+                                             IAreaRepository areaRepository,
+                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _dependenciaRepository = dependenciaRepository;
             _departamentoRepository = departamentoRepository;
             _areaRepository = areaRepository;
+            _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
         }
 
 
@@ -134,6 +137,12 @@
             {
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 solicitudNuevoCargoViewModel.SolicitudNuevoCargo = solNuevoCargo;
+                if (solNuevoCargo.EstadoActivo == IndicadorActivo.Activo)
+                {
+                    solicitudNuevoCargoViewModel.Estado = "Activo";
+                }
+                else
+                { solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
             }
             return View(solicitudNuevoCargoViewModel);
         }
@@ -161,7 +170,7 @@
 
 
         [HttpPost]
-        public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevoCargo)
+        public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevaSolicitudCargo)
         {
             var enviarMail = new SendMail();
             //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
@@ -171,19 +180,26 @@
                 if (!ModelState.IsValid)
                 {
                     var nuevoCargoViewModel = inicializarSolicitudNuevoCargo();
-                    nuevoCargoViewModel.SolicitudNuevoCargo = nuevoCargo;
+                    nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
                     return View(nuevoCargoViewModel);
                 }
-                if (nuevoCargo.IdeSolicitudNuevoCargo == 0)
+                if (nuevaSolicitudCargo.IdeSolicitudNuevoCargo == 0)
                 {
-                    nuevoCargo.EstadoActivo = "A";
-                    nuevoCargo.FechaCreacion = FechaCreacion;
-                    nuevoCargo.UsuarioCreacion = "YO";
-                    nuevoCargo.FechaModificacion = FechaCreacion;
+                    nuevaSolicitudCargo.EstadoActivo = "A";
+                    nuevaSolicitudCargo.FechaCreacion = FechaCreacion;
+                    nuevaSolicitudCargo.UsuarioCreacion = "YO";
+                    nuevaSolicitudCargo.FechaModificacion = FechaCreacion;
+                    _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
+                    var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
                     
-                    _solicitudNuevoCargoRepository.Add(nuevoCargo);
-
-                    enviarMail.EnviarCorreo("enviar", true, "Nuevo Requerimiento");
+                    LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+                    logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
+                    logSolicitud.TipoEtapa = EtapasSolicitudNuevoCargo.PendienteAprobacionGerenteArea;
+                    logSolicitud.TipoSuceso = EstadoSolicitud.Pendiente;
+                    logSolicitud.FechaSuceso = FechaCreacion;
+                    logSolicitud.UsuarioSuceso = UsuarioActual.CodUsuario;
+                    _logSolicitudNuevoCargoRepository.Add(logSolicitud);
+                    enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado,true, Solicitud.Nuevo);
                 }
                
                 objJsonMessage.Mensaje = "Agregado Correctamente";
@@ -214,6 +230,7 @@
 
             solicitudCargoViewModel.Areas = new List<Area>();
             solicitudCargoViewModel.Areas.Add(new Area { IdeArea=0, NombreArea ="Seleccionar"});
+
 
             return solicitudCargoViewModel;
         }
@@ -258,7 +275,6 @@
                 return Json(objJsonMessage);
             }
         }
-
 
        
     }

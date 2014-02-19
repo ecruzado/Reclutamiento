@@ -24,7 +24,15 @@ CREATE OR REPLACE package CHSPRP.PR_INTRANET is
   PROCEDURE SP_ACTUALIZAR_PUNTAJES(p_nombreCampoDestino VARCHAR2,
                                    p_ideCargo     CARGO.IDECARGO%TYPE, 
                                    p_valor       IN NUMBER,
-                                   p_valorEliminar IN NUMBER);                   
+                                   p_valorEliminar IN NUMBER); 
+  PROCEDURE SP_OBTENER_CARGO(p_ideSolicitud  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                             p_cRetCursor    OUT SYS_REFCURSOR);            
+                           
+FUNCTION FN_GET_ROL(p_idUsuario IN NUMBER
+                    )RETURN VARCHAR2;
+                    
+FUNCTION FN_GET_SEDE(p_idUsuario IN NUMBER
+                    )RETURN VARCHAR2;                                                     
 
 end PR_INTRANET;
 /

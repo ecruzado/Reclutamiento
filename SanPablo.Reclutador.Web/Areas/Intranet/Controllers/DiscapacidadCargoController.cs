@@ -37,6 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaDiscapacidad(GridTable grid)
         {
+            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             try
             {
 
@@ -45,7 +46,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<DiscapacidadCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_discapacidadCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 

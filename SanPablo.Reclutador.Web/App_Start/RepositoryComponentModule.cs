@@ -110,7 +110,8 @@
             builder.RegisterType<SolicitudNuevoCargoRepository>()
               .As<ISolicitudNuevoCargoRepository>();
 
-
+            builder.RegisterType<LogSolicitudNuevoCargoRepository>()
+             .As<ILogSolicitudNuevoCargoRepository>();
 
 
             builder.RegisterType<OpcionRepository>()

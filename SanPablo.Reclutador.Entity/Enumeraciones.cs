@@ -63,7 +63,11 @@
 
         //MANTENIMIENTO DE ROL
 
-        TipoSede = 43
+        TipoSede = 43,
+
+        //Solicitud Nuevo Cargo
+        TipoEtapaSolicitud = 45,
+        TipoSucesoSolicitud = 46
     }
 
     public sealed class IndicadorActivo
@@ -110,5 +114,60 @@
     {
         public const string Hijo = "03";
     }
+
+    public sealed class EtapasSolicitudNuevoCargo
+    {
+        public const string PendienteAprobacionGerenteArea = "GA";
+        public const string PendienteAprobacionGerenteAdministrativoSede = "GAS";
+        public const string PendienteAprobacionGerenteGeneralAdjunto = "GGA";
+        public const string PendienteAprobacionJefeProcesos = "JP";
+
+        public const string AprobacionRechazo = "AR";
+
+    }
+   
+    public sealed class EstadoSolicitud
+    {
+        public const string Aprobado = "A";
+        public const string Rechazado = "R";
+        public const string Pendiente = "P";
+    }
+
+    public sealed class Solicitud
+    {
+        public const string Nuevo = " Nuevo ";
+        public const string Remplazo = " Remplazo de ";
+        public const string Ampliacion = " Ampliacion de ";
+    }
+
+    public sealed class Decision
+    {
+        public const string Aprobado = "A";
+        public const string Rechazado = "R";
+    }
+
+    public sealed class Asunto 
+    {
+        public const string Solicitado = "solicitado";
+        public const string Aprobacion = "Aprobación";
+        public const string AprobacionFinal = "Aprobación final";
+        public const string Rechazo = "Rechazo";
+        public const string AprobacionPerfil = "Aprobación de perfil";
+        public const string RechazoPerfil = "Rechazo de perfil";
+    }
+
+    public sealed class AccionMail
+    {
+        public const string  Solicitado = " solicitado un "; //1.
+        public const string  Aprobacion = " Aprobado el ";//2.4
+        public const string  Rechazo = " Rechazado el ";//3
+        public const string  ElaboracionPerfil = " Elaborado el perfil para el ";//5
+        public const string  AprobacionPerfil = " Aprobado el perfil del ";//6
+        public const string  RechazoPerfil = " Rechazado el perfil del ";//6
+    }
+
+    
+
+
 
 }

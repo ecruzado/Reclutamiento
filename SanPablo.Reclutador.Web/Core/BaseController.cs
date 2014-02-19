@@ -171,6 +171,15 @@ namespace SanPablo.Reclutador.Web.Core
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
         }
 
+        protected T ObtenerSession<T> (string nombre)
+        {
+            T valor = (T)Session[nombre];
+            if (valor == null)
+            {
+                //Redirect('');
+            }
+            return valor;
+        }
         ///// <summary>
         ///// Logger instance.
         ///// </summary>
@@ -189,6 +198,18 @@ namespace SanPablo.Reclutador.Web.Core
         public DateTime FechaModificacion
         {
             get { return DateTime.Now; }
+        }
+
+        protected DatosCargo CargoPerfil
+        {
+            get 
+            {
+                return (DatosCargo)System.Web.HttpContext.Current.Session[ConstanteSesion.CargoPerfil];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.CargoPerfil, value);
+            }
         }
 
         protected int IdePostulante

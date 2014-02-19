@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\LogSolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
@@ -173,6 +174,8 @@
     <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\LogSolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />
@@ -352,6 +355,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudNuevoCargo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -443,6 +447,7 @@
     <Folder Include="Archivos\Imagenes\" />
     <Folder Include="Archivos\Pdf\" />
     <Folder Include="Helper\" />
+    <Folder Include="TemplateEmail\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

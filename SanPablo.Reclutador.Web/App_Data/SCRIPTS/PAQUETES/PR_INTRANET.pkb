@@ -221,7 +221,7 @@ END FN_ELIMINA_ROL_OPCION;
     Nombre      : SP_ACTUALIZAR_PUNTAJES
     Proposito   : Actualizar los puntajes en la tabla cargo 
                   al modificar tablas asociadas
-    Referencias : Sistema de Reclutamiento y Selección de Personal
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :               
                                   
     Log de Cambios
@@ -256,26 +256,24 @@ END SP_ACTUALIZAR_PUNTAJES;
     Nombre      : SP_CREAR_CARGO
     Proposito   : Verificar si el cargo esta creado  o crear el
                   registro y recuperar datos.
-    Referencias : Sistema de Reclutamiento y Selección de Personal
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :               
                                   
     Log de Cambios
       Fecha       Autor                Descripcion
       14/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_CREAR_CARGO(p_ideSolicitud  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                         p_cRetCursor    OUT SYS_REFCURSOR)IS
+  
+PROCEDURE SP_OBTENER_CARGO(p_ideSolicitud  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                           p_cRetCursor    OUT SYS_REFCURSOR)IS
 
-CURSOR CR_CARGO( p_cCargo CARGO.IDECARGO%TYPE) IS
-   SELECT   C.IDECARGO, C.CODCARGO, C.NOMCARGO, C.DESCARGO, 
-   FROM  CARGO C
-   WHERE C.CODCARGO = nCodCargo;
-   
-nCodCargo CARGO.CODCARGO%TYPE;
-nIdeCargo CARGO.IDECARGO%TYPE;
-nNomCargo CARGO.NOMCARGO%TYPE;
+nroCont    NUMBER;
+nCodCargo  CARGO.CODCARGO%TYPE;
+nIdeCargo  CARGO.IDECARGO%TYPE;
+nNomCargo  CARGO.NOMCARGO%TYPE;
 nDescCargo CARGO.DESCARGO%TYPE;
-nIdeArea  CARGO.IDEAREA%TYPE;
+nIdeArea   CARGO.IDEAREA%TYPE;
+
 BEGIN
 
    SELECT SN.CODCARGO, SN.NOMBRE, SN.DESCRIPCION, SN.IDEAREA 
@@ -283,21 +281,126 @@ BEGIN
    FROM SOLNUEVO_CARGO SN
    WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
    
-   SELECT C.IDECARGO INTO nIdeCargo
-   FROM CARGO C
-   WHERE C.CODCARGO = nCodCargo;
+   SELECT COUNT(*) INTO nroCont FROM CARGO WHERE CODCARGO = nCodCargo;
+   IF (nroCont > 0) THEN
+     SELECT C.IDECARGO INTO nIdeCargo
+     FROM CARGO C
+     WHERE C.CODCARGO = nCodCargo;
+   END IF;
    
-   IF (nIdeCargo IS NOT NULL)
-   INSERT CARGO INTO (CODCARGO,NOMCARGO,DESCARGO,IDEAREA)  VALUE (nCodCargo,nNomCargo,nDescCargo,nIdeArea);
-   
-        
-
+   IF (nIdeCargo IS NULL) THEN
+   INSERT  INTO CARGO (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEAREA)  VALUES (IDECARGO_SQ.NEXTVAL,1,nCodCargo,nNomCargo,nDescCargo,nIdeArea);
+   COMMIT;
+   END IF;
+     
+   OPEN  p_cRetCursor FOR
+      SELECT   C.IDECARGO, C.CODCARGO, C.NOMCARGO, C.DESCARGO, AR.NOMAREA, D.NOMDEPARTAMENTO,DE.NOMDEPENDENCIA
+      FROM  CARGO C ,  AREA AR, DEPARTAMENTO D, DEPENDENCIA DE
+      WHERE C.CODCARGO = nCodCargo
+      AND AR.IDEDEPARTAMENTO = D.IDEDEPARTAMENTO
+      AND D.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
+      AND AR.IDEAREA = nIdeArea;
   
-EXCEPTION   
-    WHEN NO_DATA_FOUND THEN
-    RETURN ''  ;
+END SP_OBTENER_CARGO;  
 
-END SP_CREAR_CARGO;                          
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_ROL
+    Proposito   : Obtiene los roles por usuario
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_GET_ROL(p_idUsuario IN NUMBER
+                    )RETURN VARCHAR2
+IS
+rol varchar2(2000);
+cont number;
+
+CURSOR cData IS
+    SELECT UR.IDROL,(SELECT R.DSCROL FROM ROL R WHERE R.IDROL=UR.IDROL) DSCROL 
+    FROM CHSPRP.USUAROLSEDE UR 
+    WHERE UR.IDUSUARIO=p_idUsuario;
+
+BEGIN
+  cont := 1;
+  FOR C1 IN cData LOOP
+      
+    BEGIN 
+      IF cont=1 THEN
+         rol := rol || C1.DSCROL; 
+      ELSE
+         rol := rol ||', '||C1.DSCROL;
+      END IF;    
+    cont:=cont+1;
+          
+    EXCEPTION
+    WHEN OTHERS THEN
+      rol:=null;
+    END;
+  
+  END LOOP;
+
+  RETURN NVL(rol,'');  
+  
+END FN_GET_ROL;
+
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_SEDE
+    Proposito   : Obtiene las sedes por usuario
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+
+FUNCTION FN_GET_SEDE(p_idUsuario IN NUMBER
+                    )RETURN VARCHAR2
+IS
+cSede varchar2(3000);
+cont number;
+
+CURSOR cData IS
+    SELECT UR.Idesede,(SELECT R.DESCRIPCION FROM SEDE R WHERE R.Idesede=UR.Idesede) DSCSEDE 
+    FROM CHSPRP.USUAROLSEDE UR 
+    WHERE UR.IDUSUARIO=p_idUsuario;
+
+BEGIN
+  cont := 1;
+  FOR C1 IN cData LOOP
+      
+    BEGIN 
+    
+     IF C1.DSCSEDE IS NOT NULL THEN
+        IF cont=1 THEN
+           cSede := cSede || C1.DSCSEDE; 
+        ELSE
+           cSede := cSede ||', '||C1.DSCSEDE;
+        END IF;    
+        cont:=cont+1;
+      END IF;
+      
+    EXCEPTION
+    WHEN OTHERS THEN
+      cSede:=null;
+    END;
+  
+  END LOOP;
+
+  RETURN NVL(cSede,'');  
+  
+END FN_GET_SEDE;
+
+                        
 
 END PR_INTRANET;
 /
+
+
+SELECT C.IDECARGO 
+   FROM CARGO C
+   WHERE C.CODCARGO = 'de5';

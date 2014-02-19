@@ -7,16 +7,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     using System.Web;
     using SanPablo.Reclutador.Entity;
 
-    public class PerfilViewModel
+    public class CargoViewModel
     {
         public Cargo Cargo { get; set; }
         public string Area { get; set; }
         public string Dependencia { get; set; }
         public string Departamento { get; set; }
 
-        public List<DetalleGeneral> Sexos { get; set; }
-        public List<DetalleGeneral> TiposRequerimientos { get; set; }
-        public List<DetalleGeneral> RangoSalariales { get; set; }
-        
     }
 }
