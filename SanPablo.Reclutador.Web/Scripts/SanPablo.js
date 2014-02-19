@@ -195,7 +195,7 @@
                                 $(this).dialog("close");
                             }
                         }
-                    ]
+                ]
             });
         }
     },
@@ -388,12 +388,12 @@
                     {}, // use default settings for add
                     {}, // delete instead that del:false we need this
                     {
-                    multipleSearch: true,
-                    beforeShowSearch: function () {
-                        $(".ui-reset").trigger("click");
-                        return true;
-                    }
-                });
+                        multipleSearch: true,
+                        beforeShowSearch: function () {
+                            $(".ui-reset").trigger("click");
+                            return true;
+                        }
+                    });
 
         if (opciones.eliminar) {
             $('#' + grilla).navButtonAdd('#' + pager, {
@@ -483,7 +483,7 @@
                             $(this).dialog("close");
                         }
                     }
-                ]
+            ]
         });
     },
     LoadDropDownList: function (name, url, parameters, selected, id, descripcion, isValIndex, async) {
@@ -606,5 +606,10 @@
                 alert(request.responseText);
             }
         });
+    },
+
+
+    Redirecciona : function(url){
+        window.location = url;
     }
 };

@@ -130,6 +130,7 @@
         /// <param name="model"></param>
         /// <param name="imagenAlternativa"></param>
         /// <returns></returns>
+        
         [HttpPost]
         public ActionResult PopupCriterio(CriterioViewModel model)
         {
@@ -192,6 +193,7 @@
             return View(criterioViewModel);
         }
 
+        [ValidarSesion]
         public ActionResult Edit(string ideCriterio)
         {
 
@@ -199,6 +201,7 @@
             return View(criterioViewModel);
         }
 
+        [ValidarSesion]
         public ActionResult BuscarCriterios()
         {
             CriterioViewModel model = new CriterioViewModel();
@@ -209,6 +212,7 @@
             return View("Index", model);
         }
 
+        [ValidarSesion]
         public ActionResult Nuevo()
         {
             CriterioViewModel model = new CriterioViewModel();
@@ -223,6 +227,8 @@
             return View("Edit", model);
         }
 
+        //[ValidarSesion(TipoDevolucionError = TipoDevolucionError.Json, NombresValidar = new string[] { ConstanteSesion.Usuario })]
+        [ValidarSesion]
         public ActionResult Edicion(string id)
         {
 
@@ -260,7 +266,7 @@
             return View("Edit", model);
         }
 
-
+        [ValidarSesion]
         public ActionResult ActivarDesactivar(string id,string estado)
         {
             CriterioViewModel model = new CriterioViewModel();
@@ -288,6 +294,7 @@
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult EliminarCriterio(string id)
         {
@@ -318,6 +325,7 @@
 
         }
 
+        [ValidarSesion]
         public ActionResult ConsultaCriterios(string id)
         {
 
@@ -360,6 +368,7 @@
         /// <param name="id"></param>
         /// <param name="codCriterio"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ViewResult PopupCriterio(int id, int codCriterio)
         {
 
@@ -385,8 +394,8 @@
             }
             
         }
-             
 
+        
         [HttpPost]
         public ActionResult ListaAlternativaxCriterio(GridTable grid, int idCriterio)
         {
@@ -443,6 +452,7 @@
         /// <param name="model"></param>
         /// <param name="image"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit(CriterioViewModel model)
         {
@@ -558,7 +568,7 @@
 
         }
 
-
+        [ValidarSesion]
         [HttpPost]
         public ActionResult Index(CriterioViewModel model)
         {
@@ -638,16 +648,7 @@
             return criterioViewModel;
         }
 
-        [HttpPost]
-        public ActionResult EdicionCriterio(string selr)
-        {
-
-            //var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == Convert.ToInt32(ideAlternativa));
-
-            //_alternativaRepository.Remove(alter);
-            return null;
-        }
-        
+       
 
         // lista de criterios del popup
         [HttpPost]
@@ -693,14 +694,7 @@
                     id = item.IdeCriterio.ToString(),
                     cell = new string[]
                             {
-                                //"",
-                                //item.IndicadorActivo,
-                                //item.IndicadorActivo,
-                                //item.Pregunta,
-                                //item.TipoMedicion,
-                                //item.TipoCriterio,
-                                //item.TipoModo,
-                                //item.TipoCalificacion
+                               
                                "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
@@ -721,11 +715,12 @@
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+               
                 return MensajeError();
             }
         }
 
+        [ValidarSesion]
         [HttpPost]
         public ActionResult PopupListaCriterio(CriterioViewModel model)
         {
@@ -746,6 +741,7 @@
         /// <param name="id"></param>
         /// <param name="idSubCategoria"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ViewResult PopupListaCriterio(int id, string idSubCategoria)
         {
             try

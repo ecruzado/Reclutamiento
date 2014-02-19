@@ -52,7 +52,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// inicializa la pantalla inicial de usuarios
         /// </summary>
         /// <returns></returns>
+        
         [AuthorizeUser]
+        [ValidarSesion]
         public ActionResult Index()
         {
             UsuarioRolSedeViewModel objModel = new UsuarioRolSedeViewModel();
@@ -71,6 +73,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Crea un nuevo Usuario
         /// </summary>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Nuevo()
         {
             UsuarioViewModel usuModel = new UsuarioViewModel();
@@ -87,6 +90,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codUsuario"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult valCodUsuario(string id, string accion)
         {
             UsuarioViewModel usuModel = new UsuarioViewModel();
@@ -123,6 +127,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult Edicion(UsuarioViewModel model)
         {
             Usuario objUsuario;
@@ -175,7 +180,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-       
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
 
@@ -195,6 +200,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+         [ValidarSesion]
         public ActionResult Consulta(string id)
         {
             UsuarioViewModel model = new UsuarioViewModel();
@@ -308,6 +314,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <param name="idSel"></param>
         /// <returns></returns>
+        
         public ViewResult PopupSedeRol(int id, int idSel)
         {
             UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
@@ -413,6 +420,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminaRolSede(string id)
         {
             JsonMessage objJson = new JsonMessage();
@@ -538,6 +546,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminarUsuario(string id)
         {
             JsonMessage objJsonMessage = new JsonMessage();
@@ -570,6 +579,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codEstado"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult ActivarDesactivar(string id, string codEstado)
         {
             JsonMessage objJsonMessage = new JsonMessage();

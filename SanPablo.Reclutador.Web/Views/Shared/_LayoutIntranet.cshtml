@@ -1,5 +1,13 @@
 ﻿@using SanPablo.Reclutador.Entity
-
+@{
+    
+   
+    var UsuarioDes = Session[ConstanteSesion.UsuarioDes] == null ? "" : Session[ConstanteSesion.UsuarioDes];
+    var RolDes = Session[ConstanteSesion.RolDes] == null ? "" : Session[ConstanteSesion.RolDes];
+    var SedeDes = Session[ConstanteSesion.SedeDes] == null ? "" : Session[ConstanteSesion.SedeDes];
+    
+    
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,13 +39,22 @@
             Sistema de Reclutamiento y Selección de Personal 
         </a>
         <div style="float:right;padding-right:5px;padding-top:8px;font-size:11px">
-            <span style="color:purple;font-weight:bold">Sede: </span>
-            <span style="color:#666;font-weight:bold">Surco</span>&nbsp;&nbsp;
+            
+           @if (!"".Equals(SedeDes))
+           {
+             <span style="color:purple;font-weight:bold">Sede: </span>
+             <span style="color:#666;font-weight:bold">@SedeDes</span>
+             <span>&nbsp; &nbsp;</span>
+           }
+            
+            
             <span style="color:purple;font-weight:bold">Rol: </span>
-            <span style="color:#666;font-weight:bold">Administrador</span>&nbsp;&nbsp;
+            <span style="color:#666;font-weight:bold">@RolDes</span>&nbsp;&nbsp;
+            
             <span style="color:purple;font-weight:bold">Usuario: </span>
-            <span style="color:#666;font-weight:bold">Test</span>
-            <a style="margin-left:10px;margin-top:0px;" href="@Url.Action("Login", "Seguridad", new { area = "Intranet"})" class="btn btn-small">Cerrar Sesion</a>
+            <span style="color:#666;font-weight:bold">@UsuarioDes</span>
+            
+            <a style="margin-left:10px;margin-top:0px;" href="@Url.Action("Login", "Seguridad", new { area = "Intranet" })" class="btn btn-small">Cerrar Sesion</a>
         </div>
     </div>
     <div class="navbar navbar-inverse">
@@ -52,8 +69,8 @@
                  
                      <ul class="nav">
 	                    @{ 
-                         var myList = (List<MenuPadre>)Session["listaPadre"];
-                         var myListOp = (List<MenuItem>)Session["ListaMenu"];
+                            var myList = (List<MenuPadre>)Session["listaPadre"];
+                            var myListOp = (List<MenuItem>)Session["ListaMenu"];
                         
                         }
                            @foreach (MenuPadre Item in myList)
@@ -61,7 +78,7 @@
                             <li class="dropdown">
 		                       
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Item.DESCRIPCION <b class="caret"></b></a>
-                                @{   List<MenuItem> Lista  =
+                                @{   List<MenuItem> Lista =
                                     (myListOp.Where(n => n.IDOPCIONPADRE == Item.IDOPCIONPADRE).ToList());
                                 }
                                     <ul class="dropdown-menu">
@@ -103,6 +120,7 @@
         <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.conastec.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
         <script type="text/javascript">
             function HabilitarFormatter(cellvalue, options, rowObject) {
                 var imgPath = '@Url.Content("~/Content/images/")';

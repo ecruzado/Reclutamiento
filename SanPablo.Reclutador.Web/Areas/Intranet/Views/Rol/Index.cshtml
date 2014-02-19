@@ -64,6 +64,7 @@
                 "Si": function () {
                     var selr = $('#grdListRol').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdListRol').jqGrid('getRowData', selr);
+                   
                     if (selr != null) {
                         EliminarRol(selr, rowData);
                     } else {
@@ -166,6 +167,10 @@
             url: "@Url.Action("EliminarRol", "Rol")",
             traditional: true,
             success: function (data) {
+                if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                 }
+
                 if (data.Resultado) {
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     $('#grdListRol').trigger('reloadGrid');

@@ -147,7 +147,17 @@ namespace SanPablo.Reclutador.Web.Core
             var controllerName = filterContext.RouteData.Values["controller"];
             var actionName = filterContext.RouteData.Values["action"];
 
+            if (filterContext.Exception.GetType() == typeof(TerminoSesionException))
+            {
+                //redirect la pagina login
+            }
+            else 
+            {
+                //error generico
+            }
+
             //logger.Error(string.Format("Controlador:{0}  Action:{1}  Mensaje:{2}", controllerName, actionName, filterContext.Exception.Message));
+            
             filterContext.Result = View("Error");
         }
 
@@ -161,15 +171,29 @@ namespace SanPablo.Reclutador.Web.Core
 
         #region Propiedades
 
+        /// <summary>
+        /// usuario actual
+        /// </summary>
+        //protected Usuario UsuarioActual
+        //{
+        //    get 
+        //    { 
+        //        var usuario = (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes]; 
+        //        return usuario;
+        //    }
+        //    set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
+        //}
         protected Usuario UsuarioActual
         {
-            get 
-            { 
+            get
+            {
                 //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
-                return new Usuario {NombreUsuario ="system" };
+                return new Usuario { NombreUsuario = (String)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes] };
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
         }
+
+
 
         ///// <summary>
         ///// Logger instance.

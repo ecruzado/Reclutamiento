@@ -68,6 +68,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public ActionResult Edit(CategoriaViewModel model)
         {
+            
             ValidationResult result = null;
             CategoriaValidator validator = new CategoriaValidator();
             CategoriaViewModel categoriaViewModel = new CategoriaViewModel();
@@ -261,7 +262,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 objCategoriaModel.SubCategoria = _subcategoriaRepository.GetSingle(x => x.IDESUBCATEGORIA == model.SubCategoria.IDESUBCATEGORIA);
                 objCategoriaModel.SubCategoria.FECMODIFICACION = Hoy;
-                objCategoriaModel.SubCategoria.USRMODIFICACION = "Prueba 02";
+                objCategoriaModel.SubCategoria.USRMODIFICACION = UsuarioActual.NombreUsuario;
                 objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
@@ -274,8 +275,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
               
                 objCategoriaModel.SubCategoria.FECMODIFICACION = Hoy;
                 objCategoriaModel.SubCategoria.FECCREACION = Hoy;
-                objCategoriaModel.SubCategoria.USRCREACION = "Prueba01";
-                objCategoriaModel.SubCategoria.USRMODIFICACION = "Prueba02";
+                objCategoriaModel.SubCategoria.USRCREACION = UsuarioActual.NombreUsuario;
+                objCategoriaModel.SubCategoria.USRMODIFICACION = UsuarioActual.NombreUsuario;
                 objCategoriaModel.SubCategoria.ORDENIMPRESION = 1;
                 objCategoriaModel.SubCategoria.ESTACTIVO = "A";
                 objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
@@ -451,21 +452,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+        [ValidarSesion]
         public ActionResult Nuevo()
         {
             CategoriaViewModel model = new CategoriaViewModel();
             model.Categoria = new Categoria();
 
             model = InicializarCategoriaEdit();
-            //model.Categoria.i = Accion.Nuevo;
+           
             model.IndVisual = Visualicion.NO;
             Session["AccionCategoria"] = Accion.Nuevo;
             Session["Tabla1"] = null;
             Session["Tabla2"] = null;
             Session["Tipo"] = 1;
-            /*Session[Grilla.Tabla1] = Grilla.Tabla1;
-            Session[Grilla.Tabla1] = Grilla.Tabla1;
-            */
+           
 
             return View("Edit", model);
         }
@@ -543,10 +543,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         cell = new string[]
                             {
                                 
-                                //item.IdeAlternativa.ToString(),
-                                //item.NombreAlternativa.ToString(),
-                                //item.Peso.ToString(),
-                                //""
+                                
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
@@ -559,7 +556,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+               
                 return MensajeError();
             }
         }
@@ -567,6 +564,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         
         [HttpPost]
+        [ValidarSesion]
         public ActionResult Index(CategoriaViewModel model)
         {
 
@@ -654,6 +652,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult btnEditarDetalle(string id)
         {
 
@@ -710,6 +709,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult btnConsultarDetalle(string id)
         {
 
@@ -767,6 +767,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <param name="estado"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult ActivarDesactivar(string id, string estado)
         {
             var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
@@ -794,6 +795,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult EliminarCategoria(string id)
         {
             CategoriaViewModel model = new CategoriaViewModel();
@@ -915,9 +917,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoria.Categoria.TipoCriterio = objExamen.TipExamen;
                 
             }
-
-            
-
 
             return View("PopupCategoria", objCategoria);
            
