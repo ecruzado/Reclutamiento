@@ -616,5 +616,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
+        
+        /// <summary>
+        /// Inicializa el popup de cambio de pass
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>s
+        [ValidarSesion]
+        public ViewResult InicializaPopup()
+        {
+            UsuarioRolSedeViewModel objModel = new UsuarioRolSedeViewModel();
+            objModel.Password = new Password();
+
+            return View("PopupPassword", objModel);
+
+         }
+
     }
 }

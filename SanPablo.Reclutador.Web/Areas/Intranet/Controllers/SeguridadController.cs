@@ -372,5 +372,51 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
+        /// <summary>
+        /// validacion del nuevo password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+          
+         [HttpPost]
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+         public ActionResult ResetPass(UsuarioRolSedeViewModel model) {
+
+             JsonMessage ObjJsonMessage;
+             ObjJsonMessage = new JsonMessage();
+             model.Usuario = new Usuario();
+
+             var codUsuario = Session[ConstanteSesion.Usuario];
+
+             if (codUsuario != null)
+             {
+
+                 model.Usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(codUsuario));
+
+                 if (model.Usuario != null)
+                 {
+                     if (model.Password.PassAnterior.Equals(model.Usuario.CodContrasena))
+                     {
+                         model.Usuario.CodContrasena = model.Password.PassNuevo;
+                        _usuarioRepository.Update(model.Usuario);
+                         ObjJsonMessage.Resultado = true;
+                     }
+                     else
+                     {
+                         ObjJsonMessage.Resultado = false;
+                         ObjJsonMessage.Mensaje = "La contraseña anterior no existe";
+                     }
+                 }
+
+             }
+             
+             return Json(ObjJsonMessage);
+
+        }
+
+
+        
+
+
     }
 }

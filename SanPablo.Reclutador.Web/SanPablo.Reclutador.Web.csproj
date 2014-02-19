@@ -358,6 +358,7 @@
     <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupPassword.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
