@@ -53,6 +53,16 @@
             }
         }
 
+        /// <summary>
+        /// Obtiene la lista de roles
+        /// </summary>
+        /// <param name="tipoTabla"></param>
+        /// <returns></returns>
+        public IList<Rol> GetByTipRol()
+        {
+            var lista = GetBy(x => x.FlgEstado == "A");
+            return lista;
+        }
 
     }
 }

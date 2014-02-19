@@ -1,4 +1,5 @@
-﻿namespace SanPablo.Reclutador.Repository.Interface
+﻿
+namespace SanPablo.Reclutador.Repository.Interface
 {
     using NHibernate;
     using SanPablo.Reclutador.Entity;
@@ -15,12 +16,11 @@
     using System.Linq;
     using System.Transactions;
 
-    public interface IRolOpcionRepository : IRepository<RolOpcion>
-    {
 
-        int EliminaOpcion(int idRol, int idOpcion);
-        List<MenuItem> GetMenu(int idRol);
-        List<MenuPadre> GetMenuPadre(int idRol);
-        
+    public interface IUsuarioRolSedeRepository : IRepository<UsuarioRolSede>
+    {
+        List<Rol> GetListaRol(int idUsuario);
+        List<Sede> GetListaSede(int idUsuario, int codRol);
     }
+
 }

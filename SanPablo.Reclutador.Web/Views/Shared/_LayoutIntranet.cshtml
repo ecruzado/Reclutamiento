@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using SanPablo.Reclutador.Entity
+
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -46,21 +49,32 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mantenimiento <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="@Url.Action("Index", "Cargo", new { area = "Intranet"})">Cargos</a></li>
-                                <li><a href="#">Generales</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Evaluaciones <b class="caret"></b></a><ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Index", "Criterio", new { area = "Intranet"})">Criterio</a></li>
-                            <li><a href="@Url.Action("Index", "Categoria", new { area = "Intranet"})">Categoría</a></li><li><a href="@Url.Action("Index", "Examen", new { area = "Intranet"})">Exámenes</a></li></ul></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Requerimientos <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})">Solicitud de Reemplazo de Cargo</a></li><li><a href="@Url.Action("ListaAmpliacion", "SolicitudCargo", new { area = "Intranet"})">Solicitud de Ampliacion de Cargo</a></li><li><a href="@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet"})">Solicitud de Nuevo Cargo</a></li></ul></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Postulante <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="@Url.Action("Index", "Evaluacion", new { area = "Intranet"})">Evaluación</a></li></ul></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Seguridad <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="@Url.Action("Index", "Rol", new { area = "Intranet"})">Registro Rol</a></li><li><a href="@Url.Action("Index", "Usuario", new { area = "Intranet"})">Registro Usuario</a></li></ul></li>                           
+                 
+                     <ul class="nav">
+	                    @{ var myList = (List<MenuPadre>)Session["listaPadre"];
+                        var myListOp = (List<MenuItem>)Session["ListaMenu"];
+                          
+                           }
+                           @foreach (MenuPadre Item in myList)
+                           {
+                            <li class="dropdown">
+		                       
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Item.DESCRIPCION <b class="caret"></b></a>
+                                @{   List<MenuItem> Lista  =
+                                    (myListOp.Where(n => n.IDOPCIONPADRE == Item.IDOPCIONPADRE).ToList());
+                                }
+                                    <ul class="dropdown-menu">
+                                    @foreach (MenuItem opciones in Lista)
+                                    {
+                                 
+			                            <li><a href="@opciones.DSCURL">@opciones.DESCRIPCION</a></li>
+			                           
+                                    }
+                                    </ul>
+		                    </li>
+                           }
                     </ul>
+                    
                 </div>
             </div>
         </div>

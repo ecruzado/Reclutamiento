@@ -486,7 +486,7 @@
                 ]
         });
     },
-    LoadDropDownList: function (name, url, parameters, selected, isValIndex, async) {
+    LoadDropDownList: function (name, url, parameters, selected, id, descripcion, isValIndex, async) {
         var combo = document.getElementById(name);
         combo.options.length = 0;
         combo.options[0] = new Option("");
@@ -504,7 +504,7 @@
             data: JSON.stringify(parameters),
             success: function (items) {
                 $.each(items, function (index, item) {
-                    combo.options[index] = new Option(item.Nombre, item.IdComun);
+                    combo.options[index] = new Option(item[descripcion], item[id]);
                 });
                 if (selected == undefined) selected = 0;
 

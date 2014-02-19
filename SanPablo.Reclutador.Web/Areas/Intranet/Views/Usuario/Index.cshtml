@@ -1,167 +1,356 @@
-﻿@{
-    ViewBag.Title = "Listado Examen";
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UsuarioRolSedeViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
+    ViewBag.Title = "Usuarios";
 }
 @section Head{
 }
-
 @section Scripts{
-
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
 
         $('#btnNuevo').click(function () {
             window.location = '@Url.Action("Nuevo", "Usuario")';
+        });
+
+        $('#btnBuscarUsuario').click(function () {
+            $('#grdListUsuario').trigger('reloadGrid');
+        });
+        
+        $('#btnEditar').click(function () {
+            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+          
+            if (selr != null) {
+                window.location = '@Url.Action("Edit", "Usuario", new { id = ""})' + '/' + selr;
+             } else {
+                 MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+
+
+        });
+        
+        $('#btnConsultar').click(function () {
+            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+            
+            if (selr != null) {
+                window.location = '@Url.Action("Consulta", "Usuario", new { id = ""})' + '/' + selr;
+            } else {
+                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+
+        });
+
+        $('#btnActivarDesactivar').click(function () {
+            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $('#divActivarDesactivar').dialog('open');
+
+            } else {
+                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $('#btnEliminar').click(function () {
+            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $('#divEliminar').dialog('open');
+
+            } else {
+                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $("#spanEliminar").html("¿Desea eliminar el registro?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
+                    var estado = rowData.CodigoEstado;
+                    if (selr != null) {
+                        EliminarUsuario(selr, estado);
+                    } else {
+                        MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+
+        $("#spanActivarDesactivar").html("¿Desea Activar/Desactivar el registro?")
+        $('#divActivarDesactivar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
+                    var estado = rowData.FLGESTADO;
+                    if (selr != null) {
+                        ActivarDesactivarUsuario(selr, estado);
+                    } else {
+                        MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        jQuery("#grdListUsuario").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+
+                    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                    { field: 'idRol', data: $("#UsuarioRolSede_IdRol").val() },
+                    { field: 'idSede', data: $("#UsuarioRolSede_IdSede").val() },
+                    { field: 'nombre', data: $("#Usuario_DscNombres").val() },
+                    { field: 'codUsu', data: $("#Usuario_CodUsuario").val() },
+                    { field: 'apellidoPat', data: $("#Usuario_DscApePaterno").val() },
+                    { field: 'apellidoMat', data: $("#Usuario_DscApeMaterno").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaUsuarios", "Usuario")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListUsuario')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+              colNames: ['Estado', '', '', 'Cod. Usuario', 'Nombres', 'Apellido Paterno', 'Apellido Materno', 'Rol', 'Sede'],
+              colModel: [
+                      { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                      { name: 'FLGESTADO', index: 'FLGESTADO', align: 'center', sortable: false, width: 50, hidden: true },
+                      { name: 'IDUSUARIO', index: 'IDUSUARIO', align: 'center', sortable: false, hidden: true },
+                      { name: 'CODUSUARIO', index: 'CODUSUARIO', align: 'left' },
+                      { name: 'DSCNOMBRES', index: 'DSCNOMBRES', align: 'left', width: 250 },
+                      { name: 'DSCAPEPATERNO', index: 'DSCAPEPATERNO', align: 'left', width: 250 },
+                      { name: 'DSCAPEMATERNO', index: 'DSCAPEMATERNO', align: 'left', width: 250 },
+                     { name: 'rol', index: 'rol', align: 'left' },
+
+                      { name: 'sede', index: 'sede', align: 'left', width: 100 }
+                    
+              ],
+
+
+              pager: jQuery('#grdPagerUsuario'),
+              rowNum: 10,
+              rowList: [10, 30, 50],
+              autowidth: true,
+              rules: true,
+              sortname: 'IDUSUARIO',
+              sortorder: 'desc',
+              viewrecords: true,
+              height: 350,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              rownumbers: true,
+              shrinkToFit: false,
+
+              postData: {
+              }, loadComplete: function (data) {
+              }
           });
 
-    //    jQuery("#grdList").jqGrid({
-
-    //        datatype: 'json',
-    //        mtype: 'POST',
-    //        colNames: ['Codigo', 'Usuario', 'Sede', 'Rol', 'Estado', "", ""],
-    //        colModel: [
-    //                { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false },
-    //                { name: 'Nombre', index: 'Nombre', align: 'left', sortable: false },
-    //                { name: 'Sede', index: 'Sede', align: 'left', sortable: false },
-    //                { name: 'Rol', index: 'Rol', align: 'left', sortable: false },
-    //                { name: 'Estado', index: 'Estado', align: 'center', width: 50, sortable: false },
-    //                { name: 'Editar', index: 'Editar', align: 'center', sortable: false, width: 20, formatter: EditarFormatter },
-    //                { name: 'Eliminar', index: 'Eliminar', align: 'center', sortable: false, width: 20, formatter: EliminarFormatter }
-    //        ],
-    //        sortname: 'Codigo',
-    //        sortorder: 'desc',
-    //        viewrecords: true,
-    //        /*caption: 'Lista Referencias',*/
-    //        height: 120,
-    //        autowidth: true,
-    //        rowNum: 0,
-    //        cellsubmit: 'clientArray',
-    //        hidegrid: false,
-    //        postData: {
-
-    //        },
-    //        loadComplete: function (data) {
-
-    //        }
-    //    });
-
-    //    var dlgregistrousuario = $("#dlgregistrousuario").dialog(
-    //{
-    //    autoOpen: false,
-    //    modal: true,
-    //    title: "Registro Usuario",
-    //    width: 400,
-    //    height: 220,
-    //    buttons: {
-    //        "Grabar": function () {
-    //            $(this).dialog("close");
-    //            return true;
-    //        },
-    //        "Cancelar": function () {
-    //            $(this).dialog("close");
-    //            return false;
-    //        }
-    //    }
-    //});
-
+  
 
     });
 
-    function EditarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'action_edit.gif';
-        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
-        return strImg;
+
+    function ActivarDesactivarUsuario(selr, estado) {
+
+        $.ajax({
+            data: {
+                id: selr,
+                codEstado: estado
+            },
+            type: "POST",
+            url: "@Url.Action("ActivarDesactivar", "Usuario")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListUsuario').trigger('reloadGrid');
+                }
+            }
+        });
+
     }
 
-    function EliminarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'action_delete.gif';
-        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Eliminar" alt="Eliminar">';
-        return strImg;
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
-    function ConsultarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'action_search.gif';
-        var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Consultar" alt="Consultar">';
-        return strImg;
+
+    function EliminarUsuario(selr, estado) {
+
+        $.ajax({
+            data: {
+                id: selr
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarUsuario", "Usuario")",
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListUsuario').trigger('reloadGrid');
+                }
+            }
+        });
+
     }
-
-    function mostrarregistrousuario() {
-        $("#dlgregistrousuario").dialog('open');
-    }
-
+   
 </script>
 }
+@using (Html.BeginForm("Index", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmUsuarioIndex" }))
+{
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Examen</h5>
+                <h5>Usuarios</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Sede</label>
-                            <div class="controles">
-                                <select id="setipo" class="select-porce valid">
-                                    <option>Seleccionar</option>
-                                    <option>CHSP - San Miguel</option>                                                                        
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                     
+                    
+                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Rol</label>
                             <div class="controles">
-                                <select id="serol" class="select-porce valid">
-                                    <option>Seleccionar</option>
-                                    <option>Administrador</option>                                                                        
-                                </select>
+                                @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new {  data_val = "false" }) 
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
+                    </td>
+                    
+                    
+                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Usuario</label>
+                            <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                                <input type="text" />
+                               @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new {  data_val = "false" }) 
                             </div>
                         </div>
-                    </div>
-                    <div class="span5">
+                    </td>
+                 </tr>
+                 <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
+                                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , data_val = "false" })                      
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+                    </td>
+                      <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Apellido Paterno</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , data_val = "false" })                      
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Codigo</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" , data_val = "false" })                      
+                            </div>
+                        </div>
+                    </td>
+                      <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Apellido Materno</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" , data_val = "false" })                      
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="formulario-accion offset9">
+                    <td>
+                    <a id="btnBuscarUsuario"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
             <div class="tabla-datos">
-                <table id="grdList">
+                <table id="grdListUsuario">
                 </table>
-                <div id="grdPager"></div>
+                <div id="grdPagerUsuario"></div>
             </div>
             <div class="form-actions">
-                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                <a  id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a  id ="btnConsultar" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a  id ="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                
             </div>
         </div>
     </div>
 </div>
+}
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+<div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="divActivarDesactivar"><span id="spanActivarDesactivar"></span></div>
+<div id="divEliminar"><span id="spanEliminar"></span></div>

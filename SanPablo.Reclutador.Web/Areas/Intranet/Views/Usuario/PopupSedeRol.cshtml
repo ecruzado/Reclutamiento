@@ -1,0 +1,87 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UsuarioRolSedeViewModel
+@{
+    Layout = "";
+}
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#UsuarioRolSede_IdRol").change(function () {
+            var vvalor = $(this).val();
+
+            $.ajax({
+                data: {
+                        id : vvalor   
+                      },
+                type: "POST",
+                url: '@Url.Action("GetIndSede", "Usuario")',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado)
+                            {
+                                $("#trSede").show();
+                            }
+                            else
+                            {
+                                $("#trSede").hide();
+                            }
+                        }
+             });
+
+        });
+
+
+    });
+
+
+
+</script>
+
+
+@using (Html.BeginForm("PopupSedeRol", "Usuario", FormMethod.Post, new { id = "frmPopupSedeRol" }))
+    {
+    @Html.ValidationSummary(true)
+    @Html.TextBoxFor(model => model.IdUsuario,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.IdRolUsuario,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.IndSede,  new { style = "display: none;" })
+        
+
+    <table style="margin-left:30px;">
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Rol<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+               
+                @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol)) 
+                <div class="tex-error" style="font-size:12px;color:red">    
+                @Html.ValidationMessageFor(model => model.UsuarioRolSede.IdRol )
+                </div>
+            </td>
+        </tr>
+        
+        
+        <tr id="trSede">
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Sede<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+
+                @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede)) 
+                <div class="tex-error" style="font-size:12px;color:red">   
+                    @Html.ValidationMessageFor(model => model.UsuarioRolSede.IdSede )
+                </div>
+            </td>
+        </tr>    
+        
+        
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+       
+    </table>
+}

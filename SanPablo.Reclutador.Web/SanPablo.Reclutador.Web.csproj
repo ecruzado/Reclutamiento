@@ -175,6 +175,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioRolSedeViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
     <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
@@ -354,6 +356,7 @@
     <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
     <Content Include="Areas\Intranet\Views\LogSolicitudNuevoCargo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />

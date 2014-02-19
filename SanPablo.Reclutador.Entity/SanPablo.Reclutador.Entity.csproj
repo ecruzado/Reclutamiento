@@ -64,6 +64,8 @@
     <Compile Include="ConocimientoGeneralCargo.cs" />
     <Compile Include="DatosCargo.cs" />
     <Compile Include="LogSolicitudNuevoCargo.cs" />
+    <Compile Include="MenuItem.cs" />
+    <Compile Include="MenuPadre.cs" />
     <Compile Include="SendMail.cs" />
     <Compile Include="SolicitudNuevoCargo.cs" />
     <Compile Include="EvaluacionCargo.cs" />
@@ -98,7 +100,9 @@
     <Compile Include="SubCategoria.cs" />
     <Compile Include="Ubigeo.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioRolSede.cs" />
     <Compile Include="UsuarioSede.cs" />
+    <Compile Include="UsuarioVista.cs" />
     <Compile Include="Validation\AlternativaValidator.cs" />
     <Compile Include="Validation\CategoriaValidator.cs" />
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
