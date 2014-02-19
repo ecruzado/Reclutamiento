@@ -19,7 +19,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-
+    [Authorize]
     public class OpcionController : BaseController
     {
         

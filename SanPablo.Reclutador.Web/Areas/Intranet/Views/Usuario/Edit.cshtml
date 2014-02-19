@@ -216,6 +216,9 @@
                 url: '@Url.Action("valCodUsuario", "Usuario")',
                 traditional: true,
                 success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
                     if (data.Resultado == false) {
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     } else {
@@ -236,6 +239,9 @@
                 data: $("#frmEdicionUsuario").serialize(),
                 traditional: true,
                 success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
                     if (data.Resultado) {
                         $("#Usuario_IdUsuario").val(data.IdDato);
                         information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);

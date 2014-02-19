@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-
+    [Authorize]
     public class RolController : BaseController
     {
         private IRolRepository _rolRepository;
@@ -39,6 +39,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Inicializa la view
         /// </summary>
         /// <returns></returns>
+        [AuthorizeUser]
         public ActionResult Index()
         {
 
@@ -58,6 +59,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Iniaciliza la pag para crear un nuevo Rol
         /// </summary>
         /// <returns></returns>
+         [ValidarSesion]
         public ActionResult Nuevo()
         {
             RolViewModel rolModel = new RolViewModel();
@@ -89,7 +91,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Reliza el proceso de crear el rol
         /// </summary>
         /// <returns></returns>
-       
+        [ValidarSesion]
         public ActionResult Edit(RolViewModel model)
         {
             JsonMessage objJson = new JsonMessage();
@@ -100,7 +102,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var objRrol = _rolRepository.GetSingle(x => x.IdRol == model.rol.IdRol);
                 objRrol.FlgSede = model.rol.FlgSede;
                 objRrol.FechaModificacion = hoy;
-                objRrol.UsuarioModificacion = "Usuario Session";
+                objRrol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                 objRrol.CodRol = model.rol.CodRol;
                 objRrol.DscRol = model.rol.DscRol;
                 _rolRepository.Update(objRrol);
@@ -117,7 +119,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             else
             {
                 //nuevo
-                model.rol.UsuarioCreacion = "Usuario Sesion";
+                model.rol.UsuarioCreacion = UsuarioActual.NombreUsuario;
                 model.rol.FechaCreacion = hoy;
                 model.rol.FlgEstado = "A";
                 _rolRepository.Add(model.rol);
@@ -254,6 +256,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Edicion(string id)
         {
 
@@ -281,6 +284,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminarRol(string id)
         {
             
@@ -313,6 +317,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codCat"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminarOpcion(string id, string codOp)
         {
             var jsonMessage = new JsonMessage();
@@ -335,8 +340,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 jsonMessage.Mensaje = "Error : No se permite eliminar la opción";
             }
 
-
-
             return Json(jsonMessage);
         }
 
@@ -345,6 +348,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Consulta(string id)
         {
             RolViewModel model = new RolViewModel();

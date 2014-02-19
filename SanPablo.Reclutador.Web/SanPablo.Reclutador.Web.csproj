@@ -205,11 +205,14 @@
     <Compile Include="Controllers\PostulanteController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
+    <Compile Include="Core\AuthorizeUserAttribute.cs" />
     <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\ConstanteSesion.cs" />
     <Compile Include="Core\ImageFile.cs" />
     <Compile Include="Core\JsonResponse.cs" />
+    <Compile Include="Core\TerminoSesionException.cs" />
     <Compile Include="Core\Utils.cs" />
+    <Compile Include="Core\ValidarSesion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SanPablo.Reclutador.Web.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,11 +7,13 @@ using System.Web.Mvc;
 
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
+    [Authorize]
     public class EvaluacionController : Controller
     {
         //
         // GET: /Intranet/Evaluacion/
 
+        [AuthorizeUser]
         public ActionResult Index()
         {
             return View();

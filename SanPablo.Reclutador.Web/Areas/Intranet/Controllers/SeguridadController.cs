@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Security;
+
     
     public class SeguridadController : BaseController
     {
@@ -49,13 +51,39 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _usuarioVistaRepository = usuarioVistaRepository;
         }
 
+        /// <summary>
+        /// Cierra Session
+        /// </summary>
+        private void logout() {
+
+            Session.Clear();
+            Session.Abandon();
+            FormsAuthentication.SignOut();
+            Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            Response.Cache.SetExpires(DateTime.Now.AddSeconds(-1));
+            HttpCookie cookie = HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie != null)
+            {
+                cookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie);
+            }
+        
+        }
+
 
         public ActionResult Login()
         {
+
+
+            logout();
+            
+            
             SeguridadViewModel model = new SeguridadViewModel();
             model.Accion = Accion.Nuevo;
             model.listaRol = new List<Rol>();
             model.listaSede = new List<Sede>();
+
+            model.listaRol.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
             model.Usuario = new Usuario();
             model.Rol = new Rol();
@@ -104,11 +132,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (objModel.listaRol.Count>0)
             {
-                objModel.Accion = Accion.Editar;
+                int dato = 1;
             }
             else
             {
-                objModel.Accion = Accion.Nuevo;
                 objModel.listaRol = new List<Rol>();
             }
             
@@ -279,12 +306,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim() 
                                          && x.CodContrasena == codPass.Trim());
 
+            var objRol = _rolRepository.GetSingle(x => x.IdRol == Convert.ToInt32(codRol));
+
+            
             if (objUsuario!=null)
             {
                 if (objUsuario.IdUsuario!=null)
                 {
                     objJsonMensaje.Resultado = true;
                     objJsonMensaje.IdDato = Convert.ToInt32(codRol);
+
+                    Session[Core.ConstanteSesion.Usuario] = objUsuario.IdUsuario;
+                    Session[Core.ConstanteSesion.UsuarioDes] = objUsuario.CodUsuario;
+                    
+                    Session[Core.ConstanteSesion.Rol] = codRol;
+                    Session[Core.ConstanteSesion.RolDes] = objRol.DscRol;
+                    
+                    if (codSede!=null && !"".Equals(codSede.Trim()))
+                    {
+                        var objSede = _sedeRepository.GetSingle(x => x.CodigoSede == codSede);
+                        
+                        Session[Core.ConstanteSesion.Sede] = codSede;
+                        Session[Core.ConstanteSesion.SedeDes] = objSede.DescripcionSede; 
+
+                    }
+                    
+
                 }
             }
 
@@ -301,6 +348,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         public ActionResult GetMenu(string id) {
 
+            FormsAuthentication.SetAuthCookie(id, false);
             SeguridadViewModel objModel = new SeguridadViewModel();
 
             JsonMessage objMessage = new JsonMessage();
@@ -309,12 +357,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.listaMenu =new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id)));
             objModel.listaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id)));
 
-            Session["ListaMenu"] = objModel.listaMenu;
-            Session["listaPadre"] = objModel.listaPadre;
-            
-            return RedirectToAction("ListaReemplazo", "SolicitudCargo");
-
-        
+            if (objModel.listaPadre!=null)
+            {
+                Session["ListaMenu"] = objModel.listaMenu;
+                Session["listaPadre"] = objModel.listaPadre;
+               
+                return RedirectToAction("ListaReemplazo", "SolicitudCargo");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Seguridad");
+            }
+           
         }
 
 

@@ -17,8 +17,8 @@
     using System.Linq;
     using SanPablo.Reclutador.Web.Models.JQGrid;
 
-   
 
+    [Authorize]
     public class AlternativaController : BaseController
     {
         private IAlternativaRepository _alternativaRepository;

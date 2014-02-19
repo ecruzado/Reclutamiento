@@ -45,11 +45,14 @@
                     data: $("#frmCriterio").serialize(),
                     traditional: true,
                     success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                         }
+
                         if (data.Resultado) {
                             information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato,data.Accion);
                         }
                         if (!data.Resultado) {
-                           
                             notificacionExito(data.Mensaje);
                         }
 

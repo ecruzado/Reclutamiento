@@ -1,11 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿
 
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
+    using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Repository.Interface;
+    using SanPablo.Reclutador.Web.Core;
+    using SanPablo.Reclutador.Web.Areas.Intranet.Models;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using System.Linq;
+    using FluentValidation;
+    using FluentValidation.Results;
+    using NHibernate.Criterion;
+    
+    
+    [Authorize]
     public class SolicitudCargoController : Controller
     {
 
@@ -403,6 +414,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         #region Ampliacion
 
+        [AuthorizeUser]
         public ActionResult ListaAmpliacion()
         {
             return View();
@@ -920,6 +932,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         #region Reemplazo
 
+
+        [AuthorizeUser]
         public ActionResult ListaReemplazo()
         {
             return View();

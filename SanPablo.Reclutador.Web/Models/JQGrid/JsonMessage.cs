@@ -12,5 +12,6 @@ namespace SanPablo.Reclutador.Web.Models.JQGrid
         public object Objeto { get; set; }
         public int IdDato { get; set; }
         public string Accion { get; set; }
+        public bool redirecciona { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using CrystalDecisions.CrystalReports;
     using CrystalDecisions.Web;
 
+    [Authorize]
     public class ExamenController : BaseController
     {
         private ICategoriaRepository _categoriaRepository;
@@ -59,6 +60,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Nuevo :  regitra un examen
         /// </summary>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Nuevo()
         {
             
@@ -76,7 +78,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Edicion : Edita un examen seleccionado
         /// </summary>
         /// <returns></returns>
-       
+       [ValidarSesion]
         public ActionResult Edicion(string id)
         {
             ExamenViewModel model = new ExamenViewModel();
@@ -94,6 +96,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Consulta(string id)
         {
             ExamenViewModel model = new ExamenViewModel();
@@ -143,8 +146,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return objExamenViewModel;
         }
 
-        
 
+
+        [AuthorizeUser]
+        [ValidarSesion]
         public ActionResult Index()
         {
 
@@ -160,6 +165,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
+        [ValidarSesion]
         public ActionResult Index(ExamenViewModel model)
         {
 
@@ -174,7 +180,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objExamenModel.Examen.DescExamen = model.Examen.DescExamen;
 
             return View(objExamenModel);
-
         }
 
 
@@ -185,6 +190,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
 
         [HttpPost]
+        [ValidarSesion]
         public ActionResult Edicion(ExamenViewModel model)
         {
 
@@ -212,7 +218,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 
                 objExamenViewModal.Examen.FecCreacion = Hoy;
-                objExamenViewModal.Examen.UsrCreacion = "Prueba 01";
+                objExamenViewModal.Examen.UsrCreacion = UsuarioActual.NombreUsuario;
                 objExamenViewModal.Examen.EstActivo = "A";
                 objExamenViewModal.Examen.EstRegistro = "A";
 
@@ -225,7 +231,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     var objExamen = _examenRepository.GetSingle(x => x.IdeExamen == model.Examen.IdeExamen);
                     objExamen.FecModificacion = Hoy;
-                    objExamen.UsrModificacion = "Prueba 02";
+                    objExamen.UsrModificacion = UsuarioActual.NombreUsuario;
                     objExamen.TipExamen = model.Examen.TipExamen;
                     objExamen.DescExamen = model.Examen.DescExamen;
                     objExamen.NomExamen = model.Examen.DescExamen;
@@ -235,8 +241,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 
             }
-
-            
 
             return RedirectToAction("Edicion", "Examen", new { id = objExamenViewModal.Examen.IdeExamen });
         }
@@ -582,12 +586,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             string fullPath = null;
             ReportDocument rep = new ReportDocument();
             MemoryStream mem;
-            //Examen objExamen;
-            //Categoria objCategoria;
-            //SubCategoria objSubCategoria;
-            //Criterio objCriterio;
-            //Alternativa objAlternativa;
-
+            
             try
             {
                

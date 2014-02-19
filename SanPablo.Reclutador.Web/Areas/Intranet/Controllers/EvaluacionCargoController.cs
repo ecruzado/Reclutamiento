@@ -14,6 +14,8 @@
     using FluentValidation.Results;
     using NHibernate.Criterion;
 
+
+    [Authorize]
     public class EvaluacionCargoController : BaseController
     {
         //

@@ -301,10 +301,15 @@
             url: "@Url.Action("EliminarCriterio", "Criterio")",
             traditional: true,
             success: function (data) {
+                if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }
+
                 if (data.Resultado) {
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     $('#grdList').trigger('reloadGrid');
                 }
+                
             }
         });
 
