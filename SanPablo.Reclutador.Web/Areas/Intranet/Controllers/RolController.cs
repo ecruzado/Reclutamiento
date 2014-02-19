@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-
+    [Authorize]
     public class RolController : BaseController
     {
         private IRolRepository _rolRepository;
@@ -39,6 +39,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Inicializa la view
         /// </summary>
         /// <returns></returns>
+        [AuthorizeUser]
         public ActionResult Index()
         {
 

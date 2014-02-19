@@ -12,7 +12,8 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
-
+    
+    [Authorize]
     public class UbigeoCargoController : BaseController
     {
         //

@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Security;
+
     
     public class SeguridadController : BaseController
     {
@@ -301,6 +303,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         public ActionResult GetMenu(string id) {
 
+            FormsAuthentication.SetAuthCookie(id, false);
             SeguridadViewModel objModel = new SeguridadViewModel();
 
             JsonMessage objMessage = new JsonMessage();

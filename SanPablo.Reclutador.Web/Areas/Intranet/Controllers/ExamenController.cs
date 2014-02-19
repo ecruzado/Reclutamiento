@@ -24,6 +24,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using CrystalDecisions.CrystalReports;
     using CrystalDecisions.Web;
 
+    [Authorize]
     public class ExamenController : BaseController
     {
         private ICategoriaRepository _categoriaRepository;
@@ -143,8 +144,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return objExamenViewModel;
         }
 
-        
 
+
+        [AuthorizeUser]
         public ActionResult Index()
         {
 

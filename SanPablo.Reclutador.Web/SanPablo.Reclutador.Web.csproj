@@ -202,6 +202,7 @@
     <Compile Include="Controllers\PostulanteController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
+    <Compile Include="Core\AuthorizeUserAttribute.cs" />
     <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\ConstanteSesion.cs" />
     <Compile Include="Core\ImageFile.cs" />

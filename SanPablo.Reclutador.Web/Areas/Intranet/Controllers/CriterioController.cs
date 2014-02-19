@@ -18,6 +18,7 @@
     using System.Web;
     using System.Web.Mvc;
 
+    [Authorize]
     public class CriterioController : BaseController
     {
         private ICriterioRepository _criterioRepository;
@@ -39,7 +40,8 @@
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
             _categoriaRepository = categoriaRepository;
         }
-        
+
+        [AuthorizeUser]
         public ActionResult Index()
         {
             var criterioViewModel = InicializarCriteriosIndex();

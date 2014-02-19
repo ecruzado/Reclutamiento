@@ -51,10 +51,11 @@
                 <div class="nav-collapse collapse">
                  
                      <ul class="nav">
-	                    @{ var myList = (List<MenuPadre>)Session["listaPadre"];
-                        var myListOp = (List<MenuItem>)Session["ListaMenu"];
-                          
-                           }
+	                    @{ 
+                         var myList = (List<MenuPadre>)Session["listaPadre"];
+                         var myListOp = (List<MenuItem>)Session["ListaMenu"];
+                        
+                        }
                            @foreach (MenuPadre Item in myList)
                            {
                             <li class="dropdown">

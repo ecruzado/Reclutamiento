@@ -13,6 +13,7 @@
     using FluentValidation.Results;
     using NHibernate.Criterion;
 
+    [Authorize]
     public class SolicitudNuevoCargoController : BaseController
     {
         //
@@ -23,6 +24,7 @@
         private IDepartamentoRepository _departamentoRepository;
         private IAreaRepository _areaRepository;
 
+      
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                              IDetalleGeneralRepository detalleGeneralRepository,
                                              IDependenciaRepository dependenciaRepository,
@@ -88,6 +90,7 @@
             }
         }
 
+        [AuthorizeUser]
         public ActionResult Index()
         {
             var solicitudnuevoViewModel = inicializarNuevaSolicitud();

@@ -20,6 +20,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Configuration;
     using Newtonsoft.Json;
 
+    [Authorize]
     public class CategoriaController : BaseController
     {
         private ICategoriaRepository _categoriaRepository;
@@ -47,8 +48,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
             _examenRepository = examenRepository;
         }
-        
-        
+
+        [AuthorizeUser]
         public ActionResult Index()
         {
 

@@ -13,6 +13,7 @@
     using FluentValidation.Results;
     using NHibernate.Criterion;
 
+    [Authorize]
     public class PerfilController : BaseController
     {
         //

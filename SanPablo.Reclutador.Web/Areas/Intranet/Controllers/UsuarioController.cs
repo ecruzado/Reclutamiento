@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-
+    [Authorize]
     public class UsuarioController : BaseController
     {
        
@@ -52,6 +52,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// inicializa la pantalla inicial de usuarios
         /// </summary>
         /// <returns></returns>
+        [AuthorizeUser]
         public ActionResult Index()
         {
             UsuarioRolSedeViewModel objModel = new UsuarioRolSedeViewModel();
