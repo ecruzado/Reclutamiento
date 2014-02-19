@@ -58,13 +58,14 @@
     <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
-    <Compile Include="Interface\ILogSolicitudNuevoCargoRepository.cs" />
-    <Compile Include="LogSolicitudNuevoCargoRepository.cs" />
+<<<<<<< HEAD
     <Compile Include="Interface\ISolicitudNuevoCargoRepository.cs" />
-    <Compile Include="Interface\IOpcionRepository.cs" />
     <Compile Include="SolicitudNuevoCargoRepository.cs" />
     <Compile Include="DepartamentoRepository.cs" />
     <Compile Include="DependenciaRepository.cs" />
+=======
+    <Compile Include="Interface\IOpcionRepository.cs" />
+>>>>>>> 3da65dfadeaf48400717601d1549e55be108256d
     <Compile Include="EvaluacionCargoRepository.cs" />
     <Compile Include="Interface\IAreaRepository.cs" />
     <Compile Include="Interface\IDepartamentoRepository.cs" />
@@ -73,8 +74,6 @@
     <Compile Include="Interface\IRolOpcionRepository.cs" />
     <Compile Include="Interface\IRolRepository.cs" />
     <Compile Include="Interface\IUsuarioRepository.cs" />
-    <Compile Include="Interface\IUsuarioRolSedeRepository.cs" />
-    <Compile Include="Interface\IUsuarioVistaRepository.cs" />
     <Compile Include="OfrecemosCargoRepository.cs" />
     <Compile Include="Interface\OfrecemosCargoRepository.cs" />
     <Compile Include="OpcionRepository.cs" />
@@ -136,8 +135,6 @@
     <Compile Include="SubcategoriaRepository.cs" />
     <Compile Include="UbigeoRepository.cs" />
     <Compile Include="UsuarioRepository.cs" />
-    <Compile Include="UsuarioRolSedeRepository.cs" />
-    <Compile Include="UsuarioVistaRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">

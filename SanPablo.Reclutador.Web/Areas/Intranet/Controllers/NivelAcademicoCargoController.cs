@@ -38,6 +38,7 @@
         [HttpPost]
         public virtual JsonResult ListaNivelAcademico(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -46,7 +47,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<NivelAcademicoCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_nivelAcademicoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -87,7 +88,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "NivelAcademico")]NivelAcademicoCargo nivelAcademicoCargo)
         { 
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -157,7 +158,7 @@
         [HttpPost]
         public ActionResult eliminarNivelAcademico(int ideNivelAcademico)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             ActionResult result = null;
             var nivelAcademicoEliminar = new NivelAcademicoCargo();
             nivelAcademicoEliminar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == ideNivelAcademico);

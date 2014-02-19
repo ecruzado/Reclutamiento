@@ -189,6 +189,7 @@
     <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UsuarioRolSedeViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
     <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
@@ -300,6 +301,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
@@ -355,6 +357,8 @@
 <<<<<<< HEAD
     <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
 =======
+    <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
+>>>>>>> 3da65dfadeaf48400717601d1549e55be108256d
     <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
 >>>>>>> 9314dbd8bcf970894e8000ce68d0d562a9416d89
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />

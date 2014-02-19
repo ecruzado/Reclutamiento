@@ -3,8 +3,190 @@
        ViewBag.Title = "Perfil";
        Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section Scripts{ 
-    <script type="text/javascript">
+
+
+@using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
+{
+<!--General Inicio -->
+    @Html.ValidationSummary(true)
+    <div class="tab-pane" id="B">
+        <form>
+            <div class="grilla-opciones" style="margin-top:0px;">
+                <h6>Datos generales</h6>
+                <div class="opciones">
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <table border="0" style="width:100%">
+                <tbody>
+                    <tr>
+                        <td style="width:40px"></td>
+                        <td style="width:350px"></td>
+                        <td>
+                            Ptje.
+                        </td>
+                        <td style="width:50px">
+                        </td>
+                        <td></td>
+                        <td>
+                        </td>
+                        <td style="text-align:center">
+                            Ptje.
+                        </td>
+                        <td></td>
+                        <td style="width:80px"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="width:180px;">
+                            <label class="control-label" for="input01">Postulante Interno</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Cargo.PuntajePostulanteInterno, new { @class = "input-xxmini" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajePostulanteInterno)
+                            </div>
+                        </td>
+                        <td></td>
+                        <td>
+                            <label class="control-label" for="input01">Rango Edad</label>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" }) -  @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
+                            </div>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
+                            </div>
+                        </td>
+                        <td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>
+              
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="td-label">
+                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
+                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.Sexo)
+                            </div>
+                        </td>
+                        <td style="width:80px" >
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
+                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeSexo)
+                            </div>
+                        </td>                                       
+                        <td></td>
+                        <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
+                        <td> 
+                            @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.TipoRequerimiento)
+                            </div>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2" style="text-align:left;">
+                            <span style="font-size:9px;font-weight:bolder;">El(los) sexo(s) seleccionado(s) serán considerados</span>
+                        </td> 
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>   
+                    <tr>
+                        <td></td>
+                        <td style =" width:450px" >
+                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
+                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
+                            </div>
+                        </td>
+                        <td style="width:80px">
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
+                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeSalario)
+                            </div>
+                        </td>
+                        <td></td>                                     
+                        <td></td>
+                        <td>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td colspan="5"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </form>
+        <div class="grilla-opciones">
+            <h6>Horario</h6>
+            <div class="opciones">
+                <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListHorario">
+            </table>
+            <div id="grdPagerHorario">
+            </div>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Ubigeo</h6>
+            <div class="opciones">
+                <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListUbigeo">
+            </table>
+            <div id="grdPagerUbigeo">
+            </div>
+        </div>
+                                            
+        <div class="formulario-accion">
+            <div class="opciones">
+                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                
+            </div>
+
+        </div>
+    </div>
+}
+  <!--General Fin-->
+<div id="updateDialogHorario" title="Agregar Horario"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>
+
+<div id="updateDialogUbigeo" title="Agregar Ubigeo"></div>
+   
+@section ScriptsCargo{   
+ <script type="text/javascript">
         $(document).ready(function () {
 
             $('#btnAgregarHorario').click(function () {
@@ -295,161 +477,3 @@
 </script>
 
 }
-
-@using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
-{
-<!--General Inicio -->
-    @Html.ValidationSummary(true)
-    <div class="tab-pane" id="B">
-        <form>
-            <div class="grilla-opciones" style="margin-top:0px;">
-                <h6>Datos generales</h6>
-                <div class="opciones">
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <table border="0" style="width:100%">
-                <tbody>
-                    <tr>
-                        <td style="width:40px"></td>
-                        <td style="width:350px"></td>
-                        <td>
-                            Ptje.
-                        </td>
-                        <td style="width:50px">
-                        </td>
-                        <td></td>
-                        <td>
-                        </td>
-                        <td style="text-align:center">
-                            Ptje.
-                        </td>
-                        <td></td>
-                        <td style="width:80px"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="width:180px;">
-                            <label class="control-label" for="input01">Postulante Interno</label>
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.Cargo.PuntajePostulanteInterno, new { @class = "input-xxmini" })
-                        </td>
-                        <td></td>
-                        <td>
-                            <label class="control-label" for="input01">Rango Edad</label>
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" }) -  @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini" })
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" })
-                        </td>
-                        <td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>
-              
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
-                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
-                        </td>
-                        <td style="width:80px" >
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
-                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
-                        </td>                                       
-                        <td></td>
-                        <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
-                        <td> 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
-                        </td>
-                        <td>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="2" style="text-align:left;">
-                            <span style="font-size:9px;font-weight:bolder;">El(los) sexo(s) seleccionado(s) serán considerados</span>
-                        </td> 
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>   
-                    <tr>
-                        <td></td>
-                        <td style =" width:450px" >
-                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
-                        </td>
-                        <td style="width:80px">
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
-                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
-                        </td>
-                        <td></td>                                     
-                        <td></td>
-                        <td>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td></td>
-                        <td colspan="5"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
-                    </tr>
-                </tbody>
-
-            </table>
-        </form>
-        <div class="grilla-opciones">
-            <h6>Horario</h6>
-            <div class="opciones">
-                <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-            </div>
-            <div style="clear:both"></div>
-        </div>
-        <div class="tabla-datos">
-            <table id="grdListHorario">
-            </table>
-            <div id="grdPagerHorario">
-            </div>
-        </div>
-        <div class="grilla-opciones">
-            <h6>Ubigeo</h6>
-            <div class="opciones">
-                <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-            </div>
-            <div style="clear:both"></div>
-        </div>
-        <div class="tabla-datos">
-            <table id="grdListUbigeo">
-            </table>
-            <div id="grdPagerUbigeo">
-            </div>
-        </div>
-                                            
-        <div class="formulario-accion">
-            <div class="opciones">
-                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
-                <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                
-            </div>
-
-        </div>
-    </div>
-}
-  <!--General Fin-->
-<div id="updateDialogHorario" title="Agregar Horario"></div>
-    <div id="divMensaje">
-        <span id="spanMensaje"></span>
-    </div>
-
-<div id="updateDialogUbigeo" title="Agregar Ubigeo"></div>
-   
-  

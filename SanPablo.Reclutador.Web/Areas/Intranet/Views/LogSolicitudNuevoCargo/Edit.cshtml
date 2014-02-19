@@ -1,0 +1,63 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.LogSolicitudNuevoCargoViewModel
+@{
+    Layout = "";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById('AreaObservaciones').style.display = "block";
+
+        //ELEGIR EL TIPO DE INSTITUCIONES
+        $('#Aprobado').change(function () {
+            mostrarObservacion();
+        });
+        $('#Rechazado').change(function () {
+            mostrarObservacion();
+        });
+
+    });
+    function mostrarObservacion()
+    {
+        var aprobado = $('input[name="Aprobado"]:checked').val();
+        if (aprobado == "false") {
+            document.getElementById('AreaObservaciones').style.display = "block";
+        }
+        else { document.getElementById('AreaObservaciones').style.display = "none"; }
+    }
+</script>
+
+
+@using (Html.BeginForm("Edit", "LogSolicitudNuevoCargo", FormMethod.Post, new { @id = "LogSolicitudNuevoCargoForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    <table style="margin-left:0px;">
+        <tr>
+            @Html.HiddenFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
+            <td class="colImput" style="width:50px"></td>
+            <td>
+                @Html.RadioButtonFor(model => model.Aprobado, "true", new { @id="Aprobado"}) Aprobar
+            </td>
+            <td class="colImput" style="width:50px"></td>
+            <td>
+                @Html.RadioButtonFor(model => model.Aprobado, "false", new { @id="Rechazado"}) Rechazar 
+            </td>
+        </tr>
+    </table>
+    <table id="AreaObservaciones" style="margin-left:0px; display:none">
+        <tr class ="colEtiqueta" style="height:10px"></tr>
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Observacion <span class="text-error">*</span></label>
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.LogSolicitudNuevoCargo.Observacion)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.LogSolicitudNuevoCargo.Observacion)
+                </div>
+            </td>
+        </tr>  
+    </table>
+}

@@ -37,6 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaCentroEstudio(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -45,7 +46,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<CentroEstudioCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_centroEstudioCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -85,7 +86,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "CentroEstudio")]CentroEstudioCargo centroEstudioCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -150,7 +151,7 @@
         public ActionResult eliminarCentroEstudio(int ideCentroEstudio)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var centroEstudioEliminar = new CentroEstudioCargo();
             centroEstudioEliminar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == ideCentroEstudio);
             int valorEliminar = centroEstudioEliminar.PuntajeCentroEstudios;

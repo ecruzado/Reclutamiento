@@ -37,6 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaOfimatica(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -46,7 +47,7 @@
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
                 where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -85,8 +86,8 @@
         [HttpPost]
         public ActionResult Ofimatica([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo conocimientoGeneralCargo)
         {
-            
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -158,7 +159,7 @@
         public ActionResult eliminarOfimatica(int ideOfimatica)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var ofimaticaEliminar = new ConocimientoGeneralCargo();
             ofimaticaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOfimatica);
             int valorEliminar = ofimaticaEliminar.PuntajeConocimiento;
@@ -175,6 +176,7 @@
         [HttpPost]
         public virtual JsonResult ListaIdioma(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -183,7 +185,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
                 where.Add(Expression.IsNotNull("TipoIdioma"));
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -223,7 +225,7 @@
         [HttpPost]
         public ActionResult Idioma([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo idiomaCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -294,7 +296,7 @@
         public ActionResult eliminarIdioma(int ideIdioma)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var idiomaEliminar = new ConocimientoGeneralCargo();
             idiomaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideIdioma);
             int valorEliminar = idiomaEliminar.PuntajeConocimiento;
@@ -311,6 +313,7 @@
         [HttpPost]
         public virtual JsonResult ListaOtrosConocimientos(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -320,7 +323,7 @@
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
                 where.Add(Expression.IsNotNull("TipoConocimientoGeneral"));
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
 
                 var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -361,7 +364,7 @@
         [HttpPost]
         public ActionResult OtrosConocimientos([Bind(Prefix = "Conocimiento")]ConocimientoGeneralCargo conocimientoCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -433,7 +436,7 @@
         public ActionResult eliminarOtrosConocimientos(int ideOtrosConocimientos)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var otrosConocimientosEliminar = new ConocimientoGeneralCargo();
             otrosConocimientosEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOtrosConocimientos);
             int valorEliminar = otrosConocimientosEliminar.PuntajeConocimiento;

@@ -23,19 +23,22 @@
         private IDependenciaRepository _dependenciaRepository;
         private IDepartamentoRepository _departamentoRepository;
         private IAreaRepository _areaRepository;
+        private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
 
       
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                              IDetalleGeneralRepository detalleGeneralRepository,
                                              IDependenciaRepository dependenciaRepository,
                                              IDepartamentoRepository departamentoRepository,
-                                             IAreaRepository areaRepository)
+                                             IAreaRepository areaRepository,
+                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _dependenciaRepository = dependenciaRepository;
             _departamentoRepository = departamentoRepository;
             _areaRepository = areaRepository;
+            _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
         }
 
 
@@ -105,7 +108,7 @@
             try
             {
                 solicitudNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
-
+                
                 if (IndicadorActivo.Activo.Equals(codEstado))
                 {
                     solicitudNuevoCargo.EstadoActivo = IndicadorActivo.Inactivo;
@@ -137,6 +140,13 @@
             {
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 solicitudNuevoCargoViewModel.SolicitudNuevoCargo = solNuevoCargo;
+                actualizarDatosAreas(solicitudNuevoCargoViewModel, solNuevoCargo.IdeArea);
+                if (solNuevoCargo.EstadoActivo == IndicadorActivo.Activo)
+                {
+                    solicitudNuevoCargoViewModel.Estado = "Activo";
+                }
+                else
+                { solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
             }
             return View(solicitudNuevoCargoViewModel);
         }
@@ -164,7 +174,7 @@
 
 
         [HttpPost]
-        public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevoCargo)
+        public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevaSolicitudCargo)
         {
             var enviarMail = new SendMail();
             //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
@@ -174,21 +184,55 @@
                 if (!ModelState.IsValid)
                 {
                     var nuevoCargoViewModel = inicializarSolicitudNuevoCargo();
-                    nuevoCargoViewModel.SolicitudNuevoCargo = nuevoCargo;
+                    nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
                     return View(nuevoCargoViewModel);
                 }
-                if (nuevoCargo.IdeSolicitudNuevoCargo == 0)
+                if (nuevaSolicitudCargo.IdeSolicitudNuevoCargo == 0)
                 {
-                    nuevoCargo.EstadoActivo = "A";
-                    nuevoCargo.FechaCreacion = FechaCreacion;
-                    nuevoCargo.UsuarioCreacion = "YO";
-                    nuevoCargo.FechaModificacion = FechaCreacion;
-                    
-                    _solicitudNuevoCargoRepository.Add(nuevoCargo);
-
-                    enviarMail.EnviarCorreo("enviar", true, "Nuevo Requerimiento");
+                    nuevaSolicitudCargo.IdeSede = 1;
+                    nuevaSolicitudCargo.EstadoActivo = "A";
+                    nuevaSolicitudCargo.FechaCreacion = FechaCreacion;
+                    nuevaSolicitudCargo.UsuarioCreacion = "YO";
+                    _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
+                    var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
+                    //determinar la sede de solicitud
+                    //SEDE SURCO
+                    //SEDE SURCO
+                    LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+                    logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
+                    logSolicitud.TipoEtapa = EtapasSolicitud.PendienteAprobacion;
+                    logSolicitud.RolResponsable = Responsable.GerenteAdministrativoSede;
+                    logSolicitud.TipoSuceso = EstadoSolicitud.Pendiente;
+                    logSolicitud.FechaSuceso = FechaCreacion;
+                    logSolicitud.UsuarioSuceso = UsuarioActual.CodUsuario;
+                    _logSolicitudNuevoCargoRepository.Add(logSolicitud);
+                    enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado, true, Solicitud.Nuevo);
                 }
-               
+                else
+                {
+                    var estadoSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == nuevaSolicitudCargo.IdeSolicitudNuevoCargo);
+                    if ((estadoSolicitud.TipoEtapa == EtapasSolicitud.PendienteAprobacion) && 
+                        (estadoSolicitud.TipoSuceso == EstadoSolicitud.Pendiente) && 
+                        ((estadoSolicitud.RolResponsable == Responsable.GerenteAdministrativoSede) || (estadoSolicitud.RolResponsable == Responsable.GerenteArea)))
+                    {
+                        var actualizarSolicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == nuevaSolicitudCargo.IdeSolicitudNuevoCargo);
+                        actualizarSolicitud.CodigoCargo = nuevaSolicitudCargo.CodigoCargo;
+                        actualizarSolicitud.NombreCargo = nuevaSolicitudCargo.NombreCargo;
+                        actualizarSolicitud.DescripcionCargo = nuevaSolicitudCargo.DescripcionCargo;
+                        actualizarSolicitud.NumeroPosiciones = nuevaSolicitudCargo.NumeroPosiciones;
+                        actualizarSolicitud.TipoRangoSalarial = nuevaSolicitudCargo.TipoRangoSalarial;
+                        actualizarSolicitud.IdeArea = nuevaSolicitudCargo.IdeArea;
+                        actualizarSolicitud.UsuarioModificacion = UsuarioActual.CodUsuario;
+                        actualizarSolicitud.FechaModificacion = FechaModificacion;
+                        _solicitudNuevoCargoRepository.Update(actualizarSolicitud);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "No se puede modificar la solicitud ya que el estado es : "+estadoSolicitud.TipoSuceso+ " por el Responsable: "+ estadoSolicitud.RolResponsable;
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                }
                 objJsonMessage.Mensaje = "Agregado Correctamente";
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
@@ -218,6 +262,7 @@
             solicitudCargoViewModel.Areas = new List<Area>();
             solicitudCargoViewModel.Areas.Add(new Area { IdeArea=0, NombreArea ="Seleccionar"});
 
+
             return solicitudCargoViewModel;
         }
 
@@ -231,7 +276,7 @@
             return result;
         }
 
-        public ActionResult listaareas(int ideDepartamento)
+        public ActionResult listaAreas(int ideDepartamento)
         {
             ActionResult result = null;
 
@@ -239,7 +284,14 @@
             result = Json(listaResultado);
             return result;
         }
-        
+        public void actualizarDatosAreas(SolicitudNuevoCargoViewModel model, int ideArea)
+        {
+            List<string> datosArea = _solicitudNuevoCargoRepository.obtenerDatosArea(ideArea);
+            model.Areas = new List<Area>(_areaRepository.GetBy(x => x.IdeArea == ideArea));
+            model.Departamentos.Insert(0, new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
+            model.Dependencias.Insert(0, new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
+        }
+
         [HttpPost]
         public ActionResult recuperarCodigoSolicitud(string codigo)
         {
@@ -261,7 +313,6 @@
                 return Json(objJsonMessage);
             }
         }
-
 
        
     }

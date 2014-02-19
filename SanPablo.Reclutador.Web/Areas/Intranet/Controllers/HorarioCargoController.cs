@@ -36,6 +36,8 @@
         [HttpPost]
         public virtual JsonResult ListaHorario(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            
             try
             {
 
@@ -44,7 +46,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<HorarioCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_horarioCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -81,7 +83,7 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Horario")]HorarioCargo horarioCargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -143,7 +145,7 @@
         public ActionResult eliminarHorario(int ideHorario)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var horarioEliminar = new HorarioCargo();
             horarioEliminar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == ideHorario);
             int puntajeEliminar = horarioEliminar.PuntajeHorario;

@@ -37,6 +37,7 @@
         [HttpPost]
         public virtual JsonResult ListaExperiencia(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -45,7 +46,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<ExperienciaCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_experienciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -84,8 +85,8 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Experiencia")]ExperienciaCargo experienciaCargo)
         {
-            
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -150,7 +151,7 @@
         public ActionResult eliminarExperiencia(int ideExperiencia)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var experienciaEliminar = new ExperienciaCargo();
             experienciaEliminar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == ideExperiencia);
             int valorEliminar = experienciaEliminar.PuntajeExperiencia;

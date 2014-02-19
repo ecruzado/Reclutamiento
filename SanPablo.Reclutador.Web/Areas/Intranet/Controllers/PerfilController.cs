@@ -1,6 +1,7 @@
 ﻿namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
     using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Entity.Validation;
     using SanPablo.Reclutador.Repository.Interface;
     using SanPablo.Reclutador.Web.Core;
     using SanPablo.Reclutador.Web.Areas.Intranet.Models;
@@ -20,37 +21,47 @@
         // GET: /Intranet/Cargo/
         private ICargoRepository _cargoRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoRepository;
        
         public PerfilController(ICargoRepository cargoRepository,
-                                IDetalleGeneralRepository detalleGeneralRepository)
+                                IDetalleGeneralRepository detalleGeneralRepository,
+                                ILogSolicitudNuevoCargoRepository logSolicitudNuevoRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
+            _logSolicitudNuevoRepository = logSolicitudNuevoRepository;
         }
 
         public ActionResult Index(string ideSolicitud)
         {
-            //try
-            //{
-
-                (Session["CargoIde"]) = 1;
-                int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            try
+            {
                 var perfilViewModel = inicializarPerfil();
+                if (ideSolicitud != null)
+                {
+                    DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud));
+                    CargoPerfil = datosCargo;
+                }
+                actualizarDatosCargo(perfilViewModel);
+
+                int IdeCargo = CargoPerfil.IdeCargo;
                 if (IdeCargo != 0)
                 {
+
                     var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
                     perfilViewModel.Cargo = cargo;
                 }
-            //}
-            //catch (Exception)
-            //{
- 
-            //}
-            return View(perfilViewModel);
+                return View(perfilViewModel);
+            }
+            catch (Exception)
+            {
+                //return View(perfilViewModel);
+                return View();
+            }
+            
         }
 
-
-
+        
         public PerfilViewModel inicializarPerfil()
         {
             var cargoViewModel = new PerfilViewModel();
@@ -72,12 +83,14 @@
         [HttpPost]
         public ActionResult Index([Bind(Prefix = "Cargo")]Cargo cargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarGeneral();
             try
             {
-                if (!ModelState.IsValid)
+                CargoValidator validation = new CargoValidator();
+                ValidationResult result = validation.Validate(cargo, "ObjetivoCargo", "FuncionCargo");
+                if (!result.IsValid)
                 {
                     cargoViewModel.Cargo = cargo;
                     return View(cargoViewModel);
@@ -100,9 +113,9 @@
 
         public ActionResult General()
         {
-            (Session["CargoIde"]) = 1;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var perfilViewModel = inicializarGeneral();
+            actualizarDatosCargo(perfilViewModel);
             if (IdeCargo != 0)
             {
                 var cargo = _cargoRepository.GetSingle(x=>x.IdeCargo == IdeCargo);
@@ -115,17 +128,20 @@
         [HttpPost]
         public ActionResult General([Bind(Prefix = "Cargo")]Cargo cargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);  
             var cargoViewModel = inicializarGeneral();
             try
             {
-                if (!ModelState.IsValid)
+                CargoValidator validation = new CargoValidator();
+                ValidationResult resul = validation.Validate(cargo, "PuntajePostulanteInterno", "EdadInicio", "EdadFin",
+                                                             "PuntajeEdad", "Sexo", "PuntajeSexo", "TipoRequerimiento", "TipoRangoSalarial", "PuntajeSalario");
+
+                if (!resul.IsValid)
                 {
                     cargoViewModel.Cargo = cargo;
                     return View(cargoViewModel);
                 }
-                             
                 cargoEditar.UsuarioModificacion = "USUA";
                 cargoEditar.FechaModificacion = FechaCreacion;
                 cargoEditar.PuntajePostulanteInterno = cargo.PuntajePostulanteInterno;
@@ -167,231 +183,39 @@
             return cargoViewModel;
         }
         
-        [HttpPost]
-        public ActionResult ListaCargo(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[11]
-        {
-          "200001",
-          "200001",
-          "Secretaría Ejecutiva",
-          "Secretaría Ejecutiva",
-          "Gerencia General",
-          "Gerencia",
-          "Gerencia",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[11]
-        {
-          "200002",
-          "200002",
-          "Técnico de Almacén",
-          "Técnico de Almacén",
-          "Logística",
-          "Almacén",
-          "Despacho",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType2_3 = new
-            {
-                id = 3,
-                cell = new string[11]
-        {
-          "200003",
-          "200003",
-          "Técnico en Enfermería",
-          "Técnico en Enfermería",
-          "Gerencia Medica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_3);
-            var fAnonymousType2_4 = new
-            {
-                id = 4,
-                cell = new string[11]
-        {
-          "200004",
-          "200004",
-          "Secretaría Ejecutiva",
-          "Secretaría Ejecutiva",
-          "Gerencia General",
-          "Gerencia",
-          "Gerencia",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_4);
-            var fAnonymousType2_5 = new
-            {
-                id = 5,
-                cell = new string[11]
-        {
-          "200005",
-          "200005",
-          "Técnico de Almacén",
-          "Técnico de Almacén",
-          "Logística",
-          "Almacén",
-          "Despacho",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_5);
-            var fAnonymousType2_6 = new
-            {
-                id = 6,
-                cell = new string[11]
-        {
-          "200006",
-          "200006",
-          "Técnico en Enfermería",
-          "Técnico en Enfermería",
-          "Gerencia Medica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_6);
-            var fAnonymousType2_7 = new
-            {
-                id = 7,
-                cell = new string[11]
-        {
-          "200007",
-          "200007",
-          "Secretaría Ejecutiva",
-          "Secretaría Ejecutiva",
-          "Gerencia General",
-          "Gerencia",
-          "Gerencia",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_7);
-            var fAnonymousType2_8 = new
-            {
-                id = 8,
-                cell = new string[11]
-        {
-          "200008",
-          "200008",
-          "Técnico de Almacén",
-          "Técnico de Almacén",
-          "Logística",
-          "Almacén",
-          "Despacho",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_8);
-            var fAnonymousType2_9 = new
-            {
-                id = 9,
-                cell = new string[11]
-        {
-          "200009",
-          "200009",
-          "Técnico en Enfermería",
-          "Técnico en Enfermería",
-          "Gerencia Medica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_9);
-            var fAnonymousType2_10 = new
-            {
-                id = 10,
-                cell = new string[11]
-        {
-          "200010",
-          "200010",
-          "Técnico en Enfermería",
-          "Técnico en Enfermería",
-          "Gerencia Medica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "19/10/2012",
-          "Admin",
-          "23/10/2013",
-          "Admin"        }
-            };
-            list.Add((object)fAnonymousType2_10);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
-
         public ActionResult Estudio()
         {
-            (Session["CargoIde"]) = 1;
             var estudioCargoViewModel = inicializarDatosCargo();
+            actualizarDatosCargo(estudioCargoViewModel);
             return View(estudioCargoViewModel);
         }
         
         public ActionResult Experiencia()
         {
-            (Session["CargoIde"]) = 1;
             var experienciaCargoViewModel = inicializarDatosCargo();
+            actualizarDatosCargo(experienciaCargoViewModel);
             return View(experienciaCargoViewModel);
         }
 
         public ActionResult Conocimientos()
         {
-            (Session["CargoIde"]) = 1;
             var conocimientosCargoViewModel = inicializarDatosCargo();
+            actualizarDatosCargo(conocimientosCargoViewModel);
             return View(conocimientosCargoViewModel);
         }
 
         public ActionResult Discapacidad()
         {
-            (Session["CargoIde"]) = 1;
             var discapacidadCargoViewModel = inicializarDatosCargo();
+            actualizarDatosCargo(discapacidadCargoViewModel);
             return View(discapacidadCargoViewModel);
         }
 
         public ActionResult ConfiguracionPerfil()
         {
-            (Session["CargoIde"]) = 1;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]); 
+            int IdeCargo = CargoPerfil.IdeCargo; 
             var discapacidadCargoViewModel = inicializarDatosConfig(IdeCargo);
+            actualizarDatosCargo(discapacidadCargoViewModel);
             return View(discapacidadCargoViewModel);
         }
         
@@ -404,24 +228,25 @@
 
         public PerfilViewModel inicializarDatosConfig(int IdeCargo)
         {
-            var discapacidadCargoViewModel = new PerfilViewModel();
+            var cargoViewModel = new PerfilViewModel();
             var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
-            discapacidadCargoViewModel.Cargo = cargoActual;
-            return discapacidadCargoViewModel;
+            cargoViewModel.Cargo = cargoActual;
+            return cargoViewModel;
         }
+
         [HttpPost]
         public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
         {
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarGeneral();
+            
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    cargoViewModel.Cargo = cargo;
-                    return View(cargoViewModel);
-                }
+                CargoValidator validation = new CargoValidator();
+                ValidationResult result = validation.Validate(cargo, "PuntajeMinimoPostulanteInterno", "PuntajeMinimoEdad", "PuntajeMinimoSexo", "PuntajeMinimoSalario",
+                                                              "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
+                                                              "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
 
                 cargoEditar.UsuarioModificacion = "USUA";
                 cargoEditar.FechaModificacion = FechaCreacion;
@@ -439,8 +264,17 @@
                 cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
                 cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
-                _cargoRepository.Update(cargoEditar);
 
+                if (!result.IsValid)
+                {
+                    cargoViewModel.Cargo = cargoEditar;
+                    actualizarDatosCargo(cargoViewModel);
+                    return View(cargoViewModel);
+                }
+                             
+                _cargoRepository.Update(cargoEditar);
+                cargoViewModel.Cargo = cargoEditar;
+                actualizarDatosCargo(cargoViewModel);
                 
                 return View(cargoViewModel);
             }
@@ -454,10 +288,32 @@
 
         public ActionResult Evaluacion()
         {
-            (Session["CargoIde"]) = 1;
             var evaluacionCargoViewModel = inicializarDatosCargo();
+            actualizarDatosCargo(evaluacionCargoViewModel);
             return View(evaluacionCargoViewModel);
         }
-        
+
+        public void actualizarDatosCargo(PerfilViewModel perfilViewModel)
+        {
+            perfilViewModel.Cargo.CodigoCargo = CargoPerfil.CodigoCargo;
+            perfilViewModel.Cargo.NombreCargo = CargoPerfil.NombreCargo;
+            perfilViewModel.Cargo.DescripcionCargo = CargoPerfil.DescripcionCargo;
+            perfilViewModel.Cargo.NumeroPosiciones = CargoPerfil.NumeroPosiciones;
+            perfilViewModel.Cargo.IdeCargo = CargoPerfil.IdeCargo;
+            perfilViewModel.Area = CargoPerfil.Area;
+            perfilViewModel.Dependencia = CargoPerfil.Dependencia;
+            perfilViewModel.Departamento = CargoPerfil.Departamento;
+        }
+
+        public void enviarPerfil()
+        {
+            var enviarMail = new SendMail();
+            int IdeCargo = CargoPerfil.IdeCargo;
+            var cargoEnviar = _cargoRepository.GetSingle(x=>x.IdeCargo == IdeCargo);
+           
+            enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado, true, Solicitud.Nuevo);
+           
+        }
+
     }
 }

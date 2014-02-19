@@ -41,6 +41,7 @@
         [HttpPost]
         public virtual JsonResult ListaEvaluaciones(GridTable grid)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
             try
             {
 
@@ -49,7 +50,7 @@
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
                 DetachedCriteria where = DetachedCriteria.For<EvaluacionCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", 1));
+                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
 
                 var generic = Listar(_evaluacionCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -92,8 +93,8 @@
         {
             EvaluacionCargoValidator validator = new EvaluacionCargoValidator();
             ValidationResult result = validator.Validate(evaluacionCargo, "TipoExamen", "TipoAreaResponsable", "PuntajeExamen", "NotaMinimaExamen");
-       
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+
+            int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -161,7 +162,7 @@
         public ActionResult eliminarEvaluacion(int ideEvaluacion)
         {
             ActionResult result = null;
-            int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            int IdeCargo = CargoPerfil.IdeCargo;
             var evaluacionEliminar = new EvaluacionCargo();
             evaluacionEliminar = _evaluacionCargoRepository.GetSingle(x => x.IdeEvaluacionCargo == ideEvaluacion);
             int valorEliminar = evaluacionEliminar.PuntajeExamen;

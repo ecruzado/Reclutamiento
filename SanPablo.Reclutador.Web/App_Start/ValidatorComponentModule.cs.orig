@@ -101,25 +101,18 @@
                 .Keyed<IValidator>(typeof(IValidator<EvaluacionCargo>))
                 .As<IValidator>();
 
+<<<<<<< HEAD
             builder.RegisterType<SolicitudNuevoCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<SolicitudNuevoCargo>))
-                .As<IValidator>();
-                
-            builder.RegisterType<UsuarioValidator>()
-                .Keyed<IValidator>(typeof(IValidator<Usuario>))
                 .As<IValidator>();
 
             builder.RegisterType<CargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<Cargo>))
+=======
+            builder.RegisterType<UsuarioValidator>()
+                .Keyed<IValidator>(typeof(IValidator<Usuario>))
+>>>>>>> 3da65dfadeaf48400717601d1549e55be108256d
                 .As<IValidator>();
-
-            builder.RegisterType<PasswordValidator>()
-               .Keyed<IValidator>(typeof(IValidator<Password>))
-               .As<IValidator>();
-            builder.RegisterType<LogSolicitudNuevoCargoValidator>()
-                .Keyed<IValidator>(typeof(IValidator<LogSolicitudNuevoCargo>))
-                .As<IValidator>();
-
 
         }
     }
