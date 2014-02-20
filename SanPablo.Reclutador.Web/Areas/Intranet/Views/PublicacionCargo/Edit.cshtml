@@ -1,0 +1,380 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PublicacionViewModel
+@{
+    ViewBag.Title = "Publicacion";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script type="text/javascript">
+        
+    $(document).ready(function () {
+
+        $("#txtfechapublicacion").datepicker();
+        $("#txtfechaexpiracion").datepicker();
+
+        jQuery("#grdListFunciones").jqGrid({
+            url: '@Url.Action("ListaFunciones2", "SolicitudCargo")',
+             datatype: 'json',
+             mtype: 'POST',
+             colNames: ['Descripci&oacuten' ],
+             colModel: [                     
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                     
+             ],
+             sortname: 'Codigo',
+             sortorder: 'desc',
+             viewrecords: true,
+             cellEdit: true,
+             /*caption: 'Horario de Trabajo',*/
+             height: 100,
+             width: 600,
+             rowNum: 0,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             postData: {
+
+             },
+             loadComplete: function (data) {
+
+             }
+        });
+
+        jQuery("#grdListCompetencias").jqGrid({
+            url: '@Url.Action("Competencias", "PublicacionCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'IdeCompetenciaCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Horario de Trabajo',*/
+            height: 100,
+            width: 600,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+
+        jQuery("#grdListOfrecemos").jqGrid({
+            url: '@Url.Action("Ofrecemos", "PublicacionCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            sortname: 'IdeOfrecemosCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 100,
+            width: 600,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListEstudios").jqGrid({
+            url: '@Url.Action("Estudios", "PublicacionCargo")',
+             datatype: 'json',
+             mtype: 'POST',
+             colNames: ['Descripci&oacuten'],
+             colModel: [
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+             ],
+             sortname: 'IdeNivelAcademicoCargo',
+             sortorder: 'desc',
+             viewrecords: true,
+             cellEdit: true,
+             height: 100,
+             width: 600,
+             rowNum: 0,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             postData: {
+
+             },
+             loadComplete: function (data) {
+
+             }
+        });
+
+        jQuery("#grdListConocimientos").jqGrid({
+            url: '@Url.Action("Conocimientos", "PublicacionCargo")',
+              datatype: 'json',
+              mtype: 'POST',
+              colNames: ['Descripci&oacuten'],
+              colModel: [
+                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+              ],
+              sortname: 'IdeConocimientoGeneralCargo',
+              sortorder: 'desc',
+              viewrecords: true,
+              cellEdit: true,
+              /*caption: 'Horario de Trabajo',*/
+              height: 100,
+              width: 600,
+              rowNum: 0,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              postData: {
+
+              },
+              loadComplete: function (data) {
+
+              }
+        });
+
+        jQuery("#grdListExperiencia").jqGrid({
+            url: '@Url.Action("Experiencia", "PublicacionCargo")',
+              datatype: 'json',
+              mtype: 'POST',
+              colNames: ['Descripci&oacuten'],
+              colModel: [
+                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+              ],
+              sortname: 'IdeExperienciaCargo',
+              sortorder: 'desc',
+              viewrecords: true,
+              cellEdit: true,
+              /*caption: 'Horario de Trabajo',*/
+              height: 100,
+              width: 600,
+              rowNum: 0,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              postData: {
+
+              },
+              loadComplete: function (data) {
+
+              }
+          });
+
+
+
+
+    });
+
+
+
+</script>
+
+}  
+
+@using (Html.BeginForm("Edit", "PublicacionCargo", FormMethod.Post, new { @id = "publicacionCargoForm" }))
+{
+  @Html.ValidationSummary(true)   
+<section id="forms">
+    
+        <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                @Html.DisplayFor(model=>model.SolicitudCargo.NombreCargo) - SEDE SAN MIGUEL
+                
+            </div>
+            <form class="form-horizontal well">
+                <fieldset>
+
+                    <table style="margin-left:50px;" >
+
+                    <tr class="formulario-fila">
+                        <td class="control-label" >Area</td>
+                        <td class="controls">
+                            @Html.TextBoxFor(model=>model.SolicitudCargo.IdeArea, new {@disabled= "disabled"})
+                        </td>
+                    </tr>
+                      
+                    <tr class="formulario-fila">
+                        <td class="control-label" >Tipo</td>
+                        <td class="controls">
+                            <input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">
+                        </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="control-label" >Vacantes</td>
+                        <td class="controls">
+                           @Html.TextBoxFor(model=>model.SolicitudCargo.NumeroPosiciones, new {@disabled = "disabled",  @class="input-small" })
+                        </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="control-label">Rango Salarial</td>
+                        <td class="controls">
+                            @Html.TextBoxFor(model => model.SolicitudCargo.TipoRangoSalarial, new {@disabled = "disabled"})
+                        </td>
+                        <td>
+                        <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
+                           @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @id = "chbIndEstudiando"})
+                        </td>
+                         
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="control-label" >Fecha de Publicación</td>
+                        <td class="controls">
+                            @Html.EditorFor(model=>model.SolicitudCargo.FechaPublicacion, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="control-label" >Fecha de Expiracion</td>
+                        <td class="controls">
+                            @Html.EditorFor(model =>model.SolicitudCargo.FechaExpiracion, new { @class = "textoFormulario" })
+                        </td>
+                    </tr>
+                     
+                    </table>
+
+                    <table style="margin-left:50px;" >
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" >Descripción</label>
+                        <div class="controls">
+                           @Html.TextAreaFor(model => model.SolicitudCargo.DescripcionCargo, new { @style = "width:600px; height:100px"})
+                           @*<textarea style="width:600px;" id="tadescripcion" rows="5" disabled="disabled">Somos una importante organización del sector Salud, con 20 años de experiencia en el mercado y nos encontramos en la búsqueda de un profesional para ocupar el cargo de: "Tecnólogo en Terapia Física y Rehabilitación".</textarea>*@
+                        </div>
+                    </td>
+                  </tr>
+
+                   <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Estudios</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListEstudios">
+                                    </table>
+                                    <div id="grdPagerEstudios">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Conocimientos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListConocimientos">
+                                    </table>
+                                    <div id="grdPagerConocimientos">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Experiencia</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListExperiencia">
+                                    </table>
+                                    <div id="grdPagerExperiencia">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+
+                   <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Funciones</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListFunciones">
+                                    </table>
+                                    <div id="grdPagerFunciones">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Competencias</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListCompetencias">
+                                    </table>
+                                    <div id="grdPagerCompetencias">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Ofrecemos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListOfrecemos">
+                                    </table>
+                                    <div id="grdPagerOfrecemos">
+                                    </div>
+                                </div>                                         
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Observaciones</label>
+                         <div class="controls">
+                            @Html.TextAreaFor(model=>model.SolicitudCargo.DescripcionObservaciones, new { @style = "width:600px;height:100px"})
+                         </div>
+                        </td>
+                    </tr>   
+                                                
+                  
+                </table>           
+
+                </fieldset>
+            </form>
+                  <div class="form-actions"> 
+                     <a class="btn" href="@Url.Action("RegistroSolicitudPersonal", "Operaciones")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                     
+                    <a class="btn btn-info" href="@Url.Action("Publicacion", "Operaciones")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                         
+                </div>
+
+            </div>
+        </div>
+</section>
+
+}

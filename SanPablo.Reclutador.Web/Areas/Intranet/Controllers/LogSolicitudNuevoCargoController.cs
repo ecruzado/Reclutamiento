@@ -84,6 +84,7 @@
             {
                 LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
                 LogSolicitudNuevoCargo logSiguiente = new LogSolicitudNuevoCargo();
+                var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
                 int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
                 //recuperar datos del estado actual
                 var logSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == IdeSolicitudNuevoCargo);
@@ -95,18 +96,20 @@
                         //determinar el usuario y el estado de la solicitud
                         logSolicitudNuevo.FechaSuceso = FechaModificacion;
                         logSolicitudNuevo.UsuarioSuceso = UsuarioActual.CodUsuario;
-                        
+                        string sedeDescripcion = Session[ConstanteSesion.SedeDes].ToString();
+                        if (sedeDescripcion == null)
+                        { sedeDescripcion = "-";}
                         if (model.Aprobado)
                         {
                             logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Aprobado;
                             _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(Asunto.Aprobacion, AccionMail.Aprobacion, true, Solicitud.Nuevo);
+                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacion, sedeDescripcion," Responsable ","Aprobación","" );
                         }
                         else
                         {
                             logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Rechazado;
                             _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(Asunto.Rechazo, AccionMail.Rechazo, true, Solicitud.Nuevo);
+                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.Finalizado, sedeDescripcion, " Responsable ", "Rechazo", logSolicitudNuevo.Observacion);
                         }
                     }
                 }

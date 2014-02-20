@@ -14,31 +14,16 @@
     public  class SendMail
     {
 
-        public void EnviarCorreo(string asunto, string accion, bool indSingular, string tipoRequerimiento )
+        public void EnviarCorreo(string dir, string asunto, string sedeDescripcion, string responsable, string tipoRequerimiento, string observacion)
         {
-            string saludo = "";
-            string cuerpo = "";
-            string comunicarle = "";
-            string inicio = "";
-            string requerimiento = "";
-
-                
-                inicio = "Estimado sr(a)."; //1.4.5.6
-                requerimiento = "se requiere de su Aprobacion/Rechazo como ";//1.4.5
-                saludo = "saludarlo(a)";//1.4.5.6
-                comunicarle = "comunicarle";//1.4.5.6
-
-
-                requerimiento = " por el motivo "; //3.4
-                requerimiento = " y se requiere la elaboracion del Perfil para continuar con el procedimiento.";//2
-
+            
 
             //Creamos un nuevo Objeto de mensaje
             System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
             mmsg.To.Add("j.ccana@conastec.com.pe");
 
             //Asunto
-            mmsg.Subject = asunto + " de Requerimiento de "+accion+" - Nro "+ "XYZ"+"- Sede:"+"SURCO" ;
+            mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" - Nro "+ "XYZ"+"- Sede:"+ sedeDescripcion;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
 
             mmsg.Bcc.Add("j.ccana@conastec.com.pe"); //Opcional
@@ -46,15 +31,15 @@
             
             //Cuerpo del Mensaje
 
-            cuerpo =  "Luego de " + saludo + "la presente es para " + comunicarle + "que se ha" + accion + "Requerimiento de " + tipoRequerimiento + "Cargo en la Sede (x)" +
-                       requerimiento;
+            string cuerpo = cuerpoMail(asunto, tipoRequerimiento, sedeDescripcion, responsable, observacion);
             
-            //var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            
+            
             //string dir = MapPath("~") + @"\TemplateEmail\EnviarSolicitud.htm";
-            //string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
-            //                                       new List<string> { cuerpo, "Usuario Actual", "Rol de usuario", "Area de Usuario", "Sede Actual" });
+            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
+                                                   new List<string> { cuerpo, "Usuario Actual", "Rol de usuario", "Area de Usuario", "Sede Actual" });
 
-            mmsg.Body = cuerpo;
+            mmsg.Body = body;
             mmsg.BodyEncoding = System.Text.Encoding.UTF8;
             mmsg.IsBodyHtml = true; //Si no queremos que se envíe como HTML
 
@@ -93,6 +78,34 @@
                 cuerpo = cuerpo.Replace("{{" + parametros[i] + "}}", valores[i]);
             }
             return cuerpo;
+        }
+
+        public string cuerpoMail(string tipo,string tipoRequerimiento, string SedeDescripcion, string Responsable1, string Observacion)
+        {
+            string cuerpo = "";
+            switch (tipo)
+            {
+                case  EtapasSolicitud.ElaboracionPerfil:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
+                        " Requerimiento de "+ tipoRequerimiento+" en la Sede " + SedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
+                        break;
+                case EtapasSolicitud.PendienteAprobacion:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
+                                 "Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación o Rechazo como "+
+                                  Responsable1+" para continuar con el procedimiento.";
+                        break;
+                case EtapasSolicitud.Finalizado:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de "+tipoRequerimiento+
+                                 " en la Sede "+SedeDescripcion+" por el motivo de "+Observacion;
+                        break;
+                case EtapasSolicitud.PendienteAprobacionPerfil:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
+                                 +tipoRequerimiento+" en la Sede "+SedeDescripcion+" y se requiere de su Aprobación/Rechazo como "+Responsable1+" para continuar con el procedimiento.";
+                        break;
+            }
+
+            return cuerpo;
+ 
         }
        
     }
