@@ -310,10 +310,18 @@
             var enviarMail = new SendMail();
             int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEnviar = _cargoRepository.GetSingle(x=>x.IdeCargo == IdeCargo);
-           
-            enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado, true, Solicitud.Nuevo);
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            string SedeDescripcion = "-";
+            var SedeDesc = Session[ConstanteSesion.SedeDes];
+            if (SedeDesc == null)
+            {
+                SedeDescripcion = SedeDesc.ToString();
+            }
+            enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfil, SedeDescripcion,"Jefe de Area" ,"Nuevo Cargo","" );
            
         }
+
+        
 
     }
 }

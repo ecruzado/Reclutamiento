@@ -242,7 +242,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>

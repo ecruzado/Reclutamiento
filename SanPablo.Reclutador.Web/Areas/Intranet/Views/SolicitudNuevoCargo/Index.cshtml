@@ -14,6 +14,10 @@
         $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
         $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
 
+        $('#btnBuscarSolicitud').click(function () {
+            $('#grdList').trigger('reloadGrid');
+        });
+
         $("#spanMessage").html("¿Desea Activar/Desactivar el registro?")
         $('#updateDialog').dialogo({
             buttons: {
@@ -34,47 +38,96 @@
             }
         });
 
+
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaSolicitudes", "SolicitudNuevoCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Estado','CodigoActivo', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Posiciones', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
-            colModel: [
-                    { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                    { name: 'CodigoActivo', index: 'CodigoActivo', align: 'center', width: 50 , hidden : true },
-                    { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
-                    { name: 'Cargo', index: 'Cargo', align: 'left' },
-                    { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
-                    { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
-                    { name: 'Area', index: 'Area', align: 'left', width: 110 },
-                    { name: 'Posiciones', index: 'Posiciones', align: 'right', width: 60 },
-                    { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                    { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                    { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                    { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                    { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                    { name: 'Inicio', index: 'Inicio', align: 'left', width: 60 },
-                    { name: 'Cierre', index: 'Cierre', align: 'left', width: 60 },
-                    { name: 'Responsable', index: 'Responsable', align: 'left', width: 100 },
-                    { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                    { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
-                    { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 },
-                    { name: 'Grupo', index: 'Grupo', align: 'center', width: 100 }
-            ],
-            pager: '#grdPager',
-            height: 420,
-            width:930,
-            rowNum: 10,
-            rowList: [10, 20, 30],
-            viewrecords: true,
-            hidegrid: false,
-            altRows: true,
-            shrinkToFit: false,
-            treeGrid: true,
-            treeGridModel: 'adjacency',
-            treedatatype: "local",
-            ExpandColumn: 'Codigo',
-        });
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+
+                    { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                    { field: 'nombreCargo', data: $("#UsuarioRolSede_IdRol").val() },
+                    { field: 'nombreDependencia', data: $("#UsuarioRolSede_IdSede").val() },
+                    { field: 'nombreDeparatemento', data: $("#Usuario_DscNombres").val() },
+                    { field: 'nombreArea', data: $("#Usuario_CodUsuario").val() },
+                    { field: 'etapa', data: $("#Usuario_DscApePaterno").val() },
+                    { field: 'estado', data: $("#Usuario_DscApeMaterno").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaSolicitudes", "SolicitudNuevoCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Estado', '', 'Codigo', 'Cargo', 'Dependencia', 'Departamento', 'Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
+                    colModel: [
+                            { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                            { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
+                            { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
+                            { name: 'Cargo', index: 'Cargo', align: 'left' },
+                            { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
+                            { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
+                            { name: 'Area', index: 'Area', align: 'left', width: 110 },
+                            { name: 'Posiciones', index: 'Posiciones', align: 'right', width: 60 },
+                            { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
+                            { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
+                            { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
+                            { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
+                            { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
+                            { name: 'Inicio', index: 'Inicio', align: 'left', width: 60 },
+                            { name: 'Cierre', index: 'Cierre', align: 'left', width: 60 },
+                            { name: 'Responsable', index: 'Responsable', align: 'left', width: 100 },
+                            { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
+                            { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
+                            { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 },
+                            { name: 'Grupo', index: 'Grupo', align: 'center', width: 100 }
+                    ],
+
+                    pager: jQuery('#grdPager'),
+                    rowNum: 10,
+                    rowList: [10, 30, 50],
+                    autowidth: true,
+                    rules: true,
+                    sortname: 'IDUSUARIO',
+                    sortorder: 'desc',
+                    viewrecords: true,
+                    height: 350,
+                    cellsubmit: 'clientArray',
+                    hidegrid: false,
+                    rownumbers: true,
+                    shrinkToFit: false,
+
+                    postData: {
+                    }, loadComplete: function (data) {
+                    }
+                });
+
 
         $('#btnActivarDesactivar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -172,16 +225,17 @@
                 <h5>Listado Solicitud de Nuevos Cargos</h5>
             </div>
             <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
+               <table style="margin-left:30px;">
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.NombreCargo, new SelectList(Model.Cargos, "NombreCargo","NombreCargo",Model.SolicitudNuevoCargo.NombreCargo ))
                             </div>
                         </div>
-                    </div>
-                    <div class="span5">
+                    </td>
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="selectError">Fecha</label>
                             <div class="controles">
@@ -189,36 +243,38 @@
                                 <input id="fechaFin" type="text" class="input-small" placeholder=" Final"/>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
+                    </td>
+                </tr>
+
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia","NombreDependencia",Model.Dependencias ))
                             </div>
                         </div>
-                    </div>
-                    <div class="span5">
+                    </td>
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
                                  @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento","NombreDepartamento",Model.Departamentos ))
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
+                    </td>
+                </tr>
+
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
                             </div>
                         </div>
-                    </div>
-                    <div class="span5">
+                    </td>
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Etapa</label>
                             <div class="controles">
@@ -227,10 +283,11 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
+                    </td>
+                </tr>
+
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
@@ -239,7 +296,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>                    <div class="span5">
+                    </td>                    
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
@@ -249,13 +307,20 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
+                    </td>
+                </tr>
+
+                <tr class="formulario-busqueda" >
+                    <td class="formulario-accion offset9">
+                        <button  id="btnbuscarSolicitud" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                        <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    </td>
+                </tr>
+
+              </table>
             </form>
+
+
             <div class="tabla-datos">
                 <table id="grdList">
                 </table>

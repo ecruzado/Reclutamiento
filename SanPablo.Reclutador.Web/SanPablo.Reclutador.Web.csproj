@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\PublicacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PublicacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudNuevoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
@@ -365,6 +367,7 @@
     <Content Include="Areas\Intranet\Views\Usuario\PopupPassword.cshtml" />
     <Content Include="Areas\Intranet\Views\LogSolicitudNuevoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\PopupTipoReq.cshtml" />
+    <Content Include="Areas\Intranet\Views\PublicacionCargo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

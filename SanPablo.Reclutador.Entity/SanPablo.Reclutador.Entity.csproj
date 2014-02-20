@@ -62,6 +62,7 @@
     <Compile Include="Cargo.cs" />
     <Compile Include="CentroEstudioCargo.cs" />
     <Compile Include="ConocimientoGeneralCargo.cs" />
+    <Compile Include="ListaSolicitudNuevoCargoVista.cs" />
     <Compile Include="DatosCargo.cs" />
     <Compile Include="LogSolicitudNuevoCargo.cs" />
     <Compile Include="MenuItem.cs" />

@@ -24,6 +24,7 @@
         private IDepartamentoRepository _departamentoRepository;
         private IAreaRepository _areaRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
+        private IListaSolicitudNuevoCargoVistaRepository _listaSolicitudRepository;
 
       
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -31,6 +32,7 @@
                                              IDependenciaRepository dependenciaRepository,
                                              IDepartamentoRepository departamentoRepository,
                                              IAreaRepository areaRepository,
+                                             IListaSolicitudNuevoCargoVistaRepository listaSolicitudRepository,
                                              ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
@@ -38,6 +40,7 @@
             _dependenciaRepository = dependenciaRepository;
             _departamentoRepository = departamentoRepository;
             _areaRepository = areaRepository;
+            _listaSolicitudRepository = listaSolicitudRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
         }
 
@@ -48,48 +51,84 @@
             try
             {
 
-                grid.page = (grid.page == 0) ? 1 : grid.page;
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<ListaSolicitudNuevoCargo>();
 
-                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                if (
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data)) ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
+                    (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
+                    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
+                    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
+                   )
+                {
 
-                DetachedCriteria where = DetachedCriteria.For<SolicitudNuevoCargo>();
-                //where.Add(Expression.Eq("Cargo.IdeCargo", 1));
-
-                var generic = Listar(_solicitudNuevoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
-
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
-                        id = item.IdeSolicitudNuevoCargo.ToString(),
-                        cell = new string[]
+                        where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
+                    }
+                    //if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+                    //{
+                    //    where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
+                    //}
+                    //if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    //{
+                    //    where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
+                    //}
+                    //if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
+                    //{
+                    //    where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
+
+                    //}
+                    //if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
+                    //{
+                    //    where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
+                    //}
+                    if (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
+                    {
+                        where.Add(Expression.Like("EstadoActivo", grid.rules[6].data));
+                    }
+                }
+
+                var generic = Listar(_listaSolicitudRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeSolicitudNuevoCargo.ToString(),
+                    cell = new string[]
                             {
-                                item.EstadoActivo,
-                                item.EstadoActivo,
-                                item.CodigoCargo,
-                                item.NombreCargo,
-                                item.IdeArea.ToString(),
-                                item.IdeArea.ToString(),
-                                item.IdeArea.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.FechaCreacion.ToString(),
-                                item.FechaExpiracion.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
+                                "1",
+                                item.EstadoActivo==null?"":item.EstadoActivo,
+                                item.CodigoCargo==null?"":item.CodigoCargo,
+                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.NombreDependencia==null?"":item.NombreDependencia,
+                                item.NombreDepartamento==null?"":item.NombreDepartamento,
+                                item.NombreArea==null?"":item.NombreArea,
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
+                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.NombreCargo==null?"":item.NombreCargo
                             }
-                    }).ToArray();
+
+
+                }).ToArray();
 
                 return Json(generic.Value);
             }
             catch (Exception ex)
             {
-                return MensajeError("ERROR: " + ex.Message);
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
             }
         }
 
@@ -178,6 +217,7 @@
         {
             var enviarMail = new SendMail();
             //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -195,9 +235,7 @@
                     nuevaSolicitudCargo.UsuarioCreacion = "YO";
                     _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
                     var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
-                    //determinar la sede de solicitud
-                    //SEDE SURCO
-                    //SEDE SURCO
+                    
                     LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
                     logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
                     logSolicitud.TipoEtapa = EtapasSolicitud.PendienteAprobacion;
@@ -206,7 +244,13 @@
                     logSolicitud.FechaSuceso = FechaCreacion;
                     logSolicitud.UsuarioSuceso = UsuarioActual.CodUsuario;
                     _logSolicitudNuevoCargoRepository.Add(logSolicitud);
-                    enviarMail.EnviarCorreo(Asunto.Solicitado, AccionMail.Solicitado, true, Solicitud.Nuevo);
+                    string SedeDescripcion = "-";                
+                    var SedeDesc = Session[ConstanteSesion.SedeDes];
+                    if (SedeDesc != null)
+                    {
+                        SedeDescripcion = SedeDesc.ToString();
+                    }
+                    enviarMail.EnviarCorreo(dir.ToString(),Asunto.Solicitado, SedeDescripcion ,"Gerente de Area","Nuevo Cargo" , "");
                 }
                 else
                 {
