@@ -143,7 +143,7 @@
           
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Logon", "Seguridad")',
+                url: '@Url.Action("Logon", "Seguridad",new { area = "Intranet" })',
                     data: {
                         id: codUsuario,
                         codPass: codPass,
@@ -154,7 +154,7 @@
                     traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
-                           window.location = '@Url.Action("GetMenu", "Seguridad", new { id = ""})' + '/' + data.IdDato;
+                           window.location = '@Url.Action("GetMenu", "Seguridad", new { id = "",  area = "Intranet"})' + '/' + data.IdDato;
                         } else {
                             MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                         }

@@ -79,15 +79,16 @@
             Sistema de Reclutamiento y Seleccion de Personal
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
-        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",placeholder="Usuario"}) 
+        @Html.TextBoxFor(model => model.UsuarioExtranet.CodUsuario, new { @class = "input-block-level" ,data_val = "false",placeholder="Usuario"}) 
         @*<input type="text" class="input-block-level" placeholder="Usuario">*@
         <label style="font-weight:bold;font-size:13px;">Contraseña</label>
         @*<input type="password" class="input-block-level" placeholder="Contraseña">*@
-        @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "input-block-level" ,data_val = "false", type="password",placeholder="Contraseña" }) 
+        @Html.TextBoxFor(model => model.UsuarioExtranet.CodContrasena, new { @class = "input-block-level" ,data_val = "false", type="password",placeholder="Contraseña" }) 
         <br />
         <br />
         <div style="text-align:center">
-            <a href="@Url.Action("General","Postulante")" class="btn btn-info">Iniciar Sesión</a>
+            @*<a href="@Url.Action("General","Postulante")" class="btn btn-info">Iniciar Sesión</a>*@
+              <a id="btnIniciaSesion" class="btn btn-info">Iniciar Sesión</a>
         </div>
         <br />
         <br />
@@ -130,6 +131,7 @@
     <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
             $("#lnkRegistrarUsuario").click(function (e) {
                 e.preventDefault();
                 $('#dialog').dialog('open');
@@ -145,6 +147,21 @@
                 open: function (event, ui) {
                 }
             });
+
+
+            $('#btnIniciaSesion').click(function () {
+                    $.ajax({
+                        data: $("#frmLoginExtranet").serialize(),
+                        type: "POST",
+                        url: '@Url.Action("Logon", "Seguridad")',
+                   
+                    traditional: true,
+                    success: function (data) {
+                    }
+                });
+            });
+
+
         });
 
 

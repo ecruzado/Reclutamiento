@@ -28,10 +28,7 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.CodUsuario)
                  .NotEmpty()
                  .WithMessage("Ingresar código de usuario");
-            RuleFor(x => x.CodUsuario)
-                .Length(1, 10)
-                .WithMessage("Ingresar código de usuario con menos de 10 caracteres");
-
+            
             RuleFor(x => x.CodContrasena)
                  .NotEmpty()
                  .WithMessage("Ingresar contraseña");

@@ -31,13 +31,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
         private ISedeRepository _sedeRepository;
         private IUsuarioVistaRepository _usuarioVistaRepository;
+        private ITipoRequerimiento _tipoRequerimiento;
 
         public UsuarioController(IRolRepository rolRepository, IDetalleGeneralRepository detalleGeneralRepository,
                              IRolOpcionRepository rolOpcionRepository, IUsuarioRepository usuarioRepository,
                              IUsuarioRolSedeRepository usuarioRolSedeRepository,
                              ISedeRepository sedeRepository,
-                             IUsuarioVistaRepository usuarioVistaRepository
-                                )
+                             IUsuarioVistaRepository usuarioVistaRepository,
+                             ITipoRequerimiento tipoRequerimiento
+            )
         {
             _rolRepository = rolRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -46,6 +48,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
             _sedeRepository = sedeRepository;
             _usuarioVistaRepository = usuarioVistaRepository;
+            _tipoRequerimiento = tipoRequerimiento;
         }
 
         /// <summary>
@@ -345,6 +348,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+
+        /// <summary>
+        /// Iniciliza popup tipo de requerimiento
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ViewResult inicioPopupTipReq(int id)
+        {
+            UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
+            model.UsuarioRolSede = new UsuarioRolSede();
+
+            
+
+            return View("PopupTipoReq",model);
+
+        }
+
+
         /// <summary>
         /// Iniciliza los parametros del popup
         /// </summary>
@@ -627,6 +648,51 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View("PopupPassword", objModel);
 
          }
+
+        /// <summary>
+        /// Lista los tipo de requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListaPopupTipoReq(GridTable grid)
+        {
+            try
+            {
+                
+                
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<DetalleGeneral>();
+
+                where.Add(Expression.Eq("IDEGENERAL", TipoTabla.TipoMenu));
+
+                var generic = Listar(_detalleGeneralRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.Valor.ToString(),
+                    cell = new string[]
+                            {
+                                
+                                item.Valor==null?"":item.Valor,
+                                item.Descripcion==null?"":item.Descripcion
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                
+                return MensajeError();
+            }
+        }
+
+        
+
+
 
     }
 }

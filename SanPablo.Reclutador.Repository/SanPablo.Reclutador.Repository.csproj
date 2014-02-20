@@ -61,6 +61,7 @@
     <Compile Include="Interface\IListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="ListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\ILogSolicitudNuevoCargoRepository.cs" />
+    <Compile Include="Interface\ITipoRequerimiento.cs" />
     <Compile Include="LogSolicitudNuevoCargoRepository.cs" />
     <Compile Include="Interface\ISolicitudNuevoCargoRepository.cs" />
     <Compile Include="Interface\IOpcionRepository.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="OpcionRepository.cs" />
     <Compile Include="RolOpcionRepository.cs" />
     <Compile Include="RolRepository.cs" />
+    <Compile Include="TipoRequerimientoRepository.cs" />
     <Compile Include="UbigeoCargoRepository.cs" />
     <Compile Include="NivelAcademicoCargoRepository.cs" />
     <Compile Include="HorarioCargoRepository.cs" />

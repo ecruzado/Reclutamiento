@@ -128,6 +128,9 @@
 
             builder.RegisterType<ListaSolicitudNuevoCargoVistaRepository>()
            .As<IListaSolicitudNuevoCargoVistaRepository>();
+            builder.RegisterType<TipoRequerimientoRepository>()
+           .As<ITipoRequerimiento>();
+
 
 
         }

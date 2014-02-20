@@ -92,8 +92,11 @@
                                     <ul class="dropdown-menu">
                                     @foreach (MenuItem opciones in Lista)
                                     {
-                                 
-			                            <li><a href="@opciones.DSCURL">@opciones.DESCRIPCION</a></li>
+                                        
+                                        var url = Utils.AbsoluteWebRoot + opciones.DSCURL;
+                                        
+                                        
+			                            <li><a href="@url">@opciones.DESCRIPCION</a></li>
 			                           
                                     }
                                     </ul>
@@ -116,7 +119,7 @@
             @RenderBody()   
         </div>
         <div id="PopupDialog" title="Cambiar Contrase&ntilde;a"></div>
-        <div id="confSelc"><span id="spanConfSelc"></span></div>
+        <div id="CambioPass"><span id="spanCambioPass"></span></div>
         <div id="divMensaje">
             <span id="spnMensaje"></span>
         </div>
@@ -152,7 +155,7 @@
                     buttons: {
                         "Grabar": function () {
                             if ($("#frmPopupPass").validate().form()) {
-                                $('#confSelc').dialog('open');
+                                $('#spanCambioPass').dialog('open');
                             }
                         },
                         "Cancelar": function () {
@@ -162,8 +165,8 @@
                 });
 
 
-                $("#spanConfSelc").html("¿Desea cambiar la Contraseña?")
-                $('#confSelc').dialog({
+                $("#spanCambioPass").html("¿Desea cambiar la Contraseña?")
+                $('#CambioPass').dialog({
                     autoOpen: false,
                     modal: true,
                     title: "Sistema de Reclutamiento Y Seleccion de Personal",
@@ -176,10 +179,10 @@
                                 traditional: true,
                                 success: function (data) {
                                     if (data.redirecciona) {
-                                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad",new { area = "Intranet" })');
                                     }
                                     if (data.Resultado) {
-                                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad",new { area = "Intranet" })');
                                     } else {
                                         $('#confSelc').dialog("close");
                                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -234,7 +237,7 @@
             function ResetPass() {
                 
                 var dialogDiv = $('#PopupDialog');
-                $.get('@Url.Action("InicializaPopup", "Usuario")', function (data) {
+                $.get('@Url.Action("InicializaPopup", "Usuario",new { area = "Intranet" })', function (data) {
                     dialogDiv.html(data);
                     $.validator.unobtrusive.parse($("#PopupDialog"));
                     dialogDiv.dialog('open');

@@ -72,6 +72,7 @@
     <Compile Include="SolicitudNuevoCargo.cs" />
     <Compile Include="EvaluacionCargo.cs" />
     <Compile Include="OfrecemosCargo.cs" />
+    <Compile Include="TipoRequerimiento.cs" />
     <Compile Include="UbigeoCargo.cs" />
     <Compile Include="ExperienciaCargo.cs" />
     <Compile Include="DiscapacidadCargo.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Validation\PostulanteValidator.cs" />
     <Compile Include="Validation\SedeValidator.cs" />
     <Compile Include="Validation\SubCategoriaValidator.cs" />
+    <Compile Include="Validation\UsuarioExtranetValidator.cs" />
     <Compile Include="Validation\UsuarioValidator.cs" />
   </ItemGroup>
   <ItemGroup>
