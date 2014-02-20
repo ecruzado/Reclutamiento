@@ -1,4 +1,7 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Models.SeguridadViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
     Layout = "";
 }
 <!DOCTYPE html>
@@ -58,9 +61,15 @@
 
 </head>
 <body>
+
+
     <div class="container">
 
-    <form class="form-signin" action="@Url.Action("Lista", "Postulante")">
+@using (Html.BeginForm("Lista", "Postulante", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data", id = "frmLoginExtranet" }))
+{
+    @Html.ValidationSummary(true)
+
+    @*<form class="form-signin" action="@Url.Action("Lista", "Postulante")">*@
         
         <div style="text-align:center;clear:both">
             <img src="@Url.Content("~/Content/images/sanpablo_logo2.GIF")" alt="Ingresar" title="Ingresar">
@@ -70,9 +79,11 @@
             Sistema de Reclutamiento y Seleccion de Personal
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
-        <input type="text" class="input-block-level" placeholder="Usuario">
+        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",placeholder="Usuario"}) 
+        @*<input type="text" class="input-block-level" placeholder="Usuario">*@
         <label style="font-weight:bold;font-size:13px;">Contraseña</label>
-        <input type="password" class="input-block-level" placeholder="Contraseña">
+        @*<input type="password" class="input-block-level" placeholder="Contraseña">*@
+        @Html.TextBoxFor(model => model.Usuario.CodContrasena, new { @class = "input-block-level" ,data_val = "false", type="password",placeholder="Contraseña" }) 
         <br />
         <br />
         <div style="text-align:center">
@@ -82,10 +93,10 @@
         <br />
         <a style="font-weight:normal;font-size:11px;color:#99356b">¿No puedes acceder a tu cuenta?</a>
         <br />
-        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a id="lnkRegistrarUsuario" href="#" style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>
+        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a id="lnkRegistrarUsuario" href="#" style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>@*
         
-    </form>
-
+    </form>*@
+}
     </div> <!-- /container -->
     <div id="dialog" title="Create Album" style="overflow: hidden;">
         <form class="form-horizontal well">

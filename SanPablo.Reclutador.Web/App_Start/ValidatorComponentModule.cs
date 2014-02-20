@@ -113,9 +113,13 @@
                 .Keyed<IValidator>(typeof(IValidator<Cargo>))
                 .As<IValidator>();
 
+            builder.RegisterType<PasswordValidator>()
+               .Keyed<IValidator>(typeof(IValidator<Password>))
+               .As<IValidator>();
             builder.RegisterType<LogSolicitudNuevoCargoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<LogSolicitudNuevoCargo>))
                 .As<IValidator>();
+
 
         }
     }

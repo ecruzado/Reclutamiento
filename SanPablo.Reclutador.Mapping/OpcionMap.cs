@@ -21,7 +21,8 @@
             Map(x => x.FECCREACION, "FECCREACION");
             Map(x => x.USRMODIFICACION, "USRMODIFICACION");
             Map(x => x.FECMODIFICACION, "FECMODIFICACION");
-
+            Map(x => x.TIPMENU, "TIPMENU");
+            Map(x => x.DESMENU).Formula("(SELECT DECODE(TIPMENU,'I','INTRANET','E','EXTRANET','') FROM dual)");
             //HasManyToMany(x => x.Roles)
             //    .Cascade.All()
             //    .Inverse()

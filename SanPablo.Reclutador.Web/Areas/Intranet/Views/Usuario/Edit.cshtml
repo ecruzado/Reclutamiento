@@ -222,7 +222,6 @@
                     if (data.Resultado == false) {
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     } else {
-                        //$('#btnGuardarUsuario').trigger('click');
                         GrabaUsuario();
                     }
                 }
@@ -244,8 +243,7 @@
                     }
                     if (data.Resultado) {
                         $("#Usuario_IdUsuario").val(data.IdDato);
-                        information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
-                       
+                        information('divMensaje', 'spnMensaje', data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
                     }
                 }
             });
@@ -254,24 +252,27 @@
 
     function information(selectorDiv, selectorSpan, msg, title, selr) {
         $('#' + selectorSpan).html(msg);
-        $('#' + selectorDiv).dialog({
+        var opt = {
             title: title,
             autoOpen: false,
             modal: true,
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
-                    $(this).dialog("close");
+                    $('#' + selectorDiv).dialog(opt).dialog('close');
                     Editar(selr);
                 }
             }
-        });
-        $('#' + selectorDiv).dialog('open');
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
     }
+
+
+  
 
 
     function Editar(selr) {
        window.location = '@Url.Action("Edit", "Usuario", new { id = ""})' + '/' + selr;    
-       
     }
 
 
@@ -548,7 +549,10 @@
         </div>
 }
 
-<div id="divMensaje"><span id="spnMensaje"></span></div>
+<div id="divMensaje">
+        <span id="spnMensaje"></span>
+</div>
+
 <div id="opcionDialog" title="Lista de Opciones"></div>
 <div id="confSelc"><span id="spanConfSelc"></span></div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>

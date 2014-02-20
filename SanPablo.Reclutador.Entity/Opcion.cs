@@ -16,6 +16,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DSCURL { get; set; }
         public virtual string DESCRIPCION { get; set; }
         public virtual string USRCREACION { get; set; }
+        public virtual string TIPMENU { get; set; }
+        public virtual string DESMENU { get; set; }
+        
         public virtual DateTime FECCREACION { get; set; }
         public virtual string USRMODIFICACION { get; set; }
         public virtual DateTime FECMODIFICACION { get; set; }

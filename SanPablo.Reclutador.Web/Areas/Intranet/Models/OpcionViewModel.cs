@@ -13,6 +13,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public Opcion opcion { get; set; }
         public int IdRoll { get; set; }
         public List<DetalleGeneral> TipoEstado { get; set; }
+        public List<DetalleGeneral> TipoMenu{ get; set; }
 
 
 

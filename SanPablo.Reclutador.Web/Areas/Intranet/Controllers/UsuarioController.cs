@@ -452,6 +452,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<UsuarioVista>();
+                
                 ProjectionList lista = Projections.ProjectionList();
                 lista.Add(Projections.Property("FLGESTADO"), "FLGESTADO");
                 lista.Add(Projections.Property("IDUSUARIO"), "IDUSUARIO");
@@ -462,8 +463,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 lista.Add(Projections.Property("DESROL"), "DESROL");
                 lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
                
-
-
                 where.SetProjection(Projections.Distinct(lista));
                 where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
 
@@ -481,9 +480,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
 
-
-                        
-                        
                         where.Add(Expression.Eq("IDROL",Convert.ToInt32(grid.rules[1].data)));
                     }
                     if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
@@ -615,6 +611,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJsonMessage);
         }
 
+
+        
+        /// <summary>
+        /// Inicializa el popup de cambio de pass
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>s
+        [ValidarSesion]
+        public ViewResult InicializaPopup()
+        {
+            UsuarioRolSedeViewModel objModel = new UsuarioRolSedeViewModel();
+            objModel.Password = new Password();
+
+            return View("PopupPassword", objModel);
+
+         }
 
     }
 }

@@ -70,3 +70,6 @@ UCosmic.Www.Mvc.Publish.xml
 
 #ignorar archivos temporales
 SanPablo.Reclutador.Web/Archivos/
+
+#ignorar archivos generados por git
+*.orig

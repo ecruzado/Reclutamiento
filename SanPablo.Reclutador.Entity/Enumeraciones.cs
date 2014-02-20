@@ -67,7 +67,11 @@
 
         //Solicitud Nuevo Cargo
         TipoEtapaSolicitud = 45,
-        TipoSucesoSolicitud = 46
+        TipoSucesoSolicitud = 46,
+
+        //Tipo de Menu
+        TipoMenu = 47
+
     }
 
     public sealed class IndicadorActivo
@@ -177,6 +181,11 @@
 
     }
 
+    public sealed class TipMenu
+    {
+        public const string Instranet = "I";
+        public const string Extranet = "E";
+    }
     
 
 

@@ -353,9 +353,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objMessage = new JsonMessage();
             MenuItem objMenuItem = new MenuItem();
-
-            objModel.listaMenu =new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id)));
-            objModel.listaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id)));
+            
+            
+            List<MenuItem> ListaItem=new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id)));
+            objModel.listaMenu = (ListaItem.Where(n => n.TIPMENU == TipMenu.Instranet).ToList());
+            
+            List<MenuPadre> ListaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id)));
+            objModel.listaPadre = (ListaPadre.Where(n => n.TIPMENU == TipMenu.Instranet).ToList());
 
             if (objModel.listaPadre!=null)
             {
@@ -370,6 +374,52 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
            
         }
+
+
+        /// <summary>
+        /// validacion del nuevo password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+          
+         [HttpPost]
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+         public ActionResult ResetPass(UsuarioRolSedeViewModel model) {
+
+             JsonMessage ObjJsonMessage;
+             ObjJsonMessage = new JsonMessage();
+             model.Usuario = new Usuario();
+
+             var codUsuario = Session[ConstanteSesion.Usuario];
+
+             if (codUsuario != null)
+             {
+
+                 model.Usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(codUsuario));
+
+                 if (model.Usuario != null)
+                 {
+                     if (model.Password.PassAnterior.Equals(model.Usuario.CodContrasena))
+                     {
+                         model.Usuario.CodContrasena = model.Password.PassNuevo;
+                        _usuarioRepository.Update(model.Usuario);
+                         ObjJsonMessage.Resultado = true;
+                     }
+                     else
+                     {
+                         ObjJsonMessage.Resultado = false;
+                         ObjJsonMessage.Mensaje = "La contraseña anterior no existe";
+                     }
+                 }
+
+             }
+             
+             return Json(ObjJsonMessage);
+
+        }
+
+
+        
 
 
     }
