@@ -126,6 +126,9 @@
             builder.RegisterType<UsuarioVistaRepository>()
             .As<IUsuarioVistaRepository>();
 
+            builder.RegisterType<ListaSolicitudNuevoCargoVistaRepository>()
+           .As<IListaSolicitudNuevoCargoVistaRepository>();
+
 
         }
     }

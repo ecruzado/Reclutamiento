@@ -450,7 +450,6 @@
     <Content Include="Views\Shared\NotAccess.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Postulante\AgregarFoto.cshtml" />
-    <Content Include="Views\Shared\MenuPerfil.cshtml" />
     <Content Include="Views\Shared\LayoutCargo.cshtml" />
   </ItemGroup>
   <ItemGroup>
