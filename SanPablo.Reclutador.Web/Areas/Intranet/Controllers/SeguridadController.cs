@@ -353,12 +353,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objMessage = new JsonMessage();
             MenuItem objMenuItem = new MenuItem();
-            
-            
-            List<MenuItem> ListaItem=new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id)));
+
+
+            List<MenuItem> ListaItem = new List<MenuItem>(_rolOpcionRepository.GetMenu(Convert.ToInt32(id), TipMenu.Instranet));
             objModel.listaMenu = (ListaItem.Where(n => n.TIPMENU == TipMenu.Instranet).ToList());
-            
-            List<MenuPadre> ListaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id)));
+
+            List<MenuPadre> ListaPadre = new List<MenuPadre>(_rolOpcionRepository.GetMenuPadre(Convert.ToInt32(id), TipMenu.Instranet));
             objModel.listaPadre = (ListaPadre.Where(n => n.TIPMENU == TipMenu.Instranet).ToList());
 
             if (objModel.listaPadre!=null)
