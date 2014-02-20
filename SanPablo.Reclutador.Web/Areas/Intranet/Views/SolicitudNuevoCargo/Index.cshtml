@@ -24,7 +24,7 @@
                 "Si": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
-                    var estado = rowData.CodigoActivo;
+                    var estado = rowData.EstadoActivo;
                     if (selr != null) {
                         ActivarDesactivarSolicitud(selr, estado);
                     } else {
@@ -51,12 +51,14 @@
                 migrilla.Rules = [
 
                     { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'nombreCargo', data: $("#UsuarioRolSede_IdRol").val() },
-                    { field: 'nombreDependencia', data: $("#UsuarioRolSede_IdSede").val() },
-                    { field: 'nombreDeparatemento', data: $("#Usuario_DscNombres").val() },
-                    { field: 'nombreArea', data: $("#Usuario_CodUsuario").val() },
-                    { field: 'etapa', data: $("#Usuario_DscApePaterno").val() },
-                    { field: 'estado', data: $("#Usuario_DscApeMaterno").val() }
+                    { field: 'nombreCargo', data: $("Select#SolicitudNuevoCargo_NombreCargo").val() },
+                    { field: 'nombreDependencia', data: $("Select#Dependencias").val() },
+                    { field: 'nombreDepartamento', data: $("Select#Departamentos").val() },
+                    { field: 'nombreArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
+                    { field: 'etapa', data: $("Select#Usuario_DscApePaterno").val() },
+                    { field: 'estado', data: $("Select#Estados").val() },
+                    { field: 'fechaInicial', data: $("#Usuario_DscApeMaterno").val() },
+                    { field: 'fechaFin', data: $("#Usuario_DscApeMaterno").val() }
 
                 ];
 
@@ -114,7 +116,7 @@
                     rowList: [10, 30, 50],
                     autowidth: true,
                     rules: true,
-                    sortname: 'IDUSUARIO',
+                    sortname: 'IdeSolicitudNuevoCargo',
                     sortorder: 'desc',
                     viewrecords: true,
                     height: 350,
@@ -155,7 +157,7 @@
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             //var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
-            var estado = rowData.CodigoActivo;
+            var estado = rowData.EstadoActivo;
             if (ideSolicitud != null) {
                 if (estado == "A") {
                     window.location = '@Url.Action("Index", "Perfil", new { ideSolicitud = "-id"})'.replace("-id", ideSolicitud);
@@ -224,8 +226,8 @@
             <div class="widget-title">
                 <h5>Listado Solicitud de Nuevos Cargos</h5>
             </div>
-            <form class="formulario-busqueda">
-               <table style="margin-left:30px;">
+           
+               <table class="formulario-busqueda">
                 <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
@@ -301,25 +303,26 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.Estados, new SelectList (Model.Estados, "Valor", "Descripcion", Model.Estados ))
                             </div>
                         </div>
                     </td>
                 </tr>
 
-                <tr class="formulario-busqueda" >
-                    <td class="formulario-accion offset9">
-                        <button  id="btnbuscarSolicitud" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                        <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                <tr class="formulario-accion offset9">
+                    <td>
+                    <a id="btnBuscarSolicitud"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        &nbsp;
                     </td>
                 </tr>
 
               </table>
-            </form>
-
 
             <div class="tabla-datos">
                 <table id="grdList">
@@ -336,10 +339,11 @@
                 <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
+
         </div>
 
     </div>
 </div>
 }
-
+<div id="updateDialog" ><span id="spanMessage"></span></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>

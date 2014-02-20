@@ -55,16 +55,17 @@
                 where = DetachedCriteria.For<ListaSolicitudNuevoCargo>();
 
                 if (
-                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
-                    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data)) ||
-                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
-                    (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
-                    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
-                    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
+                    (!"Seleccionar".Equals(grid.rules[1].data) && grid.rules[1].data != null && grid.rules[1].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
                    )
                 {
 
-                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    if (!"Seleccionar".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
                         where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
                     }
@@ -85,7 +86,7 @@
                     //{
                     //    where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
                     //}
-                    if (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
+                    if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
                     {
                         where.Add(Expression.Like("EstadoActivo", grid.rules[6].data));
                     }
@@ -104,6 +105,7 @@
                                 item.EstadoActivo==null?"":item.EstadoActivo,
                                 item.CodigoCargo==null?"":item.CodigoCargo,
                                 item.NombreCargo==null?"":item.NombreCargo,
+
                                 item.NombreDependencia==null?"":item.NombreDependencia,
                                 item.NombreDepartamento==null?"":item.NombreDepartamento,
                                 item.NombreArea==null?"":item.NombreArea,
@@ -206,7 +208,13 @@
             solicitudNuevoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
 
             solicitudNuevoViewModel.Areas = new List<Area>();
-            solicitudNuevoViewModel.Areas.Add(new Area { IdeArea = 0, NombreArea = "Selecionar" });
+            solicitudNuevoViewModel.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+            solicitudNuevoViewModel.Estados = new List<DetalleGeneral>();
+            solicitudNuevoViewModel.Estados.Add(new DetalleGeneral { Valor = IndicadorActivo.Activo, Descripcion = "Activo" });
+            solicitudNuevoViewModel.Estados.Add(new DetalleGeneral { Valor = IndicadorActivo.Inactivo, Descripcion = "Inactivo" });
+            solicitudNuevoViewModel.Estados.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
 
             return solicitudNuevoViewModel;
         }
@@ -306,7 +314,7 @@
             solicitudCargoViewModel.Areas = new List<Area>();
             solicitudCargoViewModel.Areas.Add(new Area { IdeArea=0, NombreArea ="Seleccionar"});
 
-
+            
             return solicitudCargoViewModel;
         }
 

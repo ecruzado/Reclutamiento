@@ -19,9 +19,11 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Map(x => x.CodigoCargo, "CODCARGO");
             Map(x => x.NombreCargo, "NOMBRE");
-
+            Map(x => x.IdeDependencia, "IDEDEPENDENCIA");
             Map(x => x.NombreDependencia, "NOMDEPENDENCIA");
+            Map(x => x.IdeDepartamento, "IDEDEPARTAMENTO");
             Map(x => x.NombreDepartamento, "NOMDEPARTAMENTO");
+            Map(x => x.IdeArea, "IDEAREA");
             Map(x => x.NombreArea, "NOMAREA");
             Map(x => x.NumeroPosiciones, "NUMPOSICIONES");
             Map(x => x.FechaCreacion, "FECCREACION");
