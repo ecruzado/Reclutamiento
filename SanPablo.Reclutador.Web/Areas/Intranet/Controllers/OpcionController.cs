@@ -77,6 +77,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
             objOpcion.TipoEstado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
+            objOpcion.TipoMenu =
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoMenu));
+            objOpcion.TipoMenu.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
             return objOpcion;
         }
 
@@ -97,7 +101,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 if ((!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null) ||
                     (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null) ||
-                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                    )
                 {
                    
@@ -114,6 +119,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     {
                         where.Add(Expression.Eq("FLGHABILITADO", grid.rules[2].data));
                     }
+                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Eq("TIPMENU", grid.rules[3].data));
+                    }
+
 
                 }
 
@@ -136,7 +146,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.IDOPCIONPADRE==null?"":item.IDOPCIONPADRE.ToString(),
                                 item.IDOPCION==null?"":item.IDOPCION.ToString(),
                                 item.DSCOPCION==null?"":item.DSCOPCION.ToString(),
-                                item.DESCRIPCION==null?"":item.DESCRIPCION.ToString()
+                                item.DESCRIPCION==null?"":item.DESCRIPCION.ToString(),
+                                item.TIPMENU==null?"":item.TIPMENU,
+                                item.DESMENU==null?"":item.DESMENU
                                 
                             }
                 }).ToArray();

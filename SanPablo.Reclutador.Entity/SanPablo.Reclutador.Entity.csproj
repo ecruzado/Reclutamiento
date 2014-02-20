@@ -101,6 +101,7 @@
     <Compile Include="SubCategoria.cs" />
     <Compile Include="Ubigeo.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioExtranet.cs" />
     <Compile Include="UsuarioRolSede.cs" />
     <Compile Include="UsuarioSede.cs" />
     <Compile Include="UsuarioVista.cs" />

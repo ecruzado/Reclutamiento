@@ -12,6 +12,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DESCRIPCION { get; set; }
         public virtual string DSCURL { get; set; }
         public virtual int IDROL { get; set; }
+        public virtual string TIPMENU { get; set; }
 
     }
 }

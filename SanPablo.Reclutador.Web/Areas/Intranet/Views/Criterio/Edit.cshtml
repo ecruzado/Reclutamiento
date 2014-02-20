@@ -420,47 +420,33 @@
     function RedireccionaCriterio(selr,Accion) {
         var loc = window.location.href
         console.log(loc);
-        @*window.location.assign('@Url.Action("Edicion", "Criterio")' + '/' + selr)*@
-        if ("S" == Accion) {
-            window.location = '@Url.Action("Edicion", "Criterio")';
-        } else if ("N" == Accion) {
-            window.location = '@Url.Action("Edicion", "Criterio")' + '/' + selr;
-        }
        
-        @*$.post('@Url.Action("Edicion", "Criterio")'+'?selr=' + selr,
-          function (data) {
-          }
-           );
-        return false;*@
-       @* $.ajax({
-            data: {
-                id: selr
-            },
-            type: "POST",
-            url: "@Url.Action("Edicion", "Criterio")",
-            traditional: true,
-            success: function (data) {
-
-            }
-        });*@
-
+        if ("S" == Accion) {
+           
+            window.location = '@Url.Action("Edicion", "Criterio", new { id = ""})' + '/' + selr; 
+        } else if ("N" == Accion) {
+           
+            window.location = '@Url.Action("Edicion", "Criterio", new { id = ""})' + '/' + selr; 
+        }
+      
     }
    
 
     function information(selectorDiv, selectorSpan, msg, title, selr,accion) {
         $('#' + selectorSpan).html(msg);
-        $('#' + selectorDiv).dialog({
-            title: title,
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
-                    RedireccionaCriterio(selr, accion);
+        var opt = {
+                title: title,
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "Aceptar": function () {
+                        $('#' + selectorDiv).dialog(opt).dialog('close');
+                        RedireccionaCriterio(selr, accion);
+                    }
                 }
-            }
-        });
-        $('#' + selectorDiv).dialog('open');
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
     }
 
 

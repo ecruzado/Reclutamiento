@@ -11,6 +11,7 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual int IDOPCIONPADRE { get; set; }
         public virtual string DESCRIPCION { get; set; }
-
+        public virtual string TIPMENU { get; set; }
+        
     }
 }

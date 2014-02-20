@@ -85,6 +85,7 @@
                     lobMenuItem.DESCRIPCION = Convert.ToString(ldrMenuItem["DESCRIPCION"]);
                     lobMenuItem.DSCURL = Convert.ToString(ldrMenuItem["DSCURL"]);
                     lobMenuItem.IDROL = Convert.ToInt32(ldrMenuItem["IDROL"]);
+                    lobMenuItem.TIPMENU = Convert.ToString(ldrMenuItem["TIPMENU"]);
 
                     llstMenuItem.Add(lobMenuItem);
 
@@ -136,6 +137,7 @@
 
                     lobMenuPadre.IDOPCIONPADRE = Convert.ToInt32(ldrMenuPadre["IDOPCIONPADRE"]);
                     lobMenuPadre.DESCRIPCION = Convert.ToString(ldrMenuPadre["DESCRIPCION"]);
+                    lobMenuPadre.TIPMENU = Convert.ToString(ldrMenuPadre["TIPMENU"]);
 
                     llstMenuPadre.Add(lobMenuPadre);
 

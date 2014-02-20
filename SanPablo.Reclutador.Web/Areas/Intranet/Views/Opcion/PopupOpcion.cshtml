@@ -24,7 +24,8 @@
                 migrilla.Rules = [
                      { field: 'opNombre', data: $("#opcion_DSCOPCION").val() },
                      { field: 'opDescripcion', data: $("#opcion_DESCRIPCION").val() },
-                     { field: 'opEstado', data: $("#opcion_FLGHABILITADO").val() }
+                     { field: 'opEstado', data: $("#opcion_FLGHABILITADO").val() },
+                     { field: 'opTipMenu', data: $("#opcion_TIPMENU").val() }
                 ];
 
                 if (migrilla._search == true) {
@@ -52,14 +53,16 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', '', 'Nombre', 'Descripción'],
+            colNames: ['Estado', '', '', '', 'Nombre', 'Descripción','','Tipo Menú'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'FLGHABILITADO', index: 'FLGHABILITADO', align: 'left', hidden: true },
                     { name: 'IDOPCIONPADRE', index: 'IDOPCIONPADRE', align: 'center', sortable: false, hidden: true },
                     { name: 'IDOPCION', index: 'IDOPCION', align: 'left', hidden: true },
                     { name: 'DSCOPCION', index: 'DSCOPCION', align: 'left', width: 250 },
-                    { name: 'DESCRIPCION', index: 'DESCRIPCION', align: 'left', width: 380 }
+                    { name: 'DESCRIPCION', index: 'DESCRIPCION', align: 'left', width: 380 },
+                    { name: 'TIPMENU', index: 'TIPMENU', align: 'left', width: 380 , hidden:true },
+                    { name: 'DESMENU', index: 'DESMENU', align: 'left', width: 100 }
                     
 
             ],
@@ -128,9 +131,13 @@
             <td class="colInput">
                 @Html.DropDownListFor(model => model.opcion.FLGHABILITADO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.opcion.FLGHABILITADO),new { data_val = "false" })
             </td>
-             <td style="width:40px;"></td> 
-            <td></td>
-            <td></td>
+            <td style="width:40px;"></td> 
+            <td class="colEtiqueta">
+            <label class="etiquetaFormulario" for="inputSuccess">Tipo Menú</label>
+            </td>   
+            <td class="colInput">
+                @Html.DropDownListFor(model => model.opcion.TIPMENU, new SelectList(Model.TipoMenu, "Valor", "Descripcion", Model.opcion.TIPMENU),new { data_val = "false" })
+            </td>
         </tr>
 
         <tr >
