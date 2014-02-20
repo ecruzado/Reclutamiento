@@ -19,8 +19,8 @@
     {
 
         int EliminaOpcion(int idRol, int idOpcion);
-        List<MenuItem> GetMenu(int idRol);
-        List<MenuPadre> GetMenuPadre(int idRol);
+        List<MenuItem> GetMenu(int idRol, string tipMenu);
+        List<MenuPadre> GetMenuPadre(int idRol, string tipMenu);
         
     }
 }

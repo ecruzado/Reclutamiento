@@ -55,7 +55,7 @@
         /// </summary>
         /// <param name="idMenuItem"></param>
         /// <returns></returns>
-        public List<MenuItem> GetMenu(int idRol)
+        public List<MenuItem> GetMenu(int idRol, string tipMenu)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -70,6 +70,7 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
                 lspcmd.Parameters.Add("p_nIdRol", OracleType.Int32).Value = idRol;
+                lspcmd.Parameters.Add("p_ctipMenu", OracleType.VarChar).Value = tipMenu;
                 lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
                 ldrMenuItem = (OracleDataReader)lspcmd.ExecuteReader();
                 lobMenuItem = null;
@@ -110,7 +111,7 @@
         /// </summary>
         /// <param name="idRol"></param>
         /// <returns></returns>
-        public List<MenuPadre> GetMenuPadre(int idRol)
+        public List<MenuPadre> GetMenuPadre(int idRol,string tipMenu)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -125,6 +126,8 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
                 lspcmd.Parameters.Add("p_nidrol", OracleType.Int32).Value = idRol;
+                lspcmd.Parameters.Add("p_ctipMenu", OracleType.VarChar).Value = tipMenu;
+                
                 lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
                 ldrMenuPadre = (OracleDataReader)lspcmd.ExecuteReader();
                 lobMenuPadre = null;
