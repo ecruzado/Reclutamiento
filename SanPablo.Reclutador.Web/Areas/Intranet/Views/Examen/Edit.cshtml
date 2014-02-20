@@ -101,7 +101,7 @@
                   $.ajax({
                     data: { 
                         selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
-                        codExamen: $('#Examen_IdeExamen').val()
+                        codExamen: $('#IdUsuario').val()
                     },
                     type: "POST",
                     url: '@Url.Action("GetListaCategoria", "Examen")',

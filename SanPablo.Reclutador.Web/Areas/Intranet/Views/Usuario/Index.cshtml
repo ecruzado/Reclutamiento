@@ -214,8 +214,8 @@
        
         $('#popupDialog').dialog({
             autoOpen: false,
-            width: 400,
-            height: 600,
+            width: 500,
+            height: 650,
             resizable: false,
             modal: true,
             buttons: {
@@ -238,14 +238,17 @@
                 "Si": function () {
                     if ($("#frmTipoReq").validate().form()) {
                         $.ajax({
-                            data: $("#frmTipoReq").serialize(),
+                            data: {
+                                selc: $("#grdListaTipReq").jqGrid('getGridParam', 'selarrrow'),
+                                codUsuario: $('#IdUsuario').val()
+                            },
                             type: "POST",
                             url: '@Url.Action("SetPopupTipoReq", "Usuario")',
-                        traditional: true,
-                        success: function (data) {
+                            traditional: true,
+                            success: function (data) {
                             if (data.Resultado) {
 
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                 $('#tipoReq').dialog("close");
                                 $('#popupDialog').dialog("close");
                                 $('#grdListUsuario').trigger('reloadGrid');
@@ -259,9 +262,6 @@
             }
         }
     });
-
-
-
 
 
     });
@@ -440,5 +440,5 @@
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
 <div id="divActivarDesactivar"><span id="spanActivarDesactivar"></span></div>
 <div id="divEliminar"><span id="spanEliminar"></span></div>
-<div id="popupDialog" title="Rol"></div>
+<div id="popupDialog" title="Tipos de Requerimiento"></div>
 <div id="tipoReq"><span id="spanTipoReq"></span></div>

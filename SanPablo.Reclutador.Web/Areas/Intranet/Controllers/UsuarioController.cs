@@ -359,7 +359,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
             model.UsuarioRolSede = new UsuarioRolSede();
 
-            
+            model.IdUsuario = id;
 
             return View("PopupTipoReq",model);
 
@@ -645,6 +645,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             UsuarioRolSedeViewModel objModel = new UsuarioRolSedeViewModel();
             objModel.Password = new Password();
 
+            
+
             return View("PopupPassword", objModel);
 
          }
@@ -664,7 +666,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<DetalleGeneral>();
 
-                where.Add(Expression.Eq("IDEGENERAL", TipoTabla.TipoMenu));
+                int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
+
+                where.Add(Expression.Eq("IdeGeneral", codReg));
+                where.Add(Expression.Eq("IndicadorActivo", "A"));
 
                 var generic = Listar(_detalleGeneralRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -690,8 +695,67 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// obtiene la lista de requerimientos seleccionados
+        /// </summary>
+        /// <param name="selc"></param>
+        /// <param name="codExamen"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SetPopupTipoReq(List<string> selc, string codUsuario)
+        {
+            DateTime Hoy = DateTime.Today;
+            TipoRequerimiento objTipoRequerimiento;
+            JsonMessage objJson = new JsonMessage();
+            int codigo = 0;
+            string codReq = null;
 
+            if (codUsuario != null)
+            {
+                codigo = Convert.ToInt32(codUsuario);
+            }
+            else
+            {
+                codigo = 0;
+            }
+
+            if (selc != null && selc.Count > 0)
+            {
+                for (int i = 0; i < selc.Count; i++)
+                {
+                    codReq = selc[i] == null ? "" : selc[i];
+                    
+                    var objTipoReq= _tipoRequerimiento.GetBy(x => x.IDUSUARIO == Convert.ToInt32(codUsuario) 
+                                                             &&   x.TIPREQ == codReq );
+
+                    if (objTipoReq != null && objTipoReq.Count > 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        objTipoRequerimiento = new TipoRequerimiento();
+
+                        objTipoRequerimiento.FechaCreacion = FechaCreacion;
+                        objTipoRequerimiento.FechaModificacion = FechaModificacion;
+                        objTipoRequerimiento.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                        objTipoRequerimiento.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        
+                        objTipoRequerimiento.IDUSUARIO = Convert.ToInt32(codUsuario);
+                        objTipoRequerimiento.TIPREQ = codReq;
+                        
+                        _tipoRequerimiento.Add(objTipoRequerimiento);
+                        
+                        objJson.Mensaje = "Se registraron los tipos de requerimiento correctamente";
+                        objJson.Resultado = true;
+
+                    }
+
+                }
+            }
+
+            return Json(objJson); ;
+        }
 
 
     }

@@ -14,16 +14,11 @@
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
                 migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sortField;
-                migrilla.sord = postdata.sortOrder;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [];
-                //     { field: 'opNombre', data: $("#opcion_DSCOPCION").val() },
-                //     { field: 'opDescripcion', data: $("#opcion_DESCRIPCION").val() },
-                //     { field: 'opEstado', data: $("#opcion_FLGHABILITADO").val() },
-                //     { field: 'opTipMenu', data: $("#opcion_TIPMENU").val() }
-                //];
 
                 if (migrilla._search == true) {
                     migrilla.searchField = postdata.searchField;
@@ -52,8 +47,8 @@
             },
             colNames: ['', 'Tipo Requerimiento'],
             colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'left', hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false }
+                    { name: 'Valor', index: 'Valor', align: 'left', hidden: true },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 380 }
                     
             ],
             pager: jQuery('#grdPagerListaTipReq'),
@@ -61,7 +56,7 @@
             //rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
-            sortname: 'Codigo',
+            sortname: 'Valor',
             sortorder: 'desc',
             viewrecords: true,
             height: 340,
