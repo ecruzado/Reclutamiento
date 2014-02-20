@@ -126,6 +126,10 @@
             builder.RegisterType<UsuarioVistaRepository>()
             .As<IUsuarioVistaRepository>();
 
+            builder.RegisterType<TipoRequerimientoRepository>()
+           .As<ITipoRequerimiento>();
+
+
 
         }
     }

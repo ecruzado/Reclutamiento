@@ -120,6 +120,11 @@
                 .Keyed<IValidator>(typeof(IValidator<LogSolicitudNuevoCargo>))
                 .As<IValidator>();
 
+            builder.RegisterType<UsuarioExtranetValidator>()
+                .Keyed<IValidator>(typeof(IValidator<UsuarioExtranet>))
+                .As<IValidator>();
+            
+
 
         }
     }

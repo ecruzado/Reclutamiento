@@ -81,21 +81,7 @@
         buttons: {
             "Grabar": function () {
                 $('#confSelc').dialog('open');
-                @*$.ajax({
-                    data: { 
-                        selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
-                        codExamen: $('#Examen_IdeExamen').val()
-                    },
-                    type: "POST",
-                    url: '@Url.Action("GetListaCategoria", "Examen")',
-                    traditional: true,
-                    success: function () {
-                       
-                        $('#grdListaCatxExamen').trigger('reloadGrid');
-
-
-                    }
-                });*@
+               
 
             },
             "Cancelar": function () {

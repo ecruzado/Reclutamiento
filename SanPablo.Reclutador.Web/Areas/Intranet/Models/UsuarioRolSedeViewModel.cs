@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public UsuarioRolSede UsuarioRolSede { get; set; }
         public Usuario Usuario { get; set; }
         public Password Password { get; set; }
+        public TipoRequerimiento TipoReq { get; set; }
         public List<Rol> TipRol { get; set; }
         public List<Sede> TipSede { get; set; }
         public int IdUsuario { get; set; }

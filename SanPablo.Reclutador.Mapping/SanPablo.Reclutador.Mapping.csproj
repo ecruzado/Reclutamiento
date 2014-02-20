@@ -68,6 +68,7 @@
     <Compile Include="OpcionMap.cs" />
     <Compile Include="RolMap.cs" />
     <Compile Include="RolOpcionMap.cs" />
+    <Compile Include="TipoRequerimientoMap.cs" />
     <Compile Include="UbigeoCargoMap.cs" />
     <Compile Include="NivelAcademicoMap.cs" />
     <Compile Include="ExperienciaCargoMap.cs" />

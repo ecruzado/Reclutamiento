@@ -197,7 +197,86 @@
 
   
 
+        $('#btnTipoReq').click(function () {
+            
+
+            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+
+            if (selr != null && selr > 0) {
+                mostrarPopup(selr);
+            } else {
+                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+       
+        $('#popupDialog').dialog({
+            autoOpen: false,
+            width: 400,
+            height: 600,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function () {
+                    $('#tipoReq').dialog('open');
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#spanTipoReq").html("¿Desea guardar los cambios?")
+        $('#tipoReq').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    if ($("#frmTipoReq").validate().form()) {
+                        $.ajax({
+                            data: $("#frmTipoReq").serialize(),
+                            type: "POST",
+                            url: '@Url.Action("SetPopupTipoReq", "Usuario")',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado) {
+
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                $('#tipoReq').dialog("close");
+                                $('#popupDialog').dialog("close");
+                                $('#grdListUsuario').trigger('reloadGrid');
+                            }
+                        }
+                    });
+                }
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
     });
+
+
+
+
+
+    });
+
+    function mostrarPopup(selr) {
+        var dialogDiv = $('#popupDialog');
+
+        $.get('@Url.Action("inicioPopupTipReq", "Usuario", new { area = "Intranet"})?id=' + selr, function (data) {
+
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#popupDialog"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
 
 
     function ActivarDesactivarUsuario(selr, estado) {
@@ -346,6 +425,7 @@
                 <a  id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a  id ="btnConsultar" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a  id ="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                <a  id ="btnTipoReq" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Asignar tipo requerimiento</a>
                 <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
                 
@@ -360,3 +440,5 @@
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
 <div id="divActivarDesactivar"><span id="spanActivarDesactivar"></span></div>
 <div id="divEliminar"><span id="spanEliminar"></span></div>
+<div id="popupDialog" title="Rol"></div>
+<div id="tipoReq"><span id="spanTipoReq"></span></div>
