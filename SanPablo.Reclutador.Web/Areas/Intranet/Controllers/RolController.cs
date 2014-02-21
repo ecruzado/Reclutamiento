@@ -369,6 +369,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View("Edit", model);
         }
 
+        public ActionResult EdicionOpciones()
+        {
+            UsuarioViewModel objUsuario = new UsuarioViewModel();
+
+            return View("EdicionOpciones", objUsuario);
+            //EdicionOpciones 
+        }
+        
 
     }
 }

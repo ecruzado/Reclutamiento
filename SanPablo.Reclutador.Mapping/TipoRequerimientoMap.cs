@@ -20,6 +20,8 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.DESREQ).Formula("(SELECT (SELECT D.DESCRIPCION FROM DETALLE_GENERAL D WHERE D.IDEGENERAL='41' "+
+                                       " AND D.VALOR = U.TIPREQ)  FROM USUARIOREQ U WHERE U.IDUSUARIO=IDUSUARIO AND U.TIPREQ=TIPREQ)");
 
             Table("USUARIOREQ");
             

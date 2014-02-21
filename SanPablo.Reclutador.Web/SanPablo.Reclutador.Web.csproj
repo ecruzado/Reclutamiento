@@ -368,6 +368,8 @@
     <Content Include="Areas\Intranet\Views\LogSolicitudNuevoCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\PopupTipoReq.cshtml" />
     <Content Include="Areas\Intranet\Views\PublicacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionOpciones.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionTipoReq.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

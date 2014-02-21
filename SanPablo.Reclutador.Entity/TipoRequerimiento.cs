@@ -13,6 +13,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IDUSUREQ { get; set; }
         public virtual int IDUSUARIO { get; set; }
         public virtual string TIPREQ { get; set; }
+        public virtual string DESREQ { get; set; }
+        public virtual string DESUSUARIO { get; set; }
+        
         
 
     }

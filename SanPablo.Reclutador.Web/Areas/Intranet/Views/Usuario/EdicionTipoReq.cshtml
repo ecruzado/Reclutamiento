@@ -1,0 +1,40 @@
+﻿@using SanPablo.Reclutador.Entity
+@{
+    ViewBag.Title = "EdicionTipoReq";
+    Layout = "";
+}
+
+
+@section Scripts{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+       
+    });
+
+
+    </script>
+}
+<div class="opciones">
+        <div id="btnTipReq">
+            @if (Accion.Consultar.Equals(Model.Accion))
+            {
+                <span></span>
+            }
+            else
+            {
+                <a id="btnNuevoReq" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
+                <a id="btnEliminarReq" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>        
+            }
+        </div>
+                        
+    </div>
+    <div style="clear:both"></div>
+<div class="tabla-datos" >
+    <table id="grdListaTipoReqInicial" >
+    </table>
+    <div id="grdPagerListaTipoReq">
+    </div>
+</div>
+

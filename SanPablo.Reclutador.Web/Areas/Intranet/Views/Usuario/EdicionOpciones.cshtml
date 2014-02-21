@@ -1,0 +1,37 @@
+﻿
+@using SanPablo.Reclutador.Entity
+@{
+    ViewBag.Title = "EdicionOpciones";
+    Layout = "";
+}
+
+@section Scripts{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    
+    });
+
+    </script>
+}
+ <div class="opciones">
+        <div id="btnRol">
+            @if (Accion.Consultar.Equals(Model.Accion))
+            {
+                <span></span>
+            }
+            else
+            {
+                <a id="btnNuevo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
+                <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>        
+            }
+        </div>
+    </div>
+    <div style="clear:both"></div>
+<div class="tabla-datos" >
+    <table id="grdListUsuario" >
+    </table>
+    <div id="grdPagerUsuario">
+    </div>
+</div>

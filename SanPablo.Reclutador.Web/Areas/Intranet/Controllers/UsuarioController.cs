@@ -343,7 +343,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             }
 
-            return View(model);
+            return View("PopupSedeRol", model);
             
 
         }
@@ -395,45 +395,95 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codExamen"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult SetPopupSedeRol(UsuarioRolSedeViewModel popupModel)
+        public ActionResult SetPopupSedeRol(List<int> selc, int idRol, int idUsu, string indSede)
         {
+
+
             JsonMessage objJson = new JsonMessage();
             UsuarioRolSede objUsuarioRolSede;
+            int idSede = 0;
+            int indGrabo = 0;
+            objUsuarioRolSede = new UsuarioRolSede();
 
-            int selc = popupModel.IdUsuario;
-            
-
-            if (popupModel != null)
+            if (idRol!=null && idRol>0)
             {
-
-                popupModel.UsuarioRolSede.IdUsuario = popupModel.IdUsuario;
                 objUsuarioRolSede = new UsuarioRolSede();
 
-                var objRol = _rolRepository.GetSingle(x => x.IdRol == popupModel.UsuarioRolSede.IdRol);
 
-                    if ("S".Equals(objRol.FlgSede))
+                if ("S".Equals(indSede))
+                {
+                    for (int i = 0; i < selc.Count; i++)
                     {
-                        objUsuarioRolSede.IdSede = popupModel.UsuarioRolSede.IdSede;
-                    }
-                    else
-                    {
-                        objUsuarioRolSede.IdSede = 0;
+                        idSede = selc[i];
+
+                        indGrabo = insertaRolSede(idUsu, idRol, idSede);
                     }
 
-                    objUsuarioRolSede.IdRol = popupModel.UsuarioRolSede.IdRol;
-                    objUsuarioRolSede.IdUsuario = popupModel.UsuarioRolSede.IdUsuario;
-                    objUsuarioRolSede.FechaCreacion = FechaCreacion;
-                    objUsuarioRolSede.UsuarioCreacion = UsuarioActual.UsuarioCreacion;
-                    
-                    _usuarioRolSedeRepository.Add(objUsuarioRolSede);
-                    objJson.Resultado = true;
-                    objJson.Mensaje = "Se grabo el registro";
- 
+                }
+                else
+                {
+                    indGrabo = insertaRolSede(idUsu, idRol, 0);
+                }
+
+            }
+
+            if (indGrabo>0)
+            {
+                objJson.Mensaje = "Se registraron los datos correctamente";
+                objJson.Resultado = true;
+            }
+            else
+            {
+                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Resultado = false;
             }
 
             return Json(objJson); ;
         }
 
+        /// <summary>
+        /// Inserta el rol y la Sede del del usuario
+        /// </summary>
+        /// <param name="idUsu"></param>
+        /// <param name="idRol"></param>
+        /// <param name="idSede"></param>
+        /// <returns></returns>
+        public int insertaRolSede (int idUsu,int idRol, int idSede){
+
+            int indGrabo = 0;
+            try
+            {
+
+                UsuarioRolSede objUsuarioRolSede;
+
+                    var obj =  _usuarioRolSedeRepository.GetSingle(x => x.IdRol == idRol
+                                                    && x.IdUsuario == idUsu
+                                                    && x.IdSede == idSede );
+
+                if (obj==null)
+                {
+                    objUsuarioRolSede = new UsuarioRolSede();
+                    objUsuarioRolSede.IdRol = idRol;
+                    objUsuarioRolSede.IdUsuario = idUsu;
+                    objUsuarioRolSede.IdSede = idSede;
+                    objUsuarioRolSede.FechaModificacion = FechaCreacion;
+                    objUsuarioRolSede.UsuarioModificacion = UsuarioActual.UsuarioCreacion;
+                    objUsuarioRolSede.FechaCreacion = FechaCreacion;
+                    objUsuarioRolSede.UsuarioCreacion = UsuarioActual.UsuarioCreacion;
+                    _usuarioRolSedeRepository.Add(objUsuarioRolSede);
+                }
+
+                indGrabo = 1;
+            }
+            catch (Exception)
+            {
+
+                indGrabo = 0;
+            }
+
+            return indGrabo;
+
+        }
 
         /// <summary>
         /// Se elemina la relacion rol Sede
@@ -459,6 +509,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson); ;
         }
 
+        /// <summary>
+        /// Elimina tipo de requerimiento
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        public ActionResult EliminarTipReq(string id,string tipReq)
+        {
+             
+            JsonMessage objJson = new JsonMessage();
+
+            if (id != null && tipReq!=null)
+            {
+                var objUsuTipReq = _tipoRequerimiento.GetSingle(x => x.IDUSUARIO == Convert.ToInt32(id) && x.TIPREQ == tipReq );
+
+                if (objUsuTipReq!=null)
+                {
+                    _tipoRequerimiento.Remove(objUsuTipReq);
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se elimino el registro";
+                }                                
+
+            }
+
+            return Json(objJson); ;
+        }
+        
 
         /// <summary>
         /// ListaUsuarios lista de usuarios
@@ -757,6 +835,101 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson); ;
         }
 
+        /// <summary>
+        /// obtiene la lista de tipo de requerimientos
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetListaTipoReq(GridTable grid)
+        {
 
+            TipoRequerimiento rs = new TipoRequerimiento();
+            try
+            {
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                {
+                    where = DetachedCriteria.For<TipoRequerimiento>();
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        int dato = Convert.ToInt32(grid.rules[0].data);
+                        where.Add(Expression.Eq("IDUSUARIO", dato));
+                    }
+
+                }
+
+                var generic = Listar(_tipoRequerimiento,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDUSUREQ.ToString(),
+                    cell = new string[]
+                            {
+                               
+                                item.IDUSUREQ==null?"":item.IDUSUREQ.ToString(),
+                                item.IDUSUARIO==null?"":item.IDUSUARIO.ToString(),
+                                item.TIPREQ==null?"":item.TIPREQ.ToString(),
+                                item.DESREQ==null?"":item.DESREQ
+                               
+                    
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+        /// <summary>
+        /// Lista los tipo de requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListaPopupSedesInicio(GridTable grid)
+        {
+            try
+            {
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<Sede>();
+
+               // int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
+
+                where.Add(Expression.Eq("EstadoRegistro", "A"));
+                
+
+                var generic = Listar(_sedeRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.CodigoSede.ToString(),
+                    cell = new string[]
+                            {
+                                
+                                item.CodigoSede==null?"":item.CodigoSede,
+                                item.DescripcionSede==null?"":item.DescripcionSede
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
+       
     }
 }

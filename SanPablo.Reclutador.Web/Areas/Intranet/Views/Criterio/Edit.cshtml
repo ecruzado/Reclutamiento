@@ -440,7 +440,7 @@
                 modal: true,
                 buttons: {
                     "Aceptar": function () {
-                        $('#' + selectorDiv).dialog(opt).dialog('close');
+                        $(this).dialog("close");
                         RedireccionaCriterio(selr, accion);
                     }
                 }
