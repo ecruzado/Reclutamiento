@@ -359,7 +359,18 @@ Funciones = {
 
     Alert: function (selectorDiv, selectorSpan, msg, title) {
         $('#' + selectorSpan).html(msg);
-        $('#' + selectorDiv).dialog({
+        //$('#' + selectorDiv).dialog({
+        //    title: title,
+        //    autoOpen: false,
+        //    modal: true,
+        //    buttons: {
+        //        "Aceptar": function () {
+        //            $(this).dialog("close");
+        //        }
+        //    }
+        //});
+        //$('#' + selectorDiv).dialog('open');
+        var opt = {
             title: title,
             autoOpen: false,
             modal: true,
@@ -368,8 +379,10 @@ Funciones = {
                     $(this).dialog("close");
                 }
             }
-        });
-        $('#' + selectorDiv).dialog('open');
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+
     },
     Clear: function (divName) {
         $('#' + divName + ' select').children().remove();
