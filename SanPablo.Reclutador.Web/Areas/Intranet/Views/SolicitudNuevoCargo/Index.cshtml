@@ -11,12 +11,50 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
-        $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
+        $('#fechaInicio').datepicker({ dateFormat: 'dd/mm/yy' });
+        $('#fechaFin').datepicker({ dateFormat: 'dd/mm/yy' });
 
         $('#btnBuscarSolicitud').click(function () {
             $('#grdList').trigger('reloadGrid');
         });
+
+        $('select#Dependencias').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SolicitudNuevoCargo_IdeArea").empty();
+            $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#Departamentos").empty();
+                    $("select#Departamentos").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Departamentos").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+         })
+
+        $('select#Departamentos').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SolicitudNuevoCargo_IdeArea").empty();
+                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudNuevoCargo_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
 
         $("#spanMessage").html("¿Desea Activar/Desactivar el registro?")
         $('#updateDialog').dialogo({
@@ -52,13 +90,13 @@
 
                     { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
                     { field: 'nombreCargo', data: $("Select#SolicitudNuevoCargo_NombreCargo").val() },
-                    { field: 'nombreDependencia', data: $("Select#Dependencias").val() },
-                    { field: 'nombreDepartamento', data: $("Select#Departamentos").val() },
-                    { field: 'nombreArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
+                    { field: 'ideDependencia', data: $("Select#Dependencias").val() },
+                    { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
+                    { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
                     { field: 'etapa', data: $("Select#Usuario_DscApePaterno").val() },
                     { field: 'estado', data: $("Select#Estados").val() },
-                    { field: 'fechaInicial', data: $("#Usuario_DscApeMaterno").val() },
-                    { field: 'fechaFin', data: $("#Usuario_DscApeMaterno").val() }
+                    { field: 'fechaInicial', data: $("#fechaInicio").val() },
+                    { field: 'fechaFin', data: $("#fechaFin").val() }
 
                 ];
 
@@ -87,14 +125,17 @@
                     }
                 });
             },
-            colNames: ['Estado', '', 'Codigo', 'Cargo', 'Dependencia', 'Departamento', 'Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
+            colNames: ['Estado','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Grupo'],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
                             { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
                             { name: 'Cargo', index: 'Cargo', align: 'left' },
+                            { name: 'ideDependencia', index: 'Cargo', align: 'left', hidden: true },
                             { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
+                            { name: 'ideDepartamento', index: 'Cargo', align: 'left', hidden: true },
                             { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
+                            { name: 'ideArea', index: 'Cargo', align: 'left', hidden: true },
                             { name: 'Area', index: 'Area', align: 'left', width: 110 },
                             { name: 'Posiciones', index: 'Posiciones', align: 'right', width: 60 },
                             { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
@@ -213,7 +254,32 @@
         });
     }
 
-   
+    $(function () {
+
+        //Array para dar formato en español
+        $.datepicker.regional['es'] =
+        {
+            closeText: 'Cerrar',
+            prevText: 'Previo',
+            nextText: 'Próximo',
+
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+            'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            dateFormat: 'dd/mm/yy', firstDay: 0,
+            initStatus: 'Selecciona la fecha', isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        //miDate: fecha de comienzo D=días | M=mes | Y=año
+        //maxDate: fecha tope D=días | M=mes | Y=año
+        $("#datepicker").datepicker({ minDate: "-1D", maxDate: "+1M +10D" });
+    });
 
 </script>
 }
@@ -257,6 +323,22 @@
                             </div>
                         </div>
                     </td>
+
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Responsable</label>
+                            <div class="controles">
+                                <select>
+                                    <option>Seleccionar</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </td>  
+
+                </tr>
+
+                <tr class="formulario-fila">
+                    
                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Departamento</label>
@@ -265,17 +347,7 @@
                             </div>
                         </div>
                     </td>
-                </tr>
 
-                <tr class="formulario-fila">
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Área</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
-                            </div>
-                        </div>
-                    </td>
                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Etapa</label>
@@ -289,16 +361,16 @@
                 </tr>
 
                 <tr class="formulario-fila">
+                   
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Responsable</label>
+                            <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
                             </div>
                         </div>
-                    </td>                    
+                    </td>
+
                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>

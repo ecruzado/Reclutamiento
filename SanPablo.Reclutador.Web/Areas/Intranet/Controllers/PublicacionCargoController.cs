@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
 
     [Authorize]
     public class PublicacionCargoController : BaseController
@@ -28,6 +29,7 @@
         private IExperienciaCargoRepository _experienciaCargoRepository;
         private ICargoRepository _cargoRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
+        private IHorarioCargoRepository _horarioCargoRepository;
 
 
         public PublicacionCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -39,6 +41,7 @@
                                              IConocimientoGeneralCargoRepository conocimientoCargoRepository,
                                              IExperienciaCargoRepository experienciaCargoRepository,
                                              ICargoRepository cargoRespository,
+                                             IHorarioCargoRepository horarioCargoRepository,   
                                              ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
@@ -50,6 +53,7 @@
             _conocimientoCargoRepository = conocimientoCargoRepository;
             _experienciaCargoRepository = experienciaCargoRepository;
             _cargoRepository = cargoRespository;
+            _horarioCargoRepository = horarioCargoRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
         }
 
@@ -128,13 +132,23 @@
             int Idecargo = CargoPerfil.IdeCargo;
             try
             {
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<ExperienciaCargo>();
+
+                //ProjectionList lista = Projections.ProjectionList();
+                //lista.Add(Projections.Property("TipoExperiencia"), "TipoExperiencia");
+               
+                //where.SetProjection(Projections.Distinct(lista));
+                //where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<ExperienciaCargo>());
+
 
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                DetachedCriteria where = DetachedCriteria.For<ExperienciaCargo>();
+                //DetachedCriteria where = DetachedCriteria.For<ExperienciaCargo>();
                 where.Add(Expression.Eq("Cargo.IdeCargo", Idecargo));
+                
 
                 var generic = Listar(_experienciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -145,6 +159,7 @@
                         cell = new string[]
                             {
                                 item.DescripcionExperiencia,
+                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
                             }
                     }).ToArray();
 
@@ -156,56 +171,6 @@
             }
         }
 
-        [HttpPost]
-        public virtual JsonResult Funciones(GridTable grid)
-        {
-            try
-            {
-
-                grid.page = (grid.page == 0) ? 1 : grid.page;
-
-                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
-
-                DetachedCriteria where = DetachedCriteria.For<SolicitudNuevoCargo>();
-                //where.Add(Expression.Eq("Cargo.IdeCargo", 1));
-
-                var generic = Listar(_solicitudNuevoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
-
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
-                    {
-                        id = item.IdeSolicitudNuevoCargo.ToString(),
-                        cell = new string[]
-                            {
-                                item.EstadoActivo,
-                                item.EstadoActivo,
-                                item.CodigoCargo,
-                                item.NombreCargo,
-                                item.IdeArea.ToString(),
-                                item.IdeArea.ToString(),
-                                item.IdeArea.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.FechaCreacion.ToString(),
-                                item.FechaExpiracion.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones.ToString(),
-                            }
-                    }).ToArray();
-
-                return Json(generic.Value);
-            }
-            catch (Exception ex)
-            {
-                return MensajeError("ERROR: " + ex.Message);
-            }
-        }
 
         [HttpPost]
         public virtual JsonResult Competencias(GridTable grid)
@@ -276,28 +241,77 @@
             }
         }
 
-
+        [ValidarSesion]
         [AuthorizeUser]
         public ActionResult Edit()
         {
             int IdeCargo = CargoPerfil.IdeCargo;
             var Cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
-            var publicacionViewModel = inicializarPublicacion();
+            var publicacionViewModel = inicializarPublicacion(Cargo);
             if (Cargo != null)
             {
+                publicacionViewModel.Cargo = Cargo;
                 publicacionViewModel.SolicitudCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == Cargo.CodigoCargo);
                 
             }
             return View(publicacionViewModel);
         }
-
-        public PublicacionViewModel inicializarPublicacion()
+        
+       
+        [HttpPost]
+        public ActionResult Edit([Bind(Prefix = "SolicitudCargo")]SolicitudNuevoCargo solicitudNuevoCargo)
         {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            var Cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+            var publicacionViewModel = inicializarPublicacion(Cargo);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                SolicitudNuevoCargoValidator validation = new SolicitudNuevoCargoValidator();
+                ValidationResult result = validation.Validate(solicitudNuevoCargo, "DescripcionObservaciones", "FechaPublicacion", "FechaExpiracion");
+                if (!result.IsValid)
+                {
+                    publicacionViewModel.SolicitudCargo = solicitudNuevoCargo;
+                    objJsonMessage.Mensaje = "ERROR: Verifique los datos ingresados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+                var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
+                solicitudNuevoCargoEditar.FechaModificacion = FechaModificacion;
+                solicitudNuevoCargoEditar.RangoSalarioPublicar = solicitudNuevoCargo.RangoSalarioPublicar;
+                solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
+                solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
+                _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
+
+                objJsonMessage.Mensaje = "Publicado Correctamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR: "+ex;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
+
+        public PublicacionViewModel inicializarPublicacion(Cargo cargo)
+        {
+            
             var publicacionNuevoViewModel = new PublicacionViewModel();
 
             publicacionNuevoViewModel.Cargo = new Cargo();
             publicacionNuevoViewModel.SolicitudCargo = new SolicitudNuevoCargo();
 
+            var horario = _horarioCargoRepository.getMaxPuntValue(x => x.Cargo.IdeCargo == cargo.IdeCargo);
+            publicacionNuevoViewModel.TipoHorario = horario.DescripcionHorario;
+
+            string tipoRangoSalarial = cargo.TipoRangoSalarial;
+
+            publicacionNuevoViewModel.RangoSalario = _detalleGeneralRepository.GetByTableDescription(TipoTabla.TipoSalario, tipoRangoSalarial);
+
+            
             return publicacionNuevoViewModel;
         }
 

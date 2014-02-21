@@ -81,14 +81,14 @@
         $('select#Dependencias').change(function () {
             var ideDependencia = $(this).val();
             $("select#SolicitudNuevoCargo_IdeArea").empty();
-            $("select#SolicitudNuevoCargo_IdeArea").append("<option value='00'> Seleccionar </option>");
+            $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
                 data: { ideDependencia: ideDependencia },
                 success: function (respuesta) {
                     $("select#Departamentos").empty();
-                    $("select#Departamentos").append("<option value='00'> Seleccionar </option>");
+                    $("select#Departamentos").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#Departamentos").append("<option value='"
                         + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
@@ -106,7 +106,7 @@
                 data: { ideDepartamento: ideDepartamento },
                 success: function (respuesta) {
                     $("select#SolicitudNuevoCargo_IdeArea").empty();
-                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='00'> Seleccionar </option>");
+                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#SolicitudNuevoCargo_IdeArea").append("<option value='"
                         + item.IdeArea + "'>" + item.NombreArea + "</option>");

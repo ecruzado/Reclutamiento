@@ -61,7 +61,8 @@
                     (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
                     (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
                     (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+                    (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0") ||
+                    (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
                    )
                 {
 
@@ -69,27 +70,35 @@
                     {
                         where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
                     }
-                    //if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                    //{
-                    //    where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
-                    //}
-                    //if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    //{
-                    //    where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
-                    //}
-                    //if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
-                    //{
-                    //    where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
-
-                    //}
+                    if (!"Seleccionar".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+                    {
+                        where.Add(Expression.Eq("IdeDependencia", Convert.ToInt32(grid.rules[2].data)));
+                    }
+                    if (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    {
+                        where.Add(Expression.Eq("IdeDepartamento", Convert.ToInt32(grid.rules[3].data)));
+                    }
+                    if (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
+                    {
+                        where.Add(Expression.Eq("IdeArea", Convert.ToInt32(grid.rules[4].data)));
+                    }
                     //if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
                     //{
                     //    where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
                     //}
                     if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
                     {
-                        where.Add(Expression.Like("EstadoActivo", grid.rules[6].data));
+                        where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
                     }
+                    if (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+                    {
+                        where.Add(Expression.Ge("FechaCreacion", Convert.ToDateTime(grid.rules[7].data)));
+                    }
+                    if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
+                    {
+                        where.Add(Expression.Le("FechaCreacion", Convert.ToDateTime(grid.rules[8].data)));
+                    }
+
                 }
 
                 var generic = Listar(_listaSolicitudRepository,
@@ -105,9 +114,11 @@
                                 item.EstadoActivo==null?"":item.EstadoActivo,
                                 item.CodigoCargo==null?"":item.CodigoCargo,
                                 item.NombreCargo==null?"":item.NombreCargo,
-
+                                item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
                                 item.NombreDependencia==null?"":item.NombreDependencia,
+                                item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
                                 item.NombreDepartamento==null?"":item.NombreDepartamento,
+                                item.IdeArea==null?"":item.IdeArea.ToString(),
                                 item.NombreArea==null?"":item.NombreArea,
                                 item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
                                 item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
@@ -258,7 +269,7 @@
                     {
                         SedeDescripcion = SedeDesc.ToString();
                     }
-                    enviarMail.EnviarCorreo(dir.ToString(),Asunto.Solicitado, SedeDescripcion ,"Gerente de Area","Nuevo Cargo" , "");
+                    enviarMail.EnviarCorreo(dir.ToString(),Asunto.Solicitado, SedeDescripcion ,"Gerente de Area","Nuevo Cargo" , "", "cargo", solicitud.CodigoCargo);
                 }
                 else
                 {

@@ -80,11 +80,14 @@
         public void aprobarRechazarNuevaSolicitud(LogSolicitudNuevoCargoViewModel model)
         {
             SendMail enviar = new SendMail();
+            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
+            enviar.Sede = Session[ConstanteSesion.SedeDes].ToString();
+            enviar.Area = "AREA 1";
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             try
             {
                 LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
-                LogSolicitudNuevoCargo logSiguiente = new LogSolicitudNuevoCargo();
-                var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
                 int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
                 //recuperar datos del estado actual
                 var logSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == IdeSolicitudNuevoCargo);
@@ -103,13 +106,13 @@
                         {
                             logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Aprobado;
                             _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacion, sedeDescripcion," Responsable ","Aprobación","" );
+                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacion, sedeDescripcion," Responsable ","Aprobación","","cargo","codCargo" );
                         }
                         else
                         {
                             logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Rechazado;
                             _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.Finalizado, sedeDescripcion, " Responsable ", "Rechazo", logSolicitudNuevo.Observacion);
+                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.Finalizado, sedeDescripcion, " Responsable ", "Rechazo", logSolicitudNuevo.Observacion,"cargo","codCrgo");
                         }
                     }
                 }

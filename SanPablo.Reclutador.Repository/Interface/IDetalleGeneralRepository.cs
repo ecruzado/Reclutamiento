@@ -9,5 +9,7 @@
         IList<DetalleGeneral> GetByTipoTabla(TipoTabla tipoTabla);
 
         IList<DetalleGeneral> GetByTableReference(TipoTabla tipoTabla, String referencia);
+
+        string GetByTableDescription(TipoTabla tipoTabla, String valor);
     }
 }

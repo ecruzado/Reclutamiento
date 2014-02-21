@@ -13,8 +13,14 @@
 
     public  class SendMail
     {
+            public virtual string Usuario {get; set;}
+            public virtual string Rol {get; set;}
+            public virtual string Area { get; set; }
+            public virtual string Sede { get; set; }
 
-        public void EnviarCorreo(string dir, string asunto, string sedeDescripcion, string responsable, string tipoRequerimiento, string observacion)
+        public void EnviarCorreo(string dir, string asunto, string sedeDescripcion, 
+                                 string responsable, string tipoRequerimiento, string observacion,
+                                 string cargo, string codCargo)
         {
             
 
@@ -23,7 +29,7 @@
             mmsg.To.Add("j.ccana@conastec.com.pe");
 
             //Asunto
-            mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" - Nro "+ "XYZ"+"- Sede:"+ sedeDescripcion;
+            mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" "+cargo+" - Nro "+ codCargo +" - Sede:"+ sedeDescripcion;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
 
             mmsg.Bcc.Add("j.ccana@conastec.com.pe"); //Opcional
@@ -37,7 +43,7 @@
             
             //string dir = MapPath("~") + @"\TemplateEmail\EnviarSolicitud.htm";
             string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
-                                                   new List<string> { cuerpo, "Usuario Actual", "Rol de usuario", "Area de Usuario", "Sede Actual" });
+                                                   new List<string> { cuerpo, Usuario, Rol, Area, Sede });
 
             mmsg.Body = body;
             mmsg.BodyEncoding = System.Text.Encoding.UTF8;

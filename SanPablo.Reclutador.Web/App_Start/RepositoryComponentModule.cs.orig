@@ -98,7 +98,6 @@
             builder.RegisterType<RolOpcionRepository>()
               .As<IRolOpcionRepository>();
 
-<<<<<<< HEAD
             builder.RegisterType<DependenciaRepository>()
               .As<IDependenciaRepository>();
 
@@ -111,15 +110,31 @@
             builder.RegisterType<SolicitudNuevoCargoRepository>()
               .As<ISolicitudNuevoCargoRepository>();
 
+            builder.RegisterType<LogSolicitudNuevoCargoRepository>()
+             .As<ILogSolicitudNuevoCargoRepository>();
 
 
-=======
             builder.RegisterType<OpcionRepository>()
              .As<IOpcionRepository>();
 
             builder.RegisterType<UsuarioRepository>()
             .As<IUsuarioRepository>();
->>>>>>> 3da65dfadeaf48400717601d1549e55be108256d
+
+            builder.RegisterType<UsuarioRolSedeRepository>()
+            .As<IUsuarioRolSedeRepository>();
+
+            builder.RegisterType<UsuarioVistaRepository>()
+            .As<IUsuarioVistaRepository>();
+
+<<<<<<< HEAD
+            builder.RegisterType<ListaSolicitudNuevoCargoVistaRepository>()
+           .As<IListaSolicitudNuevoCargoVistaRepository>();
+=======
+            builder.RegisterType<TipoRequerimientoRepository>()
+           .As<ITipoRequerimiento>();
+
+>>>>>>> a8d01d9ee807bd480f53e1db1c1b00a24382f3e5
+
 
         }
     }
