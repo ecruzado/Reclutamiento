@@ -150,7 +150,7 @@
 
 
             $('#btnIniciaSesion').click(function () {
-                    $.ajax({
+                @*        $.ajax({
                         data: $("#frmLoginExtranet").serialize(),
                         type: "POST",
                         url: '@Url.Action("Logon", "Seguridad")',
@@ -158,8 +158,24 @@
                     traditional: true,
                     success: function (data) {
                     }
-                });
+                });*@
+                $.ajax({
+                    type: "POST",
+                    data: $("#frmLoginExtranet").serialize(),
+                    url: '@Url.Action("Logon", "Seguridad")',
+                        traditional: true,
+                        success: function (data) {
+                            
+                        }
+                 });
+
+
+
             });
+
+
+
+
 
 
         });
