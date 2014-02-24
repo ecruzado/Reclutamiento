@@ -13,6 +13,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public SolicitudNuevoCargo SolicitudCargo { get; set; }
         public string Area { get; set; }
         public string Sede { get; set; }
+        public string TipoHorario { get; set; }
+        public string RangoSalario { get; set; }
         
     }
 }

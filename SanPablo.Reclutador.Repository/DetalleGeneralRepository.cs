@@ -30,6 +30,14 @@
             return lista;
         }
 
+        public string GetByTableDescription(TipoTabla tipoTabla, String valor)
+        {
+            var lista = GetSingle(x => x.IdeGeneral == (int)tipoTabla
+                           && x.IndicadorActivo == IndicadorActivo.Activo && x.Valor == valor);
+
+            return lista.Descripcion;
+        }
+
         
 
     }

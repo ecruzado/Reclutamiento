@@ -25,7 +25,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndicadorEdad { get; set; } 
         public virtual int PuntajeEdad { get; set; }
         public virtual int PuntajeSexo { get; set; }
-        public virtual int TipoRangoSalarial { get; set; }
+        public virtual string TipoRangoSalarial { get; set; }
         public virtual string TipoMoneda { get; set; }
         public virtual int PuntajeSalario { get; set; }
         public virtual string IndicadorSalario { get; set; }

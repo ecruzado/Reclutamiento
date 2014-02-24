@@ -1,6 +1,7 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PublicacionViewModel
 @{
     ViewBag.Title = "Publicacion";
+   
 }
 @section Head{
 }
@@ -14,30 +15,35 @@
         $("#txtfechapublicacion").datepicker();
         $("#txtfechaexpiracion").datepicker();
 
-        jQuery("#grdListFunciones").jqGrid({
-            url: '@Url.Action("ListaFunciones2", "SolicitudCargo")',
-             datatype: 'json',
-             mtype: 'POST',
-             colNames: ['Descripci&oacuten' ],
-             colModel: [                     
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                     
-             ],
-             sortname: 'Codigo',
-             sortorder: 'desc',
-             viewrecords: true,
-             cellEdit: true,
-             /*caption: 'Horario de Trabajo',*/
-             height: 100,
-             width: 600,
-             rowNum: 0,
-             cellsubmit: 'clientArray',
-             hidegrid: false,
-             postData: {
-
-             },
-             loadComplete: function (data) {
-
-             }
+        $('#updateDialogConfirmacion').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    e.preventDefault();
+                    var result = $('#publicacionCargoForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "PublicacionCargo")',
+                        $("#publicacionCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $("#updateDialogConfirmacion").dialog("close");
+                                  notificacionExito("Requerimiento Publicado exitosamente");
+                            }
+                            else {
+                                $("#updateDialogConfirmacion").dialog("close");
+                                notificacionExito(respuesta.Mensaje);
+                            }
+                        });
+                    }
+                    else { $("#updateDialogConfirmacion").dialog("close"); notificacionExito("Verificar los datos registrados"); }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
         });
 
         jQuery("#grdListCompetencias").jqGrid({
@@ -147,9 +153,10 @@
             url: '@Url.Action("Experiencia", "PublicacionCargo")',
               datatype: 'json',
               mtype: 'POST',
-              colNames: ['Descripci&oacuten'],
+              colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
               colModel: [
                       { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                      { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false },
               ],
               sortname: 'IdeExperienciaCargo',
               sortorder: 'desc',
@@ -174,8 +181,21 @@
 
     });
 
-
-
+    function publicarSolicitud()
+    {
+        var dialogDiv = $('#updateDialogConfirmacion');
+        dialogDiv.dialog('open');
+    }
+    function mensajeResultado(mensaje) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
+    }
 </script>
 
 }  
@@ -188,14 +208,14 @@
         <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                @Html.DisplayFor(model=>model.SolicitudCargo.NombreCargo) - SEDE SAN MIGUEL
-                
+                @Html.HiddenFor(model => model.SolicitudCargo.IdeSolicitudNuevoCargo)
+               <h5> @Html.DisplayFor(model=>model.SolicitudCargo.NombreCargo) - SEDE SAN MIGUEL </h5>
             </div>
             <form class="form-horizontal well">
                 <fieldset>
 
                     <table style="margin-left:50px;" >
-
+                    <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="control-label" >Area</td>
                         <td class="controls">
@@ -206,7 +226,8 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Tipo</td>
                         <td class="controls">
-                            <input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">
+                            @Html.TextBoxFor(Model=>Model.TipoHorario, new {@class="input-small", @disabled="disabled"})
+                            @*<input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">*@
                         </td>
                     </tr>
 
@@ -220,19 +241,18 @@
                     <tr class="formulario-fila">
                         <td class="control-label">Rango Salarial</td>
                         <td class="controls">
-                            @Html.TextBoxFor(model => model.SolicitudCargo.TipoRangoSalarial, new {@disabled = "disabled"})
+                            @Html.TextBoxFor(model => model.RangoSalario, new {@disabled = "disabled"})
+                            @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
                         </td>
-                        <td>
-                        <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
-                           @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @id = "chbIndEstudiando"})
-                        </td>
-                         
                     </tr>
 
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
                             @Html.EditorFor(model=>model.SolicitudCargo.FechaPublicacion, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
+                            </div>
                         </td>
                     </tr>
 
@@ -240,22 +260,16 @@
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
                             @Html.EditorFor(model =>model.SolicitudCargo.FechaExpiracion, new { @class = "textoFormulario" })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
+                            </div>
                         </td>
                     </tr>
-                     
+                     <tr><td>&nbsp;</td></tr>
                     </table>
 
                     <table style="margin-left:50px;" >
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" >Descripción</label>
-                        <div class="controls">
-                           @Html.TextAreaFor(model => model.SolicitudCargo.DescripcionCargo, new { @style = "width:600px; height:100px"})
-                           @*<textarea style="width:600px;" id="tadescripcion" rows="5" disabled="disabled">Somos una importante organización del sector Salud, con 20 años de experiencia en el mercado y nos encontramos en la búsqueda de un profesional para ocupar el cargo de: "Tecnólogo en Terapia Física y Rehabilitación".</textarea>*@
-                        </div>
-                    </td>
-                  </tr>
-
+                   <tr><td>&nbsp;</td></tr>
                    <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Estudios</label>
@@ -271,7 +285,7 @@
                          </div>
                         </td>
                     </tr>
-
+                        <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Conocimientos</label>
@@ -287,7 +301,7 @@
                          </div>
                         </td>
                     </tr>
-                    
+                    <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Experiencia</label>
@@ -303,23 +317,16 @@
                          </div>
                        </td>
                     </tr>
-
+                        <tr><td>&nbsp;</td></tr>
                    <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListFunciones">
-                                    </table>
-                                    <div id="grdPagerFunciones">
-                                    </div>
-                                </div>                                         
-                            </div>
+                            @Html.TextAreaFor(model=>model.Cargo.FuncionCargo, new {@disabled = "disabled", @style = "width:600px; height:100px"})
                          </div>
                        </td>
                     </tr>
-
+                        <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Competencias</label>
@@ -335,7 +342,7 @@
                          </div>
                        </td>
                     </tr>
-
+                        <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Ofrecemos</label>
@@ -351,7 +358,7 @@
                          </div>
                         </td>
                     </tr>
-
+                        <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
@@ -367,9 +374,9 @@
                 </fieldset>
             </form>
                   <div class="form-actions"> 
-                     <a class="btn" href="@Url.Action("RegistroSolicitudPersonal", "Operaciones")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                     <a class="btn" href="@Url.Action("SolicitudNuevoCargo", "Edit")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
                      
-                    <a class="btn btn-info" href="@Url.Action("Publicacion", "Operaciones")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    <a class="btn btn-info" onclick="publicarSolicitud()"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                          
                 </div>
 
@@ -378,3 +385,6 @@
 </section>
 
 }
+
+<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de publicar el requerimiento de nuevo cargo?</p></div>
+

@@ -124,15 +124,16 @@
             
             return View(perfilViewModel);
         }
-       
+        [ValidarSesion]
         [HttpPost]
         public ActionResult General([Bind(Prefix = "Cargo")]Cargo cargo)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
-            var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);  
+             
             var cargoViewModel = inicializarGeneral();
             try
             {
+                var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo); 
                 CargoValidator validation = new CargoValidator();
                 ValidationResult resul = validation.Validate(cargo, "PuntajePostulanteInterno", "EdadInicio", "EdadFin",
                                                              "PuntajeEdad", "Sexo", "PuntajeSexo", "TipoRequerimiento", "TipoRangoSalarial", "PuntajeSalario");
@@ -152,6 +153,9 @@
                 cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
                 cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
                 cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+                cargoEditar.IndicadorEdadRanking = cargo.IndicadorEdadRanking;
+                cargoEditar.IndicadorSalarioRanking = cargo.IndicadorSalarioRanking;
+                cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
                 cargoEditar.PuntajeSalario = cargo.PuntajeSalario;
                 _cargoRepository.Update(cargoEditar);
 
@@ -234,6 +238,7 @@
             return cargoViewModel;
         }
 
+        [ValidarSesion]
         [HttpPost]
         public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
         {
@@ -317,7 +322,13 @@
             {
                 SedeDescripcion = SedeDesc.ToString();
             }
-            enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfil, SedeDescripcion,"Jefe de Area" ,"Nuevo Cargo","" );
+
+            enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+            enviarMail.Sede = Session[ConstanteSesion.SedeDes].ToString();
+            enviarMail.Area = "AREA1";
+            enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfil, SedeDescripcion,
+                                    "Jefe de Area" ,"Nuevo Cargo","",cargoEnviar.NombreCargo,cargoEnviar.CodigoCargo);
            
         }
 
