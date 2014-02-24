@@ -15,6 +15,12 @@
         else
         { habilitarControles();}
 
+        var aprobacion = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
+        if (aprobacion != "0")
+        { deshabilitarControles(); }
+        else
+        { habilitarControles(); }
+
         $('#updateDialogAprobacion').dialog({
             autoOpen: false,
             width: 400,
@@ -53,24 +59,33 @@
             modal: true,
             buttons: {
                 "Aceptar": function (e) {
-                     $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
-                     $("#solicitudNuevoCargoForm").serialize(),
-                     function (respuesta) {
-                         if (respuesta.Resultado) {
-                            $("#updateDialogConfirmacion").dialog("close");
-                            $("#spanMensaje").html("Solicitud enviada exitosamente");
-                            $("#divMensaje").dialog({
-                                title: 'SAN PABLO',
-                                modal: true,
-                                buttons: {
-                                    "Ok": function () {actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
-                                }
-                            });
-                          }
-                          else {
-                             mensajeResultado(respuesta.Mensaje);
-                          }
-                     });
+                    e.preventDefault();
+                    var result = $('#solicitudNuevoCargoForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
+                        $("#solicitudNuevoCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $("#updateDialogConfirmacion").dialog("close");
+                                deshabilitarControles();
+                                $("#spanMensaje").html("Solicitud enviada exitosamente");
+                                $("#divMensaje").dialog({
+                                    title: 'SAN PABLO',
+                                    modal: true,
+                                    buttons: {
+                                        "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
+                                    }
+                                });
+                            }
+                            else {
+                                $(this).dialog("close");
+                                mensajeResultado(respuesta.Mensaje);
+                            }
+                        });
+                    }
+                    $(this).dialog("close");
+                    mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
+                    //notificacionError("ERROR: Verifique que los datos ingresados son correctos");
                  },
                  "Cancelar": function () {
                      $(this).dialog("close");
@@ -232,6 +247,7 @@
         $('#SolicitudNuevoCargo_DescripcionFunciones').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_DescripcionObservaciones').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_NumeroPosiciones').attr("disabled", "disabled");
+        $('#btnEnviar').attr("disabled", "disabled");
 
     }
 
@@ -248,6 +264,7 @@
         $('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");
         $('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
         $('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
+        $('#btnEnviar').removeAttr("disabled");
     }
 
 </script>
@@ -430,7 +447,7 @@
             <div class="form-actions">     
                 <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
+                <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
 
                 
                   

@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
 
     [Authorize]
     public class SolicitudNuevoCargoController : BaseController
@@ -25,6 +26,7 @@
         private IAreaRepository _areaRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
         private IListaSolicitudNuevoCargoVistaRepository _listaSolicitudRepository;
+        private IUsuarioRepository _usuarioRepository;
 
       
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -33,7 +35,8 @@
                                              IDepartamentoRepository departamentoRepository,
                                              IAreaRepository areaRepository,
                                              IListaSolicitudNuevoCargoVistaRepository listaSolicitudRepository,
-                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
+                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository,
+                                             IUsuarioRepository usuarioRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -41,6 +44,7 @@
             _departamentoRepository = departamentoRepository;
             _areaRepository = areaRepository;
             _listaSolicitudRepository = listaSolicitudRepository;
+            _usuarioRepository = usuarioRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
         }
 
@@ -230,17 +234,20 @@
             return solicitudNuevoViewModel;
         }
 
-
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevaSolicitudCargo)
         {
             var enviarMail = new SendMail();
-            //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             JsonMessage objJsonMessage = new JsonMessage();
+            int ideUsuarioResp;
             try
             {
-                if (!ModelState.IsValid)
+                SolicitudNuevoCargoValidator solicitudValidator = new SolicitudNuevoCargoValidator();
+                ValidationResult result = solicitudValidator.Validate(nuevaSolicitudCargo, "IdeArea", "CodigoCargo", "NombreCargo", "DescripcionCargo", "NumeroPosiciones", "TipoRangoSalarial", "DescripcionEstudios", "DescripcionFunciones", "DescripcionCompetencias", "DescripcionObservaciones");
+
+                if (!result.IsValid)
                 {
                     var nuevoCargoViewModel = inicializarSolicitudNuevoCargo();
                     nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
@@ -248,54 +255,33 @@
                 }
                 if (nuevaSolicitudCargo.IdeSolicitudNuevoCargo == 0)
                 {
-                    nuevaSolicitudCargo.IdeSede = 1;
+                    int Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                    int UsuarioSession = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    nuevaSolicitudCargo.IdeSede = Sede;
                     nuevaSolicitudCargo.EstadoActivo = "A";
                     nuevaSolicitudCargo.FechaCreacion = FechaCreacion;
-                    nuevaSolicitudCargo.UsuarioCreacion = "YO";
+                    nuevaSolicitudCargo.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString();
                     _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
                     var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
-                    
-                    LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
-                    logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
-                    logSolicitud.TipoEtapa = EtapasSolicitud.PendienteAprobacion;
-                    logSolicitud.RolResponsable = Responsable.GerenteAdministrativoSede;
-                    logSolicitud.TipoSuceso = EstadoSolicitud.Pendiente;
-                    logSolicitud.FechaSuceso = FechaCreacion;
-                    logSolicitud.UsuarioSuceso = UsuarioActual.CodUsuario;
-                    _logSolicitudNuevoCargoRepository.Add(logSolicitud);
-                    string SedeDescripcion = "-";                
-                    var SedeDesc = Session[ConstanteSesion.SedeDes];
-                    if (SedeDesc != null)
+                    string SedeDescripcion = "-";      
+          
+                    //Enviar para aprobacion
+
+                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Sede, solicitud.IdeArea, solicitud.IdeSolicitudNuevoCargo, UsuarioSession,
+                                                                          Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
+                    if (ideUsuarioResp != 0)
                     {
-                        SedeDescripcion = SedeDesc.ToString();
-                    }
-                    enviarMail.EnviarCorreo(dir.ToString(),Asunto.Solicitado, SedeDescripcion ,"Gerente de Area","Nuevo Cargo" , "", "cargo", solicitud.CodigoCargo);
-                }
-                else
-                {
-                    var estadoSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == nuevaSolicitudCargo.IdeSolicitudNuevoCargo);
-                    if ((estadoSolicitud.TipoEtapa == EtapasSolicitud.PendienteAprobacion) && 
-                        (estadoSolicitud.TipoSuceso == EstadoSolicitud.Pendiente) && 
-                        ((estadoSolicitud.RolResponsable == Responsable.GerenteAdministrativoSede) || (estadoSolicitud.RolResponsable == Responsable.GerenteArea)))
-                    {
-                        var actualizarSolicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == nuevaSolicitudCargo.IdeSolicitudNuevoCargo);
-                        actualizarSolicitud.CodigoCargo = nuevaSolicitudCargo.CodigoCargo;
-                        actualizarSolicitud.NombreCargo = nuevaSolicitudCargo.NombreCargo;
-                        actualizarSolicitud.DescripcionCargo = nuevaSolicitudCargo.DescripcionCargo;
-                        actualizarSolicitud.NumeroPosiciones = nuevaSolicitudCargo.NumeroPosiciones;
-                        actualizarSolicitud.TipoRangoSalarial = nuevaSolicitudCargo.TipoRangoSalarial;
-                        actualizarSolicitud.IdeArea = nuevaSolicitudCargo.IdeArea;
-                        actualizarSolicitud.UsuarioModificacion = UsuarioActual.CodUsuario;
-                        actualizarSolicitud.FechaModificacion = FechaModificacion;
-                        _solicitudNuevoCargoRepository.Update(actualizarSolicitud);
-                    }
-                    else
-                    {
-                        objJsonMessage.Mensaje = "No se puede modificar la solicitud ya que el estado es : "+estadoSolicitud.TipoSuceso+ " por el Responsable: "+ estadoSolicitud.RolResponsable;
-                        objJsonMessage.Resultado = false;
-                        return Json(objJsonMessage);
+                        Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
+                        var SedeDesc = Session[ConstanteSesion.SedeDes];
+                        if (SedeDesc != null)
+                        {
+                            SedeDescripcion = SedeDesc.ToString();
+                        }
+                        
+                        enviarMail.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion,usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo,usuario.Email,SucesoSolicitud.Pendiente);
                     }
                 }
+                
                 objJsonMessage.Mensaje = "Agregado Correctamente";
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
@@ -377,6 +363,33 @@
             }
         }
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult EstadoSolicitud(string ideSolicitud)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                List<string> estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud), Convert.ToInt32(TipoTabla.TipoEtapaSolicitud), Convert.ToInt32(TipoTabla.TipoSucesoSolicitud));
+                if ((EtapasSolicitud.PendienteElaboracionPerfil == estado[0].ToString()) && (SucesoSolicitud.Pendiente == estado[1].ToString()))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "ERROR: La solicitud no tiene las aprobaciones necesarias";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
        
     }
 }

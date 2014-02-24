@@ -31,7 +31,7 @@
             _detalleGeneralRepository = detalleGeneralRepository;
             _logSolicitudNuevoRepository = logSolicitudNuevoRepository;
         }
-
+        [ValidarSesion]
         public ActionResult Index(string ideSolicitud)
         {
             try
@@ -39,15 +39,13 @@
                 var perfilViewModel = inicializarPerfil();
                 if (ideSolicitud != null)
                 {
-                    DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud));
-                    CargoPerfil = datosCargo;
+                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud));
+                   CargoPerfil = datosCargo;
                 }
                 actualizarDatosCargo(perfilViewModel);
-
                 int IdeCargo = CargoPerfil.IdeCargo;
                 if (IdeCargo != 0)
                 {
-
                     var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
                     perfilViewModel.Cargo = cargo;
                 }
@@ -327,8 +325,8 @@
             enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
             enviarMail.Sede = Session[ConstanteSesion.SedeDes].ToString();
             enviarMail.Area = "AREA1";
-            enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfil, SedeDescripcion,
-                                    "Jefe de Area" ,"Nuevo Cargo","",cargoEnviar.NombreCargo,cargoEnviar.CodigoCargo);
+            enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion,
+                                    "Jefe de Area" ,"Nuevo Cargo","",cargoEnviar.NombreCargo,cargoEnviar.CodigoCargo,"j.ccana@conastec.com.pe",SucesoSolicitud.Pendiente);
            
         }
 
