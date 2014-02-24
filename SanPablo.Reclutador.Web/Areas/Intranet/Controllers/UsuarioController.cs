@@ -32,13 +32,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ISedeRepository _sedeRepository;
         private IUsuarioVistaRepository _usuarioVistaRepository;
         private ITipoRequerimiento _tipoRequerimiento;
+        private ISedeNivelRepository _sedeNivelRepository;
+        private IDependenciaRepository _dependenciaRepository;
+        private IDepartamentoRepository _departamentoRepository;
+        private IAreaRepository _areaRepository;
 
         public UsuarioController(IRolRepository rolRepository, IDetalleGeneralRepository detalleGeneralRepository,
                              IRolOpcionRepository rolOpcionRepository, IUsuarioRepository usuarioRepository,
                              IUsuarioRolSedeRepository usuarioRolSedeRepository,
                              ISedeRepository sedeRepository,
                              IUsuarioVistaRepository usuarioVistaRepository,
-                             ITipoRequerimiento tipoRequerimiento
+                             ITipoRequerimiento tipoRequerimiento,
+                             ISedeNivelRepository sedeNivelRepository,
+                             IDependenciaRepository dependenciaRepository,
+                             IDepartamentoRepository departamentoRepository,
+                             IAreaRepository areaRepository
+            
             )
         {
             _rolRepository = rolRepository;
@@ -49,6 +58,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _sedeRepository = sedeRepository;
             _usuarioVistaRepository = usuarioVistaRepository;
             _tipoRequerimiento = tipoRequerimiento;
+            _sedeNivelRepository = sedeNivelRepository;
+            _dependenciaRepository = dependenciaRepository;
+            _departamentoRepository = departamentoRepository;
+            _areaRepository = areaRepository;
         }
 
         /// <summary>
@@ -348,6 +361,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+        /// <summary>
+        /// Inicializa el maestro de sedes
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="idSel"></param>
+        /// <returns></returns>
+        public ViewResult PopupSede(int id, int idSel)
+        {
+            UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
+            model.UsuarioRolSede = new UsuarioRolSede();
+
+            model.IdUsuario = id;
+
+
+            return View("PopupSede", model);
+
+
+        }
+
 
         /// <summary>
         /// Iniciliza popup tipo de requerimiento
@@ -389,7 +421,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         
         /// <summary>
-        /// obtiene la los datos del popup
+        /// obtiene la los datos del popup Sede x Rol
         /// </summary>
         /// <param name="selc"></param>
         /// <param name="codExamen"></param>
@@ -441,6 +473,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson); ;
         }
 
+
         /// <summary>
         /// Inserta el rol y la Sede del del usuario
         /// </summary>
@@ -451,14 +484,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public int insertaRolSede (int idUsu,int idRol, int idSede){
 
             int indGrabo = 0;
+            SedeNivel objSedeNivel;
             try
             {
 
                 UsuarioRolSede objUsuarioRolSede;
 
-                    var obj =  _usuarioRolSedeRepository.GetSingle(x => x.IdRol == idRol
-                                                    && x.IdUsuario == idUsu
-                                                    && x.IdSede == idSede );
+                var obj =  _usuarioRolSedeRepository.GetSingle(x => x.IdRol == idRol
+                                                && x.IdUsuario == idUsu
+                                                && x.IdSede == idSede );
 
                 if (obj==null)
                 {
@@ -473,6 +507,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     _usuarioRolSedeRepository.Add(objUsuarioRolSede);
                 }
 
+                //if (idSede!=0)
+                //{
+                //    var listaSedes = _sedeNivelRepository.GetBy(x => x.IDESEDE==idSede 
+                //                                                && x.IDUSUARIO==idUsu);
+                //    if (listaSedes.Count==0)
+                //    {
+                //        objSedeNivel = new SedeNivel();
+                //        objSedeNivel.IDUSUARIO = idUsu;
+                //        objSedeNivel.IDESEDE = idSede;
+                //        objSedeNivel.FLGESTADO = IndicadorActivo.Activo;
+                //        objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                //        objSedeNivel.FechaCreacion = FechaCreacion;
+                //        objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                //        objSedeNivel.FechaModificacion = FechaModificacion;
+
+                //        _sedeNivelRepository.Add(objSedeNivel);
+                //    }
+
+                //}
+                
                 indGrabo = 1;
             }
             catch (Exception)
@@ -484,6 +538,74 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return indGrabo;
 
         }
+
+
+        /// <summary>
+        /// Obtiene las Sedes del maestro Sede y las graba
+        /// </summary>
+        /// <param name="selc"></param>
+        /// <param name="idRol"></param>
+        /// <param name="idUsu"></param>
+        /// <param name="indSede"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SetPopupSede(List<int> selc,int idUsu)
+        {
+
+
+            JsonMessage objJson = new JsonMessage();
+            SedeNivel objSedeNivel;
+            int idSede = 0;
+            int indGrabo = 0;
+           
+
+            if (idUsu != null && idUsu > 0)
+            {
+                if (selc.Count>0)
+                {
+
+                    for (int i = 0; i < selc.Count; i++)
+                    {
+                        idSede = selc[i];
+
+                        if (idSede!=0)
+                        {
+                            var listaSedes = _sedeNivelRepository.GetBy(x => x.IDESEDE==idSede 
+                                                            && x.IDUSUARIO==idUsu);
+                            if (listaSedes.Count == 0)
+                            {
+                                objSedeNivel = new SedeNivel();
+                                objSedeNivel.IDUSUARIO = idUsu;
+                                objSedeNivel.IDESEDE = idSede;
+                                objSedeNivel.FechaCreacion = FechaCreacion;
+                                objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                                objSedeNivel.FechaModificacion = FechaModificacion;
+                                objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                                objSedeNivel.FLGESTADO = IndicadorActivo.Activo;
+
+                                _sedeNivelRepository.Add(objSedeNivel);
+                                indGrabo = 1;     
+                            }
+                        }
+                    } 
+                }
+
+            }
+
+            if (indGrabo > 0)
+            {
+                objJson.Mensaje = "Se registraron los datos correctamente";
+                objJson.Resultado = true;
+            }
+            else
+            {
+                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Resultado = false;
+            }
+
+            return Json(objJson); ;
+        }
+
 
         /// <summary>
         /// Se elemina la relacion rol Sede
@@ -508,6 +630,43 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return Json(objJson); ;
         }
+
+        [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        public ActionResult EliminaRolSedeNivel(string id)
+        {
+            JsonMessage objJson = new JsonMessage();
+           
+            if (id != null)
+            {
+                var ObjSedeNivel =_sedeNivelRepository.GetSingle(x => x.IDUSUARIONIVEL == Convert.ToInt32(id));
+
+                if (ObjSedeNivel!=null)
+                {
+                      var listaRolSede =_usuarioRolSedeRepository.GetBy(x => x.IdSede == ObjSedeNivel.IDESEDE &&
+                                                                          x.IdUsuario == ObjSedeNivel.IDUSUARIO );
+                      if (listaRolSede!=null && listaRolSede.Count>0)
+                      {
+                          objJson.Resultado = false;
+                          objJson.Mensaje = "No se puede eliminar la sede, tiene roles asociados";
+
+                      }
+                      else
+                      {
+                          _sedeNivelRepository.Remove(ObjSedeNivel);
+                          objJson.Resultado = true;
+                          objJson.Mensaje = "Se elimino el registro";
+                      }
+
+                }
+
+            }
+
+            return Json(objJson); ;
+        }
+
+
+        
 
         /// <summary>
         /// Elimina tipo de requerimiento
@@ -890,7 +1049,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         /// <summary>
-        /// Lista los tipo de requerimiento
+        /// Lista todas las sedes del maestro sede
         /// </summary>
         /// <param name="grid"></param>
         /// <returns></returns>
@@ -930,6 +1089,247 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return MensajeError();
             }
         }
-       
+
+
+        /// <summary>
+        /// obtiene solo las sedes registradas para un usuario especifico
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListaPopupSedexUsuario(GridTable grid)
+        {
+            try
+            {
+                DetachedCriteria where = null;
+                //where = DetachedCriteria.For<Sede>();
+
+                // int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                {
+                    where = DetachedCriteria.For<SedeNivel>();
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        int dato = Convert.ToInt32(grid.rules[0].data);
+                        where.Add(Expression.Eq("IDUSUARIO", dato));
+                    }
+
+                }
+
+                where.Add(Expression.Eq("FLGESTADO", "A"));
+
+
+                var generic = Listar(_sedeNivelRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDESEDE.ToString(),
+                    cell = new string[]
+                            {
+                                
+                                item.IDESEDE==null?"":item.IDESEDE.ToString(),
+                                item.SEDEDES==null?"":item.SEDEDES
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
+
+
+        /// <summary>
+        /// obtiene las sedes, dependencia, departamento, area
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetSedeNivel(GridTable grid)
+        {
+
+            try
+            {
+                DetachedCriteria where = null;
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                {
+                    where = DetachedCriteria.For<SedeNivel>();
+
+                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    {
+                        int dato = Convert.ToInt32(grid.rules[0].data);
+                        where.Add(Expression.Eq("IDUSUARIO", dato));
+                    }
+
+                }
+
+                var generic = Listar(_sedeNivelRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IDUSUARIONIVEL.ToString(),
+                    cell = new string[]
+                            {                               
+                                "1",
+                                item.FLGESTADO==null?"0":item.FLGESTADO,
+                                item.IDUSUARIONIVEL==null?"0":item.IDUSUARIONIVEL.ToString(),
+                                item.IDUSUARIO==null?"0":item.IDUSUARIO.ToString(),
+                                item.IDESEDE==null?"0":item.IDESEDE.ToString(),
+                                item.IDEDEPENDENCIA==null?"0":item.IDEDEPENDENCIA.ToString(),
+                                item.IDEDEPARTAMENTO==null?"0":item.IDEDEPARTAMENTO.ToString(),
+                                item.IDEAREA==null?"0":item.IDEAREA.ToString(),
+                                item.SEDEDES==null?"":item.SEDEDES.ToString(),
+                                item.DEPENDENCIADES==null?"":item.DEPENDENCIADES.ToString(),
+                                item.DEPARTAMENTODES==null?"":item.DEPARTAMENTODES.ToString(),
+                                item.AREADES==null?"":item.AREADES.ToString()
+
+   
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
+        /// <summary>
+        /// Inicializa el popup de Sedes por cada nivel depencia,departamento,Area
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult popupSedeNivel(string id,string idSel) {
+
+            
+
+            UsuarioRolSedeViewModel usuarioRolSedeViewModel;
+            usuarioRolSedeViewModel = new UsuarioRolSedeViewModel();
+           
+
+            usuarioRolSedeViewModel = inicializarNivelesSede(Convert.ToInt32(idSel));
+            usuarioRolSedeViewModel.SedeNivel = new SedeNivel();
+            usuarioRolSedeViewModel.SedeNivel.IDESEDE = Convert.ToInt32(idSel);
+            usuarioRolSedeViewModel.SedeNivel.IDUSUARIO = Convert.ToInt32(id);
+
+            return View("popupSedeNivel", usuarioRolSedeViewModel);
+
+        }
+        
+
+        /// <summary>
+        /// Inicaliza las lista de valores de las lista de valores de la dependecia,departamento,Area
+        /// </summary>
+        /// <returns></returns>
+        public UsuarioRolSedeViewModel inicializarNivelesSede(int idSel)
+        {
+            var usuarioRolSedeViewModel = new UsuarioRolSedeViewModel();
+
+            usuarioRolSedeViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                         && x.IdeSede == idSel));
+            usuarioRolSedeViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+            usuarioRolSedeViewModel.Departamentos = new List<Departamento>();
+            usuarioRolSedeViewModel.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+            usuarioRolSedeViewModel.Areas = new List<Area>();
+            usuarioRolSedeViewModel.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+            return usuarioRolSedeViewModel;
+        }
+
+        /// <summary>
+        /// Graba las sedes con su depencia,departamento,Area
+        /// </summary>
+        /// <param name="selc"></param>
+        /// <param name="idUsu"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SetSedeNivel(UsuarioRolSedeViewModel model)
+        {
+            JsonMessage objJson = new JsonMessage();
+            SedeNivel objSedeNivel;
+            objSedeNivel = new SedeNivel();
+            
+            int indGrabo = 0;
+
+
+            var lista =  _sedeNivelRepository.GetBy(x => x.IDUSUARIO == model.SedeNivel.IDUSUARIO
+                                       && x.IDESEDE == model.SedeNivel.IDESEDE
+                                       && x.IDEDEPENDENCIA == model.SedeNivel.IDEDEPENDENCIA
+                                       && x.IDEDEPARTAMENTO == model.SedeNivel.IDEDEPARTAMENTO
+                                       && x.IDEAREA == model.SedeNivel.IDEAREA);
+
+            if (lista.Count==0)
+            {
+                objSedeNivel = _sedeNivelRepository.GetSingle(x => x.IDESEDE == model.SedeNivel.IDESEDE &&
+                                                x.IDUSUARIO == model.SedeNivel.IDUSUARIO);
+
+                objSedeNivel.IDEAREA = model.SedeNivel.IDEAREA;
+                objSedeNivel.IDEDEPENDENCIA = model.SedeNivel.IDEDEPENDENCIA;
+                objSedeNivel.IDEDEPARTAMENTO = model.SedeNivel.IDEDEPARTAMENTO;
+
+                _sedeNivelRepository.Update(objSedeNivel);
+                indGrabo = 1;
+            }
+
+            if (indGrabo > 0)
+            {
+                objJson.Mensaje = "Se registraron los datos correctamente";
+                objJson.Resultado = true;
+            }
+            else
+            {
+                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Resultado = false;
+            }
+
+            return Json(objJson); ;
+        }
+
+        /// <summary>
+        /// Lista de departamentos por dependencia
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaDepartamentos(int ideDependencia)
+        {
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
+
+            var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+            result = Json(listaResultado);
+            return result;
+        }
+
+
+        /// <summary>
+        /// Lista de areas por departamento
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+         [HttpPost]
+        public ActionResult listaAreas(int ideDepartamento)
+        {
+            ActionResult result = null;
+
+            var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+            result = Json(listaResultado);
+            return result;
+        }
+
     }
 }

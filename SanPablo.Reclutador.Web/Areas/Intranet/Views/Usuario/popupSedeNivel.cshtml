@@ -1,0 +1,106 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.UsuarioRolSedeViewModel
+@{
+    Layout = "";
+}
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $('select#SedeNivel_IDEDEPENDENCIA').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SedeNivel_IDEAREA").empty();
+            $("select#SedeNivel_IDEAREA").append("<option value='0'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos", "Usuario", new { area = "Intranet"})',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#SedeNivel_IDEDEPARTAMENTO").empty();
+                    $("select#SedeNivel_IDEDEPARTAMENTO").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SedeNivel_IDEDEPARTAMENTO").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+          })
+
+        $('select#SedeNivel_IDEDEPARTAMENTO').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","Usuario",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SedeNivel_IDEAREA").empty();
+                    $("select#SedeNivel_IDEAREA").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SedeNivel_IDEAREA").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+    });
+
+
+
+</script>
+
+
+@using (Html.BeginForm("popupSedeNivel", "Usuario", FormMethod.Post, new { id = "frmPopupSedeNivel" }))
+    {
+    @Html.ValidationSummary(true)
+
+        
+    @Html.TextBoxFor(model => model.SedeNivel.IDUSUARIO,  new { style = "display: none;" })
+    @Html.TextBoxFor(model => model.SedeNivel.IDESEDE,  new { style = "display: none;" })
+   
+    <table style="margin-left:30px;">
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Depencia<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+                @Html.DropDownListFor(model => model.SedeNivel.IDEDEPENDENCIA, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SedeNivel.IDEDEPENDENCIA))
+            </td>
+        </tr>
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Departamento<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+                 @Html.DropDownListFor(model => model.SedeNivel.IDEDEPARTAMENTO, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SedeNivel.IDEDEPARTAMENTO))
+            </td>
+        </tr>
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Area<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+                @Html.DropDownListFor(model => model.SedeNivel.IDEAREA, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SedeNivel.IDEAREA))
+            </td>
+        </tr>
+        
+        
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+       
+    </table>
+    
+    
+    <div class="tabla-datos" id="tbSede">
+    <table id="grdListaSedesInicial">
+    </table>
+    <div id="grdPagerListaSedesInicial">
+    </div>
+    </div>
+    }

@@ -68,6 +68,7 @@
     <Compile Include="MenuItem.cs" />
     <Compile Include="MenuPadre.cs" />
     <Compile Include="Password.cs" />
+    <Compile Include="SedeNivel.cs" />
     <Compile Include="SendMail.cs" />
     <Compile Include="SolicitudNuevoCargo.cs" />
     <Compile Include="EvaluacionCargo.cs" />

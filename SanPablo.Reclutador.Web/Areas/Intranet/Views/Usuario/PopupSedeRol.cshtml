@@ -45,7 +45,9 @@
                 migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
-                migrilla.Rules = [];
+                migrilla.Rules = [
+                    { field: 'idUsuario', data: $("#IdUsuario").val() },
+                ];
 
                 if (migrilla._search == true) {
                     migrilla.searchField = postdata.searchField;
@@ -56,7 +58,8 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("ListaPopupSedesInicio", "Usuario", new { area = "Intranet" })',
+                   
+                     url: '@Url.Action("ListaPopupSedexUsuario", "Usuario", new { area = "Intranet" })',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -74,8 +77,8 @@
             },
                 colNames: ['', 'Sede'],
                 colModel: [
-                        { name: 'CodigoSede', index: 'CodigoSede', align: 'left', hidden: true },
-                        { name: 'DescripcionSede', index: 'DescripcionSede', align: 'center', sortable: false, width: 380 }
+                        { name: 'IDESEDE', index: 'IDESEDE', align: 'left', hidden: true },
+                        { name: 'SEDEDES', index: 'SEDEDES', align: 'center', sortable: false, width: 380 }
 
                 ],
               pager: jQuery('#grdPagerListaSedesInicial'),
@@ -83,7 +86,7 @@
               //rowList: [10, 30, 50],
               autowidth: true,
               rules: true,
-              sortname: 'CodigoSede',
+              sortname: 'IDESEDE',
               sortorder: 'desc',
               viewrecords: true,
               height: 340,

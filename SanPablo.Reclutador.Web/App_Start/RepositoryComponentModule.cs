@@ -132,6 +132,9 @@
            .As<ITipoRequerimiento>();
 
 
+            builder.RegisterType<SedeNivelRepository>()
+            .As<ISedeNivelRepository>();
+
 
         }
     }
