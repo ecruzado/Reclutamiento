@@ -121,19 +121,23 @@
 
     public sealed class EtapasSolicitud
     {
-        public const string PendienteAprobacion = "PA";
-        public const string PendienteAprobacionPerfil = "PAP";
-        public const string ElaboracionPerfil = "EP";
-        public const string PendientePublicacion = "PP";
-        public const string Finalizado = "F";
-
+        public const string PendienteAprobacionGerenteArea = "01";
+        public const string PendienteAprobacionGerenteGralAdj = "02";
+        public const string PendienteElaboracionPerfil = "03";
+        public const string PendienteAprobacionPerfilJefeArea = "04";
+        public const string PendienteAprobacionPerfilEncargSeleccion = "05";
+        public const string PendientePublicacion = "06";
+        public const string Finalizado = "99";
     }
    
-    public sealed class EstadoSolicitud
+    public sealed class SucesoSolicitud
     {
+        public const string Pendiente = "P";
         public const string Aprobado = "A";
         public const string Rechazado = "R";
-        public const string Pendiente = "P";
+        public const string Publicado = "B";
+        public const string Finalizado = "F";
+        
     }
 
     public sealed class Solicitud
@@ -178,6 +182,16 @@
         public const string JefeArea = "JA";
         public const string EncargadoSeleccion = "ES";
         public const string AsistenteSeleccion = "AS";
+
+    }
+    public sealed class Roles
+    {
+        public const int GerenteArea = 10;
+        public const int GerenteGeneralAdjunto = 5;
+        public const int JefeProcesos = 6;
+        public const int JefeArea = 3;
+        public const int EncargadoSeleccion = 7;
+        public const int AsistenteSeleccion = 9;
 
     }
 

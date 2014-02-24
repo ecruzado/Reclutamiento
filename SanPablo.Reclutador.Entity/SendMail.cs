@@ -18,17 +18,19 @@
             public virtual string Area { get; set; }
             public virtual string Sede { get; set; }
 
-        public void EnviarCorreo(string dir, string asunto, string sedeDescripcion, 
+        public void EnviarCorreo(string dir, string etapa, string sedeDescripcion, 
                                  string responsable, string tipoRequerimiento, string observacion,
-                                 string cargo, string codCargo)
+                                 string cargo, string codCargo,string destinatario, string suceso)
         {
             
-
-            //Creamos un nuevo Objeto de mensaje
             System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
-            mmsg.To.Add("j.ccana@conastec.com.pe");
-
+            //destinatario
+            mmsg.To.Add(destinatario);
             //Asunto
+            string asunto;
+            if (etapa == EtapasSolicitud.PendienteAprobacionGerenteArea) 
+            { asunto ="Solicitud";}
+            else {asunto ="Aprobacion/Rechazo";}
             mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" "+cargo+" - Nro "+ codCargo +" - Sede:"+ sedeDescripcion;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
 
@@ -37,7 +39,7 @@
             
             //Cuerpo del Mensaje
 
-            string cuerpo = cuerpoMail(asunto, tipoRequerimiento, sedeDescripcion, responsable, observacion);
+            string cuerpo = cuerpoMail(etapa, tipoRequerimiento, sedeDescripcion, responsable, observacion,suceso);
             
             
             
@@ -86,30 +88,54 @@
             return cuerpo;
         }
 
-        public string cuerpoMail(string tipo,string tipoRequerimiento, string SedeDescripcion, string Responsable1, string Observacion)
+        public string cuerpoMail(string tipo,string tipoRequerimiento, string SedeDescripcion, string Responsable1, string Observacion,string suceso)
         {
             string cuerpo = "";
             switch (tipo)
             {
-                case  EtapasSolicitud.ElaboracionPerfil:
+                case  EtapasSolicitud.PendienteAprobacionGerenteGralAdj:
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
                         " Requerimiento de "+ tipoRequerimiento+" en la Sede " + SedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
                         break;
-                case EtapasSolicitud.PendienteAprobacion:
+                case EtapasSolicitud.PendienteAprobacionGerenteArea:
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
-                                 "Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación o Rechazo como "+
-                                  Responsable1+" para continuar con el procedimiento.";
+                                 "Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación o Rechazo como Gerente de Area"+
+                                 " para continuar con el procedimiento.";
                         break;
+                
+                case EtapasSolicitud.PendienteElaboracionPerfil:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
+                        " Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
+                        break;
+
+                case EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
+                                 +tipoRequerimiento+" en la Sede "+SedeDescripcion+" y se requiere de su Aprobación/Rechazo como Encargado de Seleccion para continuar con el procedimiento.";
+                        break;
+
+                case EtapasSolicitud.PendienteAprobacionPerfilJefeArea:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
+                                 + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación/Rechazo como Jefe de Area para continuar con el procedimiento.";
+                        break;
+
                 case EtapasSolicitud.Finalizado:
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de "+tipoRequerimiento+
                                  " en la Sede "+SedeDescripcion+" por el motivo de "+Observacion;
                         break;
-                case EtapasSolicitud.PendienteAprobacionPerfil:
-                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
-                                 +tipoRequerimiento+" en la Sede "+SedeDescripcion+" y se requiere de su Aprobación/Rechazo como "+Responsable1+" para continuar con el procedimiento.";
+
+                case EtapasSolicitud.PendientePublicacion:
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Aprobado el perfil para el Requerimiento de " + tipoRequerimiento +
+                                 " en la Sede " + SedeDescripcion + " y se requiere de la publicación como Destinatario de Recursos Humanos";
                         break;
             }
 
+            if (suceso == SucesoSolicitud.Rechazado)
+            {
+                cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de " + tipoRequerimiento +
+                                 " en la Sede " + SedeDescripcion + " por el motivo de " + Observacion;
+            }
+           
+         
             return cuerpo;
  
         }

@@ -20,12 +20,15 @@
         // GET: /Intranet/Cargo/
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
+        private IUsuarioRepository _usuarioRepository;
 
         public LogSolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
-                                               ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
+                                               ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository,
+                                                IUsuarioRepository usuarioRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         #region LOGSOLICITUD NUEVO CARGO
@@ -34,9 +37,11 @@
         {
 
             var logSolicitudNuevoCargoViewModel = inicializarLogSolicitudNuevoCargo(Convert.ToInt32(ideSolicitud));
+
             return View(logSolicitudNuevoCargoViewModel);
         }
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit(LogSolicitudNuevoCargoViewModel model)
         {
@@ -46,18 +51,26 @@
             {
                 LogSolicitudNuevoCargoValidator validator = new LogSolicitudNuevoCargoValidator();
                 ValidationResult result = validator.Validate(model.LogSolicitudNuevoCargo, "Observacion");
-                
-                if (!result.IsValid)
+                int RolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                if ((RolSession == Roles.GerenteGeneralAdjunto) || (RolSession == Roles.GerenteArea))
                 {
-                    objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
-                    objJsonMessage.Resultado = false;
+                    if (!result.IsValid)
+                    {
+                        objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    aprobarRechazarNuevaSolicitud(model);
+
+                    objJsonMessage.Mensaje = "Enviado Correctamente";
+                    objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
+
                 }
-                aprobarRechazarNuevaSolicitud(model);
-                    
-                objJsonMessage.Mensaje = "Enviado Correctamente";
-                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "Usuario sin permiso para esta accion";
+                objJsonMessage.Resultado = false;
                 return Json(objJsonMessage);
+
             }
             catch (Exception ex)
             {
@@ -71,8 +84,17 @@
         {
             var logSolicitudNuevoCargoViewModel = new LogSolicitudNuevoCargoViewModel();
             logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
+            
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo = new LogSolicitudNuevoCargo();
             logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo.IdeSolicitudNuevoCargo = ideSolicitud;
+            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteGeneralAdjunto)
+            {
+                logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteElaboracionPerfil;
+            }
+            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteArea)
+            {
+                logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionGerenteGralAdj;
+            }
 
             return logSolicitudNuevoCargoViewModel;
         }
@@ -85,37 +107,38 @@
             enviar.Sede = Session[ConstanteSesion.SedeDes].ToString();
             enviar.Area = "AREA 1";
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            int ideUsuarioResp;
             try
             {
+                
+                if (model.Aprobado)
+                {
+                    model.LogSolicitudNuevoCargo.TipoSuceso = SucesoSolicitud.Aprobado;
+                   
+                }
+                else
+                {
+                    model.LogSolicitudNuevoCargo.TipoSuceso = SucesoSolicitud.Rechazado;
+                   
+                }
                 LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
                 int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
-                //recuperar datos del estado actual
-                var logSolicitud = _logSolicitudNuevoCargoRepository.getMostRecentValue(x => x.IdeSolicitudNuevoCargo == IdeSolicitudNuevoCargo);
-                string RolActual = "";
-                if (logSolicitudNuevo.RolResponsable == RolActual)
+                ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Convert.ToInt32(Session[ConstanteSesion.Sede]), model.SolicitudNuevoCargo.IdeArea, model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
+                                                                                       model.LogSolicitudNuevoCargo.Observacion, model.LogSolicitudNuevoCargo.TipoSuceso, model.LogSolicitudNuevoCargo.TipoEtapa);
+
+                if (ideUsuarioResp != 0)
                 {
-                    if (logSolicitudNuevo.TipoSuceso == EstadoSolicitud.Pendiente)
+                    Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
+                    var SedeDesc = Session[ConstanteSesion.SedeDes];
+                    string SedeDescripcion = "";
+                    if (SedeDesc != null)
                     {
-                        //determinar el usuario y el estado de la solicitud
-                        logSolicitudNuevo.FechaSuceso = FechaModificacion;
-                        logSolicitudNuevo.UsuarioSuceso = UsuarioActual.CodUsuario;
-                        string sedeDescripcion = Session[ConstanteSesion.SedeDes].ToString();
-                        if (sedeDescripcion == null)
-                        { sedeDescripcion = "-";}
-                        if (model.Aprobado)
-                        {
-                            logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Aprobado;
-                            _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacion, sedeDescripcion," Responsable ","Aprobación","","cargo","codCargo" );
-                        }
-                        else
-                        {
-                            logSolicitudNuevo.TipoSuceso = EstadoSolicitud.Rechazado;
-                            _logSolicitudNuevoCargoRepository.Update(logSolicitudNuevo);
-                            enviar.EnviarCorreo(dir.ToString(),EtapasSolicitud.Finalizado, sedeDescripcion, " Responsable ", "Rechazo", logSolicitudNuevo.Observacion,"cargo","codCrgo");
-                        }
+                        SedeDescripcion = SedeDesc.ToString();
                     }
+
+                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudNuevoCargo.TipoEtapa, SedeDescripcion, usuario.DscNombres, "NUEVO CARGO", model.LogSolicitudNuevoCargo.Observacion, model.SolicitudNuevoCargo.NombreCargo, model.SolicitudNuevoCargo.CodigoCargo, usuario.Email,model.LogSolicitudNuevoCargo.TipoSuceso);
                 }
+
             }
             catch (Exception ex)
             {

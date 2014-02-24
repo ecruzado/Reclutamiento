@@ -189,7 +189,7 @@
                 window.location = '@Url.Action("Edit", "SolicitudNuevoCargo")' + '/' + ideSolicitud;
             }
             else {
-                MostrarMensaje("Seleccione una Solicitud a Editar");
+                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
             }
 
         });
@@ -199,17 +199,7 @@
             //var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
             var estado = rowData.EstadoActivo;
-            if (ideSolicitud != null) {
-                if (estado == "A") {
-                    window.location = '@Url.Action("Index", "Perfil", new { ideSolicitud = "-id"})'.replace("-id", ideSolicitud);
-                }
-                else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva");}
-            }
-            else {
-                MostrarMensaje("Seleccione la solicitud asociada al perfil");
-            }
-
-
+            estadoSolicitud(ideSolicitud, estado);
         });
 
     });
@@ -237,6 +227,25 @@
 
     }
 
+    function estadoSolicitud(ideSolicitud, estado) {
+        if (ideSolicitud != null) {
+            $.ajax({
+                data: { ideSolicitud: ideSolicitud },
+                type: "POST",
+                url: "@Url.Action("EstadoSolicitud", "SolicitudNuevoCargo")",
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == true) {
+                        if (estado == "A") {
+                            window.location = '@Url.Action("Index", "Perfil", new { ideSolicitud = "-id"})'.replace("-id", ideSolicitud);
+                        }
+                        else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva"); }
+                    } else { MostrarMensaje(data.Mensaje); }
+                }
+            });
+        }
+        else { MostrarMensaje("Seleccione la solicitud asociada al perfil");}
+    }
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
@@ -407,7 +416,7 @@
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
                 <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>

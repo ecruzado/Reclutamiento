@@ -9,6 +9,12 @@
     public interface ILogSolicitudNuevoCargoRepository : IRepository<LogSolicitudNuevoCargo>
     {
         LogSolicitudNuevoCargo getMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
+
         IList<LogSolicitudNuevoCargo> getTwoMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
+
+        int solicitarAprobacion(int ideSede, int ideArea, int ideSolicitudCargo, int ideUsuario,
+                                       int ideRol, string observacion, string suceso, string etapa);
+
+        List<string> estadoSolicitud(int ideSolicitudNuevo, int tipoEtapa, int tipoSuceso);
     }
 }
