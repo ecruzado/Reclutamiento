@@ -321,8 +321,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     
                     Session[Core.ConstanteSesion.Rol] = codRol;
                     Session[Core.ConstanteSesion.RolDes] = objRol.DscRol;
-                    
-                    if (codSede!=null && !"".Equals(codSede.Trim()))
+
+                    if (codSede != null && !"".Equals(codSede.Trim()) && !"0".Equals(codSede.Trim()))
                     {
                         var objSede = _sedeRepository.GetSingle(x => x.CodigoSede == codSede);
                         

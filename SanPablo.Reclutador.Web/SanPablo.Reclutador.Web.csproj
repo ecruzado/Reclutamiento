@@ -370,6 +370,9 @@
     <Content Include="Areas\Intranet\Views\PublicacionCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\EdicionOpciones.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\EdicionTipoReq.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionSede.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSede.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

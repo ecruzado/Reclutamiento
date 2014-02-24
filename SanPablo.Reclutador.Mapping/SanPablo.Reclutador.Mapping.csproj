@@ -61,6 +61,7 @@
     <Compile Include="ConocimientoGeneralCargoMap.cs" />
     <Compile Include="ListaSolicitudNuevoCargoVistaMap.cs" />
     <Compile Include="LogSolicitudNuevoCargoMap.cs" />
+    <Compile Include="SedeNivelMap.cs" />
     <Compile Include="SolicitudNuevoCargoMap.cs" />
     <Compile Include="DepartamentoMap.cs" />
     <Compile Include="DependenciaMap.cs" />

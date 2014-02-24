@@ -183,7 +183,7 @@
                             codRol: $('#IdRoll').val()
                         },
                         type: "POST",
-                        url: '@Url.Action("GetListaOpcion", "Opcion")',
+                        url: '@Url.Action("GetListaOpcion", "Opcion",new { area = "Intranet"})',
                     traditional: true,
                     success: function () {
                         $('#confSelc').dialog("close");
@@ -219,9 +219,11 @@
 
     });
 
+  
+
     function mostrarOpciones(id) {
         var dialogDiv = $('#opcionDialog');
-        $.get("/Intranet/Opcion/PopupOpcion/" + id, function (data) {
+        $.get("@Url.Action("PopupOpcion", "Opcion", new { area = "Intranet",id=""})/" + id, function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#opcionDialog"));
             dialogDiv.dialog('open');

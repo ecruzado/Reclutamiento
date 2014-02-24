@@ -1,0 +1,37 @@
+﻿@using SanPablo.Reclutador.Entity
+@{
+    ViewBag.Title = "Edicion Sede";
+    Layout = "";
+}
+
+@section Scripts{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    
+    });
+
+    </script>
+}
+ <div class="opciones">
+        <div id="showSede">
+            @if (Accion.Consultar.Equals(Model.Accion))
+            {
+                <span></span>
+            }
+            else
+            {
+                <a id="btnNuevoSede" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
+                <a id="btnSedeNivel" class="btn btn-small btn-info" title="Agregar departamento, dependica ,area"><i class="icon-list-alt icon-white"></i></a> 
+                <a id="btnEliminarSedeNivel" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>        
+            }
+        </div>
+    </div>
+    <div style="clear:both"></div>
+<div class="tabla-datos" >
+    <table id="grdListaNivelSede" >
+    </table>
+    <div id="grdPagerListaSede">
+    </div>
+</div>

@@ -26,8 +26,6 @@
         $("#tabs").tabs();
 
        
-
-
         jQuery("#grdListUsuario").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -169,6 +167,85 @@
 
 
     });
+
+
+   
+    jQuery("#grdListaNivelSede").jqGrid({
+        datatype: function (postdata) {
+            var migrilla = new Object();
+            migrilla.page = postdata.page;
+            migrilla.rows = postdata.rows;
+            migrilla.sidx = postdata.sortField;
+            migrilla.sord = postdata.sortOrder;
+            migrilla._search = postdata.isSearch;
+            migrilla.filters = postdata.filters;
+            migrilla.Rules = [
+                        { field: 'idUsuario', data: $("#Usuario_IdUsuario").val() }
+
+            ];
+
+            if (migrilla._search == true) {
+                migrilla.searchField = postdata.searchField;
+                migrilla.searchOper = postdata.searchOper;
+                migrilla.searchString = postdata.searchString;
+            }
+
+            var params = { grid: migrilla };
+
+            $.ajax({
+                url: '@Url.Action("GetSedeNivel", "Usuario")',
+            type: 'post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(params),
+            async: false,
+            success: function (data, st) {
+                if (st == 'success') {
+                    var jq = $('#grdListaNivelSede')[0];
+                    jq.addJSONData(data);
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    },
+    colNames: ['Estado','', '', '', '','','','','Sede','Depencia','Departamento','Area'],
+    colModel: [
+				 
+             { name: 'ESTADO', index: 'ESTADO', align: 'left', sortable: false, editable: false, hidden: true },
+             { name: 'FLGESTADO', index: 'FLGESTADO', align: 'left', sortable: false, editable: false, hidden: true },
+             { name: 'IDUSUARIONIVEL', index: 'IDUSUARIONIVEL', align: 'left', editable: false, sortable: false, hidden: true },
+             { name: 'IDUSUARIO', index: 'IDUSUARIO', align: 'left', editable: false, sortable: false, hidden: true },
+             { name: 'IDESEDE', index: 'IDESEDE', align: 'left', sortable: false, editable: false, hidden: true },
+             { name: 'IDEDEPENDENCIA', index: 'IDEDEPENDENCIA', align: 'left', sortable: false, editable: false, hidden: true  },
+             { name: 'IDEDEPARTAMENTO', index: 'IDEDEPARTAMENTO', align: 'left', sortable: false, editable: false, hidden: true  },
+             { name: 'IDEAREA', index: 'IDEAREA', align: 'left', sortable: false, editable: false, hidden: true  },
+             { name: 'SEDEDES', index: 'SEDEDES', align: 'left', sortable: false, editable: false, width: 200},
+             { name: 'DEPENDENCIADES', index: 'DEPENDENCIADES', align: 'left', sortable: false, editable: false, width: 200},
+             { name: 'DEPARTAMENTODES', index: 'DEPARTAMENTODES', align: 'left', sortable: false, editable: false, width: 200},
+             { name: 'AREADES', index: 'AREADES', align: 'left', sortable: false, editable: false, width: 200}
+	],
+	
+     pager: jQuery('#grdPagerListaSede'),
+         rowNum: 10,
+     autowidth: true,
+     rules: true,
+     sortname: 'IDUSUARIONIVEL',
+     sortorder: 'desc',
+     viewrecords: true,
+     height: 250,
+     cellsubmit: 'clientArray',
+     hidegrid: false,
+     rownumbers: true,
+     shrinkToFit: false,
+
+     postData: {
+     },
+     loadComplete: function (data) {
+     }
+
+     });
+
     
     $('#btnEliminar').click(function () {
 
@@ -180,6 +257,20 @@
         }
 
     });
+
+
+
+    $('#btnEliminarSedeNivel').click(function () {
+
+        var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
+        if (selr != null && selr > 0) {
+            $('#confirmacionSedeNivel').dialog('open');
+        } else {
+            MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
 
 
     $('#btnEliminarReq').click(function () {
@@ -219,6 +310,29 @@
         }
     });
 
+       
+    $("#spanConfirmacionSedeNivel").html("¿Desea eliminar el registro?")
+    $('#confirmacionSedeNivel').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+
+                var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
+
+                if (selr != null && selr > 0) {
+                    EliminarRolSedeNivel(selr);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+                $(this).dialog("close");
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 
 
 
@@ -259,6 +373,36 @@
 
     });
 
+
+    $('#btnNuevoSede').click(function () {
+        var idUsu = $("#Usuario_IdUsuario").val();
+
+        if (idUsu != null && idUsu > 0) {
+            mostrarPopupSede(idUsu, 0);
+        } else {
+            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
+
+    $('#btnSedeNivel').click(function () {
+        var idUsu = $("#Usuario_IdUsuario").val();
+        var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdListaNivelSede').jqGrid('getRowData', selr);
+        var idSede = rowData.IDESEDE;
+        
+        if (idSede != null && idSede > 0) {
+            mostrarPopupSedeNivel(idUsu, idSede);
+        } else {
+            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+    
+
+
+
     $('#popupDialog').dialog({
         autoOpen: false,
         width: 520,
@@ -274,8 +418,109 @@
                 $(this).dialog("close");
             }
         }
-     });
+    });
 
+    $('#popupDialogSede').dialog({
+        autoOpen: false,
+        width: 520,
+        height: 400,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Grabar": function () {
+                $('#confSede').dialog('open');
+
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $('#popupDialogSedeNivel').dialog({
+        autoOpen: false,
+        width: 520,
+        height: 400,
+        resizable: false,
+        modal: true,
+        buttons: {
+            "Grabar": function () {
+                $('#confSedeNivel').dialog('open');
+
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
+
+    $("#spanSedeNivel").html("¿Desea guardar los cambios?")
+    $('#confSedeNivel').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+                if ($("#frmPopupSedeNivel").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        data: $("#frmPopupSedeNivel").serialize(),
+                        url: '@Url.Action("SetSedeNivel", "Usuario", new { area = "Intranet"})',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado) {
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                $('#confSedeNivel').dialog("close");
+                                $('#popupDialogSedeNivel').dialog("close");
+                                $('#grdListaNivelSede').trigger('reloadGrid');
+
+                            }
+                        }
+                    });
+                }
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+    
+
+    $("#spanConfSede").html("¿Desea guardar los cambios?")
+    $('#confSede').dialog({
+        autoOpen: false,
+        modal: true,
+        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        buttons: {
+            "Si": function () {
+                if ($("#frmPopupSede").validate().form()) {
+                    $.ajax({
+
+                        data: {
+                            selc: $("#grdListaMaestroSede").jqGrid('getGridParam', 'selarrrow'),
+                            idUsu: $('#IdUsuario').val(),
+                        },
+                        type: "POST",
+                        url: '@Url.Action("SetPopupSede", "Usuario", new { area = "Intranet"})',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado) {
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                $('#confSede').dialog("close");
+                                $('#popupDialogSede').dialog("close");
+                                $('#grdListaNivelSede').trigger('reloadGrid');
+                            }
+                        }
+                    });
+                }
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 
 
     $("#spanConfSelc").html("¿Desea guardar los cambios?")
@@ -287,7 +532,7 @@
             "Si": function () {
                 if ($("#frmPopupSedeRol").validate().form()) {
                     $.ajax({
-                        //data: $("#frmPopupSedeRol").serialize(),
+                       
                         data: {
 
                             selc: $("#grdListaSedesInicial").jqGrid('getGridParam', 'selarrrow'),
@@ -414,6 +659,32 @@
         return false;
     }
 
+    function mostrarPopupSede(idUsu, selr) {
+        var dialogDiv = $('#popupDialogSede');
+
+        $.get('@Url.Action("PopupSede", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogSede"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+
+    function mostrarPopupSedeNivel(idUsu, selr) {
+        var dialogDiv = $('#popupDialogSedeNivel');
+
+        $.get('@Url.Action("popupSedeNivel", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogSedeNivel"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+    
+
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -515,6 +786,33 @@
             });
 
     }
+
+
+    function EliminarRolSedeNivel(selc) {
+
+        $.ajax({
+            data: {
+                id: selc
+            },
+            type: "POST",
+            url: '@Url.Action("EliminaRolSedeNivel", "Usuario", new { area = "Intranet"})',
+            traditional: true,
+            success: function (data) {
+                if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
+                    if (data.Resultado == false) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        $('#grdListaNivelSede').trigger('reloadGrid');
+                    }
+                }
+        });
+
+        }
+
+
+    
 
     function EliminarTipReq(codUsu, tipReq) {
 
@@ -738,18 +1036,17 @@
                     
                 <div id="tabs">
                   <ul>
-                    <li><a href="#tabs-1" id="tab1">Roles</a></li>
-                    <li><a href="#tabs-2" id="tab2">Tipo Requerimiento</a></li>
+                    <li><a href="#tabs-1" id="tab1">Sede</a></li>
+                    <li><a href="#tabs-2" id="tab2">Roles</a></li>
+                      <li><a href="#tabs-3" id="tab3">Tipo Requeriminto</a></li>
                   </ul>
                   <div id="tabs-1">
-                     
-                 
-                    @Html.Partial("EdicionOpciones")
+                    @Html.Partial("EdicionSede")
                   </div>
                   <div id="tabs-2">
-                   
-                   
-                 
+                    @Html.Partial("EdicionOpciones")
+                  </div>
+                  <div id="tabs-3">
                     @Html.Partial("EdicionTipoReq")
                   </div>
                 </div>                    
@@ -784,10 +1081,19 @@
 
 <div id="opcionDialog" title="Lista de Opciones"></div>
 <div id="confSelc"><span id="spanConfSelc"></span></div>
+<div id="confSede"><span id="spanConfSede"></span></div>
 <div id="confirmacion"><span id="spanConfirmacion"></span></div>
+<div id="confirmacionSedeNivel"><span id="spanConfirmacionSedeNivel"></span></div>
 <div id="confReqInical"><span id="spanConfReqInical"></span></div>
-
+<div id="confSedeNivel"><span id="spanSedeNivel"></span></div>
 <div id="popupDialog" title="Rol"></div>
 <div id="popupDialogTipReq" title="Tipos de Requerimiento"></div>
+<div id="popupDialogSede" title="Sede"></div>
+<div id="popupDialogSedeNivel" title="Sede"></div>
+
+
 <div id="tipoReq"><span id="spanTipoReq"></span></div>
+
+
+
 
