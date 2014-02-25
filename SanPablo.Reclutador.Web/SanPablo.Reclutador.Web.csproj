@@ -457,6 +457,7 @@
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Postulante\AgregarFoto.cshtml" />
     <Content Include="Views\Shared\LayoutCargo.cshtml" />
+    <Content Include="Views\Seguridad\PopupLogeo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

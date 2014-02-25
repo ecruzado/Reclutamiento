@@ -1,0 +1,70 @@
+﻿@model SanPablo.Reclutador.Web.Models.SeguridadViewModel
+@{
+    Layout = "";
+}
+
+
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+</script>
+
+
+@using (Html.BeginForm("ResetPass", "Seguridad", FormMethod.Post, new { id = "frmPopupLogeoEx" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr >
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" for="setipoInstitucion">Usuario<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+               
+                @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "textoFormulario" , maxlength="100",placeholder="Usuario" })                      
+                <div class="tex-error" style="font-size:12px;color:red">    
+                @Html.ValidationMessageFor(model => model.UsuarioExtranet.Usuario )
+                </div>
+            </td>
+        </tr>
+        
+        
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">contrase&ntilde;a<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+
+                 @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "textoFormulario" ,type = "password" ,  maxlength="15",placeholder="Contraseña"})      
+                <div class="tex-error" style="font-size:12px;color:red">   
+                    @Html.ValidationMessageFor(model => model.UsuarioExtranet.Password )
+                </div>
+            </td>
+        </tr>    
+        
+         <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="setInstitucion">Confirmar contrase&ntilde;a<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+
+                 @Html.TextBoxFor(model => model.UsuarioExtranet.PasswordConfirma, new { @class = "textoFormulario" ,type = "password" ,  maxlength="15",placeholder="Confirmar Contraseña"})      
+                <div class="tex-error" style="font-size:12px;color:red">   
+                    @Html.ValidationMessageFor(model => model.UsuarioExtranet.PasswordConfirma )
+                </div>
+            </td>
+        </tr>    
+
+        
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+       
+    </table>
+}

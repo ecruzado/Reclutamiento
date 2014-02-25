@@ -27,7 +27,8 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IDESEDE, "IDESEDE");
             Map(x => x.DESROL, "DESROL");
             Map(x => x.DESSEDE, "DESSEDE");
-
+            Map(x => x.TIPUSUARIO, "TIPUSUARIO");
+            
             Table("VISTA_USUARIO");
         }
 

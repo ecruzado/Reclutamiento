@@ -22,6 +22,8 @@
             Map(x => x.FecCreacion, "FECCREACION");
             Map(x => x.UsrModificacion, "USRMODIFICACION");
             Map(x => x.FecModifcacion, "FECMODIFICACION");
+            Map(x => x.TipUsuario, "TIPUSUARIO");
+            
 
             Table("USUARIO");
             

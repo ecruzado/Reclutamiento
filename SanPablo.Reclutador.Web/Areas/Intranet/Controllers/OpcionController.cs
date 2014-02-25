@@ -169,7 +169,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codExamen"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult GetListaOpcion(List<int> selc, string codRol)
+        public ActionResult GetListaOpcion(List<int> selc, string codRol,string tipMenu)
         {
             DateTime Hoy = DateTime.Today;
             RolOpcion objRolOpcion;

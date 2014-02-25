@@ -1,4 +1,27 @@
-﻿<!DOCTYPE html>
+﻿@using SanPablo.Reclutador.Entity
+@using System.Web.Mvc
+@{
+    
+   
+    var ObUsuarioExtranet = Session[ConstanteSesion.ObjUsuarioExtranet] == null ? "" : Session[ConstanteSesion.ObjUsuarioExtranet];
+    Usuario objUsuario;
+    string codUsuario = null;
+    if (ObUsuarioExtranet!="")
+    {
+        objUsuario = new Usuario();
+        objUsuario = (Usuario)ObUsuarioExtranet;
+
+        codUsuario = objUsuario.CodUsuario;
+    }
+
+    var myList = (List<MenuPadre>)Session["listaPadre"];
+    var myListOp = (List<MenuItem>)Session["ListaMenu"];
+
+   
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -14,6 +37,23 @@
         <link href="@Url.Content("~/Content/jqGrid.overrides.css")" rel="stylesheet" type="text/css" />
         <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
         @RenderSection("head", required: false)
+
+
+         <style type="text/css">
+            .ui-jqgrid tr.jqgrow td {
+                word-wrap: break-word; /* IE 5.5+ and CSS3 */
+                white-space: pre-wrap; /* CSS3 */
+                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+                white-space: -pre-wrap; /* Opera 4-6 */
+                white-space: -o-pre-wrap; /* Opera 7 */
+                overflow: hidden;
+                height: auto;
+                vertical-align: middle;
+                padding-top: 3px;
+                padding-bottom: 3px
+            }
+        </style>
+
     </head>
     <body>
     <div class="navbar navbar-inverse" style="margin-bottom:0px;margin-top:2px;background-color:#f5f5f5">
@@ -28,7 +68,7 @@
         </a>
         <div style="float:right;padding-right:5px;padding-top:8px;font-size:11px">
             <span style="color:purple;font-weight:bold">Usuario: </span>
-            <span style="color:#666;font-weight:bold">Test</span>
+            <span style="color:#666;font-weight:bold">@codUsuario</span>
             <a style="margin-left:10px;margin-top:0px;" href="@Url.Action("Login", "Seguridad")" class="btn btn-small">Cerrar Sesion</a>
         </div>
     </div>
@@ -42,9 +82,29 @@
                 </a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="dropdown"><a href="@Url.Action("General", "Postulante")">Mi CV</a></li>
-                        <li class="dropdown"><a href="@Url.Action("Lista", "Postulante")">Oportunidades Laborales</a></li>
-                        <li class="dropdown"><a href="@Url.Action("Postulaciones", "Postulante")">Mis postulaciones</a></li>
+                     
+                         @foreach (MenuPadre Item in myList)
+                           {
+                            <li class="dropdown">
+		                       
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Item.DESCRIPCION <b class="caret"></b></a>
+                                @{   List<MenuItem> Lista =
+                                    (myListOp.Where(n => n.IDOPCIONPADRE == Item.IDOPCIONPADRE).ToList());
+                                }
+                                    <ul class="dropdown-menu">
+                                    @foreach (MenuItem opciones in Lista)
+                                    {
+
+                                        var url = Utils.AbsoluteWebRoot + opciones.DSCURL;
+                                       
+                                        
+			                            <li><a href="@url">@opciones.DESCRIPCION</a></li>
+			                           
+                                    }
+                                    </ul>
+		                    </li>
+                           }
+
                     </ul>
                 </div>
             </div>

@@ -13,10 +13,18 @@ namespace SanPablo.Reclutador.Entity.Validation
         public UsuarioExtranetValidator()
         {
 
-            RuleFor(x => x.CodUsuario).NotEmpty().EmailAddress().WithMessage("Ingrese email valido");
-            RuleFor(x => x.CodContrasena)
+            RuleFor(x => x.Usuario).NotEmpty().EmailAddress().WithMessage("Ingrese email valido");
+            RuleFor(x => x.Password)
                   .NotEmpty()
                   .WithMessage("Ingresar contraseña");
+
+
+
+            RuleFor(x => x.PasswordConfirma)
+                .NotEmpty()
+                .WithMessage("Confirme la nueva contraseña")
+                .Equal(x => x.Password)
+                .WithMessage("la contraseña no coincide");
 
         }
     }
