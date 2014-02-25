@@ -50,9 +50,31 @@ namespace SanPablo.Reclutador.Web.Controllers
 
         public ActionResult Login() 
         {
+            logout();
             return View();
-        
-        } 
+        }
+
+        /// <summary>
+        /// Cierra la sesion del usuario
+        /// </summary>
+        private void logout()
+        {
+
+            Session.Clear();
+            Session.Abandon();
+            FormsAuthentication.SignOut();
+            Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            Response.Cache.SetExpires(DateTime.Now.AddSeconds(-1));
+            HttpCookie cookie = HttpContext.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie != null)
+            {
+                cookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie);
+            }
+
+        }
+
+
         /// <summary>
         /// Logeo de usuario Extranet
         /// </summary>
@@ -208,8 +230,64 @@ namespace SanPablo.Reclutador.Web.Controllers
             return Json(objJson);
         }
 
-        
-        
+        /// <summary>
+        /// Inicializa el popup para restablecer la constraseña, no la cambia la restablece
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult InicializaPopupRestablePass() 
+        {
+            SeguridadViewModel model;
+
+            model = new SeguridadViewModel();
+            model.UsuarioExtranet = new UsuarioExtranet();
+
+            return View("PopupRestablecePass",model);
+        }
+
+
+        /// <summary>
+        /// Envia la contraseña al correo del usuario externo
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult RestablecePass(SeguridadViewModel model) 
+        {
+            JsonMessage objJsonMensaje = new JsonMessage();
+            string codUsuario;
+            try
+            {
+                if (model != null)
+                {
+                   var objUsuario =  _usuarioRepository.GetSingle(x => x.CodUsuario == model.UsuarioExtranet.Usuario
+                                                && x.TipUsuario == TipUsuario.Extranet);
+
+                   if (objUsuario!=null)
+                   {
+                       codUsuario = objUsuario.Email;
+                       //envia Emial;
+                       objJsonMensaje.Resultado = true;
+                       objJsonMensaje.Mensaje = "Se envio la contraseña a su correo electrónico";
+
+                   }
+                }
+                else
+                {
+                    objJsonMensaje.Resultado = false;
+                    objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas";
+                }
+            }
+            catch (Exception)
+            {
+                objJsonMensaje.Resultado = false;
+                objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas";
+            }
+          
+
+            return Json(objJsonMensaje);
+
+
+        }
 
         /// <summary>
         /// obtiene los menus del Extranet
