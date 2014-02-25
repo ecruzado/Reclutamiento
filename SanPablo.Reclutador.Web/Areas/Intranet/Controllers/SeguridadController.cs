@@ -304,10 +304,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     return Json(objJsonMensaje);
                 }
             }
-
+            
 
             objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim() 
-                                         && x.CodContrasena == codPass.Trim());
+                                         && x.CodContrasena == codPass.Trim()
+                                         && x.TipUsuario == TipUsuario.Instranet 
+                                         && x.FlgEstado == IndicadorActivo.Activo);
 
             var objRol = _rolRepository.GetSingle(x => x.IdRol == Convert.ToInt32(codRol));
 
@@ -326,6 +328,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     Session[Core.ConstanteSesion.RolDes] = objRol.DscRol;
 
                     Session[Core.ConstanteSesion.UsuarioSede] = null;
+
+                    Session[Core.ConstanteSesion.ObjUsuario] = objUsuario;
                     
                     if (codSede != null && !"".Equals(codSede.Trim()) && !"0".Equals(codSede.Trim()))
                     {

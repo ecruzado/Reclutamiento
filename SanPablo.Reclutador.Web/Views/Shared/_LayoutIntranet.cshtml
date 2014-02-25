@@ -1,4 +1,5 @@
 ﻿@using SanPablo.Reclutador.Entity
+@using System.Web.Mvc
 @{
     
    
@@ -24,6 +25,23 @@
         <link href="@Url.Content("~/Content/ui.jqgrid.css")" rel="stylesheet" type="text/css" />
         <link href="@Url.Content("~/Content/jqGrid.overrides.css")" rel="stylesheet" type="text/css" />
         <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
+
+        <style type="text/css">
+            .ui-jqgrid tr.jqgrow td {
+                word-wrap: break-word; /* IE 5.5+ and CSS3 */
+                white-space: pre-wrap; /* CSS3 */
+                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+                white-space: -pre-wrap; /* Opera 4-6 */
+                white-space: -o-pre-wrap; /* Opera 7 */
+                overflow: hidden;
+                height: auto;
+                vertical-align: middle;
+                padding-top: 3px;
+                padding-bottom: 3px
+            }
+        </style>
+
         @RenderSection("head", required: false)
     </head>
     <body>

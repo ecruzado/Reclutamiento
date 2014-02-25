@@ -14,6 +14,9 @@ namespace SanPablo.Reclutador.Web.Core
         public const string RolDes = "RolDes";
         public const string UsuarioDes = "UsuarioDes";
         public const string UsuarioSede = "UsuarioSede";
+        public const string ObjUsuario = "ObjUsuario";
+        public const string ObjUsuarioExtranet = "ObjUsuarioExtranet";
+
 
         public const string IdePostulante = "IdePostulante";
         public const string CargoPerfil = "CargoPerfil";

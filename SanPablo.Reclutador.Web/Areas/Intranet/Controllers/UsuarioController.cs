@@ -115,7 +115,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (Accion.Nuevo.Equals(accion))
             {
-                 objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                 objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id && x.TipUsuario == TipUsuario.Instranet);
                  
                  if (objUsuario != null)
                  {
@@ -179,7 +179,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario = model.Usuario;
                 objUsuario.FecCreacion = FechaCreacion;
                 objUsuario.UsrCreacion = UsuarioActual.NombreUsuario;
-                objUsuario.FlgEstado = "A";
+                objUsuario.FlgEstado = IndicadorActivo.Activo;
+                objUsuario.TipUsuario = TipUsuario.Instranet;
+
                 _usuarioRepository.Add(model.Usuario);
                 jsonMessage.Mensaje = "Se registro el usuario";
                 jsonMessage.IdDato = objUsuario.IdUsuario;
@@ -507,25 +509,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     _usuarioRolSedeRepository.Add(objUsuarioRolSede);
                 }
 
-                //if (idSede!=0)
-                //{
-                //    var listaSedes = _sedeNivelRepository.GetBy(x => x.IDESEDE==idSede 
-                //                                                && x.IDUSUARIO==idUsu);
-                //    if (listaSedes.Count==0)
-                //    {
-                //        objSedeNivel = new SedeNivel();
-                //        objSedeNivel.IDUSUARIO = idUsu;
-                //        objSedeNivel.IDESEDE = idSede;
-                //        objSedeNivel.FLGESTADO = IndicadorActivo.Activo;
-                //        objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario;
-                //        objSedeNivel.FechaCreacion = FechaCreacion;
-                //        objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                //        objSedeNivel.FechaModificacion = FechaModificacion;
-
-                //        _sedeNivelRepository.Add(objSedeNivel);
-                //    }
-
-                //}
+               
                 
                 indGrabo = 1;
             }
@@ -720,6 +704,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 lista.Add(Projections.Property("DSCAPEMATERNO"), "DSCAPEMATERNO");
                 lista.Add(Projections.Property("DESROL"), "DESROL");
                 lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
+                lista.Add(Projections.Property("TIPUSUARIO"), "TIPUSUARIO");
                
                 where.SetProjection(Projections.Distinct(lista));
                 where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
@@ -761,6 +746,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         where.Add(Expression.Like("DSCAPEMATERNO", '%' + grid.rules[6].data + '%'));
                     }
                 }
+
+                where.Add(Expression.Eq("TIPUSUARIO", TipUsuario.Instranet));
 
                 var generic = Listar(_usuarioVistaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);

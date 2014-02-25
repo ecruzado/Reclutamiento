@@ -69,7 +69,7 @@
 {
     @Html.ValidationSummary(true)
 
-    @*<form class="form-signin" action="@Url.Action("Lista", "Postulante")">*@
+    
         
         <div style="text-align:center;clear:both">
             <img src="@Url.Content("~/Content/images/sanpablo_logo2.GIF")" alt="Ingresar" title="Ingresar">
@@ -79,11 +79,16 @@
             Sistema de Reclutamiento y Seleccion de Personal
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
-        @Html.TextBoxFor(model => model.UsuarioExtranet.CodUsuario, new { @class = "input-block-level" ,data_val = "false",placeholder="Usuario"}) 
-        @*<input type="text" class="input-block-level" placeholder="Usuario">*@
+        @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "input-block-level" ,placeholder="Usuario"}) 
+        <div class="tex-error" style="font-size:12px;color:red">         
+          @Html.ValidationMessageFor(model => model.UsuarioExtranet.Usuario)
+        </div>
         <label style="font-weight:bold;font-size:13px;">Contraseña</label>
-        @*<input type="password" class="input-block-level" placeholder="Contraseña">*@
-        @Html.TextBoxFor(model => model.UsuarioExtranet.CodContrasena, new { @class = "input-block-level" ,data_val = "false", type="password",placeholder="Contraseña" }) 
+       
+        @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "input-block-level" , type="password",placeholder="Contraseña" }) 
+        <div class="tex-error" style="font-size:12px;color:red">         
+          @Html.ValidationMessageFor(model => model.UsuarioExtranet.Password)
+        </div>
         <br />
         <br />
         <div style="text-align:center">
@@ -94,12 +99,20 @@
         <br />
         <a style="font-weight:normal;font-size:11px;color:#99356b">¿No puedes acceder a tu cuenta?</a>
         <br />
-        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a id="lnkRegistrarUsuario" href="#" style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>@*
-        
+        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a id="lnkRegistrarUsuario"  style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>
+    @*
+         <li><a onclick ="ResetPass();">Cambiar Contrase&ntilde;a</a></li>
     </form>*@
 }
     </div> <!-- /container -->
-    <div id="dialog" title="Create Album" style="overflow: hidden;">
+    <div id="PopupDialogLogeoExtranet" title="Registrar Usuario"></div>
+    <div id="LogeoExtranet"><span id="spanLogeoExtranet"></span></div>
+    <div id="divMensajeExtranet">
+        <span id="spnMensajeExtranet"></span>
+    </div>
+    
+    
+   @* <div id="dialog" title="Create Album" style="overflow: hidden;">
         <form class="form-horizontal well">
             <div class="control-group">
                 <label class="control-label" for="input01">Correo Electronico</label>
@@ -124,17 +137,22 @@
                 <a class="btn btn-info" href="#"><i class="icon-ok-sign icon-white"></i> Registrar</a>
             </div>
         </form>
-    </div>
+    </div>*@
     <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery-migrate-1.2.1.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
 
             $("#lnkRegistrarUsuario").click(function (e) {
                 e.preventDefault();
-                $('#dialog').dialog('open');
+                //$('#dialog').dialog('open');
+                RegistroUsuario();
             });
 
             $('#dialog').dialog({
@@ -149,37 +167,98 @@
             });
 
 
-            $('#btnIniciaSesion').click(function () {
-                @*        $.ajax({
-                        data: $("#frmLoginExtranet").serialize(),
-                        type: "POST",
-                        url: '@Url.Action("Logon", "Seguridad")',
-                   
-                    traditional: true,
-                    success: function (data) {
+            $('#PopupDialogLogeoExtranet').dialog({
+                autoOpen: false,
+                width: 500,
+                height: 300,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function () {
+                        if ($("#frmPopupLogeoEx").validate().form()) {
+                            $('#LogeoExtranet').dialog('open');
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
                     }
-                });*@
-                $.ajax({
-                    type: "POST",
-                    data: $("#frmLoginExtranet").serialize(),
-                    url: '@Url.Action("Logon", "Seguridad")',
+                }
+            });
+
+            $("#spanLogeoExtranet").html("¿Desea registrar el usuario?")
+            $('#LogeoExtranet').dialog({
+                autoOpen: false,
+                modal: true,
+                title: "Sistema de Reclutamiento Y Seleccion de Personal",
+                buttons: {
+                    "Si": function () {
+                        $.ajax({
+                            data: $("#frmPopupLogeoEx").serialize(),
+                            type: "POST",
+                            url: '@Url.Action("LogeoUsuario", "Seguridad")',
+                                traditional: true,
+                                success: function (data) {
+                                    if (data.Resultado) {
+                                        @*SanPablo.Redirecciona('@Url.Action("GetMenuExtranet", "Seguridad")');*@
+                                        $('#LogeoExtranet').dialog("close");
+                                        $('#PopupDialogLogeoExtranet').dialog("close");
+
+                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    } else {
+                                        $('#LogeoExtranet').dialog("close");
+                                        $('#PopupDialogLogeoExtranet').dialog("close");
+                                        
+                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    }
+                                }
+                            });
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+
+
+            $('#btnIniciaSesion').click(function () {
+                if ($("#frmLoginExtranet").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        data: $("#frmLoginExtranet").serialize(),
+                        url: '@Url.Action("Logon", "Seguridad")',
                         traditional: true,
                         success: function (data) {
-                            
+                            if (data.Resultado) {
+                                window.location = '@Url.Action("GetMenuEx", "Seguridad")';
+                            } else {
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            }
                         }
-                 });
-
-
+                    });
+                };
 
             });
 
-
-
-
-
-
         });
 
+
+        function RegistroUsuario() {
+
+            var dialogDiv = $('#PopupDialogLogeoExtranet');
+            $.get('@Url.Action("InicializaPopupExtranet", "Seguridad")', function (data) {
+                    dialogDiv.html(data);
+                    $.validator.unobtrusive.parse($("#PopupDialogLogeoExtranet"));
+                    dialogDiv.dialog('open');
+                });
+                return false;
+
+        }
+
+        function MostrarMensaje(mensaje, titulo) {
+            Funciones.Alert("divMensajeExtranet", "spnMensajeExtranet", mensaje, titulo);
+        }
 
     </script>
 </body>

@@ -20,6 +20,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string FLGESTADO { get; set; }
         public virtual string DESROL { get; set; }
         public virtual string DESSEDE { get; set; }
+        public virtual string TIPUSUARIO { get; set; }
         
     }
 }

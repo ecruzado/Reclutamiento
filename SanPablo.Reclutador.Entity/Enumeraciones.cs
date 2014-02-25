@@ -200,8 +200,18 @@
         public const string Instranet = "I";
         public const string Extranet = "E";
     }
-    
 
+    public sealed class TipUsuario
+    {
+        public const string Instranet = "I";
+        public const string Extranet = "E";
+    }
+
+    public sealed class UsuarioInicio
+    {
+        public const string Web = "Web";
+        public const string POSTULANTE = "POSTULANTE";
+    }
 
 
 }
