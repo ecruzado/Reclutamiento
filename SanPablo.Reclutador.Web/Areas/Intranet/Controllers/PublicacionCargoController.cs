@@ -276,17 +276,32 @@
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
-                var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
-                solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
-                solicitudNuevoCargoEditar.FechaModificacion = FechaModificacion;
-                solicitudNuevoCargoEditar.RangoSalarioPublicar = solicitudNuevoCargo.RangoSalarioPublicar;
-                solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
-                solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
-                _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
+                var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(solicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                int rolActual = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                if ((estadoSolicitud.TipoEtapa == EtapasSolicitud.PendientePublicacion)&&(Convert.ToInt32(estadoSolicitud.RolResponsable) == rolActual))
+                {
+                    var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                    solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
+                    solicitudNuevoCargoEditar.FechaModificacion = FechaModificacion;
+                    solicitudNuevoCargoEditar.RangoSalarioPublicar = solicitudNuevoCargo.RangoSalarioPublicar;
+                    solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
+                    solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
+                    _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
+                    int ideUsuarioResp = 0;
+                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Convert.ToInt32(Session[ConstanteSesion.Sede]), 1, solicitudNuevoCargo.IdeSolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
+                                                                                           "", SucesoSolicitud.Publicado, EtapasSolicitud.Publicado);
 
-                objJsonMessage.Mensaje = "Publicado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    objJsonMessage.Mensaje = "Publicado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    publicacionViewModel.SolicitudCargo = solicitudNuevoCargo;
+                    objJsonMessage.Mensaje = "ERROR: La solicitud no esta pendiente de publicacion";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -315,37 +330,5 @@
             return publicacionNuevoViewModel;
         }
 
-
-        //[HttpPost]
-        //public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevaSolicitudCargo)
-        //{
-        //    var enviarMail = new SendMail();
-        //    //int IdeCargo = Convert.ToInt32(Session["CargoIde"]);
-        //    var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
-        //    JsonMessage objJsonMessage = new JsonMessage();
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            var nuevoCargoViewModel = inicializarSolicitudNuevoCargo();
-        //            nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
-        //            return View(nuevoCargoViewModel);
-        //        }
-           
-        //        objJsonMessage.Mensaje = "Agregado Correctamente";
-        //        objJsonMessage.Resultado = true;
-        //        return Json(objJsonMessage);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        objJsonMessage.Mensaje = "ERROR:" + ex.Message;
-        //        objJsonMessage.Resultado = false;
-        //        return Json(objJsonMessage);
-        //    }
-
-        //}
-       
-
-       
     }
 }

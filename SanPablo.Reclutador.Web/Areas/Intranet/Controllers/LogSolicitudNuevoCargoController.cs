@@ -32,12 +32,10 @@
         }
 
         #region LOGSOLICITUD NUEVO CARGO
-
+        [ValidarSesion]
         public ActionResult Edit(string ideSolicitud)
         {
-
             var logSolicitudNuevoCargoViewModel = inicializarLogSolicitudNuevoCargo(Convert.ToInt32(ideSolicitud));
-
             return View(logSolicitudNuevoCargoViewModel);
         }
 
@@ -52,11 +50,12 @@
                 LogSolicitudNuevoCargoValidator validator = new LogSolicitudNuevoCargoValidator();
                 ValidationResult result = validator.Validate(model.LogSolicitudNuevoCargo, "Observacion");
                 int RolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                if ((RolSession == Roles.GerenteGeneralAdjunto) || (RolSession == Roles.GerenteArea))
+                var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                if (RolSession == Convert.ToInt32(estadoSolicitud.RolResponsable) )
                 {
                     if (!result.IsValid)
                     {
-                        objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
+                        objJsonMessage.Mensaje = "ERROR: Aprobación/Rechazo no enviado, intente de nuevo";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
@@ -87,13 +86,34 @@
             
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo = new LogSolicitudNuevoCargo();
             logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo.IdeSolicitudNuevoCargo = ideSolicitud;
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteGeneralAdjunto)
+
+            logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.Observacion = "";
+
+            var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(ideSolicitud);
+            if (estadoSolicitud.TipoSuceso == SucesoSolicitud.Pendiente)
             {
-                logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteElaboracionPerfil;
-            }
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteArea)
-            {
-                logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionGerenteGralAdj;
+                switch (estadoSolicitud.TipoEtapa)
+                {
+                    case EtapasSolicitud.PendienteAprobacionGerenteArea :
+                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionGerenteGralAdj;
+                        break;
+
+                    case EtapasSolicitud.PendienteAprobacionGerenteGralAdj:
+                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteElaboracionPerfil;
+                        break;
+
+                    case EtapasSolicitud.PendienteElaboracionPerfil:
+                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionPerfilJefeArea;
+                        break;
+
+                    case EtapasSolicitud.PendienteAprobacionPerfilJefeArea:
+                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion;
+                        break;
+
+                    case EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion:
+                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendientePublicacion;
+                        break;
+                }
             }
 
             return logSolicitudNuevoCargoViewModel;
@@ -114,7 +134,7 @@
                 if (model.Aprobado)
                 {
                     model.LogSolicitudNuevoCargo.TipoSuceso = SucesoSolicitud.Aprobado;
-                   
+                    model.LogSolicitudNuevoCargo.Observacion = "";
                 }
                 else
                 {
@@ -145,8 +165,47 @@
                 //manejar el error
             }
         }
-        
-        
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult AprobacionRechazoPerfil(LogSolicitudNuevoCargoViewModel model)
+        {
+
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                LogSolicitudNuevoCargoValidator validator = new LogSolicitudNuevoCargoValidator();
+                ValidationResult result = validator.Validate(model.LogSolicitudNuevoCargo, "Observacion");
+                var RolSession = Convert.ToString(Session[ConstanteSesion.Rol]);
+                var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                if(estadoSolicitud.RolResponsable == RolSession)
+                {
+                    if (!result.IsValid)
+                    {
+                        objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    aprobarRechazarNuevaSolicitud(model);
+
+                    objJsonMessage.Mensaje = "Enviado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+
+                }
+                objJsonMessage.Mensaje = "Usuario sin permiso para esta accion";
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+
+        }
         #endregion
     }
 }

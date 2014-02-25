@@ -127,6 +127,7 @@
         public const string PendienteAprobacionPerfilJefeArea = "04";
         public const string PendienteAprobacionPerfilEncargSeleccion = "05";
         public const string PendientePublicacion = "06";
+        public const string Publicado = "07";
         public const string Finalizado = "99";
     }
    

@@ -17,6 +17,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> RangosSalariales { get; set; }
         public List<SolicitudNuevoCargo> Cargos { get; set; }
         public List<DetalleGeneral> Estados { get; set; }
+        public List<DetalleGeneral> Etapas { get; set; }
+        public List<Rol> Responsables { get; set; }
         public string Observacion { get; set; }
         public string Estado { get; set; }
     }

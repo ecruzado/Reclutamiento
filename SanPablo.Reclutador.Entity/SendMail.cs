@@ -13,10 +13,10 @@
 
     public  class SendMail
     {
-            public virtual string Usuario {get; set;}
-            public virtual string Rol {get; set;}
-            public virtual string Area { get; set; }
-            public virtual string Sede { get; set; }
+        public virtual string Usuario {get; set;}
+        public virtual string Rol {get; set;}
+        public virtual string Area { get; set; }
+        public virtual string Sede { get; set; }
 
         public void EnviarCorreo(string dir, string etapa, string sedeDescripcion, 
                                  string responsable, string tipoRequerimiento, string observacion,

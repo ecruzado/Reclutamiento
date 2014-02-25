@@ -21,6 +21,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreArea { get; set; }
         public virtual int NumeroPosiciones { get; set; }
         public virtual DateTime FechaCreacion { get; set; }
+        public virtual string Responsable { get; set; }
+        public virtual string NombreResponable { get; set; }
         
         
     }
