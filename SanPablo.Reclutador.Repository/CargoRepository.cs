@@ -42,6 +42,7 @@
                         cargo.Departamento = Convert.ToString(lector["NOMDEPARTAMENTO"]);
                         cargo.Dependencia = Convert.ToString(lector["NOMDEPENDENCIA"]);
                         cargo.IdeCargo = Convert.ToInt32(lector["IDECARGO"]);
+                       
                         //cargo.NumeroPosiciones = Convert.ToInt32(lector["NUMPOSICION"]);
 
                     }

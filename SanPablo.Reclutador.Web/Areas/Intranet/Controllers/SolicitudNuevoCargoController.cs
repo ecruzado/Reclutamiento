@@ -27,6 +27,7 @@
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
         private IListaSolicitudNuevoCargoVistaRepository _listaSolicitudRepository;
         private IUsuarioRepository _usuarioRepository;
+        private IRolRepository _rolRepository;
 
       
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -36,7 +37,8 @@
                                              IAreaRepository areaRepository,
                                              IListaSolicitudNuevoCargoVistaRepository listaSolicitudRepository,
                                              ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository,
-                                             IUsuarioRepository usuarioRepository)
+                                             IUsuarioRepository usuarioRepository,
+                                             IRolRepository rolRepository)
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -46,6 +48,7 @@
             _listaSolicitudRepository = listaSolicitudRepository;
             _usuarioRepository = usuarioRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
+            _rolRepository = rolRepository;
         }
 
 
@@ -131,8 +134,8 @@
                                 item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
                                 item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
                                 item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.NombreCargo==null?"":item.NombreCargo,
-                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.Responsable==null?"":item.Responsable,
+                                item.NombreResponable==null?"":item.NombreResponable,
                                 item.NombreCargo==null?"":item.NombreCargo,
                                 item.NombreCargo==null?"":item.NombreCargo
                             }
@@ -148,13 +151,14 @@
                 return MensajeError();
             }
         }
-
+        [ValidarSesion]
         [AuthorizeUser]
         public ActionResult Index()
         {
             var solicitudnuevoViewModel = inicializarNuevaSolicitud();
             return View(solicitudnuevoViewModel);
         }
+
 
         [HttpPost]
         public ActionResult CambiarEstado(string id, string codEstado)
@@ -225,11 +229,15 @@
             solicitudNuevoViewModel.Areas = new List<Area>();
             solicitudNuevoViewModel.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            solicitudNuevoViewModel.Estados = new List<DetalleGeneral>();
-            solicitudNuevoViewModel.Estados.Add(new DetalleGeneral { Valor = IndicadorActivo.Activo, Descripcion = "Activo" });
-            solicitudNuevoViewModel.Estados.Add(new DetalleGeneral { Valor = IndicadorActivo.Inactivo, Descripcion = "Inactivo" });
-            solicitudNuevoViewModel.Estados.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSucesoSolicitud));
+            solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
+            solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
+            solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            solicitudNuevoViewModel.Responsables = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo));
+            solicitudNuevoViewModel.Responsables.Insert(0, new Rol { IdRol = 0, DscRol = "Seleccionar" });
+            
 
             return solicitudNuevoViewModel;
         }
@@ -370,8 +378,8 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
-                List<string> estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud), Convert.ToInt32(TipoTabla.TipoEtapaSolicitud), Convert.ToInt32(TipoTabla.TipoSucesoSolicitud));
-                if ((EtapasSolicitud.PendienteElaboracionPerfil == estado[0].ToString()) && (SucesoSolicitud.Pendiente == estado[1].ToString()))
+                LogSolicitudNuevoCargo estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
+                if ((EtapasSolicitud.PendienteAprobacionGerenteArea != estado.TipoEtapa) && (EtapasSolicitud.PendienteAprobacionGerenteGralAdj != estado.TipoEtapa))
                 {
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);

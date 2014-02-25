@@ -337,9 +337,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.Responsables, new SelectList(Model.Responsables, "IdRol", "DscRol", Model.Responsables))
                             </div>
                         </div>
                     </td>  
@@ -361,9 +359,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Etapa</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
                             </div>
                         </div>
                     </td>

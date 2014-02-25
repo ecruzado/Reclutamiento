@@ -18,6 +18,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Area { get; set; }
         public virtual string Dependencia { get; set; }
         public virtual string Departamento { get; set; }
+        public virtual int IdeSolicitud { get; set; }
+       
         
     }
 }

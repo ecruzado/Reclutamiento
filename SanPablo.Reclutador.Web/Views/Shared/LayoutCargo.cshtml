@@ -12,7 +12,10 @@
                 <h5>Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    @Html.HiddenFor(model=>model.Cargo.EstadoActivo)
+                    @Html.HiddenFor(model=>model.IdeSolicitud)
+                    @Html.TextBoxFor(model => model.EstadoRegistro, new {@class="btn btn-primary btn-small disabled" ,disabled="disabled" , style ="width:60px"})
+                    @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>
             </div>
 
@@ -104,47 +107,93 @@
 </div>
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
-
+<div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="divMensaje">
     <span id="spanMensaje"></span>
-</div>    
+</div>  
+
+ 
+      
 
 @section Scripts{ 
 
     @RenderSection("ScriptsCargo", required: false)
 
 <script type="text/javascript">
-    $('#updateDialogConfirmacion').dialog({
-        autoOpen: false,
-        width: 300,
-        resizable: false,
-        modal: true,
-        buttons: {
-            "Aceptar": function (e) {
-                $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
-                    $("#solicitudNuevoCargoForm").serialize(),
-                    function (respuesta) {
-                        if (respuesta.Resultado) {
-                            $("#updateDialogConfirmacion").dialog("close");
-                            $("#spanMensaje").html("Solicitud enviada exitosamente");
-                            $("#divMensaje").dialog({
-                                title: 'SAN PABLO',
-                                modal: true,
-                                buttons: {
-                                    "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
-                                }
-                            });
-                        }
-                        else {
-                            mensajeResultado(respuesta.Mensaje);
-                        }
-                    });
+    $(function () {
+        $('#updateDialogAprobacion').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Enviar": function (e) {
+                    e.preventDefault();
+                    var result = $('#LogSolicitudNuevoCargoForm').valid();
+                    if (result) {
+                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                        $("#divMensaje").dialog({
+                            title: 'SAN PABLO',
+                            modal: true,
+                            buttons: {
+                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+                                "No": function () { $(this).dialog("close"); }
+                            }
+                        });
+
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
+        });
+
+        // }
+
+        $('#updateDialogConfirmacion').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    $.post('@Url.Action("enviarPerfil", "Perfil")',
+                        //$("#solicitudNuevoCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $('#updateDialogConfirmacion').dialog("close");
+                                mostrarMensaje("Solicitud enviada exitosamente");
+
+                            }
+                            else {
+                                $('#updateDialogConfirmacion').dialog("close");
+                                mostrarMensaje(respuesta.Mensaje);
+                            }
+                        });
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
     });
+
+    function mostrarMensaje(msj)
+    {
+        
+        $("#spanMensaje").html(msj);
+        $("#divMensaje").dialog({
+            title: 'SAN PABLO',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
+    }
 
     function mostrarConfirmacion() {
         var dialogDiv = $('#updateDialogConfirmacion');
@@ -161,6 +210,45 @@
             mensajeResultado("Solicitu en estado: 'INACTIVO'");
         }
     }
+    function mostrarAprobarDesaprobar() {
+        var estado = $('#Cargo_EstadoActivo').val();
+        if (estado == "A") {
+            var dialogDiv = $('#updateDialogAprobacion');
+            var ideSolicitud = $('#IdeSolicitud').val();
+            $.get('@Url.Action("Edit", "LogSolicitudNuevoCargo")', { ideSolicitud: ideSolicitud }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
+                dialogDiv.dialog('open');
+            });
+        }
+        else {
+            notificacionError("No puede realizar esta accion en una solicitud en estado 'INACTIVO'");
+        }
+        return false;
+    }
+
+    function enviarAprobacionRechazo() {
+        $.post('@Url.Action("AprobacionRechazoPerfil", "LogSolicitudNuevoCargo")',
+             $("#LogSolicitudNuevoCargoForm").serialize(),
+             function (respuesta) {
+                 if (respuesta.Resultado) {
+                     $("#updateDialogAprobacion").dialog("close");
+                     $("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
+                     $("#divMensaje").dialog({
+                         title: 'SAN PABLO',
+                         modal: true,
+                         buttons: {
+                             "Ok": function () { $(this).dialog("close"); }
+                         }
+                     });
+                 }
+                 else {
+                     notificacionError(respuesta.Mensaje);
+                 }
+             }
+        );
+    }
+
 </script>
 }
 

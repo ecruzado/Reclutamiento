@@ -86,7 +86,7 @@
             }
         }
 
-        public List<string> estadoSolicitud(int ideSolicitudNuevo, int tipoEtapa, int tipoSuceso)
+        public LogSolicitudNuevoCargo estadoSolicitud(int ideSolicitudNuevo)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -98,17 +98,16 @@
                 cmd.Connection = lcon;
 
                 cmd.Parameters.Add("p_ideSolCargo", OracleType.Int32).Value = ideSolicitudNuevo;
-                cmd.Parameters.Add("p_ideGeneralE", OracleType.Int32).Value = tipoEtapa;
-                cmd.Parameters.Add("p_ideGeneralS", OracleType.Int32).Value = tipoSuceso;
                 cmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
-                
-                List<string> estadoSolicitud = new List<string>();
+
+                LogSolicitudNuevoCargo estadoSolicitud = new LogSolicitudNuevoCargo();
                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
                 {
                     if (lector.Read())
                     {
-                        estadoSolicitud.Add(Convert.ToString(lector["ETAPA"]));
-                        estadoSolicitud.Add(Convert.ToString(lector["SUCESO"]));
+                        estadoSolicitud.TipoEtapa = Convert.ToString(lector["TIPETAPA"]);
+                        estadoSolicitud.TipoSuceso = Convert.ToString(lector["TIPSUCESO"]);
+                        estadoSolicitud.RolResponsable = Convert.ToString(lector["ROLRESPONSABLE"]);
                     }
                 }
 
