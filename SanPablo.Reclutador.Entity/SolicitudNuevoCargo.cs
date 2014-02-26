@@ -17,6 +17,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionCargo { get; set; }
         public virtual int NumeroPosiciones { get; set; }
         public virtual string TipoRangoSalarial { get; set; }
+        public virtual int IdeDependencia { get; set; }
+        public virtual int IdeDepartamento { get; set; }
         public virtual int IdeArea { get; set; }
         public virtual string IndicadorVerSexo { get; set; }
         public virtual string IndicadorVerSalario { get; set; }

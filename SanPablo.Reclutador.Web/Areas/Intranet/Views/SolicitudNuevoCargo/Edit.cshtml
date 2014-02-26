@@ -67,6 +67,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $("#updateDialogConfirmacion").dialog("close");
+                                $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
                                 deshabilitarControles();
                                 $("#spanMensaje").html("Solicitud enviada exitosamente");
                                 $("#divMensaje").dialog({
@@ -83,9 +84,11 @@
                             }
                         });
                     }
-                    $(this).dialog("close");
-                    mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
-                    //notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    else {
+                        $(this).dialog("close");
+                        mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
+                    }
+                   
                  },
                  "Cancelar": function () {
                      $(this).dialog("close");
@@ -141,7 +144,6 @@
 
     function mostrarAprobarDesaprobar() {
         var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
-        alert(estado);
         if (estado == "A") {
             var dialogDiv = $('#updateDialogAprobacion');
             var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
@@ -152,7 +154,7 @@
             });
         }
         else {
-            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO'");
+            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
         }
         return false;
     }
@@ -160,18 +162,11 @@
     function enviarAprobacionRechazo()
     {
         $.post('@Url.Action("Edit", "LogSolicitudNuevoCargo")',
-             $("#LogSolicitudNuevoCargoForm").serialize(),
+             $('#LogSolicitudNuevoCargoForm').serialize(),
              function (respuesta) {
                  if (respuesta.Resultado) {
-                     $("#updateDialogAprobacion").dialog("close");
-                     $("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
-                     $("#divMensaje").dialog({
-                         title: 'SAN PABLO',
-                         modal: true,
-                         buttons: {
-                             "Ok": function () { $(this).dialog("close"); }
-                         }
-                     });
+                     $('#updateDialogAprobacion').dialog("close");
+                     mensajeResultado("Aprobación/Rechazo enviado exitosamente")
                  }
                  else {
                      notificacionError(respuesta.Mensaje);
@@ -214,7 +209,7 @@
             }
         }
         else {
-            mensajeResultado("Solicitu en estado: 'INACTIVO'");
+            mensajeResultado("Solicitud en estado: 'INACTIVO'");
         }
     }
     function actualizarCodigo(codigo) {
@@ -279,10 +274,8 @@
                 <div class="opciones">
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.SolicitudNuevoCargo.EstadoActivo)
-                   @* @Html.DisplayTextFor(Model=>Model.SolicitudNuevoCargo.EstadoActivo, new {@class="btn btn-primary btn-small disabled", @disabled="disabled"})*@
                     
                     @Html.TextBoxFor(model =>model.Estado, new {@class="btn btn-primary btn-small disabled", @disabled = "disabled", @style ="width:60px"})
-                    @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>
             </div>
             
@@ -326,10 +319,11 @@
                                 <div class="">
                                     <label class="control-label" for="selectError">Dependencia</label>
                                     <div class="controles">
-                                         @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Dependencias))
+                                         @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
                                         </div>
+                                        @*@Html.TextBoxFor(model => model.Dependencia, new { @disabled = "disabled" })*@
                                     </div>
                                 </div>
                             </td>
@@ -352,10 +346,12 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Departamento</label>
                                     <div class="controles">
-                                        @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Departamentos))
+                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDepartamento)
                                         </div>
+                                        @*@Html.TextBoxFor(model => model.Departamento, new { @disabled = "disabled" })*@
+                                        
                                     </div>
                                 </div>
                             </td>
@@ -379,6 +375,7 @@
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
                                         </div>
+                                        @*@Html.TextBoxFor(model => model.Area, new { @disabled = "disabled" })*@
                                    </div>
                                 </div>
                             </td>  

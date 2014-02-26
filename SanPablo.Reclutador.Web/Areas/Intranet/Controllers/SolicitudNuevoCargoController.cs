@@ -89,10 +89,10 @@
                     {
                         where.Add(Expression.Eq("IdeArea", Convert.ToInt32(grid.rules[4].data)));
                     }
-                    //if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
-                    //{
-                    //    where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
-                    //}
+                    if (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
+                    {
+                        where.Add(Expression.Eq("IdeResponsable",Convert.ToInt32(grid.rules[5].data)));
+                    }
                     if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
                     {
                         where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
@@ -121,23 +121,27 @@
                                 item.EstadoActivo==null?"":item.EstadoActivo,
                                 item.CodigoCargo==null?"":item.CodigoCargo,
                                 item.NombreCargo==null?"":item.NombreCargo,
-                                item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
+                                item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
                                 item.NombreDependencia==null?"":item.NombreDependencia,
-                                item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
+                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
                                 item.NombreDepartamento==null?"":item.NombreDepartamento,
-                                item.IdeArea==null?"":item.IdeArea.ToString(),
+                                item.IdeArea==0?"":item.IdeArea.ToString(),
                                 item.NombreArea==null?"":item.NombreArea,
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
                                 item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
+                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
+                                item.IdeResponsable ==null?"":item.IdeResponsable.ToString(),
                                 item.Responsable==null?"":item.Responsable,
-                                item.NombreResponable==null?"":item.NombreResponable,
-                                item.NombreCargo==null?"":item.NombreCargo,
-                                item.NombreCargo==null?"":item.NombreCargo
+                                
+                                item.NombreResponsable==null?"":item.NombreResponsable,
+                                item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
+                                item.Etapa==null?"":item.Etapa,
+                                item.Etapa==null?"":item.Etapa
                             }
 
 
@@ -206,7 +210,7 @@
                     solicitudNuevoCargoViewModel.Estado = "Activo";
                 }
                 else
-                { solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
+                {  solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
             }
             return View(solicitudNuevoCargoViewModel);
         }
@@ -221,7 +225,7 @@
             solicitudNuevoViewModel.Cargos.Insert(0, new SolicitudNuevoCargo { IdeSolicitudNuevoCargo = 0,NombreCargo="Seleccionar"});
 
             solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
-            solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia ="Seleccionar"});
+            solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
             solicitudNuevoViewModel.Departamentos = new List<Departamento>();
             solicitudNuevoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
@@ -271,12 +275,11 @@
                     nuevaSolicitudCargo.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString();
                     _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
                     var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
-                    string SedeDescripcion = "-";      
-          
+                    string SedeDescripcion = "-";
+
                     //Enviar para aprobacion
 
-                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Sede, solicitud.IdeArea, solicitud.IdeSolicitudNuevoCargo, UsuarioSession,
-                                                                          Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
+                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(nuevaSolicitudCargo, UsuarioSession,Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
                     if (ideUsuarioResp != 0)
                     {
                         Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
@@ -285,14 +288,20 @@
                         {
                             SedeDescripcion = SedeDesc.ToString();
                         }
-                        
-                        enviarMail.EnviarCorreo(dir.ToString(),EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion,usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo,usuario.Email,SucesoSolicitud.Pendiente);
+
+                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
                     }
+                    objJsonMessage.IdDato = solicitud.IdeSolicitudNuevoCargo;
+                    objJsonMessage.Mensaje = "Agregado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
                 }
-                
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                else
+                {
+                    objJsonMessage.Mensaje = "No puede enviar la solicitud nuevamente";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -308,18 +317,25 @@
             solicitudCargoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
 
             solicitudCargoViewModel.RangosSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
-            solicitudCargoViewModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor ="00", Descripcion = "Seleccionar"});
+            solicitudCargoViewModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            solicitudCargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x=>x.EstadoActivo==IndicadorActivo.Activo));
-            solicitudCargoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar"});
+            solicitudCargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            solicitudCargoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
-            solicitudCargoViewModel.Departamentos = new List<Departamento>();
-            solicitudCargoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar"});
+            solicitudCargoViewModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            solicitudCargoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
 
-            solicitudCargoViewModel.Areas = new List<Area>();
-            solicitudCargoViewModel.Areas.Add(new Area { IdeArea=0, NombreArea ="Seleccionar"});
+            solicitudCargoViewModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            solicitudCargoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            
+            var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            if (usuarioSede != null)
+            {
+                solicitudCargoViewModel.SolicitudNuevoCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                solicitudCargoViewModel.SolicitudNuevoCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                solicitudCargoViewModel.SolicitudNuevoCargo.IdeArea = usuarioSede.IDEAREA;
+
+            }
             return solicitudCargoViewModel;
         }
 

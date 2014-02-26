@@ -73,6 +73,7 @@ COMMENT ON COLUMN CARGO.CODCARGO           IS 'Codigo del Cargo ingresado por el
 COMMENT ON COLUMN CARGO.NOMCARGO           IS 'Nombre corto del cargo.';
 COMMENT ON COLUMN CARGO.DESCARGO           IS 'Nombre largo del cargo.';
 COMMENT ON COLUMN CARGO.IDEAREA            IS 'Código del área';
+COMMENT ON COLUMN CARGO.IDEAREA            IS 'Código del área';
 COMMENT ON COLUMN CARGO.NUMPOSICION        IS 'Número de posiciones del cargo';
 COMMENT ON COLUMN CARGO.PUNTPOSTUINTE      IS 'Puntaje para el postulante interno';
 COMMENT ON COLUMN CARGO.SEXO               IS 'Puntaje para sexo';

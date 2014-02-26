@@ -85,7 +85,8 @@
             logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
             
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo = new LogSolicitudNuevoCargo();
-            logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo.IdeSolicitudNuevoCargo = ideSolicitud;
+            var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == ideSolicitud);
+            logSolicitudNuevoCargoViewModel.SolicitudNuevoCargo = solicitud;
 
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.Observacion = "";
 
@@ -143,7 +144,7 @@
                 }
                 LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
                 int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
-                ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Convert.ToInt32(Session[ConstanteSesion.Sede]), model.SolicitudNuevoCargo.IdeArea, model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
+                ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(model.SolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
                                                                                        model.LogSolicitudNuevoCargo.Observacion, model.LogSolicitudNuevoCargo.TipoSuceso, model.LogSolicitudNuevoCargo.TipoEtapa);
 
                 if (ideUsuarioResp != 0)

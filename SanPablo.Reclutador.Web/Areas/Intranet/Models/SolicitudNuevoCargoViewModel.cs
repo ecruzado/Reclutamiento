@@ -21,5 +21,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Rol> Responsables { get; set; }
         public string Observacion { get; set; }
         public string Estado { get; set; }
+        public string Dependencia { get; set; }
+        public string Departamento { get; set; }
+        public string Area { get; set; }
     }
 }

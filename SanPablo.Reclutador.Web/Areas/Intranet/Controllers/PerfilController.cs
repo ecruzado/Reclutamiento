@@ -362,7 +362,7 @@
                 if ((estadoSolicitud.TipoEtapa == EtapasSolicitud.PendienteElaboracionPerfil) && (estadoSolicitud.TipoSuceso == SucesoSolicitud.Pendiente) && (estadoSolicitud.RolResponsable == Convert.ToString(Session[ConstanteSesion.Rol])))
                 {
 
-                    int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(Convert.ToInt32(SedeSession), Area, solicitud.IdeSolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Aprobado, EtapasSolicitud.PendienteAprobacionPerfilJefeArea);
+                    int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(solicitud, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Aprobado, EtapasSolicitud.PendienteAprobacionPerfilJefeArea);
                     if (ideUsuario != 0)
                     {
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);

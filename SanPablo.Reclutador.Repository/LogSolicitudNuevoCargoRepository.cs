@@ -48,7 +48,7 @@
                            // .SingleOrDefault();
         }
 
-        public int solicitarAprobacion(int ideSede, int ideArea, int ideSolicitudCargo, int ideUsuario, 
+        public int solicitarAprobacion(SolicitudNuevoCargo solicitud, int ideUsuario, 
                                        int ideRol, string observacion, string suceso, string etapa)
         {
 
@@ -60,9 +60,9 @@
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = lcon;
 
-                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = ideSede;
-                cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = ideArea;
-                cmd.Parameters.Add("p_ideSolCargo", OracleType.Int32).Value = ideSolicitudCargo;
+                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = solicitud.IdeSede;
+                cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = solicitud.IdeArea;
+                cmd.Parameters.Add("p_ideSolCargo", OracleType.Int32).Value = solicitud.IdeSolicitudNuevoCargo;
                 cmd.Parameters.Add("p_ideUsuario", OracleType.Int32).Value = ideUsuario;
                 cmd.Parameters.Add("p_ideRol", OracleType.Int32).Value = ideRol;
                 cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = observacion;

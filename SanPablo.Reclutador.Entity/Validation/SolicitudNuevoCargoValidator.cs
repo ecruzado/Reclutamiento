@@ -10,9 +10,9 @@ namespace SanPablo.Reclutador.Entity.Validation
         public SolicitudNuevoCargoValidator()
         {
 
-            RuleFor(x => x.IdeArea)
-                .NotEqual(0)
-                .WithMessage("Seleccionar los datos requeridos ");
+            //RuleFor(x => x.IdeArea)   
+            //    .NotEqual(0)
+            //    .WithMessage("Seleccionar los datos requeridos ");
 
             RuleFor(x => x.CodigoCargo)
                 .NotEmpty()

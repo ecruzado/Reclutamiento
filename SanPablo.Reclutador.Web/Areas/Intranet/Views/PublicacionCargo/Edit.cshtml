@@ -219,7 +219,8 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Area</td>
                         <td class="controls">
-                            @Html.TextBoxFor(model=>model.SolicitudCargo.IdeArea, new {@disabled= "disabled"})
+                            @Html.HiddenFor(model=>model.SolicitudCargo.IdeArea)
+                            @Html.TextBoxFor(model => model.Area, new { @disabled = "disabled" })
                         </td>
                     </tr>
                       
