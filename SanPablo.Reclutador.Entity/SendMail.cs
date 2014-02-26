@@ -34,7 +34,7 @@
             mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" "+cargo+" - Nro "+ codCargo +" - Sede:"+ sedeDescripcion;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
 
-            mmsg.Bcc.Add("j.ccana@conastec.com.pe"); //Opcional
+           // mmsg.Bcc.Add("j.ccana@conastec.com.pe"); //Opcional
 
             
             //Cuerpo del Mensaje
@@ -69,6 +69,7 @@
             
             try
             {
+             
                 cliente.Send(mmsg);
             }
             catch (System.Net.Mail.SmtpException ex)

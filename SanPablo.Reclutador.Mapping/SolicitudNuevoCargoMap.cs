@@ -16,6 +16,8 @@
             Map(x => x.DescripcionCargo, "DESCRIPCION");
             Map(x => x.NumeroPosiciones, "NUMPOSICIONES");
             Map(x => x.TipoRangoSalarial, "TIPRANSALARIO");
+            Map(x => x.IdeDependencia, "IDEDEPENDENCIA");
+            Map(x => x.IdeDepartamento, "IDEDEPARTAMENTO");
             Map(x => x.IdeArea, "IDEAREA");
             
             Map(x => x.IndicadorVerSexo, "INDVERSEXO");

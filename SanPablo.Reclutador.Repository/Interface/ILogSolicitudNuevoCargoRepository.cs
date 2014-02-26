@@ -12,7 +12,7 @@
 
         IList<LogSolicitudNuevoCargo> getTwoMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
 
-        int solicitarAprobacion(int ideSede, int ideArea, int ideSolicitudCargo, int ideUsuario,
+        int solicitarAprobacion(SolicitudNuevoCargo solicitud, int ideUsuario,
                                        int ideRol, string observacion, string suceso, string etapa);
 
         LogSolicitudNuevoCargo estadoSolicitud(int ideSolicitudNuevo);

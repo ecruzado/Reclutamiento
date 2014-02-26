@@ -11,16 +11,32 @@ FUNCTION FN_APROBACION_NUEVO(p_ideSede     IN SEDE.IDESEDE%TYPE,
                               p_etapa       IN DETALLE_GENERAL.VALOR%TYPE)RETURN NUMBER;
                               
 PROCEDURE SP_OBTENER_ETAPA_SOLICITUD(p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                                     p_ideGeneralE IN DETALLE_GENERAL.IDEGENERAL%TYPE,
-                                     p_ideGeneralS IN DETALLE_GENERAL.IDEGENERAL%TYPE,
                                      p_cRetVal OUT SYS_REFCURSOR);
+                                     
+FUNCTION FN_RESPONSABLE_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)
+                            RETURN VARCHAR2;
+
+FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)
+                           RETURN VARCHAR2;
+
+
 
 
 END PR_REQUERIMIENTOS;
 /
 CREATE OR REPLACE PACKAGE BODY PR_REQUERIMIENTOS is
 
-
+/* ------------------------------------------------------------
+    Nombre      : FN_APROBACION_NUEVO
+    Proposito   : Actualizar el estado de la Solicitud y agregar nueva etapa
+                  dependiendo del caso.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      20/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
 FUNCTION FN_APROBACION_NUEVO(p_ideSede      IN SEDE.IDESEDE%TYPE,
                               p_ideArea     IN AREA.IDEAREA%TYPE,
                               p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
@@ -29,7 +45,7 @@ FUNCTION FN_APROBACION_NUEVO(p_ideSede      IN SEDE.IDESEDE%TYPE,
                               p_observacion IN LOGSOLNUEVO_CARGO.OBSERVACION%TYPE,
                               p_suceso      IN DETALLE_GENERAL.VALOR%TYPE,
                               p_etapa       IN DETALLE_GENERAL.VALOR%TYPE)RETURN NUMBER IS
-                             -- c_ideUsuarioResp OUT USUARIO.IDUSUARIO%TYPE)IS
+                             
                         
 c_ideUsuarioResp USUARIO.IDUSUARIO%TYPE;
 c_ideLogSolicitud LOGSOLNUEVO_CARGO.IDELOGSOLNUEVOCARGO%TYPE;
@@ -52,15 +68,18 @@ BEGIN
    c_ideRolResp := 3;  --jefe de area
    --c_etapaSgte :='05';
   ELSIF (p_etapa = '05')THEN   --pendiente aprobacion perfil2  
-   c_ideRolResp := 3;  --encargado seleccion
+   c_ideRolResp := 7;  --encargado seleccion
   -- c_etapaSgte :='06';
   ELSIF (p_etapa = '06')THEN   --pendiente publicacion 
-   c_ideRolResp := 3; --destinatario recursos 
-  -- c_etapaSgte :='07';
+   c_ideRolResp := 9; --destinatario recursos 
+  ELSIF (p_etapa = '07')THEN   --pendiente publicacion 
+   c_ideRolResp := -1; --destinatario recursos 
+ -- c_etapaSgte :='07';
   END IF;
   
-   SELECT  U.IDUSUARIO,R.IDROL
-   INTO c_ideUsuarioResp, c_ideRolResp
+  IF (c_ideRolResp <> -1) THEN
+   SELECT  U.IDUSUARIO
+   INTO c_ideUsuarioResp
    FROM USUARIO_NIVEL U, ROL R , USUAROLSEDE UR
    WHERE U.IDUSUARIO = UR.IDUSUARIO
    AND R.IDROL = UR.IDROL
@@ -68,6 +87,9 @@ BEGIN
    AND U.IDEAREA = p_ideArea
    AND U.IDESEDE = p_ideSede
    AND U.FLGESTADO ='A'; -- ESTACTIVO
+  ELSE
+   c_ideUsuarioResp :=-1;
+  END IF; 
   
    --ultimo registro de log de solicitud
    IF( p_etapa <> '01')THEN      
@@ -78,7 +100,11 @@ BEGIN
                         FROM  LOGSOLNUEVO_CARGO SN
                         WHERE SN.IDESOLNUEVOCARGO = p_ideSolCargo)
      AND LG.IDESOLNUEVOCARGO =  p_ideSolCargo;  
+   ELSE
+     c_ideRolRespSuc := p_ideRol;
    END IF;
+    
+   
    BEGIN
      --   AND ESTADO = "PENDIENTE"
       IF (p_ideRol = c_ideRolRespSuc) THEN
@@ -88,7 +114,7 @@ BEGIN
           WHERE LS.IDELOGSOLNUEVOCARGO = c_ideLogSolicitud;
         END IF;    
         IF(p_suceso <> 'R') THEN --DIFRENTE A RECHAZADO
-          IF (p_etapa <> '06') THEN 
+          IF (p_etapa <> '07') THEN 
             INSERT INTO LOGSOLNUEVO_CARGO 
             (IDELOGSOLNUEVOCARGO, IDESOLNUEVOCARGO,TIPETAPA, TIPSUCESO,OBSERVACION,FECSUCESO,USRSUCESO,ROLSUCESO, USRESPONSABLE,ROLRESPONSABLE)
             VALUES(IDESOLNUEVOCARGO_SQ.NEXTVAL,p_ideSolCargo,p_etapa,'P',p_observacion,sysdate,p_ideUsuario,p_ideRol,c_ideUsuarioResp,c_ideRolResp);
@@ -99,57 +125,98 @@ BEGIN
      
    EXCEPTION
        WHEN OTHERS THEN  
-       c_ideUsuarioResp:= 0;
+       c_ideUsuarioResp:= -1;
        ROLLBACK;
    END;
    
    RETURN c_ideUsuarioResp;
 END FN_APROBACION_NUEVO;
 
-
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_ETAPA_SOLICITUD
+    Proposito   : Obtener la etapa y estado actual de la solicitud de cargo.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
 PROCEDURE SP_OBTENER_ETAPA_SOLICITUD(p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                                     p_ideGeneralE IN DETALLE_GENERAL.IDEGENERAL%TYPE,
-                                     p_ideGeneralS IN DETALLE_GENERAL.IDEGENERAL%TYPE,
                                      p_cRetVal OUT SYS_REFCURSOR)IS
-
-c_tipoEtapa LOGSOLNUEVO_CARGO.TIPETAPA%TYPE;
-c_ideEtapa DETALLE_GENERAL.VALOR%TYPE;
-c_tipSuceso DETALLE_GENERAL.VALOR%TYPE;
 
 BEGIN
 
-  SELECT LG.TIPETAPA,LG.TIPSUCESO
-  INTO c_tipoEtapa,c_tipSuceso
+  BEGIN
+  OPEN p_cRetVal FOR
+  SELECT LG.TIPETAPA,LG.TIPSUCESO,LG.ROLRESPONSABLE
   FROM LOGSOLNUEVO_CARGO LG   
   WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
                      FROM  LOGSOLNUEVO_CARGO SN
                      WHERE SN.IDESOLNUEVOCARGO = p_ideSolCargo)
   AND LG.IDESOLNUEVOCARGO =  p_ideSolCargo; 
 
-  BEGIN  
-    SELECT DG.VALOR
-    INTO c_ideEtapa
-    FROM DETALLE_GENERAL DG
-    WHERE DG.IDEGENERAL =  p_ideGeneralE
-    AND DG.VALOR =  c_tipoEtapa;
-    
-    SELECT DG.VALOR
-    INTO c_tipSuceso
-    FROM DETALLE_GENERAL DG
-    WHERE DG.IDEGENERAL =  p_ideGeneralS
-    AND DG.VALOR =  c_tipSuceso;
-    
-    OPEN p_cRetVal FOR
-      SELECT c_ideEtapa ETAPA, c_tipSuceso SUCESO
-      FROM DUAL;
- 
   EXCEPTION
   WHEN OTHERS THEN
     p_cRetVal:=NULL;
   END;   
-
   
 END SP_OBTENER_ETAPA_SOLICITUD;
+
+
+/* ------------------------------------------------------------
+    Nombre      : FN_RESPONSABLE_SOL
+    Proposito   : Obtener la etapa y estado actual de la solicitud de cargo.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_RESPONSABLE_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)RETURN VARCHAR2
+
+IS
+c_responsable ROL.DSCROL%TYPE;
+BEGIN
+  SELECT R.DSCROL
+  INTO c_responsable
+  FROM LOGSOLNUEVO_CARGO LG , ROL R   
+  WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
+                     FROM  LOGSOLNUEVO_CARGO SN
+                     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
+  AND R.IDROL = LG.ROLRESPONSABLE;
+
+  RETURN NVL(c_responsable,'');  
+  
+END FN_RESPONSABLE_SOL;
+
+/* ------------------------------------------------------------
+    Nombre      : FN_NOMRESPONS_SOL
+    Proposito   : Obtener el nombre del responsable del suceso
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)RETURN VARCHAR2
+
+IS
+c_responsable ROL.DSCROL%TYPE;
+BEGIN
+  SELECT US.DSCNOMBRES||' ' ||US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO
+  INTO c_responsable
+  FROM LOGSOLNUEVO_CARGO LG , USUARIO US   
+  WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
+                     FROM  LOGSOLNUEVO_CARGO SN
+                     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
+  AND US.IDUSUARIO = LG.USRESPONSABLE;
+
+  RETURN NVL(c_responsable,'');  
+  
+END FN_NOMRESPONS_SOL;
 
 END PR_REQUERIMIENTOS;
 /

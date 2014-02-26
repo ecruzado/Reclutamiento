@@ -288,9 +288,8 @@
                     solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
                     int ideUsuarioResp = 0;
-                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(Convert.ToInt32(Session[ConstanteSesion.Sede]), 1, solicitudNuevoCargo.IdeSolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
+                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(solicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
                                                                                            "", SucesoSolicitud.Publicado, EtapasSolicitud.Publicado);
-
                     objJsonMessage.Mensaje = "Publicado Correctamente";
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
@@ -319,14 +318,16 @@
             publicacionNuevoViewModel.Cargo = new Cargo();
             publicacionNuevoViewModel.SolicitudCargo = new SolicitudNuevoCargo();
 
+            var area = _areaRepository.GetSingle(x => x.IdeArea == cargo.IdeArea);
+
+            publicacionNuevoViewModel.Area = area.NombreArea;
+
             var horario = _horarioCargoRepository.getMaxPuntValue(x => x.Cargo.IdeCargo == cargo.IdeCargo);
             publicacionNuevoViewModel.TipoHorario = horario.DescripcionHorario;
 
             string tipoRangoSalarial = cargo.TipoRangoSalarial;
-
             publicacionNuevoViewModel.RangoSalario = _detalleGeneralRepository.GetByTableDescription(TipoTabla.TipoSalario, tipoRangoSalarial);
 
-            
             return publicacionNuevoViewModel;
         }
 
