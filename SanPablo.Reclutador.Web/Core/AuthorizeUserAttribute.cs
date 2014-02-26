@@ -14,7 +14,6 @@ namespace SanPablo.Reclutador.Web.Core
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-
             try
             {
                 var isAuthorized = base.AuthorizeCore(httpContext);

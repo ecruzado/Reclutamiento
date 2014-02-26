@@ -168,6 +168,7 @@
     <Compile Include="Areas\Intranet\Controllers\RolController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SeguridadController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudReemplazoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UbigeoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\OpcionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\RolViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudRempCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\HorarioCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\OfrecimientoViewModel.cs" />
@@ -373,6 +375,7 @@
     <Content Include="Areas\Intranet\Views\Usuario\EdicionSede.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\PopupSede.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudReemplazoCargo\ListaReemplazo.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

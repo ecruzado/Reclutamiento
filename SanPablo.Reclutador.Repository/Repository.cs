@@ -99,7 +99,10 @@
                    .SingleOrDefault<int>();
         }
 
-       
+        public virtual ResultadoQuery<TEntity> GetPagingBySql(string sortField, bool ascending, int pageIndex, int pageSize, string where)
+        {
+            return null;
+        }
 
     }
 

@@ -38,6 +38,15 @@
         int CountByExpress(Expression<Func<TEntity, bool>> condition);
 
         int getMaxValue(string campo, Expression<Func<TEntity, bool>> condition);
-       
+
+        ResultadoQuery<TEntity> GetPagingBySql(string sortField, bool ascending, int pageIndex, int pageSize, string where);
+
     }
+
+    public class ResultadoQuery<T>
+    {
+        public List<T> Lista { get; set; }
+        public int Count { get; set; }
+    }
+
 }

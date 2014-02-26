@@ -16,5 +16,11 @@
         {
             return new List<Criterio>();
         }
+
+        public ResultadoQuery<Criterio> GetPagingBySql(string sortField, bool ascending, int pageIndex, int pageSize, string where) 
+        {
+            return null;
+        }
+            
     }
 }

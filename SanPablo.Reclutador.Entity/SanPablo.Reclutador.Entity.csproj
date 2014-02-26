@@ -73,6 +73,7 @@
     <Compile Include="SolicitudNuevoCargo.cs" />
     <Compile Include="EvaluacionCargo.cs" />
     <Compile Include="OfrecemosCargo.cs" />
+    <Compile Include="SolicitudRempCargo.cs" />
     <Compile Include="TipoRequerimiento.cs" />
     <Compile Include="UbigeoCargo.cs" />
     <Compile Include="ExperienciaCargo.cs" />

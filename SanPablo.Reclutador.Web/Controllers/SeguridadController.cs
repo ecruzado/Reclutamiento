@@ -19,6 +19,7 @@ using System.Web.Security;
 
 namespace SanPablo.Reclutador.Web.Controllers
 {
+    [AllowAnonymous]
     public class SeguridadController : BaseController
     {
         private IRolRepository _rolRepository;

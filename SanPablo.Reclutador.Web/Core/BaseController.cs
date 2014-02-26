@@ -135,6 +135,80 @@ namespace SanPablo.Reclutador.Web.Core
             return columna + " " + opciones[operacion] + " '" + valor + "'";
         }
 
+        protected GenericDouble<JQgrid, T> ListarSql<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, string where) where T : class
+        {
+            if (string.IsNullOrEmpty(sidx))
+            {
+                sidx = string.Empty;
+            }
+            if (string.IsNullOrEmpty(sord))
+            {
+                sord = "desc";
+            }
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            if (pageSize == 0)
+            {
+                pageSize = 100;
+            }
+
+            var jqgrid = new JQgrid();
+            IList<T> list;
+
+            try
+            {
+                int totalPages = 0;
+
+                //if (search)
+                //{
+                //    @where = @where + GetWhere(searchField, searchOper, searchString);
+                //}
+
+                var test = logic.GetPagingBySql(sidx, true, pageIndex, pageSize, where);
+                list = test.Lista;
+
+                var count = logic.CountBy();
+
+                if (count > 0 && pageSize > 0)
+                {
+                    if (count % pageSize > 0)
+                    {
+                        totalPages = (int)Math.Ceiling((decimal)(count / pageSize));
+                        totalPages = (int)(count / pageSize) + 1;
+                    }
+                    else
+                    {
+                        totalPages = (int)(count / pageSize);
+                    }
+                    totalPages = totalPages == 0 ? 1 : totalPages;
+                }
+
+                pageIndex = pageIndex > totalPages ? totalPages : pageIndex;
+
+                var start = pageSize * pageIndex - pageSize;
+                if (start < 0)
+                {
+                    start = 0;
+                }
+
+                jqgrid.total = totalPages;
+                //
+                jqgrid.page = pageIndex;
+                jqgrid.records = count;
+                jqgrid.start = start;
+
+                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return new GenericDouble<JQgrid, T>(jqgrid, list);
+        }
+
+
         #endregion Paginacion
 
 
