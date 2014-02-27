@@ -11,9 +11,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     {
         public SolicitudNuevoCargo SolicitudNuevoCargo { get; set; }
         
-        public List<Dependencia> Dependencias { get; set; }
-        public List<Departamento> Departamentos { get; set; }
-        public List<Area> Areas { get; set; }
+        public Dependencia DependenciaSession { get; set; }
+        public Departamento DepartamentoSession { get; set; }
+        public Area AreaSession { get; set; }
         public List<DetalleGeneral> RangosSalariales { get; set; }
         public List<SolicitudNuevoCargo> Cargos { get; set; }
         public List<DetalleGeneral> Estados { get; set; }
@@ -21,8 +21,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Rol> Responsables { get; set; }
         public string Observacion { get; set; }
         public string Estado { get; set; }
-        public string Dependencia { get; set; }
-        public string Departamento { get; set; }
-        public string Area { get; set; }
+        public List<Dependencia> Dependencias { get; set; }
+        public List<Departamento> Departamentos { get; set; }
+        public List<Area> Areas { get; set; }
+        
     }
 }

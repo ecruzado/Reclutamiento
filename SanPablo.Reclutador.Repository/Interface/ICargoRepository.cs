@@ -5,6 +5,6 @@
 
     public interface ICargoRepository : IRepository<Cargo>
     {
-        DatosCargo obtenerDatosCargo(int IdeSolicitud);
+        DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion);
     }
 }

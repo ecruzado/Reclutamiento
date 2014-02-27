@@ -6,5 +6,6 @@
     public interface ISolicitudNuevoCargoRepository : IRepository<SolicitudNuevoCargo>
     {
         List<string> obtenerDatosArea(int ideArea);
+        bool verificarCodCodigo(string codigoCargo);
     }
 }
