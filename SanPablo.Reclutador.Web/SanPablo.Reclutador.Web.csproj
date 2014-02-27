@@ -378,9 +378,10 @@
     <Content Include="Areas\Intranet\Views\Usuario\PopupSede.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudReemplazoCargo\ListaReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Edit1.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index1.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\InformacionAmpliacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

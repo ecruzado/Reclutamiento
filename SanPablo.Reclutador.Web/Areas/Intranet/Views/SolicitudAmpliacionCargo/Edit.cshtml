@@ -1,6 +1,6 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
 @{
-    ViewBag.Title = "Solicitud Nuevo Cargo";
+    ViewBag.Title = "Solicitud Ampliación";
 }
 @section Head{
 }
@@ -8,465 +8,203 @@
 @section Scripts{
 
 <script type="text/javascript">
+    //Table initialisation 
     $(document).ready(function () {
-        var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
-        if (estado == "I")
-        { deshabilitarControles(); }
-        else
-        { habilitarControles();}
+        $("#txtfechapublicacion").datepicker();
+        $("#txtfechaexpiracion").datepicker();
+        
+        var dlgobservacion = $("#dlgAprobarRechazo").dialog(
+           {
+               autoOpen: false,
+               modal: true,
+               title: "Aprobación/Rechazo",
+               width: 600,
+               height: 300,
+               buttons: {
+                   "Grabar": function () {
+                       //AsociarReciboAPolizaCorrecta();
+                       return true;
+                   },
+                   "Cancelar": function () {
+                       $(this).dialog("close");
+                       return false;
+                   }
+               }
+           });
 
-        var aprobacion = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
-        if (aprobacion != "0")
-        { deshabilitarControles(); }
-        else
-        { habilitarControles(); }
-
-        $('#updateDialogAprobacion').dialog({
+        $("#dlgEnviarSolicitud").dialog({
             autoOpen: false,
-            width: 400,
             resizable: false,
+            height: 180,
             modal: true,
             buttons: {
-                "Enviar": function (e) {
-                    e.preventDefault();
-                    var result = $('#LogSolicitudNuevoCargoForm').valid();
-                    if (result) {
-                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
-                        $("#divMensaje").dialog({
-                            title: 'SAN PABLO',
-                            modal: true,
-                            buttons: {
-                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
-                                "No": function () { $(this).dialog("close");}
-                            }
-                        });
-                       
-                    }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    }
+                "Aceptar": function () {
+                    $(this).dialog("close");
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
-                });
+        });
 
-        $('#updateDialogConfirmacion').dialog({
+        $("#dlgGrabar").dialog({
             autoOpen: false,
-            width: 300,
             resizable: false,
+            height: 180,
             modal: true,
             buttons: {
-                "Aceptar": function (e) {
-                    e.preventDefault();
-                    var result = $('#solicitudNuevoCargoForm').valid();
-                    if (result) {
-                        $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
-                        $("#solicitudNuevoCargoForm").serialize(),
-                        function (respuesta) {
-                            if (respuesta.Resultado) {
-                                $("#updateDialogConfirmacion").dialog("close");
-                                $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
-                                deshabilitarControles();
-                                $("#spanMensaje").html("Solicitud enviada exitosamente");
-                                $("#divMensaje").dialog({
-                                    title: 'SAN PABLO',
-                                    modal: true,
-                                    buttons: {
-                                        "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
-                                    }
-                                });
-                            }
-                            else {
-                                $(this).dialog("close");
-                                mensajeResultado(respuesta.Mensaje);
-                            }
-                        });
-                    }
-                    else {
-                        $(this).dialog("close");
-                        mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
-                    }
-                   
-                 },
-                 "Cancelar": function () {
-                     $(this).dialog("close");
-                  }
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
             }
-         });
+        });
+        //$("#txtEdadInicial").spinner();
+        //$("#txtEdadFinal").spinner();
 
-        $('select#Dependencias').change(function () {
-            var ideDependencia = $(this).val();
-            $("select#SolicitudNuevoCargo_IdeArea").empty();
-            $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
-                data: { ideDependencia: ideDependencia },
-                success: function (respuesta) {
-                    $("select#Departamentos").empty();
-                    $("select#Departamentos").append("<option value='0'> Seleccionar </option>");
-                    $.each(respuesta, function (i, item) {
-                        $("select#Departamentos").append("<option value='"
-                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
-                    }
-                );
-                }
-            });
-        })
-
-        $('select#Departamentos').change(function () {
-            var ideDepartamento = $(this).val();        
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
-                data: { ideDepartamento: ideDepartamento },
-                success: function (respuesta) {
-                    $("select#SolicitudNuevoCargo_IdeArea").empty();
-                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
-                    $.each(respuesta, function (i, item) {
-                        $("select#SolicitudNuevoCargo_IdeArea").append("<option value='"
-                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
-                    }
-                );
-                }
-            });
-        })
-
-        
     });
-
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
     }
 
-    function mostrarAprobarDesaprobar() {
-        var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
-        if (estado == "A") {
-            var dialogDiv = $('#updateDialogAprobacion');
-            var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
-            $.get('@Url.Action("Edit", "LogSolicitudNuevoCargo")', { ideSolicitud: ideSolicitud }, function (data) {
-                dialogDiv.html(data);
-                $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
-                dialogDiv.dialog('open');
-            });
-        }
-        else {
-            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
-        }
-        return false;
+    function irATab(tab) {
+        $('a[href=#' + tab + ']').tab('show');
     }
 
-    function enviarAprobacionRechazo()
-    {
-        $.post('@Url.Action("Edit", "LogSolicitudNuevoCargo")',
-             $('#LogSolicitudNuevoCargoForm').serialize(),
-             function (respuesta) {
-                 if (respuesta.Resultado) {
-                     $('#updateDialogAprobacion').dialog("close");
-                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
-                 }
-                 else {
-                     notificacionError(respuesta.Mensaje);
-                 }
-              }
-        );
+    function mostrarAprobarRechazar() {
+        $("#dlgAprobarRechazo").dialog('open');
     }
 
-
-
-    function mostrarConfirmacion() {
-        var dialogDiv = $('#updateDialogConfirmacion');
-            dialogDiv.dialog('open');
+    function mostrarEnvio(id) {
+        $("#dlgEnviarSolicitud").dialog("open");
     }
 
-    function ocultarAprobarDesaprobar() {
-        $('#modalAprobarRechazar').modal('hide');
-    }
-
-    function mensajeResultado(mensaje) {
-        $("#spanMensaje").html(mensaje);
-        $("#divMensaje").dialog({
-            title: 'SAN PABLO',
-            modal: true,
-            buttons: {
-                "Ok": function () { $(this).dialog("close"); }
-            }
-        });
-    }
-    function deshabilita() {
-        document.getElementById('idB1').style.display = "none";
-    }
-    function habilita() {
-        document.getElementById('idB1').style.display = "block";
-    }
-
-    function verificarCodigo()
-    {
-        var codCodigo = $("#SolicitudNuevoCargo_CodigoCargo").val();
-        $.ajax({
-            data: { codCodigo: codCodigo },
-            type: "POST",
-            url: '@Url.Action("verificarCodigo", "SolicitudNuevoCargo")',
-            traditional: true,
-            success: function (data) {
-                if (data.Resultado) {
-                    $("#SolicitudNuevoCargo_CodigoCargo").val("");
-                    mensajeResultado(data.Mensaje);
-                } 
-            }
-        });
-    }
-    function validarFormulario() {
-        if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
-            if ($("#solicitudNuevoCargoForm").validate().form()) {
-                mostrarConfirmacion();
-            }
-        }
-        else {
-            mensajeResultado("Solicitud en estado: 'INACTIVO'");
-        }
-    }
-    function actualizarCodigo(codigo) {
-        $.ajax({
-            data: { codigo: codigo },
-            type: "POST",
-            url: '@Url.Action("recuperarCodigoSolicitud", "SolicitudNuevoCargo")',
-            traditional: true,
-                success: function (data) {
-                    if (data.Resultado) {
-                        $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val(data.Mensaje);
-                    } else {
-                        mensajeResultado(data.Mensaje);
-                    }
-                }
-        });
-
-    }
-    function deshabilitarControles()
-    {
-        $('#SolicitudNuevoCargo_CodigoCargo').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_NombreCargo').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_DescripcionCargo').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_TipoRangoSalarial').attr("disabled", "disabled");
-        $('#Dependencias').attr("disabled", "disabled");
-        $('#Departamentos').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_IdeArea').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_DescripcionEstudios').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_DescripcionCompetencias').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_DescripcionFunciones').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_DescripcionObservaciones').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_NumeroPosiciones').attr("disabled", "disabled");
-        $('#btnEnviar').attr("disabled", "disabled");
-
-    }
-
-    function habilitarControles() {
-        $('#SolicitudNuevoCargo_CodigoCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_NombreCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_TipoRangoSalarial').removeAttr("disabled");
-        $('#Dependencias').removeAttr("disabled");
-        $('#Departamentos').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionEstudios').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionCompetencias').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
-        $('#btnEnviar').removeAttr("disabled");
+    function mostrarGrabar(id) {
+        $("#dlgGrabar").dialog("open");
     }
 
 </script>
 }
-@using (Html.BeginForm("Edit", "SolicitudNuevoCargo", FormMethod.Post, new { @id = "solicitudNuevoCargoForm" }))
-{
 <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Solicitud Nuevo Cargo</h5>
+                <h5>Solicitud de Ampliación de Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    @Html.HiddenFor(model=>model.SolicitudNuevoCargo.EstadoActivo)
-                    
-                    @Html.TextBoxFor(model =>model.Estado, new {@class="btn btn-primary btn-small disabled", @disabled = "disabled", @style ="width:60px"})
-                </div>
+                    @*@Html.TextBoxFor(model => model.SolReqPersonal, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled" })*@
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                </div>            
             </div>
-            
-                <table  class="formulario-busqueda">
-                    <tbody>
-                        <tr class="formulario-fila">
-                            <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Solicitud</label>
-                                    @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled" })
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Código de Cargo</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase", @onblur ="verificarCodigo()" })
-                                    </div>
-                                </div>
-                            </td>
-                            
-                        </tr>
-                        <tr class="formulario-fila">
-                            <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Cargo</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { @style="text-transform: uppercase" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NombreCargo)
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="selectError">Dependencia</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.DependenciaSession.NombreDependencia, new { @disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.DependenciaSession.IdeDependencia)
-                                    </div>
-                                </div>
-                            </td>
-                           
-                        </tr>
-                        <tr class="formulario-fila">
-                            <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Descripción</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { @style="text-transform: uppercase" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                             <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Departamento</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.DepartamentoSession.NombreDepartamento, new { @disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)
-                                    </div>
-                                </div>
-                            </td>
-                            
-                        </tr>
-                        <tr class="formulario-fila">
-                            <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Nro. Posiciones</label>
-                                    <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class ="input-mini"})
-                                    </div>
-                                </div>
-                            </td> 
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Área</label>
-                                    <div class="controles">
-                                          @Html.TextBoxFor(model => model.AreaSession.NombreArea, new { @disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.AreaSession.IdeArea)
-                                   </div>
-                                </div>
-                            </td>  
-                                      
-                        </tr>
-                        <tr class="formulario-fila">
-                        <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)</label>
-                                    <div class="controles">
-                                        @Html.DropDownListFor(model =>model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion",Model.SolicitudNuevoCargo.TipoRangoSalarial ))
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial)
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>  
-                        </tr>
-                    </tbody>
-                </table>
-
-
-
-            <h5>Perfil</h5>
-            
-            <div>
-                <div class="grilla-opciones">
-                <h6>Estudios</h6>
-                <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                    @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
-                </div>
-                </div>
+            <h5>Motivo requerimiento</h5>
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Requerimiento</label>
+                            <div class="controles">
+                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled" value="REQ0001">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Dependencia <span class="text-error">*</span></label>
+                            <div class="controles">
+                                <select id="sedependencia" class="select-large valid">
+                                    <option selected="selected">Gerencia Médica</option>
+                                </select>                            
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
+                        <div class="controles">
+                            @*@Html.DropDownListFor(model=>model.SolReqPersonal.*@
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Departamento <span class="text-error">*</span></label>
+                        <div class="controles">
+                            <select >
+                                <option>Seleccionar</option>                                    
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
+                            <div class="controles">
+                                <input type="text" class="input-mini" id="txtcantidad" value="1">
+                            </div>
+                    </td>                    
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Área <span class="text-error">*</span></label>
+                            <div class="controles">
+                                <select id="searea" class="select-large valid">
+                                    <option>Seleccionar</option>
+                                    <option selected="selected">Cuidados Intensivos</option>
+                                </select>
+                            </div>
+                    </td> 
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                         <div class="">
+                            <label class="control-label" for="inputSuccess">Observaciones</label>
+                            <div class="controles">
+                                <textarea class="input-large" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Motivos</label>
+                            <div class="controles">
+                                <textarea class="input-large" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </td>   
+                </tr>
+          </table>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                <button type="submit" class="btn btn-info" onclick="mostrarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</button>
+                <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
-            <div>
-                <div class="grilla-opciones">
-                <h6>Competencias</h6>
-                <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
-                </div>
-                </div>
-            </div>
-            <div>
-                <div class="grilla-opciones">
-                <h6>Funciones</h6>
-                <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
-                </div>
-                </div>
-            </div>
-            <div>
-                <div class="grilla-opciones">
-                <h6>Observaciones adicionales</h6>
-                <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase" })
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
-                </div>
-                </div>
-            </div>
-            <div class="form-actions">     
-                <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
-
-                
-                  
-            </div>
-
+        
         </div>
     </div>
 </div>
 
-}    
+<div id="dlgAprobarRechazo">
+    <table style="width:100%">
+        <tr><td>Comentarios</td></tr>
+        <tr>               
+            <td><textarea class="input-xxlarge" id="taobservacionaprobacion" rows="3"></textarea></td>
+        </tr>
+        <tr>
+            <td style="height:10px;"></td>
+        </tr>
+        <tr>
+            <td ><input type="radio" name="aprobacion" value="1" /> Aprobar <input type="radio" name="aprobacion" value="0" /> Rechazar</td>
+        </tr>
+    </table>
+</div>
 
-<div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
-<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
+<div id="dlgEnviarSolicitud" title="Mensaje">
+    <p></p> <p></p>
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de enviar la solicitud?</p>
+</div>
 
-<div id="divMensaje">
-    <span id="spanMensaje"></span>
-</div>    
-    
+<div id="dlgGrabar" title="Mensaje">
+    <p></p> <p></p>
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de grabar la solicitud?</p>
+</div>
