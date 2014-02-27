@@ -14,6 +14,21 @@
 <script type="text/javascript">
     //Table initialisation 
     $(document).ready(function () {
+
+        //inicio
+
+
+
+
+
+
+
+
+
+
+
+        //fin
+
         $("#txtfechapublicacion").datepicker();
         $("#txtfechaexpiracion").datepicker();
         $("#txtFechaInicio").datepicker();
@@ -402,9 +417,9 @@
     @Html.ValidationSummary(true)
 
     
-     @Html.TextBoxFor(model => model.SolReqPersonal.IDEAREA, new { style = "display: none;" })
-     @Html.TextBoxFor(model => model.SolReqPersonal.IDEDEPARTAMENTO, new { style = "display: none;" })
-     @Html.TextBoxFor(model => model.SolReqPersonal.IDEDEPENDENCIA, new { style = "display: none;" })
+     @Html.TextBoxFor(model => model.SolReqPersonal.IdeArea, new { style = "display: none;" })
+     @Html.TextBoxFor(model => model.SolReqPersonal.IdeDepartamento, new { style = "display: none;" })
+     @Html.TextBoxFor(model => model.SolReqPersonal.IdeDependencia, new { style = "display: none;" })
     
                 <table class="formulario-busqueda">
                     <tr class="formulario-fila">
@@ -412,7 +427,7 @@
                            
                                 <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">    
-                            @Html.TextBoxFor(model => model.SolReqPersonal.IDESOLREQPERSONAL, new { @class = "textoFormulario", @readonly = "readonly" })    
+                            @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { @class = "textoFormulario", @readonly = "readonly" })    
                             </div>
                             
                         </td>
@@ -420,7 +435,7 @@
                        
                                 <label class="control-label" for="inputSuccess">Dependecia</label>
                                 <div class="controles">
-                                     @Html.DropDownListFor(model => model.SolReqPersonal.IDEDEPENDENCIA, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IDEDEPENDENCIA), new { disabled = "disabled" })                      
+                                     @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled = "disabled" })                      
                                     
                                     @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPENDENCIA_DES, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
 
@@ -433,7 +448,7 @@
                                 <label class="control-label" for="inputSuccess">Departamento</label>
                                 <div class="controles">
                                   
-                                    @Html.DropDownListFor(model => model.SolReqPersonal.IDEDEPARTAMENTO, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IDEDEPARTAMENTO), new { disabled = "disabled" })                      
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled = "disabled" })                      
 
                                     @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPARTAMENTO_DES, new { @class = "textoFormulario",disabled = "disabled" })    *@
                                 </div>
@@ -445,7 +460,7 @@
                             <div class="controles">
                                
                                 @*@Html.TextBoxFor(model => model.SolReqPersonal.IDEAREA, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.IDEAREA, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IDEAREA), new { disabled = "disabled" })                      
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled = "disabled" })                      
                             </div>
                       
                         </td>
@@ -455,7 +470,7 @@
                         
                             <label class="control-label" for="selectError">Tipo Vacante</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.TIPVACANTE, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TIPVACANTE))
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante))
                             </div>
                         
                         </td>
@@ -463,7 +478,7 @@
                        
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IDECARGO, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IDECARGO))
+                                @Html.DropDownListFor(model => model.SolReqPersonal.Idecargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.Idecargo))
                             </div>
                        
                         </td>
@@ -475,7 +490,7 @@
                             <label class="control-label" for="inputSuccess">Vacantes</label>
                             <div class="controles">
                                 
-                                @Html.TextBoxFor(model => model.SolReqPersonal.NUMVACANTES, new { @class = "textoFormulario" }) 
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" }) 
                             </div>
                         
                         </td>                    
@@ -485,7 +500,7 @@
                         <td class="span5">
                         <label class="control-label" for="inputSuccess">Observaciones</label>
                         <div class="controles">
-                                @Html.TextAreaFor(model => model.SolReqPersonal.OBSERVACION, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
                         </div>
                         </td>                    
                     </tr>

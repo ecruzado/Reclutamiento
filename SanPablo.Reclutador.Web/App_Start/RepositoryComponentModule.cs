@@ -138,6 +138,9 @@
             builder.RegisterType<SolReqPersonalRepository>()
            .As<ISolReqPersonalRepository>();
 
+            builder.RegisterType<ReemplazoRepository>()
+            .As<IReemplazoRepository>();
+
 
         }
     }
