@@ -126,7 +126,7 @@
                     }
                 });
             },
-            colNames: ['Estado','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre','', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa', 'Grupo'],
+            colNames: ['Estado','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre','', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa', '','Estado'],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
@@ -152,7 +152,8 @@
                             { name: 'Publicado', index: 'Publicado', align: 'left', width: 100 },
                             { name: 'ideEtapa', index: 'ideEtapa', align: 'left', hidden: true },
                             { name: 'Etapa', index: 'Etapa', align: 'center', width: 160 },
-                            { name: 'Grupo', index: 'Grupo', align: 'center', width: 100 }
+                            { name: 'TipoEstado',index: 'TipoEstado', align: 'left', hidden: true  },
+                            { name: 'Estado', index: 'Estado', align: 'center', width: 100 }
                     ],
 
                     pager: jQuery('#grdPager'),

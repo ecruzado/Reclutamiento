@@ -15,7 +15,7 @@
         {
         }
 
-        public DatosCargo obtenerDatosCargo(int IdeSolicitud)
+        public DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
@@ -26,6 +26,7 @@
                 cmd.Connection = lcon;
 
                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = IdeSolicitud;
+                cmd.Parameters.Add("p_ideUsuario", OracleType.VarChar).Value = IdeUSuarioCreacion;
                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 DatosCargo cargo;
@@ -42,9 +43,8 @@
                         cargo.Departamento = Convert.ToString(lector["NOMDEPARTAMENTO"]);
                         cargo.Dependencia = Convert.ToString(lector["NOMDEPENDENCIA"]);
                         cargo.IdeCargo = Convert.ToInt32(lector["IDECARGO"]);
+                        cargo.NumeroPosiciones = Convert.ToInt32(lector["NUMPOSIC"]);
                        
-                        //cargo.NumeroPosiciones = Convert.ToInt32(lector["NUMPOSICION"]);
-
                     }
                 }
 

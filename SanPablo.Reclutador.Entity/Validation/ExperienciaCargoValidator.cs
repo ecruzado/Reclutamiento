@@ -23,15 +23,19 @@
                 .NotEmpty()
                 .WithMessage("Ingresar Meses de Experiencia");
             RuleFor(x => x.CantidadMesesExperiencia)
-                .InclusiveBetween(0, 12)
-                .WithMessage("Ingresar una cantidad válida");
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Ingresar una cantidad mayor igual a cero")
+                .LessThanOrEqualTo(12)
+                .WithMessage("Cantidad máximo de experiencia en meses es 12");
 
             RuleFor(x => x.PuntajeExperiencia)
                 .NotEmpty()
                 .WithMessage("Ingresar Puntaje");
             RuleFor(x => x.PuntajeExperiencia)
-                .InclusiveBetween(0, 20)
-                .WithMessage("Ingresar un puntaje válido");
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Ingresar un puntaje mayor igual a cero")
+                .LessThanOrEqualTo(20)
+                .WithMessage("Cantidad máximo de puntaje es 20");
 
          }
 

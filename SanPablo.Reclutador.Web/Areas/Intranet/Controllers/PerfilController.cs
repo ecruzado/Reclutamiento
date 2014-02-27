@@ -45,9 +45,10 @@
             {
 
                 var perfilViewModel = inicializarPerfil();
+                var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
                 if (ideSolicitud != null)
                 {
-                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud));
+                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud),usuario);
                    datosCargo.IdeSolicitud = Convert.ToInt32(ideSolicitud);
                    CargoPerfil = datosCargo;
                    

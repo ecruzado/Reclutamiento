@@ -166,7 +166,7 @@
              function (respuesta) {
                  if (respuesta.Resultado) {
                      $('#updateDialogAprobacion').dialog("close");
-                     mensajeResultado("Aprobación/Rechazo enviado exitosamente")
+                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
                  }
                  else {
                      notificacionError(respuesta.Mensaje);
@@ -201,6 +201,23 @@
     }
     function habilita() {
         document.getElementById('idB1').style.display = "block";
+    }
+
+    function verificarCodigo()
+    {
+        var codCodigo = $("#SolicitudNuevoCargo_CodigoCargo").val();
+        $.ajax({
+            data: { codCodigo: codCodigo },
+            type: "POST",
+            url: '@Url.Action("verificarCodigo", "SolicitudNuevoCargo")',
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    $("#SolicitudNuevoCargo_CodigoCargo").val("");
+                    mensajeResultado(data.Mensaje);
+                } 
+            }
+        });
     }
     function validarFormulario() {
         if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
@@ -296,7 +313,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Código de Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase", @onblur ="verificarCodigo()" })
                                     </div>
                                 </div>
                             </td>
@@ -319,11 +336,8 @@
                                 <div class="">
                                     <label class="control-label" for="selectError">Dependencia</label>
                                     <div class="controles">
-                                         @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
-                                        </div>
-                                        @*@Html.TextBoxFor(model => model.Dependencia, new { @disabled = "disabled" })*@
+                                        @Html.TextBoxFor(model => model.DependenciaSession.NombreDependencia, new { @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.DependenciaSession.IdeDependencia)
                                     </div>
                                 </div>
                             </td>
@@ -346,12 +360,8 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Departamento</label>
                                     <div class="controles">
-                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDepartamento)
-                                        </div>
-                                        @*@Html.TextBoxFor(model => model.Departamento, new { @disabled = "disabled" })*@
-                                        
+                                        @Html.TextBoxFor(model => model.DepartamentoSession.NombreDepartamento, new { @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)
                                     </div>
                                 </div>
                             </td>
@@ -371,11 +381,8 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Área</label>
                                     <div class="controles">
-                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
-                                        </div>
-                                        @*@Html.TextBoxFor(model => model.Area, new { @disabled = "disabled" })*@
+                                          @Html.TextBoxFor(model => model.AreaSession.NombreArea, new { @disabled = "disabled" })
+                                        @Html.HiddenFor(model => model.AreaSession.IdeArea)
                                    </div>
                                 </div>
                             </td>  

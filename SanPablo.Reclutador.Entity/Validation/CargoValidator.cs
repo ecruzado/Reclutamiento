@@ -66,12 +66,11 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual("00")
                 .WithMessage("Seleccionar el tipo de Requerimiento");
 
-            ////RuleFor(x => x.PuntajeMinimoPostulanteInterno)
-            ////    .InclusiveBetween(0, 20)
-            ////    .WithMessage("El rango del puntaje es de 0 a 20");
-            //RuleFor(x => x.PuntajeMinimoPostulanteInterno)
-            //    .LessThan(x => x.PuntajePostulanteInterno)
-            //    .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
+            RuleFor(x => x.PuntajeMinimoPostulanteInterno)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Ingresar puntaje válido")
+                .LessThanOrEqualTo(x => x.PuntajePostulanteInterno)
+                .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
 
         }
 

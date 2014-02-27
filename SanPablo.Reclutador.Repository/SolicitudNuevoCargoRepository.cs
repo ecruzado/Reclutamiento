@@ -57,5 +57,37 @@
                 lcon.Close();
             }
         }
+        public bool verificarCodCodigo(string  codigoCargo)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.FN_VERIFICAR_CODCARGO");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
+
+                cmd.Parameters.Add("p_codCargo", OracleType.VarChar).Value = codigoCargo;
+                cmd.Parameters.Add("c_retVal", OracleType.Number).Direction = ParameterDirection.ReturnValue;
+                cmd.ExecuteNonQuery();
+
+                int indicador = Convert.ToInt32(cmd.Parameters[cmd.Parameters.IndexOf("c_retVal")].Value);
+                if (indicador == 1)
+                { return true; }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
     }
 }

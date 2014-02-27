@@ -38,6 +38,8 @@
             
             @Html.HiddenFor(model=>model.LogSolicitudNuevoCargo.TipoEtapa)
             @Html.HiddenFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
+            @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeSede)
+            @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeArea)
             <td class="colImput" style="width:50px"></td>
             <td>
                 @Html.RadioButtonFor(model => model.Aprobado, "true", new { @id="Aprobado"}) Aprobar
