@@ -11,7 +11,7 @@ namespace SanPablo.Reclutador.Entity
     public class SolReqPersonal : BaseEntity
     {
 
-        public virtual int IDESOLREQPERSONAL { get; set; }
+        public virtual int IDESOLREQPERSONAL     { get; set; }
 	    public virtual string CODSOLREQPERSONAL  { get; set; }
 	    public virtual int IDESEDE               { get; set; }
 	    public virtual string TIPPUESTO          { get; set; }
@@ -84,10 +84,10 @@ namespace SanPablo.Reclutador.Entity
 	    public virtual string USRMODIFICA         { get; set; }
         public virtual DateTime FECMODIFICA       { get; set; }
 
-        public virtual string DEPENDENCIA_DES { get; set; }
-        public virtual string DEPARTAMENTO_DES { get; set; }
-        public virtual string AREA_DES { get; set; }
-        public virtual string SEDE_DES { get; set; }
+        public virtual string DEPENDENCIA_DES     { get; set; }
+        public virtual string DEPARTAMENTO_DES    { get; set; }
+        public virtual string AREA_DES            { get; set; }
+        public virtual string SEDE_DES            { get; set; }
         
 
 

@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PublicacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudNuevoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PublicacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudNuevoCargoViewModel.cs" />
@@ -376,6 +378,9 @@
     <Content Include="Areas\Intranet\Views\Usuario\PopupSede.cshtml" />
     <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudReemplazoCargo\ListaReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\InformacionAmpliacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
