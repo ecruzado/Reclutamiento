@@ -70,7 +70,10 @@
         TipoSucesoSolicitud = 46,
 
         //Tipo de Menu
-        TipoMenu = 47
+        TipoMenu = 47,
+
+        //Tipo de Vacante
+        TipoVacante = 48
 
     }
 

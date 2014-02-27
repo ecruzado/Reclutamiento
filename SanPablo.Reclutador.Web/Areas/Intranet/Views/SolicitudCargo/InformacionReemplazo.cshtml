@@ -1,8 +1,10 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
 @using SanPablo.Reclutador.Entity
 
+
 @{
     ViewBag.Title = "Solicitud Personal";
+    
 }
 @section Head{
 }
@@ -395,127 +397,122 @@
             </div>
             <h5>Motivo requerimiento</h5>
              
-            adadada
+@using (Html.BeginForm("Index", "SolicitudReemplazoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmSolReemplazoCargo", @class = "formulario-busqueda" }))
+{
+    @Html.ValidationSummary(true)
 
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Cargo</label>
-                            <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled" value="REQ0001">
+    
+     @Html.TextBoxFor(model => model.SolReqPersonal.IDEAREA, new { style = "display: none;" })
+     @Html.TextBoxFor(model => model.SolReqPersonal.IDEDEPARTAMENTO, new { style = "display: none;" })
+     @Html.TextBoxFor(model => model.SolReqPersonal.IDEDEPENDENCIA, new { style = "display: none;" })
+    
+                <table class="formulario-busqueda">
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                           
+                                <label class="control-label" for="inputSuccess">Requerimiento</label>
+                            <div class="controles">    
+                            @Html.TextBoxFor(model => model.SolReqPersonal.IDESOLREQPERSONAL, new { @class = "textoFormulario", @readonly = "readonly" })    
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Dependecia</label>
-                            <div class="controles">
-                                <select id="sedependencia" class="select-large valid">
-                                    <option selected="selected">Gerencia Médica</option>
-                                </select>                            
+                            
+                        </td>
+                        <td class="span5">
+                       
+                                <label class="control-label" for="inputSuccess">Dependecia</label>
+                                <div class="controles">
+                                     @Html.DropDownListFor(model => model.SolReqPersonal.IDEDEPENDENCIA, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IDEDEPENDENCIA), new { disabled = "disabled" })                      
+                                    
+                                    @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPENDENCIA_DES, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
+
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo Puesto</label>
-                            <div class="controles">
-                                <select id="setipopuesto" class="select-large valid">
-                                    <option selected="selected">Tiempo Completo</option>
-                                    <option>Tiempo Parcial</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
-                            <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo Vacante</label>
-                            <div class="controles">
-                                <select id="setipovacante" class="select-large valid">
-                                    <option value="0">Seleccionar</option>
-                                    <option value="2">Reemplazo - Vacaciones</option>
-                                    <option value="3">Reemplazo - Descanso Médico</option>
-                                    <option value="4">Reemplazo - Cese</option>
-                                    <option value="5">Reemplazo - Permiso</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                        </td>
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            
+                                <label class="control-label" for="inputSuccess">Departamento</label>
+                                <div class="controles">
+                                  
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IDEDEPARTAMENTO, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IDEDEPARTAMENTO), new { disabled = "disabled" })                      
+
+                                    @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPARTAMENTO_DES, new { @class = "textoFormulario",disabled = "disabled" })    *@
+                                </div>
+                           
+                        </td>
+                          <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                <select id="searea" class="select-large valid">
-                                    <option>Seleccionar</option>
-                                    <option selected="selected">Cuidados Intensivos</option>
-                                </select>
+                               
+                                @*@Html.TextBoxFor(model => model.SolReqPersonal.IDEAREA, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IDEAREA, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IDEAREA), new { disabled = "disabled" })                      
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Vacantes</label>
+                      
+                        </td>
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        
+                            <label class="control-label" for="selectError">Tipo Vacante</label>
                             <div class="controles">
-                                <input type="text" class="input-mini" id="txtcantidad" value="1">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TIPVACANTE, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TIPVACANTE))
                             </div>
-                        </div>
-                    </div>                    
-                    <div class="span5">
-                        <div class="">
+                        
+                        </td>
+                        <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                <select id="setipo" class="select-large valid">
-                                    <option>Seleccionar</option>
-                                    <option>Técnico en Enfermería</option>
-                                </select>
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IDECARGO, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IDECARGO))
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Observaciones</label>
+                       
+                        </td>
+                      
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                       
+                            <label class="control-label" for="inputSuccess">Vacantes</label>
                             <div class="controles">
-                                <textarea class="input-large" rows="3"></textarea>
+                                
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NUMVACANTES, new { @class = "textoFormulario" }) 
                             </div>
+                        
+                        </td>                    
+                        
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="inputSuccess">Observaciones</label>
+                        <div class="controles">
+                                @Html.TextAreaFor(model => model.SolReqPersonal.OBSERVACION, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
                         </div>
-                    </div>                    
-                </div>
+                        </td>                    
+                    </tr>
+                </table>
                 <div class="grilla-opciones">
-                    <h6>Remplazos</h6>
+                    <h6>Reemplazos</h6>
                         <div class="opciones">
-                            <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                            <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                            <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
+                            <a class="btn btn-small btn-info" title="Editar" id="btnEditarReemplazo"><i class="icon-edit icon-white"></i></a>
+                            <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminarReemplazo"><i class="icon-remove icon-white"></i></a>                                  
                         </div>
                         <div style="clear:both"></div>
                 </div>
                 <div class="tabla-datos">
                         <table id="grdListRemplazos">
                         </table>
-                    </div>
+                </div>
                 
                              
-            </form>
-            <h5>Perfil</h5>
+}
+           
+            
+            @if (!Accion.Nuevo.Equals(Model.Accion))
+            {
+                
+
+             <h5>Perfil</h5>
             <ul class="nav nav-tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
                 <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
@@ -1129,6 +1126,7 @@
 
                 </div>
             </div>
+            }
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>

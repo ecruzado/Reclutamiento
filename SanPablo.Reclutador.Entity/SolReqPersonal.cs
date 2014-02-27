@@ -8,7 +8,7 @@ namespace SanPablo.Reclutador.Entity
     using System.Linq;
     using System.Web;
     
-    public class SolicitudRempCargo : BaseEntity
+    public class SolReqPersonal : BaseEntity
     {
 
         public virtual int IDESOLREQPERSONAL { get; set; }
@@ -83,6 +83,12 @@ namespace SanPablo.Reclutador.Entity
 	    public virtual DateTime FECCREACION       { get; set; }
 	    public virtual string USRMODIFICA         { get; set; }
         public virtual DateTime FECMODIFICA       { get; set; }
+
+        public virtual string DEPENDENCIA_DES { get; set; }
+        public virtual string DEPARTAMENTO_DES { get; set; }
+        public virtual string AREA_DES { get; set; }
+        public virtual string SEDE_DES { get; set; }
+        
 
 
 

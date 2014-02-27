@@ -60,6 +60,7 @@
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
     <Compile Include="Interface\IListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\ISedeNivelRepository.cs" />
+    <Compile Include="Interface\ISolReqPersonalRepository.cs" />
     <Compile Include="ListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\ILogSolicitudNuevoCargoRepository.cs" />
     <Compile Include="Interface\ITipoRequerimiento.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="OpcionRepository.cs" />
     <Compile Include="RolOpcionRepository.cs" />
     <Compile Include="RolRepository.cs" />
+    <Compile Include="SolReqPersonalRepository.cs" />
     <Compile Include="TipoRequerimientoRepository.cs" />
     <Compile Include="UbigeoCargoRepository.cs" />
     <Compile Include="NivelAcademicoCargoRepository.cs" />

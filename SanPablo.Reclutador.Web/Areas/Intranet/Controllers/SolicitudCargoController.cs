@@ -17,8 +17,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     
     
     [Authorize]
-    public class SolicitudCargoController : Controller
+    public class SolicitudCargoController : BaseController
     {
+
+
+        /// <summary>
+        /// Se inicializa los repositorios de base de datos
+        /// </summary>
+        private IDetalleGeneralRepository _detalleGeneralRepository;
+        private ISolReqPersonalRepository _solReqPersonalRepository;
+        private IDependenciaRepository _dependenciaRepository;
+        private IAreaRepository _areaRepository;
+        private IDepartamentoRepository _departamentoRepository;
+      
+        public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
+                                         ISolReqPersonalRepository solReqPersonalRepository,
+                                         IDependenciaRepository dependenciaRepository,
+                                         IAreaRepository areaRepository,
+                                         IDepartamentoRepository departamentoRepository
+            )
+        {
+            _detalleGeneralRepository = detalleGeneralRepository;
+            _solReqPersonalRepository = solReqPersonalRepository;
+            _dependenciaRepository = dependenciaRepository;
+            _areaRepository = areaRepository;
+            _departamentoRepository = departamentoRepository;
+
+        }
+
+        
+
+
+
 
         #region Nuevo
 
@@ -939,10 +969,74 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// pagina para crear un nuevo reemplazo
+        /// </summary>
+        /// <returns></returns>
+        [ValidarSesion]
         public ActionResult CrearReemplazo()
         {
-            return View("InformacionReemplazo");
+            SolicitudRempCargoViewModel model;
+            SedeNivel UsuarioSede;
+            model = new SolicitudRempCargoViewModel();
+            
+            var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
+
+            if (objUsuarioSede!=null)
+            {
+                UsuarioSede = new SedeNivel();
+                UsuarioSede = (SedeNivel)objUsuarioSede;
+                model = Inicializar(UsuarioSede);
+            }
+            
+            model.SolReqPersonal = new SolReqPersonal();
+
+            model.Accion = Accion.Nuevo;
+
+            return View("InformacionReemplazo", model);
         }
+
+        /// <summary>
+        /// Inicializa la pagina inicial de reemplazo
+        /// </summary>
+        /// <returns></returns>
+       
+        private SolicitudRempCargoViewModel Inicializar(SedeNivel UsuarioSede)
+        {
+            var objModel = new SolicitudRempCargoViewModel();
+            objModel.SolReqPersonal = new SolReqPersonal();
+           
+            objModel.listaTipVacante=
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVacante));
+            objModel.listaTipVacante.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            objModel.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
+            objModel.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+
+            objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                        && x.IdeSede == UsuarioSede.IDESEDE
+                                                                        && x.IdeDependencia ==UsuarioSede.IDEDEPENDENCIA
+                                                                        ));
+            
+
+            objModel.listaDepartamento = new List<Departamento>(_departamentoRepository.GetBy(x => x.IdeDepartamento == UsuarioSede.IDEDEPARTAMENTO 
+                                                                                              && x.Dependencia.IdeDependencia == UsuarioSede.IDEDEPENDENCIA          
+                                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+            
+
+            objModel.listaArea = new List<Area>(_areaRepository.GetBy(x => x.IdeArea == UsuarioSede.IDEAREA
+                                                                      && x.Departamento.IdeDepartamento == UsuarioSede.IDEDEPARTAMENTO
+                                                                      && x.EstadoActivo == IndicadorActivo.Activo));
+            
+
+
+            return objModel;
+        }
+
+
+
         #endregion
 
         #region ranking

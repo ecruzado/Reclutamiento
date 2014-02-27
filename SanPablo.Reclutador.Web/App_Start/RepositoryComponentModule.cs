@@ -135,6 +135,9 @@
             builder.RegisterType<SedeNivelRepository>()
             .As<ISedeNivelRepository>();
 
+            builder.RegisterType<SolReqPersonalRepository>()
+           .As<ISolReqPersonalRepository>();
+
 
         }
     }

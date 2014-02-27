@@ -22,18 +22,7 @@
    
     $(document).ready(function () {
         
-        @*var mensaje = '@Session["MensajeVal"]';
        
-        if (mensaje != null && mensaje.length > 0) {
-           
-            MostrarMensaje(mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-        }
-        
-        @if (true)
-	    {
-            Session.Remove("MensajeVal");
-	    }*@
-
         
         $("#btnGuardarCriterio").click(function () {
             if ($("#frmCriterio").validate().form()) {
