@@ -123,6 +123,10 @@
             builder.RegisterType<UsuarioExtranetValidator>()
                 .Keyed<IValidator>(typeof(IValidator<UsuarioExtranet>))
                 .As<IValidator>();
+
+            builder.RegisterType<SolReqPersonalValidator>()
+                .Keyed<IValidator>(typeof(IValidator<SolReqPersonal>))
+                .As<IValidator>();
             
 
 

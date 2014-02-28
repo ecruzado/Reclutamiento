@@ -115,6 +115,7 @@
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
     <Compile Include="Validation\CompetenciaCargoValidator.cs" />
     <Compile Include="Validation\CargoValidator.cs" />
+    <Compile Include="Validation\SolReqPersonalValidator.cs" />
     <Compile Include="Validation\PasswordValidator.cs" />
     <Compile Include="Validation\LogSolicitudNuevoCargoValidator.cs" />
     <Compile Include="Validation\SolicitudNuevoCargoValidator.cs" />

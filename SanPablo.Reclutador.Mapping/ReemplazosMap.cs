@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FecInicioReemplazo, "FECINICIOREEMPLAZO");
             Map(x => x.FecFinReemplazo, "FECFINREEMPLAZO");
             Map(x => x.UsuarioCreacion, "USRCREACION");
-            Map(x => x.FechaModificacion, "FECCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
             Table("REEMPLAZOS");

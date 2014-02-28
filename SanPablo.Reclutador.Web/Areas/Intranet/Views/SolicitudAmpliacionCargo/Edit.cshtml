@@ -1,4 +1,4 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
 @{
     ViewBag.Title = "Solicitud Ampliación";
 }
@@ -7,87 +7,70 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    //Table initialisation 
+
     $(document).ready(function () {
-        $("#txtfechapublicacion").datepicker();
-        $("#txtfechaexpiracion").datepicker();
-        
-        var dlgobservacion = $("#dlgAprobarRechazo").dialog(
-           {
-               autoOpen: false,
-               modal: true,
-               title: "Aprobación/Rechazo",
-               width: 600,
-               height: 300,
-               buttons: {
-                   "Grabar": function () {
-                       //AsociarReciboAPolizaCorrecta();
-                       return true;
-                   },
-                   "Cancelar": function () {
-                       $(this).dialog("close");
-                       return false;
-                   }
-               }
-           });
 
-        $("#dlgEnviarSolicitud").dialog({
+        $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
+            width: 300,
             resizable: false,
-            height: 180,
             modal: true,
             buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
+                "Aceptar": function (e) {
+                    e.preventDefault();
+                    var result = $('#solicitudAmpliacionCargoForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "SolicitudAmpliacionCargo")',
+                        $("#solicitudAmpliacionCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $("#updateDialogConfirmacion").dialog("close");
+                                $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
+                                deshabilitarControles();
+                                MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO")
+                            }
+                            else {
+                                $(this).dialog("close");
+                                mensajeResultado("Solicitud no enviada intente nuevamente".Mensaje);
+                            }
+                        });
+                    }
+                    else {
+                        $(this).dialog("close");
+                        mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
+                    }
+
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
         });
-
-        $("#dlgGrabar").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 180,
-            modal: true,
-            buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-        //$("#txtEdadInicial").spinner();
-        //$("#txtEdadFinal").spinner();
-
     });
-    function RadioFormatter(cellvalue, options, rowObject) {
-        var strRdo = '<input type ="radio" name = "codigo">';
-        return strRdo;
-    }
 
-    function irATab(tab) {
-        $('a[href=#' + tab + ']').tab('show');
-    }
+  function confirmarEnvio()
+  {
+    var dialogDiv = $('#updateDialog');
+    dialogDiv.dialog('open');
+  }
 
-    function mostrarAprobarRechazar() {
-        $("#dlgAprobarRechazo").dialog('open');
-    }
+  function deshabilitarControles()
+  {
 
-    function mostrarEnvio(id) {
-        $("#dlgEnviarSolicitud").dialog("open");
-    }
+  }
 
-    function mostrarGrabar(id) {
-        $("#dlgGrabar").dialog("open");
-    }
+  function MostrarMensaje(mensaje, titulo)
+  {
+    Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
+  }
 
 </script>
 }
+@using (Html.BeginForm("Edit", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "solicitudAmpliacionCargoForm" }))
+{
+@Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -95,8 +78,8 @@
                 <h5>Solicitud de Ampliación de Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    @*@Html.TextBoxFor(model => model.SolReqPersonal, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled" })*@
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    @Html.TextBoxFor(model => model.SolReqPersonal.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
+                    @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>            
             </div>
             <h5>Motivo requerimiento</h5>
@@ -106,34 +89,37 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">
-                                <input type="text" class="input-small" id="txtcodigo" disabled="disabled" value="REQ0001">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { @class = "input-small", disabled = "disabled" })
                             </div>
                         </div>
                     </td>
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Dependencia <span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError">Dependencia </label>
                             <div class="controles">
-                                <select id="sedependencia" class="select-large valid">
-                                    <option selected="selected">Gerencia Médica</option>
-                                </select>                            
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Dependencia_des, new { @disabled = "disabled" })                           
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr class="formulario-fila">
                     <td class="span5">
+                      <div class="">
                         <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
                         <div class="controles">
-                            @*@Html.DropDownListFor(model=>model.SolReqPersonal.*@
+                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
+                             <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.SolReqPersonal.IdeCargo)
+                             </div>
                         </div>
+                       </div>
                     </td>
-                    <td class="span5">
-                        <label class="control-label" for="inputSuccess">Departamento <span class="text-error">*</span></label>
-                        <div class="controles">
-                            <select >
-                                <option>Seleccionar</option>                                    
-                            </select>
+                   <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Departamento </label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Departamento_des, new { @disabled = "disabled" })                           
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -141,33 +127,39 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
                             <div class="controles">
-                                <input type="text" class="input-mini" id="txtcantidad" value="1">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "input-small" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.NumVacantes)
+                                </div>
                             </div>
                     </td>                    
                     <td class="span5">
-                            <label class="control-label" for="inputSuccess">Área <span class="text-error">*</span></label>
+                            <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
-                                <select id="searea" class="select-large valid">
-                                    <option>Seleccionar</option>
-                                    <option selected="selected">Cuidados Intensivos</option>
-                                </select>
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @disabled = "disabled" })
                             </div>
                     </td> 
                 </tr>
                 <tr class="formulario-fila">
                     <td class="span5">
                          <div class="">
-                            <label class="control-label" for="inputSuccess">Observaciones</label>
+                            <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
                             <div class="controles">
-                                <textarea class="input-large" rows="3"></textarea>
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { @class = "input-large", rows = "3" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.Observacion)
+                             </div>
                             </div>
                         </div>
                     </td>
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Motivos</label>
+                            <label class="control-label" for="inputSuccess">Motivos <span class="text-error">*</span></label>
                             <div class="controles">
-                                <textarea class="input-large" rows="3"></textarea>
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Motivo, new { @class = "input-large", rows = "3" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.Motivo)
+                                </div>
                             </div>
                         </div>
                     </td>   
@@ -176,35 +168,13 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <button type="submit" class="btn btn-info" onclick="mostrarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</button>
+                <button class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</button>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
         
         </div>
     </div>
 </div>
-
-<div id="dlgAprobarRechazo">
-    <table style="width:100%">
-        <tr><td>Comentarios</td></tr>
-        <tr>               
-            <td><textarea class="input-xxlarge" id="taobservacionaprobacion" rows="3"></textarea></td>
-        </tr>
-        <tr>
-            <td style="height:10px;"></td>
-        </tr>
-        <tr>
-            <td ><input type="radio" name="aprobacion" value="1" /> Aprobar <input type="radio" name="aprobacion" value="0" /> Rechazar</td>
-        </tr>
-    </table>
-</div>
-
-<div id="dlgEnviarSolicitud" title="Mensaje">
-    <p></p> <p></p>
-    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de enviar la solicitud?</p>
-</div>
-
-<div id="dlgGrabar" title="Mensaje">
-    <p></p> <p></p>
-    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de grabar la solicitud?</p>
-</div>
+}
+<div id="updateDialogConfirmacion" title="Confirmar Envio "></div>
+<div id="divMensaje"><span id="spanMensaje"></span></div>

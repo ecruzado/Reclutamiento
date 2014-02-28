@@ -39,6 +39,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IndSexMascu, "INDSEXMASCU");
             Map(x => x.IndSexFemen, "INDSEXFEMEN");
             Map(x => x.Observacion, "OBSERVACION");
+            Map(x => x.Motivo, "MOTIVO");
             Map(x => x.PuntTotPostuinte, "PUNTTOTPOSTUINTE");
             Map(x => x.PuntMinPostuinte, "PUNTMINPOSTUINTE");
             Map(x => x.PuntTotEdad, "PUNTTOTEDAD");
@@ -74,7 +75,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FecExpiracacion, "FECEXPIRACACION");
             Map(x => x.TipVacante, "TIPVACANTE");
             Map(x => x.NumVacantes, "NUMVACANTES");
-            Map(x => x.Idecargo, "IDECARGO");
+            Map(x => x.IdeCargo, "IDECARGO");
             Map(x => x.NomPersonReemplazo, "NOMPERSONREEMPLAZO");
             Map(x => x.FecIniReemplazo, "FECINIREEMPLAZO");
             Map(x => x.FecfInReemplazo, "FECFINREEMPLAZO");
@@ -82,9 +83,10 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IndVerSueldo, "INDVERSUELDO");
             Map(x => x.IndVerSexoMasc, "INDVERSEXOMASC");
             Map(x => x.IndVerSexoFem, "INDVERSEXOFEM");
-           
+            Map(x => x.EstadoActivo, "ESTACTIVO");
+
             Map(x => x.UsuarioCreacion, "USRCREACION");
-            Map(x => x.FechaModificacion, "FECCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICA");
             Map(x => x.FechaModificacion, "FECMODIFICA");
 

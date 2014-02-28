@@ -29,10 +29,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionObservaciones { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public virtual DateTime FechaPublicacion { get; set; }
+        public virtual DateTime? FechaPublicacion { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public virtual DateTime FechaExpiracion { get; set; }
+        public virtual DateTime? FechaExpiracion { get; set; }
         public virtual string  Motivo { get; set; }
         public virtual string EstadoActivo { get; set; }
 
