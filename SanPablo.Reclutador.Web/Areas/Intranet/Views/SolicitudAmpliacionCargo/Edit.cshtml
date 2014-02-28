@@ -27,9 +27,8 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $("#updateDialogConfirmacion").dialog("close");
-                                $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
-                                deshabilitarControles();
-                                MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO")
+                                $("#SolReqPersonal_IdeSolReqPersonal").val(respuesta.IdDato);
+                                MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO");
                             }
                             else {
                                 $(this).dialog("close");
@@ -39,7 +38,7 @@
                     }
                     else {
                         $(this).dialog("close");
-                        mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "SAN PABLO");
                     }
 
                 },
@@ -52,8 +51,9 @@
 
   function confirmarEnvio()
   {
-    var dialogDiv = $('#updateDialog');
+    var dialogDiv = $('#updateDialogConfirmacion');
     dialogDiv.dialog('open');
+    return false;
   }
 
   function deshabilitarControles()
@@ -78,8 +78,8 @@
                 <h5>Solicitud de Ampliación de Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
+                    @Html.HiddenFor(model=>model.SolReqPersonal.IdeSede)
                     @Html.TextBoxFor(model => model.SolReqPersonal.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
-                    @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>            
             </div>
             <h5>Motivo requerimiento</h5>
@@ -97,6 +97,7 @@
                         <div class="">
                             <label class="control-label" for="selectError">Dependencia </label>
                             <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeDependencia)
                                 @Html.TextBoxFor(model => model.SolReqPersonal.Dependencia_des, new { @disabled = "disabled" })                           
                             </div>
                         </div>
@@ -118,6 +119,7 @@
                         <div class="">
                             <label class="control-label" for="selectError">Departamento </label>
                             <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeDepartamento)
                                 @Html.TextBoxFor(model => model.SolReqPersonal.Departamento_des, new { @disabled = "disabled" })                           
                             </div>
                         </div>
@@ -136,6 +138,7 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeArea)
                                 @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @disabled = "disabled" })
                             </div>
                     </td> 
@@ -168,7 +171,7 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <button class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</button>
+                <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
         
@@ -176,5 +179,5 @@
     </div>
 </div>
 }
-<div id="updateDialogConfirmacion" title="Confirmar Envio "></div>
+<div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>

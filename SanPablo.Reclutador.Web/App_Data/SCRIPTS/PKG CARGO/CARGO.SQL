@@ -12,15 +12,14 @@ CREATE TABLE CARGO
   PUNTPOSTUINTE      NUMBER(2), 
   SEXO               VARCHAR2(1), 
   INDSEXO            VARCHAR2(1), 
-  PUNTSEXO			 NUMBER(2),
+  PUNTSEXO			     NUMBER(2),
   EDADINICIO         NUMBER(8),
   EDADFIN            NUMBER(2), 
   PUNTEDAD           NUMBER(2), 
   INDEDAD            VARCHAR(1),
   TIPRANGOSALARIO    VARCHAR2(3), 
   TIPMONEDA          VARCHAR2(3), 
-  PUNTSALARIO        NUMBER(2), 
-  INDVERSALARIO      VARCHAR2(1), 
+  PUNTSALARIO        NUMBER(2),  
   TIPREQUERIMIENTO	 VARCHAR2(3),
   OBJETIVOSCARGO     VARCHAR2(255),
   FUNCIONESCARGO     VARCHAR2(255),
@@ -75,7 +74,7 @@ COMMENT ON COLUMN CARGO.DESCARGO           IS 'Nombre largo del cargo.';
 COMMENT ON COLUMN CARGO.IDEAREA            IS 'Código del área';
 COMMENT ON COLUMN CARGO.IDEAREA            IS 'Código del área';
 COMMENT ON COLUMN CARGO.NUMPOSICION        IS 'Número de posiciones del cargo';
-COMMENT ON COLUMN CARGO.PUNTPOSTUINTE      IS 'Puntaje para el postulante interno';
+
 COMMENT ON COLUMN CARGO.SEXO               IS 'Puntaje para sexo';
 COMMENT ON COLUMN CARGO.INDSEXO            IS 'Indicador de sexo masculino';
 COMMENT ON COLUMN CARGO.EDADFIN            IS 'Rango de edad final para el cargo';
@@ -83,7 +82,7 @@ COMMENT ON COLUMN CARGO.PUNTEDAD           IS 'Puntaje para el rango de edad';
 COMMENT ON COLUMN CARGO.TIPRANGOSALARIO    IS 'Rango salarial inicial';
 COMMENT ON COLUMN CARGO.TIPMONEDA          IS 'Código de la moneda del salario (tabla general)';
 COMMENT ON COLUMN CARGO.PUNTSALARIO        IS 'Puntaje correspondiente al rango de salario indicado';
-COMMENT ON COLUMN CARGO.INDVERSALARIO      IS 'Indicador de visualización del salario';
+
 COMMENT ON COLUMN CARGO.OBSERVACIONCARGO   IS 'Observaciones del puesto (sección General)';
 COMMENT ON COLUMN CARGO.PUNTTOTPOSTUINTE   IS 'Puntaje total del postulante interno';
 COMMENT ON COLUMN CARGO.PUNTMINPOSTUINTE   IS 'Puntaje mínimo del postulante interno';

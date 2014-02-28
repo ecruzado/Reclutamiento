@@ -60,15 +60,15 @@
                 .EmailAddress()
                 .WithMessage("Ingresar un correo válido");
 
-            //RuleFor(x => x.FechaTrabajoFin)
-            //    .GreaterThan(x => x.FechaTrabajoInicio)
-            //    .When(x => x.ActualmenteTrabajando.Equals(false))
-            //    .WithMessage("Ingresar una fecha final válida");
+            RuleFor(x => x.FechaTrabajoFin)
+                .GreaterThan(x => x.FechaTrabajoInicio.Value).When(x => x.FechaTrabajoInicio != null)
+                .When(x => x.ActualmenteTrabajando.Equals(false))
+                .WithMessage("Ingresar una fecha final válida");
 
             //When(x => x.ActualmenteTrabajando.Equals(false), () =>
             //{
             //    RuleFor(x => x.FechaTrabajoFin)
-            //        .GreaterThan(x => x.FechaTrabajoInicio)
+            //        .GreaterThan(x => x.FechaTrabajoInicio).When(x=>x.FechaTrabajoInicio != null)
             //        .WithMessage("Ingresar una fecha final válida");
             //});
         }

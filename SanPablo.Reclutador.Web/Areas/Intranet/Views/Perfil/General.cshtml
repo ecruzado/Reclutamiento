@@ -42,9 +42,9 @@
                             <label class="control-label" for="input01">Postulante Interno</label>
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.Cargo.PuntajePostulanteInterno, new { @class = "input-xxmini" })
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.PuntajePostulanteInterno)
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeTotalPostulanteInterno)
                             </div>
                         </td>
                         <td></td>

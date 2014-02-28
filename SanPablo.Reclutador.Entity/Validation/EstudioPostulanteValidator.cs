@@ -41,14 +41,14 @@
 
 
             RuleFor(x => x.FechaEstudioFin)
-                .GreaterThan(x => x.FechaEstudioInicio)
+                .GreaterThan(x => x.FechaEstudioInicio.Value)
                 .When(x => x.ActualmenteEstudiando.Equals(false))
                 .WithMessage("Ingresar una fecha final válida");
             
             When(x => x.ActualmenteEstudiando.Equals(false), () =>
             {
                 RuleFor(x => x.FechaEstudioFin)
-                    .GreaterThan(x => x.FechaEstudioInicio)
+                    .GreaterThan(x => x.FechaEstudioInicio.Value)
                     .WithMessage("Ingresar una fecha final válida");
             });
             

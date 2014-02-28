@@ -97,7 +97,6 @@
             if (IdePostulante != 0)
             {
                 postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-               // postulanteGeneralViewModel.directorioImagen = Bytes_A_Imagen(postulanteGeneralViewModel.Postulante.FotoPostulante);
                 mostrarUbigeo(postulanteGeneralViewModel);
             }
             return View(postulanteGeneralViewModel);
@@ -404,48 +403,6 @@
 
         }
         #endregion
-
- 
-
-        public ActionResult Referencias()
-        {
-            return View("Referencias");
-        }
-
-        public ActionResult Reclutamientos()
-        {
-            return View("Reclutamientos");
-        }
-
-        public ActionResult DetalleCargo()
-        {
-            return View("DetalleCargo");
-        }
-
-        public ActionResult InstruccionesExamen()
-        {
-            return View("InstruccionesExamen");
-        }
-
-        public ActionResult Lista()
-        {
-            return View();
-        }
-
-        public ActionResult Postulaciones()
-        {
-            return View();
-        }
-        public ActionResult EvaluacionPostulante()
-        {
-            return View("EvaluacionPostulante");
-        }
-
-        public ActionResult Examen()
-        {
-            return View("Examen");
-        }
-
 
     }
 }

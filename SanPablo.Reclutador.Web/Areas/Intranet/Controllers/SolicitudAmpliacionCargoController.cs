@@ -21,14 +21,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private ISolReqPersonalRepository _solicitudAmpliacionPersonal;
         private ICargoRepository _cargoRepository;
+        private IAreaRepository _areaRepository;
+        private IDependenciaRepository _dependenciaRepository;
+        private IDepartamentoRepository _departamentoRepository;
 
         public SolicitudAmpliacionCargoController(IDetalleGeneralRepository detalleGeneralRepository,
                                                   ISolReqPersonalRepository solicitudAmpliacionPersonal,
-                                                  ICargoRepository cargoRepository)
+                                                  ICargoRepository cargoRepository,
+                                                  IAreaRepository areaRepository,
+                                                  IDependenciaRepository dependenciaRepository,
+                                                  IDepartamentoRepository departamentoRepository)
         {
             _detalleGeneralRepository = detalleGeneralRepository;
             _solicitudAmpliacionPersonal = solicitudAmpliacionPersonal;
             _cargoRepository = cargoRepository;
+            _areaRepository = areaRepository;
+            _dependenciaRepository = dependenciaRepository;
+            _departamentoRepository = departamentoRepository;
             
         }
         
@@ -50,9 +59,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             else
             {
                 var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-                solicitudModel.SolReqPersonal.IdeArea = usuario.IDEAREA;
-                solicitudModel.SolReqPersonal.IdeDepartamento = usuario.IDEDEPARTAMENTO;
-                solicitudModel.SolReqPersonal.IdeDependencia = usuario.IDEDEPENDENCIA;
+                SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
+                solicitudAmpliacion.IdeArea = usuario.IDEAREA;
+                solicitudAmpliacion.IdeSede = usuario.IDESEDE;
+                solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
+                solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
+                var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuario.IDEDEPARTAMENTO);
+                var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuario.IDEDEPENDENCIA);
+                var area = _areaRepository.GetSingle(x => x.IdeArea == usuario.IDEAREA);
+                solicitudAmpliacion.Departamento_des = departamento.NombreDepartamento;
+                solicitudAmpliacion.Dependencia_des = dependencia.NombreDependencia;
+                solicitudAmpliacion.Area_des = area.NombreArea;
+                solicitudModel.SolReqPersonal = solicitudAmpliacion;
             }
             return View(solicitudModel);
         }
@@ -77,7 +95,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.FechaCreacion = FechaCreacion;
                 solicitudAmpliacion.UsuarioCreacion = "YO";
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
-
                 _solicitudAmpliacionPersonal.Add(solicitudAmpliacion);
 
                 objJsonMessage.Mensaje = "Solicitud enviada correctamente";
