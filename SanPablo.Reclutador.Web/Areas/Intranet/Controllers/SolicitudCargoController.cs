@@ -1035,6 +1035,156 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return objModel;
         }
 
+       /// <summary>
+       /// Incializa el popup de reemplazo
+       /// </summary>
+       /// <returns></returns>
+        public ActionResult InicioPopupReemplazo() 
+        {
+
+            SolicitudRempCargoViewModel model;
+
+            model = new SolicitudRempCargoViewModel();
+
+            model.Reemplazo = new Reemplazo();
+
+            DateTime Hoy = DateTime.Today;
+
+            //model.Reemplazo.FecInicioReemplazo = Hoy;
+            //model.Reemplazo.FecFinReemplazo = Hoy.AddDays(1);
+
+
+            return View("PopupListaReemplazo",model);
+        }
+        
+        /// <summary>
+        /// obtiene los valores del popup
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SetPopupReemplazo(SolicitudRempCargoViewModel model) 
+        {
+
+            JsonMessage objJson = new JsonMessage();
+            Reemplazo objReemplazo;
+            objReemplazo = new Reemplazo();
+
+
+            List<Reemplazo> lista = new List<Reemplazo>();
+
+            var listaInicio = Session[ConstanteSesion.ListaReemplazo];
+
+            if (listaInicio!=null)
+            {
+                List<Reemplazo> list = (List<Reemplazo>)listaInicio;
+                foreach (Reemplazo item in list)
+                {
+                    objReemplazo = new Reemplazo();
+                    objReemplazo = item;
+                    lista.Add(objReemplazo);
+                }
+            }
+
+
+            objReemplazo = new Reemplazo();
+            objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+            objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+            objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+            objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+            objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
+
+            lista.Add(objReemplazo);
+
+            Session[ConstanteSesion.ListaReemplazo] = lista;
+            objJson.Resultado = true;
+
+
+            return Json(objJson);
+        }
+
+
+        /// <summary>
+        /// lista de reemplazos
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListReemplazoReq(GridTable grid)
+        {
+            try
+            {
+                List<Reemplazo> ListaReemplazo = new List<Reemplazo>();
+                Reemplazo ObjReemplazo;
+                var objListaReemplazo = Session[ConstanteSesion.ListaReemplazo];
+
+
+
+                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                {
+                    if (objListaReemplazo != null)
+                    {
+
+                        List<Reemplazo> lista = (List<Reemplazo>)objListaReemplazo;
+
+                        ListaReemplazo =
+                                    (lista.Where(n => n.IdeSolReqPersonal == Convert.ToInt32(grid.rules[0].data)).ToList());
+                    }
+
+                }
+                else {
+
+                    if (objListaReemplazo != null)
+                    {
+
+                        List<Reemplazo> lista = (List<Reemplazo>)objListaReemplazo;
+
+                        ListaReemplazo = lista;
+
+                    }
+                    else 
+                    { 
+                        ObjReemplazo = new Reemplazo();
+                      
+                        ListaReemplazo.Add(ObjReemplazo);
+                    }
+                
+                }
+
+
+                var generic = GetListar(ListaReemplazo,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+               
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeSolReqPersonal.ToString(),
+                    cell = new string[]
+                            {
+                               
+                                item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
+                                item.IdReemplazo==null?"":item.IdReemplazo.ToString(),
+                                item.FecInicioReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecInicioReemplazo), 
+                                item.FecFinalReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecFinalReemplazo),
+                                item.Nombres==null?"":item.Nombres,
+                                item.ApePaterno==null?"":item.ApePaterno,
+                                item.ApeMaterno==null?"":item.ApeMaterno
+                    
+                            }
+                }).ToArray();
+
+               
+
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
+        //
 
 
         #endregion

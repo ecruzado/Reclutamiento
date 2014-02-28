@@ -323,6 +323,94 @@ namespace SanPablo.Reclutador.Web.Core
         #endregion Propiedades
 
 
+        /// <summary>
+        /// obtiene los datos de una lista para mostrar en el jqgrid
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="logic"></param>
+        /// <param name="sidx"></param>
+        /// <param name="sord"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="search"></param>
+        /// <param name="searchField"></param>
+        /// <param name="searchOper"></param>
+        /// <param name="searchString"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        protected GenericDouble<JQgrid, T> GetListar<T>(List<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString) where T : class
+        {
+            if (string.IsNullOrEmpty(sidx))
+            {
+                sidx = string.Empty;
+            }
+            if (string.IsNullOrEmpty(sord))
+            {
+                sord = "desc";
+            }
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            if (pageSize == 0)
+            {
+                pageSize = 100;
+            }
+
+            var jqgrid = new JQgrid();
+            IList<T> list;
+
+            try
+            {
+                int totalPages = 0;
+
+              
+                var count = logic.Count();
+
+                if (count > 0 && pageSize > 0)
+                {
+                    if (count % pageSize > 0)
+                    {
+                        totalPages = (int)Math.Ceiling((decimal)(count / pageSize));
+                        totalPages = (int)(count / pageSize) + 1;
+                    }
+                    else
+                    {
+                        totalPages = (int)(count / pageSize);
+                    }
+                    totalPages = totalPages == 0 ? 1 : totalPages;
+                }
+
+                pageIndex = pageIndex > totalPages ? totalPages : pageIndex;
+
+                var start = pageSize * pageIndex - pageSize;
+                if (start < 0)
+                {
+                    start = 0;
+                }
+
+                jqgrid.total = totalPages;
+                jqgrid.page = pageIndex;
+                jqgrid.records = count;
+                jqgrid.start = start;
+
+               //LIst = logic.GetPaging(sidx, true, pageIndex,pageSize,where).ToList();
+
+               // pageSize * (pageIndex - 1)
+                //var lista = new List<Criterio>();
+                //var listap = lista.Skip(grid.rows * grid.page).Take(grid.rows);
+                //lista.Count();
+               // list = logic.Take(pageSize).ToList();
+                list = logic.Skip((pageIndex-1) * pageSize).Take(pageSize).ToList();
+                //list = logic.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return new GenericDouble<JQgrid, T>(jqgrid, list);
+        }
+
 
     }
 }

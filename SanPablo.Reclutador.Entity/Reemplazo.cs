@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Web; 
 
 
 namespace SanPablo.Reclutador.Entity
@@ -12,9 +13,16 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ApePaterno  { get; set; }
         public virtual string ApeMaterno  { get; set; }
         public virtual string Nombres     { get; set; }
-        public virtual DateTime FecInicioReemplazo  { get; set; }
-        public virtual DateTime FecFinReemplazo     { get; set; }
-  
+        public virtual int IdeSolReqPersonal    { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public virtual DateTime? FecFinalReemplazo { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public virtual DateTime? FecInicioReemplazo  { get; set; }
+
+       
     }
 
 }

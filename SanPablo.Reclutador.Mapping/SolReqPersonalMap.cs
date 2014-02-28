@@ -56,7 +56,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.PuntMinExplaboral, "PUNTMINEXPLABORAL");
             Map(x => x.PuntTotFundEse, "PUNTTOTFUNDESE");
             Map(x => x.PuntMinFundEse, "PUNTMINFUNDESE");
-            Map(x => x.PuntTotConoGen     , "PUNTTOTCONOGEN");
+            Map(x => x.PuntTotConoGen, "PUNTTOTCONOGEN");
             Map(x => x.PuntMinConoGen, "PUNTMINCONOGEN");
             Map(x => x.PuntTotConoIdioma, "PUNTTOTCONOIDIOMA");
             Map(x => x.PuntMinConoIdioma, "PUNTMINCONOIDIOMA");
