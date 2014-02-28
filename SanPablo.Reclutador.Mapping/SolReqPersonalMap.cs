@@ -55,7 +55,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.PuntMinExplaboral, "PUNTMINEXPLABORAL");
             Map(x => x.PuntTotFundEse, "PUNTTOTFUNDESE");
             Map(x => x.PuntMinFundEse, "PUNTMINFUNDESE");
-            Map(x => x.PuntTotConoGen     , "PUNTTOTCONOGEN");
+            Map(x => x.PuntTotConoGen, "PUNTTOTCONOGEN");
             Map(x => x.PuntMinConoGen, "PUNTMINCONOGEN");
             Map(x => x.PuntTotConoIdioma, "PUNTTOTCONOIDIOMA");
             Map(x => x.PuntMinConoIdioma, "PUNTMINCONOIDIOMA");
@@ -82,9 +82,9 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IndVerSueldo, "INDVERSUELDO");
             Map(x => x.IndVerSexoMasc, "INDVERSEXOMASC");
             Map(x => x.IndVerSexoFem, "INDVERSEXOFEM");
-           
+
             Map(x => x.UsuarioCreacion, "USRCREACION");
-            Map(x => x.FechaModificacion, "FECCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICA");
             Map(x => x.FechaModificacion, "FECMODIFICA");
 

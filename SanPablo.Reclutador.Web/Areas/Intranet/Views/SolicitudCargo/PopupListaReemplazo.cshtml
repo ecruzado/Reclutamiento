@@ -11,6 +11,9 @@
 
     });
 
+    
+
+
 </script>
 
 
@@ -21,7 +24,7 @@
     <table style="margin-left:30px;">
         <tr >
             <td class="colEtiqueta" >
-                <label class="etiquetaFormulario" for="setipoInstitucion">Nombres<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Nombres<span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
                
@@ -35,7 +38,7 @@
         
         <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="setInstitucion">Apellido Paterno<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Apellido Paterno<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
 
@@ -48,7 +51,7 @@
         
          <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="setInstitucion">Apellido Materno<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Apellido Materno<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
                  @Html.TextBoxFor(model => model.Reemplazo.ApeMaterno, new { @class = "textoFormulario" ,type = "password" ,  maxlength="100"})      
@@ -59,10 +62,10 @@
         </tr>    
          <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="setInstitucion">Fecha Inicio<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Fecha Inicio<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                 @Html.TextBoxFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", @readonly="readonly"})      
+                 @Html.EditorFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
                 <div class="tex-error" style="font-size:12px;color:red">   
                     @Html.ValidationMessageFor(model => model.Reemplazo.FecInicioReemplazo )
                 </div>
@@ -70,16 +73,18 @@
         </tr>    
          <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="setInstitucion">Fecha Fin<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Fecha Fin<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                 @Html.TextBoxFor(model => model.Reemplazo.FecFinReemplazo, new { @class = "textoFormulario" ,  maxlength="15",@readonly="readonly"})      
+                 @Html.EditorFor(model => model.Reemplazo.FecFinalReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
                 <div class="tex-error" style="font-size:12px;color:red">   
-                 @Html.ValidationMessageFor(model => model.Reemplazo.FecFinReemplazo )
+                 @Html.ValidationMessageFor(model => model.Reemplazo.FecFinalReemplazo )
                 </div>
             </td>
         </tr>    
 
+
+         
         
         <tr>
             <td>
