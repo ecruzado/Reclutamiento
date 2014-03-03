@@ -93,7 +93,7 @@ namespace SanPablo.Reclutador.Repository
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET.FN_GET_LISTAREQ");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = obj.Idecargo;
+                 lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = obj.IdeCargo;
                  lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = obj.IdeDependencia;
                  lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = obj.IdeDepartamento;
                  lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = obj.IdeArea;
@@ -114,7 +114,7 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal = new SolReqPersonal();
                      lobSolReqPersonal.IdeSolReqPersonal = Convert.ToInt32(ldrSolReqPersonal["IDESOLREQPERSONAL"]);
                      lobSolReqPersonal.CodSolReqPersonal = Convert.ToString(ldrSolReqPersonal["CODSOLREQPERSONAL"]);
-                     lobSolReqPersonal.Idecargo = Convert.ToInt32(ldrSolReqPersonal["IDECARGO"]);
+                     lobSolReqPersonal.IdeCargo = Convert.ToInt32(ldrSolReqPersonal["IDECARGO"]);
                      lobSolReqPersonal.DesCargo = Convert.ToString(ldrSolReqPersonal["DESCARGO"]);
                      lobSolReqPersonal.IdeDependencia = Convert.ToInt32(ldrSolReqPersonal["IDEDEPENDENCIA"]);
                      lobSolReqPersonal.Dependencia_des = Convert.ToString(ldrSolReqPersonal["DESDEPENDENCIA"]);
