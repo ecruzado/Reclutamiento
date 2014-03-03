@@ -25,8 +25,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.ObjetivoCargo, "OBJETIVOCARGO");
             Map(x => x.PuntPostuinte, "PUNTPOSTUINTE");
             Map(x => x.PuntRefElaboral, "PUNTREFELABORAL");
-            Map(x => x.IndMasculino, "INDMASCULINO");
-            Map(x => x.IndFemenino, "INDFEMENINO");
+           
             Map(x => x.PuntSexo, "PUNTSEXO");
             Map(x => x.EdadInicio, "EDADINICIO");
             Map(x => x.edadfin, "EDADFIN");
@@ -35,9 +34,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.SalarioFin, "SALARIOFIN");
             Map(x => x.TipMoneda, "TIPMONEDA");
             Map(x => x.PuntSalario, "PUNTSALARIO");
-            Map(x => x.IndVerSalario, "INDVERSALARIO");
-            Map(x => x.IndSexMascu, "INDSEXMASCU");
-            Map(x => x.IndSexFemen, "INDSEXFEMEN");
+            
             Map(x => x.Observacion, "OBSERVACION");
             Map(x => x.Motivo, "MOTIVO");
             Map(x => x.PuntTotPostuinte, "PUNTTOTPOSTUINTE");
@@ -64,6 +61,8 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.PuntMinDisCapa, "PUNTMINDISCAPA");
             Map(x => x.PuntTotHorario, "PUNTTOTHORARIO");
             Map(x => x.PuntMinHorario, "PUNTMINHORARIO");
+            Map(x => x.PuntajeTotalOfimatica, "PUNTTOTOFIMATI");
+            Map(x => x.PuntajeMinimoOfimatica, "PUNTMINOFIMATI");
             Map(x => x.PuntTotUbigeo, "PUNTTOTUBIGEO");
             Map(x => x.PuntMinUbigeo, "PUNTMINUBIGEO");
             Map(x => x.PuntTotReflaboral, "PUNTTOTREFLABORAL");
@@ -81,14 +80,24 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FecfInReemplazo, "FECFINREEMPLAZO");
             Map(x => x.IndCargo, "INDCARGO");
             Map(x => x.IndVerSueldo, "INDVERSUELDO");
-            Map(x => x.IndVerSexoMasc, "INDVERSEXOMASC");
-            Map(x => x.IndVerSexoFem, "INDVERSEXOFEM");
-            Map(x => x.EstadoActivo, "ESTACTIVO");
 
+           
+            Map(x => x.EstadoActivo, "ESTACTIVO");
+            Map(x => x.FuncionesCargo, "FUNCIONESCARGO");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICA");
             Map(x => x.FechaModificacion, "FECMODIFICA");
+
+
+            //
+            Map(x => x.IndicadorSexo, "INDSEXO");
+            Map(x => x.IndicadorEdad, "INDEDAD");
+            Map(x => x.IndicadorSalario, "INDVERSALARIO");
+            Map(x => x.Sexo , "SEXO");
+            Map(x => x.TipoRequerimiento, "TIPREQUERIMIENTO");
+            Map(x => x.TipoRangoSalario, "TIPRANGOSALARIO");
+
 
             Map(x => x.Sede_des).Formula("(SELECT nvl(s.descripcion,'') descripcion FROM SEDE S WHERE S.IDESEDE=IDESEDE)");
             Map(x => x.Dependencia_des).Formula("(SELECT nvl(d.nomdependencia,'') nomdependencia FROM DEPENDENCIA d WHERE d.IDESEDE=IDESEDE AND d.idedependencia=IDEDEPENDENCIA)");

@@ -1,13 +1,12 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
 @{
     ViewBag.Title = "Perfil";
-    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{  
 
 
     }
-@using (Html.BeginForm("ConfiguracionPerfil", "Perfil", FormMethod.Post, new { @id = "configuracionPerfilForm" }))
+@using (Html.BeginForm("ConfiguracionPerfil", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "configuracionPerfilForm" }))
 {
 
 <!--CONFIGURACION PERFIL -->
@@ -40,12 +39,12 @@
                                         <td class="td-label" style="width: 130px;">
                                             <label>Postulante Interno</label></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalPostulanteInterno, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntPostuinte, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinPostuinte, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
+                                                 @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinPostuinte)
                                             </div>
 
                                     </tr>
@@ -53,12 +52,12 @@
                                         <td></td>
                                         <td class="td-label">Edad</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinEdad, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinEdad)
                                             </div>
                                             </td>
                                     </tr>
@@ -67,104 +66,104 @@
                                         <td class="td-label">
                                             <label>Sexo</label></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeSexo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntSexo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinSexo, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSexo)
+                                                 @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinSexo)
                                             </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Rango Salarial</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeSalario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntSalario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                          <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinSalario, new {@Class ="input-xxmini text-right"})
                                         <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSalario)
+                                             @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinSalario)
                                         </div>    </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Nivel de Estudios</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalNivelEstudio, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotNivelEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinNivelEst, new {@Class ="input-xxmini text-right"})
                                         <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
+                                            @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinNivelEst)
                                         </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Centro de Estudios</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalCentroEstudio, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotCentroEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinNivelEst, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinNivelEst)
                                             </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Experiencia Laboral</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalExperiencia, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotExpLaboral, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinExplaboral, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoCentroEstudio)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinExplaboral)
                                             </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Ofimatica</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalOfimatica, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntajeTotalOfimatica, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoOfimatica)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntajeMinimoOfimatica)
                                             </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Idiomas</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalIdioma, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotConoIdioma, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
 
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinConoIdioma, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoIdioma)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinConoIdioma)
                                             </div>                                    </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Generales</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalConocimientoGeneral, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotConoGen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinConoGen, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoConocimientoGeneral)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinConoGen)
                                             </div> </td>
                                     </tr>
                                     <tr>
@@ -172,13 +171,13 @@
                                         <td class="td-label">
                                             <label>Discapacidades</label></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalDiscapacidad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotDisCapa, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinDisCapa, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoDiscapacidad)
+                                             @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinDisCapa)
                                             </div>
                                         </td>
                                     </tr>
@@ -186,13 +185,13 @@
                                         <td></td>
                                         <td class="td-label">Horario</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalHorario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotHorario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                          </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinHorario, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoHorario)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinHorario)
                                             </div>
                                         </td>
                                     </tr>
@@ -200,14 +199,14 @@
                                         <td></td>
                                         <td class="td-label">Ubigeo</td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalUbigeo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotUbigeo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
 
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinUbigeo, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoUbigeo)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinUbigeo)
                                             </div>
                                         </td>
                                     </tr>
@@ -239,13 +238,13 @@
                                     <tr>
                                         <td class="td-label" style="width:130px;">Exámenes</td>
                                         <td>
-                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalExamen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
+                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotExamen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinExamen, new {@Class ="input-xxmini text-right"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoExamen)
+                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinExamen)
                                             </div>
                                             </td>
                                     </tr>                                                       
@@ -259,7 +258,7 @@
                                         <td class="td-label" style="width:130px;">
                                             Postulantes Pre-Selec.
                                         </td>
-                                        <td>  @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"}) @*<input type="text" class="input-xxmini text-right" value="9">*@</td>
+                                        <td>  @Html.TextBoxFor(model=>model.SolicitudRequerimiento.CantPreSelec, new {@Class ="input-xxmini text-right"}) @*<input type="text" class="input-xxmini text-right" value="9">*@</td>
                                     </tr>
                                         <tr>
                                         <td colspan="2" style="height:40px;">                                                            

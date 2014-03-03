@@ -35,6 +35,7 @@ namespace SanPablo.Reclutador.Web.Core
 
         public const string IdePostulante = "IdePostulante";
         public const string CargoPerfil = "CargoPerfil";
+        public const string IdeSolicitudAmpliacion = "ideSolicitudAmp";
     }
     public enum TipoDevolucionError 
     {
