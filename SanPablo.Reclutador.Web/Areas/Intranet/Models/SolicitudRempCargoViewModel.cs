@@ -30,6 +30,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         
       
         public string Accion { get; set; }
+        public string AccionPopup { get; set; }
 
     }
 

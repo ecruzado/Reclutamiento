@@ -1245,8 +1245,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Reemplazo = new Reemplazo();
 
             DateTime Hoy = DateTime.Today;
-
-          
+            
             return View("PopupListaReemplazo",model);
         }
         
@@ -1262,10 +1261,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJson = new JsonMessage();
             Reemplazo objReemplazo;
             objReemplazo = new Reemplazo();
-
+            
 
             List<Reemplazo> lista = new List<Reemplazo>();
-
+           
             var listaInicio = Session[ConstanteSesion.ListaReemplazo];
 
             if (listaInicio!=null)
@@ -1273,30 +1272,136 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 List<Reemplazo> list = (List<Reemplazo>)listaInicio;
                 foreach (Reemplazo item in list)
                 {
+                   
                     objReemplazo = new Reemplazo();
                     objReemplazo = item;
                     lista.Add(objReemplazo);
+  
                 }
+
+                objReemplazo = new Reemplazo();
+                objReemplazo.Indicador = lista.Count + 1;
+
+                objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+                objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+                objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+                objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+                objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
+
+                lista.Add(objReemplazo);
+
+
+                Session[ConstanteSesion.ListaReemplazo] = lista;
+                objJson.Mensaje = "Se grabo el registro correctamente";
+                objJson.Resultado = true;
+
             }
+            else
+            {
+                objReemplazo = new Reemplazo();
+                objReemplazo.Indicador = objReemplazo.Indicador + 1;
+
+                objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+                objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+                objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+                objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+                objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
+
+                lista.Add(objReemplazo);
+
+                //if (model.Reemplazo.IdeSolReqPersonal>0 && model.Reemplazo.IdReemplazo>0)
+                //{
+                //    Reemplazo obj = new Reemplazo();
+                //    _solReqPersonalRepository.AgregaReemplazo();
+                //}
 
 
-            objReemplazo = new Reemplazo();
-            objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
-            objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
-            objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
-            objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
-            objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
-
-            lista.Add(objReemplazo);
-
-            Session[ConstanteSesion.ListaReemplazo] = lista;
-            objJson.Mensaje = "Se grabo el registro correctamente";
-            objJson.Resultado = true;
-
+                Session[ConstanteSesion.ListaReemplazo] = lista;
+                objJson.Mensaje = "Se grabo el registro correctamente";
+                objJson.Resultado = true;
+            }
 
             return Json(objJson);
         }
 
+        //[HttpPost]
+        //public ActionResult SetPopupReemplazoEdit(SolicitudRempCargoViewModel model)
+        //{
+        //    JsonMessage objJson = new JsonMessage();
+        //    Reemplazo objReemplazo;
+           
+        //     List<Reemplazo> lista = new List<Reemplazo>();
+           
+        //    var listaInicio = Session[ConstanteSesion.ListaReemplazo];
+
+        //    if (listaInicio != null)
+        //    {
+        //        List<Reemplazo> listaReem = (List<Reemplazo>)listaInicio;
+        //        objReemplazo = (Reemplazo)listaReem[model.Reemplazo.IdReemplazo];
+
+        //        objReemplazo.Nombres = model.Reemplazo.Nombres;
+        //        objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+        //        objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+        //        objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+        //        objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+
+        //    }
+
+        //    return Json(objJson);
+        //}
+
+        /// <summary>
+        /// Elimina el detalle del reemplazo
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// 
+        
+        public ActionResult EliminarReemplazo(int id,int idReq,int idReemp)
+        {
+            JsonMessage objJson = new JsonMessage();
+            SolicitudRempCargoViewModel model;
+
+            model = new SolicitudRempCargoViewModel();
+            var ListaSession = Session[ConstanteSesion.ListaReemplazo];
+
+            if (ListaSession!=null)
+            {
+                List<Reemplazo> lista = (List<Reemplazo>)ListaSession;
+                if (id>0)
+                {
+                    id = id - 1;
+                }
+                else
+                {
+                    id = 0;
+                }
+                lista.RemoveAt(id);
+                Session[ConstanteSesion.ListaReemplazo] = lista;
+
+                objJson.Resultado=true;	 
+                objJson.Mensaje = "Se elimino el registro correctamente";
+
+            }
+
+            if (idReq>0 && idReemp>0)
+            {
+                Reemplazo objReemplazo = new Reemplazo();
+                objReemplazo.IdeSolReqPersonal = idReq;
+                objReemplazo.IdReemplazo = idReemp;
+                int dato = _solReqPersonalRepository.EliminaListaReemplazo(objReemplazo);
+                
+                if (dato==1)
+	            {
+	                objJson.Resultado=true;	 
+                    objJson.Mensaje = "Se elimino el registro correctamente";
+	            }
+            
+            }
+
+
+            return Json(objJson);
+        }
 
         /// <summary>
         /// lista de reemplazos
@@ -1356,10 +1461,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.Nombres.ToString(),
+                    id = item.Indicador.ToString(),
                     cell = new string[]
                             {
                                
+                                item.Indicador==null?"0":item.Indicador.ToString(),
                                 item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
                                 item.IdReemplazo==null?"":item.IdReemplazo.ToString(),
                                 item.FecInicioReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecInicioReemplazo), 
@@ -1367,7 +1473,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Nombres==null?"":item.Nombres,
                                 item.ApePaterno==null?"":item.ApePaterno,
                                 item.ApeMaterno==null?"":item.ApeMaterno
-                    
+                               
                             }
                 }).ToArray();
 

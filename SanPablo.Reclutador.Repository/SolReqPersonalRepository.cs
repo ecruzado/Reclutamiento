@@ -70,7 +70,37 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
-         
+        /// <summary>
+        /// Elimina el Reemplazo
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public int EliminaListaReemplazo(Reemplazo obj) 
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_ELIMINA_REEMPLAZO");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_ideReemplazo", OracleType.Int32).Value = obj.IdReemplazo;
+                 lspcmd.Parameters.Add("p_ideSolReq", OracleType.Int32).Value = obj.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.ExecuteNonQuery();
+                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
         /// <summary>
         /// obtiene las solicitudes resultado de la busqueda inicial
         /// </summary>
