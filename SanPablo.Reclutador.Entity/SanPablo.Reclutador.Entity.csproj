@@ -117,6 +117,7 @@
     <Compile Include="Validation\CargoValidator.cs" />
     <Compile Include="Validation\PasswordValidator.cs" />
     <Compile Include="Validation\LogSolicitudNuevoCargoValidator.cs" />
+    <Compile Include="Validation\ReemplazoValidator.cs" />
     <Compile Include="Validation\SolicitudNuevoCargoValidator.cs" />
     <Compile Include="Validation\RolValidator.cs" />
     <Compile Include="Validation\CentroEstudioCargoValidator.cs" />

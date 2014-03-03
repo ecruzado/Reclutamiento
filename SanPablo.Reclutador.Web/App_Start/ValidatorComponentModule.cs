@@ -123,6 +123,11 @@
             builder.RegisterType<UsuarioExtranetValidator>()
                 .Keyed<IValidator>(typeof(IValidator<UsuarioExtranet>))
                 .As<IValidator>();
+
+
+            builder.RegisterType<ReemplazoValidator>()
+               .Keyed<IValidator>(typeof(IValidator<Reemplazo>))
+               .As<IValidator>();
             
 
 

@@ -18,6 +18,10 @@ namespace SanPablo.Reclutador.Repository.Interface
     public interface ISolReqPersonalRepository : IRepository<SolReqPersonal>
     {
         List<Cargo> GetTipCargo(int IdCargo);
+        List<SolReqPersonal> GetListaSolReqPersonal(SolReqPersonal obj);
+
+        
+
     }
 }
 
