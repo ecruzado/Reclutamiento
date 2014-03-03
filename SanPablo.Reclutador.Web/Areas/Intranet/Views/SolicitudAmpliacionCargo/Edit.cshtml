@@ -56,7 +56,7 @@
         });
 
         jQuery("#grdListCompetencias").jqGrid({
-            url: '@Url.Action("ListarCompetencias", "CompetenciaCargo")',
+            url: '@Url.Action("ListarCompetencias", "SolicitudAmpliacionCargo")',
               datatype: 'json',
               mtype: 'POST',
               colNames: ['Descripci&oacuten'],
@@ -86,7 +86,7 @@
 
 
         jQuery("#grdListOfrecemos").jqGrid({
-            url: '@Url.Action("ListarOfrecemos", "OfrecimientoCargo")',
+            url: '@Url.Action("ListarOfrecemos", "SolicitudAmpliacionCargo")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Codigo', 'Descripci&oacuten'],
@@ -233,7 +233,7 @@
                     </td>   
                 </tr>
           </table>
-          @if (Accion.Nuevo.Equals(Model.Accion))
+          @if (Accion.Consultar.Equals(Model.Accion))
           {
 		           <span></span>
           }

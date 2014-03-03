@@ -20,7 +20,11 @@ namespace SanPablo.Reclutador.Repository.Interface
         List<Cargo> GetTipCargo(int IdCargo);
         List<SolReqPersonal> GetListaSolReqPersonal(SolReqPersonal obj);
 
-        
+        List<CompetenciaReemplazo> ListaCompetencias(int ideSolicitudReqPersonal);
+
+        List<OfrecemosReemplazo> ListaOfrecemos(int ideSolicitudReqPersonal);
+
+        List<HorarioReemplazo> ListaHorarios(int ideSolicitudReqPersonal);
 
     }
 }

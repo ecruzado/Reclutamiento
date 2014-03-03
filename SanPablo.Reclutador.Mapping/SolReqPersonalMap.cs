@@ -99,10 +99,10 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.TipoRangoSalario, "TIPRANGOSALARIO");
 
 
-            Map(x => x.Sede_des).Formula("(SELECT nvl(s.descripcion,'') descripcion FROM SEDE S WHERE S.IDESEDE=IDESEDE)");
-            Map(x => x.Dependencia_des).Formula("(SELECT nvl(d.nomdependencia,'') nomdependencia FROM DEPENDENCIA d WHERE d.IDESEDE=IDESEDE AND d.idedependencia=IDEDEPENDENCIA)");
-            Map(x => x.Departamento_des).Formula("select nvl(a.nomdepartamento,'') from departamento a where a.idedepartamento = IDEDEPARTAMENTO and a.idedependencia=IDEDEPENDENCIA)");
-            Map(x => x.Area_des).Formula("(select * from area r where r.idearea = IDEAREA and r.idedepartamento=IDEDEPARTAMENTO)");
+            //Map(x => x.Sede_des).Formula("(SELECT nvl(s.descripcion,'') descripcion FROM SEDE S WHERE S.IDESEDE=IDESEDE)");
+            //Map(x => x.Dependencia_des).Formula("(SELECT nvl(d.nomdependencia,'') nomdependencia FROM DEPENDENCIA d WHERE d.IDESEDE=IDESEDE AND d.idedependencia=IDEDEPENDENCIA)");
+            //Map(x => x.Departamento_des).Formula("(select nvl(a.nomdepartamento,'')  FROM departamento a where a.idedepartamento = IDEDEPARTAMENTO and a.idedependencia=IDEDEPENDENCIA)");
+            //Map(x => x.Area_des).Formula("(select * from area r where r.idearea = IDEAREA and r.idedepartamento=IDEDEPARTAMENTO)");
 
             Table("SOLREQ_PERSONAL");
 

@@ -152,5 +152,136 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+         public List<CompetenciaReemplazo> ListaCompetencias(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_COMPETENCIAREMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var competencia = new CompetenciaReemplazo();
+                 var listCompetencias = new List<CompetenciaReemplazo>();
+  
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         competencia = new CompetenciaReemplazo();
+                         competencia.IdeCompetenciaReemplazo = Convert.ToInt32(lector["IDECOMPETENCIASOLREQ"]);
+                         competencia.DescripcionCompetencia = Convert.ToString(lector["DESCRIPCION"]);
+                         listCompetencias.Add(competencia);
+                     }
+                     lector.Close();
+                 }
+                 
+                
+                 return listCompetencias;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+         public List<OfrecemosReemplazo> ListaOfrecemos(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_OFRECIMIENTO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var ofrecimiento = new OfrecemosReemplazo();
+                 var listOfrecemos = new List<OfrecemosReemplazo>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         ofrecimiento = new OfrecemosReemplazo();
+                         ofrecimiento.IdeOfrecemosReemplazo = Convert.ToInt32(lector["IDEOFRECEMOSSOLREQ"]);
+                         ofrecimiento.DescripcionOfrecimiento = Convert.ToString(lector["DESCRIPCION"]);
+                         listOfrecemos.Add(ofrecimiento);
+                     }
+                     lector.Close();
+                 }
+
+
+                 return listOfrecemos;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<HorarioReemplazo> ListaHorarios(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_HORARIO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var horario = new HorarioReemplazo();
+                 var listaHorario = new List<HorarioReemplazo>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         horario = new HorarioReemplazo();
+                         horario.IdeHorarioReemplazo = Convert.ToInt32(lector["IDEHORARIOSOLREQ"]);
+                         horario.DescripcionHorario = Convert.ToString(lector["DESCRIPCION"]);
+                         listaHorario.Add(horario);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaHorario;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
     }
 }

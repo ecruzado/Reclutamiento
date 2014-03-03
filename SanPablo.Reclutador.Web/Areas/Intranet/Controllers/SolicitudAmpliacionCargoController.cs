@@ -117,6 +117,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             model.Accion = Accion.Nuevo;
             model.SolicitudRequerimiento = new SolReqPersonal();
+            model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+
             model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
@@ -263,119 +265,115 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         //#region GRILLAS PERFIL AMPLIACION
-        ////
-        ////COMPETENCIAS
-        ////
+        //
+        //COMPETENCIAS
+        //
 
-        //[HttpPost]
-        //public JsonResult ListarCompetencias(GridTable grid)
-        //{
-        //    int IdeCargo = CargoPerfil.IdeCargo;
-        //    try
-        //    {
+        [HttpPost]
+        public JsonResult ListarCompetencias(GridTable grid)
+        {
+            List<CompetenciaReemplazo> lista = new List<CompetenciaReemplazo>();
+            try
+            {
 
-        //        grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 10 : grid.rows;
 
-        //        grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                lista = _solicitudAmpliacionPersonal.ListaCompetencias(IdeSolicitudAmpliacion);
 
-        //        DetachedCriteria where = DetachedCriteria.For<CompetenciaCargo>();
-        //        where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-        //        var generic = Listar(_competenciaCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaReemplazo.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
 
-        //        generic.Value.rows = generic.List
-        //            .Select(item => new Row
-        //            {
-        //                id = item.IdeCompetenciaCargo.ToString(),
-        //                cell = new string[]
-        //                    {
-        //                        item.DescripcionCompetencia,
-        //                    }
-        //            }).ToArray();
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+        //    
+        //OFRECEMOS
+        //
+        [HttpPost]
+        public virtual JsonResult ListarOfrecemos(GridTable grid)
+        {
+            List<OfrecemosReemplazo> lista = new List<OfrecemosReemplazo>();
+            try
+            {
 
-        //        return Json(generic.Value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return MensajeError("ERROR: " + ex.Message);
-        //    }
-        //}
-        ////
-        ////OFRECEMOS
-        ////
-        //[HttpPost]
-        //public virtual JsonResult ListarOfrecemos(GridTable grid)
-        //{
-        //    int IdeCargo = CargoPerfil.IdeCargo;
-        //    try
-        //    {
+                grid.page = (grid.page == 0) ? 1 : grid.page;
 
-        //        grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-        //        grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                lista = _solicitudAmpliacionPersonal.ListaOfrecemos(IdeSolicitudAmpliacion);
 
-        //        DetachedCriteria where = DetachedCriteria.For<OfrecemosCargo>();
-        //        where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-        //        var generic = Listar(_ofrecemosCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeOfrecemosReemplazo.ToString(),
+                        cell = new string[]
+                            {
+                                item.IdeOfrecemosReemplazo.ToString(),
+                                item.DescripcionOfrecimiento,
+                            }
+                    }).ToArray();
 
-        //        generic.Value.rows = generic.List
-        //            .Select(item => new Row
-        //            {
-        //                id = item.IdeOfrecemosCargo.ToString(),
-        //                cell = new string[]
-        //                    {
-        //                        item.IdeOfrecemosCargo.ToString(),
-        //                        item.DescripcionOfrecimiento,
-        //                    }
-        //            }).ToArray();
-
-        //        return Json(generic.Value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return MensajeError("ERROR: " + ex.Message);
-        //    }
-        //}
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
         ////
         ////HORARIO
         ////
-        
-        //[HttpPost]
-        //public virtual JsonResult ListaHorario(GridTable grid)
-        //{
-        //    int IdeCargo = CargoPerfil.IdeCargo;
 
-        //    try
-        //    {
+        [HttpPost]
+        public virtual JsonResult ListaHorario(GridTable grid)
+        {
+            List<HorarioReemplazo> lista = new List<HorarioReemplazo>();
 
-        //        grid.page = (grid.page == 0) ? 1 : grid.page;
+            try
+            {
 
-        //        grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                grid.page = (grid.page == 0) ? 1 : grid.page;
 
-        //        DetachedCriteria where = DetachedCriteria.For<HorarioCargo>();
-        //        where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-        //        var generic = Listar(_horarioCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                lista = _solicitudAmpliacionPersonal.ListaHorarios(IdeSolicitudAmpliacion);
 
-        //        generic.Value.rows = generic.List
-        //            .Select(item => new Row
-        //            {
-        //                id = item.IdeHorarioCargo.ToString(),
-        //                cell = new string[]
-        //                    {
-        //                        item.DescripcionHorario,
-        //                        item.PuntajeHorario.ToString(),
-        //                    }
-        //            }).ToArray();
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-        //        return Json(generic.Value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return MensajeError("ERROR: " + ex.Message);
-        //    }
-        //}
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeHorarioReemplazo.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionHorario,
+                                item.PuntajeHorario.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
         ////
         ////UBIGEO
         ////

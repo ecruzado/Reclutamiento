@@ -313,7 +313,8 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get
             {
-                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeSolicitudAmpliacion];
+                //return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeSolicitudAmpliacion];
+                return 4;
             }
             set
             {
