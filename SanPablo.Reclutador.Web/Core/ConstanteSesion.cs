@@ -31,7 +31,7 @@ namespace SanPablo.Reclutador.Web.Core
         /// obtiene la lista de personal de reemplazo
         /// </summary>
         public const string ListaReemplazo = "ListaReemplazo";
-
+        public const string cantRegListaReemplazo = "cantRegListaReemplazo";
 
         public const string IdePostulante = "IdePostulante";
         public const string CargoPerfil = "CargoPerfil";

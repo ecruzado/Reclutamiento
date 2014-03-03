@@ -1,4 +1,9 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
+
+@{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
 }
 @section Head{
@@ -10,7 +15,144 @@
     $("#txtfechainicio").datepicker();
     $("#txtfechafin").datepicker();
 
-    jQuery("#grdList").jqGrid({
+    $('#btnBuscarReemplazo').click(function () {
+        $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+    });
+
+
+
+    $('select#SolReqPersonal_IdeDependencia').change(function () {
+        var ideDependencia = $(this).val();
+        $("select#SolReqPersonal_IdeArea").empty();
+        $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("listaDepartamentos", "SolicitudCargo", new { area = "Intranet"})',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#SolReqPersonal_IdeDepartamento").empty();
+                    $("select#SolReqPersonal_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolReqPersonal_IdeDepartamento").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+     })
+
+    $('select#SolReqPersonal_IdeDepartamento').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudCargo",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SolReqPersonal_IdeArea").empty();
+                    $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolReqPersonal_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+
+    jQuery("#grdListBusquedaReemplazo").jqGrid({
+        datatype: function (postdata) {
+            var migrilla = new Object();
+            migrilla.page = postdata.page;
+            migrilla.rows = postdata.rows;
+            migrilla.sidx = postdata.sidx;
+            migrilla.sord = postdata.sord;
+            migrilla._search = postdata.isSearch;
+            migrilla.filters = postdata.filters;
+            migrilla.Rules = [
+
+                { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                { field: 'idCargo', data: $("#SolReqPersonal_Idecargo").val() },
+                { field: 'idDependencia', data: $("#SolReqPersonal_IdeDependencia").val() },
+                { field: 'idArea', data: $("#SolReqPersonal_IdeArea").val() },
+                { field: 'tipResp', data: $("#SolReqPersonal_TipResponsable").val() },
+                { field: 'fecInicio', data: $("#SolReqPersonal_FechaInicioBus").val() },
+                { field: 'fecFin', data: $("#SolReqPersonal_FechaFinBus").val() },
+                { field: 'idDepartamento', data: $("#SolReqPersonal_IdeDepartamento").val() },
+                { field: 'tipEtapa', data: $("#SolReqPersonal_TipEtapa").val() },
+                { field: 'tipEstado', data: $("#SolReqPersonal_TipEstado").val() }
+
+            ];
+            if (migrilla._search == true) {
+                migrilla.searchField = postdata.searchField;
+                migrilla.searchOper = postdata.searchOper;
+                migrilla.searchString = postdata.searchString;
+            }
+            var params = { grid: migrilla };
+
+            $.ajax({
+                url: '@Url.Action("ListBusquedaReemplazo", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListBusquedaReemplazo')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+        colNames: ['Estado', '', '', 'SolReqPersonal', '', '', '', '', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Fecha Creación', 'Responsable', 'Nom.Responsable', 'Publicado','Etapa'],
+        colModel: [
+                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
+                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left',hidden:true },
+                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
+                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
+                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left',hidden: true },
+                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'right', hidden: true },
+                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
+                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
+                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
+                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
+                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
+                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
+                { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
+                { name: 'TipResponsable', index: 'TipResponsable', align: 'left', hidden: true },
+                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300},
+                { name: 'FecPublicacion', index: 'FecPublicacion', align: 'center', width: 200 },
+                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
+        ],
+        pager: jQuery('#grdPagerBusquedaReemplazo'),
+        rowNum: 10,
+        //rowList: [10, 30, 50],
+        autowidth: true,
+        rules: true,
+        sortname: 'IdeSolReqPersonal',
+        sortorder: 'desc',
+        viewrecords: true,
+        height: 250,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        rownumbers: true,
+        shrinkToFit: false,
+
+        postData: {
+        },
+        loadComplete: function (data) {
+        }
+    });
+
+
+
+
+
+    @*jQuery("#grdList").jqGrid({
         url: '@Url.Action("ListaSolicitudAmpliacion", "SolicitudCargo")',
         datatype: 'json',
         mtype: 'POST',
@@ -43,7 +185,7 @@
         hidegrid: false,
         altRows: true,
         shrinkToFit: false
-    });
+    });*@
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
@@ -155,104 +297,100 @@
             <div class="widget-title">
                 <h5>Listado Solicitud de Reemplazo de Cargo</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+           @* <form class="formulario-busqueda">*@
+@using (Html.BeginForm("Index", "SolicitudReemplazoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmBusListaReemplazo", @class = "formulario-busqueda" }))
+{
+    @Html.ValidationSummary(true)
+          <table class="formulario-busqueda">        
+                  <tr class="formulario-fila">
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                <select id="selectCargo">
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolReqPersonal.Idecargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.Idecargo),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                    </td>
+                    <td class="span5">
                             <label class="control-label" for="selectError">Fecha</label>
                             <div class="controles">
-                                <input id="txtfechainicio" type="text" class="input-small" placeholder=" Inicial"/>
-                                <input id="txtfechafin" type="text" class="input-small" placeholder=" Final"/>
+                                @*<input id="txtfechainicio" type="text" class="input-small" placeholder=" Inicial"/>
+                                <input id="txtfechafin" type="text" class="input-small" placeholder=" Final"/>*@
+
+                                @Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                                @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
+
+
+
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                     </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                      
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
+                      
+                    </td>
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Etapa</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                      
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipResponsable, new SelectList(Model.listaRol, "IdRol", "CodRol", Model.SolReqPersonal.TipResponsable), new {  data_val = "false"})     
                             </div>
-                        </div>
-                    </div>                    
-                    <div class="span5">
-                        <div class="">
+                       
+                    </td>                    
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
+                               @Html.DropDownListFor(model => model.SolReqPersonal.TipEstado, new SelectList(Model.listaEstados, "Valor", "Descripcion", Model.SolReqPersonal.TipEstado),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+                       
+                    </td>
+                </tr>
+             </table>
+           
+            <div class="formulario-accion offset9">
+                <a class="btn btn-info" id="btnBuscarReemplazo"><i class="icon-search icon-white"></i> Buscar</a>
+                <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+            </div>
+           
             <div class="tabla-datos">
-                <table id="grdList">
+                <table id="grdListBusquedaReemplazo">
                 </table>
-                <div id="grdPager">
+                
+                <div id="grdPagerBusquedaReemplazo">
                 </div>
             </div>
             <div>
@@ -269,6 +407,7 @@
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
+        }
         </div>
-    </div>
+     </div>
 </div>

@@ -1,16 +1,18 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
 @using SanPablo.Reclutador.Entity
-
+@using System.Collections.Generic
 
 @{
     ViewBag.Title = "Solicitud Personal";
+
     
 }
 @section Head{
 }
 
 @section Scripts{
-
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <script type="text/javascript">
     //Table initialisation 
     $(document).ready(function () {
@@ -73,7 +75,7 @@
 
              pager: jQuery('#grdPagerReemplazosReq'),
              rowNum: 10,
-             //rowList: [10, 30, 50],
+             
              autowidth: true,
              rules: true,
              sortname: 'Nombres',
@@ -107,7 +109,11 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $('#DialogReemplazo').dialog('open');
+                    if ($("#frmPopupReemplazo").valid()) {
+
+
+                        $('#DialogReemplazo').dialog('open');
+                    }
 
                 },
                 "Cancelar": function () {
@@ -124,7 +130,7 @@
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
                 "Si": function () {
-                    //if ($("#frmPopupReemplazo").validate().form()) {
+                   
                         $.ajax({
                             data: $("#frmPopupReemplazo").serialize(),
                             type: "POST",
@@ -139,7 +145,7 @@
                             }
                         }
                     });
-                //}
+                
             },
             "No": function () {
                 $(this).dialog("close");
@@ -528,10 +534,60 @@
         $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet"})', function (data) {
 
             dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#popupDialogTipReq"));
+            $.validator.unobtrusive.parse($("#popupDialogReemplazo"));
             dialogDiv.dialog('open');
         });
         return false;
+    }
+    
+    function validaEnvio() {
+        
+        var tipVacante = $('#SolReqPersonal_TipVacante').val();
+        var solReqIdeCargo = $('#SolReqPersonal_Idecargo').val();
+        var numVacante = $('#SolReqPersonal_NumVacantes').val();
+
+        var countList = jQuery("#grdListReemplazosReq").jqGrid('getGridParam', 'records');
+
+        var observ = $('#SolReqPersonal_Observacion').val();
+        
+
+        if (tipVacante=="0") {
+            notificacionExito("Seleccione un tipo de vacante");
+            return;
+        }
+
+        if (solReqIdeCargo == 0) {
+            notificacionExito("Seleccione cargo");
+            return;
+        }
+
+        if (tipVacante == 0) {
+            notificacionExito("Seleccione un tipo de vacante");
+            return;
+        }
+
+        if (numVacante.length>0) {
+
+            var nVacante = parseInt(numVacante);
+            if (nVacante==0) {
+                notificacionExito("Ingrese el numero de vacantes");
+                return;
+            }
+
+            if (nVacante != countList) {
+                notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
+                return;
+            }
+            
+        }
+
+        creaSolicitudReempCargo();
+
+    }
+    
+    function creaSolicitudReempCargo() {
+
+
     }
 
     //fin
@@ -571,37 +627,31 @@
                         </td>
                         <td class="span5">
                        
-                                <label class="control-label" for="inputSuccess">Dependecia</label>
-                                <div class="controles">
-                                     @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled = "disabled" })                      
-                                    
-                                    @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPENDENCIA_DES, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
-
+                            <label class="control-label" for="inputSuccess">Dependecia</label>
+                            <div class="controles">
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled = "disabled" })                      
                             </div>
                         </td>
                     </tr>
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            
-                                <label class="control-label" for="inputSuccess">Departamento</label>
-                                <div class="controles">
-                                  
-                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled = "disabled" })                      
-
-                                    @*@Html.TextBoxFor(model => model.SolReqPersonal.DEPARTAMENTO_DES, new { @class = "textoFormulario",disabled = "disabled" })    *@
-                                </div>
-                           
-                        </td>
-                          <td class="span5">
+                       <td class="span5">
                        
-                            <label class="control-label" for="inputSuccess">Área</label>
+                            <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                               
-                                @*@Html.TextBoxFor(model => model.SolReqPersonal.IDEAREA, new { @class = "textoFormulario" ,disabled = "disabled"})    *@
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled = "disabled" })                      
+                                @Html.DropDownListFor(model => model.SolReqPersonal.Idecargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.Idecargo))
                             </div>
-                      
+                       
                         </td>
+                        
+                         <td class="span5">
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled = "disabled" })                      
+                            </div>
+                           
+                        </td>  
+                        
+                   
                     </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
@@ -612,15 +662,14 @@
                             </div>
                         
                         </td>
-                        <td class="span5">
-                       
-                            <label class="control-label" for="inputSuccess">Cargo</label>
+                   
+                           <td class="span5">
+                            <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled = "disabled" })                      
                             </div>
-                       
                         </td>
-                      
+
                     </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
@@ -631,7 +680,16 @@
                                 @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" }) 
                             </div>
                         
-                        </td>                    
+                        </td> 
+                        
+                        <td class="span5">
+                        
+                            <label class="control-label" for="selectError">Tipo puesto</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
+                            </div>
+                        
+                        </td>                   
                         
                     </tr>
                     <tr class="formulario-fila">
@@ -1291,7 +1349,7 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <button type="submit" class="btn btn-info" onclick="mostrarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</button>
+                <a  class="btn btn-info" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
 
             </div>

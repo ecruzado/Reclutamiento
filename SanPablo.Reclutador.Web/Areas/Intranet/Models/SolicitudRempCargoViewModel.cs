@@ -24,7 +24,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Dependencia> listaDependencia { get; set; }
         public List<Departamento> listaDepartamento { get; set; }
         public List<Area> listaArea { get; set; }
-      
+        public List<Rol> listaRol { get; set; }
+        public List<DetalleGeneral> listaEtapas { get; set; }
+        public List<DetalleGeneral> listaEstados { get; set; }
+        
       
         public string Accion { get; set; }
 

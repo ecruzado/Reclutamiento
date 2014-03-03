@@ -29,12 +29,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IDependenciaRepository _dependenciaRepository;
         private IAreaRepository _areaRepository;
         private IDepartamentoRepository _departamentoRepository;
+        private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
                                          IDependenciaRepository dependenciaRepository,
                                          IAreaRepository areaRepository,
-                                         IDepartamentoRepository departamentoRepository
+                                         IDepartamentoRepository departamentoRepository,
+                                         IUsuarioRolSedeRepository usuarioRolSedeRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -42,7 +44,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _dependenciaRepository = dependenciaRepository;
             _areaRepository = areaRepository;
             _departamentoRepository = departamentoRepository;
-
+            _usuarioRolSedeRepository = usuarioRolSedeRepository;
+            
         }
 
         
@@ -962,12 +965,200 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         #region Reemplazo
 
-
+        /// <summary>
+        /// inicializa la busqueda de lista de reemplazo
+        /// </summary>
+        /// <returns></returns>
         [AuthorizeUser]
+        [ValidarSesion]
         public ActionResult ListaReemplazo()
         {
-            return View();
+            SolicitudRempCargoViewModel model;
+            try
+            {
+                model = new SolicitudRempCargoViewModel();
+                
+
+                var sede = Session[ConstanteSesion.Sede];
+                if (sede!=null)
+                {
+                  model = InicializarListaReemplazo(Convert.ToInt32(sede));
+                  model.SolReqPersonal = new SolReqPersonal();
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
+            return View("ListaReemplazo", model);
         }
+
+        /// <summary>
+        /// lista de departamentos
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaDepartamentos(int ideDependencia)
+        {
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
+
+            var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+            result = Json(listaResultado);
+            return result;
+        }
+
+        /// <summary>
+        /// lista de areas
+        /// </summary>
+        /// <param name="ideDepartamento"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaAreas(int ideDepartamento)
+        {
+            ActionResult result = null;
+
+            var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+            result = Json(listaResultado);
+            return result;
+        }
+
+        /// <summary>
+        /// iniciliza la pantalla de busqueda de reemplazo
+        /// </summary>
+        /// <param name="idSel"></param>
+        /// <returns></returns>
+        public SolicitudRempCargoViewModel InicializarListaReemplazo(int idSel)
+        {
+            var model = new SolicitudRempCargoViewModel();
+
+            model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                         && x.IdeSede == idSel));
+            model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+            model.Departamentos = new List<Departamento>();
+            model.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+            model.Areas = new List<Area>();
+            model.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+            model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
+            model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+            model.listaRol = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
+            model.listaRol.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
+
+            model.listaEtapas =
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
+            model.listaEtapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            model.listaEstados =
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            model.listaEtapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            model.listaTipPuesto =
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
+            model.listaTipPuesto.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            return model;
+        }
+
+
+        /// <summary>
+        /// Lista de busqueda de reemplazo
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListBusquedaReemplazo(GridTable grid)
+        {
+
+            SolReqPersonal solReqPersonal;
+            List<SolReqPersonal> lista = new List<SolReqPersonal>();
+            try
+            {
+               
+
+                if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data) && !0.Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data) && !0.Equals(grid.rules[2].data)) ||
+                    (!"".Equals(grid.rules[3].data) && !"0".Equals(grid.rules[3].data) && !0.Equals(grid.rules[3].data)) ||
+                    (!"".Equals(grid.rules[4].data) && !"0".Equals(grid.rules[4].data) && !0.Equals(grid.rules[4].data)) ||
+                    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null ) ||
+                    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null ) ||
+                    (!"".Equals(grid.rules[7].data) && !"0".Equals(grid.rules[7].data) && !0.Equals(grid.rules[7].data)) ||
+                    (!"".Equals(grid.rules[8].data) && grid.rules[8].data != null && !"0".Equals(grid.rules[8].data)) ||
+                    (!"".Equals(grid.rules[9].data) && grid.rules[9].data != null && !"0".Equals(grid.rules[9].data))
+                    
+                    )
+                {
+
+                    solReqPersonal = new SolReqPersonal();
+
+                    solReqPersonal.Idecargo = (grid.rules[1].data==null?0:Convert.ToInt32(grid.rules[1].data));
+                    solReqPersonal.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+                    solReqPersonal.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+                    solReqPersonal.TipResponsable = (grid.rules[4].data == null ? "" : grid.rules[4].data);
+
+                    if (grid.rules[5].data!=null && grid.rules[6].data!=null)
+                    {
+                        solReqPersonal.FechaInicioBus = Convert.ToDateTime(grid.rules[5].data);
+                        solReqPersonal.FechaFinBus = Convert.ToDateTime(grid.rules[6].data);      
+                    }
+                  
+                    solReqPersonal.IdeDepartamento = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[7].data));
+                    solReqPersonal.TipEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
+                    solReqPersonal.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
+
+                    lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
+                }
+
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+               
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeSolReqPersonal.ToString(),
+                    cell = new string[]
+                            {
+                               
+                                "1",
+                                item.TipEstado==null?"":item.TipEstado,
+                                item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
+                                item.CodSolReqPersonal==null?"":item.CodSolReqPersonal.ToString(),
+                                item.Idecargo==null?"":item.Idecargo.ToString(),
+                                item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
+                                item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
+                                item.IdeArea==null?"":item.IdeArea.ToString(),
+
+                                item.NumVacantes==null?"":item.NumVacantes.ToString(),
+                                item.CantPostulante==null?"":item.CantPostulante.ToString(),
+                                item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
+                                item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
+                                item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
+                                item.Feccreacion==null?"":item.Feccreacion.ToString(),
+
+                                item.TipResponsable==null?"":item.TipResponsable,
+                                item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
+                                item.FecPublicacion==null?"":item.FecPublicacion.ToString(),
+                                item.TipEtapa==null?"":item.TipEtapa
+                               
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+                
+            }
+            catch (Exception ex)
+            {
+               
+                return MensajeError();
+            }
+        }
+
 
 
         /// <summary>
@@ -1011,6 +1202,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVacante));
             objModel.listaTipVacante.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
+            objModel.listaTipPuesto =
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
+            objModel.listaTipPuesto.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
             objModel.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
             objModel.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
@@ -1050,10 +1246,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             DateTime Hoy = DateTime.Today;
 
-            //model.Reemplazo.FecInicioReemplazo = Hoy;
-            //model.Reemplazo.FecFinReemplazo = Hoy.AddDays(1);
-
-
+          
             return View("PopupListaReemplazo",model);
         }
         
@@ -1097,6 +1290,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             lista.Add(objReemplazo);
 
             Session[ConstanteSesion.ListaReemplazo] = lista;
+            objJson.Mensaje = "Se grabo el registro correctamente";
             objJson.Resultado = true;
 
 
@@ -1147,9 +1341,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         ObjReemplazo = new Reemplazo();
                       
                         ListaReemplazo.Add(ObjReemplazo);
+                        return null;
                     }
                 
                 }
+
+                Session[ConstanteSesion.cantRegListaReemplazo] = ListaReemplazo.Count();
+
 
 
                 var generic = GetListar(ListaReemplazo,
@@ -1158,7 +1356,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdeSolReqPersonal.ToString(),
+                    id = item.Nombres.ToString(),
                     cell = new string[]
                             {
                                
