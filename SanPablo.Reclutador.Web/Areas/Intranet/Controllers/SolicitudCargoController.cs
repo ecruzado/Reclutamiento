@@ -1097,7 +1097,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     solReqPersonal = new SolReqPersonal();
 
-                    solReqPersonal.Idecargo = (grid.rules[1].data==null?0:Convert.ToInt32(grid.rules[1].data));
+                    solReqPersonal.IdeCargo = (grid.rules[1].data==null?0:Convert.ToInt32(grid.rules[1].data));
                     solReqPersonal.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
                     solReqPersonal.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
                     solReqPersonal.TipResponsable = (grid.rules[4].data == null ? "" : grid.rules[4].data);
@@ -1129,7 +1129,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.TipEstado==null?"":item.TipEstado,
                                 item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
                                 item.CodSolReqPersonal==null?"":item.CodSolReqPersonal.ToString(),
-                                item.Idecargo==null?"":item.Idecargo.ToString(),
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
                                 item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
                                 item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
                                 item.IdeArea==null?"":item.IdeArea.ToString(),
