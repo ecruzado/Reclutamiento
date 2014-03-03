@@ -62,9 +62,12 @@
                     }
                 });
             },
-             colNames: ['', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno','Apellido Materno'],
+             colNames: ['','', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno','Apellido Materno'],
              colModel: [
-                       { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
+
+                 
+                      { name: 'Indicador', index: 'Indicador', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
                       { name: 'FecFinReemplazo', index: 'FecFinReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
@@ -78,7 +81,7 @@
              
              autowidth: true,
              rules: true,
-             sortname: 'Nombres',
+             sortname: 'Indicador',
              sortorder: 'desc',
              viewrecords: true,
              height: 250,
@@ -99,6 +102,42 @@
         $('#btnAgregarReemplazo').click(function () {
            mostrarPopuprReemplazo();
         });
+
+       
+        $('#btnEliminaReemplazo').click(function () {
+            var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+
+                $('#divEliminar').dialog('open');
+
+            } else {
+                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
+
+        $("#spanEliminar").html("¿Desea eliminar el registro?")
+        $('#divEliminar').dialogo({
+            buttons: {
+                "Si": function () {
+                    var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdListReemplazosReq').jqGrid('getRowData', selr);
+                    var idReq = rowData.IdeSolReqPersonal;
+                    var idReemp = rowData.IdReemplazo;
+                    if (selr != null) {
+                        EliminarReemplazo(selr, idReq, idReemp);
+                    } else {
+                        MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                    $(this).dialog("close");
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
 
 
         $('#popupDialogReemplazo').dialog({
@@ -539,6 +578,38 @@
         });
         return false;
     }
+
+   
+
+    function EliminarReemplazo(selr, idReq, idReemp) {
+
+        $.ajax({
+            data: {
+                id: selr,
+                idReq: idReq,
+                idReemp: idReemp
+
+            },
+            type: "POST",
+            url: "@Url.Action("EliminarReemplazo", "SolicitudCargo")",
+			traditional: true,
+			success: function (data) {
+			    if (data.Resultado == true) {
+			        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+			        $('#grdListReemplazosReq').trigger('reloadGrid');
+			    }
+			}
+		});
+
+    }
+
+
+
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
     
     function validaEnvio() {
         
@@ -638,7 +709,7 @@
                        
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.Idecargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.Idecargo))
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
                             </div>
                        
                         </td>
@@ -705,8 +776,8 @@
                     <h6>Reemplazos</h6>
                         <div class="opciones">
                             <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
-                            <a class="btn btn-small btn-info" title="Editar" id="btnEditarReemplazo"><i class="icon-edit icon-white"></i></a>
-                            <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminarReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                            @*<a class="btn btn-small btn-info" title="Editar" id="btnEditarReemplazo"><i class="icon-edit icon-white"></i></a>*@
+                            <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
                         </div>
                         <div style="clear:both"></div>
                 </div>@*
@@ -1386,7 +1457,9 @@
 @*Inicio*@
 <div id="popupDialogReemplazo" title="Reemplazo"></div>
 <div id="DialogReemplazo"><span id="spanDialogReemplazo"></span></div>
-
+<div id="divEliminar">
+	<span id="spanEliminar"></span>
+</div>
 
 
 

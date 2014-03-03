@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Repository.Interface
     {
         List<Cargo> GetTipCargo(int IdCargo);
         List<SolReqPersonal> GetListaSolReqPersonal(SolReqPersonal obj);
+        int EliminaListaReemplazo(Reemplazo obj);
+
 
         
 
