@@ -250,7 +250,7 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
-                            @Html.EditorFor(model=>model.SolicitudCargo.FechaPublicacion, new { @class = "textoFormulario" })
+                            @Html.EditorFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"  })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
                             </div>
@@ -260,13 +260,14 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
-                            @Html.EditorFor(model =>model.SolicitudCargo.FechaExpiracion, new { @class = "textoFormulario" })
+                            @Html.EditorFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Final" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
                             </div>
                         </td>
                     </tr>
-                     <tr><td>&nbsp;</td></tr>
+                    
+                        <tr><td>&nbsp;</td></tr>
                     </table>
 
                     <table style="margin-left:50px;" >

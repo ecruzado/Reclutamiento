@@ -145,7 +145,7 @@
                 }
                 cargoEditar.UsuarioModificacion = "USUA";
                 cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajePostulanteInterno = cargo.PuntajePostulanteInterno;
+                cargoEditar.PuntajeTotalPostulanteInterno = cargo.PuntajeTotalPostulanteInterno;
                 cargoEditar.EdadInicio = cargo.EdadInicio;
                 cargoEditar.EdadFin = cargo.EdadFin;
                 cargoEditar.PuntajeEdad = cargo.PuntajeEdad;

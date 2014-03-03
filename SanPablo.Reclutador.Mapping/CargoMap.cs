@@ -16,7 +16,6 @@
             Map(x => x.CodigoCargo, "CODCARGO");
             Map(x => x.IdeArea, "IDEAREA");
             Map(x => x.NumeroPosiciones, "NUMPOSICION");
-            Map(x => x.PuntajePostulanteInterno, "PUNTPOSTUINTE");
             Map(x => x.Sexo, "SEXO");
             Map(x => x.IndicadorSexo, "INDSEXO");
             Map(x => x.EdadInicio, "EDADINICIO");
@@ -25,9 +24,8 @@
             Map(x => x.PuntajeEdad, "PUNTEDAD");
             Map(x => x.PuntajeSexo, "PUNTSEXO");
             Map(x => x.TipoRangoSalarial, "TIPRANGOSALARIO");
-            Map(x => x.TipoMoneda, "TIPMONEDA");
+            Map(x => x.IndicadorSalario, "INDSALARIO");
             Map(x => x.PuntajeSalario, "PUNTSALARIO");
-            Map(x => x.IndicadorSalario, "INDVERSALARIO");
             Map(x => x.TipoRequerimiento, "TIPREQUERIMIENTO");
 
             HasMany(x => x.Competencias)

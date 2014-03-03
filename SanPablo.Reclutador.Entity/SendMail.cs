@@ -18,44 +18,25 @@
         public virtual string Area { get; set; }
         public virtual string Sede { get; set; }
 
-        public void EnviarCorreo(string dir, string etapa, string sedeDescripcion, 
-                                 string responsable, string tipoRequerimiento, string observacion,
-                                 string cargo, string codCargo,string destinatario, string suceso)
+       
+        public void EnviarMail(string destinatario, string asunto, string conCopia, string cuerpo )
         {
-            
             System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
             //destinatario
             mmsg.To.Add(destinatario);
-            //Asunto
-            string asunto;
-            if (etapa == EtapasSolicitud.PendienteAprobacionGerenteArea) 
-            { asunto ="Solicitud";}
-            else {asunto ="Aprobacion/Rechazo";}
-            mmsg.Subject = asunto + " de Requerimiento de "+tipoRequerimiento+" "+cargo+" - Nro "+ codCargo +" - Sede:"+ sedeDescripcion;
+            
+            mmsg.Subject = asunto;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
 
-           // mmsg.Bcc.Add("j.ccana@conastec.com.pe"); //Opcional
 
-            
-            //Cuerpo del Mensaje
+            mmsg.Bcc.Add(conCopia); //Opcional
 
-            string cuerpo = cuerpoMail(etapa, tipoRequerimiento, sedeDescripcion, responsable, observacion,suceso);
-            
-            
-            
-            //string dir = MapPath("~") + @"\TemplateEmail\EnviarSolicitud.htm";
-            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
-                                                   new List<string> { cuerpo, Usuario, Rol, Area, Sede });
-
-            mmsg.Body = body;
+            mmsg.Body = cuerpo;
             mmsg.BodyEncoding = System.Text.Encoding.UTF8;
             mmsg.IsBodyHtml = true; //Si no queremos que se envíe como HTML
 
-            
-
             mmsg.From = new System.Net.Mail.MailAddress("j.ccana@conastec.com.pe");
 
-           
             //Creamos un objeto de cliente de correo
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
 
@@ -66,10 +47,9 @@
 
             cliente.EnableSsl = false;
 
-            
             try
             {
-             
+
                 cliente.Send(mmsg);
             }
             catch (System.Net.Mail.SmtpException ex)
@@ -77,7 +57,6 @@
                 //Aquí gestionamos los errores al intentar enviar el correo
             }
         }
-
         public static string ObtenerCuerpoCorreo(string path, List<string> parametros, List<string> valores)
         {
             StreamReader sr = new StreamReader(path);
@@ -89,56 +68,91 @@
             return cuerpo;
         }
 
-        public string cuerpoMail(string tipo,string tipoRequerimiento, string SedeDescripcion, string Responsable1, string Observacion,string suceso)
+        public List<string> cuerpoMail(string tipo,string tipoRequerimiento, string sedeDescripcion, string Responsable1,
+                                       string Observacion,string suceso, string cargo, string codCargo )
         {
             string cuerpo = "";
+            string asunto = "";
             switch (tipo)
             {
-                case  EtapasSolicitud.PendienteAprobacionGerenteGralAdj:
-                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
-                        " Requerimiento de "+ tipoRequerimiento+" en la Sede " + SedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
-                        break;
-                case EtapasSolicitud.PendienteAprobacionGerenteArea:
-                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un "+
-                                 "Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación o Rechazo como Gerente de Area"+
-                                 " para continuar con el procedimiento.";
-                        break;
-                
-                case EtapasSolicitud.PendienteElaboracionPerfil:
+                case EtapasSolicitud.PendienteAprobacionGerenteGralAdj:
+                    {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
-                        " Requerimiento de " + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
+                           " Requerimiento de " + tipoRequerimiento + " en la Sede " + sedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
+                        asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
                         break;
-
+                    }
+                case EtapasSolicitud.PendienteAprobacionGerenteArea:
+                    {
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
+                                 "Requerimiento de " + tipoRequerimiento + " en la Sede " + sedeDescripcion + " y se requiere de su Aprobación o Rechazo como Gerente de Area" +
+                                 " para continuar con el procedimiento.";
+                        asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
+                        break;
+                    }
+                case EtapasSolicitud.PendienteElaboracionPerfil:
+                    {
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
+                        " Requerimiento de " + tipoRequerimiento + " en la Sede " + sedeDescripcion + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
+                        asunto = "Elaboracion de Perfil de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
+                        break;
+                    }
                 case EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion:
+                    {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
-                                 +tipoRequerimiento+" en la Sede "+SedeDescripcion+" y se requiere de su Aprobación/Rechazo como Encargado de Seleccion para continuar con el procedimiento.";
+                                   + tipoRequerimiento + " en la Sede " + sedeDescripcion + " y se requiere de su Aprobación/Rechazo como Encargado de Seleccion para continuar con el procedimiento.";
+                        asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
                         break;
-
+                    }
                 case EtapasSolicitud.PendienteAprobacionPerfilJefeArea:
+                    {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
-                                 + tipoRequerimiento + " en la Sede " + SedeDescripcion + " y se requiere de su Aprobación/Rechazo como Jefe de Area para continuar con el procedimiento.";
+                                    + tipoRequerimiento + " en la Sede " + sedeDescripcion + " y se requiere de su Aprobación/Rechazo como Jefe de Area para continuar con el procedimiento.";
+                        asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
                         break;
-
+                    }
                 case EtapasSolicitud.Finalizado:
-                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de "+tipoRequerimiento+
-                                 " en la Sede "+SedeDescripcion+" por el motivo de "+Observacion;
+                    {
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de " + tipoRequerimiento +
+                                   " en la Sede " + sedeDescripcion + " por el motivo de " + Observacion;
+                        asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
                         break;
-
+                    }
                 case EtapasSolicitud.PendientePublicacion:
+                    {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Aprobado el perfil para el Requerimiento de " + tipoRequerimiento +
-                                 " en la Sede " + SedeDescripcion + " y se requiere de la publicación como Destinatario de Recursos Humanos";
+                                   " en la Sede " + sedeDescripcion + " y se requiere de la publicación como Destinatario de Recursos Humanos";
+                        asunto = "Pendiente de publicación " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
                         break;
+                    }
             }
 
             if (suceso == SucesoSolicitud.Rechazado)
             {
                 cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de " + tipoRequerimiento +
-                                 " en la Sede " + SedeDescripcion + " por el motivo de " + Observacion;
+                                 " en la Sede " + sedeDescripcion + " por el motivo de " + Observacion;
+                asunto = "Aprobacion/Rechazo " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + sedeDescripcion;
             }
-           
-         
-            return cuerpo;
+
+            List<string> mail = new List<string>();
+            mail.Add(cuerpo);
+            mail.Add(asunto);
+            return mail;
  
+        }
+
+        public void EnviarCorreo(string dir, string etapa, string sedeDescripcion,
+                                string responsable, string tipoRequerimiento, string observacion,
+                                string cargo, string codCargo, string destinatario, string suceso)
+        {
+
+            List<string> mail = cuerpoMail(etapa, tipoRequerimiento, sedeDescripcion, responsable, observacion, suceso, cargo, codCargo);
+
+            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
+                                                   new List<string> { mail[0], Usuario, Rol, Area, Sede });
+
+            EnviarMail(destinatario, mail[1], "", body);
+
         }
        
     }

@@ -23,10 +23,10 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .Length(1, 255)
                 .WithMessage("El campo no debe sobrepasar los 255 caracteres");
 
-            RuleFor(x => x.PuntajePostulanteInterno)
+            RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el puntaje para el postulante interno");
-            RuleFor(x => x.PuntajePostulanteInterno)
+            RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .ExclusiveBetween(0,20)
                 .WithMessage("el rango de puntaje es de 0 a 20");
 
@@ -69,7 +69,7 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.PuntajeMinimoPostulanteInterno)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Ingresar puntaje válido")
-                .LessThanOrEqualTo(x => x.PuntajePostulanteInterno)
+                .LessThanOrEqualTo(x => x.PuntajeTotalPostulanteInterno)
                 .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
 
         }

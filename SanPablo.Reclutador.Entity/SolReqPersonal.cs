@@ -39,6 +39,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndSexMascu { get; set; }
         public virtual string IndSexFemen { get; set; }
         public virtual string Observacion { get; set; }
+        public virtual string Motivo      { get; set; }
         public virtual int PuntTotPostuinte { get; set; }
         public virtual int PuntMinPostuinte { get; set; }
         public virtual int PuntTotEdad { get; set; }
@@ -74,7 +75,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FecExpiracacion { get; set; }
         public virtual string TipVacante { get; set; }
         public virtual int NumVacantes { get; set; }
-        public virtual int Idecargo { get; set; }
+        public virtual int IdeCargo { get; set; }
         public virtual string NomPersonReemplazo { get; set; }
         public virtual DateTime FecIniReemplazo { get; set; }
         public virtual DateTime FecfInReemplazo { get; set; }
@@ -83,6 +84,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndVerSexoMasc { get; set; }
         public virtual string IndVerSexoFem { get; set; }
         // para la auditoria
+        public virtual string EstadoActivo { get; set; }
         public virtual string UsrCreacion { get; set; }
         public virtual DateTime Feccreacion { get; set; }
         public virtual string UsrModifica { get; set; }

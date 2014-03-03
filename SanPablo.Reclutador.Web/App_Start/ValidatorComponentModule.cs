@@ -128,6 +128,10 @@
             builder.RegisterType<ReemplazoValidator>()
                .Keyed<IValidator>(typeof(IValidator<Reemplazo>))
                .As<IValidator>();
+            builder.RegisterType<SolReqPersonalValidator>()
+                .Keyed<IValidator>(typeof(IValidator<SolReqPersonal>))
+                .As<IValidator>();
+            
             
 
 

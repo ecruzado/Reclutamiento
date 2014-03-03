@@ -1,0 +1,183 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
+@{
+    ViewBag.Title = "Solicitud Ampliación";
+}
+@section Head{
+}
+
+@section Scripts{
+
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#updateDialogConfirmacion').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    e.preventDefault();
+                    var result = $('#solicitudAmpliacionCargoForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("Edit", "SolicitudAmpliacionCargo")',
+                        $("#solicitudAmpliacionCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $("#updateDialogConfirmacion").dialog("close");
+                                $("#SolReqPersonal_IdeSolReqPersonal").val(respuesta.IdDato);
+                                MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO");
+                            }
+                            else {
+                                $(this).dialog("close");
+                                mensajeResultado("Solicitud no enviada intente nuevamente".Mensaje);
+                            }
+                        });
+                    }
+                    else {
+                        $(this).dialog("close");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "SAN PABLO");
+                    }
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+  function confirmarEnvio()
+  {
+    var dialogDiv = $('#updateDialogConfirmacion');
+    dialogDiv.dialog('open');
+    return false;
+  }
+
+  function deshabilitarControles()
+  {
+
+  }
+
+  function MostrarMensaje(mensaje, titulo)
+  {
+    Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
+  }
+
+</script>
+}
+@using (Html.BeginForm("Edit", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "solicitudAmpliacionCargoForm" }))
+{
+@Html.ValidationSummary(true)
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Solicitud de Ampliación de Cargo</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                    @Html.HiddenFor(model=>model.SolReqPersonal.IdeSede)
+                    @Html.TextBoxFor(model => model.SolReqPersonal.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
+                </div>            
+            </div>
+            <h5>Motivo requerimiento</h5>
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Requerimiento</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { @class = "input-small", disabled = "disabled" })
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Dependencia </label>
+                            <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeDependencia)
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Dependencia_des, new { @disabled = "disabled" })                           
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                      <div class="">
+                        <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
+                        <div class="controles">
+                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
+                             <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.SolReqPersonal.IdeCargo)
+                             </div>
+                        </div>
+                       </div>
+                    </td>
+                   <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Departamento </label>
+                            <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeDepartamento)
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Departamento_des, new { @disabled = "disabled" })                           
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "input-small" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.NumVacantes)
+                                </div>
+                            </div>
+                    </td>                    
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Área </label>
+                            <div class="controles">
+                                @Html.HiddenFor(model =>model.SolReqPersonal.IdeArea)
+                                @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @disabled = "disabled" })
+                            </div>
+                    </td> 
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                         <div class="">
+                            <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
+                            <div class="controles">
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { @class = "input-large", rows = "3" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.Observacion)
+                             </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Motivos <span class="text-error">*</span></label>
+                            <div class="controles">
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Motivo, new { @class = "input-large", rows = "3" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolReqPersonal.Motivo)
+                                </div>
+                            </div>
+                        </div>
+                    </td>   
+                </tr>
+          </table>
+            <div class="form-actions">
+                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+            </div>
+        
+        </div>
+    </div>
+</div>
+}
+<div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
+<div id="divMensaje"><span id="spanMensaje"></span></div>
