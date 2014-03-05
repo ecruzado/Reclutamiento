@@ -107,7 +107,7 @@ namespace SanPablo.Reclutador.Repository
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-         public string CreaSolicitudReemplazo(SolReqPersonal solReqPersonal, Reemplazo objReemplazo) 
+         public Int32 CreaSolicitudReemplazo(SolReqPersonal solReqPersonal, Reemplazo objReemplazo) 
          {
 
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -139,7 +139,7 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = solReqPersonal.Tipsol;
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
-                 return Convert.ToString(lspcmd.Parameters["p_cRetVal"].Value);
+                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
 
 
              }

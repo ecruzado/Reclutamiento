@@ -1511,7 +1511,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             JsonMessage objJson = new JsonMessage();
-            string retorno=null;
+            Int32 retorno=0;
             model.Reemplazo = new Reemplazo();
 
             try
@@ -1555,14 +1555,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             catch (Exception)
             {
 
-                retorno = "";
+                retorno = 0;
             }
 
 
-            if (retorno!="")
+            if (retorno>0)
             {
                 objJson.Resultado = true;
                 objJson.Mensaje = "Se genero la Solicitud";
+                objJson.IdDato = retorno;
             }
 
 

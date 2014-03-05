@@ -637,20 +637,20 @@
             return;
         }
 
-        if (numVacante.length>0) {
+        //if (numVacante.length>0) {
 
-            var nVacante = parseInt(numVacante);
-            if (nVacante==0) {
-                notificacionExito("Ingrese el numero de vacantes");
-                return;
-            }
+        //    var nVacante = parseInt(numVacante);
+        //    if (nVacante==0) {
+        //        notificacionExito("Ingrese el numero de vacantes");
+        //        return;
+        //    }
 
-            if (nVacante != countList) {
-                notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
-                return;
-            }
+        //    if (nVacante != countList) {
+        //        notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
+        //        return;
+        //    }
             
-        }
+        //}
 
         creaSolicitudReempCargo();
 
@@ -665,6 +665,7 @@
                 traditional: true,
                 success: function (data) {
                     if (data.Resultado) {
+                        $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                         $('#grdListReemplazosReq').trigger('reloadGrid');
                     }
@@ -704,7 +705,11 @@
                            
                                 <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">    
-                            @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { @class = "textoFormulario", @readonly = "readonly" })    
+                            
+                              @*  <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.SolReqPersonal.CodSolReqPersonal" readonly="readonly">
+                                @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { @class = "textoFormulario", @readonly = "readonly" })    *@
+                                <input class="textoFormulario" id="SolReqPersonal_CodSolReqPersonal" name="SolReqPersonal.CodSolReqPersonal" readonly="readonly" type="text" value="@Model.SolReqPersonal.CodSolReqPersonal">
+
                             </div>
                             
                         </td>
@@ -784,14 +789,14 @@
                         </td>                    
                     </tr>
                     
-                </table>@*
+                </table>
     
                 <div class="grilla-opciones">
                         <div class="opciones">
-                            <a  class="btn btn-info" id="btnGrabarSolReq" ><i class="icon-screenshot icon-white"></i> Grabar</a>
+                            <a  class="btn btn-info" id="btnGrabarSolReq" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Grabar</a>
                         </div>
                         <div style="clear:both"></div>
-                </div>*@
+                </div>
     
     
                 <div class="grilla-opciones">
@@ -1442,7 +1447,7 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <a  class="btn btn-info" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                <a  class="btn btn-info" ><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
 
             </div>
