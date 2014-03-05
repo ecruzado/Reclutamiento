@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PublicacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudNuevoCargoController.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PublicacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
@@ -379,9 +381,16 @@
     <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudReemplazoCargo\ListaReemplazo.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupListaReemplazo.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index1.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Puesto.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

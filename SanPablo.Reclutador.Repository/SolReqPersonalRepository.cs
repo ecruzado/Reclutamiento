@@ -336,5 +336,464 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+         public List<CompetenciaRequerimiento> ListaCompetencias(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_COMPETENCIAREMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var competencia = new CompetenciaRequerimiento();
+                 var listCompetencias = new List<CompetenciaRequerimiento>();
+  
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         competencia = new CompetenciaRequerimiento();
+                         competencia.IdeCompetenciaRequerimiento = Convert.ToInt32(lector["IDECOMPETENCIASOLREQ"]);
+                         competencia.DescripcionCompetencia = Convert.ToString(lector["DESCRIPCION"]);
+                         listCompetencias.Add(competencia);
+                     }
+                     lector.Close();
+                 }
+                 
+                
+                 return listCompetencias;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+         public List<OfrecemosRequerimiento> ListaOfrecemos(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_OFRECIMIENTO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var ofrecimiento = new OfrecemosRequerimiento();
+                 var listOfrecemos = new List<OfrecemosRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         ofrecimiento = new OfrecemosRequerimiento();
+                         ofrecimiento.IdeOfrecemosRequerimiento = Convert.ToInt32(lector["IDEOFRECEMOSSOLREQ"]);
+                         ofrecimiento.DescripcionOfrecimiento = Convert.ToString(lector["DESCRIPCION"]);
+                         listOfrecemos.Add(ofrecimiento);
+                     }
+                     lector.Close();
+                 }
+
+
+                 return listOfrecemos;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<HorarioRequerimiento> ListaHorarios(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_HORARIO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var horario = new HorarioRequerimiento();
+                 var listaHorario = new List<HorarioRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         horario = new HorarioRequerimiento();
+                         horario.IdeHorarioRequerimiento = Convert.ToInt32(lector["IDEHORARIOSOLREQ"]);
+                         horario.DescripcionHorario = Convert.ToString(lector["DESCRIPCION"]);
+                         horario.PuntajeHorario = Convert.ToInt32(lector["PUNTHORARIO"]);
+                         listaHorario.Add(horario);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaHorario;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<UbigeoReemplazo> ListaUbigeos(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_UBIGEO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var ubigeo = new UbigeoReemplazo();
+                 var listaHorario = new List<UbigeoReemplazo>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         ubigeo = new UbigeoReemplazo();
+                         ubigeo.IdeUbigeoReemplazo = Convert.ToInt32(lector["IDEUBIGEOSOLREQ"]);
+                         ubigeo.IdeUbigeo = Convert.ToInt32(lector["IDEUBIGEO"]);
+                         ubigeo.Distrito = Convert.ToString(lector["DISTRITO"]);
+                         ubigeo.Provincia = Convert.ToString(lector["PROVINCIA"]);
+                         ubigeo.Departamento = Convert.ToString(lector["DEPARTAMENT"]);
+                         ubigeo.PuntajeUbigeo = Convert.ToInt32(lector["PUNTUBIGEO"]);
+                         listaHorario.Add(ubigeo);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaHorario;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<CentroEstudioRequerimiento> ListaCentroEstudio(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_CENT_EST_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var centroEstudio = new CentroEstudioRequerimiento();
+                 var listaCentroEstudio = new List<CentroEstudioRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         centroEstudio = new CentroEstudioRequerimiento();
+                         centroEstudio.IdeCentroEstudioRequerimiento = Convert.ToInt32(lector["IDECENTESTSOLREQ"]);
+                         centroEstudio.DescripcionTipoCentroEstudio = Convert.ToString(lector["TIPINST"]);
+                         centroEstudio.DescripcionNombreCentroEstudio = Convert.ToString(lector["NOMBINST"]);
+                         centroEstudio.PuntajeCentroEstudios = Convert.ToInt32(lector["PUNTACENTROEST"]);
+                         listaCentroEstudio.Add(centroEstudio);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaCentroEstudio;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<NivelAcademicoRequerimiento> ListaNivelAcademico(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_NIVELACAD_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var nivelAcademico = new NivelAcademicoRequerimiento();
+                 var listaNivelAcademico = new List<NivelAcademicoRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         nivelAcademico = new NivelAcademicoRequerimiento();
+                         nivelAcademico.IdeNivelAcademicoRequerimiento = Convert.ToInt32(lector["IDENIVELACADESOLREQ"]);
+                         nivelAcademico.DescripcionTipoEducacion = Convert.ToString(lector["TIPEDUCACION"]);
+                         nivelAcademico.DescripcionAreaEstudio = Convert.ToString(lector["AREAESTUDIO"]);
+                         nivelAcademico.DescripcionNivelAlcanzado = Convert.ToString(lector["NIVELALCANZADO"]);
+                         nivelAcademico.CicloSemestre = Convert.ToInt32(lector["CICLOSEMESTRE"]);
+                         nivelAcademico.PuntajeNivelEstudio = Convert.ToInt32(lector["PUNTNIVESTUDIO"]);
+                         listaNivelAcademico.Add(nivelAcademico);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaNivelAcademico;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<ConocimientoGeneralRequerimiento> ListaConocimientos(int ideSolicitudReqPersonal, string conocimiento)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_CONOCIMIENTO_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_tipoConocimiento", OracleType.VarChar).Value = conocimiento;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var conocimientoGral = new ConocimientoGeneralRequerimiento();
+                 var listaConocimientoGral = new List<ConocimientoGeneralRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         conocimientoGral = new ConocimientoGeneralRequerimiento();
+                         conocimientoGral.IdeConocimientoGeneralRequerimiento = Convert.ToInt32(lector["IDECONOGENSOLREQ"]);
+                         conocimientoGral.DescripcionConocimientoOfimatica = Convert.ToString(lector["OFIMATICA"]);
+                         conocimientoGral.DescripcionNombreOfimatica = Convert.ToString(lector["DESCOFIMATICA"]);
+                         conocimientoGral.DescripcionIdioma = Convert.ToString(lector["IDIOMA"]);
+                         conocimientoGral.DescripcionConocimientoIdioma = Convert.ToString(lector["CONOIDIOMA"]);
+                         conocimientoGral.DescripcionConocimientoGeneral = Convert.ToString(lector["GENERAL"]);
+                         conocimientoGral.DescripcionNombreConocimientoGeneral = Convert.ToString(lector["DESCGENERAL"]);
+                         conocimientoGral.DescripcionNivelConocimiento = Convert.ToString(lector["NIVELCONO"]);
+                         conocimientoGral.PuntajeConocimiento = Convert.ToInt32(lector["PUNTCONOCIMIENTO"]);
+                         listaConocimientoGral.Add(conocimientoGral);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaConocimientoGral;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<ExperienciaRequerimiento> ListaExperiencia(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_EXPR_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var experiencia = new ExperienciaRequerimiento();
+                 var listaExperiencia = new List<ExperienciaRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         experiencia = new ExperienciaRequerimiento();
+                         experiencia.IdeExperienciaRequerimiento = Convert.ToInt32(lector["IDEEXPSOLREQ"]);
+                         experiencia.DescripcionExperiencia = Convert.ToString(lector["EXPERIENCIA"]);
+                         experiencia.CantidadAnhosExperiencia = Convert.ToInt32(lector["CANTANHOEXP"]);
+                         experiencia.CantidadMesesExperiencia = Convert.ToInt32(lector["CANTMESESEXP"]);
+                         experiencia.PuntajeExperiencia = Convert.ToInt32(lector["PUNTEXPERIENCIA"]);
+                         listaExperiencia.Add(experiencia);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaExperiencia;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<EvaluacionRequerimiento> ListaEvaluacion(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_EVAL_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var evaluacion = new EvaluacionRequerimiento();
+                 var listaEvaluacion = new List<EvaluacionRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         evaluacion = new EvaluacionRequerimiento();
+                         evaluacion.IdeEvaluacionRequerimiento = Convert.ToInt32(lector["IDEEVALUACIONSOLREQ"]);
+                         evaluacion.DescripcionExamen = Convert.ToString(lector["NOMEXAMEN"]);
+                         evaluacion.DescripcionTipoExamen = Convert.ToString(lector["TIPOEXAMEN"]);
+                         evaluacion.DescripcionAreaResponsable = Convert.ToString(lector["NOMAREA"]);
+                         evaluacion.PuntajeExamen = Convert.ToInt32(lector["PUNTEXAMEN"]);
+                         evaluacion.NotaMinimaExamen = Convert.ToInt32(lector["NOTAMINEXAMEN"]);
+                         listaEvaluacion.Add(evaluacion);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaEvaluacion;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         public List<DiscapacidadRequerimiento> ListaDiscapacidad(int ideSolicitudReqPersonal)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_OBTENER_DISCAP_REMP");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = ideSolicitudReqPersonal;
+                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 var discapacidad = new DiscapacidadRequerimiento();
+                 var listaDiscapacidad = new List<DiscapacidadRequerimiento>();
+
+                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                 {
+
+                     while (lector.Read())
+                     {
+                         discapacidad = new DiscapacidadRequerimiento();
+                         discapacidad.IdeDiscapacidadRequerimiento = Convert.ToInt32(lector["IDEDISCAPASOLREQ"]);
+                         discapacidad.DescripcionTipoDiscapacidad = Convert.ToString(lector["DESCDISCAP"]);
+                         discapacidad.PuntajeDiscapacidad = Convert.ToInt32(lector["PUNTDISCAPA"]);
+                         listaDiscapacidad.Add(discapacidad);
+                     }
+                     lector.Close();
+                 }
+
+                 return listaDiscapacidad;
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
     }
 }

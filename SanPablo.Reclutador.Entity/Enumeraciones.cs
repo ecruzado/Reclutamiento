@@ -73,7 +73,8 @@
         TipoMenu = 47,
 
         //Tipo de Vacante
-        TipoVacante = 48
+        TipoVacante = 48,
+        TipoSolicitud = 49
 
     }
 
@@ -158,11 +159,12 @@
         
     }
 
-    public sealed class Solicitud
+    public sealed class TipoSolicitud
     {
-        public const string Nuevo = " Nuevo ";
-        public const string Remplazo = " Remplazo de ";
-        public const string Ampliacion = " Ampliacion de ";
+        public const string Nuevo = "01";
+        public const string Ampliacion = "02";
+        public const string Remplazo = "03";
+        
     }
 
     public sealed class Decision

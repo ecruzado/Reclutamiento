@@ -13,7 +13,7 @@
         public EvaluacionCargo Evaluacion { get; set; }
         public string descExamen { get; set; }
         
-        public List<DetalleGeneral> TiposAreasResponsables { get; set; }
+        public List<Area> TiposAreasResponsables { get; set; }
         public List<Examen> Examenes { get; set; }
         public List<Examen> TipoExamenes { get; set; }
         

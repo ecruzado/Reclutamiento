@@ -1,0 +1,510 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
+@{
+    ViewBag.Title = "Perfil";
+}
+@section ScriptsCargo{  
+<script type="text/javascript">
+        $(document).ready(function () {
+ 
+            $('#btnAgregarOfimatica').click(function () {
+                mostrarAgregarOfimatica();
+            });
+
+
+            $('#updateDialogOfimatica').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('#ofimaticaForm').valid();
+                        if (result) {
+                            $.post('@Url.Action("Ofimatica", "ConocimientosCargo")',
+                                $("#ofimaticaForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialogOfimatica").dialog("close");
+                                        $('#grdListOfimatica').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                }
+                            );
+                        }
+                        else {
+                            notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnEliminarOfimatica').click(function () {
+                var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
+                if (ideOfimatica != null) {
+                    $("#spanMensaje7").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje7").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarOfimatica(ideOfimatica); $(this).dialog("close"); $('#grdListOfimatica').trigger('reloadGrid'); },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
+
+                    return false;
+                }
+                else {
+                    $("#spanMensaje7").html('Seleccionar un item a eliminar');
+                    $("#divMensaje7").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+
+            $('#btnEditarOfimatica').click(function () {
+                var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
+                if (ideOfimatica != null) {
+                    mostrarEditarOfimatica(ideOfimatica);
+                }
+                else {
+                    $("#spanMensaje7").html('Seleccionar un item a editar');
+                    $("#divMensaje7").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+
+            $('#btnAgregarIdioma').click(function () {
+                mostrarAgregarIdioma();
+            });
+
+
+            $('#updateDialogIdioma').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('#IdiomaForm').valid();
+                        if (result) {
+                            $.post('@Url.Action("Idioma", "ConocimientosCargo")',
+                                    $("#IdiomaForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.Resultado) {
+                                            $("#updateDialogIdioma").dialog("close");
+                                            $('#grdListIdioma').trigger('reloadGrid');
+                                        }
+                                        else {
+                                            notificacionError(respuesta.Mensaje);
+                                        }
+                                    }
+                                );
+                        }
+                        else {
+                            notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnEliminarIdioma').click(function () {
+                var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
+                if (ideIdioma != null) {
+                    $("#spanMensaje8").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje8").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarIdioma(ideIdioma); $(this).dialog("close"); $('#grdListIdioma').trigger('reloadGrid'); },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
+
+                    return false;
+                }
+                else {
+                    $("#spanMensaje8").html('Seleccionar un item a eliminar');
+                    $("#divMensaje8").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+
+            $('#btnEditarIdioma').click(function () {
+                var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
+                if (ideIdioma != null) {
+                    mostrarEditarIdioma(ideIdioma);
+                }
+                else {
+                    $("#spanMensaje8").html('Seleccionar un item a editar');
+                    $("#divMensaje8").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+
+            $('#btnAgregarOtrosConocimientos').click(function () {
+                mostrarAgregarOtrosConocimientos();
+            });
+
+
+            $('#updateDialogOtrosConocimientos').dialog({
+                autoOpen: false,
+                width: 600,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var result = $('#otrosConocimientosForm').valid();
+                        if (result) {
+                            $.post('@Url.Action("OtrosConocimientos", "ConocimientosCargo")',
+                                    $("#otrosConocimientosForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.Resultado) {
+                                            $("#updateDialogOtrosConocimientos").dialog("close");
+                                            $('#grdListOtrosConocimientos').trigger('reloadGrid');
+                                        }
+                                        else {
+                                            notificacionError(respuesta.Mensaje);
+                                        }
+                                    }
+                                );
+                        }
+                        else {
+                            notificacionError("ERROR: Verifique que los datos ingresados sean los correctos");
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $('#btnEliminarOtrosConocimientos').click(function () {
+                var ideOtrosConocimientos = jQuery('#grdListOtrosConocimientos').jqGrid('getGridParam', 'selrow');
+                if (ideOtrosConocimientos != null) {
+                    $("#spanMensaje9").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje9").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () { eliminarOtrosConocimientos(ideOtrosConocimientos); $(this).dialog("close"); $('#grdListOtrosConocimientos').trigger('reloadGrid'); },
+                            "Cancel": function () { $(this).dialog("close"); }
+                        }
+                    });
+
+                    return false;
+                }
+                else {
+                    $("#spanMensaje9").html('Seleccionar un item a eliminar');
+                    $("#divMensaje9").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+
+            $('#btnEditarOtrosConocimientos').click(function () {
+                var ideOtrosConocimientos = jQuery('#grdListOtrosConocimientos').jqGrid('getGridParam', 'selrow');
+                if (ideOtrosConocimientos != null) {
+                    mostrarEditarOtrosConocimientos(ideOtrosConocimientos);
+                }
+                else {
+                    $("#spanMensaje9").html('Seleccionar un item a editar');
+                    $("#divMensaje9").dialog({
+                        title: 'SAN PABLO',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function () {
+           
+            jQuery("#grdListOfimatica").jqGrid({
+                url: '@Url.Action("ListaOfimatica", "ConocimientosCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                pager: jQuery('#grdPagerOfimatica'),
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: false,
+                cellEdit: true,
+                height: 200,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdListIdioma").jqGrid({
+                url: '@Url.Action("ListaIdioma", "ConocimientosCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                pager: jQuery('#grdPagerIdioma'),
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: false,
+                cellEdit: true,
+                height: 200,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+
+            jQuery("#grdListOtrosConocimientos").jqGrid({
+                url: '@Url.Action("ListaOtrosConocimientos", "ConocimientosCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+                colModel: [
+                        { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                        { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                        { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                ],
+                pager: jQuery('#grdPagerOtrosConocimientos'),
+                sortname: 'IdeConocimientoGeneralCargo',
+                sortorder: 'desc',
+                viewrecords: false,
+                cellEdit: true,
+                height: 200,
+                width: 898,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+        });
+
+        function mostrarAgregarOfimatica() {
+            var dialogDiv = $('#updateDialogOfimatica');
+            $.get('@Url.Action("Ofimatica", "ConocimientosCargo", new { id = "0"})', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOfimatica"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+        }
+
+        function mostrarEditarOfimatica(ideOfimatica) {
+            var dialogDiv = $('#updateDialogOfimatica');
+            $.get('@Url.Action("Ofimatica", "ConocimientosCargo")', { id: ideOfimatica }, function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOfimatica"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+        }
+
+        function eliminarOfimatica(id) {
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '@Url.Action("eliminarOfimatica","ConocimientosCargo")',
+            data: { ideOfimatica: id },
+        });
+        }
+
+        function mostrarAgregarIdioma() {
+        var dialogDiv = $('#updateDialogIdioma');
+        $.get('@Url.Action("Idioma", "ConocimientosCargo", new { id = "0"})', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogIdioma"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+        }
+
+        function mostrarEditarIdioma(ideIdioma) {
+            var dialogDiv = $('#updateDialogIdioma');
+            $.get('@Url.Action("Idioma", "ConocimientosCargo")', { id: ideIdioma }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogIdioma"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function eliminarIdioma(id) {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '@Url.Action("eliminarIdioma","ConocimientosCargo")',
+            data: { ideIdioma: id },
+        });
+        }
+
+        function mostrarAgregarOtrosConocimientos() {
+        var dialogDiv = $('#updateDialogOtrosConocimientos');
+        $.get('@Url.Action("OtrosConocimientos", "ConocimientosCargo", new { id = "0"})', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialogOtrosConocimientos"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+        }
+
+        function mostrarEditarOtrosConocimientos(ideOtrosConocimientos) {
+            var dialogDiv = $('#updateDialogOtrosConocimientos');
+            $.get('@Url.Action("OtrosConocimientos", "ConocimientosCargo")', { id: ideOtrosConocimientos }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogOtrosConocimientos"));
+                dialogDiv.dialog('open');
+            });
+            return false;
+        }
+
+        function eliminarOtrosConocimientos(id) {
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '@Url.Action("eliminarOtrosConocimientos","ConocimientosCargo")',
+            data: { ideOtrosConocimientos: id },
+        });
+        }
+
+</script>
+}
+
+<!--CONOCIMIENTOS -->
+      <div class="tab-pane" id="E">
+        <div class="grilla-opciones">
+            <h6>Ofimática</h6>
+            <div class="opciones">
+                <a id="btnAgregarOfimatica" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarOfimatica" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarOfimatica" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListOfimatica">
+            </table>
+            <div id="grdPagerOfimatica">
+            </div>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Idiomas</h6>
+            <div class="opciones">
+                <a id="btnAgregarIdioma" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
+                <a id="btnEditarIdioma" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarIdioma" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListIdioma">
+            </table>
+            <div id="grdPagerIdioma">
+            </div>
+        </div>
+        <div class="grilla-opciones">
+            <h6>Otros Conocimientos</h6>
+            <div class="opciones">
+                <a id ="btnAgregarOtrosConocimientos" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id ="btnEditarOtrosConocimientos" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id ="btnEliminarOtrosConocimientos" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="tabla-datos">
+            <table id="grdListOtrosConocimientos">
+            </table>
+            <div id="grdPagerOtrosConocimientos">
+            </div>
+        </div>                        
+        <div class="formulario-accion">   
+            <div class="opciones">
+            <a class="btn" href="@Url.Action("Experiencia", "Perfil")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="@Url.Action("Discapacidad", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
+            </div>
+                                        
+        </div>                    
+    </div>
+
+    <!--CONOCIMIENTOS FIN-->
+
+
+<div id="updateDialogOfimatica" title="Agregar Conocimiento Ofimatica"></div>
+    <div id="divMensaje7">
+        <span id="spanMensaje7"></span>
+    </div>
+
+<div id="updateDialogIdioma" title="Agregar Conocimiento Idioma"></div>
+    <div id="divMensaje8">
+        <span id="spanMensaje8"></span>
+    </div>
+
+<div id="updateDialogOtrosConocimientos" title="Agregar Otros Conocimientos"></div>
+    <div id="divMensaje9">
+        <span id="spanMensaje9"></span>
+    </div>
+

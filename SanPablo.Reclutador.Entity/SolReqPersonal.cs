@@ -25,8 +25,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ObjetivoCargo { get; set; }
         public virtual int PuntPostuinte { get; set; }
         public virtual int PuntRefElaboral { get; set; }
-        public virtual string IndMasculino { get; set; }
-        public virtual string IndFemenino { get; set; }
+       
         public virtual int PuntSexo { get; set; }
         public virtual int EdadInicio { get; set; }
         public virtual int edadfin { get; set; }
@@ -35,10 +34,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual double SalarioFin { get; set; }
         public virtual string TipMoneda { get; set; }
         public virtual double PuntSalario { get; set; }
-        public virtual string IndVerSalario { get; set; }
-        public virtual string IndSexMascu { get; set; }
-        public virtual string IndSexFemen { get; set; }
+        
+        
         public virtual string Observacion { get; set; }
+        public virtual string FuncionesCargo { get; set; }
         public virtual string Motivo      { get; set; }
         public virtual int PuntTotPostuinte { get; set; }
         public virtual int PuntMinPostuinte { get; set; }
@@ -64,6 +63,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntMinDisCapa { get; set; }
         public virtual int PuntTotHorario { get; set; }
         public virtual int PuntMinHorario { get; set; }
+       
         public virtual int PuntTotUbigeo { get; set; }
         public virtual int PuntMinUbigeo { get; set; }
         public virtual int PuntTotReflaboral { get; set; }
@@ -81,8 +81,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FecfInReemplazo { get; set; }
         public virtual string IndCargo { get; set; }
         public virtual string IndVerSueldo { get; set; }
-        public virtual string IndVerSexoMasc { get; set; }
-        public virtual string IndVerSexoFem { get; set; }
+        public virtual string IndVerSexo { get; set; }
+        
         // para la auditoria
         public virtual string EstadoActivo { get; set; }
         public virtual string UsrCreacion { get; set; }
@@ -96,7 +96,14 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Departamento_des { get; set; }
         public virtual string Area_des { get; set; }
         public virtual string Sede_des { get; set; }
-        
+
+
+        //
+        public virtual string IndicadorSexo { get; set; }
+        public virtual int PuntajeTotalOfimatica { get; set; }
+        public virtual int PuntajeMinimoOfimatica { get; set; }
+        public virtual string IndicadorSalario { get; set; }
+        public virtual string IndicadorEdad { get; set; }
         /// <summary>
         /// tipo de etapa de la solicitud
         /// </summary>
@@ -104,6 +111,55 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipResponsable { get; set; }
         public virtual string TipEstado { get; set; }
        
+        public virtual string Sexo { get; set; }
+        public virtual string TipoRequerimiento { get; set; }
+        public virtual string TipoRangoSalario { get; set; }
+        public virtual string TipoSolicitud { get; set; }
+
+        public virtual bool IndicadorSexoRanking
+        {
+            get
+            {
+                return IndicadorSexo == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorSexo = Indicador.Si;
+                else
+                    IndicadorSexo = Indicador.No;
+            }
+        }
+
+        public virtual bool IndicadorSalarioRanking
+        {
+            get
+            {
+                return IndicadorSalario == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorSalario = Indicador.Si;
+                else
+                    IndicadorSalario = Indicador.No;
+            }
+        }
+
+        public virtual bool IndicadorEdadRanking
+        {
+            get
+            {
+                return IndicadorEdad == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorEdad = Indicador.Si;
+                else
+                    IndicadorEdad = Indicador.No;
+            }
+        }
         
        
         /// <summary>

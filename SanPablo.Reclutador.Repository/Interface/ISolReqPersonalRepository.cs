@@ -25,7 +25,25 @@ namespace SanPablo.Reclutador.Repository.Interface
         string CreaSolicitudReemplazo(SolReqPersonal obj,Reemplazo objReemplazo);
 
 
-        
+        List<CompetenciaRequerimiento> ListaCompetencias(int ideSolicitudReqPersonal);
+
+        List<OfrecemosRequerimiento> ListaOfrecemos(int ideSolicitudReqPersonal);
+
+        List<HorarioRequerimiento> ListaHorarios(int ideSolicitudReqPersonal);
+
+        List<UbigeoReemplazo> ListaUbigeos(int ideSolicitudReqPersonal);
+
+        List<CentroEstudioRequerimiento> ListaCentroEstudio(int ideSolicitudReqPersonal);
+
+        List<NivelAcademicoRequerimiento> ListaNivelAcademico(int ideSolicitudReqPersonal);
+
+        List<ConocimientoGeneralRequerimiento> ListaConocimientos(int ideSolicitudReqPersonal, string conocimiento);
+
+        List<ExperienciaRequerimiento> ListaExperiencia(int ideSolicitudReqPersonal);
+
+        List<DiscapacidadRequerimiento> ListaDiscapacidad(int ideSolicitudReqPersonal);
+
+        List<EvaluacionRequerimiento> ListaEvaluacion(int ideSolicitudReqPersonal);
 
     }
 }

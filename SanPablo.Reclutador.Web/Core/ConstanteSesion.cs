@@ -36,6 +36,7 @@ namespace SanPablo.Reclutador.Web.Core
         public const string IdePostulante = "IdePostulante";
         public const string CargoPerfil = "CargoPerfil";
 
+        public const string IdeSolicitudAmpliacion = "ideSolicitudAmp";
         /// <summary>
         /// Codigo de session unico que se genera al intentar crear una solicitud de requerimiento
         /// para asociar los reemplazos a la solicitud una vez se cree la solicitud

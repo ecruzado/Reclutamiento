@@ -1,7 +1,6 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
 @{
     ViewBag.Title = "Perfil";
-    Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{  
 <script type="text/javascript">
@@ -207,7 +206,7 @@
         });
 
         jQuery("#grdListCentroEstudio").jqGrid({
-            url: '@Url.Action("ListaCentroEstudio", "NivelAcademicoCargo")',
+            url: '@Url.Action("ListaCentroEstudio", "CentroEstudioCargo")',
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Tipo de Institución', 'Institución', 'Puntaje'],
@@ -295,12 +294,12 @@
 </script>
 }
 
-@using (Html.BeginForm("Estudio", "Perfil", FormMethod.Post, new { @id = "estudioCargoForm" }))
+@using (Html.BeginForm("Estudio", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "estudioCargoForm" }))
 {
 
 <!--ESTUDIOS -->
   
-    <div class="tab-pane" id="C">
+    <div class="tab-pane" id="tabC">
         <div class="grilla-opciones">
             <h6>Nivel Académico</h6>
             <div class="opciones">

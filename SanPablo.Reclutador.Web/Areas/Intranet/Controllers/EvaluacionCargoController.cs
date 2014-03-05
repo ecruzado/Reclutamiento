@@ -24,16 +24,19 @@
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IEvaluacionCargoRepository _evaluacionCargoRepository;
         private IExamenRepository _examenRepository;
+        private IAreaRepository _areaRepository;
 
         public EvaluacionCargoController(ICargoRepository cargoRepository,
                                       IDetalleGeneralRepository detalleGeneralRepository,
                                       IEvaluacionCargoRepository evaluacionCargoRepository,
-                                      IExamenRepository examenRepository)
+                                      IExamenRepository examenRepository,
+                                      IAreaRepository areaRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _evaluacionCargoRepository = evaluacionCargoRepository;
             _examenRepository = examenRepository;
+            _areaRepository = areaRepository;
         }
 
         #region EVALUACION CARGO
@@ -149,8 +152,8 @@
             evaluacionCargoViewModel.Cargo = new Cargo();
             evaluacionCargoViewModel.Evaluacion = new EvaluacionCargo();
 
-            evaluacionCargoViewModel.TiposAreasResponsables = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
-            evaluacionCargoViewModel.TiposAreasResponsables.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar"});
+            evaluacionCargoViewModel.TiposAreasResponsables = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            evaluacionCargoViewModel.TiposAreasResponsables.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar"});
 
             evaluacionCargoViewModel.Examenes = new List<Examen>(_examenRepository.GetBy(x=>x.EstActivo == IndicadorActivo.Activo));
             evaluacionCargoViewModel.Examenes.Insert(0, new Examen { IdeExamen = 0, DescExamen = "Seleccionar" });
