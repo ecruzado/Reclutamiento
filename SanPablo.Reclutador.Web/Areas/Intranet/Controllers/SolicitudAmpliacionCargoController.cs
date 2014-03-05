@@ -50,6 +50,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit(string ideSolicitud)
         {
             SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo();
+            var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
+
             var ideSolicitudAmp = Convert.ToInt32(ideSolicitud);
             if (ideSolicitudAmp != 0)
             {
@@ -59,8 +62,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             else
             {
-                var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-                SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
+                solicitudModel.Accion = Accion.Nuevo;
                 solicitudAmpliacion.IdeArea = usuario.IDEAREA;
                 solicitudAmpliacion.IdeSede = usuario.IDESEDE;
                 solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
@@ -72,11 +74,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.Dependencia_des = dependencia.NombreDependencia;
                 solicitudAmpliacion.Area_des = area.NombreArea;
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
-
-                solicitudModel.Accion = Accion.Nuevo;
-
             }
-            
             return View(solicitudModel);
         }
 
@@ -102,6 +100,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion; 
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
                 _solicitudAmpliacionPersonal.Add(solicitudAmpliacion);
+
+                //insertar el log y enviar
 
                 objJsonMessage.Mensaje = "Solicitud enviada correctamente";
                 objJsonMessage.Resultado = true;
@@ -867,27 +867,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                
                                 "1",
                                 item.TipEstado==null?"":item.TipEstado,
-                                item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
+                                item.IdeSolReqPersonal==0?"":item.IdeSolReqPersonal.ToString(),
                                 item.CodSolReqPersonal==null?"":item.CodSolReqPersonal.ToString(),
-                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
+                                item.IdeCargo==0?"":item.IdeCargo.ToString(),
                                 item.DesCargo==null?"":item.DesCargo,
-                                item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
+                                item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
                                 item.Dependencia_des==null?"":item.Dependencia_des,
-                                item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
+                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
                                 item.Departamento_des==null?"":item.Departamento_des,
-                                item.IdeArea==null?"":item.IdeArea.ToString(),
+                                item.IdeArea==0?"":item.IdeArea.ToString(),
                                 item.Area_des==null?"":item.Area_des,
-                                item.NumVacantes==null?"":item.NumVacantes.ToString(),
-                                item.CantPostulante==null?"":item.CantPostulante.ToString(),
-                                item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
-                                item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
-                                item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
+                                item.NumVacantes==0?"":item.NumVacantes.ToString(),
+                                item.CantPostulante==0?"":item.CantPostulante.ToString(),
+                                item.CantPreSelec==0?"":item.CantPreSelec.ToString(),
+                                item.CantEvaluados==0?"":item.CantEvaluados.ToString(),
+                                item.CantSeleccionados==0?"":item.CantSeleccionados.ToString(),
                                 item.Feccreacion==null?"":item.Feccreacion.ToString(),
                                 item.FecExpiracacion==null?"":item.FecExpiracacion.ToString(),
                                
-                                item.IdRol==null?"":item.IdRol.ToString(),
-                                item.DesRol==null?"":item.DesRol,
-                                item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
+                                item.idRolSuceso==0?"":item.idRolSuceso.ToString(),
+                                item.DesRolSuceso==null?"":item.DesRolSuceso,
+                                //item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
                                 item.TipEtapa==null?"":item.TipEtapa
