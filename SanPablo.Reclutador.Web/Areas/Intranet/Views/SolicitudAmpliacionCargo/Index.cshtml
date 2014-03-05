@@ -1,4 +1,9 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
+
+@{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
 }
 @section Head{
@@ -10,48 +15,165 @@
     $("#txtfechainicio").datepicker();
     $("#txtfechafin").datepicker();
 
-    jQuery("#grdList").jqGrid({
-        url: '@Url.Action("ListaSolicitudAmpliacion", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Estado', 'Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
-        colModel: [
-                { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
-                { name: 'Cargo', index: 'Cargo', align: 'left' },
-                { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
-                { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
-                { name: 'Area', index: 'Area', align: 'left', width: 100 },
-                { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                { name: 'Inicio', index: 'Inicio', align: 'left', width: 50 },
-                { name: 'Cierre', index: 'Cierre', align: 'left', width: 50 },
-                { name: 'Responsable', index: 'Responsable', align: 'left', width: 50 },
-                { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
-                { name: 'Etapa', index: 'Etapa', align: 'center', width: 50 }
-        ],
-        pager: '#grdPager',
-        height: 420,
-        width: 930,
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        viewrecords: true,
-        hidegrid: false,
-        altRows: true,
-        shrinkToFit: false
+    $('#btnBuscarReemplazo').click(function () {
+
+        //validacionBuscar();
+        $('#grdList').trigger('reloadGrid');
     });
 
-    function RadioFormatter(cellvalue, options, rowObject) {
-        var strRdo = '<input type ="radio" name = "codigo">';
-        return strRdo;
-    }
+    $('#btnAproRechaSol').click(function () {
+        var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        if (ideSolicitud != null) {
+            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo")' + '/' + ideSolicitud;
+            }
+            else {
+                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
+            }
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
+     });
+
+
+    $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
+        var ideDependencia = $(this).val();
+        $("select#SolicitudRequerimiento_IdeArea").empty();
+        $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet"})',
+            data: { ideDependencia: ideDependencia },
+            success: function (respuesta) {
+                $("select#SolicitudRequerimiento_IdeDepartamento").empty();
+                $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                $.each(respuesta, function (i, item) {
+                    $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='"
+                    + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                }
+            );
+            }
+        });
+    })
+
+    $('select#SolicitudRequerimiento_IdeDepartamento').change(function () {
+        var ideDepartamento = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("listaAreas","SolicitudAmpliacionCargo",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SolicitudRequerimiento_IdeArea").empty();
+                    $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudRequerimiento_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+    })
+
+
+        jQuery("#grdList").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+
+                    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                    { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
+                    { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
+                    { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
+                    { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
+                    { field: 'fecInicio', data: $("#SolicitudRequerimiento_FechaInicioBus").val() },
+                    { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
+                    { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
+                    { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
+                    { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() }
+
+                ];
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListBusquedaAmpliacion", "SolicitudAmpliacionCargo", new { area="Intranet"})',
+                type: 'post',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(params),
+                async: false,
+                success: function (data, st) {
+                    if (st == 'success') {
+                        var jq = $('#grdList')[0];
+                        jq.addJSONData(data);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        },
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
+        colModel: [
+                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
+                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true },
+                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
+                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
+                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250 },
+                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true },
+                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300 },
+                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true },
+                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
+                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
+                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
+
+                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
+                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
+                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
+                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
+                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
+                { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
+                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
+                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
+                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
+                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300 },
+                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
+                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
+        ],
+        pager: jQuery('#grdPager'),
+        rowNum: 10,
+        //rowList: [10, 30, 50],
+        autowidth: true,
+        rules: true,
+        sortname: 'IdeSolReqPersonal',
+        sortorder: 'desc',
+        viewrecords: true,
+        height: 250,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        rownumbers: true,
+        shrinkToFit: false,
+
+        postData: {
+        },
+        loadComplete: function (data) {
+        }
+    });
+
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function HabilitarFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'enabled.png';
         var title = "Habilitar"
         if (rowObject[14] == "Activo") {
@@ -66,123 +188,120 @@
         return strImg;
     }
 
+  
 </script>
 }
 <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Listado Solicitud de Ampliación de Cargo</h5>
+                <h5>Listado Solicitud de Ampliacion de Cargo</h5>
             </div>
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+@using (Html.BeginForm("Index", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmBusListaReemplazo", @class = "formulario-busqueda" }))
+{
+    @Html.ValidationSummary(true)
+          <table class="formulario-busqueda">        
+                  <tr class="formulario-fila">
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                <select id="selectCargo">
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Fecha</label>
+                    </td>
+                    <td class="span5" style="width:500px">
+                            <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
-                                <input id="txtfechainicio" type="text" class="input-small" placeholder=" Inicial"/>
-                                <input id="txtfechafin" type="text" class="input-small" placeholder=" Final"/>
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaInicioBus, new {@style="width:130px"})      
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaFinBus, new {@style="width:130px"})      
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                     </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                              @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
-                            <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Área</label>
-                            <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Etapa</label>
-                            <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
+                        
+                    </td>
+                    <td class="span5">
+                        
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
-                                <select>
-                                    <option>Seleccionar</option>                                    
-                                </select>
+                                
+                                 @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipResponsable, new SelectList(Model.Roles, "IdRol", "CodRol", Model.SolicitudRequerimiento.TipResponsable), new {  data_val = "false"})     
                             </div>
-                        </div>
-                    </div>                    
-                    <div class="span5">
-                        <div class="">
+                       
+                    </td>  
+                </tr>
+                <tr class="formulario-fila">
+                    
+                    <td class="span5">
+                       
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false"})
+                            </div>
+                        
+                    </td>
+                    <td class="span5">
+                        
+                            <label class="control-label" for="inputSuccess">Etapa</label>
+                            <div class="controles">
+                                 @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipEtapa, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipEtapa),new {  data_val = "false"})
+                            </div>
+                      
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                      
+                            <label class="control-label" for="inputSuccess">Área</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false"})
+                            </div>
+                      
+                    </td>
+                    <td class="span5">
+                       
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                <select id="selectEstado">
-                                    <option>Activo</option>                                    
-                                    <option>Inactivo</option>                                    
-                                </select>
+                               @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipEstado, new SelectList(Model.Estados, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipEstado),new {  data_val = "false"})
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="formulario-accion offset9">
-                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                </div>
-            </form>
+                       
+                    </td>
+                </tr>
+             
+             </table>
+           
+            <div class="formulario-accion offset9">
+                <a class="btn btn-info" id="btnBuscarReemplazo"><i class="icon-search icon-white"></i> Buscar</a>
+                <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+            </div>
+    <div>
+        &nbsp;
+    </div>       
+    
             <div class="tabla-datos">
                 <table id="grdList">
                 </table>
+                
                 <div id="grdPager">
                 </div>
             </div>
-            <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                <a class="btn btn-info" href="@Url.Action("CrearAmpliacion", "SolicitudCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("CrearAmpliacion", "SolicitudCargo")"><i class="icon-pencil icon-white"></i> Editar</a>
+
+           <div class="form-actions">
+                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
+        }
         </div>
-    </div>
+     </div>
 </div>

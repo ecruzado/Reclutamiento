@@ -17,6 +17,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Departamento> Departamentos { get; set; }
         public List<Area> Areas { get; set; }
         public List<Cargo> Cargos { get; set; }
+        public List<Rol> Roles { get; set; }
 
         public Dependencia DependenciaSession { get; set; }
         public Departamento DepartamentoSession { get; set; }
@@ -31,6 +32,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> Sexos { get; set; }
         public List<DetalleGeneral> TiposRequerimientos { get; set; }
         public List<DetalleGeneral> RangoSalariales { get; set; }
+
+        public List<DetalleGeneral> Etapas { get; set; }
+        public List<DetalleGeneral> Estados { get; set; }
+        public List<DetalleGeneral> TipoPuesto { get; set; }
 
     }
 

@@ -114,6 +114,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Sexo { get; set; }
         public virtual string TipoRequerimiento { get; set; }
         public virtual string TipoRangoSalario { get; set; }
+        public virtual string TipoSolicitud { get; set; }
 
         public virtual bool IndicadorSexoRanking
         {
