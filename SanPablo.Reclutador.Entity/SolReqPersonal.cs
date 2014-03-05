@@ -186,5 +186,21 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual int CantSeleccionados { get; set; }
 
+        /// <summary>
+        /// id del rol
+        /// </summary>
+        public virtual int IdRol { get; set; }
+
+        /// <summary>
+        /// descripcion del rol
+        /// </summary>
+        public virtual string DesRol { get; set; }
+
+        /// <summary>
+        /// Indica si se esta publicado la solicitud
+        /// </summary>
+        public virtual string FlagPublicado { get; set; }
+
+
     }
 }

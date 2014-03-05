@@ -14,11 +14,11 @@ namespace SanPablo.Reclutador.Web.Core
         public const string RolDes = "RolDes";
         public const string UsuarioDes = "UsuarioDes";
         /// <summary>
-        /// obtiene la sede, depencia, departamento, area por usuario
+        /// obtiene la sede, depencia, departamento, area por usuario hace referencia al Objeto SedeNivel
         /// </summary>
         public const string UsuarioSede = "UsuarioSede";
         /// <summary>
-        /// obtiene los datos de la tabla usaurio
+        /// obtiene los datos de la tabla usaurio hace referencia al Objeto Usuario
         /// </summary>
         public const string ObjUsuario = "ObjUsuario";
 
@@ -35,7 +35,14 @@ namespace SanPablo.Reclutador.Web.Core
 
         public const string IdePostulante = "IdePostulante";
         public const string CargoPerfil = "CargoPerfil";
+
         public const string IdeSolicitudAmpliacion = "ideSolicitudAmp";
+        /// <summary>
+        /// Codigo de session unico que se genera al intentar crear una solicitud de requerimiento
+        /// para asociar los reemplazos a la solicitud una vez se cree la solicitud
+        /// </summary>
+        public const string codReqSolTemp = "codReqSolTemp";
+
     }
     public enum TipoDevolucionError 
     {

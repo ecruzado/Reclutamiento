@@ -16,6 +16,8 @@
     $("#txtfechafin").datepicker();
 
     $('#btnBuscarReemplazo').click(function () {
+
+        //validacionBuscar();
         $('#grdListBusquedaReemplazo').trigger('reloadGrid');
     });
 
@@ -91,7 +93,7 @@
             var params = { grid: migrilla };
 
             $.ajax({
-                url: '@Url.Action("ListBusquedaReemplazo", "SolicitudCargo")',
+                url: '@Url.Action("ListBusquedaReemplazo", "SolicitudCargo", new { area="Intranet"})',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -107,25 +109,32 @@
                     }
                 });
             },
-        colNames: ['Estado', '', '', 'SolReqPersonal', '', '', '', '', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Fecha Creación', 'Responsable', 'Nom.Responsable', 'Publicado','Etapa'],
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo','', 'Dependencia','', 'Departamento','','Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio','Cierre', '','Responsable', 'Nom.Responsable', 'Publicado','Etapa'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
                 { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left',hidden:true },
                 { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
                 { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
-                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left',hidden: true },
-                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'right', hidden: true },
+                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250 },
+                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true },
+                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300 },
+                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true },
+                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
                 { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
+                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
+
                 { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
                 { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
                 { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
                 { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
                 { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
                 { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
-                { name: 'TipResponsable', index: 'TipResponsable', align: 'left', hidden: true },
+                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
+                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
+                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
                 { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300},
-                { name: 'FecPublicacion', index: 'FecPublicacion', align: 'center', width: 200 },
+                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
                 { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
         ],
         pager: jQuery('#grdPagerBusquedaReemplazo'),
@@ -149,43 +158,24 @@
     });
 
 
+    //inicio
+
+    //function validacionBuscar() {
+        
+    //    var fechaInicial = $("#SolReqPersonal_FechaInicioBus").val()
+    //    var fechaFinal = $("#SolReqPersonal_FechaFinBus").val()
+
+    //    if (fechaInicial.length > 0 && fechaFinal.length) {
 
 
 
-    @*jQuery("#grdList").jqGrid({
-        url: '@Url.Action("ListaSolicitudAmpliacion", "SolicitudCargo")',
-        datatype: 'json',
-        mtype: 'POST',
-        colNames: ['Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Estado'],
-        colModel: [
-                { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
-                { name: 'Cargo', index: 'Cargo', align: 'left' },
-                { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
-                { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
-                { name: 'Area', index: 'Area', align: 'left', width: 100 },
-                { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                { name: 'Inicio', index: 'Inicio', align: 'left', width: 50 },
-                { name: 'Cierre', index: 'Cierre', align: 'left', width: 50 },
-                { name: 'Responsable', index: 'Responsable', align: 'left', width: 50 },
-                { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
-                { name: 'Etapa', index: 'Etapa', align: 'center', width: 50 }
-        ],
-        pager: '#grdPager',
-        height: 420,
-        width: 930,
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        viewrecords: true,
-        hidegrid: false,
-        altRows: true,
-        shrinkToFit: false
-    });*@
+    //    }
+
+
+    //}
+
+    //Fin
+
 
     function RadioFormatter(cellvalue, options, rowObject) {
         var strRdo = '<input type ="radio" name = "codigo">';
@@ -209,7 +199,7 @@
     }
 
 
-    //-----------grilla anidada
+    @*//-----------grilla anidada
     jQuery("#sg2").jqGrid({
         url: '@Url.Action("ListaSolicitudAmpliacion", "SolicitudCargo")',
         datatype: "xml",
@@ -286,7 +276,7 @@
             jQuery("#" + subgrid_table_id).jqGrid('navGrid', "#" + pager_id, { edit: false, add: false, del: false })
         }
     });
-    jQuery("#sg2").jqGrid('navGrid', '#psg2', { add: false, edit: false, del: false });
+    jQuery("#sg2").jqGrid('navGrid', '#psg2', { add: false, edit: false, del: false });*@
 
     //------------fin de grilla anidada
 </script>
@@ -311,7 +301,7 @@
                             </div>
                     </td>
                     <td class="span5">
-                            <label class="control-label" for="selectError">Fecha</label>
+                            <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
                                 @*<input id="txtfechainicio" type="text" class="input-small" placeholder=" Inicial"/>
                                 <input id="txtfechafin" type="text" class="input-small" placeholder=" Final"/>*@
@@ -379,13 +369,17 @@
                        
                     </td>
                 </tr>
+             
              </table>
            
             <div class="formulario-accion offset9">
                 <a class="btn btn-info" id="btnBuscarReemplazo"><i class="icon-search icon-white"></i> Buscar</a>
                 <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
             </div>
-           
+    <div>
+        &nbsp;
+    </div>       
+    
             <div class="tabla-datos">
                 <table id="grdListBusquedaReemplazo">
                 </table>

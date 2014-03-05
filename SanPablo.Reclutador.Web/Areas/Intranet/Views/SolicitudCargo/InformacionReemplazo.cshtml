@@ -658,6 +658,18 @@
     
     function creaSolicitudReempCargo() {
 
+        $.ajax({
+            data: $("#frmSolReemplazoCargo").serialize(),
+            type: "POST",
+            url: '@Url.Action("SetSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        $('#grdListReemplazosReq').trigger('reloadGrid');
+                    }
+                }
+          });
 
     }
 
@@ -700,7 +712,7 @@
                        
                             <label class="control-label" for="inputSuccess">Dependecia</label>
                             <div class="controles">
-                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled = "disabled" })                      
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia))                      
                             </div>
                         </td>
                     </tr>
@@ -717,7 +729,7 @@
                          <td class="span5">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled = "disabled" })                      
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento))                      
                             </div>
                            
                         </td>  
@@ -737,7 +749,7 @@
                            <td class="span5">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled = "disabled" })                      
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea))                      
                             </div>
                         </td>
 
@@ -771,7 +783,17 @@
                         </div>
                         </td>                    
                     </tr>
-                </table>
+                    
+                </table>@*
+    
+                <div class="grilla-opciones">
+                        <div class="opciones">
+                            <a  class="btn btn-info" id="btnGrabarSolReq" ><i class="icon-screenshot icon-white"></i> Grabar</a>
+                        </div>
+                        <div style="clear:both"></div>
+                </div>*@
+    
+    
                 <div class="grilla-opciones">
                     <h6>Reemplazos</h6>
                         <div class="opciones">
