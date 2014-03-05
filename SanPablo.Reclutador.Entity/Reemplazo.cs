@@ -15,6 +15,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ApeMaterno  { get; set; }
         public virtual string Nombres     { get; set; }
 
+        public virtual string CodGenerado { get; set; }
+
         public virtual string indEdcicion { get; set; }
 
         public virtual int IdeSolReqPersonal    { get; set; }
