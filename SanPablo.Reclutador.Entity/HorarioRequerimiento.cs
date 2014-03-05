@@ -7,10 +7,10 @@ using System.Web;
 
 namespace SanPablo.Reclutador.Entity
 {
-    public class HorarioReemplazo :BaseEntity
+    public class HorarioRequerimiento :BaseEntity
     {
-        public virtual int IdeHorarioReemplazo { get; set; }
-        public virtual SolReqPersonal SolicitudReemplazo { get; set; }
+        public virtual int IdeHorarioRequerimiento { get; set; }
+        public virtual SolReqPersonal SolicitudRequerimiento { get; set; }
         public virtual string TipoHorario { get; set; }
         public virtual int PuntajeHorario { get; set; }
         public virtual string EstadoActivo { get; set; }

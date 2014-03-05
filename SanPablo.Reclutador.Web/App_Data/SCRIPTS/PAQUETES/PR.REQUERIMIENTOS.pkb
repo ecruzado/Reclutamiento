@@ -22,7 +22,7 @@ FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYP
 FUNCTION FN_VERIFICAR_CODCARGO(p_codCargo IN SOLNUEVO_CARGO.CODCARGO%TYPE)RETURN NUMBER ;
 
 
-PROCEDURE GENERAR_AMPLIACION(p_ideCargo IN CARGO.IDECARGO%TYPE,
+PROCEDURE COPIA_CARGO(p_ideCargo IN CARGO.IDECARGO%TYPE,
                              p_ideSolReqPersonal IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                              p_usrCreacion IN SOLREQ_PERSONAL.USRCREACION%TYPE);
 
@@ -54,31 +54,31 @@ FUNCTION FN_APROBACION_NUEVO(p_ideSede      IN SEDE.IDESEDE%TYPE,
 c_ideUsuarioResp USUARIO.IDUSUARIO%TYPE;
 c_ideLogSolicitud LOGSOLNUEVO_CARGO.IDELOGSOLNUEVOCARGO%TYPE;
 c_ideRolRespSuc ROL.IDROL%TYPE;
-c_etapaSgte DETALLE_GENERAL.VALOR%TYPE;    
+--c_etapaSgte DETALLE_GENERAL.VALOR%TYPE;    
 c_ideRolResp ROL.IDROL%TYPE;
 c_ideTipoReq CARGO.TIPREQUERIMIENTO%TYPE;
 
 BEGIN   
   IF (p_etapa = '01') THEN-- 01 envio solicitud -ETAPA PENDIENTE SOLICITUD
    c_ideRolResp := 10;     --GERENTE AREA
-   --c_etapaSgte :='02';
+   
   ELSIF (p_etapa = '02')THEN --02 aprob/rechazo 
    c_ideRolResp := 5; --GGA 
-   --c_etapaSgte :='03';
+   
   ELSIF (p_etapa = '03')THEN --elaboracion perfil 
    c_ideRolResp := 6;   --jefe procesos
-  -- c_etapaSgte :='04';
+  
   ELSIF (p_etapa = '04')THEN   --pendiente aprobacion perfil
    c_ideRolResp := 3;  --jefe de area
-   --c_etapaSgte :='05';
+  
   ELSIF (p_etapa = '05')THEN   --pendiente aprobacion perfil2  
    c_ideRolResp := 7;  --encargado seleccion
-  -- c_etapaSgte :='06';
+  
   ELSIF (p_etapa = '06')THEN   --pendiente publicacion 
    c_ideRolResp := 9; --destinatario recursos 
   ELSIF (p_etapa = '07')THEN   --determinar el usuario asignado 
    c_ideRolResp := -1; --destinatario recursos 
- -- c_etapaSgte :='07';
+       
   END IF;
   
   IF (c_ideRolResp <> -1) THEN
@@ -281,7 +281,7 @@ END OBTENER_CONOCIMIENTOS_CARGO;*/
 
 
 /* ------------------------------------------------------------
-    Nombre      : GENERAR_AMPLIACION
+    Nombre      : COPIA_CARGO
     Proposito   : Hacer una copia del cargo a las tablas de 
                   ampliacion de cargo
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
@@ -291,7 +291,7 @@ END OBTENER_CONOCIMIENTOS_CARGO;*/
       Fecha       Autor                Descripcion
       28/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE GENERAR_AMPLIACION(p_ideCargo IN CARGO.IDECARGO%TYPE,
+PROCEDURE COPIA_CARGO(p_ideCargo IN CARGO.IDECARGO%TYPE,
                              p_ideSolReqPersonal IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                              p_usrCreacion IN SOLREQ_PERSONAL.USRCREACION%TYPE) IS
 
@@ -341,6 +341,11 @@ CURSOR c_discapacidades(p_ideCargo CARGO.IDECARGO%TYPE) IS
   SELECT DC.TIPDISCAPA, DC.DESDISCAPA, DC.PUNTDISCAPA  
   FROM DISCAPACIDAD_CARGO DC 
   WHERE DC.IDECARGO =  p_ideCargo;
+  
+CURSOR c_evaluaciones(p_ideCargo CARGO.IDECARGO%TYPE) IS
+  SELECT EC.IDEEXAMEVAL, EC.TIPEXAMEN, EC.NOTAMINEXAMEN, EC.TIPAREARESPON, EC.PUNTEXAMEN  
+  FROM EVALUACION_CARGO EC 
+  WHERE EC.IDECARGO =  p_ideCargo;
   
 BEGIN
  c_ideSolReqPersonal:=p_ideSolReqPersonal;
@@ -410,13 +415,19 @@ BEGIN
      VALUES(IDEDISCAPASOLREQ_SQ.NEXTVAL,c_ideSolReqPersonal, REG_DISCAPACIDAD.TIPDISCAPA, REG_DISCAPACIDAD.DESDISCAPA, REG_DISCAPACIDAD.PUNTDISCAPA ,'A',p_usrCreacion,SYSDATE );
   END LOOP;
   
+  FOR REG_EVALUACION IN c_evaluaciones(p_ideCargo) LOOP        
+     INSERT INTO EVALUACION_SOLREQ
+     (IDEEVALUACIONSOLREQ,IDESOLREQPERSONAL,IDEEXAMEVAL,TIPEXAMEN,NOTAMINEXAMEN,TIPAREARESPON,PUNTEXAMEN,ESTACTIVO,USRCREACION,FECCREACION)
+     VALUES(IDEEVALUACIONSOLREQ_SQ.NEXTVAL,c_ideSolReqPersonal, REG_EVALUACION.IDEEXAMEVAL, REG_EVALUACION.TIPEXAMEN, REG_EVALUACION.NOTAMINEXAMEN,REG_EVALUACION.TIPAREARESPON,REG_EVALUACION.PUNTEXAMEN,'A',p_usrCreacion,SYSDATE );
+  END LOOP;
+  
   COMMIT;
   EXCEPTION 
      WHEN OTHERS THEN
      ROLLBACK;
   END;
 
-END GENERAR_AMPLIACION;  
+END COPIA_CARGO;  
   
 END PR_REQUERIMIENTOS;
 /

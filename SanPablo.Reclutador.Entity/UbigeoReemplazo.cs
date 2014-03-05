@@ -7,7 +7,7 @@ namespace SanPablo.Reclutador.Entity
 {
     public class UbigeoReemplazo : BaseEntity
     {
-        public virtual int IdeUbigeoCargo { get; set; }
+        public virtual int IdeUbigeoReemplazo { get; set; }
         public virtual SolReqPersonal SolicitudReemplazo { get; set; }
         public virtual int IdeUbigeo { get; set; }
         public virtual int PuntajeUbigeo { get; set; }

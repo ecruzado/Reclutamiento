@@ -67,7 +67,7 @@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Area Responsable <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                 @Html.DropDownListFor(model => model.Evaluacion.TipoAreaResponsable, new SelectList(Model.TiposAreasResponsables, "Valor", "Descripcion", Model.Evaluacion.TipoAreaResponsable))
+                 @Html.DropDownListFor(model => model.Evaluacion.TipoAreaResponsable, new SelectList(Model.TiposAreasResponsables, "IdeArea", "NombreArea", Model.Evaluacion.TipoAreaResponsable))
                 @*<div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Conocimiento.TipoNivelConocimiento)
                 </div>*@

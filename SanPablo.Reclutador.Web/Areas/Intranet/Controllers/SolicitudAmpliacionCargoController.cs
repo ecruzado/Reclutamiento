@@ -48,17 +48,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View();
         }
         [ValidarSesion]
-        [AuthorizeUser]  
-        public ActionResult Edit(string idSolictud)
+        [AuthorizeUser]
+        public ActionResult Edit()
         {
             SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo();
-            int idSolicitudAmpliacion = Convert.ToInt32(idSolictud);
-            if (idSolicitudAmpliacion != 0)
-            {
-                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == idSolicitudAmpliacion);
-            }
-            else
-            {
                 var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
                 SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
                 solicitudAmpliacion.IdeArea = usuario.IDEAREA;
@@ -72,7 +65,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.Dependencia_des = dependencia.NombreDependencia;
                 solicitudAmpliacion.Area_des = area.NombreArea;
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
-            }
+            
             return View(solicitudModel);
         }
 
@@ -95,6 +88,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.EstadoActivo = "A";
                 solicitudAmpliacion.FechaCreacion = FechaCreacion;
                 solicitudAmpliacion.UsuarioCreacion = "YO";
+                ///agregar tip sol 
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
                 _solicitudAmpliacionPersonal.Add(solicitudAmpliacion);
 
@@ -136,11 +130,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return model;
         }
 
-
-
-        //
-        //
-        //
 
         [ValidarSesion]
         public ActionResult Puesto(string ideSolicitud)
@@ -264,7 +253,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View(evaluacionCargoViewModel);
         }
 
-        //#region GRILLAS PERFIL AMPLIACION
+        #region GRILLAS PERFIL AMPLIACION
         //
         //COMPETENCIAS
         //
@@ -272,7 +261,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public JsonResult ListarCompetencias(GridTable grid)
         {
-            List<CompetenciaReemplazo> lista = new List<CompetenciaReemplazo>();
+            List<CompetenciaRequerimiento> lista = new List<CompetenciaRequerimiento>();
             try
             {
 
@@ -286,7 +275,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.IdeCompetenciaReemplazo.ToString(),
+                        id = item.IdeCompetenciaRequerimiento.ToString(),
                         cell = new string[]
                             {
                                 item.DescripcionCompetencia,
@@ -306,7 +295,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public virtual JsonResult ListarOfrecemos(GridTable grid)
         {
-            List<OfrecemosReemplazo> lista = new List<OfrecemosReemplazo>();
+            List<OfrecemosRequerimiento> lista = new List<OfrecemosRequerimiento>();
             try
             {
 
@@ -321,10 +310,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.IdeOfrecemosReemplazo.ToString(),
+                        id = item.IdeOfrecemosRequerimiento.ToString(),
                         cell = new string[]
                             {
-                                item.IdeOfrecemosReemplazo.ToString(),
+                                item.IdeOfrecemosRequerimiento.ToString(),
                                 item.DescripcionOfrecimiento,
                             }
                     }).ToArray();
@@ -343,7 +332,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public virtual JsonResult ListaHorario(GridTable grid)
         {
-            List<HorarioReemplazo> lista = new List<HorarioReemplazo>();
+            List<HorarioRequerimiento> lista = new List<HorarioRequerimiento>();
 
             try
             {
@@ -359,7 +348,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 generic.Value.rows = generic.List
                     .Select(item => new Row
                     {
-                        id = item.IdeHorarioReemplazo.ToString(),
+                        id = item.IdeHorarioRequerimiento.ToString(),
                         cell = new string[]
                             {
                                 item.DescripcionHorario,
@@ -378,43 +367,334 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         ////UBIGEO
         ////
 
-        //[HttpPost]
-        //public virtual JsonResult ListaUbigeo(GridTable grid)
-        //{
-        //    int IdeCargo = CargoPerfil.IdeCargo;
-        //    try
-        //    {
+        [HttpPost]
+        public virtual JsonResult ListaUbigeo(GridTable grid)
+        {
 
-        //        grid.page = (grid.page == 0) ? 1 : grid.page;
+            List<UbigeoReemplazo> lista = new List<UbigeoReemplazo>();
+            try
+            {
 
-        //        grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+                grid.page = (grid.page == 0) ? 1 : grid.page;
 
-        //        DetachedCriteria where = DetachedCriteria.For<UbigeoCargo>();
-        //        where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-        //        var generic = Listar(_ubigeoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
-        //        generic.Value.rows = generic.List
-        //            .Select(item => new Row
-        //            {
-        //                id = item.IdeUbigeo.ToString(),
-        //                cell = new string[]
-        //                    {
-        //                        item.Departamento,
-        //                        item.Provincia,
-        //                        item.Distrito,
-        //                        item.PuntajeUbigeo.ToString(),
-        //                    }
-        //            }).ToArray();
+                lista = _solicitudAmpliacionPersonal.ListaUbigeos(IdeSolicitudAmpliacion);
 
-        //        return Json(generic.Value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return MensajeError("ERROR: " + ex.Message);
-        //    }
-        //}
-        //#endregion
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeUbigeoReemplazo.ToString(),
+                        cell = new string[]
+                            {
+                                item.Departamento,
+                                item.Provincia,
+                                item.Distrito,
+                                item.PuntajeUbigeo.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaCentroEstudio(GridTable grid)
+        {
+            List<CentroEstudioRequerimiento> lista = new List<CentroEstudioRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaCentroEstudio(IdeSolicitudAmpliacion);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCentroEstudioRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoCentroEstudio,
+                                item.DescripcionNombreCentroEstudio,
+                                item.PuntajeCentroEstudios.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaNivelAcademico(GridTable grid)
+        {
+            List<NivelAcademicoRequerimiento> lista = new List<NivelAcademicoRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaNivelAcademico(IdeSolicitudAmpliacion);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeNivelAcademicoRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoEducacion,
+                                item.DescripcionAreaEstudio,
+                                item.DescripcionNivelAlcanzado,
+                                item.CicloSemestre.ToString(),
+                                item.PuntajeNivelEstudio.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaOfimatica(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaConocimientos(IdeSolicitudAmpliacion, "OFIMATICA");
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaIdioma(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaConocimientos(IdeSolicitudAmpliacion, "IDIOMA");
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaOtrosConocimientos(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaConocimientos(IdeSolicitudAmpliacion, "GENERAL");
+
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaExperiencia(GridTable grid)
+        {
+            List<ExperienciaRequerimiento> lista = new List<ExperienciaRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaExperiencia(IdeSolicitudAmpliacion);
+
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeExperienciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExperiencia,
+                                item.CantidadAnhosExperiencia.ToString(),
+                                item.CantidadMesesExperiencia.ToString(),
+                                item.PuntajeExperiencia.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaDiscapacidad(GridTable grid)
+        {
+            List<DiscapacidadRequerimiento> lista = new List<DiscapacidadRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaDiscapacidad(IdeSolicitudAmpliacion);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeDiscapacidadRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoDiscapacidad,
+                                item.PuntajeDiscapacidad.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaEvaluaciones(GridTable grid)
+        {
+            List<EvaluacionRequerimiento> lista = new List<EvaluacionRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solicitudAmpliacionPersonal.ListaEvaluacion(IdeSolicitudAmpliacion);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeEvaluacionRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExamen,
+                                item.DescripcionTipoExamen,
+                                item.NotaMinimaExamen.ToString(),
+                                item.DescripcionAreaResponsable.ToString(),
+                                item.PuntajeExamen.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        #endregion
 
 
     }

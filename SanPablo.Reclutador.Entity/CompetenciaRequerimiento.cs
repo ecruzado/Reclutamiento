@@ -7,9 +7,9 @@ using System.Web;
 
 namespace SanPablo.Reclutador.Entity
 {
-    public class CompetenciaReemplazo : BaseEntity
+    public class CompetenciaRequerimiento : BaseEntity
     {
-        public virtual int IdeCompetenciaReemplazo { get; set; }
+        public virtual int IdeCompetenciaRequerimiento { get; set; }
         public virtual SolReqPersonal SolicitudRequerimiento { get; set; }
         public virtual string TipoCompetencia { get; set; }
         public virtual string EstadoActivo { get; set; }
