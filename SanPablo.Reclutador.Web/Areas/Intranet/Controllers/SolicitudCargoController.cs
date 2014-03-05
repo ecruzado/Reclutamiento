@@ -1145,8 +1145,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Feccreacion==null?"":item.Feccreacion.ToString(),
                                 item.FecExpiracacion==null?"":item.FecExpiracacion.ToString(),
                                
-                                item.IdRol==null?"":item.IdRol.ToString(),
-                                item.DesRol==null?"":item.DesRol,
+                                item.idRolSuceso==null?"":item.idRolSuceso.ToString(),
+                                item.DesRolSuceso==null?"":item.DesRolSuceso,
                                 item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
@@ -1536,6 +1536,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.SolReqPersonal.IdeArea = codArea;
                     model.SolReqPersonal.IdeDependencia = codDependencia;
                     model.SolReqPersonal.IdeDepartamento = codDepartamento;
+
+                    model.SolReqPersonal.idRolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    model.SolReqPersonal.IdRolResp = 1;
+                    model.SolReqPersonal.idUsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.SolReqPersonal.idUsuarioResp = 1;
+                    model.SolReqPersonal.Tipsol = "01";
+                    model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
 
                     model.Reemplazo.CodGenerado = Convert.ToString(Session[ConstanteSesion.codReqSolTemp]);
                 }

@@ -98,6 +98,20 @@
 
     }
 
+    public sealed class Etapa
+    {
+        public const string Pendiente = "01";
+        public const string Validado = "02";
+        public const string Aprobado = "03";
+        public const string Publicado = "04";
+        public const string Generacion_Perfil = "05";
+        public const string Aprobacion_Perfil = "06";
+        public const string Observado = "07";
+        public const string Finalizado = "08";
+        public const string Rechazado = "09";
+    }
+
+   
     public sealed class Visualicion
     {
         public const string SI = "S";

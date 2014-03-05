@@ -119,21 +119,24 @@ namespace SanPablo.Reclutador.Repository
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CREA_SOLREEMPLAZO");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Int32).Value = solReqPersonal.IdeSede;
-                 lspcmd.Parameters.Add("p_nIdeDependencia", OracleType.Int32).Value = solReqPersonal.IdeDependencia;
-                 lspcmd.Parameters.Add("p_nIdeCargo", OracleType.Int32).Value = solReqPersonal.IdeCargo;
-                 lspcmd.Parameters.Add("p_nIdeDepartamento", OracleType.Int32).Value = solReqPersonal.IdeDepartamento;
-                 lspcmd.Parameters.Add("p_nIdeArea", OracleType.Int32).Value = solReqPersonal.IdeArea;
-                 lspcmd.Parameters.Add("p_cTipVacante", OracleType.Int32).Value = solReqPersonal.TipVacante;
-
-                 lspcmd.Parameters.Add("p_nNumVacantes", OracleType.Int32).Value = solReqPersonal.NumVacantes;
+                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = solReqPersonal.IdeSede;
+                 lspcmd.Parameters.Add("p_nIdeDependencia", OracleType.Number).Value = solReqPersonal.IdeDependencia;
+                 lspcmd.Parameters.Add("p_nIdeCargo", OracleType.Number).Value = solReqPersonal.IdeCargo;
+                 lspcmd.Parameters.Add("p_nIdeDepartamento", OracleType.Number).Value = solReqPersonal.IdeDepartamento;
+                 lspcmd.Parameters.Add("p_nIdeArea", OracleType.Number).Value = solReqPersonal.IdeArea;
+                 lspcmd.Parameters.Add("p_cTipVacante", OracleType.Number).Value = solReqPersonal.TipVacante;
+                 lspcmd.Parameters.Add("p_nNumVacantes", OracleType.Number).Value = solReqPersonal.NumVacantes;
                  lspcmd.Parameters.Add("p_cTipPuesto", OracleType.VarChar).Value = solReqPersonal.TipPuesto;
                  lspcmd.Parameters.Add("p_cObservacion", OracleType.VarChar).Value = solReqPersonal.Observacion;
-                 lspcmd.Parameters.Add("p_cUsuarioCreacion", OracleType.VarChar).Value = solReqPersonal.UsuarioCreacion;
-                 lspcmd.Parameters.Add("p_cFechaCreacion", OracleType.VarChar).Value = cFechaInicio;
+                 lspcmd.Parameters.Add("p_idUsuarioSuceso", OracleType.Number).Value = solReqPersonal.idUsuarioSuceso;
+                 lspcmd.Parameters.Add("p_cDesUsuarioSuceso", OracleType.VarChar).Value = solReqPersonal.UsuarioCreacion;
+                 lspcmd.Parameters.Add("p_cFechaSuceso", OracleType.VarChar).Value = cFechaInicio;
+                 lspcmd.Parameters.Add("p_cIdRolSuceso", OracleType.Number).Value = solReqPersonal.idRolSuceso;
                  lspcmd.Parameters.Add("p_cCodReemplazo", OracleType.VarChar).Value = objReemplazo.CodGenerado;
-                 
-                 
+                 lspcmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = solReqPersonal.TipEtapa;
+                 lspcmd.Parameters.Add("p_idUsuarioResp", OracleType.VarChar).Value = solReqPersonal.idUsuarioResp;
+                 lspcmd.Parameters.Add("p_idRolResp", OracleType.Number).Value = solReqPersonal.IdRolResp;
+                 lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = solReqPersonal.Tipsol;
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
                  return Convert.ToString(lspcmd.Parameters["p_cRetVal"].Value);
@@ -257,8 +260,8 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal.CantSeleccionados = Convert.ToInt32(ldrSolReqPersonal["SELECCIONADOS"]);
 
 
-                     lobSolReqPersonal.IdRol = Convert.ToInt32(ldrSolReqPersonal["ROL"]);
-                     lobSolReqPersonal.DesRol = Convert.ToString(ldrSolReqPersonal["DESROL"]);
+                     lobSolReqPersonal.idRolSuceso = Convert.ToInt32(ldrSolReqPersonal["ROL"]);
+                     lobSolReqPersonal.DesRolSuceso = Convert.ToString(ldrSolReqPersonal["DESROL"]);
 
                      lobSolReqPersonal.TipEstado = Convert.ToString(ldrSolReqPersonal["ESTACTIVO"]);
                      lobSolReqPersonal.TipEtapa = Convert.ToString(ldrSolReqPersonal["TIPETAPA"]);
