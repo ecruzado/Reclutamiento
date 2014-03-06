@@ -22,9 +22,9 @@
     });
 
     $('#btnAproRechaSol').click(function () {
-        var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        if (ideSolicitud != null) {
-            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo")' + '/' + ideSolicitud;
+        var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        if (ideSolAmpliacion != null) {
+            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSolAmpliacion;
             }
             else {
                 MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
@@ -72,38 +72,38 @@
     })
 
 
-        jQuery("#grdList").jqGrid({
-            datatype: function (postdata) {
-                var migrilla = new Object();
-                migrilla.page = postdata.page;
-                migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sidx;
-                migrilla.sord = postdata.sord;
-                migrilla._search = postdata.isSearch;
-                migrilla.filters = postdata.filters;
-                migrilla.Rules = [
+    jQuery("#grdList").jqGrid({
+        datatype: function (postdata) {
+            var migrilla = new Object();
+            migrilla.page = postdata.page;
+            migrilla.rows = postdata.rows;
+            migrilla.sidx = postdata.sidx;
+            migrilla.sord = postdata.sord;
+            migrilla._search = postdata.isSearch;
+            migrilla.filters = postdata.filters;
+            migrilla.Rules = [
 
-                    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
-                    { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
-                    { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
-                    { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
-                    { field: 'fecInicio', data: $("#SolicitudRequerimiento_FechaInicioBus").val() },
-                    { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
-                    { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
-                    { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
-                    { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() }
+                { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
+                { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
+                { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
+                { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
+                { field: 'fecInicio', data: $("#SolicitudRequerimiento_FechaInicioBus").val() },
+                { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
+                { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
+                { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
+                { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() }
 
-                ];
-                if (migrilla._search == true) {
-                    migrilla.searchField = postdata.searchField;
-                    migrilla.searchOper = postdata.searchOper;
-                    migrilla.searchString = postdata.searchString;
-                }
-                var params = { grid: migrilla };
+            ];
+            if (migrilla._search == true) {
+                migrilla.searchField = postdata.searchField;
+                migrilla.searchOper = postdata.searchOper;
+                migrilla.searchString = postdata.searchString;
+            }
+            var params = { grid: migrilla };
 
-                $.ajax({
-                    url: '@Url.Action("ListBusquedaAmpliacion", "SolicitudAmpliacionCargo", new { area="Intranet"})',
+            $.ajax({
+                url: '@Url.Action("ListBusquedaAmpliacion", "SolicitudAmpliacionCargo", new { area="Intranet"})',
                 type: 'post',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(params),
@@ -119,53 +119,53 @@
                 }
             });
         },
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
-        colModel: [
-                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
-                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true },
-                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
-                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
-                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250 },
-                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true },
-                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300 },
-                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true },
-                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
-                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
-                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
+     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
+     colModel: [
+             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+             { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
+             { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true },
+             { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
+             { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
+             { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250 },
+             { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true },
+             { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300 },
+             { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true },
+             { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
+             { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
+             { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
 
-                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
-                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
-                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
-                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
-                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
-                { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
-                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
-                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
-                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
-                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300 },
-                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
-                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
-        ],
-        pager: jQuery('#grdPager'),
-        rowNum: 10,
-        //rowList: [10, 30, 50],
-        autowidth: true,
-        rules: true,
-        sortname: 'IdeSolReqPersonal',
-        sortorder: 'desc',
-        viewrecords: true,
-        height: 250,
-        cellsubmit: 'clientArray',
-        hidegrid: false,
-        rownumbers: true,
-        shrinkToFit: false,
+             { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
+             { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
+             { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
+             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
+             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
+             { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
+             { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
+             { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
+             { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
+             { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300 },
+             { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
+             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
+     ],
+     pager: jQuery('#grdPager'),
+     rowNum: 10,
+     //rowList: [10, 30, 50],
+     autowidth: true,
+     rules: true,
+     sortname: 'IdeSolReqPersonal',
+     sortorder: 'desc',
+     viewrecords: true,
+     height: 250,
+     cellsubmit: 'clientArray',
+     hidegrid: false,
+     rownumbers: true,
+     shrinkToFit: false,
 
-        postData: {
-        },
-        loadComplete: function (data) {
-        }
-    });
+     postData: {
+     },
+     loadComplete: function (data) {
+     }
+ });
 
         function RadioFormatter(cellvalue, options, rowObject) {
             var strRdo = '<input type ="radio" name = "codigo">';

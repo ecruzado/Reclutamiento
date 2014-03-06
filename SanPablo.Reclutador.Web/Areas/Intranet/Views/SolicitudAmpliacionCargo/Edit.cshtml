@@ -19,6 +19,12 @@
 
     $(document).ready(function () {
 
+        var ideSolicitudAmpliacion = $("#SolicitudRequerimiento_IdeSolReqPersonal").val();
+        if (ideSolicitudAmpliacion == "") {
+            habilitarControles();
+        }
+        else { deshabilitarControles(); }
+
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
             width: 300,
@@ -412,12 +418,33 @@
 
   function deshabilitarControles()
   {
+      $("#SolicitudRequerimiento_IdeCargo").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_NumVacantes").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_Observacion").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeDependencia").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeDepartamento").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeArea").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_Motivo").attr("disabled", "disabled");
+  }
 
+  function habilitarControles()
+  {
+      $("#SolicitudRequerimiento_IdeCargo").removeAttr("disabled");
+      $("#SolicitudRequerimiento_NumVacantes").removeAttr("disabled");
+      $("#SolicitudRequerimiento_Observacion").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeDependencia").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeDepartamento").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeArea").removeAttr("disabled");
+      $("#SolicitudRequerimiento_Motivo").removeAttr("disabled");
   }
 
   function MostrarMensaje(mensaje, titulo)
   {
     Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
+  }
+
+  function irATab(tab) {
+      $('a[href=#' + tab + ']').tab('show');
   }
 
 </script>
@@ -451,8 +478,10 @@
                         <div class="">
                             <label class="control-label" for="selectError">Dependencia </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeDependencia)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Dependencia_des, new { @disabled = "disabled" })                           
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -473,8 +502,10 @@
                         <div class="">
                             <label class="control-label" for="selectError">Departamento </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeDepartamento)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Departamento_des, new { @disabled = "disabled" })                           
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -492,8 +523,10 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeArea)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Area_des, new { @disabled = "disabled" })
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeArea)
+                                </div>
                             </div>
                     </td> 
                 </tr>
@@ -522,12 +555,13 @@
                     </td>   
                 </tr>
           </table>
-          @if (Accion.Consultar.Equals(Model.Accion))
+          @if (Accion.Nuevo.Equals(Model.Accion))
           {
 		           <span></span>
           }
           else
           {
+             
               <h5>Perfil</h5>
             <ul class="nav nav-tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
@@ -571,7 +605,9 @@
                 <div class="container">
                 </div>  
                  </div>  
-             }
+               
+          
+          }
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
