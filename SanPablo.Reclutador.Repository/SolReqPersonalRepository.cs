@@ -400,6 +400,7 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+
          public List<OfrecemosRequerimiento> ListaOfrecemos(int ideSolicitudReqPersonal)
          {
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -855,5 +856,51 @@ namespace SanPablo.Reclutador.Repository
                  lcon.Close();
              }
          }
+
+
+        /// <summary>
+         /// EnviaSolicitud
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public int EnviaSolicitud(SolReqPersonal solReqPersonal)
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             string cFechaInicio = String.Format("{0:dd/MM/yyyy}", solReqPersonal.Feccreacion);
+             try
+             {
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ENVIA_SOL_REEMPLAZO");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                
+                 lspcmd.Parameters.Add("p_nIdeSolReqPersonal", OracleType.Number).Value = solReqPersonal.IdeSolReqPersonal;                
+                 lspcmd.Parameters.Add("p_nidUsuarioSuceso", OracleType.Number).Value = solReqPersonal.idUsuarioSuceso;
+                 lspcmd.Parameters.Add("p_cDesUsuarioSuceso", OracleType.VarChar).Value = solReqPersonal.UsuarioCreacion;
+                 lspcmd.Parameters.Add("p_cFechaSuceso", OracleType.VarChar).Value = cFechaInicio;
+                 lspcmd.Parameters.Add("p_cIdRolSuceso", OracleType.Number).Value = solReqPersonal.idRolSuceso;
+                 lspcmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = solReqPersonal.TipEtapa;
+                 lspcmd.Parameters.Add("p_idUsuarioResp", OracleType.Number).Value = solReqPersonal.idUsuarioResp;
+                 lspcmd.Parameters.Add("p_idRolResp", OracleType.Number).Value = solReqPersonal.IdRolResp;
+                 lspcmd.Parameters.Add("p_nIdeCargo", OracleType.Number).Value = solReqPersonal.IdeCargo;
+                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.ExecuteNonQuery();
+                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
+
+                
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+
     }
 }

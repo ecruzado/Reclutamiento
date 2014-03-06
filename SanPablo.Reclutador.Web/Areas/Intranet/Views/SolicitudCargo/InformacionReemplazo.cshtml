@@ -19,6 +19,7 @@
     $(document).ready(function () {
 
 
+
      jQuery("#grdListReemplazosReq").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -95,6 +96,20 @@
          });
 
 
+        
+
+        $('#btnAprobarRechazarReemplazo').click(function () {
+
+            id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+            if (id != null && id > 0) {
+                mostrarPopuprAprobacion(id);
+            } else {
+                MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+
+        });
 
        
         $('#btnAgregarReemplazo').click(function () {
@@ -144,6 +159,63 @@
                 }
             }
         });
+
+
+        $('#popupDialogAprobReem').dialog({
+            autoOpen: false,
+            width: 500,
+            height: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function () {
+                    if ($("#frmPopupAprobReem").valid()) {
+
+                        $('#DialogAprobReem').dialog('open');
+                    }
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+        $("#spanDialogAprobReem").html("¿Desea guardar los cambios?")
+        $('#DialogAprobReem').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+
+                    $.ajax({
+                        data: $("#frmPopupAprobReem").serialize(),
+                        type: "POST",
+                        //xxxxxxxxx
+                        url: '@Url.Action("SetPopupAprobReem", "SolicitudCargo")',
+                            traditional: true,
+                            success: function (data) {
+                                if (data.Resultado) {
+                                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    $('#DialogAprobReem').dialog('close');
+                                    $('#popupDialogAprobReem').dialog('close');
+                                   
+
+                                }
+                            }
+                        });
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
 
 
 
@@ -231,6 +303,18 @@
         return false;
     }
 
+
+    function mostrarPopuprAprobacion(id) {
+        var dialogDiv = $('#popupDialogAprobReem');
+
+        $.get('@Url.Action("InicioPopupAprobReem", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogAprobReem"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
    
 
     function EliminarReemplazo(selr, idReq, idPersona) {
@@ -258,6 +342,11 @@
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+    function GeneraSolicitud() {
+        validaEnvio();
+        creaSolicitudReempCargo();
     }
 
     
@@ -294,31 +383,17 @@
             return;
         }
         
-
-        //if (numVacante.length>0) {
-
-        //    var nVacante = parseInt(numVacante);
-        //    if (nVacante==0) {
-        //        notificacionExito("Ingrese el numero de vacantes");
-        //        return;
-        //    }
-
-        //    if (nVacante != countList) {
-        //        notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
-        //        return;
-        //    }
-            
-        //}
-
-        creaSolicitudReempCargo();
-
     }
     
 
     function EnvioSolicitud() {
+
+        validaEnvio();
+
         var numVacante = $('#SolReqPersonal_NumVacantes').val();
         var countList = jQuery("#grdListReemplazosReq").jqGrid('getGridParam', 'records');
-        if (numVacante.length>=0) {
+
+        if (numVacante.length >= 0) {
 
             var nVacante = parseInt(numVacante);
             if (nVacante==0) {
@@ -339,7 +414,19 @@
 
 
     function enviaSolicitud() {
-
+        $.ajax({
+            data: $("#frmSolReemplazoCargo").serialize(),
+            type: "POST",
+            url: '@Url.Action("EnviaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListReemplazosReq').trigger('reloadGrid');
+                }
+            }
+         });
 
     }
 
@@ -479,7 +566,7 @@
         
                     <div class="grilla-opciones">
                             <div class="opciones">
-                                <a  class="btn btn-info" id="btnGrabarSolReq" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Grabar</a>
+                                <a  class="btn btn-info" id="btnGrabarSolReq" onclick="GeneraSolicitud()"><i class="icon-screenshot icon-white"></i> Grabar</a>
                             </div>
                             <div style="clear:both"></div>
                     </div>
@@ -515,8 +602,8 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <a  class="btn btn-info" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                <button type="submit" class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
 
             </div>
@@ -552,6 +639,10 @@
 
 @*Inicio*@
 <div id="popupDialogReemplazo" title="Reemplazo"></div>
+<div id="popupDialogAprobReem" title="Aprobar/Rechazar"></div>
+
+
+<div id="DialogAprobReem"><span id="spanDialogAprobReem"></span></div>
 <div id="DialogReemplazo"><span id="spanDialogReemplazo"></span></div>
 <div id="divEliminar">
 	<span id="spanEliminar"></span>
