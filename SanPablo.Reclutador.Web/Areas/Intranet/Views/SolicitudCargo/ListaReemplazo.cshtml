@@ -294,7 +294,9 @@
           <table class="formulario-busqueda">        
                   <tr class="formulario-fila">
                     <td class="span5">
+
                        
+
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo),new {  data_val = "false"})
