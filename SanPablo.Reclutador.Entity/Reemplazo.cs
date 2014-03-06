@@ -11,6 +11,7 @@ namespace SanPablo.Reclutador.Entity
     {
         public virtual int IdReemplazo    { get; set; }
         public virtual int Indicador { get; set; }
+        public virtual int IdPersona { get; set; }
         public virtual string ApePaterno  { get; set; }
         public virtual string ApeMaterno  { get; set; }
         public virtual string Nombres     { get; set; }
@@ -28,6 +29,8 @@ namespace SanPablo.Reclutador.Entity
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecInicioReemplazo  { get; set; }
 
+
+        public virtual int CodSolReqPersonal { get; set; }
        
     }
 

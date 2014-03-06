@@ -4,7 +4,8 @@
 
 @{
     ViewBag.Title = "Solicitud Personal";
-
+    
+    
     
 }
 @section Head{
@@ -14,13 +15,9 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    //Table initialisation 
+    
     $(document).ready(function () {
 
-        //inicio
-
-        //Reemplazo_FecInicioReemplazo
-        //Reemplazo_FecFinReemplazo
 
      jQuery("#grdListReemplazosReq").jqGrid({
             datatype: function (postdata) {
@@ -32,8 +29,8 @@
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
-                    { field: 'id', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
                     { field: 'codigo', data: $("#SolReqPersonal_CodSolReqPersonal").val() }
+                   
                        
                 ];
 
@@ -62,26 +59,27 @@
                     }
                 });
             },
-             colNames: ['','', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno','Apellido Materno'],
+             colNames: ['','','', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
              colModel: [
 
-                 
-                      { name: 'Indicador', index: 'Indicador', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdPersona', index: 'IdPersona', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
                       { name: 'FecFinReemplazo', index: 'FecFinReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                      { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 400 },
+                      { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
                       { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 400, editable: false },
-                      { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left', sortable: false, width: 400, editable: false }
+                     
              ],
+
 
              pager: jQuery('#grdPagerReemplazosReq'),
              rowNum: 10,
              
              autowidth: true,
              rules: true,
-             sortname: 'Indicador',
+             sortname: 'IdReemplazo',
              sortorder: 'desc',
              viewrecords: true,
              height: 250,
@@ -100,7 +98,16 @@
 
        
         $('#btnAgregarReemplazo').click(function () {
-           mostrarPopuprReemplazo();
+
+            id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+            if (id != null && id > 0) {
+                mostrarPopuprReemplazo(id);
+            } else {
+                MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+
         });
 
        
@@ -111,7 +118,7 @@
                 $('#divEliminar').dialog('open');
 
             } else {
-                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
         });
@@ -124,9 +131,9 @@
                     var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdListReemplazosReq').jqGrid('getRowData', selr);
                     var idReq = rowData.IdeSolReqPersonal;
-                    var idReemp = rowData.IdReemplazo;
+                    var idPersona = rowData.IdPersona;
                     if (selr != null) {
-                        EliminarReemplazo(selr, idReq, idReemp);
+                        EliminarReemplazo(selr, idReq, idPersona);
                     } else {
                         MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
@@ -178,9 +185,11 @@
                             success: function (data) {
                             if (data.Resultado) {
                                 MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                
                                 $('#DialogReemplazo').dialog('close');
                                 $('#popupDialogReemplazo').dialog('close');
                                 $('#grdListReemplazosReq').trigger('reloadGrid');
+
                             }
                         }
                     });
@@ -193,352 +202,7 @@
     });
 
 
-        //fin
-
-        //$("#txtfechapublicacion").datepicker();
-        //$("#txtfechaexpiracion").datepicker();
-        //$("#txtFechaInicio").datepicker();
-        //$("#txtFechaFin").datepicker();
-
-        jQuery("#grdListFunciones").jqGrid({
-            url: '@Url.Action("ListaFunciones", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 60,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-
-        });
-
-        jQuery("#grdListCompetencias").jqGrid({
-            url: '@Url.Action("ListaCompetencias", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-
-        jQuery("#grdListOfrecemos").jqGrid({
-            url: '@Url.Action("ListaOfrecemos", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-
-        jQuery("#grdListHorario").jqGrid({
-            url: '@Url.Action("ListaHorario", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten', "Puntaje"],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false }
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListUbigeo").jqGrid({
-            url: '@Url.Action("ListaUbigeo", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Departamento', 'Provincia', 'Distrito', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Departamento', index: 'Departamento', align: 'left', editable: false, sortable: false },
-                    { name: 'Provincia', index: 'Provincia', align: 'left', editable: false, sortable: false },
-                    { name: 'Distrito', index: 'Distrito', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-
-        jQuery("#grdListNivelAcademico").jqGrid({
-            url: '@Url.Action("ListaEstudios", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Nivel de Estudios', 'Carrera', 'Nivel Alcanzado', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'GradoEstudios', index: 'GradoEstudios', align: 'left', editable: false, sortable: false },
-                    { name: 'Carrera', index: 'Carrera', align: 'left', editable: false, sortable: false },
-                    { name: 'Estado', index: 'Estado', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-
-        jQuery("#grdListCentroEstudios").jqGrid({
-            url: '@Url.Action("ListaCentroEstudios", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Nivel de Estudios', 'Carrera', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'GradoEstudios', index: 'GradoEstudios', align: 'left', editable: false, sortable: false },
-                    { name: 'Carrera', index: 'Carrera', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-
-        jQuery("#grdListExperenciaLaboral").jqGrid({
-            url: '@Url.Action("ListaExperienciaLaboral", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Cargo', 'Años', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'GradoEstudios', index: 'GradoEstudios', align: 'left', editable: false, sortable: false },
-                    { name: 'Estado', index: 'Estado', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListConocimentoGeneral").jqGrid({
-            url: '@Url.Action("ListaConocimientosGeneralaes", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListConocimientoIdiomas").jqGrid({
-            url: '@Url.Action("ListaConocimientosIdiomas", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
-                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListOtrosConocimientos").jqGrid({
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListDiscapacidad").jqGrid({
-            url: '@Url.Action("ListaDiscapacidades", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Tipo', 'Descripci&oacuten', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListEvaluacion").jqGrid({
-            url: '@Url.Action("ListaEvaluacionesPerfil", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Código', 'Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                    { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false },
-                    { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false
-        });
-        jQuery("#grdListRemplazos").jqGrid({
-            //url: 'alt-64//Url.Action("ListaCompetencias", "SolicitudCargo")',
-            datatype: 'json', 
-            mtype: 'POST',
-            colNames: ['Fecha Inicio', 'Fecha Fin','Nombre',' Apellido'],
-            colModel: [
-                    { name: 'Fecha Inicio', index: 'Fecha Inicio', align: 'center', editable: false, sortable: false },
-                    { name: 'Fecha Fin', index: 'Fecha Fin', align: 'left', editable: false, sortable: false },
-                    { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, sortable: false },
-                    { name: 'Apellido', index: 'Apellido', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Fecha Inicio',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 90,
-            width: 930,
-            rowNum: 4,
-            cellsubmit: 'clientArray',
-            hidegrid: true
-
-        });
-        var dlgobservacion = $("#dlgAprobarRechazo").dialog(
-           {
-               autoOpen: false,
-               modal: true,
-               title: "Aprobación/Rechazo",
-               width: 600,
-               height: 300,
-               buttons: {
-                   "Grabar": function () {
-                       //AsociarReciboAPolizaCorrecta();
-                       return true;
-                   },
-                   "Cancelar": function () {
-                       $(this).dialog("close");
-                       return false;
-                   }
-               }
-           });
-
-        $("#dlgEnviarSolicitud").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 180,
-            modal: true,
-            buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#dlgGrabar").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 180,
-            modal: true,
-            buttons: {
-                "Aceptar": function () {
-                    $(this).dialog("close");
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
+      
         //$("#txtEdadInicial").spinner();
         //$("#txtEdadFinal").spinner();
 
@@ -552,25 +216,13 @@
         $('a[href=#' + tab + ']').tab('show');
     }
 
-    function mostrarAprobarRechazar() {
-        $("#dlgAprobarRechazo").dialog('open');
-    }
-
-    function mostrarEnvio(id) {
-        $("#dlgEnviarSolicitud").dialog("open");
-    }
-
-    function mostrarGrabar(id) {
-        $("#dlgGrabar").dialog("open");
-    }
-
-
+   
 
     //inicio
-    function mostrarPopuprReemplazo() {
+    function mostrarPopuprReemplazo(id) {
         var dialogDiv = $('#popupDialogReemplazo');
 
-        $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet"})', function (data) {
+        $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id, function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#popupDialogReemplazo"));
@@ -581,13 +233,13 @@
 
    
 
-    function EliminarReemplazo(selr, idReq, idReemp) {
+    function EliminarReemplazo(selr, idReq, idPersona) {
 
         $.ajax({
             data: {
                 id: selr,
                 idReq: idReq,
-                idReemp: idReemp
+                idPersona: idPersona
 
             },
             type: "POST",
@@ -604,8 +256,6 @@
     }
 
 
-
-
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
@@ -620,6 +270,8 @@
         var countList = jQuery("#grdListReemplazosReq").jqGrid('getGridParam', 'records');
 
         var observ = $('#SolReqPersonal_Observacion').val();
+        var tipoPuesto = $('#SolReqPersonal_TipPuesto').val();
+        
         
 
         if (tipVacante=="0") {
@@ -637,7 +289,36 @@
             return;
         }
 
-        if (numVacante.length>0) {
+        if (tipoPuesto=="0") {
+            notificacionExito("Seleccione un tipo de puesto");
+            return;
+        }
+        
+
+        //if (numVacante.length>0) {
+
+        //    var nVacante = parseInt(numVacante);
+        //    if (nVacante==0) {
+        //        notificacionExito("Ingrese el numero de vacantes");
+        //        return;
+        //    }
+
+        //    if (nVacante != countList) {
+        //        notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
+        //        return;
+        //    }
+            
+        //}
+
+        creaSolicitudReempCargo();
+
+    }
+    
+
+    function EnvioSolicitud() {
+        var numVacante = $('#SolReqPersonal_NumVacantes').val();
+        var countList = jQuery("#grdListReemplazosReq").jqGrid('getGridParam', 'records');
+        if (numVacante.length>=0) {
 
             var nVacante = parseInt(numVacante);
             if (nVacante==0) {
@@ -649,13 +330,21 @@
                 notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
                 return;
             }
-            
+
         }
 
-        creaSolicitudReempCargo();
+        enviaSolicitud();
 
     }
-    
+
+
+    function enviaSolicitud() {
+
+
+    }
+
+
+
     function creaSolicitudReempCargo() {
 
         $.ajax({
@@ -665,6 +354,8 @@
                 traditional: true,
                 success: function (data) {
                     if (data.Resultado) {
+                       
+                        $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                         $('#grdListReemplazosReq').trigger('reloadGrid');
                     }
@@ -702,9 +393,9 @@
                     <tr class="formulario-fila">
                         <td class="span5">
                            
-                                <label class="control-label" for="inputSuccess">Requerimiento</label>
+                            <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">    
-                            @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { @class = "textoFormulario", @readonly = "readonly" })    
+                                <input class="textoFormulario" id="SolReqPersonal_CodSolReqPersonal" name="SolReqPersonal.CodSolReqPersonal" readonly="readonly" type="text" value="@Model.SolReqPersonal.CodSolReqPersonal">
                             </div>
                             
                         </td>
@@ -784,661 +475,44 @@
                         </td>                    
                     </tr>
                     
-                </table>@*
+                </table>
+        
+                    <div class="grilla-opciones">
+                            <div class="opciones">
+                                <a  class="btn btn-info" id="btnGrabarSolReq" onclick="validaEnvio()"><i class="icon-screenshot icon-white"></i> Grabar</a>
+                            </div>
+                            <div style="clear:both"></div>
+                    </div>
     
-                <div class="grilla-opciones">
-                        <div class="opciones">
-                            <a  class="btn btn-info" id="btnGrabarSolReq" ><i class="icon-screenshot icon-white"></i> Grabar</a>
-                        </div>
-                        <div style="clear:both"></div>
-                </div>*@
-    
-    
-                <div class="grilla-opciones">
-                    <h6>Reemplazos</h6>
-                        <div class="opciones">
-                            <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
-                            @*<a class="btn btn-small btn-info" title="Editar" id="btnEditarReemplazo"><i class="icon-edit icon-white"></i></a>*@
-                            <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
-                        </div>
-                        <div style="clear:both"></div>
-                </div>@*
-                <div class="tabla-datos">
-                        <table id="grdListRemplazos">
-                        </table>
-                </div>*@
-    
-    <div class="tabla-datos" >
-    <table id="grdListReemplazosReq" >
-    </table>
-    <div id="grdPagerReemplazosReq">
-    </div>
-</div>
+                
+               
+        
+               <div id="SeccionReemplazos">
+                     <div class="grilla-opciones">
+                        <h6>Reemplazos</h6>
+                            <div class="opciones">
+                                <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
+                                <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                            </div>
+                            <div style="clear:both"></div>
+                    </div>
+                    <div class="tabla-datos" >
+                    <table id="grdListReemplazosReq" >
+                    </table>
+                    <div id="grdPagerReemplazosReq">
+                    </div>
+                    </div>
+               </div>
+               
+               
+
 
                 
                              
 }
            
             
-            @if (!Accion.Nuevo.Equals(Model.Accion))
-            {
-                
-
-             <h5>Perfil</h5>
-            <ul class="nav nav-tabs">
-                <li><div style="width:110px;display:inline-block"></div></li>
-                <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
-                <li class=""><a href="#B" data-toggle="tab">General</a></li>
-                <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
-                <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
-                <li class=""><a href="#E" data-toggle="tab">Conocimientos</a></li>
-                <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
-                <li><a href="#G" data-toggle="tab">Evaluación</a></li>
-                <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
-            </ul>
-            <div class="tabbable">
-                <div class="tab-content">
-                    <!--Puesto Inicio -->
-                    <div class="tab-pane active" id="A">
-                        <div class="grilla-opciones" style="margin-top:0px;">
-                            <h6>Objetivos</h6>
-                            <div style="clear:both"></div>
-                        </div>
-                        <textarea style="width:900px;margin-left:8px;" id="taobjetivos" rows="3" disabled="disabled"></textarea>
-                        <div class="espacio-division-entre-fieldset"></div>
-                        <div class="grilla-opciones">
-                            <h6>Funciones</h6>
-                            <div class="opciones">
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <textarea style="width:900px;margin-left:8px;" id="taFunciones" rows="3" disabled="disabled"></textarea>
-                        <div class="grilla-opciones">
-                            <h6>Competencias</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListCompetencias">
-                            </table>
-                        </div>
-                        <div class="grilla-opciones">
-                            <h6>Ofrecemos</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListOfrecemos">
-                            </table>
-                        </div>
-
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn btn-info" href="#" onclick="irATab('B');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <!--Puesto Fin -->
-
-                    <!--General Inicio -->
-
-                    <div class="tab-pane" id="B">
-                        <form>
-                            <div class="grilla-opciones" style="margin-top:0px;">
-                                <h6>Datos generales</h6>
-                                <div class="opciones">
-                                </div>
-                                <div style="clear:both"></div>
-                            </div>
-                            <table border="0" style="width:100%">
-                                <tbody>
-                                    <tr>
-                                        <td style="width:40px"></td>
-                                        <td style="width:350px">
-                                        </td>
-                                        <td>
-                                            Ptje.
-                                        </td>
-                                        <td style="width:50px">
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                        </td>
-                                        <td style="text-align:center">
-                                            Ptje.
-                                        </td>
-                                        <td></td>
-                                        <td style="width:80px"></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td style="width:180px;">
-                                            <label class="control-label" for="input01">Postulante Interno</label>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="input-xxmini" value="15">
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                            <label class="control-label" for="input01">Rango Edad</label>
-                                        </td>
-                                        <td>
-                                              
-                                            <input id="txtEdadInicial" type="text" class="input-xmini" value="22"> - <input id="txtEdadFinal" type="text" class="input-xmini" value="35">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="input-xxmini" value="10">
-                                        </td>
-                                        <td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>
-              
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td class="td-label">
-                                            <label class="control-label" for="input01">Sexo
-                                                <select class="input-medium">
-                                                    <option>Ambos</option>
-                                                    <option>Masculino</option>
-                                                    <option>Femenino</option>
-                                                </select>                                             
-                                            </label>
-                                        </td>
-                                        <td style="width:80px" >
-                                            <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
-                                        </td>                                       
-                                        <td></td>
-                                        <!--<td> <label class="control-label" for="input01">Publicación Sexo</label></td>
-                                        <td>
-                                            <select id="sesexo" class="input-medium">
-                                                <option>Indistinto</option>
-                                                <option>Masculino</option>
-                                                <option>Femenino</option>
-                                            </select> 
-                                        </td> -->
-                                        <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
-                                        <td>                                         
-                                            <select class="input-large">
-                                                <option>Jefe Corporativo Administrativo</option>
-                                                <option>Personal Administrativo</option>
-                                                <option>Personal Asistencial</option>
-                                                <option>Personal de Contacto</option>
-                                                <option>Personal Operativo</option>
-                                            </select>
-
-                                        </td>
-                                        <td>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="2" style="text-align:left;">
-                                            <span style="font-size:9px;font-weight:bolder;">El(los) sexo(s) seleccionado(s) serán considerados</span>
-                                        </td> 
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>   
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <label class="control-label" for="input01">Rango Salarial Bruto (S/.)                                             <select class="input-medium">
-                                                <option>Menos de 1000</option>
-                                                <option>De 1000 a 2000</option>
-                                                <option>De 2000 a 3000</option>
-                                                <option>De 3000 a 4000</option>
-                                                <option>De 4000 a 5000</option>
-                                                <option>De 5000 a 6000</option>
-                                                <option>De 6000 a más</option>
-                                            </select>
-</label>
-                                        </td>
-                                        <td style="width:80px">
-                                            <input type="text" class="input-xxmini" value="10">
-                                            <label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="5"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
-                        </form>
-                        <div class="grilla-opciones">
-                            <h6>Horario</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListHorario">
-                            </table>
-                        </div>
-                        <div class="grilla-opciones">
-                            <h6>Ubigeo</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListUbigeo">
-                            </table>
-                        </div>
-                                            
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>                        
-                                <a class="btn" href="#" onclick="irATab('A');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('C');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!--General Fin-->
-
-                    <div class="tab-pane" id="C">
-                        <div class="grilla-opciones">
-                            <h6>Nivel Académico</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListNivelAcademico">
-                            </table>
-                        </div>                        
-                        <div class="grilla-opciones">
-                            <h6>Centro Estudios</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListCentroEstudios">
-                            </table>
-                        </div>                                            
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn" href="#" onclick="irATab('B');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('D');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="D">
-                        <div class="grilla-opciones">
-                            <h6>Experiencia Laboral</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListExperenciaLaboral">
-                            </table>
-                        </div>   
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn" href="#" onclick="irATab('C');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('E');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="E">
-                        <div class="grilla-opciones">
-                            <h6>Ofimática</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListConocimentoGeneral">
-                            </table>
-                        </div>                                               
-                        <div class="grilla-opciones">
-                            <h6>Idiomas</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                                <a class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListConocimientoIdiomas">
-                            </table>
-                        </div>
-                        <div class="grilla-opciones">
-                            <h6>Otros conocimientos</h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListOtrosConocimientos">
-                            </table>
-                        </div> 
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn" href="#" onclick="irATab('D');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('F');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="F">
-                        <div class="grilla-opciones">
-                            <h6></h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListDiscapacidad">
-                            </table>
-                        </div>                         
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn" href="#" onclick="irATab('E');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('G');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>                        
-                    </div>
-
-                    <div class="tab-pane" id="G">
-                        <div class="grilla-opciones">
-                            <h6></h6>
-                            <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                                <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                        <div class="tabla-datos">
-                            <table id="grdListEvaluacion">
-                            </table>
-                        </div>                         
-                        <div class="formulario-accion">
-                            <div class="opciones">
-                                <a class="btn" href="#" onclick="irATab('F');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                <a class="btn btn-info" href="#" onclick="irATab('H');"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                            </div>
-                        </div>                        
-                    </div>
-
-                    <!--Conf. Perfil Inicio-->
-                    <div class="tab-pane" id="H">
-                        <form>
-                            <div class="grilla-opciones" style="margin-top:0px;">
-                                <h6>Parámetros</h6>
-                                <div class="opciones">
-                                </div>
-                                <div style="clear:both"></div>
-                            </div>
-                            <div style="margin-left:20px;">
-                                <table style="width: 900px;" border="0">
-                                    <tr>
-                                        <td style="width: 50%; vertical-align: top">
-                                                <h6>Parámetros Pre-Selección</h6>
-                                                <table border="0">
-                                                    <tr>
-                                                        <td style="width: 80px;"></td>
-                                                        <td></td>
-                                                        <td>Ptje.
-                                                        </td>
-                                                        <td style="width: 10px;"></td>
-                                                        <td>Ptje.Min
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label" style="width: 130px;">
-                                                            <label>Postulante Interno</label></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Edad</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="8" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">
-                                                            <label>Sexo</label></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Rango Salarial</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Nivel de Estudios</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="7" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Centro de Estudios</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="10" disabled="disabled"></td>
-                                                        <td></td>
-
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Experiencia Laboral</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="6" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Conoc. Ofimáticos</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="3" disabled="disabled"></td>
-                                                        <td></td>
-
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Conoc. Idiomas</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Conoc. Otros</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">
-                                                            <label>Discapacidades</label></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="9" disabled="disabled"></td>
-                                                        <td></td>
-
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Horario</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label">Ubigeo</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="4" disabled="disabled"></td>
-                                                        <td></td>
-
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td class="td-label"><b>Totales</b></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="84" disabled="disabled"></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
-
-                                                    </tr>
-                                                </table>
-
-                                        </td>
-                                        <td style="width: 50%; vertical-align: top">
-                                            <h6>Parámetros Selección</h6>
-                                                <table border="0">
-                                                        <tr>
-                                                        <td></td>
-                                                        <td>Ptje.
-                                                            </td>
-                                                            <td style="width:10px;"></td>
-                                                        <td>Ptje.Min
-                                                            </td>
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="td-label" style="width:130px;">Exámenes</td>
-                                                        <td>
-                                                            <input type="text" class="input-xxmini text-right" value="5" disabled="disabled"></td>
-                                                        <td></td>
-                                                            <td>
-                                                            <input type="text" class="input-xxmini text-right" value="0"></td>
-
-                                                    </tr>                                                       
-                                                    <tr>
-                                                        <td colspan="4" style="height:20px;"></td>
-                                                    </tr>
-                                                </table>
-                                            <label>Vacantes por Estado</label>
-                                                <table border="0">
-                                                    <tr>
-                                                        <td class="td-label" style="width:130px;">
-                                                            Postulantes Pre-Selec.
-                                                        </td>
-                                                        <td> <input type="text" class="input-xxmini text-right" value="9"></td>
-                                                    </tr>
-                                                        <tr>
-                                                        <td colspan="2" style="height:40px;">                                                            
-                                                        </td>                                                            
-                                                    </tr>
-                                                </table>
-
-                                        </td>
-                                    </tr>
-
-                                </table>
-                            </div>
-                            <div class="formulario-accion">
-                                <div class="opciones">
-                                     <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a> 
-                                    <a class="btn" href="#" onclick="irATab('G');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>
-                    <!--Conf. Perfil Fin-->
-
-
-                </div>
-            </div>
-            }
+            
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>

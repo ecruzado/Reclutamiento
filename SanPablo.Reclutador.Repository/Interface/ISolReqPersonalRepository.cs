@@ -22,7 +22,7 @@ namespace SanPablo.Reclutador.Repository.Interface
         int EliminaListaReemplazo(Reemplazo obj);
         int InsertTempReemplazo(Reemplazo obj);
         List<Reemplazo> GetListaReemplazo(Reemplazo obj);
-        string CreaSolicitudReemplazo(SolReqPersonal obj,Reemplazo objReemplazo);
+        Int32 CreaSolicitudReemplazo(SolReqPersonal obj,Reemplazo objReemplazo);
 
 
         List<CompetenciaRequerimiento> ListaCompetencias(int ideSolicitudReqPersonal);

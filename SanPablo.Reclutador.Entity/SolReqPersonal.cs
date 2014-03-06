@@ -14,7 +14,7 @@ namespace SanPablo.Reclutador.Entity
     public class SolReqPersonal : BaseEntity
     {
 
-        public virtual int IdeSolReqPersonal { get; set; }
+        public virtual int? IdeSolReqPersonal { get; set; }
         public virtual string CodSolReqPersonal { get; set; }
         public virtual int IdeSede { get; set; }
         public virtual string TipPuesto { get; set; }
@@ -71,14 +71,14 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntTotExamen { get; set; }
         public virtual int PuntMinExamen { get; set; }
         public virtual int CantPreSelec { get; set; }
-        public virtual DateTime FecPublicacion { get; set; }
-        public virtual DateTime FecExpiracacion { get; set; }
+        public virtual DateTime? FecPublicacion { get; set; }
+        public virtual DateTime? FecExpiracacion { get; set; }
         public virtual string TipVacante { get; set; }
         public virtual int NumVacantes { get; set; }
         public virtual int IdeCargo { get; set; }
         public virtual string NomPersonReemplazo { get; set; }
-        public virtual DateTime FecIniReemplazo { get; set; }
-        public virtual DateTime FecfInReemplazo { get; set; }
+        public virtual DateTime? FecIniReemplazo { get; set; }
+        public virtual DateTime? FecfInReemplazo { get; set; }
         public virtual string IndCargo { get; set; }
         public virtual string IndVerSueldo { get; set; }
         public virtual string IndVerSexo { get; set; }
@@ -86,9 +86,9 @@ namespace SanPablo.Reclutador.Entity
         // para la auditoria
         public virtual string EstadoActivo { get; set; }
         public virtual string UsrCreacion { get; set; }
-        public virtual DateTime Feccreacion { get; set; }
+        public virtual DateTime? Feccreacion { get; set; }
         public virtual string UsrModifica { get; set; }
-        public virtual DateTime FecModifica { get; set; }
+        public virtual DateTime? FecModifica { get; set; }
 
         public virtual int PuntTotCentroEst { get; set; }
 

@@ -1201,10 +1201,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var codRol = Convert.ToString(Session[ConstanteSesion.Rol]);
 
             CodGenerado = codUsuario+codSede+codRol+String.Format("{0:MM/dd/yyyy}", hoy) + System.Guid.NewGuid().ToString();
+            
             codCodificado = Base64Encode(CodGenerado);
 
+            Session.Remove(ConstanteSesion.ListaReemplazo);
+            Session.Remove(ConstanteSesion.codReqSolTemp);
+            
             Session[ConstanteSesion.codReqSolTemp] = codCodificado;
 
+            model.Accion = Accion.Nuevo;
 
             return View("InformacionReemplazo", model);
         }
@@ -1256,16 +1261,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
        /// Incializa el popup de reemplazo
        /// </summary>
        /// <returns></returns>
-        public ActionResult InicioPopupReemplazo() 
+        public ActionResult InicioPopupReemplazo(string id) 
         {
 
             SolicitudRempCargoViewModel model;
 
             model = new SolicitudRempCargoViewModel();
+            model.SolReqPersonal = new SolReqPersonal();
 
             model.Reemplazo = new Reemplazo();
 
             DateTime Hoy = DateTime.Today;
+
+            if (id != null && id.Length > 0)
+            {
+                model.SolReqPersonal.CodSolReqPersonal = id;
+            }
+            
+            
             
             return View("PopupListaReemplazo",model);
         }
@@ -1282,69 +1295,90 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJson = new JsonMessage();
             Reemplazo objReemplazo;
             objReemplazo = new Reemplazo();
-            string codGeneredo =null;
+            objReemplazo = model.Reemplazo;
+
+
+            var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+
+
+            objReemplazo.IdeSolReqPersonal = Convert.ToInt32(objSol.IdeSolReqPersonal);
+            objReemplazo.FechaCreacion = FechaSistema;
+            objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
+
             int dato = 0;
-            codGeneredo = Convert.ToString(Session[ConstanteSesion.codReqSolTemp]);
-            List<Reemplazo> lista = new List<Reemplazo>();
+            dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+
+            objJson.Mensaje = "Se grabo el registro correctamente";
+            objJson.Resultado = true;
+
+
+
+            //string codGeneredo =null;
+            //int dato = 0;
+            //codGeneredo = Convert.ToString(Session[ConstanteSesion.codReqSolTemp]);
+            //List<Reemplazo> lista = new List<Reemplazo>();
            
-            var listaInicio = Session[ConstanteSesion.ListaReemplazo];
+            //var listaInicio = Session[ConstanteSesion.ListaReemplazo];
 
-            if (listaInicio!=null)
-            {
-                List<Reemplazo> list = (List<Reemplazo>)listaInicio;
-                foreach (Reemplazo item in list)
-                {
+            //if (listaInicio!=null)
+            //{
+            //    List<Reemplazo> list = (List<Reemplazo>)listaInicio;
+            //    foreach (Reemplazo item in list)
+            //    {
                    
-                    objReemplazo = new Reemplazo();
-                    objReemplazo = item;
-                    lista.Add(objReemplazo);
+            //        objReemplazo = new Reemplazo();
+            //        objReemplazo = item;
+            //        lista.Add(objReemplazo);
   
-                }
+            //    }
 
-                objReemplazo = new Reemplazo();
-                objReemplazo.Indicador = lista.Count + 1;
+            //    objReemplazo = new Reemplazo();
+            //    objReemplazo.Indicador = lista.Count;
 
-                objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
-                objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
-                objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
-                objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
-                objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
+            //    objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+            //    objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+            //    objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+            //    objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+            //    objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
 
-                lista.Add(objReemplazo);
+            //    lista.Add(objReemplazo);
 
-                objReemplazo.CodGenerado = codGeneredo;
-                objReemplazo.FechaCreacion = FechaSistema;
-                objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
-                dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+               
+            //    objReemplazo.CodGenerado = codGeneredo;
+            //    objReemplazo.FechaCreacion = FechaSistema;
+            //    objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
+            //    dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+              
 
-                Session[ConstanteSesion.ListaReemplazo] = lista;
-                objJson.Mensaje = "Se grabo el registro correctamente";
-                objJson.Resultado = true;
+            //    Session[ConstanteSesion.ListaReemplazo] = lista;
+            //    objJson.Mensaje = "Se grabo el registro correctamente";
+            //    objJson.Resultado = true;
 
-            }
-            else
-            {
-                objReemplazo = new Reemplazo();
-                objReemplazo.Indicador = objReemplazo.Indicador + 1;
+            //}
+            //else
+            //{
+            //    objReemplazo = new Reemplazo();
+            //    objReemplazo.Indicador = objReemplazo.Indicador;
 
-                objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
-                objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
-                objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
-                objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
-                objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
+            //    objReemplazo.ApePaterno = model.Reemplazo.ApePaterno;
+            //    objReemplazo.ApeMaterno = model.Reemplazo.ApeMaterno;
+            //    objReemplazo.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;
+            //    objReemplazo.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;
+            //    objReemplazo.Nombres = model.Reemplazo.ApeMaterno;
 
-                lista.Add(objReemplazo);
+            //    lista.Add(objReemplazo);
 
-                objReemplazo.CodGenerado = codGeneredo;
-                objReemplazo.FechaCreacion = FechaSistema;
-                objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
-                dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+                
+            //    objReemplazo.CodGenerado = codGeneredo;
+            //    objReemplazo.FechaCreacion = FechaSistema;
+            //    objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
+            //    dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+                
 
-
-                Session[ConstanteSesion.ListaReemplazo] = lista;
-                objJson.Mensaje = "Se grabo el registro correctamente";
-                objJson.Resultado = true;
-            }
+            //    Session[ConstanteSesion.ListaReemplazo] = lista;
+            //    objJson.Mensaje = "Se grabo el registro correctamente";
+            //    objJson.Resultado = true;
+            //}
 
             return Json(objJson);
         }
@@ -1357,39 +1391,41 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         /// 
-        
-        public ActionResult EliminarReemplazo(int id,int idReq,int idReemp)
+
+        public ActionResult EliminarReemplazo(int id, int idReq, int idPersona)
         {
             JsonMessage objJson = new JsonMessage();
             SolicitudRempCargoViewModel model;
 
             model = new SolicitudRempCargoViewModel();
-            var ListaSession = Session[ConstanteSesion.ListaReemplazo];
+            //var ListaSession = Session[ConstanteSesion.ListaReemplazo];
 
-            if (ListaSession!=null)
-            {
-                List<Reemplazo> lista = (List<Reemplazo>)ListaSession;
-                if (id>0)
-                {
-                    id = id - 1;
-                }
-                else
-                {
-                    id = 0;
-                }
-                lista.RemoveAt(id);
-                Session[ConstanteSesion.ListaReemplazo] = lista;
+            //if (ListaSession!=null)
+            //{
+            //    List<Reemplazo> lista = (List<Reemplazo>)ListaSession;
 
-                objJson.Resultado=true;	 
-                objJson.Mensaje = "Se elimino el registro correctamente";
+            //    //Reemplazo objReemplazo = new Reemplazo();
+            //    //objReemplazo.IdReemplazo = id;
+            //    //lista.Remove(objReemplazo);
+            //    //lista.Remove(new Reemplazo() { Indicador = id});
+            //    var itemToRemove = lista.SingleOrDefault(r => r.Indicador == id);
+            //    if (itemToRemove != null)
+            //        lista.Remove(itemToRemove);
 
-            }
 
-            if (idReq>0 && idReemp>0)
+            //    Session[ConstanteSesion.ListaReemplazo] = lista;
+
+            //    objJson.Resultado=true;	 
+            //    objJson.Mensaje = "Se elimino el registro correctamente";
+
+            //}
+
+            if (idReq>0)
             {
                 Reemplazo objReemplazo = new Reemplazo();
                 objReemplazo.IdeSolReqPersonal = idReq;
-                objReemplazo.IdReemplazo = idReemp;
+                objReemplazo.IdReemplazo = id;
+                objReemplazo.IdPersona = idPersona;
                 int dato = _solReqPersonalRepository.EliminaListaReemplazo(objReemplazo);
                 
                 if (dato==1)
@@ -1416,54 +1452,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 List<Reemplazo> ListaReemplazo = new List<Reemplazo>();
                 Reemplazo ObjReemplazo;
-                var objListaReemplazo = Session[ConstanteSesion.ListaReemplazo];
+              
+                ObjReemplazo = new Reemplazo();
 
 
-
-                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
+                if (grid.rules[0].data != null)
                 {
-                    if (objListaReemplazo != null)
-                    {
-
-                        List<Reemplazo> lista = (List<Reemplazo>)objListaReemplazo;
-
-                        ListaReemplazo =
-                                    (lista.Where(n => n.IdeSolReqPersonal == Convert.ToInt32(grid.rules[0].data)).ToList());
-                        
-                        
-                    }
-                    else
-                    {
-                        ObjReemplazo = new Reemplazo();
-                        ObjReemplazo.IdeSolReqPersonal = Convert.ToInt32(grid.rules[0].data);
-                        ListaReemplazo = _solReqPersonalRepository.GetListaReemplazo(ObjReemplazo);
-
-                    }
-
+                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == grid.rules[0].data);
+                    ObjReemplazo.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                 }
-                else {
-
-                    if (objListaReemplazo != null)
-                    {
-
-                        List<Reemplazo> lista = (List<Reemplazo>)objListaReemplazo;
-
-                        ListaReemplazo = lista;
-
-                    }
-                    else 
-                    { 
-                        ObjReemplazo = new Reemplazo();
-                      
-                        ListaReemplazo.Add(ObjReemplazo);
-                        return null;
-                    }
-                
+                else
+                {
+                    ObjReemplazo.IdeSolReqPersonal = 0;
                 }
-
-                Session[ConstanteSesion.cantRegListaReemplazo] = ListaReemplazo.Count();
-
                
+
+                ListaReemplazo = _solReqPersonalRepository.GetListaReemplazo(ObjReemplazo);
 
                 var generic = GetListar(ListaReemplazo,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
@@ -1471,18 +1475,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.Indicador.ToString(),
+                    id = item.IdReemplazo.ToString(),
                     cell = new string[]
                             {
                                
-                                item.Indicador==null?"0":item.Indicador.ToString(),
-                                item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
                                 item.IdReemplazo==null?"":item.IdReemplazo.ToString(),
+                                item.IdPersona==null?"":item.IdPersona.ToString(),
+                                item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
                                 item.FecInicioReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecInicioReemplazo), 
                                 item.FecFinalReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecFinalReemplazo),
                                 item.Nombres==null?"":item.Nombres,
                                 item.ApePaterno==null?"":item.ApePaterno,
-                                item.ApeMaterno==null?"":item.ApeMaterno
+                               
                                
                             }
                 }).ToArray();
@@ -1511,7 +1515,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             JsonMessage objJson = new JsonMessage();
-            string retorno=null;
+            Int32 retorno=0;
             model.Reemplazo = new Reemplazo();
 
             try
@@ -1555,14 +1559,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             catch (Exception)
             {
 
-                retorno = "";
+                retorno = 0;
             }
 
 
-            if (retorno!="")
+            if (retorno>0)
             {
                 objJson.Resultado = true;
                 objJson.Mensaje = "Se genero la Solicitud";
+                objJson.IdDato = retorno;
             }
 
 

@@ -85,8 +85,9 @@ namespace SanPablo.Reclutador.Repository
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ELIMINA_REEMPLAZO");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("p_ideReemplazo", OracleType.Int32).Value = obj.IdReemplazo;
-                 lspcmd.Parameters.Add("p_ideSolReq", OracleType.Int32).Value = obj.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_idReemplazo", OracleType.Int32).Value = obj.IdReemplazo;
+                 lspcmd.Parameters.Add("p_idSolReq", OracleType.Int32).Value = obj.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_idPersona", OracleType.Int32).Value = obj.IdPersona;
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
                  return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
@@ -107,7 +108,7 @@ namespace SanPablo.Reclutador.Repository
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-         public string CreaSolicitudReemplazo(SolReqPersonal solReqPersonal, Reemplazo objReemplazo) 
+         public Int32 CreaSolicitudReemplazo(SolReqPersonal solReqPersonal, Reemplazo objReemplazo) 
          {
 
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -124,7 +125,7 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_nIdeCargo", OracleType.Number).Value = solReqPersonal.IdeCargo;
                  lspcmd.Parameters.Add("p_nIdeDepartamento", OracleType.Number).Value = solReqPersonal.IdeDepartamento;
                  lspcmd.Parameters.Add("p_nIdeArea", OracleType.Number).Value = solReqPersonal.IdeArea;
-                 lspcmd.Parameters.Add("p_cTipVacante", OracleType.Number).Value = solReqPersonal.TipVacante;
+                 lspcmd.Parameters.Add("p_cTipVacante", OracleType.VarChar).Value = solReqPersonal.TipVacante;
                  lspcmd.Parameters.Add("p_nNumVacantes", OracleType.Number).Value = solReqPersonal.NumVacantes;
                  lspcmd.Parameters.Add("p_cTipPuesto", OracleType.VarChar).Value = solReqPersonal.TipPuesto;
                  lspcmd.Parameters.Add("p_cObservacion", OracleType.VarChar).Value = solReqPersonal.Observacion;
@@ -139,7 +140,7 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = solReqPersonal.Tipsol;
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
-                 return Convert.ToString(lspcmd.Parameters["p_cRetVal"].Value);
+                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
 
 
              }
@@ -172,18 +173,18 @@ namespace SanPablo.Reclutador.Repository
              try
              {
                  lcon.Open();
-                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_INSERTA_REEMPLAZO_TEMP");
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_INSERTA_REEMPLAZO");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("nIdTemp", OracleType.VarChar).Value = obj.CodGenerado;
-                 lspcmd.Parameters.Add("nIdReemplazo", OracleType.Int32).Value = obj.IdReemplazo;
-                 lspcmd.Parameters.Add("cApePaterno", OracleType.VarChar).Value = obj.ApeMaterno;
-                 lspcmd.Parameters.Add("cNomBres", OracleType.VarChar).Value = obj.Nombres;
-                 lspcmd.Parameters.Add("cFecInicioReemplazo", OracleType.VarChar).Value = cFechaInicio;
-                 lspcmd.Parameters.Add("cFecFinReemplazo", OracleType.VarChar).Value = cFechaFin;
-                 lspcmd.Parameters.Add("cUsrCreacion", OracleType.VarChar).Value = obj.UsuarioCreacion;
-                 lspcmd.Parameters.Add("cFecCreacion", OracleType.VarChar).Value = cFechaCreacion;
-                 lspcmd.Parameters.Add("nIdeSolReqPersonal", OracleType.Int32).Value = obj.IdeSolReqPersonal;
+                
+                 lspcmd.Parameters.Add("p_cApePaterno", OracleType.VarChar).Value = obj.ApePaterno;
+                 lspcmd.Parameters.Add("p_cNomBres", OracleType.VarChar).Value = obj.Nombres;
+                 lspcmd.Parameters.Add("p_cFecInicioReemplazo", OracleType.VarChar).Value = cFechaInicio;
+                 lspcmd.Parameters.Add("p_cFecFinReemplazo", OracleType.VarChar).Value = cFechaFin;
+                 lspcmd.Parameters.Add("p_cUsrCreacion", OracleType.VarChar).Value = obj.UsuarioCreacion;
+                 lspcmd.Parameters.Add("p_cFecCreacion", OracleType.VarChar).Value = cFechaCreacion;
+                 lspcmd.Parameters.Add("p_nIdeSolReqPersonal", OracleType.Int32).Value = obj.IdeSolReqPersonal;
+
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
                  return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
@@ -265,9 +266,25 @@ namespace SanPablo.Reclutador.Repository
 
                      lobSolReqPersonal.TipEstado = Convert.ToString(ldrSolReqPersonal["ESTACTIVO"]);
                      lobSolReqPersonal.TipEtapa = Convert.ToString(ldrSolReqPersonal["TIPETAPA"]);
-                     lobSolReqPersonal.FecPublicacion = Convert.ToDateTime(ldrSolReqPersonal["FECPUBLICACION"]);
-                     lobSolReqPersonal.Feccreacion = Convert.ToDateTime(ldrSolReqPersonal["FECCREACION"]);
-                     lobSolReqPersonal.FecExpiracacion = Convert.ToDateTime(ldrSolReqPersonal["FECEXPIRACACION"]);
+
+                     var fecPublicacion = Convert.ToString(ldrSolReqPersonal["FECPUBLICACION"]);
+                     if (fecPublicacion.Length>0)
+                     {
+                         lobSolReqPersonal.FecPublicacion = Convert.ToDateTime(ldrSolReqPersonal["FECPUBLICACION"]);
+                     }
+                     var fecCreacion = Convert.ToString(ldrSolReqPersonal["FECCREACION"]);
+                     if (fecCreacion.Length>0)
+                     {
+                         lobSolReqPersonal.Feccreacion = Convert.ToDateTime(ldrSolReqPersonal["FECCREACION"]);
+                     }
+
+                     var fecExpiracion = Convert.ToString(ldrSolReqPersonal["FECEXPIRACACION"]);
+                     if (fecExpiracion.Length>0)
+                     {
+                         lobSolReqPersonal.FecExpiracacion = Convert.ToDateTime(ldrSolReqPersonal["FECEXPIRACACION"]);
+                     }
+                     
+                     
                      lobSolReqPersonal.NomPersonReemplazo = Convert.ToString(ldrSolReqPersonal["NOMPERSONREEMPLAZO"]);
                      lobSolReqPersonal.FlagPublicado = Convert.ToString(ldrSolReqPersonal["PUBLICADO"]);
                      
@@ -316,11 +333,13 @@ namespace SanPablo.Reclutador.Repository
             
                      lobReemplazo = new Reemplazo();
                      lobReemplazo.IdReemplazo = Convert.ToInt32(ldrReemplazo["IDREEMPLAZO"]);
-                     lobReemplazo.ApeMaterno = Convert.ToString(ldrReemplazo["APEPATERNO"]);
+                     lobReemplazo.ApePaterno = Convert.ToString(ldrReemplazo["APEPATERNO"]);
                      lobReemplazo.Nombres = Convert.ToString(ldrReemplazo["NOMBRES"]);
                      lobReemplazo.FecInicioReemplazo = Convert.ToDateTime(ldrReemplazo["FECINICIOREEMPLAZO"]);
                      lobReemplazo.FecFinalReemplazo = Convert.ToDateTime(ldrReemplazo["FECFINREEMPLAZO"]);
                      lobReemplazo.IdeSolReqPersonal = Convert.ToInt32(ldrReemplazo["IDESOLREQPERSONAL"]);
+                     lobReemplazo.IdPersona = Convert.ToInt32(ldrReemplazo["IDPERSONA"]);
+                     
                      llstReemplazo.Add(lobReemplazo);
                  }
                  ldrReemplazo.Close();
