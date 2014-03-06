@@ -30,13 +30,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IAreaRepository _areaRepository;
         private IDepartamentoRepository _departamentoRepository;
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
+        private ITipoRequerimiento _tipoRequerimiento;
+        private ICargoRepository _cargoRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
                                          IDependenciaRepository dependenciaRepository,
                                          IAreaRepository areaRepository,
                                          IDepartamentoRepository departamentoRepository,
-                                         IUsuarioRolSedeRepository usuarioRolSedeRepository
+                                         IUsuarioRolSedeRepository usuarioRolSedeRepository,
+                                         ITipoRequerimiento tipoRequerimiento,
+                                         ICargoRepository cargoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -45,7 +49,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _areaRepository = areaRepository;
             _departamentoRepository = departamentoRepository;
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
-            
+            _tipoRequerimiento = tipoRequerimiento;
+            _cargoRepository = cargoRepository;
         }
 
         
@@ -1550,7 +1555,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult EnviaSolReqPersonal(SolicitudRempCargoViewModel model) {
 
             JsonMessage objJson = new JsonMessage();
-            int retorno;
+            int retorno=0;
            
 
             int idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
@@ -1605,17 +1610,125 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objJson.Mensaje = "Error: no se puede enviar la solicitud, revise que los campos esten correctos";
             }
 
-            //if (retorno>0)
-            //{
-            //    objJson.Resultado = true;
-            //    objJson.Mensaje = "Se envio la solicitud correctamente";
-            //}
+            if (retorno > 0)
+            {
+                objJson.Resultado = true;
+                objJson.Mensaje = "Se envio la solicitud correctamente";
+            }
 
 
             return Json(objJson);
         
         }
- 
+
+        /// <summary>
+        /// inicializa el popup para las aprobaciones o rechazos.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult InicioPopupAprobReem(string id)
+        {
+            
+            SolicitudRempCargoViewModel model;
+            model = new SolicitudRempCargoViewModel();
+         
+            model.SolReqPersonal = new SolReqPersonal();
+            model.LogSolReqPersonal = new LogSolReqPersonal();
+
+            return View("PopupAprobacionRechazo", model);
+        }
+
+        /// <summary>
+        /// obtiene los datos del popup de aprobacion y rechazo
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SetPopupAprobReem(SolicitudRempCargoViewModel model)
+        {
+            JsonMessage objJson = new JsonMessage();
+            int dato = 0;
+            
+            Boolean aprobacion = false;
+            int Sede =0;
+            string tipoReq=null;
+            if (model.SolReqPersonal.CodSolReqPersonal!=null)
+            {
+                aprobacion = model.LogSolReqPersonal.Aprobado;
+
+
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+                if (objSol!=null)
+                {
+                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    Sede = Convert.ToInt32(Session.[ConstanteSesion.Sede]);
+
+                    if (aprobacion)
+                    {
+                        model.LogSolReqPersonal.TipEtapa = Etapa.Aprobado;
+                        model.LogSolReqPersonal.Observacion = "";
+                    }
+                    else
+                    {
+                        model.LogSolReqPersonal.TipEtapa = Etapa.Rechazado;
+                    }
+
+
+                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                    //if (objCargo!=null)
+                    //{
+                    //    if (objCargo.TipoRequerimiento!=null)
+                    //    {
+                    //        tipoReq = objCargo.TipoRequerimiento;
+                    //        var ObjTipoReq = _tipoRequerimiento.GetBy(x => x.TIPREQ == tipoReq);
+
+                    //        if (ObjTipoReq!=null)
+                    //        {
+                    //          List<TipoRequerimiento> lista = (List<TipoRequerimiento>)ObjTipoReq;
+                    //          TipoRequerimiento tipo = (TipoRequerimiento)lista[0];
+                                
+                    //        }
+
+
+                    //    }
+                    //}
+
+                    
+                    var objUsuarioSede = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Analista_Seleccion &&
+                                                                         x.IdSede ==Sede );
+
+                    
+                }
+
+
+
+                
+            }
+
+            if (dato>0)
+            {
+                objJson.Resultado = true;
+                if (aprobacion)
+                {
+                    objJson.Mensaje = "Se aprobo la solicitud";
+                }
+                else
+                {
+                    objJson.Mensaje = "Se rechazo la solicitud";
+                }
+            }
+          
+
+
+
+            return Json(objJson);
+            
+        }
+
+
+        
 
 
         #endregion

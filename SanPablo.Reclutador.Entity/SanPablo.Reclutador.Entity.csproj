@@ -68,6 +68,7 @@
     <Compile Include="DiscapacidadRequerimiento.cs" />
     <Compile Include="EvaluacionRequerimiento.cs" />
     <Compile Include="ExperienciaRequerimiento.cs" />
+    <Compile Include="LogSolReqPersonal.cs" />
     <Compile Include="NivelAcademicoRequerimiento.cs" />
     <Compile Include="UbigeoReemplazo.cs" />
     <Compile Include="HorarioRequerimiento.cs" />
