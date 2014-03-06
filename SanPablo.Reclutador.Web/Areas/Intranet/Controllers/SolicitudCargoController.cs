@@ -1663,7 +1663,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                     model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                    Sede = Convert.ToInt32(Session.[ConstanteSesion.Sede]);
+                    Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
                     if (aprobacion)
                     {
