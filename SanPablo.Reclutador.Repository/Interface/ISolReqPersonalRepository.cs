@@ -45,6 +45,8 @@ namespace SanPablo.Reclutador.Repository.Interface
 
         List<EvaluacionRequerimiento> ListaEvaluacion(int ideSolicitudReqPersonal);
 
+        int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, string codRolRespSgte, string indArea);
+
     }
 }
 

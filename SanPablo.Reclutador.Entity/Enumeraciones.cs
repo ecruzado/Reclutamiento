@@ -173,25 +173,25 @@
         public const string Rechazado = "R";
     }
 
-    public sealed class Asunto 
-    {
-        public const string Solicitado = "solicitado";
-        public const string Aprobacion = "Aprobación";
-        public const string AprobacionFinal = "Aprobación final";
-        public const string Rechazo = "Rechazo";
-        public const string AprobacionPerfil = "Aprobación de perfil";
-        public const string RechazoPerfil = "Rechazo de perfil";
-    }
+    //public sealed class Asunto 
+    //{
+    //    public const string Solicitado = "solicitado";
+    //    public const string Aprobacion = "Aprobación";
+    //    public const string AprobacionFinal = "Aprobación final";
+    //    public const string Rechazo = "Rechazo";
+    //    public const string AprobacionPerfil = "Aprobación de perfil";
+    //    public const string RechazoPerfil = "Rechazo de perfil";
+    //}
 
-    public sealed class AccionMail
-    {
-        public const string  Solicitado = " solicitado un "; //1.
-        public const string  Aprobacion = " Aprobado el ";//2.4
-        public const string  Rechazo = " Rechazado el ";//3
-        public const string  ElaboracionPerfil = " Elaborado el perfil para el ";//5
-        public const string  AprobacionPerfil = " Aprobado el perfil del ";//6
-        public const string  RechazoPerfil = " Rechazado el perfil del ";//6
-    }
+    //public sealed class AccionMail
+    //{
+    //    public const string  Solicitado = " solicitado un "; //1.
+    //    public const string  Aprobacion = " Aprobado el ";//2.4
+    //    public const string  Rechazo = " Rechazado el ";//3
+    //    public const string  ElaboracionPerfil = " Elaborado el perfil para el ";//5
+    //    public const string  AprobacionPerfil = " Aprobado el perfil del ";//6
+    //    public const string  RechazoPerfil = " Rechazado el perfil del ";//6
+    //}
 
     public sealed class Responsable
     {

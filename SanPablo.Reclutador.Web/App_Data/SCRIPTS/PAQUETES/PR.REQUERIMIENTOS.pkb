@@ -25,6 +25,21 @@ FUNCTION FN_VERIFICAR_CODCARGO(p_codCargo IN SOLNUEVO_CARGO.CODCARGO%TYPE)RETURN
 PROCEDURE COPIA_CARGO(p_ideCargo IN CARGO.IDECARGO%TYPE,
                              p_ideSolReqPersonal IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                              p_usrCreacion IN SOLREQ_PERSONAL.USRCREACION%TYPE);
+                             
+FUNCTION SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                                p_ideSede          IN SEDE.IDESEDE%TYPE,
+                                p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                p_ideArea          IN AREA.IDEAREA%TYPE,
+                                p_numVacantes      IN SOLREQ_PERSONAL.NUMVACANTES%TYPE,
+                                p_motivo           IN SOLREQ_PERSONAL.MOTIVO%TYPE,
+                                p_observacion      IN SOLREQ_PERSONAL.OBSERVACION%TYPE,
+                                p_ideUsuarioSuceso IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
+                                p_ideRolSuceso     IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
+                                p_cEtapa           IN DETALLE_GENERAL.VALOR%TYPE,
+                                p_responsableSig   IN ROL.CODROL%TYPE,
+                                p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
+                                p_indicArea        IN BOOLEAN)RETURN NUMBER ; 
 
 END PR_REQUERIMIENTOS;
 /
@@ -78,7 +93,7 @@ BEGIN
    c_ideRolResp := 9; --destinatario recursos 
   ELSIF (p_etapa = '07')THEN   --determinar el usuario asignado 
    c_ideRolResp := -1; --destinatario recursos 
-       
+    
   END IF;
   
   IF (c_ideRolResp <> -1) THEN
@@ -428,6 +443,92 @@ BEGIN
   END;
 
 END COPIA_CARGO;  
+
+
+/* ------------------------------------------------------------
+    Nombre      : SP_INSERTAR_AMPLIACION
+    Proposito   : realiza el insert de una solicitud clona los datos 
+                  y registra en el log de la solicitud
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      05/05/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                                p_ideSede          IN SEDE.IDESEDE%TYPE,
+                                p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                p_ideArea          IN AREA.IDEAREA%TYPE,
+                                p_numVacantes      IN SOLREQ_PERSONAL.NUMVACANTES%TYPE,
+                                p_motivo           IN SOLREQ_PERSONAL.MOTIVO%TYPE,
+                                p_observacion      IN SOLREQ_PERSONAL.OBSERVACION%TYPE,
+                                p_ideUsuarioSuceso IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
+                                p_ideRolSuceso     IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
+                                p_cEtapa           IN DETALLE_GENERAL.VALOR%TYPE,
+                                p_responsableSig   IN ROL.CODROL%TYPE,
+                                p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
+                                p_indicArea        IN BOOLEAN)RETURN NUMBER 
+
+IS
+c_ideLogSequency  LOGSOLREQ_PERSONAL.IDELOGSOLREQ_PERSONAL%TYPE;
+c_codAmpliacion   SOLREQ_PERSONAL.CODSOLREQPERSONAL%TYPE;
+c_ideUsuarioResp  USUARIO.IDUSUARIO%TYPE;
+c_descUsuario     USUARIO.CODUSUARIO%TYPE;
+c_idRolResp       ROL.IDROL%TYPE;
+c_idUsuarioResp   USUARIO.IDUSUARIO%TYPE;
+qWhere            VARCHAR2(100);
+qQuery            VARCHAR2(500);
+BEGIN
+  
+    SELECT SOLREQ_PERSONAL_SQ.NEXTVAL
+    INTO c_ideLogSequency
+    FROM DUAL; 
+    
+    SELECT IDESOLAMPLIACION_SQ.NEXTVAL
+    INTO c_codAmpliacion 
+    FROM DUAL;
+  
+    SELECT US.CODUSUARIO
+    INTO c_descUsuario
+    FROM USUARIO US
+    WHERE US.IDUSUARIO = p_ideUsuarioSuceso;
+    
+    IF (p_indicArea = TRUE)THEN
+    qWhere := 'AND UN.IDEAREA = '||p_ideArea;
+    ELSE
+    qWhere :='';
+    END IF;
+    
+    qQuery := 'SELECT US.IDUSUARIO , R.IDROL '||
+              'INTO c_idUsuarioResp, c_idRolResp '||
+              'FROM ROL R, USUARIO US, USUAROLSEDE UR, USUARIO_NIVEL UN '||
+              'WHERE R.IDROL = UR.IDROL '||
+              'AND US.IDUSUARIO = UR.IDUSUARIO '||
+              'AND UR.IDESEDE = '||p_ideSede|| 
+              ' AND R.CODROL = ' ||p_responsableSig ||' '|| qWhere;
+        
+   EXECUTE IMMEDIATE qQuery;
+   
+  BEGIN 
+    INSERT INTO SOLREQ_PERSONAL 
+    (IDESOLREQPERSONAL,CODSOLREQPERSONAL,IDEDEPENDENCIA,IDEDEPARTAMENTO,IDEAREA,NUMVACANTES,MOTIVO,OBSERVACION,ESTACTIVO,TIPSOL,USRCREACION,FECCREACION)
+    VALUES(c_ideLogSequency, c_codAmpliacion, p_ideDependencia,p_ideDepartamento,p_ideArea,p_numVacantes,p_motivo,p_observacion,'A',p_tipoSolicitud,c_descUsuario,SYSDATE);
+    --realizar la copia de cargo a la tabla ampliacion 
+    PR_REQUERIMIENTOS.COPIA_CARGO(p_ideCargo,c_ideLogSequency,c_descUsuario);
+    --insertar el log de solicitud
+    PR_INTRANET_ED.SP_INSERT_LOG_SOLREQPERSONAL( c_ideLogSequency,p_cEtapa,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso, c_idRolResp,c_idUsuarioResp, NULL); 
+    COMMIT; 
+  EXCEPTION
+    WHEN OTHERS THEN
+    ROLLBACK;
+    c_idUsuarioResp := -1;
+  END;
+  
+  RETURN c_idUsuarioResp;
+  
+END SP_INSERTAR_AMPLIACION;
   
 END PR_REQUERIMIENTOS;
 /

@@ -291,7 +291,7 @@
                             SedeDescripcion = SedeDesc.ToString();
                         }
 
-                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
+                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
                     }
                     objJsonMessage.IdDato = solicitud.IdeSolicitudNuevoCargo;
                     objJsonMessage.Mensaje = "Agregado Correctamente";

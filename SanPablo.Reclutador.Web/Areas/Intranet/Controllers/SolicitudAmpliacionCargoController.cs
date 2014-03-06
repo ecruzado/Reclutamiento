@@ -25,6 +25,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IDependenciaRepository _dependenciaRepository;
         private IDepartamentoRepository _departamentoRepository;
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
+        private IUsuarioRepository _usuarioRepository;
         
 
         public SolicitudAmpliacionCargoController(IDetalleGeneralRepository detalleGeneralRepository,
@@ -33,7 +34,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                   IAreaRepository areaRepository,
                                                   IDependenciaRepository dependenciaRepository,
                                                   IDepartamentoRepository departamentoRepository,
-                                                  IUsuarioRolSedeRepository usuarioRolSedeRepository)
+                                                  IUsuarioRolSedeRepository usuarioRolSedeRepository,
+                                                  IUsuarioRepository usuarioRepository)
         {
             _detalleGeneralRepository = detalleGeneralRepository;
             _solicitudAmpliacionPersonal = solicitudAmpliacionPersonal;
@@ -42,6 +44,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _dependenciaRepository = dependenciaRepository;
             _departamentoRepository = departamentoRepository;
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
+            _usuarioRepository = usuarioRepository;
         }
         
         
@@ -63,16 +66,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             else
             {
                 solicitudModel.Accion = Accion.Nuevo;
-                solicitudAmpliacion.IdeArea = usuario.IDEAREA;
+                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
+                solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;
+                solicitudAmpliacion.Area_des = usuario.AREADES;
                 solicitudAmpliacion.IdeSede = usuario.IDESEDE;
-                solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
                 solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
-                var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuario.IDEDEPARTAMENTO);
-                var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuario.IDEDEPENDENCIA);
-                var area = _areaRepository.GetSingle(x => x.IdeArea == usuario.IDEAREA);
-                solicitudAmpliacion.Departamento_des = departamento.NombreDepartamento;
-                solicitudAmpliacion.Dependencia_des = dependencia.NombreDependencia;
-                solicitudAmpliacion.Area_des = area.NombreArea;
+                solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
             }
             return View(solicitudModel);
@@ -83,6 +83,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit([Bind(Prefix = "SolicitudRequerimiento")]SolReqPersonal solicitudAmpliacion)
         {
             JsonMessage objJsonMessage = new JsonMessage();
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             try
             {
                 SolReqPersonalValidator validation = new SolReqPersonalValidator();
@@ -94,15 +95,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solicitudAmpliacionModel.SolicitudRequerimiento = solicitudAmpliacion;
                     return View(solicitudAmpliacionModel);
                 }
+
+
                 solicitudAmpliacion.EstadoActivo = "A";
                 solicitudAmpliacion.FechaCreacion = FechaCreacion;
                 solicitudAmpliacion.UsuarioCreacion = "YO";
                 solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion; 
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
-                _solicitudAmpliacionPersonal.Add(solicitudAmpliacion);
+                var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-                //insertar el log y enviar
-
+                var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, Etapa.Pendiente, "GERENTE AREA", "SI");
+                var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                enviarMail.EnviarCorreo(dir, Etapa.Pendiente, "GERENTE AREA", Etapa.Pendiente, "", solicitudAmpliacion.DesCargo, "c001", usuarioResponsable.Email, "suceso");
+                
                 objJsonMessage.Mensaje = "Solicitud enviada correctamente";
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
@@ -264,9 +276,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         #endregion
 
         #region GRILLAS PERFIL AMPLIACION
-        //
-        //COMPETENCIAS
-        //
+        ///
+        ///COMPETENCIAS
+        ///
 
         [HttpPost]
         public JsonResult ListarCompetencias(GridTable grid)
@@ -335,9 +347,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return MensajeError("ERROR: " + ex.Message);
             }
         }
-        ////
-        ////HORARIO
-        ////
+        ///
+        ///HORARIO
+        ///
 
         [HttpPost]
         public virtual JsonResult ListaHorario(GridTable grid)
@@ -373,9 +385,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return MensajeError("ERROR: " + ex.Message);
             }
         }
-        ////
-        ////UBIGEO
-        ////
+        /// <summary>
+        ///UBIGEO
+        /// </summary>
 
         [HttpPost]
         public virtual JsonResult ListaUbigeo(GridTable grid)

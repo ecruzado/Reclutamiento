@@ -39,7 +39,7 @@
                             }
                             else {
                                 $(this).dialog("close");
-                                mensajeResultado("Solicitud no enviada intente nuevamente".Mensaje);
+                                MostrarMensaje("Solicitud no enviada intente nuevamente".Mensaje);
                             }
                         });
                     }
@@ -522,7 +522,7 @@
                     </td>   
                 </tr>
           </table>
-          @if (Accion.Nuevo.Equals(Model.Accion))
+          @if (Accion.Consultar.Equals(Model.Accion))
           {
 		           <span></span>
           }
