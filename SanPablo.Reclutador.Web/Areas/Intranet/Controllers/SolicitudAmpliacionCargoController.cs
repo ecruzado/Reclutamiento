@@ -83,7 +83,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit([Bind(Prefix = "SolicitudRequerimiento")]SolReqPersonal solicitudAmpliacion)
         {
             JsonMessage objJsonMessage = new JsonMessage();
-            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            
             try
             {
                 SolReqPersonalValidator validation = new SolReqPersonalValidator();
@@ -95,30 +95,58 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solicitudAmpliacionModel.SolicitudRequerimiento = solicitudAmpliacion;
                     return View(solicitudAmpliacionModel);
                 }
-                solicitudAmpliacion.EstadoActivo = "A";
-                solicitudAmpliacion.FechaCreacion = FechaCreacion;
-                solicitudAmpliacion.UsuarioCreacion = "YO";
+               
                 solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion; 
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
                 var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                var rolResponsable = 0;
+                var etapaInicio = "";
+                /// 
+                ///enviar dependiendo el usuario que registra la solicitud
+                /// 
+                if (rolSuceso == Roles.Jefe)
+                {
+                    rolResponsable = Roles.Gerente;
+                    etapaInicio = Etapa.Pendiente;
+                }
+                else {
+                    if (rolSuceso == Roles.Gerente)
+                    {
+                        rolResponsable = Roles.Gerente_General_Adjunto;
+                        etapaInicio = Etapa.Validado;
+                    }
+                    else
+                        if (rolSuceso == Roles.Gerente_General_Adjunto)
+                        {
+                            rolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            etapaInicio = Etapa.Aprobado;
+                        }
+                }
 
-                //if (rolSuceso == Roles.
+                if ((rolResponsable != 0) && (etapaInicio != ""))
+                {
+                    var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, "SI");
+                    var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+                   
+                    Cargo cargoSol = _cargoRepository.GetSingle(x=>x.IdeCargo == solicitudAmpliacion.IdeCargo);
 
-
-                var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, Etapa.Pendiente, "GERENTE AREA", "SI");
-                var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
-                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-                
-                SendMail enviarMail = new SendMail();
-                enviarMail.Area = usuarioSession.AREADES;
-                enviarMail.Sede = usuarioSession.SEDEDES;
-                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
-                enviarMail.EnviarCorreo(dir, Etapa.Pendiente,"GERENTE AREA", Etapa.Pendiente, "", solicitudAmpliacion.DesCargo, "c001", usuarioResponsable.Email, "suceso");
-                
-                objJsonMessage.Mensaje = "Solicitud enviada correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    bool flag = EnviarCorreo(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo);
+                    string msj = "";
+                    if (!flag)
+                    {
+                       msj = "Falló envio de correo";
+                    }
+                    objJsonMessage.Mensaje = "Solicitud enviada correctamente "+ msj;
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                    
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "No puede realizar esta accion, revise sus permisos";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -149,7 +177,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             model.Departamentos = new List<Departamento>();
             model.Areas = new List<Area>();
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteGeneralAdjunto)
+            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.Gerente_General_Adjunto)
             {
                 model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
                 model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccione" });
@@ -209,18 +237,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return ampliacionViewModel;
         }
 
-        public ActionResult General()
+        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string observacion, string cargoDescripcion, string codCargo)
         {
-            var perfilAmpliacionViewModel = inicializarGeneral();
-            if (CargoPerfil != null)
+            JsonMessage objJsonMessage = new JsonMessage();
+            var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            try
             {
-                var solicitudAmpliacion = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
-                perfilAmpliacionViewModel.SolicitudRequerimiento = solicitudAmpliacion;
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                enviarMail.EnviarCorreo(dir,etapa, rolResponsable,"Ampliación de cargo de ", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+                
+               return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+                
             }
 
-            return PartialView(perfilAmpliacionViewModel);
         }
-
 
         public SolicitudAmpliacionCargoViewModel inicializarGeneral()
         {

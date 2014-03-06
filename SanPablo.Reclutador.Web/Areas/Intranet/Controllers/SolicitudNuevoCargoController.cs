@@ -247,7 +247,7 @@
             solicitudNuevoViewModel.Departamentos = new List<Departamento>();
             solicitudNuevoViewModel.Areas = new List<Area>();
 
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.GerenteGeneralAdjunto)
+            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.Gerente_General_Adjunto)
             {
                 solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
                 solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
@@ -260,6 +260,7 @@
             {
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
                 solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
+                
                 solicitudNuevoViewModel.Dependencias.Add(new Dependencia { IdeDependencia = usuarioSession.IDEDEPENDENCIA, NombreDependencia = usuarioSession.DEPENDENCIADES });
 
                 solicitudNuevoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = usuarioSession.IDEDEPARTAMENTO, NombreDepartamento = usuarioSession.DEPARTAMENTODES });

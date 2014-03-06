@@ -817,7 +817,7 @@ namespace SanPablo.Reclutador.Repository
          }
          #endregion
 
-         public int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, string codRolRespSgte, string indArea )
+         public int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolResponsable, string indArea )
          {
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
 
@@ -839,7 +839,7 @@ namespace SanPablo.Reclutador.Repository
                  cmd.Parameters.Add("p_ideUsuarioSuceso", OracleType.Int32).Value = ideUsuarioSuceso;
                  cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = ideRolSuceso;
                  cmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = etapa;
-                 cmd.Parameters.Add("p_responsableSig", OracleType.VarChar).Value = codRolRespSgte;
+                 cmd.Parameters.Add("p_responsableSig", OracleType.Int32).Value = idRolResponsable;
                  cmd.Parameters.Add("p_tipoSolicitud", OracleType.VarChar).Value = solicitudAmpliacion.TipoSolicitud;
                  cmd.Parameters.Add("p_indicArea", OracleType.VarChar).Value = indArea;
                  cmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;

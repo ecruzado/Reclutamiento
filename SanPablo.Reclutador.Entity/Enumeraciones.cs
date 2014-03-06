@@ -193,17 +193,17 @@
     //    public const string  RechazoPerfil = " Rechazado el perfil del ";//6
     //}
 
-    public sealed class Responsable
-    {
-        public const string GerenteArea = "GA";
-        public const string GerenteAdministrativoSede = "GAS";
-        public const string GerenteGeneralAdjunto = "GGA";
-        public const string JefeProcesos = "JP";
-        public const string JefeArea = "JA";
-        public const string EncargadoSeleccion = "ES";
-        public const string AsistenteSeleccion = "AS";
+    //public sealed class Responsable
+    //{
+    //    public const string GerenteArea = "GA";
+    //    public const string GerenteAdministrativoSede = "GAS";
+    //    public const string GerenteGeneralAdjunto = "GGA";
+    //    public const string JefeProcesos = "JP";
+    //    public const string JefeArea = "JA";
+    //    public const string EncargadoSeleccion = "ES";
+    //    public const string AsistenteSeleccion = "AS";
 
-    }
+    //}
     /// <summary>
     /// Roles del Sistema 
     /// </summary>
