@@ -391,6 +391,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Puesto.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupAprobacionRechazo.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

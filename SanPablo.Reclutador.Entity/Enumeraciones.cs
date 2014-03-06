@@ -204,14 +204,21 @@
         public const string AsistenteSeleccion = "AS";
 
     }
+    /// <summary>
+    /// Roles del Sistema 
+    /// </summary>
     public sealed class Roles
     {
-        public const int GerenteArea = 10;
-        public const int GerenteGeneralAdjunto = 5;
-        public const int JefeProcesos = 6;
-        public const int JefeArea = 3;
-        public const int EncargadoSeleccion = 7;
-        public const int AsistenteSeleccion = 9;
+        public const int Administrador_Sistema = 1;
+        public const int Jefe = 2;
+        public const int Gerente_General_Adjunto = 5;
+        public const int Jefe_Corporativo_Seleccion = 6;
+        public const int Consultor = 7;
+        public const int Analista_Seleccion = 8;
+        public const int Encargado_Selección = 9;
+        public const int Postulante = 10;
+        public const int Gerente =3;
+
 
     }
 

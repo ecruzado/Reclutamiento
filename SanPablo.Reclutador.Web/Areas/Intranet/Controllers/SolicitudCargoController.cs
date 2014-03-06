@@ -1082,18 +1082,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                
 
-                if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data) && !0.Equals(grid.rules[1].data)) ||
-                    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data) && !0.Equals(grid.rules[2].data)) ||
-                    (!"".Equals(grid.rules[3].data) && !"0".Equals(grid.rules[3].data) && !0.Equals(grid.rules[3].data)) ||
-                    (!"".Equals(grid.rules[4].data) && !"0".Equals(grid.rules[4].data) && !0.Equals(grid.rules[4].data)) ||
-                    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null ) ||
-                    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null ) ||
-                    (!"".Equals(grid.rules[7].data) && !"0".Equals(grid.rules[7].data) && !0.Equals(grid.rules[7].data)) ||
-                    (!"".Equals(grid.rules[8].data) && grid.rules[8].data != null && !"0".Equals(grid.rules[8].data)) ||
-                    (!"".Equals(grid.rules[9].data) && grid.rules[9].data != null && !"0".Equals(grid.rules[9].data))
-                    
-                    )
-                {
+               
 
                     solReqPersonal = new SolReqPersonal();
 
@@ -1113,7 +1102,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solReqPersonal.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
                     lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
-                }
+               
 
 
                 var generic = GetListar(lista,
@@ -1398,27 +1387,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
 
             model = new SolicitudRempCargoViewModel();
-            //var ListaSession = Session[ConstanteSesion.ListaReemplazo];
-
-            //if (ListaSession!=null)
-            //{
-            //    List<Reemplazo> lista = (List<Reemplazo>)ListaSession;
-
-            //    //Reemplazo objReemplazo = new Reemplazo();
-            //    //objReemplazo.IdReemplazo = id;
-            //    //lista.Remove(objReemplazo);
-            //    //lista.Remove(new Reemplazo() { Indicador = id});
-            //    var itemToRemove = lista.SingleOrDefault(r => r.Indicador == id);
-            //    if (itemToRemove != null)
-            //        lista.Remove(itemToRemove);
-
-
-            //    Session[ConstanteSesion.ListaReemplazo] = lista;
-
-            //    objJson.Resultado=true;	 
-            //    objJson.Mensaje = "Se elimino el registro correctamente";
-
-            //}
+           
 
             if (idReq>0)
             {
@@ -1545,7 +1514,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.SolReqPersonal.IdRolResp = 1;
                     model.SolReqPersonal.idUsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.SolReqPersonal.idUsuarioResp = 1;
-                    model.SolReqPersonal.Tipsol = "01";
+                    model.SolReqPersonal.Tipsol = TipoSolicitud.Ampliacion;
                     model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
 
                     model.Reemplazo.CodGenerado = Convert.ToString(Session[ConstanteSesion.codReqSolTemp]);
@@ -1569,13 +1538,84 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objJson.Mensaje = "Se genero la Solicitud";
                 objJson.IdDato = retorno;
             }
+            return Json(objJson);
+        }
 
+        /// <summary>
+        /// Envia la solicitud de Reemplazo de requeremiento personal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EnviaSolReqPersonal(SolicitudRempCargoViewModel model) {
+
+            JsonMessage objJson = new JsonMessage();
+            int retorno;
+           
+
+            int idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+            if (model!=null)
+            {
+
+                if (model.SolReqPersonal.CodSolReqPersonal!=null)
+                {
+                    
+                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+
+                    if (objSol!=null)
+                    {
+                        model.SolReqPersonal.IdeSolReqPersonal = objSol.IdeSolReqPersonal;
+                        model.SolReqPersonal.idUsuarioSuceso = idUsuario;
+                        model.SolReqPersonal.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                        model.SolReqPersonal.Feccreacion = FechaSistema;
+                        model.SolReqPersonal.idRolSuceso = idRol;
+                        model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
+                        model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
+
+                        var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+
+
+                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol==Roles.Jefe_Corporativo_Seleccion
+                                                        && x.IdSede == Sede
+                                                        );
+
+                        if (ObjUsuarioResp!=null)
+                        {
+                             List<UsuarioRolSede> listaUsuarios= ( List<UsuarioRolSede>)ObjUsuarioResp;
+                             UsuarioRolSede usuarioRolSede = (UsuarioRolSede)listaUsuarios[0];
+                             model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
+                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
+                        }
+
+                        retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
+                    }
+                    else
+                    {
+                        objJson.Resultado = false;
+                        objJson.Mensaje = "Error: no se puede enviar la solicitud, revise que los campos esten correctos";
+                    }
+
+                }
+            }
+            else
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "Error: no se puede enviar la solicitud, revise que los campos esten correctos";
+            }
+
+            //if (retorno>0)
+            //{
+            //    objJson.Resultado = true;
+            //    objJson.Mensaje = "Se envio la solicitud correctamente";
+            //}
 
 
             return Json(objJson);
-
-        }
         
+        }
+ 
 
 
         #endregion
