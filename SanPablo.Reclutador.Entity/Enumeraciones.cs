@@ -98,6 +98,14 @@
         public const string Consultar = "C";
 
     }
+    public sealed class TipoRequerimientos
+    {
+        public const string jefe_corporativo_administrativo = "01";
+        public const string personal_administrativo = "02";
+        public const string personal_asistencial = "03";
+        public const string personal_contacto = "04";
+        public const string personal_operativo = "05";
+    }
 
     public sealed class Etapa
     {

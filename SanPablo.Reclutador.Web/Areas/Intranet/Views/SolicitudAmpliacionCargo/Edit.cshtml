@@ -44,13 +44,13 @@
                                 MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO");
                             }
                             else {
-                                $(this).dialog("close");
+                                $("#updateDialogConfirmacion").dialog("close");
                                 MostrarMensaje("Solicitud no enviada intente nuevamente".Mensaje);
                             }
                         });
                     }
                     else {
-                        $(this).dialog("close");
+                        $("#updateDialogConfirmacion").dialog("close");
                         MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "SAN PABLO");
                     }
 
@@ -444,7 +444,38 @@
              loadComplete: function (data) {
 
              }
-         });
+        });
+
+        $('#updateDialogAprobacion').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Enviar": function (e) {
+                    e.preventDefault();
+                    var result = $('#aprobRechazForm').valid();
+                    if (result) {
+                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                        $("#divMensaje").dialog({
+                            title: 'SAN PABLO',
+                            modal: true,
+                            buttons: {
+                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+                                "No": function () { $(this).dialog("close"); }
+                            }
+                        });
+
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
 
     });
 
@@ -485,6 +516,38 @@
   function irATab(tab) {
       $('a[href=#' + tab + ']').tab('show');
   }
+
+  function mostrarAprobarRechazar() {
+      var estado = $('#SolicitudRequerimiento_EstadoActivo').val();
+      if (estado == "A") {
+          var dialogDiv = $('#updateDialogAprobacion');
+          var ideSolicitud = $('#SolicitudRequerimiento_IdeSolReqPersonal').val();
+          $.get('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")', { ideSolicitud: ideSolicitud }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
+                dialogDiv.dialog('open');
+            });
+        }
+        else {
+            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
+        }
+        return false;
+    }
+
+    function enviarAprobacionRechazo() {
+        $.post('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")',
+             $('#aprobRechazForm').serialize(),
+             function (respuesta) {
+                 if (respuesta.Resultado) {
+                     $('#updateDialogAprobacion').dialog("close");
+                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
+                 }
+                 else {
+                     notificacionError(respuesta.Mensaje);
+                 }
+             }
+        );
+    }
 
 </script>
 }
@@ -604,7 +667,7 @@
               <h5>Perfil</h5>
             <ul class="nav nav-tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
-                <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
+                <li class=""><a href="#A" data-toggle="tab">Puesto</a></li>
                 <li class=""><a href="#B" data-toggle="tab">General</a></li>
                 <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
                 <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
@@ -649,7 +712,7 @@
           }
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                <a class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>
                 <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
@@ -659,5 +722,7 @@
     </div>
 </div>
 }
+
+<div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>

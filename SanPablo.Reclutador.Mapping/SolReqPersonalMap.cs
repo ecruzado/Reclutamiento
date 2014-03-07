@@ -79,6 +79,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FecIniReemplazo, "FECINIREEMPLAZO");
             Map(x => x.FecfInReemplazo, "FECFINREEMPLAZO");
             Map(x => x.IndCargo, "INDCARGO");
+            Map(x => x.nombreCargo, "NOMCARGO");
             Map(x => x.IndVerSueldo, "INDVERSUELDO");
 
            
@@ -97,6 +98,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.Sexo , "SEXO");
             Map(x => x.TipoRequerimiento, "TIPREQUERIMIENTO");
             Map(x => x.TipoRangoSalario, "TIPRANGOSALARIO");
+            Map(x => x.TipEtapa, "TIPETAPA");
 
             Map(x => x.TipoSolicitud, "TIPSOL");
 

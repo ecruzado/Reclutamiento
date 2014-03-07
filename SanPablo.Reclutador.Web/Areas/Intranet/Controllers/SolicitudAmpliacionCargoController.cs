@@ -98,6 +98,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                
                 solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion; 
                 solicitudAmpliacion.FechaModificacion = FechaCreacion;
+                Cargo cargoSol = _cargoRepository.GetSingle(x=>x.IdeCargo == solicitudAmpliacion.IdeCargo);
                 var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 var rolResponsable = 0;
                 var etapaInicio = "";
@@ -118,7 +119,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     else
                         if (rolSuceso == Roles.Gerente_General_Adjunto)
                         {
-                            rolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            //determinar responsable de publicación
+                            rolResponsable = _solicitudAmpliacionPersonal.responsablePublicacion(cargoSol.IdeCargo, solicitudAmpliacion.IdeSede);
                             etapaInicio = Etapa.Aprobado;
                         }
                 }
@@ -126,19 +128,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if ((rolResponsable != 0) && (etapaInicio != ""))
                 {
                     var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, "SI");
-                    var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
-                   
-                    Cargo cargoSol = _cargoRepository.GetSingle(x=>x.IdeCargo == solicitudAmpliacion.IdeCargo);
-
-                    bool flag = EnviarCorreo(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo);
-                    string msj = "";
-                    if (!flag)
+                    if (idUsuarioResponsable != -1)
                     {
-                       msj = "Falló envio de correo";
+                        var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+
+                        bool flag = EnviarCorreo(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo);
+                        string msj = "";
+                        if (!flag)
+                        {
+                            msj = "Falló envio de correo";
+                        }
+                        objJsonMessage.Mensaje = "Solicitud enviada correctamente " + msj;
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
                     }
-                    objJsonMessage.Mensaje = "Solicitud enviada correctamente "+ msj;
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    else
+                    {
+                        objJsonMessage.Mensaje = "Solicitud no enviada, intente de nuevo ";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                     
                 }
                 else
@@ -250,7 +259,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                 enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                enviarMail.EnviarCorreo(dir,etapa, rolResponsable,"Ampliación de cargo de ", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+                enviarMail.EnviarCorreo(dir,etapa, rolResponsable,"Ampliación de cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
                 
                return true;
             }

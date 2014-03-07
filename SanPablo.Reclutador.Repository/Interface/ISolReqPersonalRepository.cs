@@ -48,6 +48,8 @@ namespace SanPablo.Reclutador.Repository.Interface
 
         int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolRespSgte, string indArea);
 
+        int responsablePublicacion(int ideCargo, int ideSede);
+
     }
 }
 

@@ -12,7 +12,7 @@
             <h6>Objetivos</h6>
             <div style="clear:both"></div>
         </div>
-            @Html.TextAreaFor(model => model.SolicitudRequerimiento.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+            @Html.TextAreaFor(model => model.SolicitudRequerimiento.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" })
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
             <h6>Funciones</h6>
@@ -20,7 +20,7 @@
             </div>
             <div style="clear:both"></div>
         </div>
-            @Html.TextAreaFor(model => model.SolicitudRequerimiento.FuncionesCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+            @Html.TextAreaFor(model => model.SolicitudRequerimiento.FuncionesCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled"  })
         <div class="grilla-opciones">
             <h6>Competencias</h6>
             <div class="opciones">

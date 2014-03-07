@@ -58,6 +58,8 @@
     <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
+    <Compile Include="Interface\ILogSolicitudRequerimientoRepository.cs" />
+    <Compile Include="LogSolicitudRequerimientoRepository.cs" />
     <Compile Include="Interface\IListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\IReemplazoRepository.cs" />
     <Compile Include="Interface\ISedeNivelRepository.cs" />

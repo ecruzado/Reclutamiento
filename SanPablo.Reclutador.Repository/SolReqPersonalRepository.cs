@@ -817,6 +817,9 @@ namespace SanPablo.Reclutador.Repository
          }
          #endregion
 
+         /// <summary>
+         /// inserta la solicitud de Ampliacion de Cargo
+         /// </summary>
          public int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolResponsable, string indArea )
          {
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -857,6 +860,37 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+
+         /// <summary>
+         /// determinar responsable de publicacion de acuerdo a requerimiento
+         /// </summary>
+         public int responsablePublicacion(int ideCargo, int ideSede)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_DETERMINAR_RESPONSABLE");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_idCargo", OracleType.Int32).Value = ideCargo;
+                 cmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
+                 cmd.Parameters.Add("p_idUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                 cmd.ExecuteNonQuery();
+                 return Convert.ToInt32(cmd.Parameters["p_idUsuarioResp"].Value);
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
 
         /// <summary>
          /// EnviaSolicitud
