@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PublicacionCargoController.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PublicacionViewModel.cs" />
@@ -392,6 +394,8 @@
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Puesto.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupAprobacionRechazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edita.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

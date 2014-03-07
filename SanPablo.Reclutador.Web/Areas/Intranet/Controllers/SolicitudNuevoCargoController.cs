@@ -244,6 +244,30 @@
             solicitudNuevoViewModel.Areas = new List<Area>();
             solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
+            solicitudNuevoViewModel.Departamentos = new List<Departamento>();
+            solicitudNuevoViewModel.Areas = new List<Area>();
+
+            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.Gerente_General_Adjunto)
+            {
+                solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+                solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+                solicitudNuevoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+                
+                solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+            }
+            else
+            {
+                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
+                
+                solicitudNuevoViewModel.Dependencias.Add(new Dependencia { IdeDependencia = usuarioSession.IDEDEPENDENCIA, NombreDependencia = usuarioSession.DEPENDENCIADES });
+
+                solicitudNuevoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = usuarioSession.IDEDEPARTAMENTO, NombreDepartamento = usuarioSession.DEPARTAMENTODES });
+              
+                solicitudNuevoViewModel.Areas.Add(new Area { IdeArea = usuarioSession.IDEAREA, NombreArea = usuarioSession.AREADES });
+            }
+
 
             return solicitudNuevoViewModel;
         }
@@ -291,7 +315,7 @@
                             SedeDescripcion = SedeDesc.ToString();
                         }
 
-                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, SedeDescripcion, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
+                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
                     }
                     objJsonMessage.IdDato = solicitud.IdeSolicitudNuevoCargo;
                     objJsonMessage.Mensaje = "Agregado Correctamente";

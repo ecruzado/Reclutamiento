@@ -76,6 +76,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipVacante { get; set; }
         public virtual int NumVacantes { get; set; }
         public virtual int IdeCargo { get; set; }
+        public virtual string nombreCargo { get; set; }
         public virtual string NomPersonReemplazo { get; set; }
         public virtual DateTime? FecIniReemplazo { get; set; }
         public virtual DateTime? FecfInReemplazo { get; set; }

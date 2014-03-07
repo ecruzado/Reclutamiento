@@ -371,7 +371,7 @@
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = "AREA1";
-                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfilJefeArea, SedeDescripcion,"RESPONSABLE", "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, usuarioResp.Email, SucesoSolicitud.Pendiente);
+                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionPerfilJefeArea,"RESPONSABLE", "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, usuarioResp.Email, SucesoSolicitud.Pendiente);
 
                         objJsonMessage.Mensaje = "Perfil enviado para su aprobación";
                         objJsonMessage.Resultado = true;

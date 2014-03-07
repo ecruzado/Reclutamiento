@@ -141,6 +141,8 @@
             builder.RegisterType<ReemplazoRepository>()
             .As<IReemplazoRepository>();
 
+             builder.RegisterType<LogSolicitudRequerimientoRepository>()
+            .As<ILogSolicitudRequerimientoRepository>();
 
         }
     }

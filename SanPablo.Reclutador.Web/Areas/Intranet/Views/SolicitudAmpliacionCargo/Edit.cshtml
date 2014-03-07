@@ -19,6 +19,12 @@
 
     $(document).ready(function () {
 
+        var ideSolicitudAmpliacion = $("#SolicitudRequerimiento_IdeSolReqPersonal").val();
+        if (ideSolicitudAmpliacion == "") {
+            habilitarControles();
+        }
+        else { deshabilitarControles(); }
+
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
             width: 300,
@@ -38,13 +44,13 @@
                                 MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO");
                             }
                             else {
-                                $(this).dialog("close");
-                                mensajeResultado("Solicitud no enviada intente nuevamente".Mensaje);
+                                $("#updateDialogConfirmacion").dialog("close");
+                                MostrarMensaje("Solicitud no enviada intente nuevamente".Mensaje);
                             }
                         });
                     }
                     else {
-                        $(this).dialog("close");
+                        $("#updateDialogConfirmacion").dialog("close");
                         MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "SAN PABLO");
                     }
 
@@ -54,6 +60,45 @@
                 }
             }
         });
+
+
+        $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SolicitudRequerimiento_IdeArea").empty();
+            $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet"})',
+            data: { ideDependencia: ideDependencia },
+            success: function (respuesta) {
+                $("select#SolicitudRequerimiento_IdeDepartamento").empty();
+                $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                $.each(respuesta, function (i, item) {
+                    $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='"
+                    + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                }
+            );
+            }
+        });
+         })
+
+        $('select#SolicitudRequerimiento_IdeDepartamento').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudAmpliacionCargo",new { area = "Intranet"})',
+            data: { ideDepartamento: ideDepartamento },
+            success: function (respuesta) {
+                $("select#SolicitudRequerimiento_IdeArea").empty();
+                $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+                $.each(respuesta, function (i, item) {
+                    $("select#SolicitudRequerimiento_IdeArea").append("<option value='"
+                    + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                }
+            );
+            }
+        });
+    })
 
         jQuery("#grdListCompetencias").jqGrid({
             url: '@Url.Action("ListarCompetencias", "SolicitudAmpliacionCargo")',
@@ -399,7 +444,38 @@
              loadComplete: function (data) {
 
              }
-         });
+        });
+
+        $('#updateDialogAprobacion').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Enviar": function (e) {
+                    e.preventDefault();
+                    var result = $('#aprobRechazForm').valid();
+                    if (result) {
+                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                        $("#divMensaje").dialog({
+                            title: 'SAN PABLO',
+                            modal: true,
+                            buttons: {
+                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+                                "No": function () { $(this).dialog("close"); }
+                            }
+                        });
+
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
 
     });
 
@@ -412,13 +488,66 @@
 
   function deshabilitarControles()
   {
+      $("#SolicitudRequerimiento_IdeCargo").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_NumVacantes").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_Observacion").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeDependencia").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeDepartamento").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_IdeArea").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_Motivo").attr("disabled", "disabled");
+  }
 
+  function habilitarControles()
+  {
+      $("#SolicitudRequerimiento_IdeCargo").removeAttr("disabled");
+      $("#SolicitudRequerimiento_NumVacantes").removeAttr("disabled");
+      $("#SolicitudRequerimiento_Observacion").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeDependencia").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeDepartamento").removeAttr("disabled");
+      $("#SolicitudRequerimiento_IdeArea").removeAttr("disabled");
+      $("#SolicitudRequerimiento_Motivo").removeAttr("disabled");
   }
 
   function MostrarMensaje(mensaje, titulo)
   {
     Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
   }
+
+  function irATab(tab) {
+      $('a[href=#' + tab + ']').tab('show');
+  }
+
+  function mostrarAprobarRechazar() {
+      var estado = $('#SolicitudRequerimiento_EstadoActivo').val();
+      if (estado == "A") {
+          var dialogDiv = $('#updateDialogAprobacion');
+          var ideSolicitud = $('#SolicitudRequerimiento_IdeSolReqPersonal').val();
+          $.get('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")', { ideSolicitud: ideSolicitud }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
+                dialogDiv.dialog('open');
+            });
+        }
+        else {
+            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
+        }
+        return false;
+    }
+
+    function enviarAprobacionRechazo() {
+        $.post('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")',
+             $('#aprobRechazForm').serialize(),
+             function (respuesta) {
+                 if (respuesta.Resultado) {
+                     $('#updateDialogAprobacion').dialog("close");
+                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
+                 }
+                 else {
+                     notificacionError(respuesta.Mensaje);
+                 }
+             }
+        );
+    }
 
 </script>
 }
@@ -451,8 +580,10 @@
                         <div class="">
                             <label class="control-label" for="selectError">Dependencia </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeDependencia)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Dependencia_des, new { @disabled = "disabled" })                           
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -473,8 +604,10 @@
                         <div class="">
                             <label class="control-label" for="selectError">Departamento </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeDepartamento)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Departamento_des, new { @disabled = "disabled" })                           
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -492,8 +625,10 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
-                                @Html.HiddenFor(model =>model.SolicitudRequerimiento.IdeArea)
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.Area_des, new { @disabled = "disabled" })
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeArea)
+                                </div>
                             </div>
                     </td> 
                 </tr>
@@ -528,10 +663,11 @@
           }
           else
           {
+             
               <h5>Perfil</h5>
             <ul class="nav nav-tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
-                <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
+                <li class=""><a href="#A" data-toggle="tab">Puesto</a></li>
                 <li class=""><a href="#B" data-toggle="tab">General</a></li>
                 <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
                 <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
@@ -571,10 +707,12 @@
                 <div class="container">
                 </div>  
                  </div>  
-             }
+               
+          
+          }
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</button>
+                <a class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>
                 <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
             </div>
@@ -584,5 +722,7 @@
     </div>
 </div>
 }
+
+<div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>

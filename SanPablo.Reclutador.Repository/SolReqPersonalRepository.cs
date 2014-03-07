@@ -443,6 +443,7 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+         #region LISTAR 
          public List<CompetenciaRequerimiento> ListaCompetencias(int ideSolicitudReqPersonal)
          {
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -902,7 +903,82 @@ namespace SanPablo.Reclutador.Repository
                  lcon.Close();
              }
          }
+         #endregion
 
+         /// <summary>
+         /// inserta la solicitud de Ampliacion de Cargo
+         /// </summary>
+         public int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolResponsable, string indArea )
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_INSERTAR_AMPLIACION");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_ideCargo", OracleType.Int32).Value = solicitudAmpliacion.IdeCargo;
+                 cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = solicitudAmpliacion.IdeSede;
+                 cmd.Parameters.Add("p_ideDependencia", OracleType.Int32).Value = solicitudAmpliacion.IdeDependencia;
+                 cmd.Parameters.Add("p_ideDepartamento", OracleType.Int32).Value = solicitudAmpliacion.IdeDepartamento;
+                 cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = solicitudAmpliacion.IdeArea;
+                 cmd.Parameters.Add("p_numVacantes", OracleType.Int32).Value = solicitudAmpliacion.NumVacantes;
+                 cmd.Parameters.Add("p_motivo", OracleType.VarChar).Value = solicitudAmpliacion.Motivo;
+                 cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = solicitudAmpliacion.Observacion;
+                 cmd.Parameters.Add("p_ideUsuarioSuceso", OracleType.Int32).Value = ideUsuarioSuceso;
+                 cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = ideRolSuceso;
+                 cmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = etapa;
+                 cmd.Parameters.Add("p_responsableSig", OracleType.Int32).Value = idRolResponsable;
+                 cmd.Parameters.Add("p_tipoSolicitud", OracleType.VarChar).Value = solicitudAmpliacion.TipoSolicitud;
+                 cmd.Parameters.Add("p_indicArea", OracleType.VarChar).Value = indArea;
+                 cmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 cmd.ExecuteNonQuery();
+                 return Convert.ToInt32(cmd.Parameters["p_cRetVal"].Value);
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+         /// <summary>
+         /// determinar responsable de publicacion de acuerdo a requerimiento
+         /// </summary>
+         public int responsablePublicacion(int ideCargo, int ideSede)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_DETERMINAR_RESPONSABLE");
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Connection = lcon;
+
+                 cmd.Parameters.Add("p_idCargo", OracleType.Int32).Value = ideCargo;
+                 cmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
+                 cmd.Parameters.Add("p_idUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                 cmd.ExecuteNonQuery();
+                 return Convert.ToInt32(cmd.Parameters["p_idUsuarioResp"].Value);
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
 
         /// <summary>
          /// EnviaSolicitud

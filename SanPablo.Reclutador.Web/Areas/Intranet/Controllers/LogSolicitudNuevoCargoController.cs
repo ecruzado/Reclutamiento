@@ -157,7 +157,7 @@
                         SedeDescripcion = SedeDesc.ToString();
                     }
 
-                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudNuevoCargo.TipoEtapa, SedeDescripcion, usuario.DscNombres, "NUEVO CARGO", model.LogSolicitudNuevoCargo.Observacion, model.SolicitudNuevoCargo.NombreCargo, model.SolicitudNuevoCargo.CodigoCargo, usuario.Email,model.LogSolicitudNuevoCargo.TipoSuceso);
+                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudNuevoCargo.TipoEtapa, usuario.DscNombres, "NUEVO CARGO", model.LogSolicitudNuevoCargo.Observacion, model.SolicitudNuevoCargo.NombreCargo, model.SolicitudNuevoCargo.CodigoCargo, usuario.Email,model.LogSolicitudNuevoCargo.TipoSuceso);
                 }
 
             }
