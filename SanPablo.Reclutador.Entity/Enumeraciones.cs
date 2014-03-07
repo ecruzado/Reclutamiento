@@ -96,6 +96,10 @@
         public const string Eliminar = "D";
         public const string Actualizar = "A";
         public const string Consultar = "C";
+        public const string Aprobar = "Aprobar";
+        public const string Enviar = "Enviar";
+        public const string Publicar = "Publicar";
+
 
     }
 
@@ -112,7 +116,18 @@
         public const string Rechazado = "09";
     }
 
-   
+    /// <summary>
+    /// tipo de derivacion
+    /// </summary>
+    public sealed class TipoDerivacion
+    {
+        public const string Pendiente = "P";
+        public const string Aprobado = "A";
+        public const string Publicado = "U";
+    }
+
+
+
     public sealed class Visualicion
     {
         public const string SI = "S";

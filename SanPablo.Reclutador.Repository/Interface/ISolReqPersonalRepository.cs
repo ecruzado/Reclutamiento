@@ -24,6 +24,22 @@ namespace SanPablo.Reclutador.Repository.Interface
         List<Reemplazo> GetListaReemplazo(Reemplazo obj);
         Int32 CreaSolicitudReemplazo(SolReqPersonal obj,Reemplazo objReemplazo);
         Int32 EnviaSolicitud(SolReqPersonal obj);
+        
+        /// <summary>
+        /// obtiene el responsable de relizar una accion determinada
+        /// </summary>
+        /// <param name="Tipo"></param>
+        /// <param name="sede"></param>
+        /// <param name="TipoReq"></param>
+        /// <returns></returns>
+        SolReqPersonal GetResponsable(string Tipo,Int32 sede,string TipoReq);
+
+        /// <summary>
+        /// actualiza el log de solicitud de requerimiento
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        void ActualizaLogSolReq(LogSolReqPersonal obj);
 
 
         List<CompetenciaRequerimiento> ListaCompetencias(int ideSolicitudReqPersonal);

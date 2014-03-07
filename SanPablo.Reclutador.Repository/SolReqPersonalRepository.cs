@@ -103,6 +103,94 @@ namespace SanPablo.Reclutador.Repository
          }
 
 
+         /// <summary>
+         /// obtiene el responsable de realizar una determinada accion
+         /// </summary>
+         /// <param name="Tipo"></param>
+         /// <param name="sede"></param>
+         /// <param name="TipoReq"></param>
+         /// <returns></returns>
+         public SolReqPersonal GetResponsable(string TipoDerivacion, Int32 sede, string TipoReq)
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             int IdUsuarioResp = 0;
+             int IdRolResp = 0;
+             SolReqPersonal SolReqPersonal = null;
+             try
+             {
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ASIGNACION_REMPLAZO");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_cTipoDerivacion", OracleType.VarChar).Value = TipoDerivacion;
+                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Int32).Value = sede;
+                 lspcmd.Parameters.Add("p_nTipoReq", OracleType.VarChar).Value = TipoReq;
+                 lspcmd.Parameters.Add("p_nIdUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.Parameters.Add("p_nIdRol", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.ExecuteNonQuery();
+
+                 IdUsuarioResp = Convert.ToInt32(lspcmd.Parameters["p_nIdUsuarioResp"].Value);
+                 IdRolResp = Convert.ToInt32(lspcmd.Parameters["p_nIdRol"].Value);
+                 SolReqPersonal = new SolReqPersonal();
+
+                 SolReqPersonal.idUsuarioResp = IdUsuarioResp;
+                 SolReqPersonal.IdRolResp = IdRolResp;
+
+                 return SolReqPersonal;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+         /// <summary>
+         /// Actualiza el log de la solictud con la etapa actual
+         /// </summary>
+         /// <param name="obj"></param>
+         /// <returns></returns>
+         public void ActualizaLogSolReq(LogSolReqPersonal obj)
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             string cFechaSuceso = String.Format("{0:dd/MM/yyyy}", obj.FecSuceso);
+
+             try
+             {
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_INSERT_LOG_SOLREQPERSONAL");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_nIDESOLREQPERSONAL", OracleType.Number).Value = obj.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_cTIPETAPA", OracleType.VarChar).Value = obj.TipEtapa;
+                 lspcmd.Parameters.Add("p_cFECSUCESO", OracleType.VarChar).Value = cFechaSuceso;
+                 lspcmd.Parameters.Add("p_nIdUsuarioSuceco", OracleType.Number).Value = obj.UsrSuceso;
+                 lspcmd.Parameters.Add("p_nIdRolSuceso", OracleType.Number).Value = obj.RolSuceso;
+                 lspcmd.Parameters.Add("p_nIdRolResp", OracleType.Number).Value = obj.RolResponsable;
+                 lspcmd.Parameters.Add("p_nIdResponble", OracleType.Number).Value = obj.UsResponsable;
+                 lspcmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = obj.Observacion;
+                 
+                 lspcmd.ExecuteNonQuery();
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+
         /// <summary>
         /// Crea la Solicitud del reemplazo de cargo
         /// </summary>

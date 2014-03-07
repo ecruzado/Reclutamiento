@@ -17,10 +17,23 @@
 
     $('#btnBuscarReemplazo').click(function () {
 
-        //validacionBuscar();
         $('#grdListBusquedaReemplazo').trigger('reloadGrid');
     });
 
+
+    $('#btnRequerimintoSol').click(function () {
+        var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
+
+        if (selr != null) {
+            window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + selr;
+        } else {
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
+   
+   
 
 
     $('select#SolReqPersonal_IdeDependencia').change(function () {
@@ -305,13 +318,9 @@
                     <td class="span5">
                             <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
-                                @*<input id="txtfechainicio" type="text" class="input-small" placeholder=" Inicial"/>
-                                <input id="txtfechafin" type="text" class="input-small" placeholder=" Final"/>*@
-
+                               
                                 @Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
                                 @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
-
-
 
                             </div>
                      </td>
@@ -399,7 +408,7 @@
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-pencil icon-white"></i> Editar</a>
+                <a class="btn btn-info" id ="btnRequerimintoSol"><i class="icon-pencil icon-white"></i> Requerimiento</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>

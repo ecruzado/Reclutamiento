@@ -20,6 +20,45 @@
 
 
 
+        $('select#SolReqPersonal_IdeDependencia').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SolReqPersonal_IdeArea").empty();
+            $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos", "SolicitudCargo", new { area = "Intranet"})',
+            data: { ideDependencia: ideDependencia },
+            success: function (respuesta) {
+                $("select#SolReqPersonal_IdeDepartamento").empty();
+                $("select#SolReqPersonal_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                $.each(respuesta, function (i, item) {
+                    $("select#SolReqPersonal_IdeDepartamento").append("<option value='"
+                    + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                }
+            );
+            }
+        });
+         })
+
+        $('select#SolReqPersonal_IdeDepartamento').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudCargo",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#SolReqPersonal_IdeArea").empty();
+                    $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolReqPersonal_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+       })
+
+
      jQuery("#grdListReemplazosReq").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -163,16 +202,29 @@
 
         $('#popupDialogAprobReem').dialog({
             autoOpen: false,
-            width: 500,
+            width: 450,
             height: 400,
             resizable: false,
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    if ($("#frmPopupAprobReem").valid()) {
-
-                        $('#DialogAprobReem').dialog('open');
+                    var observacion = $("#LogSolReqPersonal_Observacion").val();
+                    var aprobado = $('input[name="LogSolReqPersonal.Aprobado"]:checked').val();
+                    if (aprobado == "false") {
+                        aprobado = 2;
+                    } else {
+                        aprobado = 1;
                     }
+
+
+                    var dato = validaAprobacion(observacion, aprobado);
+                    if (dato) {
+                        $('#DialogAprobReem').dialog('open');
+                    } else {
+                        MostrarMensaje('Ingrese una observación', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                       
+                    
 
                 },
                 "Cancelar": function () {
@@ -339,14 +391,34 @@
 
     }
 
+    function validaAprobacion(observacion, aprobado) {
+        
+        var longitud = observacion.length;
+       
+        if (aprobado==1) {
+            return true;
+        }
+        else
+        {
+           
+            if (observacion != null && longitud > 0) {
+                return true;
+            } else {
+                return false;
+            }
+            
+        }
+    }
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
     function GeneraSolicitud() {
-        validaEnvio();
-        creaSolicitudReempCargo();
+        if (validaEnvio()) {
+            creaSolicitudReempCargo();
+        } 
+        
     }
 
     
@@ -365,24 +437,25 @@
 
         if (tipVacante=="0") {
             notificacionExito("Seleccione un tipo de vacante");
-            return;
+            return false;
         }
 
         if (solReqIdeCargo == 0) {
             notificacionExito("Seleccione cargo");
-            return;
+            return false;
         }
 
         if (tipVacante == 0) {
             notificacionExito("Seleccione un tipo de vacante");
-            return;
+            return false;
         }
 
         if (tipoPuesto=="0") {
             notificacionExito("Seleccione un tipo de puesto");
-            return;
+            return false;
         }
-        
+        return true;
+
     }
     
 
@@ -421,9 +494,8 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
-                    $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                    $('#grdListReemplazosReq').trigger('reloadGrid');
+                    
                 }
             }
          });
@@ -472,9 +544,12 @@
     @Html.ValidationSummary(true)
 
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
+
+@*    
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeArea, new { style = "display: none;" })
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeDepartamento, new { style = "display: none;" })
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeDependencia, new { style = "display: none;" })
+            *@
     
                 <table class="formulario-busqueda">
                     <tr class="formulario-fila">
@@ -571,9 +646,6 @@
                             <div style="clear:both"></div>
                     </div>
     
-                
-               
-        
                <div id="SeccionReemplazos">
                      <div class="grilla-opciones">
                         <h6>Reemplazos</h6>
@@ -591,51 +663,36 @@
                     </div>
                </div>
                
-               
-
-
-                
                              
 }
            
-            
-            
             <div class="form-actions">
+                
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <button type="submit" class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</button>
-                <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                
+                @if (Accion.Aprobar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                }
+               
+                
+                
+                @if (Accion.Enviar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                }
+                
+                @if (Accion.Publicar.Equals(Model.Accion))
+                {
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
-
+                }
             </div>
         
         </div>
     </div>
 </div>
 
-<div id="dlgAprobarRechazo">
-    <table style="width:100%">
-        <tr><td>Comentarios</td></tr>
-        <tr>               
-            <td><textarea class="input-xxlarge" id="taobservacionaprobacion" rows="3"></textarea></td>
-        </tr>
-        <tr>
-            <td style="height:10px;"></td>
-        </tr>
-        <tr>
-            <td ><input type="radio" name="aprobacion" value="1" /> Aprobar <input type="radio" name="aprobacion" value="0" /> Rechazar</td>
-        </tr>
-    </table>
-</div>
 
-<div id="dlgEnviarSolicitud" title="Mensaje">
-    <p></p> <p></p>
-    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de enviar la solicitud?</p>
-</div>
-
-<div id="dlgGrabar" title="Mensaje">
-    <p></p> <p></p>
-    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>¿Está seguro de grabar la solicitud?</p>
-</div>
 
 @*Inicio*@
 <div id="popupDialogReemplazo" title="Reemplazo"></div>
