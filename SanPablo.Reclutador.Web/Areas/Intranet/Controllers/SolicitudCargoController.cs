@@ -37,6 +37,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICompetenciaRequerimientoRepository _competenciaRequerimientoRepository;
         private IExperienciaRequerimientoRepository _experienciaRequerimientoRepository;
         private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
+        private IUsuarioRepository _usuarioRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -50,7 +51,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             INivelAcademicoRequerimientoRepository nivelAcademicoRequerimientoRepository,
             ICompetenciaRequerimientoRepository CompetenciaRequerimientoRepository,
             IExperienciaRequerimientoRepository experienciaRequerimientoRepository,
-            IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository
+            IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository,
+            IUsuarioRepository usuarioRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -66,6 +68,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _competenciaRequerimientoRepository = CompetenciaRequerimientoRepository;
             _experienciaRequerimientoRepository = experienciaRequerimientoRepository;
             _ofrecemosRequerimientoRepository = ofrecemosRequerimientoRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         
@@ -1632,7 +1635,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objJson = new JsonMessage();
             int retorno=0;
-           
+            Cargo objCargo = new Cargo();
 
             int idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
@@ -1654,7 +1657,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.idRolSuceso = idRol;
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
-                       
+
+                        objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
 
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -1670,6 +1674,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
                             retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
+
+                            
                         }
                         else
                         {
@@ -1699,6 +1705,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (retorno > 0)
             {
+
+
+               var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp);
+               string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+
+               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+
+                
                 objJson.Resultado = true;
                 objJson.Mensaje = "Se envio la solicitud correctamente";
             }
@@ -1753,6 +1767,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                     model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
 
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     if (aprobacion)
@@ -1781,6 +1796,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                             _solReqPersonalRepository.Update(objSol);
 
+
+                            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsResponsable);
+
+
+                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
                             retorno = 1;
 
                         }
@@ -1804,7 +1824,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         
                         _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
                         retorno = 1;
-
+                        
                         if (retorno > 0)
                         {
                             objJson.Resultado = true;
@@ -1833,6 +1853,43 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
             
         }
+
+
+        /// <summary>
+        /// envia correo electronico a los responsables de la solicitud de requerimiento de personal
+        /// </summary>
+        /// <param name="usuarioDestinatario"></param>
+        /// <param name="rolResponsable"></param>
+        /// <param name="etapa"></param>
+        /// <param name="observacion"></param>
+        /// <param name="cargoDescripcion"></param>
+        /// <param name="codCargo"></param>
+        /// <returns></returns>
+        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string observacion, string cargoDescripcion, string codCargo)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            try
+            {
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                enviarMail.EnviarCorreo(dir, etapa, rolResponsable, "Reemplazo de cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+
+            }
+
+        }
+
 
         [ValidarSesion]
         public ActionResult Publica(string id) 
@@ -2107,6 +2164,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (objSol!=null)
                 {
 
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
                     objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
                     objSol.FechaModificacion = FechaSistema;
                     objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
@@ -2121,11 +2180,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                     model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
 
                     _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
 
+                    var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";
