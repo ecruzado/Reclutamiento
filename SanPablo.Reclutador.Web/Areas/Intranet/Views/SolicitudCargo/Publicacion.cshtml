@@ -1,4 +1,8 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
+@{
     ViewBag.Title = "Publicacion";
 }
 @section Head{
@@ -6,273 +10,518 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
         
     $(document).ready(function () {
 
-        $("#txtfechapublicacion").datepicker();
-        $("#txtfechaexpiracion").datepicker();
 
-        jQuery("#grdListFunciones").jqGrid({
-            url: '@Url.Action("ListaFunciones2", "SolicitudCargo")',
-             datatype: 'json',
-             mtype: 'POST',
-             colNames: ['Descripci&oacuten' ],
-             colModel: [                     
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },                     
-             ],
-             sortname: 'Codigo',
-             sortorder: 'desc',
-             viewrecords: true,
-             cellEdit: true,
-             /*caption: 'Horario de Trabajo',*/
-             height: 100,
-             width: 600,
-             rowNum: 0,
-             cellsubmit: 'clientArray',
-             hidegrid: false,
-             postData: {
-
-             },
-             loadComplete: function (data) {
-
-             }
-        });
-
-        jQuery("#grdListCompetencias").jqGrid({
-            url: '@Url.Action("ListaCompetencias2", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
-            colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            cellEdit: true,
-            /*caption: 'Horario de Trabajo',*/
-            height: 100,
-            width: 600,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
+        
+        $('#btnPublicarSolReq').click(function () {
+            if (validaPublicacion)
+            {
+                $.ajax({
+                data: $("#frmPublicaSolReemplazoCargo").serialize(),
+                type: "POST",
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+                traditional: true,
+                    success: function (data) {
+                        if (data.Resultado)
+                        {
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        }
+                    }
+                });
             }
+       });
+
+
+        $('#btnAnteriorPublica').click(function () {
+            var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
+
+            window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = "", area = "Intranet"})' + '/' + selr;
+
         });
+        
 
-@*        jQuery("#grdListHorarios").jqGrid({
-            url: '@Url.Action("ListaHorarios2", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
-            colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            cellEdit: true,
-            /*caption: 'Horario de Trabajo',*/
-            height: 100,
-            width: 600,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            }
-        });*@
-
-        jQuery("#grdListOfrecemos").jqGrid({
-            url: '@Url.Action("ListaOfrecemos2", "SolicitudCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
-            colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            sortname: 'Codigo',
-            sortorder: 'desc',
-            viewrecords: true,
-            cellEdit: true,
-            /*caption: 'Horario de Trabajo',*/
-            height: 100,
-            width: 600,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            }
-        });
-
-        jQuery("#grdListEstudios").jqGrid({
-            url: '@Url.Action("ListaEstudiosPublicacion", "SolicitudCargo")',
-             datatype: 'json',
-             mtype: 'POST',
-             colNames: ['Descripci&oacuten'],
-             colModel: [
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-             ],
-             sortname: 'Codigo',
-             sortorder: 'desc',
-             viewrecords: true,
-             cellEdit: true,
-             /*caption: 'Horario de Trabajo',*/
-             height: 100,
-             width: 600,
-             rowNum: 0,
-             cellsubmit: 'clientArray',
-             hidegrid: false,
-             postData: {
-
-             },
-             loadComplete: function (data) {
-
-             }
-        });
 
         jQuery("#grdListConocimientos").jqGrid({
-            url: '@Url.Action("ListaConocimientosPublicacion", "SolicitudCargo")',
-              datatype: 'json',
-              mtype: 'POST',
-              colNames: ['Descripci&oacuten'],
-              colModel: [
-                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-              ],
-              sortname: 'Codigo',
-              sortorder: 'desc',
-              viewrecords: true,
-              cellEdit: true,
-              /*caption: 'Horario de Trabajo',*/
-              height: 100,
-              width: 600,
-              rowNum: 0,
-              cellsubmit: 'clientArray',
-              hidegrid: false,
-              postData: {
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
 
-              },
-              loadComplete: function (data) {
+                ];
 
-              }
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Conocimientos", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListConocimientos')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
+            ],
+
+            pager: jQuery('#grdPagerEstudios'),
+             rowNum: 10,
+             //rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IdeConocimientoGeneralRequerimiento',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 180,
+             width: 600,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
+
+             postData: {
+             },
+             loadComplete: function (data) {
+             }
+         });
+
+
+        jQuery("#grdListEstudios").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Estudios", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListEstudios')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
+            ],
+
+            pager: jQuery('#grdPagerConocimientos'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IdeNivelAcademicoRequerimiento',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 180,
+            width: 600,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
         });
 
+
+        jQuery("#grdListCompetencias").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Competencias", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListCompetencias')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
+            ],
+
+            pager: jQuery('#grdPagerCompetencias'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IdeCompetenciaRequerimiento',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 180,
+            width: 600,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+
+
         jQuery("#grdListExperiencia").jqGrid({
-            url: '@Url.Action("ListaExperienciaPublicacion", "SolicitudCargo")',
-              datatype: 'json',
-              mtype: 'POST',
-              colNames: ['Descripci&oacuten'],
-              colModel: [
-                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-              ],
-              sortname: 'Codigo',
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Experiencia", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListExperiencia')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 400 },
+                    { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false, width: 200 },
+            ],
+
+              pager: jQuery('#grdPagerExperiencia'),
+              rowNum: 10,
+              //rowList: [10, 30, 50],
+              autowidth: true,
+              rules: true,
+              sortname: 'IdeExperienciaRequerimiento',
               sortorder: 'desc',
               viewrecords: true,
-              cellEdit: true,
-              /*caption: 'Horario de Trabajo',*/
-              height: 100,
+              height: 180,
               width: 600,
-              rowNum: 0,
               cellsubmit: 'clientArray',
               hidegrid: false,
-              postData: {
+              rownumbers: true,
+              shrinkToFit: false,
 
+              postData: {
               },
               loadComplete: function (data) {
-
               }
           });
 
+ 
+
+        jQuery("#grdListOfrecemos").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
 
 
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#SolReqPersonal_IdeSolReqPersonal").val() },
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Ofrecemos", "SolicitudCargo")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListOfrecemos')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 },
+            ],
+
+             pager: jQuery('#grdPagerOfrecemos'),
+             rowNum: 10,
+             //rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'IdeOfrecemosRequerimiento',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 180,
+             width: 600,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
+
+             postData: {
+             },
+             loadComplete: function (data) {
+             }
+         });
 
     });
 
+    function validaPublicacion() {
 
+        var fecInicial = $("#SolReqPersonal_FecPublicacion").val();
+        var fecFinal = $("#SolReqPersonal_FecExpiracacion").val();
+
+        var firstValue = fecInicial.split('-');
+        var secondValue = fecFinal.split('-');
+
+        if (firstValue == 0 && firstValue=="") {
+            
+            MostrarMensaje('Ingrese fecha de publicación', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+        if (secondValue == 0 && secondValue=="") {
+            
+            MostrarMensaje('Ingrese fecha de experización', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+
+        var firstDate = new Date();
+        firstDate.setFullYear(firstValue[0], (firstValue[1] - 1), firstValue[2]);
+
+        var secondDate = new Date();
+        secondDate.setFullYear(secondValue[0], (secondValue[1] - 1), secondValue[2]);
+
+        if (firstDate > secondDate) {
+            MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+        return true;
+
+
+    }
+
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
 
 </script>
 
 }     
-<section id="forms">
-    
         <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>TÉCNICO EN ENFERMERÍA - SEDE SAN MIGUEL</h5>
+                <h5>@Model.SolReqPersonal.nombreCargo - @Model.SolReqPersonal.DesCargo</h5>
             </div>
-            <form class="form-horizontal well">
+@using (Html.BeginForm("Index", "SolicitudReemplazoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo"}))
+{
+    @Html.ValidationSummary(true)
+
+    
+     @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
+    
                 <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Area</label>
-                        <div class="controls">                         
-                              <input type="text" class="input-xlarge" disabled="disabled"  id="txtarea" value="Salud">
-                        </div>
-                    </div>
+                    <legend></legend>
+                    <table class="formulario-busqueda">
+
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Area</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>
                       
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Tipo</label>
-                        <div class="controls">
-                            <input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">
-                        </div>
-                    </div>
+                     <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>
 
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Vancantes</label>
-                        <div class="controls">
-                            <input type="text" class="input-smini" id="txtvacantes" disabled="disabled" value="1">
-                        </div>
-                    </div>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Vacantes</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>
 
-                    <!-- <div class="control-group">
-                       <label class="control-label" for="input01" >Sexo</label>
-                        <div class="controls">
-                             <input type="text" class="input-small" id="txtsexo" disabled="disabled" value="Indistinto">
-                        </div>
-                    </div>-->
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Rango salarial</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
+                                
+                                @*<label class="checkbox" style="display:inline-table"><input type="checkbox" id="IndVerSalario" name="IndVerSalario" class="chkclass" value="@Model.SolReqPersonal.IndicadorSalario" /> No Publicar</label>*@
+                               
+                            </div>
+                        </td>
+                        
+                    </tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Publicar</label>
+                            <div class="controles">
+                                
+                                @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                            </div>
+                        </td>
+                        
+                    </tr>
+                         
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
+                            <div class="controles">
+                               @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                            </div>
+                        </td>
+                    </tr>
 
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Rango Salarial</label>
-                        <div class="controls">
-                            <input type="text" class="input-small" id="txtsalario" disabled="disabled" value="5500">
-                            <label class="checkbox" style="display:inline-table"><input type="checkbox" checked="checked"/> No Publicar</label>
-                        </div>
-                    </div>
+                      <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
+                            <div class="controles">
+                               @Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                            </div>
+                        </td>
+                    </tr>
 
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Fecha de Publicación</label>
-                        <div class="controls">
-                            <input type="text" class="input-small" id="txtfechapublicacion"  value="15/07/2013" >           
-                        </div>
-                    </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="input01">Fecha de Expiracion</label>
-                        <div class="controls">
-                            <input type="text" class="input-small" id="txtfechaexpiracion"  value="31/07/2013" >
-                        </div>
-                    </div>
+                    </table>
 
-                    <div class="control-group" style="padding-bottom:10px;">
-                        <label class="control-label" for="input01">Descripción</label>
-                         <div class="controls">
-                           <textarea style="width:600px;" id="tadescripcion" rows="5" disabled="disabled">Somos una importante organización del sector Salud, con 20 años de experiencia en el mercado y nos encontramos en la búsqueda de un profesional para ocupar el cargo de: "Tecnólogo en Terapia Física y Rehabilitación".</textarea>
-                        </div>
-                    </div>
-                    
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                   <table style="margin-left:50px;" >
+                   <tr><td>&nbsp;</td></tr>
+                   <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Estudios</label>
                          <div class="controls">
                             <div style="width: 100%">                                        
@@ -284,9 +533,11 @@
                                 </div>                                         
                             </div>
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                        </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Conocimientos</label>
                          <div class="controls">
                             <div style="width: 100%">                                        
@@ -298,9 +549,11 @@
                                 </div>                                         
                             </div>
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Experiencia</label>
                          <div class="controls">
                             <div style="width: 100%">                                        
@@ -312,23 +565,20 @@
                                 </div>                                         
                             </div>
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                   <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListFunciones">
-                                    </table>
-                                    <div id="grdPagerFunciones">
-                                    </div>
-                                </div>                                         
-                            </div>
+                            @Html.TextAreaFor(model=>model.SolReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:600px; height:100px"})
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Competencias</label>
                          <div class="controls">
                             <div style="width: 100%">                                        
@@ -340,9 +590,11 @@
                                 </div>                                         
                             </div>
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:10px;">
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Ofrecemos</label>
                          <div class="controls">
                             <div style="width: 100%">                                        
@@ -354,27 +606,32 @@
                                 </div>                                         
                             </div>
                          </div>
-                    </div>
-
-                    <div class="control-group" style="padding-bottom:20px;">
+                        </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                    <tr class="formulario-fila">
+                        <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            <textarea style="width:600px;" id="taobservacion" rows="5">Observaciones</textarea>
+                            @Html.TextAreaFor(model=>model.SolReqPersonal.Observacion, new { @style = "width:600px;height:100px"})
                          </div>
-                    </div>                      
+                        </td>
+                    </tr>   
+                                                
+                  
+                </table>                       
                               
 
                 </fieldset>
-            </form>
-                  <div class="form-actions"> 
-                     <a class="btn" href="@Url.Action("RegistroSolicitudPersonal", "Operaciones")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                     
-                    <a class="btn btn-info" href="@Url.Action("Publicacion", "Operaciones")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                <div class="form-actions"> 
+                     <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                     <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                          
                 </div>
-
+}
+                  
             </div>
         </div>
-</section>
+
 
 

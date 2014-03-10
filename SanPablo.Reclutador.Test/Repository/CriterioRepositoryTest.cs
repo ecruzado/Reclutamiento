@@ -124,5 +124,17 @@ namespace SanPablo.Reclutador.Test.Repository
             var repository = new UsuarioVistaRepository(NHibernateHelper.OpenSession());
             var lista = repository.All();
         }
+
+
+        [TestMethod]
+        public void testing2()
+        {
+            //var repository = new ConocimientoGeneralRequerimientoRepository(NHibernateHelper.OpenSession());
+            Int32 dato = 89;
+            var cargoRepository = new ConocimientoGeneralRequerimientoRepository(NHibernateHelper.OpenSession());
+           // var cargo = cargoRepository.GetSingle(x => x.IdeCargo == 1);
+            var cargo = cargoRepository.GetBy(x => x.SolicitudRequerimiento.IdeSolReqPersonal == dato);
+            //var lista = repository.All();
+        }
     }
 }

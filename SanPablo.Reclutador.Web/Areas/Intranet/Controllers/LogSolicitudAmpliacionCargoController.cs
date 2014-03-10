@@ -124,7 +124,7 @@
                     logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.TipEtapa = Etapa.Aprobado;
                     if (solicitud.TipoRequerimiento == TipoRequerimientos.jefe_corporativo_administrativo)
                     {
-                        logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.RolResponsable = Roles.Encargado_Selección;
+                        logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.RolResponsable = Roles.Encargado_Seleccion;
                     }
                     else
                     {

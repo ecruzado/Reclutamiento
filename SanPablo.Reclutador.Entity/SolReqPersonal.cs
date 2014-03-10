@@ -71,8 +71,18 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntTotExamen { get; set; }
         public virtual int PuntMinExamen { get; set; }
         public virtual int CantPreSelec { get; set; }
+
+
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecPublicacion { get; set; }
+        
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecExpiracacion { get; set; }
+
+
         public virtual string TipVacante { get; set; }
         public virtual int NumVacantes { get; set; }
         public virtual int IdeCargo { get; set; }
@@ -220,7 +230,23 @@ namespace SanPablo.Reclutador.Entity
         /// tipo de solicitud
         /// </summary>
         public virtual string Tipsol { get; set; }
-        
 
+        /// <summary>
+        /// descripcion tipo de puesto
+        /// </summary>
+        public virtual string TipPuestoDes { get; set; }
+
+        /// <summary>
+        /// indicador de ver salario
+        /// </summary>
+        public virtual string IndVerSalario { get; set; }
+
+       
+
+        /// <summary>
+        /// Descripción de observaciones del cargo
+        /// </summary>
+        public virtual string DescripcionObservaciones { get; set; }
+        
     }
 }

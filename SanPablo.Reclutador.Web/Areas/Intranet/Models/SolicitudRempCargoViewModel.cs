@@ -28,12 +28,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Rol> listaRol { get; set; }
         public List<DetalleGeneral> listaEtapas { get; set; }
         public List<DetalleGeneral> listaEstados { get; set; }
+
+        public List<DetalleGeneral> listaRangoSalarial { get; set; }
         
       
         public string Accion { get; set; }
         public string AccionPopup { get; set; }
 
         public string Visualiza { get; set; }
+
+        public Boolean verSalario { get; set; }
 
     }
 

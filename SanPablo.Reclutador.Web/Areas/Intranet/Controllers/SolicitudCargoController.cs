@@ -32,6 +32,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
         private ITipoRequerimiento _tipoRequerimiento;
         private ICargoRepository _cargoRepository;
+        private IConocimientoGeneralRequerimientoRepository _ConocimientoGeneralRequerimientoRepository;
+        private INivelAcademicoRequerimientoRepository _nivelAcademicoRequerimientoRepository;
+        private ICompetenciaRequerimientoRepository _competenciaRequerimientoRepository;
+        private IExperienciaRequerimientoRepository _experienciaRequerimientoRepository;
+        private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -40,7 +45,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                          IDepartamentoRepository departamentoRepository,
                                          IUsuarioRolSedeRepository usuarioRolSedeRepository,
                                          ITipoRequerimiento tipoRequerimiento,
-                                         ICargoRepository cargoRepository
+                                         ICargoRepository cargoRepository,
+            IConocimientoGeneralRequerimientoRepository conocimientoGeneralRequerimientoRepository,
+            INivelAcademicoRequerimientoRepository nivelAcademicoRequerimientoRepository,
+            ICompetenciaRequerimientoRepository CompetenciaRequerimientoRepository,
+            IExperienciaRequerimientoRepository experienciaRequerimientoRepository,
+            IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -51,6 +61,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
             _tipoRequerimiento = tipoRequerimiento;
             _cargoRepository = cargoRepository;
+            _ConocimientoGeneralRequerimientoRepository = conocimientoGeneralRequerimientoRepository;
+            _nivelAcademicoRequerimientoRepository = nivelAcademicoRequerimientoRepository;
+            _competenciaRequerimientoRepository = CompetenciaRequerimientoRepository;
+            _experienciaRequerimientoRepository = experienciaRequerimientoRepository;
+            _ofrecemosRequerimientoRepository = ofrecemosRequerimientoRepository;
         }
 
         
@@ -1143,7 +1158,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
-                                item.TipEtapa==null?"":item.TipEtapa
+                                item.TipEtapa==null?"":item.TipEtapa,
+                                item.idUsuarioResp ==null?"":item.idUsuarioResp.ToString()
                                
                             }
                 }).ToArray();
@@ -1343,9 +1359,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit(string id) {
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
-           
-            
+            string EtapaSol = null;
+
             var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
+            EtapaSol = ObjSol.TipEtapa;
+            
+            var idRolUsuario = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
             if (ObjSol!=null)
             {
@@ -1375,7 +1394,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             }
 
-            model.Accion = Accion.Aprobar;
+
+            if (Etapa.Pendiente.Equals(EtapaSol))
+            {
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario))
+                {
+                    model.Accion = Accion.Aprobar;
+                }    
+            }
+
+            if (Etapa.Aprobado.Equals(EtapaSol))
+            {
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario) || Roles.Analista_Seleccion.Equals(idRolUsuario))
+                {
+                    model.Accion = Accion.Publicar;
+                }
+            }
+
+           
+
+            
 
             return View("InformacionReemplazo", model);
         }
@@ -1395,7 +1433,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             model = new SolicitudRempCargoViewModel();
            
-
             if (idReq>0)
             {
                 Reemplazo objReemplazo = new Reemplazo();
@@ -1411,7 +1448,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 	            }
             
             }
-
 
             return Json(objJson);
         }
@@ -1466,9 +1502,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                
                             }
                 }).ToArray();
-
-               
-
 
                 return Json(generic.Value);
             }
@@ -1610,7 +1643,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
                         // Se obtiene el usaurio reponsable
-                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Selección
+                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Seleccion
                                                             && x.IdSede == Sede
                                                             );
                         // se valida que exista y se toma al primer responsable
@@ -1666,7 +1699,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         public ActionResult InicioPopupAprobReem(string id)
         {
-            
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
          
@@ -1761,35 +1793,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             objJson.Mensaje = "Se rechazo la solicitud";
                         }
                     }
-
-
-                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-                    //if (objCargo!=null)
-                    //{
-                    //    if (objCargo.TipoRequerimiento!=null)
-                    //    {
-                    //        tipoReq = objCargo.TipoRequerimiento;
-                    //        var ObjTipoReq = _tipoRequerimiento.GetBy(x => x.TIPREQ == tipoReq);
-
-                    //        if (ObjTipoReq!=null)
-                    //        {
-                    //          List<TipoRequerimiento> lista = (List<TipoRequerimiento>)ObjTipoReq;
-                    //          TipoRequerimiento tipo = (TipoRequerimiento)lista[0];
-                                
-                    //        }
-
-
-                    //    }
-                    //}
-
-                    
-                    
                     
                 }
 
-
-
-                
             }
 
             if (retorno > 0)
@@ -1806,15 +1812,316 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
           
 
-
-
             return Json(objJson);
             
         }
 
+        [ValidarSesion]
+        public ActionResult Publica(string id) 
+        {
+            SolicitudRempCargoViewModel model;
+            model = new SolicitudRempCargoViewModel();
+            model.SolReqPersonal = new SolReqPersonal();
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id);
 
-        
+            if (ObjSol!=null)
+            {
+                model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
+                model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
+                model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
 
+                var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
+                                                        && x.IdeArea == ObjSol.IdeArea);
+                
+                model.SolReqPersonal.Area_des = objArea.NombreArea;
+
+                int TipoPuesto = Convert.ToInt32(TipoCampo.TipoSalario);
+
+                var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto 
+                                                                            && x.Valor == ObjSol.TipPuesto);
+
+                model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion==null?"":ObjDetalleGeneral.Descripcion;
+
+                model.SolReqPersonal.NumVacantes = ObjSol.NumVacantes;
+                model.SolReqPersonal.FuncionesCargo = ObjSol.FuncionesCargo;
+
+                model.listaRangoSalarial =
+                    new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
+                model.listaRangoSalarial.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+                model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario==null?"":ObjSol.TipoRangoSalario;
+                
+            }
+
+
+
+            return View("Publicacion",model);
+        }
+
+
+        /// <summary>
+        /// lista de conocimientos de la solicitud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Conocimientos(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoGeneral,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Estudios de la solicitud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Estudios(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<NivelAcademicoRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_nivelAcademicoRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeNivelAcademicoRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionAreaEstudio,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Compeetencias de la solictud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Competencias(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<CompetenciaRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_competenciaRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Lista de experiencias 
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Experiencia(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<ExperienciaRequerimiento>();
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+  
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_experienciaRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeExperienciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExperiencia,
+                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Lista de ofrecimientos
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Ofrecemos(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<OfrecemosRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_ofrecemosRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeOfrecemosRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionOfrecimiento,
+                                
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Realiza la publicacion de la solicitud de reemplazo de personal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model) 
+        {
+            JsonMessage objJson = new JsonMessage();
+            var verSalario = model.verSalario;
+            string IndVerSalario;
+
+            if (verSalario)
+            {
+                IndVerSalario = "S";
+            }else
+	        {
+                IndVerSalario = "N";
+	        }
+
+
+            if (model!=null)
+            {
+
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
+                if (objSol!=null)
+                {
+
+                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+                    objSol.FechaModificacion = FechaSistema;
+                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                    objSol.TipEtapa = EtapasSolicitud.Publicado;
+                    objSol.IndicadorSalario = IndVerSalario;
+                    objSol.Observacion = model.SolReqPersonal.Observacion;
+
+                    _solReqPersonalRepository.Update(objSol);
+
+                    model.LogSolReqPersonal = new LogSolReqPersonal();
+                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
+                    model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
+
+                    _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se publico la Solicitud";
+                }
+            }
+            else
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
+            }
+
+
+
+            return Json(objJson);
+        }
 
         #endregion
 
@@ -2448,6 +2755,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return result;
 
         }
+
+
+
+
+
         #endregion
 
         public ActionResult ResultadoExamen1()

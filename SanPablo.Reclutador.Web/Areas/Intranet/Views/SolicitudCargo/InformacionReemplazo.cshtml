@@ -99,17 +99,17 @@
                     }
                 });
             },
-             colNames: ['','','', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
+             colNames: ['','','', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
              colModel: [
 
                       { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdPersona', index: 'IdPersona', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
-                      { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
+                     
                       { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                      { name: 'FecFinReemplazo', index: 'FecFinReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
+                      { name: 'FecFinalReemplazo', index: 'FecFinalReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
                       { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
-                      { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 400, editable: false },
+                      { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 200, editable: false },
                      
              ],
 
@@ -139,14 +139,32 @@
 
         $('#btnAprobarRechazarReemplazo').click(function () {
 
-            id = $("#SolReqPersonal_CodSolReqPersonal").val();
+            if (validaEnvio()) {
 
-            if (id != null && id > 0) {
-                mostrarPopuprAprobacion(id);
-            } else {
-                MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+                if (id != null && id > 0) {
+                    mostrarPopuprAprobacion(id);
+                } else {
+                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
             }
 
+        });
+
+
+        $('#btnPublicarSolReemplazo').click(function () {
+
+            if (validaEnvio()) {
+
+                id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+                if (id != null && id > 0) {
+                    window.location = '@Url.Action("Publica", "SolicitudCargo", new { id = ""})' + '/' + id;
+                } else {
+                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            }
 
         });
 
@@ -674,8 +692,6 @@
                 {
                   <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                 }
-               
-                
                 
                 @if (Accion.Enviar.Equals(Model.Accion))
                 {
@@ -684,7 +700,7 @@
                 
                 @if (Accion.Publicar.Equals(Model.Accion))
                 {
-                <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                <a class="btn btn-info" id ="btnPublicarSolReemplazo"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                 }
             </div>
         
