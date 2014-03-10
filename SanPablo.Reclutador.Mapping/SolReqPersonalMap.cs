@@ -99,6 +99,8 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.TipoRequerimiento, "TIPREQUERIMIENTO");
             Map(x => x.TipoRangoSalario, "TIPRANGOSALARIO");
             Map(x => x.TipEtapa, "TIPETAPA");
+            Map(x => x.ObservacionPublica, "OBSERVACIONPUBLICA");
+            
 
             Map(x => x.TipoSolicitud, "TIPSOL");
 

@@ -30,7 +30,9 @@
                     success: function (data) {
                         if (data.Resultado)
                         {
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                          information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+
                         }
                     }
                 });
@@ -428,6 +430,29 @@
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
+
+    function information(selectorDiv, selectorSpan, msg, title) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaBus();
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+
+    function RedireccionaBus() {
+        window.location = '@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})';
+    }
+
+
 </script>
 
 }     
@@ -613,7 +638,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.Observacion, new { @style = "width:600px;height:100px"})
+                            @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})
                          </div>
                         </td>
                     </tr>   

@@ -43,6 +43,11 @@ namespace SanPablo.Reclutador.Web.Core
         /// </summary>
         public const string codReqSolTemp = "codReqSolTemp";
 
+        /// <summary>
+        /// id de la solicitud de reemplazo
+        /// </summary>
+        public const string IdeSolicitudReemplazo = "IdeSolicitudReemplazo";
+
     }
     public enum TipoDevolucionError 
     {

@@ -28,9 +28,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Rol> listaRol { get; set; }
         public List<DetalleGeneral> listaEtapas { get; set; }
         public List<DetalleGeneral> listaEstados { get; set; }
-
+        public List<DetalleGeneral> Sexos { get; set; }
         public List<DetalleGeneral> listaRangoSalarial { get; set; }
-        
+        public List<DetalleGeneral> TiposRequerimientos { get; set; }
       
         public string Accion { get; set; }
         public string AccionPopup { get; set; }
@@ -38,6 +38,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string Visualiza { get; set; }
 
         public Boolean verSalario { get; set; }
+
+        public List<DetalleGeneral> RangoSalariales { get; set; }
+
+        public List<DetalleGeneral> Etapas { get; set; }
+        public List<DetalleGeneral> Estados { get; set; }
 
     }
 

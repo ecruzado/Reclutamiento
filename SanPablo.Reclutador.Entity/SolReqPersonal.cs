@@ -247,6 +247,11 @@ namespace SanPablo.Reclutador.Entity
         /// Descripción de observaciones del cargo
         /// </summary>
         public virtual string DescripcionObservaciones { get; set; }
-        
+
+        /// <summary>
+        /// observacion de publicacion
+        /// </summary>
+        public virtual string ObservacionPublica { get; set; }
+
     }
 }

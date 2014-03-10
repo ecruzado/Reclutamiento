@@ -396,6 +396,14 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupAprobacionRechazo.cshtml" />
     <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edita.cshtml" />
     <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

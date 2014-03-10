@@ -322,6 +322,9 @@ namespace SanPablo.Reclutador.Web.Core
             }
         }
 
+
+
+
         protected int IdePostulante
         {
             get
@@ -422,6 +425,23 @@ namespace SanPablo.Reclutador.Web.Core
             }
             return new GenericDouble<JQgrid, T>(jqgrid, list);
         }
+
+        /// <summary>
+        /// Id de solicitud de reemplazo 
+        /// </summary>
+        protected int IdeSolicitudReemplazo
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeSolicitudAmpliacion];
+                
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdeSolicitudAmpliacion, value);
+            }
+        }
+
 
         /// <summary>
         /// codifica a base 64
