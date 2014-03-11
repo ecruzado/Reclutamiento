@@ -211,6 +211,7 @@
     <Compile Include="Controllers\ExperienciaPostulanteController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OportunidadLaboralController.cs" />
     <Compile Include="Controllers\ParientePostulanteController.cs" />
     <Compile Include="Controllers\PostulanteController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Models\JQGrid\Row.cs" />
     <Compile Include="Models\JQGrid\Rule.cs" />
     <Compile Include="Models\MenuItem.cs" />
+    <Compile Include="Models\OportunidadLaboralViewModel.cs" />
     <Compile Include="Models\ParientePostulanteGeneralViewModel.cs" />
     <Compile Include="Models\PostulanteGeneralViewModel.cs" />
     <Compile Include="Models\SeguridadViewModel.cs" />
@@ -460,7 +462,7 @@
     <Content Include="Views\Postulante\Examen.cshtml" />
     <Content Include="Views\Postulante\General.cshtml" />
     <Content Include="Views\Postulante\InstruccionesExamen.cshtml" />
-    <Content Include="Views\Postulante\Lista.cshtml" />
+    <Content Include="Views\Postulante\OportunidadLaboral.cshtml" />
     <Content Include="Views\Postulante\Postulaciones.cshtml" />
     <Content Include="Views\Postulante\Reclutamientos.cshtml" />
     <Content Include="Views\Postulante\Referencias.cshtml" />

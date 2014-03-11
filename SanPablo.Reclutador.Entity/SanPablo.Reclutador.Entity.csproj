@@ -70,6 +70,7 @@
     <Compile Include="ExperienciaRequerimiento.cs" />
     <Compile Include="LogSolReqPersonal.cs" />
     <Compile Include="NivelAcademicoRequerimiento.cs" />
+    <Compile Include="OportunidadLaboral.cs" />
     <Compile Include="UbigeoReemplazo.cs" />
     <Compile Include="HorarioRequerimiento.cs" />
     <Compile Include="OfrecemosRequerimiento.cs" />
