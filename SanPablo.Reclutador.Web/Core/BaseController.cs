@@ -214,6 +214,10 @@ namespace SanPablo.Reclutador.Web.Core
 
         #region Control Error
 
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+        (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Response.StatusCode = (int)HttpStatusCode.InternalServerError;
