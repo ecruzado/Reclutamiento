@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoEtapa { get; set; }
         public virtual string TipoSuceso { get; set; }
         public virtual int RolResponsable { get; set; }
+        public virtual int UsuarioResponsable { get; set; }
         public virtual string Observacion { get; set; }
   
         public virtual DateTime FechaSuceso { get; set; }

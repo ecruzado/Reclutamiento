@@ -34,6 +34,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string UsrModificacion { get; set; }
         public virtual DateTime FecModifcacion { get; set; }
         public virtual string TipUsuario { get; set; }
+        public virtual int IdePostulante { get; set; }
+        public virtual string IndicadorPostulante { get; set; }
 
 
        

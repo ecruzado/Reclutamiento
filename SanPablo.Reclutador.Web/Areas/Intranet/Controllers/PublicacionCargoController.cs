@@ -256,19 +256,23 @@
             }
             return View(publicacionViewModel);
         }
-        
-       
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "SolicitudCargo")]SolicitudNuevoCargo solicitudNuevoCargo)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
             var Cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var publicacionViewModel = inicializarPublicacion(Cargo);
+          
             JsonMessage objJsonMessage = new JsonMessage();
+            LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+            
             try
             {
                 SolicitudNuevoCargoValidator validation = new SolicitudNuevoCargoValidator();
                 ValidationResult result = validation.Validate(solicitudNuevoCargo, "DescripcionObservaciones", "FechaPublicacion", "FechaExpiracion");
+            
                 if (!result.IsValid)
                 {
                     publicacionViewModel.SolicitudCargo = solicitudNuevoCargo;
@@ -276,9 +280,12 @@
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
+                
                 var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(solicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                
                 int rolActual = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                if ((estadoSolicitud.TipoEtapa == EtapasSolicitud.PendientePublicacion)&&(Convert.ToInt32(estadoSolicitud.RolResponsable) == rolActual))
+                
+                if ((estadoSolicitud.TipoEtapa == Etapa.Aceptado)&&(Convert.ToInt32(estadoSolicitud.RolResponsable) == rolActual))
                 {
                     var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
                     solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
@@ -286,11 +293,16 @@
                     solicitudNuevoCargoEditar.RangoSalarioPublicar = solicitudNuevoCargo.RangoSalarioPublicar;
                     solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
                     solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
+
+                    logSolicitud.TipoEtapa = Etapa.Publicado;
+                    logSolicitud.RolSuceso = rolActual;
+                    logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    logSolicitud.RolResponsable = 0;
+                    logSolicitud.UsuarioSuceso = 0;
+
+                    _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargo.IdeSede, solicitudNuevoCargo.IdeArea, "NO");
+
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
-                    int ideUsuarioResp = 0;
-                    //ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(solicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
-                    //                                                                       "", SucesoSolicitud.Publicado, EtapasSolicitud.Publicado);
-                    
 
                     objJsonMessage.Mensaje = "Publicado Correctamente";
                     objJsonMessage.Resultado = true;

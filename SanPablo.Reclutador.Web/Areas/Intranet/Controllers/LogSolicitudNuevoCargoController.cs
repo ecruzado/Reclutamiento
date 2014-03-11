@@ -129,7 +129,13 @@
 
                     case Etapa.Generacion_Perfil:
                         logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
-                        logSolicitud.RolResponsable = Roles.Analista_Seleccion;//identificar destiatario
+                        logSolicitud.RolResponsable = Roles.Jefe;//solicitante
+                        break;
+
+                    case Etapa.Aprobacion_Perfil:
+                        logSolicitud.TipoEtapa = Etapa.Aceptado;
+                        var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
+                        logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
                         break;
 
                     case Etapa.Observado:

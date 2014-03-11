@@ -309,7 +309,7 @@ namespace SanPablo.Reclutador.Repository
                  SolReqPersonal lobSolReqPersonal;
                  List<SolReqPersonal> llstSolReqPersonal;
                  lcon.Open();
-                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET.FN_GET_LISTAREQ");
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET.FN_GET_LISTAREQ2");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
                  lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = obj.IdeCargo;
@@ -352,7 +352,7 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal.idRolSuceso = Convert.ToInt32(ldrSolReqPersonal["ROL"]);
                      lobSolReqPersonal.DesRolSuceso = Convert.ToString(ldrSolReqPersonal["DESROL"]);
 
-                     lobSolReqPersonal.TipEstado = Convert.ToString(ldrSolReqPersonal["ESTACTIVO"]);
+                     lobSolReqPersonal.TipEstado = Convert.ToString(ldrSolReqPersonal["ESTADO"]);
                      lobSolReqPersonal.TipEtapa = Convert.ToString(ldrSolReqPersonal["TIPETAPA"]);
 
                      var fecPublicacion = Convert.ToString(ldrSolReqPersonal["FECPUBLICACION"]);

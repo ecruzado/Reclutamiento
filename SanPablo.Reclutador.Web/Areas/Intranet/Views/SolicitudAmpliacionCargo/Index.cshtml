@@ -172,17 +172,35 @@
             return strRdo;
         }
 
-        function HabilitarFormatter(cellvalue, options, rowObject) {
-            var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar"
-        if (rowObject[14] == "Activo") {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        } else {
-            archivo = 'enabled.png';
-            var title = "Habilitar"
-        }
+
+     function HabilitarFormatter(cellvalue, options, rowObject) {
+     var imgPath = '@Url.Content("~/Content/images/")';
+     var archivo = 'enabled.png';
+     var title = "Habilitar";
+                
+     if (rowObject[1] == "V") {
+         archivo = 'enabled.png';
+         var title = "Habilitar";
+
+     }
+     else {
+         if (rowObject[1] == "M") {
+             archivo = 'ekiga.png';
+             var title = "Habilitar";
+         }
+         else {
+             if (rowObject[1] == "R") {
+                 archivo = 'red.png';
+                 var title = "Habilitar";
+             }
+             else {
+                 if (rowObject[1] == "I") {
+                     archivo = 'enigma.png';
+                     var title = "Habilitar";
+                 }
+             }
+         }
+     }
 
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;

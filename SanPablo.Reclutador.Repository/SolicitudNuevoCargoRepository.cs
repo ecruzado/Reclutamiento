@@ -14,7 +14,7 @@
             : base(session)
         {
         }
-        
+
         public List<string> obtenerDatosArea(int ideArea)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -28,7 +28,7 @@
                 cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = ideArea;
                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
-                
+
                 List<string> datos;
                 using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
                 {
@@ -36,13 +36,13 @@
 
                     if (lector.Read())
                     {
-                        datos.Add (Convert.ToString(lector["IDEAREA"]));
-                        datos.Add (Convert.ToString(lector["NOMAREA"]));
-                        datos.Add (Convert.ToString(lector["IDEDEPARTAMENTO"]));
-                        datos.Add (Convert.ToString(lector["NOMDEPARTAMENTO"]));
-                        datos.Add (Convert.ToString(lector["IDEDEPENDENCIA"]));
-                        datos.Add (Convert.ToString(lector["NOMDEPENDENCIA"]));
-                        
+                        datos.Add(Convert.ToString(lector["IDEAREA"]));
+                        datos.Add(Convert.ToString(lector["NOMAREA"]));
+                        datos.Add(Convert.ToString(lector["IDEDEPARTAMENTO"]));
+                        datos.Add(Convert.ToString(lector["NOMDEPARTAMENTO"]));
+                        datos.Add(Convert.ToString(lector["IDEDEPENDENCIA"]));
+                        datos.Add(Convert.ToString(lector["NOMDEPENDENCIA"]));
+
 
                     }
                 }
@@ -57,7 +57,7 @@
                 lcon.Close();
             }
         }
-        public bool verificarCodCodigo(string  codigoCargo)
+        public bool verificarCodCodigo(string codigoCargo)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -134,6 +134,44 @@
             }
         }
 
-       
+        /// <summary>
+        /// identifica al usuario y responsable de la publicació
+        /// </summary>
+        /// <param name="ideCargo"></param>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        public LogSolicitudNuevoCargo responsablePublicacion(int ideSolicitudNuevo, int ideSede)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+            try
+            {
+                lcon.Open();
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_RESPONSABLE_PUBLICACION");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
+
+                cmd.Parameters.Add("p_idSolicitudNuevo", OracleType.Int32).Value = ideSolicitudNuevo;
+                cmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
+                cmd.Parameters.Add("p_idUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("p_idRolResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                logSolicitud.UsuarioResponsable = Convert.ToInt32(cmd.Parameters["p_idUsuarioResp"].Value);
+                logSolicitud.RolResponsable = Convert.ToInt32(cmd.Parameters["p_idRolResp"].Value);
+
+                return logSolicitud;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+        }
     }
 }

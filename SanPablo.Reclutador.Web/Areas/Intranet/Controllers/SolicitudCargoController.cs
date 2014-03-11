@@ -1897,7 +1897,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             model.SolReqPersonal = new SolReqPersonal();
-            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id);
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id );
 
             if (ObjSol!=null)
             {

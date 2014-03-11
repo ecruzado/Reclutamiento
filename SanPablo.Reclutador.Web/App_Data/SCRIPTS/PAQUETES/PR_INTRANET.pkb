@@ -106,12 +106,14 @@ PROCEDURE FN_GET_LISTAREQ(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                           p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
                           p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
                           p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
-                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROL%TYPE,   
+                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
                           p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
                           p_cFecIni   IN    varchar2,
                           p_cFeFin   IN     varchar2,
                           p_cRetVal         OUT CUR_CURSOR
           );
+          
+FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE)RETURN VARCHAR2;
 
 end PR_INTRANET;
 /
@@ -1011,7 +1013,7 @@ PROCEDURE FN_GET_LISTAREQ(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                           p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
                           p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
                           p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
-                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROL%TYPE,   
+                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
                           p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
                           p_cFecIni   IN    varchar2,
                           p_cFeFin   IN     varchar2,
@@ -1050,14 +1052,15 @@ BEGIN
    || ' 0 PRESELECCIONADOS, '
    || ' 0 EVALUADOS, '
    || ' 0 SELECCIONADOS , '
-   || ' L.ROL , '
-   || ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROL ) DESROL, '
+   || ' L.ROLRESPONSABLE ROL , '
+   || ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROLRESPONSABLE ) DESROL, '
    || ' S.ESTACTIVO, '
    || ' L.TIPETAPA, '
    || ' S.FECPUBLICACION, '
    || ' S.FECCREACION, '
    || ' S.FECEXPIRACACION, '
-   || ' S.NOMPERSONREEMPLAZO, '
+   || ' L.USRESPONSABLE ID_USUARIO_RESP,'
+   || ' (SELECT U.CODUSUARIO FROM USUARIO U WHERE U.IDUSUARIO = L.USRESPONSABLE AND ROWNUM<2) NOMPERSONREEMPLAZO,'
    || ' DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO '
    || '  FROM SOLREQ_PERSONAL S,LOGSOLREQ_PERSONAL L '
    || '  WHERE S.IDESOLREQPERSONAL = L.IDESOLREQPERSONAL '
@@ -1115,6 +1118,8 @@ BEGIN
         
     END IF;
     
+    cWhere := cWhere || 'ORDER BY S.IDESOLREQPERSONAL ';
+    
     cQUERY := cCONSULTA || cWhere;                                       
 
 DELETE FROM  LOG_MENSAJE;
@@ -1127,7 +1132,56 @@ COMMIT;
    
 END FN_GET_LISTAREQ; 
 
+/* ------------------------------------------------------------
+    Nombre      : SP_ESTADO_SOLICITUD
+    Proposito   : Obtiene el estado deacuerdo el tiempo 
+                  transcurrido desde la solicitud
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      11/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE)RETURN VARCHAR2 IS
 
+p_retVal     VARCHAR2(1);                              
+c_estado     VARCHAR2(1);
+c_diasTrans  NUMBER;
+BEGIN
+  BEGIN
+  SELECT SQ.ESTACTIVO
+  INTO c_estado
+  FROM SOLREQ_PERSONAL SQ
+  WHERE SQ.IDESOLREQPERSONAL = p_idSolicitud;
+
+  IF (c_estado = 'A')THEN
+  
+  SELECT TO_DATE(SYSDATE) - TO_DATE(SREQ.FECCREACION)
+  INTO c_diasTrans
+  FROM SOLREQ_PERSONAL SREQ
+  WHERE  SREQ.IDESOLREQPERSONAL = p_idSolicitud;
+  
+  IF (c_diasTrans <= 21) THEN
+     p_retVal := 'V';
+  ELSIF ((c_diasTrans > 21)AND(c_diasTrans <= 35))THEN
+     p_retVal := 'M';
+  ELSIF ( c_diasTrans > 35) THEN
+     p_retVal := 'R';
+  END IF;
+  
+  ELSE
+      p_retVal := c_estado;
+  END IF;
+  EXCEPTION 
+    WHEN OTHERS THEN
+    p_retVal := 'I';
+    
+  END;
+  RETURN p_retVal;
+  
+END FN_ESTADO_SOLICITUD; 
 
 END PR_INTRANET;
 /

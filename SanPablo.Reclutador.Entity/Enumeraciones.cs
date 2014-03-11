@@ -128,6 +128,7 @@
         public const string Observado = "07";
         public const string Finalizado = "08";
         public const string Rechazado = "09";
+        public const string Aceptado = "10";
     }
 
     /// <summary>

@@ -26,6 +26,7 @@
         private IConocimientoGeneralPostulanteRepository _conocimientoGeneralRepository;
         private IParientePostulanteRepository _parienteGeneralRepository;
         private IDiscapacidadPostulanteRepository _discapacidadGeneralRepository;
+        private IUsuarioRepository _usuarioRepository;
 
         private PostulanteGeneralViewModel postulanteModel = new PostulanteGeneralViewModel();
                 
@@ -36,7 +37,8 @@
                                     IExperienciaPostulanteRepository experienciaGeneralRepository,
                                     IConocimientoGeneralPostulanteRepository conocimientoGeneralRepository,
                                     IParientePostulanteRepository parienteGeneralRepository,
-                                    IDiscapacidadPostulanteRepository discapacidadGeneralRepository)
+                                    IDiscapacidadPostulanteRepository discapacidadGeneralRepository,
+                                    IUsuarioRepository usuarioRepository)
         {
             _postulanteRepository = postulanteRepository;
             _estudioPostulanteRepository = estudioPostulanteRepository;
@@ -46,7 +48,7 @@
             _conocimientoGeneralRepository = conocimientoGeneralRepository;
             _parienteGeneralRepository = parienteGeneralRepository;
             _discapacidadGeneralRepository = discapacidadGeneralRepository;
-                        
+            _usuarioRepository = usuarioRepository;            
         }
         #region General
         public PostulanteGeneralViewModel inicializarPostulante()
@@ -87,7 +89,15 @@
 
             postulanteGeneralViewModel.Distritos = new List<Ubigeo>();
             postulanteGeneralViewModel.Distritos.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
-                      
+                     
+            //identificar si el usuario tiene CV ingresado
+            var idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuario);
+            if (usuario.IdePostulante != null)
+            {
+                IdePostulante = usuario.IdePostulante;
+            }
+
             return postulanteGeneralViewModel;
         }
 
@@ -140,6 +150,12 @@
                 if (IdePostulante == 0)
                 {
                     _postulanteRepository.Add(model.Postulante);
+                    IdePostulante = model.Postulante.IdePostulante;
+                    var ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
+                    usuario.IdePostulante = IdePostulante;
+                    usuario.IndicadorPostulante = Indicador.Si;
+                    _usuarioRepository.Update(usuario);
                     
                 }
                 else

@@ -404,6 +404,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Publicacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

@@ -37,13 +37,32 @@ create or replace package PR_INTRANET is
                                       p_cRetCursor OUT SYS_REFCURSOR);  
                                       
  PROCEDURE SP_OBTENER_OFRECIMIENTO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                       p_cRetCursor OUT SYS_REFCURSOR);
+                                        p_cRetCursor OUT SYS_REFCURSOR);
                                        
  PROCEDURE SP_OBTENER_HORARIO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                    p_cRetCursor OUT SYS_REFCURSOR);
+                                   p_cRetCursor OUT SYS_REFCURSOR);
 
  PROCEDURE SP_OBTENER_UBIGEO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                   p_cRetCursor OUT SYS_REFCURSOR);
+                                  
+ PROCEDURE SP_OBTENER_NIVELACAD_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                     p_cRetCursor OUT SYS_REFCURSOR);
+                                    
+ PROCEDURE SP_OBTENER_CENT_EST_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                    p_cRetCursor OUT SYS_REFCURSOR);
+                                    
+ PROCEDURE SP_OBTENER_CONOCIMIENTO_REMP(p_ideSolicitud     IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                        p_tipoConocimiento IN VARCHAR2,
+                                        p_cRetCursor OUT SYS_REFCURSOR);
+                                        
+ PROCEDURE SP_OBTENER_EXPR_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                p_cRetCursor OUT SYS_REFCURSOR);
+                                    
+ PROCEDURE SP_OBTENER_EVAL_REMP(p_ideSolicitud IN  SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                p_cRetCursor   OUT SYS_REFCURSOR);
+                                    
+ PROCEDURE SP_OBTENER_DISCAP_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                  p_cRetCursor    OUT SYS_REFCURSOR);
                            
  FUNCTION FN_GET_ROL(p_idUsuario IN NUMBER
                     )RETURN VARCHAR2;
@@ -522,6 +541,169 @@ BEGIN
 END SP_OBTENER_UBIGEO_REMP;
 
 /* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_NIVELACAD_REMP
+    Proposito   : Recuperar los datos de nivel academico de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      03/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_NIVELACAD_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                    p_cRetCursor OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT  NA.IDENIVELACADESOLREQ,(PR_INTRANET.FN_VALOR_GENERAL('TIPEDUCACION',NA.TIPEDUCACION)) TIPEDUCACION, 
+            (PR_INTRANET.FN_VALOR_GENERAL('TIPAREA',NA.TIPAREAESTUDIO)) AREAESTUDIO, (PR_INTRANET.FN_VALOR_GENERAL('NIVELALCANZADO',NA.TIPNIVELCANZADO)) NIVELALCANZADO, 
+            NA.CICLOSEMESTRE, NA.PUNTNIVESTUDIO
+    FROM NIVELACADEMICO_SOLREQ NA
+    WHERE NA.ESTACTIVO = 'A' 
+    AND NA.IDESOLREQPERSONAL = p_ideSolicitud;
+
+END SP_OBTENER_NIVELACAD_REMP;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_CENT_EST_REMP
+    Proposito   : Recuperar los datos de centro de estudios de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      03/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_CENT_EST_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                    p_cRetCursor OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT CE.IDECENTESTSOLREQ, (PR_INTRANET.FN_VALOR_GENERAL('TIPTIPINSTIT',CE.TIPCENESTU)) TIPINST , 
+          (PR_INTRANET.FN_VALOR_GENERAL('TIPTIPINSTIT',CE.TIPNOMCENESTU)) NOMBINST, CE.PUNTACENTROEST
+    FROM CENTROEST_SOLREQ CE
+    WHERE CE.ESTACTIVO = 'A' 
+    AND CE.IDESOLREQPERSONAL = p_ideSolicitud;
+
+END SP_OBTENER_CENT_EST_REMP;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_CONOCIMIENTO_REMP
+    Proposito   : Recuperar los datos de conocimientos de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      04/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_CONOCIMIENTO_REMP(p_ideSolicitud     IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                       p_tipoConocimiento IN VARCHAR2,
+                                       p_cRetCursor OUT SYS_REFCURSOR)IS
+                                       
+c_condicion VARCHAR2(100);
+c_Consulta VARCHAR2(1000);
+
+BEGIN
+    IF (p_tipoConocimiento = 'OFIMATICA')THEN
+       c_condicion := 'CG.TIPCONOFIMATICA IS NOT NULL';
+    ELSIF (p_tipoConocimiento = 'IDIOMA') THEN
+       c_condicion := 'CG.TIPIDIOMA IS NOT NULL';
+    ELSIF (p_tipoConocimiento = 'GENERAL') THEN
+       c_condicion := 'CG.TIPCONOGENERAL IS NOT NULL';
+    END IF;         
+       
+    c_Consulta:= 'SELECT CG.IDECONOGENSOLREQ,(PR_INTRANET.FN_VALOR_GENERAL(''TIPCONOFIMATICA'',CG.TIPCONOFIMATICA)) OFIMATICA, (PR_INTRANET.FN_VALOR_GENERAL(''TIPNOMOFIMATICA'',CG.TIPNOMOFIMATICA)) DESCOFIMATICA,
+                 (PR_INTRANET.FN_VALOR_GENERAL(''TIPCONOIDIOMA'',CG.TIPCONOCIDIOMA)) CONOIDIOMA,(PR_INTRANET.FN_VALOR_GENERAL(''TIPIDIOMA'',CG.TIPIDIOMA)) IDIOMA,
+                 (PR_INTRANET.FN_VALOR_GENERAL(''TIPCONOGRALES'',CG.TIPCONOGENERAL)) GENERAL, (PR_INTRANET.FN_VALOR_GENERAL(''TIPCONOGRALES'',CG.TIPNOMCONOCGRALES)) DESCGENERAL,CG.PUNTCONOCIMIENTO,
+                 (PR_INTRANET.FN_VALOR_GENERAL(''TIPNIVELALCAN'',CG.TIPNIVELCONOCIMIENTO)) NIVELCONO
+                 FROM CONOGENERAL_SOLREQ CG
+                 WHERE CG.ESTACTIVO = ''A'' 
+                 AND CG.IDESOLREQPERSONAL = '|| p_ideSolicitud ||
+                 ' AND '||c_condicion;
+                 
+    OPEN p_cRetCursor FOR c_Consulta;  
+
+
+END SP_OBTENER_CONOCIMIENTO_REMP;
+
+
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_EXPR_REMP
+    Proposito   : Recuperar los datos de experiencia de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      03/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_EXPR_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                    p_cRetCursor OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT ES.IDEEXPSOLREQ, PR_INTRANET.FN_VALOR_GENERAL('TIPCARGO',ES.TIPEXPLABORAL) EXPERIENCIA, ES.CANTANHOEXP, ES.CANTMESESEXP, ES.PUNTEXPERIENCIA 
+    FROM EXPERIENCIA_SOLREQ ES
+    WHERE ES.ESTACTIVO = 'A' 
+    AND ES.IDESOLREQPERSONAL = p_ideSolicitud;
+
+END SP_OBTENER_EXPR_REMP;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_EVAL_REMP
+    Proposito   : Recuperar los datos de evaluaciones de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      04/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_EVAL_REMP(p_ideSolicitud IN  SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                               p_cRetCursor   OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT EV.IDEEVALUACIONSOLREQ, EX.NOMEXAMEN, EX.DESCEXAMEN,AR.NOMAREA, EV.PUNTEXAMEN,EV.NOTAMINEXAMEN, PR_INTRANET.FN_VALOR_GENERAL('TIPOCRITERIO',EV.TIPEXAMEN) TIPOEXAMEN  
+    FROM EVALUACION_SOLREQ EV, EXAMEN EX, AREA AR
+    WHERE EV.ESTACTIVO = 'A' 
+    AND EV.IDEEXAMEVAL = EX.IDEEXAMEN
+    AND EV.TIPAREARESPON = AR.IDEAREA
+    AND EV.IDESOLREQPERSONAL = p_ideSolicitud;
+
+END SP_OBTENER_EVAL_REMP;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_OBTENER_DISCAP_REMP
+    Proposito   : Recuperar los datos de discapacidades de una solicitud
+                  requerimiento de solicitud de personal.
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      04/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  
+PROCEDURE SP_OBTENER_DISCAP_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                 p_cRetCursor    OUT SYS_REFCURSOR)IS
+BEGIN
+    OPEN p_cRetCursor FOR
+    SELECT DR.IDEDISCAPASOLREQ, PR_INTRANET.FN_VALOR_GENERAL('TIPDISCAPACIDAD',DR.TIPDISCAPA) DESCDISCAP,DR.PUNTDISCAPA  
+    FROM DISCAPACIDAD_SOLREQ DR
+    WHERE DR.ESTACTIVO = 'A' 
+    AND DR.IDESOLREQPERSONAL = p_ideSolicitud;
+
+END SP_OBTENER_DISCAP_REMP;
+
+/* ------------------------------------------------------------
     Nombre      : FN_GET_ROL
     Proposito   : Obtiene los roles por usuario
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
@@ -747,7 +929,7 @@ END FN_GET_OPCIONESPADRExROL;
                                   
     Log de Cambios
       Fecha       Autor                Descripcion
-      14/02/2014  Edward Llamoca       Creaci?n    
+      14/02/2014  Jaqueline Ccana      Creaci?n    
   ------------------------------------------------------------ */
 
 FUNCTION FN_VALOR_GENERAL(p_tipoTabla IN GENERAL.TIPTABLA%TYPE,
@@ -758,6 +940,7 @@ cDescripcion    DETALLE_GENERAL.DESCRIPCION%TYPE;
       
 BEGIN
     
+    BEGIN
     SELECT DG.DESCRIPCION
     INTO cDescripcion
     FROM DETALLE_GENERAL DG
@@ -765,11 +948,14 @@ BEGIN
                            FROM GENERAL G
                            WHERE G.TIPTABLA = p_tipoTabla)
     AND DG.VALOR = p_valor;
-    RETURN NVL(cDescripcion,'');
     
-EXCEPTION
-  WHEN OTHERS THEN
-  cDescripcion := '-1';
+    
+    EXCEPTION
+      WHEN OTHERS THEN
+      cDescripcion := '';
+    END;
+    
+    RETURN NVL(cDescripcion,'');
 END FN_VALOR_GENERAL; 
 
 
@@ -798,6 +984,17 @@ BEGIN
    
 END FN_GET_CARGO; 
 
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_LISTAREQ
+    Proposito   : obtiene la lista de requerimiento
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
 /* ------------------------------------------------------------
     Nombre      : FN_GET_LISTAREQ
     Proposito   : obtiene la lista de requerimiento
@@ -853,12 +1050,15 @@ BEGIN
    || ' 0 PRESELECCIONADOS, '
    || ' 0 EVALUADOS, '
    || ' 0 SELECCIONADOS , '
-   || ' L.ROL RESPONSABLE, '
-   || ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROL )NOMBRESPONSABLE, '
+   || ' L.ROL , '
+   || ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROL ) DESROL, '
    || ' S.ESTACTIVO, '
    || ' L.TIPETAPA, '
    || ' S.FECPUBLICACION, '
-   || ' S.FECCREACION '
+   || ' S.FECCREACION, '
+   || ' S.FECEXPIRACACION, '
+   || ' S.NOMPERSONREEMPLAZO, '
+   || ' DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO '
    || '  FROM SOLREQ_PERSONAL S,LOGSOLREQ_PERSONAL L '
    || '  WHERE S.IDESOLREQPERSONAL = L.IDESOLREQPERSONAL '
    || '  AND L.FECSUCESO =  (SELECT MAX(P.FECSUCESO) FROM LOGSOLREQ_PERSONAL P '
@@ -908,13 +1108,10 @@ BEGIN
         
     END IF;
   
-    IF p_cFecIni IS NOT NULL  AND 
-       p_cFeFin IS NOT NULL AND
-       p_cFecIni <>''  AND
-       p_cFecIni <>''  THEN
+    IF LENGTH(rtrim(p_cFecIni))>0 AND LENGTH(rtrim(p_cFeFin))>0 THEN
        
-      cWhere := cWhere || ' AND s.Fecinireemplazo >= to_date('''||p_cFecIni||''',''DD/MM/YYYY'')'
-                       || ' AND s.Fecfinreemplazo <= to_date('''||p_cFeFin||''',''DD/MM/YYYY'')';
+      cWhere := cWhere || ' AND s.FECCREACION >= to_date('''||p_cFecIni||''',''DD/MM/YYYY'')'
+                       || ' AND s.FECCREACION < to_date('''||p_cFeFin||''',''DD/MM/YYYY'')+1';
         
     END IF;
     
