@@ -174,7 +174,7 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_nIdRolSuceso", OracleType.Number).Value = obj.RolSuceso;
                  lspcmd.Parameters.Add("p_nIdRolResp", OracleType.Number).Value = obj.RolResponsable;
                  lspcmd.Parameters.Add("p_nIdResponble", OracleType.Number).Value = obj.UsResponsable;
-                 lspcmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = obj.Observacion;
+                 lspcmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = (obj.Observacion == null ? "" : obj.Observacion);
                  
                  lspcmd.ExecuteNonQuery();
 
@@ -375,6 +375,7 @@ namespace SanPablo.Reclutador.Repository
                      
                      lobSolReqPersonal.NomPersonReemplazo = Convert.ToString(ldrSolReqPersonal["NOMPERSONREEMPLAZO"]);
                      lobSolReqPersonal.FlagPublicado = Convert.ToString(ldrSolReqPersonal["PUBLICADO"]);
+                     lobSolReqPersonal.idUsuarioResp = Convert.ToInt32(ldrSolReqPersonal["ID_USUARIO_RESP"]);
                      
 
                      llstSolReqPersonal.Add(lobSolReqPersonal);

@@ -144,6 +144,26 @@
              builder.RegisterType<LogSolicitudRequerimientoRepository>()
             .As<ILogSolicitudRequerimientoRepository>();
 
+             builder.RegisterType<CentroEstudioRequerimientoRepository>()
+           .As<ICentroEstudioRequerimientoRepository>();
+
+             builder.RegisterType<ConocimientoGeneralRequerimientoRepository>()
+           .As<IConocimientoGeneralRequerimientoRepository>();
+
+             builder.RegisterType<NivelAcademicoRequerimientoRepository>()
+          .As<INivelAcademicoRequerimientoRepository>();
+
+             builder.RegisterType<CompetenciaRequerimientoRepository>()
+          .As<ICompetenciaRequerimientoRepository>();
+
+             builder.RegisterType<ExperienciaRequerimientoRepository>()
+         .As<IExperienciaRequerimientoRepository>();
+
+
+             builder.RegisterType<OfrecemosRequerimientoRepository>()
+         .As<IOfrecemosRequerimientoRepository>();
+
+
         }
     }
 }

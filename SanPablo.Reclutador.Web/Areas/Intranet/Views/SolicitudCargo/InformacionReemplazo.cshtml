@@ -18,7 +18,7 @@
     
     $(document).ready(function () {
 
-
+       
 
         $('select#SolReqPersonal_IdeDependencia').change(function () {
             var ideDependencia = $(this).val();
@@ -57,6 +57,359 @@
                 }
             });
        })
+
+
+        jQuery("#grdListCompetencias").jqGrid({
+            url: '@Url.Action("ListarCompetencias", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
+            ],
+            pager: jQuery('#grdPagerCompetencia'),
+            sortname: 'DescripcionCompetencia',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            },
+            loadError: function (xhr, st, err) {
+
+            }
+        });
+
+
+        jQuery("#grdListOfrecemos").jqGrid({
+            url: '@Url.Action("ListarOfrecemos", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Codigo', 'Descripci&oacuten'],
+            colModel: [
+                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+            ],
+            pager: jQuery('#grdPagerOfrecemos'),
+            sortname: 'DescripcionOfrecimiento',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListHorario").jqGrid({
+            url: '@Url.Action("ListaHorario", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten', 'Puntaje'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, editable: false },
+
+            ],
+            pager: jQuery('#grdPagerHorario'),
+            sortname: 'IdeHorarioCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            height: 200,
+            width: 890,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListUbigeo").jqGrid({
+            url: '@Url.Action("ListaUbigeo", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Departamento', 'Provincia', 'Distrito', 'Puntaje'],
+            colModel: [
+                    { name: 'Departamento', index: 'Departamento', align: 'left', editable: false, sortable: false },
+                    { name: 'Provincia', index: 'Provincia', align: 'left', editable: false, sortable: false },
+                    { name: 'Distrito', index: 'Distrito', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
+            ],
+            pager: jQuery('#grdPagerUbigeo'),
+            sortname: 'IdeUbigeoCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 890,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListNivelAcademico").jqGrid({
+            url: '@Url.Action("ListaNivelAcademico", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo de Educación', 'Área de Estudios', 'Nivel Alcanzado', 'Ciclo/Semestre', 'Puntaje'],
+            colModel: [
+                    { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', editable: false, sortable: false },
+                    { name: 'AreaEstudio', index: 'AreaEstudio', align: 'left', editable: false, sortable: false },
+                    { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
+                    { name: 'CicloSemestre', index: 'CicloSemestre', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerNivelAcademico'),
+            sortname: 'IdeNivelAcademicoCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListCentroEstudio").jqGrid({
+            url: '@Url.Action("ListaCentroEstudio", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo de Institución', 'Institución', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', Tipo: 'Codigo', align: 'center', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerCentroEstudio'),
+            sortname: 'IdeCentroEstudioCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListOfimatica").jqGrid({
+            url: '@Url.Action("ListaOfimatica", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerOfimatica'),
+            sortname: 'IdeConocimientoGeneralCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListIdioma").jqGrid({
+            url: '@Url.Action("ListaIdioma", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten', 'Tipo Conoc.', 'Nivel', 'Puntaje'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerIdioma'),
+            sortname: 'IdeConocimientoGeneralCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListOtrosConocimientos").jqGrid({
+            url: '@Url.Action("ListaOtrosConocimientos", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo', 'Descripci&oacuten', 'Nivel', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerOtrosConocimientos'),
+            sortname: 'IdeConocimientoGeneralCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListExperiencia").jqGrid({
+            url: '@Url.Action("ListaExperiencia", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Cargo', 'Años', 'Meses', 'Puntaje'],
+            colModel: [
+                    { name: 'Cargo', index: 'Cargo', align: 'left', editable: false, sortable: false },
+                    { name: 'Anho', index: 'Anho', align: 'left', editable: false, sortable: false, width: 50 },
+                    { name: 'Meses', index: 'Meses', align: 'left', editable: false, sortable: false, width: 50 },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
+            ],
+            pager: jQuery('#grdPagerExperiencia'),
+            sortname: 'IdeExperienciaCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListDiscapacidad").jqGrid({
+            url: '@Url.Action("ListaDiscapacidad", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Tipo', 'Puntaje'],
+            colModel: [
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
+            ],
+            pager: jQuery('#grdPagerDiscapacidad'),
+            sortname: 'IdeDiscapacidadCargo',
+            sortorder: 'desc',
+            viewrecords: false,
+            cellEdit: true,
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+        jQuery("#grdListEvaluacion").jqGrid({
+            url: '@Url.Action("ListaEvaluaciones", "SolicitudCargo")',
+            datatype: 'json',
+            mtype: 'POST',
+            colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
+                    { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false, width: 60 },
+                    { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+            ],
+            pager: jQuery('#grdPagerEvaluacion'),
+            sortname: 'TipoExamen',
+            sortorder: 'desc',
+            viewrecords: true,
+            cellEdit: true,
+            /*caption: 'Horario de Trabajo',*/
+            height: 200,
+            width: 898,
+            rowNum: 0,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            postData: {
+
+            },
+            loadComplete: function (data) {
+
+            }
+        });
+
+
+
+
+
+
 
 
      jQuery("#grdListReemplazosReq").jqGrid({
@@ -99,17 +452,17 @@
                     }
                 });
             },
-             colNames: ['','','', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
+             colNames: ['','','', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
              colModel: [
 
                       { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdPersona', index: 'IdPersona', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
-                      { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
+                     
                       { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                      { name: 'FecFinReemplazo', index: 'FecFinReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
+                      { name: 'FecFinalReemplazo', index: 'FecFinalReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
                       { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
-                      { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 400, editable: false },
+                      { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 200, editable: false },
                      
              ],
 
@@ -139,14 +492,32 @@
 
         $('#btnAprobarRechazarReemplazo').click(function () {
 
-            id = $("#SolReqPersonal_CodSolReqPersonal").val();
+            if (validaEnvio()) {
 
-            if (id != null && id > 0) {
-                mostrarPopuprAprobacion(id);
-            } else {
-                MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+                if (id != null && id > 0) {
+                    mostrarPopuprAprobacion(id);
+                } else {
+                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
             }
 
+        });
+
+
+        $('#btnPublicarSolReemplazo').click(function () {
+
+            if (validaEnvio()) {
+
+                id = $("#SolReqPersonal_CodSolReqPersonal").val();
+
+                if (id != null && id > 0) {
+                    window.location = '@Url.Action("Publica", "SolicitudCargo", new { id = ""})' + '/' + id;
+                } else {
+                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            }
 
         });
 
@@ -251,9 +622,13 @@
                             traditional: true,
                             success: function (data) {
                                 if (data.Resultado) {
-                                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                     $('#DialogAprobReem').dialog('close');
                                     $('#popupDialogAprobReem').dialog('close');
+
+                                    MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+
+                                    
                                    
 
                                 }
@@ -266,9 +641,6 @@
                 }
             }
         });
-
-
-
 
 
         $('#popupDialogReemplazo').dialog({
@@ -326,9 +698,7 @@
     });
 
 
-      
-        //$("#txtEdadInicial").spinner();
-        //$("#txtEdadFinal").spinner();
+  
 
     });
     function RadioFormatter(cellvalue, options, rowObject) {
@@ -494,8 +864,8 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                    
+                    //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
             }
          });
@@ -523,6 +893,27 @@
 
     }
 
+    function MensajeInformacion(selectorDiv, selectorSpan, msg, title) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaBus();
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+
+    function RedireccionaBus() {
+        window.location = '@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})';
+     }
+
     //fin
 
 </script>
@@ -545,11 +936,6 @@
 
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
 
-@*    
-     @Html.TextBoxFor(model => model.SolReqPersonal.IdeArea, new { style = "display: none;" })
-     @Html.TextBoxFor(model => model.SolReqPersonal.IdeDepartamento, new { style = "display: none;" })
-     @Html.TextBoxFor(model => model.SolReqPersonal.IdeDependencia, new { style = "display: none;" })
-            *@
     
                 <table class="formulario-busqueda">
                     <tr class="formulario-fila">
@@ -666,6 +1052,62 @@
                              
 }
            
+           
+          @if (Accion.Enviar.Equals(Model.Accion))
+          {
+		           <span></span>
+          }
+          else
+          {
+             
+              <h5>Perfil</h5>
+            <ul class="nav nav-tabs">
+                <li><div style="width:110px;display:inline-block"></div></li>
+                <li class=""><a href="#A" data-toggle="tab">Puesto</a></li>
+                <li class=""><a href="#B" data-toggle="tab">General</a></li>
+                <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
+                <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
+                <li class=""><a href="#E" data-toggle="tab">Conocimientos</a></li>
+                <li class=""><a href="#F" data-toggle="tab">Discapacidad</a></li>
+                <li class=""><a href="#G" data-toggle="tab">Evaluación</a></li>
+                <li class=""><a href="#H" data-toggle="tab">Conf.Perfil</a></li>
+            </ul>
+            <div class="tabbable" >
+                <div class="tab-content">
+                     <div class="tab-pane" id="A">
+                     @Html.Partial("Puesto")
+                    </div>
+                    <div class="tab-pane" id="B">
+                     @Html.Partial("General")
+                    </div>
+                    <div class="tab-pane" id="C">
+                     @Html.Partial("Estudio")
+                    </div>
+                  <div class="tab-pane" id="D">
+                    @Html.Partial("Experiencia")
+                  </div>
+                  <div class="tab-pane" id="E">
+                    @Html.Partial("Conocimientos")
+                  </div>
+                  <div class="tab-pane" id="F">
+                    @Html.Partial("Discapacidad")
+                  </div>
+                    <div class="tab-pane" id="G">
+                    @Html.Partial("Evaluacion")
+                  </div>
+                  <div class="tab-pane" id="H">
+                    @Html.Partial("ConfiguracionPerfil")
+                  </div>
+              
+                </div>     
+                <div class="container">
+                </div>  
+           </div>  
+               
+          
+          }
+
+
             <div class="form-actions">
                 
                 <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
@@ -674,8 +1116,6 @@
                 {
                   <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                 }
-               
-                
                 
                 @if (Accion.Enviar.Equals(Model.Accion))
                 {
@@ -684,7 +1124,7 @@
                 
                 @if (Accion.Publicar.Equals(Model.Accion))
                 {
-                <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                <a class="btn btn-info" id ="btnPublicarSolReemplazo"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                 }
             </div>
         
@@ -704,7 +1144,9 @@
 <div id="divEliminar">
 	<span id="spanEliminar"></span>
 </div>
-
+<div id="divMensajeInfo">
+        <span id="spnMensajeInfo"></span>
+</div>
 
 
 @*Fin*@

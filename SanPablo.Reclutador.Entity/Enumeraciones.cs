@@ -78,6 +78,12 @@
 
     }
 
+    public sealed class TipoCampo
+    {
+        public const string TipoSalario = "14";
+        
+    }
+
     public sealed class IndicadorActivo
     {
         public const string Activo = "A";
@@ -238,7 +244,7 @@
         public const int Jefe_Corporativo_Seleccion = 6;
         public const int Consultor = 7;
         public const int Analista_Seleccion = 8;
-        public const int Encargado_Selección = 9;
+        public const int Encargado_Seleccion = 9;
         public const int Postulante = 10;
         public const int Gerente =3;
 

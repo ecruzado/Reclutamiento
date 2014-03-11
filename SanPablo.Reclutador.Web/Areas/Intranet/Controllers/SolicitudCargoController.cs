@@ -32,6 +32,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
         private ITipoRequerimiento _tipoRequerimiento;
         private ICargoRepository _cargoRepository;
+        private IConocimientoGeneralRequerimientoRepository _ConocimientoGeneralRequerimientoRepository;
+        private INivelAcademicoRequerimientoRepository _nivelAcademicoRequerimientoRepository;
+        private ICompetenciaRequerimientoRepository _competenciaRequerimientoRepository;
+        private IExperienciaRequerimientoRepository _experienciaRequerimientoRepository;
+        private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
+        private IUsuarioRepository _usuarioRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -40,7 +46,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                          IDepartamentoRepository departamentoRepository,
                                          IUsuarioRolSedeRepository usuarioRolSedeRepository,
                                          ITipoRequerimiento tipoRequerimiento,
-                                         ICargoRepository cargoRepository
+                                         ICargoRepository cargoRepository,
+            IConocimientoGeneralRequerimientoRepository conocimientoGeneralRequerimientoRepository,
+            INivelAcademicoRequerimientoRepository nivelAcademicoRequerimientoRepository,
+            ICompetenciaRequerimientoRepository CompetenciaRequerimientoRepository,
+            IExperienciaRequerimientoRepository experienciaRequerimientoRepository,
+            IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository,
+            IUsuarioRepository usuarioRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -51,6 +63,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
             _tipoRequerimiento = tipoRequerimiento;
             _cargoRepository = cargoRepository;
+            _ConocimientoGeneralRequerimientoRepository = conocimientoGeneralRequerimientoRepository;
+            _nivelAcademicoRequerimientoRepository = nivelAcademicoRequerimientoRepository;
+            _competenciaRequerimientoRepository = CompetenciaRequerimientoRepository;
+            _experienciaRequerimientoRepository = experienciaRequerimientoRepository;
+            _ofrecemosRequerimientoRepository = ofrecemosRequerimientoRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         
@@ -58,915 +76,915 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
 
-        #region Nuevo
+        //#region Nuevo
 
-        public ActionResult ListaNuevo()
-        {
-            return View();
-        }
+        //public ActionResult ListaNuevo()
+        //{
+        //    return View();
+        //}
 
-        public ActionResult CrearNuevo() 
-        {
-            return View("InformacionNuevo");
-        }
-        [HttpPost]
-        public ActionResult ListaSolicitudPersonal(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[]
-        {
-          "200002",
-          "200002",
-          "Técnico de Almacén",
-          "Gerencia Administrativa",
-          "Logística",
-          "Almacén",
-          "5",
-          "8",
-          "0",
-          "0",
-          "0",
-          "0",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "Pend. Aproba.",
-          "Almacén - Técnico de Almacén",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType2_5 = new
-            {
-                id = 5,
-                cell = new string[]
-        {
-          "200005",
-          "200005",
-          "Técnico de Almacén",
-          "Gerencia Administrativa",
-          "Logística",
-          "Almacén",
-          "8",
-          "8",
-          "0",
-          "0",
-          "0",
-          "0",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "Pend. Aproba.",
-          "Almacén - Técnico de Almacén",
-          "Activo"
-        }
-            };
+        //public ActionResult CrearNuevo() 
+        //{
+        //    return View("InformacionNuevo");
+        //}
+        //[HttpPost]
+        //public ActionResult ListaSolicitudPersonal(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2_2 = new
+        //    {
+        //        id = 2,
+        //        cell = new string[]
+        //{
+        //  "200002",
+        //  "200002",
+        //  "Técnico de Almacén",
+        //  "Gerencia Administrativa",
+        //  "Logística",
+        //  "Almacén",
+        //  "5",
+        //  "8",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "Pend. Aproba.",
+        //  "Almacén - Técnico de Almacén",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_2);
+        //    var fAnonymousType2_5 = new
+        //    {
+        //        id = 5,
+        //        cell = new string[]
+        //{
+        //  "200005",
+        //  "200005",
+        //  "Técnico de Almacén",
+        //  "Gerencia Administrativa",
+        //  "Logística",
+        //  "Almacén",
+        //  "8",
+        //  "8",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "Pend. Aproba.",
+        //  "Almacén - Técnico de Almacén",
+        //  "Activo"
+        //}
+        //    };
 
-            list.Add((object)fAnonymousType2_5);
-            var fAnonymousType2_8 = new
-            {
-                id = 8,
-                cell = new string[]
-        {
-          "200008",
-          "200008",
-          "Técnico de Almacén",
-          "Gerencia Administrativa",
-          "Logística",
-          "Almacén",
-          "8",
-          "8",
-          "0",
-          "0",
-          "0",
-          "0",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "Pend. Aproba.",
-          "Almacén - Técnico de Almacén",
-          "Activo"
-        }
-            };
+        //    list.Add((object)fAnonymousType2_5);
+        //    var fAnonymousType2_8 = new
+        //    {
+        //        id = 8,
+        //        cell = new string[]
+        //{
+        //  "200008",
+        //  "200008",
+        //  "Técnico de Almacén",
+        //  "Gerencia Administrativa",
+        //  "Logística",
+        //  "Almacén",
+        //  "8",
+        //  "8",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "Pend. Aproba.",
+        //  "Almacén - Técnico de Almacén",
+        //  "Activo"
+        //}
+        //    };
 
-            list.Add((object)fAnonymousType2_8);
-
-
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "200001",
-          "200001",
-          "Secretaría Ejecutiva",
-          "Gerencia de Créditos",
-          "Cobranzas",
-          "Cobranzas",
-          "5",
-          "0",
-          "0",
-          "0",
-          "0",
-          "0",
-          "19/10/2012",
-          "",
-          "Jefe de Cobranza",
-          "Carol Sandoval",
-          "NO",
-          "Nuevo",
-          "Cobranzas - Secretaría Ejecutiva",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-
-            var fAnonymousType2_4 = new
-            {
-                id = 4,
-                cell = new string[]
-        {
-          "200004",
-          "200004",
-          "Secretaría Ejecutiva",
-          "Gerencia de Créditos",
-          "Cobranzas",
-          "Cobranzas",
-          "6",
-          "0",
-          "0",
-          "0",
-          "0",
-          "0",
-          "19/10/2012",
-          "",
-          "Jefe de Cobranza",
-          "Carol Sandoval",
-          "NO",
-          "Nuevo",
-          "Cobranzas - Secretaría Ejecutiva",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_4);
-
-            var fAnonymousType2_7 = new
-            {
-                id = 7,
-                cell = new string[]
-        {
-          "200007",
-          "200007",
-          "Secretaría Ejecutiva",
-          "Gerencia de Créditos",
-          "Cobranzas",
-          "Cobranzas",
-          "5",
-          "0",
-          "0",
-          "0",
-          "0",
-          "0",
-          "19/10/2012",
-          "",
-          "Jefe de Cobranza",
-          "Carol Sandoval",
-          "NO",
-          "Nuevo",
-          "Cobranzas - Secretaría Ejecutiva",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_7);
-
-            var fAnonymousType2_3 = new
-            {
-                id = 3,
-                cell = new string[]
-        {
-          "200003",
-          "200003",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "4",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "En Evaluación",
-          "Cuidados Intensivos - Técnico de Enfermería",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_3);
+        //    list.Add((object)fAnonymousType2_8);
 
 
-            var fAnonymousType2_6 = new
-            {
-                id = 6,
-                cell = new string[]
-        {
-          "200006",
-          "200006",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "5",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "En Evaluación",
-          "Cuidados Intensivos - Técnico de Enfermería",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_6);
+        //    var fAnonymousType2_1 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "200001",
+        //  "200001",
+        //  "Secretaría Ejecutiva",
+        //  "Gerencia de Créditos",
+        //  "Cobranzas",
+        //  "Cobranzas",
+        //  "5",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "19/10/2012",
+        //  "",
+        //  "Jefe de Cobranza",
+        //  "Carol Sandoval",
+        //  "NO",
+        //  "Nuevo",
+        //  "Cobranzas - Secretaría Ejecutiva",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_1);
+
+        //    var fAnonymousType2_4 = new
+        //    {
+        //        id = 4,
+        //        cell = new string[]
+        //{
+        //  "200004",
+        //  "200004",
+        //  "Secretaría Ejecutiva",
+        //  "Gerencia de Créditos",
+        //  "Cobranzas",
+        //  "Cobranzas",
+        //  "6",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "19/10/2012",
+        //  "",
+        //  "Jefe de Cobranza",
+        //  "Carol Sandoval",
+        //  "NO",
+        //  "Nuevo",
+        //  "Cobranzas - Secretaría Ejecutiva",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_4);
+
+        //    var fAnonymousType2_7 = new
+        //    {
+        //        id = 7,
+        //        cell = new string[]
+        //{
+        //  "200007",
+        //  "200007",
+        //  "Secretaría Ejecutiva",
+        //  "Gerencia de Créditos",
+        //  "Cobranzas",
+        //  "Cobranzas",
+        //  "5",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "0",
+        //  "19/10/2012",
+        //  "",
+        //  "Jefe de Cobranza",
+        //  "Carol Sandoval",
+        //  "NO",
+        //  "Nuevo",
+        //  "Cobranzas - Secretaría Ejecutiva",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_7);
+
+        //    var fAnonymousType2_3 = new
+        //    {
+        //        id = 3,
+        //        cell = new string[]
+        //{
+        //  "200003",
+        //  "200003",
+        //  "Técnico de Enfermería",
+        //  "Gerencia Médica",
+        //  "Enfermería",
+        //  "Cuidados Intensivos",
+        //  "4",
+        //  "1",
+        //  "50",
+        //  "2",
+        //  "1",
+        //  "1",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "En Evaluación",
+        //  "Cuidados Intensivos - Técnico de Enfermería",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_3);
 
 
-            var fAnonymousType2_9 = new
-            {
-                id = 9,
-                cell = new string[]
-        {
-          "200009",
-          "200009",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "5",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "En Evaluación",
-          "Cuidados Intensivos - Técnico de Enfermería",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_9);
-            var fAnonymousType2_10 = new
-            {
-                id = 10,
-                cell = new string[]
-        {
-          "200010",
-          "200010",
-          "Técnico de Enfermería",
-          "Gerencia Médica",
-          "Enfermería",
-          "Cuidados Intensivos",
-          "5",
-          "1",
-          "50",
-          "2",
-          "1",
-          "1",
-          "20/10/2012",
-          "",
-          "RRHH",
-          "Pedro Gutierrez",
-          "SI",
-          "En Evaluación",
-          "Cuidados Intensivos - Técnico de Enfermería",
-          "Activo"
-        }
-            };
-            list.Add((object)fAnonymousType2_10);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //    var fAnonymousType2_6 = new
+        //    {
+        //        id = 6,
+        //        cell = new string[]
+        //{
+        //  "200006",
+        //  "200006",
+        //  "Técnico de Enfermería",
+        //  "Gerencia Médica",
+        //  "Enfermería",
+        //  "Cuidados Intensivos",
+        //  "5",
+        //  "1",
+        //  "50",
+        //  "2",
+        //  "1",
+        //  "1",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "En Evaluación",
+        //  "Cuidados Intensivos - Técnico de Enfermería",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_6);
 
-        [HttpPost]
-        public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "200104",
-          "Técnico ",
-          "Enfermería",
-          "Titulado",
-          "15"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
 
-        [HttpPost]
-        public ActionResult ListaCompetencias(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "C0001",
-          "Responsabilidad"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[]
-        {
-          "C0002",
-          "Capacidad para resolver problemas"
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //    var fAnonymousType2_9 = new
+        //    {
+        //        id = 9,
+        //        cell = new string[]
+        //{
+        //  "200009",
+        //  "200009",
+        //  "Técnico de Enfermería",
+        //  "Gerencia Médica",
+        //  "Enfermería",
+        //  "Cuidados Intensivos",
+        //  "5",
+        //  "1",
+        //  "50",
+        //  "2",
+        //  "1",
+        //  "1",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "En Evaluación",
+        //  "Cuidados Intensivos - Técnico de Enfermería",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_9);
+        //    var fAnonymousType2_10 = new
+        //    {
+        //        id = 10,
+        //        cell = new string[]
+        //{
+        //  "200010",
+        //  "200010",
+        //  "Técnico de Enfermería",
+        //  "Gerencia Médica",
+        //  "Enfermería",
+        //  "Cuidados Intensivos",
+        //  "5",
+        //  "1",
+        //  "50",
+        //  "2",
+        //  "1",
+        //  "1",
+        //  "20/10/2012",
+        //  "",
+        //  "RRHH",
+        //  "Pedro Gutierrez",
+        //  "SI",
+        //  "En Evaluación",
+        //  "Cuidados Intensivos - Técnico de Enfermería",
+        //  "Activo"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_10);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaFunciones(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "F0001",
-          "Coordinar con los Médicos",
-          "10"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaEstudios(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "200104",
+        //  "Técnico ",
+        //  "Enfermería",
+        //  "Titulado",
+        //  "15"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        #endregion
+        //[HttpPost]
+        //public ActionResult ListaCompetencias(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2_1 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "C0001",
+        //  "Responsabilidad"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_1);
+        //    var fAnonymousType2_2 = new
+        //    {
+        //        id = 2,
+        //        cell = new string[]
+        //{
+        //  "C0002",
+        //  "Capacidad para resolver problemas"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        #region Ampliacion
+        //[HttpPost]
+        //public ActionResult ListaFunciones(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "F0001",
+        //  "Coordinar con los Médicos",
+        //  "10"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [AuthorizeUser]
-        public ActionResult ListaAmpliacion()
-        {
-            return View();
-        }
+        //#endregion
 
-        public ActionResult CrearAmpliacion()
-        {
-            return View("InformacionAmpliacion");
-        }
+        //#region Ampliacion
 
-        [HttpPost]
-        public ActionResult ListaSolicitudAmpliacion(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var item = new
-            {
-                id = 1,
-                cell = new string[]
-				{
-					"200001",
-					"200001",
-					"Secretaría Ejecutiva",
-					"Gerencia de Créditos",
-					"Cobranzas",
-					"Cobranzas",
-					"0",
-					"0",
-					"0",
-					"0",
-					"0",
-					"19/10/2012",
-					"",
-					"Jefe de Cobranza",
-					"Carol Sandoval",
-					"NO",
-					"Nuevo",
-					"Activo"
-				}
-            };
-            list.Add(item);
-            var item2 = new
-            {
-                id = 2,
-                cell = new string[]
-				{
-					"200002",
-					"200002",
-					"Técnico de Almacén",
-					"Gerencia Administrativa",
-					"Logística",
-					"Almacén",
-					"8",
-					"0",
-					"0",
-					"0",
-					"0",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"Pend. Aproba.",
-					"Activo"
-				}
-            };
-            list.Add(item2);
-            var item3 = new
-            {
-                id = 3,
-                cell = new string[]
-				{
-					"200003",
-					"200003",
-					"Técnico de Enfermería",
-					"Gerencia Médica",
-					"Enfermería",
-					"Cuidados Intensivos",
-					"1",
-					"50",
-					"2",
-					"1",
-					"1",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"En Evaluación",
-					"Activo"
-				}
-            };
-            list.Add(item3);
-            var item4 = new
-            {
-                id = 4,
-                cell = new string[]
-				{
-					"200004",
-					"200004",
-					"Secretaría Ejecutiva",
-					"Gerencia de Créditos",
-					"Cobranzas",
-					"Cobranzas",
-					"0",
-					"0",
-					"0",
-					"0",
-					"0",
-					"19/10/2012",
-					"",
-					"Jefe de Cobranza",
-					"Carol Sandoval",
-					"NO",
-					"Nuevo",
-					"Activo"
-				}
-            };
-            list.Add(item4);
-            var item5 = new
-            {
-                id = 5,
-                cell = new string[]
-				{
-					"200005",
-					"200005",
-					"Técnico de Almacén",
-					"Gerencia Administrativa",
-					"Logística",
-					"Almacén",
-					"8",
-					"0",
-					"0",
-					"0",
-					"0",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"Pend. Aproba.",
-					"Activo"
-				}
-            };
-            list.Add(item5);
-            var item6 = new
-            {
-                id = 6,
-                cell = new string[]
-				{
-					"200006",
-					"200006",
-					"Técnico de Enfermería",
-					"Gerencia Médica",
-					"Enfermería",
-					"Cuidados Intensivos",
-					"1",
-					"50",
-					"2",
-					"1",
-					"1",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"En Evaluación",
-					"Activo"
-				}
-            };
-            list.Add(item6);
-            var item7 = new
-            {
-                id = 7,
-                cell = new string[]
-				{
-					"200007",
-					"200007",
-					"Secretaría Ejecutiva",
-					"Gerencia de Créditos",
-					"Cobranzas",
-					"Cobranzas",
-					"0",
-					"0",
-					"0",
-					"0",
-					"0",
-					"19/10/2012",
-					"",
-					"Jefe de Cobranza",
-					"Carol Sandoval",
-					"NO",
-					"Nuevo",
-					"Activo"
-				}
-            };
-            list.Add(item7);
-            var item8 = new
-            {
-                id = 8,
-                cell = new string[]
-				{
-					"200008",
-					"200008",
-					"Técnico de Almacén",
-					"Gerencia Administrativa",
-					"Logística",
-					"Almacén",
-					"8",
-					"0",
-					"0",
-					"0",
-					"0",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"Pend. Aproba.",
-					"Activo"
-				}
-            };
-            list.Add(item8);
-            var item9 = new
-            {
-                id = 9,
-                cell = new string[]
-				{
-					"200009",
-					"200009",
-					"Técnico de Enfermería",
-					"Gerencia Médica",
-					"Enfermería",
-					"Cuidados Intensivos",
-					"1",
-					"50",
-					"2",
-					"1",
-					"1",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"En Evaluación",
-					"Activo"
-				}
-            };
-            list.Add(item9);
-            var item10 = new
-            {
-                id = 10,
-                cell = new string[]
-				{
-					"200010",
-					"200010",
-					"Técnico de Enfermería",
-					"Gerencia Médica",
-					"Enfermería",
-					"Cuidados Intensivos",
-					"1",
-					"50",
-					"2",
-					"1",
-					"1",
-					"20/10/2012",
-					"",
-					"RRHH",
-					"Pedro Gutierrez",
-					"SI",
-					"En Evaluación",
-					"Activo"
-				}
-            };
-            list.Add(item10);
-            var data = new
-            {
-                rows = list
-            };
-            return base.Json(data);
-        }
+        //[AuthorizeUser]
+        //public ActionResult ListaAmpliacion()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult ListaOfrecemos(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var item = new
-            {
-                id = 1,
-                cell = new string[]
-				{
-					"O0001",
-					"Remuneración promedio al mercado"
-				}
-            };
-            list.Add(item);
-            var item2 = new
-            {
-                id = 2,
-                cell = new string[]
-				{
-					"O0002",
-					"Ingreso a planilla con todos los beneficios de ley"
-				}
-            };
-            list.Add(item2);
-            var data = new
-            {
-                rows = list
-            };
-            return base.Json(data);
-        }
+        //public ActionResult CrearAmpliacion()
+        //{
+        //    return View("InformacionAmpliacion");
+        //}
 
-        [HttpPost]
-        public ActionResult ListaHorario(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "0001",
-          "Tiempo Completo",
-          "20"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaSolicitudAmpliacion(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var item = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //        {
+        //            "200001",
+        //            "200001",
+        //            "Secretaría Ejecutiva",
+        //            "Gerencia de Créditos",
+        //            "Cobranzas",
+        //            "Cobranzas",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "19/10/2012",
+        //            "",
+        //            "Jefe de Cobranza",
+        //            "Carol Sandoval",
+        //            "NO",
+        //            "Nuevo",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item);
+        //    var item2 = new
+        //    {
+        //        id = 2,
+        //        cell = new string[]
+        //        {
+        //            "200002",
+        //            "200002",
+        //            "Técnico de Almacén",
+        //            "Gerencia Administrativa",
+        //            "Logística",
+        //            "Almacén",
+        //            "8",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "Pend. Aproba.",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item2);
+        //    var item3 = new
+        //    {
+        //        id = 3,
+        //        cell = new string[]
+        //        {
+        //            "200003",
+        //            "200003",
+        //            "Técnico de Enfermería",
+        //            "Gerencia Médica",
+        //            "Enfermería",
+        //            "Cuidados Intensivos",
+        //            "1",
+        //            "50",
+        //            "2",
+        //            "1",
+        //            "1",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "En Evaluación",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item3);
+        //    var item4 = new
+        //    {
+        //        id = 4,
+        //        cell = new string[]
+        //        {
+        //            "200004",
+        //            "200004",
+        //            "Secretaría Ejecutiva",
+        //            "Gerencia de Créditos",
+        //            "Cobranzas",
+        //            "Cobranzas",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "19/10/2012",
+        //            "",
+        //            "Jefe de Cobranza",
+        //            "Carol Sandoval",
+        //            "NO",
+        //            "Nuevo",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item4);
+        //    var item5 = new
+        //    {
+        //        id = 5,
+        //        cell = new string[]
+        //        {
+        //            "200005",
+        //            "200005",
+        //            "Técnico de Almacén",
+        //            "Gerencia Administrativa",
+        //            "Logística",
+        //            "Almacén",
+        //            "8",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "Pend. Aproba.",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item5);
+        //    var item6 = new
+        //    {
+        //        id = 6,
+        //        cell = new string[]
+        //        {
+        //            "200006",
+        //            "200006",
+        //            "Técnico de Enfermería",
+        //            "Gerencia Médica",
+        //            "Enfermería",
+        //            "Cuidados Intensivos",
+        //            "1",
+        //            "50",
+        //            "2",
+        //            "1",
+        //            "1",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "En Evaluación",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item6);
+        //    var item7 = new
+        //    {
+        //        id = 7,
+        //        cell = new string[]
+        //        {
+        //            "200007",
+        //            "200007",
+        //            "Secretaría Ejecutiva",
+        //            "Gerencia de Créditos",
+        //            "Cobranzas",
+        //            "Cobranzas",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "19/10/2012",
+        //            "",
+        //            "Jefe de Cobranza",
+        //            "Carol Sandoval",
+        //            "NO",
+        //            "Nuevo",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item7);
+        //    var item8 = new
+        //    {
+        //        id = 8,
+        //        cell = new string[]
+        //        {
+        //            "200008",
+        //            "200008",
+        //            "Técnico de Almacén",
+        //            "Gerencia Administrativa",
+        //            "Logística",
+        //            "Almacén",
+        //            "8",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "0",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "Pend. Aproba.",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item8);
+        //    var item9 = new
+        //    {
+        //        id = 9,
+        //        cell = new string[]
+        //        {
+        //            "200009",
+        //            "200009",
+        //            "Técnico de Enfermería",
+        //            "Gerencia Médica",
+        //            "Enfermería",
+        //            "Cuidados Intensivos",
+        //            "1",
+        //            "50",
+        //            "2",
+        //            "1",
+        //            "1",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "En Evaluación",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item9);
+        //    var item10 = new
+        //    {
+        //        id = 10,
+        //        cell = new string[]
+        //        {
+        //            "200010",
+        //            "200010",
+        //            "Técnico de Enfermería",
+        //            "Gerencia Médica",
+        //            "Enfermería",
+        //            "Cuidados Intensivos",
+        //            "1",
+        //            "50",
+        //            "2",
+        //            "1",
+        //            "1",
+        //            "20/10/2012",
+        //            "",
+        //            "RRHH",
+        //            "Pedro Gutierrez",
+        //            "SI",
+        //            "En Evaluación",
+        //            "Activo"
+        //        }
+        //    };
+        //    list.Add(item10);
+        //    var data = new
+        //    {
+        //        rows = list
+        //    };
+        //    return base.Json(data);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaUbigeo(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "150136",
-          "Lima",
-          "Lima",
-          "San Miguel",
-          "15"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaOfrecemos(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var item = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //        {
+        //            "O0001",
+        //            "Remuneración promedio al mercado"
+        //        }
+        //    };
+        //    list.Add(item);
+        //    var item2 = new
+        //    {
+        //        id = 2,
+        //        cell = new string[]
+        //        {
+        //            "O0002",
+        //            "Ingreso a planilla con todos los beneficios de ley"
+        //        }
+        //    };
+        //    list.Add(item2);
+        //    var data = new
+        //    {
+        //        rows = list
+        //    };
+        //    return base.Json(data);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaCentroEstudios(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "10013",
-          "Universidad",
-          "Universidad Católica del Perú",
-          "20"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaHorario(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "0001",
+        //  "Tiempo Completo",
+        //  "20"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaExperienciaLaboral(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "31405",
-          "Analista de Sistemas",
-          "3",
-          "20"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaUbigeo(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "150136",
+        //  "Lima",
+        //  "Lima",
+        //  "San Miguel",
+        //  "15"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaConocimientosGeneralaes(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "5201",
-          "Software",
-          "Microsoft Word",
-          "Avanzado",
-          "15"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaCentroEstudios(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "10013",
+        //  "Universidad",
+        //  "Universidad Católica del Perú",
+        //  "20"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaConocimientosIdiomas(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "4001",
-          "Inglés                ",
-          "Escritura            ",
-          "Avanzado",
-          "20"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaExperienciaLaboral(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "31405",
+        //  "Analista de Sistemas",
+        //  "3",
+        //  "20"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaDiscapacidades(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "15001",
-          "Motora",
-          "Parálisis pierna izquierda",
-          "20"
-        }
-            };
-            list.Add((object)fAnonymousType2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
+        //[HttpPost]
+        //public ActionResult ListaConocimientosGeneralaes(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "5201",
+        //  "Software",
+        //  "Microsoft Word",
+        //  "Avanzado",
+        //  "15"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
 
-        [HttpPost]
-        public ActionResult ListaEvaluacionesPerfil(string sidx, string sord, int page, int rows)
-        {
-            List<object> list = new List<object>();
-            var fAnonymousType2_1 = new
-            {
-                id = 1,
-                cell = new string[]
-        {
-          "15305",
-          "Examen 3",
-          "Examen",
-          "11",
-          "RRHH",
-          "50"
-        }
-            };
-            list.Add((object)fAnonymousType2_1);
-            var fAnonymousType2_2 = new
-            {
-                id = 2,
-                cell = new string[]
-        {
-          "15309",
-          "Examen 4",
-          "Entrevista",
-          "12",
-          "GA",
-          "40"
-        }
-            };
-            list.Add((object)fAnonymousType2_2);
-            var fAnonymousType3 = new
-            {
-                rows = list
-            };
-            return (ActionResult)this.Json((object)fAnonymousType3);
-        }
-        #endregion 
+        //[HttpPost]
+        //public ActionResult ListaConocimientosIdiomas(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "4001",
+        //  "Inglés                ",
+        //  "Escritura            ",
+        //  "Avanzado",
+        //  "20"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
+
+        //[HttpPost]
+        //public ActionResult ListaDiscapacidades(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "15001",
+        //  "Motora",
+        //  "Parálisis pierna izquierda",
+        //  "20"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
+
+        //[HttpPost]
+        //public ActionResult ListaEvaluacionesPerfil(string sidx, string sord, int page, int rows)
+        //{
+        //    List<object> list = new List<object>();
+        //    var fAnonymousType2_1 = new
+        //    {
+        //        id = 1,
+        //        cell = new string[]
+        //{
+        //  "15305",
+        //  "Examen 3",
+        //  "Examen",
+        //  "11",
+        //  "RRHH",
+        //  "50"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_1);
+        //    var fAnonymousType2_2 = new
+        //    {
+        //        id = 2,
+        //        cell = new string[]
+        //{
+        //  "15309",
+        //  "Examen 4",
+        //  "Entrevista",
+        //  "12",
+        //  "GA",
+        //  "40"
+        //}
+        //    };
+        //    list.Add((object)fAnonymousType2_2);
+        //    var fAnonymousType3 = new
+        //    {
+        //        rows = list
+        //    };
+        //    return (ActionResult)this.Json((object)fAnonymousType3);
+        //}
+        //#endregion 
 
         #region Reemplazo
 
@@ -1143,7 +1161,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
-                                item.TipEtapa==null?"":item.TipEtapa
+                                item.TipEtapa==null?"":item.TipEtapa,
+                                item.idUsuarioResp ==null?"":item.idUsuarioResp.ToString()
                                
                             }
                 }).ToArray();
@@ -1269,6 +1288,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.listaArea = new List<Area>();
             objModel.listaArea.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
+
+            //objModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            //objModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+            objModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
+            objModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            objModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
+            objModel.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
+            objModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
+            objModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
             return objModel;
         }
 
@@ -1343,9 +1375,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit(string id) {
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
-           
-            
+            string EtapaSol = null;
+
             var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
+            EtapaSol = ObjSol.TipEtapa;
+            
+            var idRolUsuario = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
             if (ObjSol!=null)
             {
@@ -1373,9 +1408,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                                             && x.Departamento.IdeDepartamento == model.SolReqPersonal.IdeDepartamento
                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
 
+
+                IdeSolicitudReemplazo = (int)ObjSol.IdeSolReqPersonal;
             }
 
-            model.Accion = Accion.Aprobar;
+
+            if (Etapa.Pendiente.Equals(EtapaSol))
+            {
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario))
+                {
+                    model.Accion = Accion.Aprobar;
+                }    
+            }
+
+            if (Etapa.Aprobado.Equals(EtapaSol))
+            {
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario) || Roles.Analista_Seleccion.Equals(idRolUsuario))
+                {
+                    model.Accion = Accion.Publicar;
+                }
+            }
+
+            
+
+            
 
             return View("InformacionReemplazo", model);
         }
@@ -1395,7 +1451,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             model = new SolicitudRempCargoViewModel();
            
-
             if (idReq>0)
             {
                 Reemplazo objReemplazo = new Reemplazo();
@@ -1411,7 +1466,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 	            }
             
             }
-
 
             return Json(objJson);
         }
@@ -1466,9 +1520,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                
                             }
                 }).ToArray();
-
-               
-
 
                 return Json(generic.Value);
             }
@@ -1584,7 +1635,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objJson = new JsonMessage();
             int retorno=0;
-           
+            Cargo objCargo = new Cargo();
 
             int idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
@@ -1607,10 +1658,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
 
+                        objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
                         // Se obtiene el usaurio reponsable
-                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Selección
+                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Seleccion
                                                             && x.IdSede == Sede
                                                             );
                         // se valida que exista y se toma al primer responsable
@@ -1621,6 +1674,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
                             retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
+
+                            
                         }
                         else
                         {
@@ -1650,6 +1705,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (retorno > 0)
             {
+
+
+               var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp);
+               string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+
+               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+
+                
                 objJson.Resultado = true;
                 objJson.Mensaje = "Se envio la solicitud correctamente";
             }
@@ -1666,7 +1729,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         public ActionResult InicioPopupAprobReem(string id)
         {
-            
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
          
@@ -1682,6 +1744,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        [ValidarSesion]
         [HttpPost]
         public ActionResult SetPopupAprobReem(SolicitudRempCargoViewModel model)
         {
@@ -1704,6 +1767,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                     model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
 
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     if (aprobacion)
@@ -1732,6 +1796,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                             _solReqPersonalRepository.Update(objSol);
 
+
+                            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsResponsable);
+
+
+                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
                             retorno = 1;
 
                         }
@@ -1754,42 +1823,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         
                         _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
-
+                        retorno = 1;
+                        
                         if (retorno > 0)
                         {
                             objJson.Resultado = true;
                             objJson.Mensaje = "Se rechazo la solicitud";
                         }
                     }
-
-
-                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-                    //if (objCargo!=null)
-                    //{
-                    //    if (objCargo.TipoRequerimiento!=null)
-                    //    {
-                    //        tipoReq = objCargo.TipoRequerimiento;
-                    //        var ObjTipoReq = _tipoRequerimiento.GetBy(x => x.TIPREQ == tipoReq);
-
-                    //        if (ObjTipoReq!=null)
-                    //        {
-                    //          List<TipoRequerimiento> lista = (List<TipoRequerimiento>)ObjTipoReq;
-                    //          TipoRequerimiento tipo = (TipoRequerimiento)lista[0];
-                                
-                    //        }
-
-
-                    //    }
-                    //}
-
-                    
-                    
                     
                 }
 
-
-
-                
             }
 
             if (retorno > 0)
@@ -1806,18 +1850,811 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
           
 
-
-
             return Json(objJson);
             
         }
 
 
-        
+        /// <summary>
+        /// envia correo electronico a los responsables de la solicitud de requerimiento de personal
+        /// </summary>
+        /// <param name="usuarioDestinatario"></param>
+        /// <param name="rolResponsable"></param>
+        /// <param name="etapa"></param>
+        /// <param name="observacion"></param>
+        /// <param name="cargoDescripcion"></param>
+        /// <param name="codCargo"></param>
+        /// <returns></returns>
+        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string observacion, string cargoDescripcion, string codCargo)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            try
+            {
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                enviarMail.EnviarCorreo(dir, etapa, rolResponsable, "Reemplazo de cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+
+            }
+
+        }
+
+
+        [ValidarSesion]
+        public ActionResult Publica(string id) 
+        {
+            SolicitudRempCargoViewModel model;
+            model = new SolicitudRempCargoViewModel();
+            model.SolReqPersonal = new SolReqPersonal();
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id);
+
+            if (ObjSol!=null)
+            {
+                model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
+                model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
+                model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+
+                var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
+                                                        && x.IdeArea == ObjSol.IdeArea);
+                
+                model.SolReqPersonal.Area_des = objArea.NombreArea;
+
+                int TipoPuesto = Convert.ToInt32(TipoCampo.TipoSalario);
+
+                var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto 
+                                                                            && x.Valor == ObjSol.TipPuesto);
+
+                model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion==null?"":ObjDetalleGeneral.Descripcion;
+
+                model.SolReqPersonal.NumVacantes = ObjSol.NumVacantes;
+                model.SolReqPersonal.FuncionesCargo = ObjSol.FuncionesCargo;
+
+                model.listaRangoSalarial =
+                    new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
+                model.listaRangoSalarial.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+                model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario==null?"":ObjSol.TipoRangoSalario;
+                
+            }
+
+
+
+            return View("Publicacion",model);
+        }
+
+
+        /// <summary>
+        /// lista de conocimientos de la solicitud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Conocimientos(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoGeneral,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Estudios de la solicitud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Estudios(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<NivelAcademicoRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_nivelAcademicoRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeNivelAcademicoRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionAreaEstudio,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Compeetencias de la solictud del requerimiento
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Competencias(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<CompetenciaRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_competenciaRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Lista de experiencias 
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Experiencia(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<ExperienciaRequerimiento>();
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+  
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_experienciaRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeExperienciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExperiencia,
+                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Lista de ofrecimientos
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Ofrecemos(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                DetachedCriteria where = DetachedCriteria.For<OfrecemosRequerimiento>();
+                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+
+                var generic = Listar(_ofrecemosRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeOfrecemosRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionOfrecimiento,
+                                
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Realiza la publicacion de la solicitud de reemplazo de personal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ValidarSesion]
+        public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model) 
+        {
+            JsonMessage objJson = new JsonMessage();
+            var verSalario = model.verSalario;
+            string IndVerSalario;
+
+            if (verSalario)
+            {
+                IndVerSalario = "S";
+            }else
+	        {
+                IndVerSalario = "N";
+	        }
+
+
+            if (model!=null)
+            {
+
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
+                if (objSol!=null)
+                {
+
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
+                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+                    objSol.FechaModificacion = FechaSistema;
+                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                    objSol.TipEtapa = EtapasSolicitud.Publicado;
+                    objSol.IndicadorSalario = IndVerSalario;
+                    objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
+
+                    _solReqPersonalRepository.Update(objSol);
+
+                    model.LogSolReqPersonal = new LogSolReqPersonal();
+                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
+                    model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
+
+                    _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+                    var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se publico la Solicitud";
+                }
+            }
+            else
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
+            }
+
+
+
+            return Json(objJson);
+        }
 
 
         #endregion
 
+
+        #region GRILLAS PERFIL 
+        ///
+        ///COMPETENCIAS
+        ///
+
+        [HttpPost]
+        public JsonResult ListarCompetencias(GridTable grid)
+        {
+            List<CompetenciaRequerimiento> lista = new List<CompetenciaRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 10 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaCompetencias(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCompetenciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionCompetencia,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+        //    
+        //OFRECEMOS
+        //
+        [HttpPost]
+        public virtual JsonResult ListarOfrecemos(GridTable grid)
+        {
+            List<OfrecemosRequerimiento> lista = new List<OfrecemosRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaOfrecemos(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeOfrecemosRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.IdeOfrecemosRequerimiento.ToString(),
+                                item.DescripcionOfrecimiento,
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+        ///
+        ///HORARIO
+        ///
+
+        [HttpPost]
+        public virtual JsonResult ListaHorario(GridTable grid)
+        {
+            List<HorarioRequerimiento> lista = new List<HorarioRequerimiento>();
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaHorarios(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeHorarioRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionHorario,
+                                item.PuntajeHorario.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+        /// <summary>
+        ///UBIGEO
+        /// </summary>
+
+        [HttpPost]
+        public virtual JsonResult ListaUbigeo(GridTable grid)
+        {
+
+            List<UbigeoReemplazo> lista = new List<UbigeoReemplazo>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+
+                lista = _solReqPersonalRepository.ListaUbigeos(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeUbigeoReemplazo.ToString(),
+                        cell = new string[]
+                            {
+                                item.Departamento,
+                                item.Provincia,
+                                item.Distrito,
+                                item.PuntajeUbigeo.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaCentroEstudio(GridTable grid)
+        {
+            List<CentroEstudioRequerimiento> lista = new List<CentroEstudioRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaCentroEstudio(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeCentroEstudioRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoCentroEstudio,
+                                item.DescripcionNombreCentroEstudio,
+                                item.PuntajeCentroEstudios.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaNivelAcademico(GridTable grid)
+        {
+            List<NivelAcademicoRequerimiento> lista = new List<NivelAcademicoRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaNivelAcademico(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeNivelAcademicoRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoEducacion,
+                                item.DescripcionAreaEstudio,
+                                item.DescripcionNivelAlcanzado,
+                                item.CicloSemestre.ToString(),
+                                item.PuntajeNivelEstudio.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaOfimatica(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaConocimientos(IdeSolicitudReemplazo, "OFIMATICA");
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaIdioma(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaConocimientos(IdeSolicitudReemplazo, "IDIOMA");
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaOtrosConocimientos(GridTable grid)
+        {
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaConocimientos(IdeSolicitudReemplazo, "GENERAL");
+
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento,
+                                item.PuntajeConocimiento.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaExperiencia(GridTable grid)
+        {
+            List<ExperienciaRequerimiento> lista = new List<ExperienciaRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaExperiencia(IdeSolicitudReemplazo);
+
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeExperienciaRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExperiencia,
+                                item.CantidadAnhosExperiencia.ToString(),
+                                item.CantidadMesesExperiencia.ToString(),
+                                item.PuntajeExperiencia.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaDiscapacidad(GridTable grid)
+        {
+            List<DiscapacidadRequerimiento> lista = new List<DiscapacidadRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaDiscapacidad(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeDiscapacidadRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionTipoDiscapacidad,
+                                item.PuntajeDiscapacidad.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public virtual JsonResult ListaEvaluaciones(GridTable grid)
+        {
+            List<EvaluacionRequerimiento> lista = new List<EvaluacionRequerimiento>();
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                lista = _solReqPersonalRepository.ListaEvaluacion(IdeSolicitudReemplazo);
+
+                var generic = GetListar(lista, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List
+                    .Select(item => new Row
+                    {
+                        id = item.IdeEvaluacionRequerimiento.ToString(),
+                        cell = new string[]
+                            {
+                                item.DescripcionExamen,
+                                item.DescripcionTipoExamen,
+                                item.NotaMinimaExamen.ToString(),
+                                item.DescripcionAreaResponsable.ToString(),
+                                item.PuntajeExamen.ToString(),
+                            }
+                    }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+        #endregion
+        
+
+
+        /**************************************************************************************************************/
         #region ranking
         public ActionResult PostulantesPorRequerimiento()
         {
@@ -2310,40 +3147,40 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
         #endregion
 
-        #region ListaHorarios2
-        /// <summary>
-        /// Lista de Evaluaciones Detalle
-        /// </summary>       
-        [HttpPost]
-        public ActionResult ListaHorarios2(string sidx, string sord, int page, int rows)
-        {
-            ActionResult result = null;
-            List<object> lstFilas = new List<object>();
+        //#region ListaHorarios2
+        ///// <summary>
+        ///// Lista de Evaluaciones Detalle
+        ///// </summary>       
+        //[HttpPost]
+        //public ActionResult ListaHorarios2(string sidx, string sord, int page, int rows)
+        //{
+        //    ActionResult result = null;
+        //    List<object> lstFilas = new List<object>();
 
-            var fila1 = new
-            {
-                id = 1,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila       
+        //    var fila1 = new
+        //    {
+        //        id = 1,                 // ID único de la fila
+        //        cell = new string[] {   // Array de celdas de la fila       
                   
-                    "Turno noche de 12 horas",                    
-                }
-            };
-            lstFilas.Add(fila1);
+        //            "Turno noche de 12 horas",                    
+        //        }
+        //    };
+        //    lstFilas.Add(fila1);
 
-            //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-            var data = new
-            {
-                //total = totalPag,       // Total de páginas
-                //page = page,            // Página actual
-                //records = totalReg,     // Total de registros (obtenido del modelo)
-                rows = lstFilas
-            };
-            result = Json(data);
+        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
+        //    var data = new
+        //    {
+        //        //total = totalPag,       // Total de páginas
+        //        //page = page,            // Página actual
+        //        //records = totalReg,     // Total de registros (obtenido del modelo)
+        //        rows = lstFilas
+        //    };
+        //    result = Json(data);
 
-            return result;
+        //    return result;
 
-        }
-        #endregion
+        //}
+        //#endregion
 
         #region ListaEstudiosPublicacion
         /// <summary>
@@ -2448,6 +3285,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return result;
 
         }
+
+
         #endregion
 
         public ActionResult ResultadoExamen1()

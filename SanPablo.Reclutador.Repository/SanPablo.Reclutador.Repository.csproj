@@ -57,8 +57,18 @@
     <Compile Include="AreaRepository.cs" />
     <Compile Include="CargoRepository.cs" />
     <Compile Include="CategoriaRepository.cs" />
+    <Compile Include="CentroEstudioRequerimientoRepository.cs" />
+    <Compile Include="CompetenciaRequerimientoRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
+    <Compile Include="ConocimientoGeneralRequerimientoRepository.cs" />
+    <Compile Include="ExperienciaRequerimientoRepository.cs" />
+    <Compile Include="Interface\ICentroEstudioRequerimientoRepository.cs" />
+    <Compile Include="Interface\ICompetenciaRequerimientoRepository.cs" />
+    <Compile Include="Interface\IConocimientoGeneralRequerimientoRepository.cs" />
+    <Compile Include="Interface\IExperienciaRequerimientoRepository.cs" />
     <Compile Include="Interface\ILogSolicitudRequerimientoRepository.cs" />
+    <Compile Include="Interface\INivelAcademicoRequerimientoRepository.cs" />
+    <Compile Include="Interface\IOfrecemosRequerimientoRepository.cs" />
     <Compile Include="LogSolicitudRequerimientoRepository.cs" />
     <Compile Include="Interface\IListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\IReemplazoRepository.cs" />
@@ -70,6 +80,8 @@
     <Compile Include="LogSolicitudNuevoCargoRepository.cs" />
     <Compile Include="Interface\ISolicitudNuevoCargoRepository.cs" />
     <Compile Include="Interface\IOpcionRepository.cs" />
+    <Compile Include="NivelAcademicoRequerimientoRepository.cs" />
+    <Compile Include="OfrecemosRequerimientoRepository.cs" />
     <Compile Include="ReemplazoRepository.cs" />
     <Compile Include="SedeNivelRepository.cs" />
     <Compile Include="SolicitudNuevoCargoRepository.cs" />
