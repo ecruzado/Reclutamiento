@@ -269,6 +269,9 @@ namespace SanPablo.Reclutador.Web.Core
 
 
 
+
+
+
         protected T ObtenerSession<T> (string nombre)
         {
             T valor = (T)Session[nombre];
@@ -464,6 +467,8 @@ namespace SanPablo.Reclutador.Web.Core
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
+
+        
 
 
     }

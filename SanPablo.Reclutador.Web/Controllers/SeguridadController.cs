@@ -99,9 +99,14 @@ namespace SanPablo.Reclutador.Web.Controllers
 
                 foreach (Usuario item in ListaUsuario)
                 {
+                   
                     ObjJsonMessage.Resultado = true;
                     objUSaurioExtranet = item;
-                    Session[ConstanteSesion.ObjUsuarioExtranet] = objUSaurioExtranet;     
+                    Session[ConstanteSesion.ObjUsuarioExtranet] = objUSaurioExtranet;
+                    Session[ConstanteSesion.Usuario] = objUSaurioExtranet.IdUsuario;
+                    Session[ConstanteSesion.Rol] = SanPablo.Reclutador.Entity.Roles.Postulante;
+
+
                 }
                 
             }
