@@ -148,9 +148,6 @@
 
             experienciaPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
-            //experienciaPostulanteGeneralViewModel.Experiencia.FechaTrabajoInicio = DateTime.Now;
-            //experienciaPostulanteGeneralViewModel.Experiencia.FechaTrabajoFin = DateTime.Now;
-
             experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
             experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 

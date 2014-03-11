@@ -67,11 +67,12 @@
 
         //Solicitud Nuevo Cargo
         TipoEtapaSolicitud = 45,
-        TipoSucesoSolicitud = 46,
+        
+        TipoEtapa = 50,
 
         //Tipo de Menu
         TipoMenu = 47,
-
+        EstadoRegistro = 3,
         //Tipo de Vacante
         TipoVacante = 48,
         TipoSolicitud = 49

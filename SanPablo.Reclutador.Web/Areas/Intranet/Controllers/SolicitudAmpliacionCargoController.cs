@@ -51,17 +51,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult Edit(string id)
         {
-            var ideSolicitud = id;
             SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo();
+            
             var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            
             SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
 
-            var ideSolicitudAmp = Convert.ToInt32(ideSolicitud);
-            if (ideSolicitudAmp != 0)
+            IdeSolicitudAmpliacion = Convert.ToInt32(id);
+
+            if (IdeSolicitudAmpliacion != 0)
             {
-                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == ideSolicitudAmp);
-                IdeSolicitudAmpliacion = ideSolicitudAmp;
+                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                
                 if ((rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
                 {
                     solicitudModel.Accion = Accion.Aprobar;
@@ -177,7 +180,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudAmpliacionCargoViewModel model = new SolicitudAmpliacionCargoViewModel();
 
             model.SolicitudRequerimiento = new SolReqPersonal();
-            model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+            //model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
 
             model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });

@@ -34,16 +34,8 @@
                 .WithMessage("Seleccione vinculo de parentesco");
 
             RuleFor(x => x.FechaNacimiento)
-                .GreaterThan(new DateTime(1900, 01, 01)).When(x => x.TipoDeVinculo.Equals(TipoVinculo.Hijo))
+                .NotEmpty().When(x => x.TipoDeVinculo.Equals(TipoVinculo.Hijo))
                 .WithMessage("La fecha de nacimiento en caso de hijos es obligatoria");
-
-
-            //When(x => x.TipoDeVinculo.Equals(TipoVinculo.Hijo), () => {
-            //    RuleFor(x => x.FechaNacimiento).GreaterThan(new DateTime(1950,01,01))
-            //        .WithMessage("La fecha de nacimiento en caso de hijos es obligatoria");
-                
-            //});
-
 
         }
 
