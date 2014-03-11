@@ -145,13 +145,13 @@
         public ActionResult General()
         {
 
-            RouteValueDictionary retorno = new RouteValueDictionary();
-            retorno = Autentificacion();
+            //RouteValueDictionary retorno = new RouteValueDictionary();
+            //retorno = Autentificacion();
                 
-            if (retorno!=null)
-            {
-                return RedirectToRoute(retorno);
-            }
+            //if (retorno!=null)
+            //{
+            //    return RedirectToRoute(retorno);
+            //}
            
             
             var postulanteGeneralViewModel = inicializarPostulante();
