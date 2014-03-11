@@ -15,7 +15,8 @@ namespace SanPablo.Reclutador.Web.Core
     {
         public string[] NombresValidar { get; set; }
         public TipoDevolucionError TipoDevolucionError { get; set; }
-        
+        public string TipoServicio { get; set; }
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var Usuario = filterContext.HttpContext.Session[ConstanteSesion.Usuario];
@@ -49,10 +50,24 @@ namespace SanPablo.Reclutador.Web.Core
         {
             if (TipoDevolucionError == Core.TipoDevolucionError.Html)
             {
-                var routeValues = new System.Web.Routing.RouteValueDictionary();
-                routeValues["controller"] = "Seguridad";
-                routeValues["action"] = "Login";
-                filterContext.Result = new RedirectToRouteResult(routeValues);
+                
+                if (!"E".Equals(TipoServicio))
+                {
+                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    routeValues["controller"] = "Seguridad";
+                    routeValues["action"] = "Login";
+                    routeValues["area"] = "Intranet";
+                    filterContext.Result = new RedirectToRouteResult(routeValues);
+                }
+                else
+                {
+                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    routeValues["controller"] = "Seguridad";
+                    routeValues["action"] = "Login";
+                    filterContext.Result = new RedirectToRouteResult(routeValues);
+                }
+
+               
                 
                 
 

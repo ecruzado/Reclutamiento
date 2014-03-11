@@ -18,7 +18,13 @@
         public virtual string Area { get; set; }
         public virtual string Sede { get; set; }
 
-       
+       /// <summary>
+       /// envia el Email de forma generica
+       /// </summary>
+       /// <param name="destinatario">destino</param>
+       /// <param name="asunto">asunto</param>
+       /// <param name="conCopia">No funciona xD</param>
+       /// <param name="cuerpo">texto que visualiza el destinatario</param>
         public void EnviarMail(string destinatario, string asunto, string conCopia, string cuerpo )
         {
             System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
@@ -57,7 +63,15 @@
                 //Aquí gestionamos los errores al intentar enviar el correo
             }
         }
-        public static string ObtenerCuerpoCorreo(string path, List<string> parametros, List<string> valores)
+
+        /// <summary>
+        /// Se obtiene el html con los campos
+        /// </summary>
+        /// <param name="path">ruta del archivo html</param>
+        /// <param name="parametros">los parametros del html</param>
+        /// <param name="valores">datos de los parametros</param>
+        /// <returns></returns>
+        public string ObtenerCuerpoCorreo(string path, List<string> parametros, List<string> valores)
         {
             StreamReader sr = new StreamReader(path);
             string cuerpo = sr.ReadToEnd();

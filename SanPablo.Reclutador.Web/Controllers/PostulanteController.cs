@@ -7,6 +7,7 @@
     using SanPablo.Reclutador.Web.Core;
     using System.Web.Mvc;
     using System.Web;
+    using System.Linq;
     using System.Web.Services;
     using SanPablo.Reclutador.Entity.Validation;
     using FluentValidation.Results;
@@ -14,8 +15,9 @@
     using System.IO;
     using System;
     using System.Drawing;
+    using System.Web.Routing;
 
-
+   
     public class PostulanteController :  BaseController
     {
         private IPostulanteRepository _postulanteRepository;
@@ -101,8 +103,61 @@
             return postulanteGeneralViewModel;
         }
 
-        public ViewResult General()
+        /// <summary>
+        /// Realiza la validacion si tiene permisos para acceder a la pagina
+        /// </summary>
+        /// <returns></returns>
+        public System.Web.Routing.RouteValueDictionary Autentificacion() 
         {
+
+            var myListOp = (List<SanPablo.Reclutador.Entity.MenuItem>)Session["ListaMenu"];
+
+            string rutaAbsoluta = (Request.Path).ToUpper();
+
+            int indWeb = rutaAbsoluta.IndexOf("/INTRANET/");
+            var tieneAcceso = myListOp.Where(x => x.DSCURL == Request.Path).ToList();
+
+            if (tieneAcceso != null && tieneAcceso.Count > 0)
+            {
+                return null;
+            }
+            else
+            {
+                if (indWeb != -1)
+                {
+                    //intranet
+                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    routeValues["controller"] = "Seguridad";
+                    routeValues["action"] = "Login";
+                    routeValues["area"] = "Intranet";
+                    return routeValues;
+
+                }
+                else
+                {
+                    //extranet
+                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    routeValues["controller"] = "Seguridad";
+                    routeValues["action"] = "Login";
+                    return routeValues;
+                   
+                }
+            }
+        }
+
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
+        public ActionResult General()
+        {
+
+            RouteValueDictionary retorno = new RouteValueDictionary();
+            retorno = Autentificacion();
+                
+            if (retorno!=null)
+            {
+                return RedirectToRoute(retorno);
+            }
+           
+            
             var postulanteGeneralViewModel = inicializarPostulante();
             if (IdePostulante != 0)
             {
