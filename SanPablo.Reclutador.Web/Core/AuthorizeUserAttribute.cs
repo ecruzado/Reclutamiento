@@ -11,7 +11,8 @@ namespace SanPablo.Reclutador.Web.Core
     {
         // Custom property
         public string AccessLevel { get; set; }
-       
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+        (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
@@ -25,9 +26,11 @@ namespace SanPablo.Reclutador.Web.Core
                 var myListOp = (List<SanPablo.Reclutador.Entity.MenuItem>)httpContext.Session["ListaMenu"];
                 
                 //string indWeb = rutaAbsoluta.
+                
 
                 var tieneAcceso = myListOp.Where(x => x.DSCURL == httpContext.Request.Path).ToList();
-               
+                log.Info("tieneAcceso.Count");
+
                 if (tieneAcceso != null && tieneAcceso.Count > 0)
                 {
                     return true;
