@@ -21,6 +21,16 @@ PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
                             p_usuarioCreacion   IN SOLNUEVO_CARGO.USRCREACION%TYPE,
                             p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
                             p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);
+                            
+PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                          p_ideSede            IN SEDE.IDESEDE%TYPE,
+                          p_ideArea            IN AREA.IDEAREA%TYPE,
+                          p_ideUsuarioSuceso   IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
+                          p_ideRolSuceso       IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
+                          p_ideRolResponsable  IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
+                          p_indArea            IN VARCHAR2,
+                          p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
+                          p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);                         
                               
 PROCEDURE SP_OBTENER_ETAPA_SOLICITUD(p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
                                      p_cRetVal OUT SYS_REFCURSOR);
@@ -53,6 +63,11 @@ PROCEDURE SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%
                                 p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
                                 p_indicArea        IN VARCHAR2,
                                 p_cRetVal          OUT NUMBER);
+                                
+PROCEDURE SP_RESPONSABLE_PUBLICACION(p_idSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                                     p_idSede           IN SEDE.IDESEDE%TYPE,
+                                     p_idUsuarioResp    OUT USUARIO.IDUSUARIO%TYPE,
+                                     p_idRolResp        OUT ROL.IDROL%TYPE);
                                 
 PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idCargo       IN CARGO.IDECARGO%TYPE,
                                    p_idSede         IN SEDE.IDESEDE%TYPE,
@@ -168,15 +183,15 @@ END SP_INSERTAR_NUEVO;
       Fecha       Autor                Descripcion
       20/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                          p_ideSede           IN SEDE.IDESEDE%TYPE,
-                          p_ideArea           IN AREA.IDEAREA%TYPE,
-                          p_ideUsuarioSuceso  IN USUARIO.IDUSUARIO%TYPE,
-                          p_ideRolSuceso      IN ROL.IDROL%TYPE,
-                          p_ideRolResponsable IN ROL.IDROL%TYPE,
-                          p_indArea           IN VARCHAR2,
-                          p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
-                          p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
+PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                          p_ideSede            IN SEDE.IDESEDE%TYPE,
+                          p_ideArea            IN AREA.IDEAREA%TYPE,
+                          p_ideUsuarioSuceso   IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
+                          p_ideRolSuceso       IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
+                          p_ideRolResponsable  IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
+                          p_indArea            IN VARCHAR2,
+                          p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
+                          p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
                              
                         
 c_idesolCargo SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE;
@@ -184,6 +199,8 @@ qWhere VARCHAR2(100);
 qQuery VARCHAR2(1000);
 
 BEGIN   
+  
+  IF (p_ideRolResponsable != 0) THEN
   
   IF (p_indArea = 'SI')THEN
     qWhere := 'AND UN.IDEAREA = '||p_ideArea;
@@ -200,18 +217,21 @@ BEGIN
              qWhere ||' '||
             'AND UN.FLGESTADO = ''A'' '||
             'AND ROWNUM <= 1';
-                     
+       
+                
   EXECUTE IMMEDIATE qQuery INTO p_ideUsuarioResp;
   
+  END IF;
+  
   BEGIN
-      
+    
     INSERT INTO LOGSOLNUEVO_CARGO
     (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
     VALUES (IDELOGSOLREQ_PERSONAL_SQ.NEXTVAL,p_ideSolicitudNuevo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
    
     UPDATE SOLNUEVO_CARGO SN
     SET SN.TIPETAPA = p_etapa
-    WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo
+    WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
     COMMIT;   
      
   EXCEPTION
@@ -605,6 +625,49 @@ BEGIN
   END;
     
 END SP_INSERTAR_AMPLIACION;
+
+/* ------------------------------------------------------------
+    Nombre      : SP_RESPONSABLE_PUBLICACION
+    Proposito   : determinar el responsable de la publicación de la solicitud
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      06/03/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_RESPONSABLE_PUBLICACION(p_idSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                                     p_idSede            IN SEDE.IDESEDE%TYPE,
+                                     p_idUsuarioResp     OUT USUARIO.IDUSUARIO%TYPE,
+                                     p_idRolResp         OUT ROL.IDROL%TYPE)
+
+IS
+
+c_tipoRequerimiento CARGO.TIPREQUERIMIENTO%TYPE;
+BEGIN
+  SELECT C.TIPREQUERIMIENTO
+  INTO c_tipoRequerimiento
+  FROM CARGO C , SOLNUEVO_CARGO SN
+  WHERE C.CODCARGO = SN.CODCARGO
+  AND SN.IDESOLNUEVOCARGO = p_idSolicitudNuevo;
+  
+  BEGIN
+    SELECT UN.IDUSUARIO,UN.IDROL
+    INTO p_idUsuarioResp,p_idRolResp
+    FROM USUARIOREQ UQ, USUAROLSEDE UN
+    WHERE UQ.IDUSUARIO = UN.IDUSUARIO
+    AND UN.IDESEDE =1
+    AND UQ.TIPREQ = '01'
+    AND UN.IDROL IN (8,9)
+    AND ROWNUM < 2
+    ORDER BY UN.IDUSUARIO,UN.IDROL;
+  EXCEPTION
+    WHEN OTHERS THEN
+    p_idUsuarioResp:= -1;
+    p_idRolResp:=-1;
+  END;
+  
+END SP_RESPONSABLE_PUBLICACION;
 
 /* ------------------------------------------------------------
     Nombre      : FN_DETERMINAR_RESPONSABLE

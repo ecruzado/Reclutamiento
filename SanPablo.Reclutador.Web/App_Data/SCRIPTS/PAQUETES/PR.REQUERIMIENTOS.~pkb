@@ -169,14 +169,14 @@ END SP_INSERTAR_NUEVO;
       20/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
 PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                              p_ideSede           IN SEDE.IDESEDE%TYPE,
-                              p_ideArea           IN AREA.IDEAREA%TYPE,
-                              p_ideUsuarioSuceso  IN USUARIO.IDUSUARIO%TYPE,
-                              p_ideRolSuceso      IN ROL.IDROL%TYPE,
-                              p_ideRolResponsable IN ROL.IDROL%TYPE,
-                              p_indArea           IN VARCHAR2,
-                              p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
-                              p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
+                          p_ideSede           IN SEDE.IDESEDE%TYPE,
+                          p_ideArea           IN AREA.IDEAREA%TYPE,
+                          p_ideUsuarioSuceso  IN USUARIO.IDUSUARIO%TYPE,
+                          p_ideRolSuceso      IN ROL.IDROL%TYPE,
+                          p_ideRolResponsable IN ROL.IDROL%TYPE,
+                          p_indArea           IN VARCHAR2,
+                          p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
+                          p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
                              
                         
 c_idesolCargo SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE;

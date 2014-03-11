@@ -113,8 +113,20 @@ PROCEDURE FN_GET_LISTAREQ(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                           p_cRetVal         OUT CUR_CURSOR
           );
           
-FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE)RETURN VARCHAR2;
-
+PROCEDURE FN_GET_LISTAREQ2(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                          p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                          p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                          p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
+                          p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
+                          p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                          p_cFecIni   IN    varchar2,
+                          p_cFeFin   IN     varchar2,
+                          p_cRetVal         OUT CUR_CURSOR
+          );
+          
+FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                             p_tipoSolicitud IN VARCHAR2)RETURN VARCHAR2;
 end PR_INTRANET;
 /
 create or replace package body PR_INTRANET is
@@ -1133,6 +1145,141 @@ COMMIT;
 END FN_GET_LISTAREQ; 
 
 /* ------------------------------------------------------------
+    Nombre      : FN_GET_LISTAREQ
+    Proposito   : obtiene la lista de requerimiento
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Edward Llamoca       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE FN_GET_LISTAREQ2(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                          p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                          p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                          p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
+                          p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
+                          p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                          p_cFecIni   IN    varchar2,
+                          p_cFeFin   IN     varchar2,
+                          p_cRetVal         OUT CUR_CURSOR
+          )IS
+          
+cCONSULTA VARCHAR2(2000):=NULL;
+cWhere VARCHAR2(1000):=NULL;
+cQUERY VARCHAR2(4000):=NULL;
+          
+BEGIN
+  
+                 
+   cCONSULTA:='SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO, ' 
+   || ' (SELECT C.NOMCARGO ' 
+   || ' FROM CARGO C '
+   || ' WHERE C.IDECARGO=S.IDECARGO '
+   || ' AND C.IDESEDE=S.IDESEDE) DESCARGO, '
+   ||  ' S.IDEDEPENDENCIA, '
+   || ' (SELECT D.NOMDEPENDENCIA '
+   || ' FROM DEPENDENCIA D '
+   || ' WHERE D.IDEDEPENDENCIA = S.IDEDEPENDENCIA '
+   || ' AND D.IDESEDE=S.IDESEDE) DESDEPENDENCIA, '
+   || ' S.IDEDEPARTAMENTO, '
+   || ' (SELECT E.NOMDEPARTAMENTO  '
+   || '  FROM DEPARTAMENTO E '
+   || '  WHERE E.IDEDEPARTAMENTO=S.IDEDEPARTAMENTO '
+   || '  AND E.IDEDEPENDENCIA = S.IDEDEPENDENCIA) DESDEPARTAMENTO, '
+   || ' S.IDEAREA, '
+   || ' (SELECT A.NOMAREA '
+   || '  FROM AREA A '
+   || '  WHERE A.IDEAREA = S.IDEAREA '
+   || '  AND A.IDEDEPARTAMENTO = S.IDEDEPARTAMENTO) DESAREA, '
+   || ' S.NUMVACANTES, '
+   || ' 0 POSTULANTE, '
+   || ' 0 PRESELECCIONADOS, '
+   || ' 0 EVALUADOS, '
+   || ' 0 SELECCIONADOS , '
+   || ' L.ROLRESPONSABLE ROL , '
+   || ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROLRESPONSABLE ) DESROL, '
+   --|| ' S.ESTACTIVO, '
+   || 'PR_INTRANET.FN_ESTADO_SOLICITUD(S.IDESOLREQPERSONAL,''R'') ESTADO,'
+   || ' L.TIPETAPA, '
+   || ' S.FECPUBLICACION, '
+   || ' S.FECCREACION, '
+   || ' S.FECEXPIRACACION, '
+   || ' L.USRESPONSABLE ID_USUARIO_RESP,'
+   || ' (SELECT U.CODUSUARIO FROM USUARIO U WHERE U.IDUSUARIO = L.USRESPONSABLE AND ROWNUM<2) NOMPERSONREEMPLAZO,'
+   || ' DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO '
+   || '  FROM SOLREQ_PERSONAL S,LOGSOLREQ_PERSONAL L '
+   || '  WHERE S.IDESOLREQPERSONAL = L.IDESOLREQPERSONAL '
+   || '  AND L.FECSUCESO =  (SELECT MAX(P.FECSUCESO) FROM LOGSOLREQ_PERSONAL P '
+   || '  WHERE P.IDESOLREQPERSONAL=L.IDESOLREQPERSONAL) ';
+   
+    IF p_nIdCargo>0 THEN
+    
+      cWhere := cWhere || ' AND  S.IDECARGO = '||p_nIdCargo;
+    
+    END IF;
+   
+    IF p_nIdDependencia>0 THEN
+        
+      cWhere := cWhere || '  AND S.IDEDEPENDENCIA = '||p_nIdDependencia ;
+        
+    END IF;
+    
+    IF p_nIdDepartamento>0 THEN
+        
+      cWhere := cWhere || '  AND S.IDEDEPARTAMENTO = '||p_nIdDepartamento ;
+        
+    END IF;
+
+    IF p_nIdArea>0 THEN
+        
+      cWhere := cWhere || ' AND S.IDEAREA = '||p_nIdArea ;
+        
+    END IF;
+ 
+    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa<>'' THEN
+        
+      cWhere := cWhere || ' AND '''||p_cTipEtapa||''' = L.TIPETAPA ';
+                            
+
+        
+    END IF;
+
+    IF p_cTipResp IS NOT NULL AND p_cTipResp<>'' THEN
+        
+      cWhere := cWhere || ' AND '''||p_cTipResp||''' = L.ROL ';
+        
+    END IF;
+    
+    IF p_cEstado IS NOT NULL AND p_cEstado<>'' THEN
+        
+      cWhere := cWhere || ' AND '''||p_cEstado||''' = L.ESTACTIVO ';
+        
+    END IF;
+  
+    IF LENGTH(rtrim(p_cFecIni))>0 AND LENGTH(rtrim(p_cFeFin))>0 THEN
+       
+      cWhere := cWhere || ' AND s.FECCREACION >= to_date('''||p_cFecIni||''',''DD/MM/YYYY'')'
+                       || ' AND s.FECCREACION < to_date('''||p_cFeFin||''',''DD/MM/YYYY'')+1';
+        
+    END IF;
+    
+    cWhere := cWhere || 'ORDER BY S.IDESOLREQPERSONAL ';
+    
+    cQUERY := cCONSULTA || cWhere;                                       
+
+DELETE FROM  LOG_MENSAJE;
+
+INSERT INTO LOG_MENSAJE 
+VALUES(cQUERY);
+COMMIT;
+
+ OPEN p_cRetVal FOR cQUERY;
+   
+END FN_GET_LISTAREQ2; 
+/* ------------------------------------------------------------
     Nombre      : SP_ESTADO_SOLICITUD
     Proposito   : Obtiene el estado deacuerdo el tiempo 
                   transcurrido desde la solicitud
@@ -1144,24 +1291,33 @@ END FN_GET_LISTAREQ;
       Fecha       Autor                Descripcion
       11/03/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE)RETURN VARCHAR2 IS
+FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                             p_tipoSolicitud IN VARCHAR2)RETURN VARCHAR2 IS
 
-p_retVal     VARCHAR2(1);                              
-c_estado     VARCHAR2(1);
-c_diasTrans  NUMBER;
+p_retVal         VARCHAR2(1);                              
+c_estado         VARCHAR2(1);
+c_fechaSolicitud DATE;
+c_diasTrans      NUMBER;
 BEGIN
   BEGIN
-  SELECT SQ.ESTACTIVO
-  INTO c_estado
-  FROM SOLREQ_PERSONAL SQ
-  WHERE SQ.IDESOLREQPERSONAL = p_idSolicitud;
-
+  
+  IF(p_tipoSolicitud = 'N') THEN
+  SELECT SN.ESTACTIVO,SN.FECCREACION
+    INTO c_estado,c_fechaSolicitud
+    FROM SOLNUEVO_CARGO SN
+    WHERE SN.IDESOLNUEVOCARGO = p_idSolicitud;
+  ELSE 
+    SELECT SQ.ESTACTIVO,SQ.FECCREACION
+    INTO c_estado,c_fechaSolicitud
+    FROM SOLREQ_PERSONAL SQ
+    WHERE SQ.IDESOLREQPERSONAL = p_idSolicitud;
+  END IF;
+  
   IF (c_estado = 'A')THEN
   
-  SELECT TO_DATE(SYSDATE) - TO_DATE(SREQ.FECCREACION)
+  SELECT TO_DATE(SYSDATE) - TO_DATE(c_fechaSolicitud)
   INTO c_diasTrans
-  FROM SOLREQ_PERSONAL SREQ
-  WHERE  SREQ.IDESOLREQPERSONAL = p_idSolicitud;
+  FROM DUAL;
   
   IF (c_diasTrans <= 21) THEN
      p_retVal := 'V';
@@ -1182,6 +1338,8 @@ BEGIN
   RETURN p_retVal;
   
 END FN_ESTADO_SOLICITUD; 
+
+
 
 END PR_INTRANET;
 /
