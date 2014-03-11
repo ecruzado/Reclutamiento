@@ -1350,7 +1350,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objReemplazo = model.Reemplazo;
 
 
-            var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+            var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud==TipoSolicitud.Remplazo);
 
 
             objReemplazo.IdeSolReqPersonal = Convert.ToInt32(objSol.IdeSolReqPersonal);
@@ -1488,7 +1488,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 if (grid.rules[0].data != null)
                 {
-                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == grid.rules[0].data);
+                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == grid.rules[0].data && x.TipoSolicitud == TipoSolicitud.Remplazo);
                     ObjReemplazo.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
                 }
                 else
@@ -1558,7 +1558,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 if (model.SolReqPersonal.CodSolReqPersonal!=null)
                 {
-                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud==TipoSolicitud.Remplazo);
 
                     objSol.IdeArea = model.SolReqPersonal.IdeArea;
                     objSol.IdeDependencia = model.SolReqPersonal.IdeDependencia;
@@ -1596,7 +1596,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.IdRolResp = 0;
                         model.SolReqPersonal.idUsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                         model.SolReqPersonal.idUsuarioResp = 0;
-                        model.SolReqPersonal.Tipsol = TipoSolicitud.Ampliacion;
+                        model.SolReqPersonal.Tipsol = TipoSolicitud.Remplazo;
 
                         model.Reemplazo.CodGenerado = Convert.ToString(Session[ConstanteSesion.codReqSolTemp]);
                     }
@@ -1646,7 +1646,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (model.SolReqPersonal.CodSolReqPersonal != null)
                 {
 
-                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+                    var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud == TipoSolicitud.Remplazo);
 
                     if (objSol != null)
                     {
@@ -1761,7 +1761,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 aprobacion = model.LogSolReqPersonal.Aprobado;
 
                 //se obtiene los datos de la solicitud
-                var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal);
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud == TipoSolicitud.Remplazo);
                 if (objSol!=null)
                 {
                     model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
@@ -1897,7 +1897,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             model.SolReqPersonal = new SolReqPersonal();
-            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id);
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id && x.TipoSolicitud == TipoSolicitud.Remplazo);
 
             if (ObjSol!=null)
             {
