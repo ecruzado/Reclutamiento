@@ -1657,8 +1657,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.idRolSuceso = idRol;
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
-
-                        objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                        
+                       // objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
 
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -1710,7 +1710,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp);
                string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
 
-               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "", "Reemplazo de cargo", model.SolReqPersonal.CodSolReqPersonal);
 
                 
                 objJson.Resultado = true;
@@ -1777,10 +1777,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         //se obtiene el tipo de requerimiento
 
-                        var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-                        if (objCargo != null) 
-                        {
-                            tipoReq = objCargo.TipoRequerimiento;
+                        //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                        //if (objCargo != null) 
+                        //{
+                            tipoReq = objSol.TipoRequerimiento;
 
                             objSolReqPersonal = new SolReqPersonal();
                             objSolReqPersonal = _solReqPersonalRepository.GetResponsable(TipoDerivacion.Publicado, sede, tipoReq);
@@ -1800,10 +1800,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsResponsable);
 
 
-                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
                             retorno = 1;
 
-                        }
+                        //}
                         
                         if (retorno>0)
                         {
@@ -2164,7 +2164,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (objSol!=null)
                 {
 
-                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
 
                     objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
                     objSol.FechaModificacion = FechaSistema;
@@ -2188,7 +2188,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";
