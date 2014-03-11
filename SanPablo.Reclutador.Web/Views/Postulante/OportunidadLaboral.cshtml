@@ -1,18 +1,28 @@
-﻿@{
+﻿@model SanPablo.Reclutador.Web.Models.OportunidadLaboralViewModel
+
+
+@{
     ViewBag.Title = "Lista";
     Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
 }
 @section Head{
+    <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
 }
 
 @section Scripts{
+
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 
             $("#txtfechainicio").datepicker();
             $("#txtfechafin").datepicker();
 
-            jQuery("#grdList").jqGrid({
+            jQuery("#grdListBuscarOportunidad").jqGrid({
                 url: '@Url.Action("ListaOfertasLaborales", "Postulante")',
                 datatype: 'json',
                 mtype: 'POST',
@@ -21,13 +31,12 @@
                         { name: 'Fecha', index: 'Fecha', align: 'center', width: 80, sortable: false },
                         { name: 'Lugar', index: 'Lugar', align: 'left', width: 150, sortable: false },
                         //{ name: 'CargoPosicion', index: 'CargoPosicion', width: 180, align: 'left', sortable: false, formatter: DetalleCargoFormatter },
-                        { name: 'CargoPosicion', index: 'CargoPosicion', align: 'left', sortable: false, formatter: 'showlink', formatoptions: { baseLinkUrl: 'DetalleCargo', addParam: '&id=1' } },
                         { name: 'Tipo', index: 'Tipo', align: 'center', sortable: false, width: 90 },
                         { name: 'FechaExpiracion', index: 'FechaExpiracion', align: 'center', sortable: false, width: 80},
                         { name: 'Area', index: 'Area', hidden: true, visible: false, width: 80 },
                         { name: 'Postular', index: 'Postular', align: 'center', sortable: false, width: 40, formatter: PostularFormatter }
                 ],
-                pager: jQuery('#grdPager'),
+                pager: jQuery('#grdPagerBuscarOportunidad'),
                 rowNum: 10,
                 rowList: [10, 30, 50],
                 sortname: 'Fecha',
@@ -103,71 +112,60 @@
             <div class="widget-title">
                 <h5>Oportunidades Laborales</h5>
             </div> 
-            <form class="formulario-busqueda">
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Lugar</label>
-                            <div class="controles">
-                                <select id="selugar">
-                                    <option>SELECCIONAR</option>
-                                    <option>SANTIAGO DE SURCO</option>
-                                    <option>SAN JUAN DE MIRAFLORES</option>
-                                    <option>RIMAC</option>
-                                </select>
-                            </div>
-                        </div>
+            
+@using (Html.BeginForm("Index", "OportunidadLaboral", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormOportunidadLaboral" }))
+{
+    @Html.ValidationSummary(true)
+    // <form class="formulario-busqueda">
+        <table class="formulario-busqueda">
+            <tr class="formulario-fila">
+                <td class="span5">
+                    <label class="control-label" for="inputSuccess">Lugar</label>
+                    <div class="controles">
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeSede, new SelectList(Model.listaSede, "Valor", "Descripcion", Model.oportunidadLaboral.IdeSede),new {  data_val = "false"})
                     </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Cargo</label>
-                            <div class="controles">
-                                <select id="secargo">
-                                    <option>SELECCIONAR</option>
-                                    <option>SECRETARIA DE HOSPITALIZACIÓN</option>
-                                    <option>TÉCNICO EN ENFERMERÍA</option>
-                                    <option>AYUDANTE DE COCINA</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>       
-                <div class="formulario-fila">
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Tipo</label>
-                            <div class="controles">
-                                <select id="setipo">
-                                    <option>SELECCIONAR</option>
-                                    <option>TIEMPO PARCIAL</option>
-                                    <option>TIEMPO COMPLETO</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="">
-                            <label class="control-label" for="selectError">Fecha</label>
-                            <div class="controles">
-                                <input type="text" placeholder=" Inicial"  class="input-small" id="txtfechainicio"> -  <input type="text" placeholder=" Final" class="input-small" id="txtfechafin">
-                            </div>
-                        </div>
-                    </div>
-                </div>     
-                <div class="formulario-accion">
-                    <div class="opciones">
-                        <a class="btn btn-info" href="#"><i class="icon-search icon-white"></i> Buscar</a> 
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-            </form>           
+                </td>
 
-            <div>
-                <table id="grdList">
-                </table>
-                <div id="grdPager">
-                </div>
-            </div>                          
+                <td class="span5">
+                    <label class="control-label" for="selectError">Cargo</label>
+                    <div class="controles">
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeCargo, new SelectList(Model.listaCargos, "IdeCargo", "NombreCargo", Model.oportunidadLaboral.IdeCargo),new {  data_val = "false"})
+                    </div> 
+                </td>
+            </tr>       
+            <tr class="formulario-fila">
+                <td class="span5">
+                    <label class="control-label" for="inputSuccess">Tipo</label>
+                   <div class="controles">
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.TipoHorario, new SelectList(Model.listaHorario, "Valor", "Descripcion", Model.oportunidadLaboral.TipoHorario),new {  data_val = "false"})
+                    </div>
+                </td>
+                <td class="span5">
+                    <label class="control-label" for="selectError">Fecha</label>
+                    <div class="controles">
+                        @*<input type="text" placeholder=" Inicial"  class="input-small" id="txtfechainicio"> -  <input type="text" placeholder=" Final" class="input-small" id="txtfechafin">*@
+
+                           @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                           @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
+                    </div>
+                </td>
+            </tr>     
+        </table>
+}
+        <div class="formulario-accion">
+            <div class="opciones">
+                <a class="btn btn-info" id="btnBuscarOportunidad"><i class="icon-search icon-white"></i> Buscar</a> 
+            </div>
+            </div>
+        <div style="clear:both"></div>
+            
+        <div>
+            <table id="grdListBuscarOportunidad">
+            </table>
+            <div id="grdPagerBuscarOportunidad">
+            </div>
+        </div>
+                                      
         </div>
     </div>
 </div>
