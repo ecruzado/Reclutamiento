@@ -4,7 +4,39 @@
     Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{  
+    <script type="text/javascript">
+        $(document).ready(function () {
+            calcularTotales();
+        });
 
+        function calcularTotales()
+        {
+            if (parseInt($("#Cargo_PuntajeMinimoPostulanteInterno").val()) > parseInt($("#Cargo_PuntajeTotalPostulanteInterno").val())) {
+                mostrarMensaje()
+                $("#Cargo_PuntajeMinimoPostulanteInterno").val('0');
+            }
+            else {
+                var total = parseInt($("#Cargo_PuntajeMinimoPostulanteInterno").val()) + parseInt($("#Cargo_PuntajeMinimoEdad").val()) +
+                            parseInt($("#Cargo_PuntajeMinimoSexo").val()) + parseInt($("#Cargo_PuntajeMinimoSalario").val()) + parseInt($("#Cargo_PuntajeMinimoNivelEstudio").val()) +
+                            parseInt($("#Cargo_PuntajeMinimoCentroEstudio").val()) + parseInt($("#Cargo_PuntajeMinimoExperiencia").val()) + parseInt($("#Cargo_PuntajeMinimoOfimatica").val()) +
+                            parseInt($("#Cargo_PuntajeMinimoIdioma").val()) + parseInt($("#Cargo_PuntajeMinimoConocimientoGeneral").val()) + parseInt($("#Cargo_PuntajeMinimoDiscapacidad").val()) +
+                            parseInt($("#Cargo_PuntajeMinimoHorario").val()) + parseInt($("#Cargo_PuntajeMinimoUbigeo").val()) + parseInt($("#Cargo_PuntajeMinimoExamen").val());
+
+                $("#TotalMinimo").val(total);
+            }
+        }
+        function mostrarMensaje()
+        {
+            $("#spanMensaje").html("El puntaje Mínimo no puede ser mayor al puntaje Máximo");
+            $("#divMensaje").dialog({
+                title: 'SAN PABLO',
+                modal: true,
+                buttons: {
+                    "Ok": function () { $(this).dialog("close"); }
+                }
+            });
+        }
+    </script>
 
     }
 @using (Html.BeginForm("ConfiguracionPerfil", "Perfil", FormMethod.Post, new { @id = "configuracionPerfilForm" }))
@@ -43,7 +75,7 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalPostulanteInterno, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                  @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
                                             </div>
@@ -56,7 +88,7 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
                                             </div>
@@ -71,7 +103,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                  @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSexo)
                                             </div>                                        </td>
@@ -84,7 +116,7 @@
                                         </td>
                                          <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                              @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSalario)
                                         </div>    </td>
@@ -97,7 +129,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
                                         </div>                                        </td>
@@ -110,7 +142,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
                                             </div>                                        </td>
@@ -123,7 +155,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExperiencia, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoCentroEstudio)
                                             </div>                                        </td>
@@ -136,7 +168,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoOfimatica)
                                             </div>                                        </td>
@@ -150,7 +182,7 @@
                                         <td></td>
 
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoIdioma)
                                             </div>                                    </tr>
@@ -162,7 +194,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoConocimientoGeneral)
                                             </div> </td>
@@ -176,7 +208,7 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                              @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoDiscapacidad)
                                             </div>
@@ -190,7 +222,7 @@
                                          </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoHorario)
                                             </div>
@@ -205,7 +237,7 @@
                                         <td></td>
 
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right"})
+                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoUbigeo)
                                             </div>
@@ -215,10 +247,13 @@
                                         <td></td>
                                         <td class="td-label"><b>Totales</b></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="84" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.TotalMaximo, new {@class="input-xxmini text-right",disabled="disabled"})
+                                            @*<input type="text" class="input-xxmini text-right" value="84" disabled="disabled">*@
+                                        </td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model=>model.TotalMinimo, new {@class="input-xxmini text-right",disabled="disabled"})
+                                            @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>*@
 
                                     </tr>
                                 </table>

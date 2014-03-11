@@ -6,6 +6,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //ACTUALIZAR EL TIPO DE EXAMEN
+
         $('select#Evaluacion_Examen_IdeExamen').change(function () {
             var ideExamen = $(this).val();
             $.ajax({
@@ -56,7 +57,7 @@
             </td>
             <td class="colInput">
                  @Html.HiddenFor(model => model.Evaluacion.TipoExamen)
-                 @Html.TextBoxFor(model => model.descExamen)
+                 @Html.TextBoxFor(model => model.descExamen, new {@disabled="disabled" })
                 @*<div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Conocimiento.TipoNombreOfimatica)
                 </div>*@

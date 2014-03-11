@@ -23,7 +23,8 @@
             Map(x => x.UsrModificacion, "USRMODIFICACION");
             Map(x => x.FecModifcacion, "FECMODIFICACION");
             Map(x => x.TipUsuario, "TIPUSUARIO");
-            
+            Map(x => x.IdePostulante, "IDEPOSTULANTE");
+            Map(x => x.IndicadorPostulante, "INDPOSTULANTE");
 
             Table("USUARIO");
             

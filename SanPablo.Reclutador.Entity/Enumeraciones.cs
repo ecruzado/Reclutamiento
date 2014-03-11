@@ -67,11 +67,12 @@
 
         //Solicitud Nuevo Cargo
         TipoEtapaSolicitud = 45,
-        TipoSucesoSolicitud = 46,
+        
+        TipoEtapa = 50,
 
         //Tipo de Menu
         TipoMenu = 47,
-
+        EstadoRegistro = 3,
         //Tipo de Vacante
         TipoVacante = 48,
         TipoSolicitud = 49
@@ -128,6 +129,7 @@
         public const string Observado = "07";
         public const string Finalizado = "08";
         public const string Rechazado = "09";
+        public const string Aceptado = "10";
     }
 
     /// <summary>

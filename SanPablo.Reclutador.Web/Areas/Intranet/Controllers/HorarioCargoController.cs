@@ -69,6 +69,7 @@
             }
         }
 
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var horariosViewModel = inicializarHorarios();

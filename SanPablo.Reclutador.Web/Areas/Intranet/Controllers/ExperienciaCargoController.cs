@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
 
     [Authorize]
     public class ExperienciaCargoController : BaseController
@@ -34,6 +35,8 @@
         
         #region EXPERIENCIA
 
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public virtual JsonResult ListaExperiencia(GridTable grid)
         {
@@ -71,6 +74,7 @@
             }
         }
 
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var experienciaViewModel = inicializarExperiencia();
@@ -90,7 +94,11 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
-                if (!ModelState.IsValid)
+                ExperienciaCargoValidator validator = new ExperienciaCargoValidator();
+                ValidationResult resultValidator = validator.Validate(experienciaCargo, "TipoExperiencia", "PuntajeExperiencia");
+                bool result = validarExperiencia(experienciaCargo);
+
+                if ((!resultValidator.IsValid)&&(result))
                 {
                     var experienciaViewModel = inicializarExperiencia();
                     experienciaViewModel.Experiencia = experienciaCargo;
@@ -98,9 +106,9 @@
                 }
                 if (experienciaCargo.IdeExperienciaCargo == 0)
                 {
-                    experienciaCargo.EstadoActivo = "A";
+                    experienciaCargo.EstadoActivo = IndicadorActivo.Activo;
                     experienciaCargo.FechaCreacion = FechaCreacion;
-                    experienciaCargo.UsuarioCreacion = "YO";
+                    experienciaCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                     experienciaCargo.FechaModificacion = FechaCreacion;
                     experienciaCargo.Cargo = new Cargo();
                     experienciaCargo.Cargo.IdeCargo = IdeCargo;
@@ -159,6 +167,17 @@
             _experienciaCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 
             return result;
+        }
+
+        public bool validarExperiencia(ExperienciaCargo experienciaCargo)
+        {
+            if ((experienciaCargo.CantidadAnhosExperiencia >= 0) && (experienciaCargo.CantidadAnhosExperiencia <= 70) &&
+                (experienciaCargo.CantidadMesesExperiencia >= 0) && (experienciaCargo.CantidadMesesExperiencia <= 12) &&
+                (experienciaCargo.PuntajeExperiencia >= 0) && (experienciaCargo.CantidadMesesExperiencia <= 20))
+            {
+                return true;
+            }
+            else { return false; }
         }
 
         #endregion

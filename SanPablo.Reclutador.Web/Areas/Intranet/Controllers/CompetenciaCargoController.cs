@@ -67,6 +67,7 @@
             }
         }
 
+        [ValidarSesion]
         public ViewResult Edit()
         {
             var cargoViewModel = InicializarCompetencias();

@@ -41,6 +41,7 @@
 
         #region EVALUACION CARGO
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public virtual JsonResult ListaEvaluaciones(GridTable grid)
         {
@@ -79,6 +80,7 @@
             }
         }
 
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var evaluacionViewModel = inicializarEvaluacion();
@@ -91,6 +93,7 @@
             return View(evaluacionViewModel);
         }
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Evaluacion")]EvaluacionCargo evaluacionCargo)
         {
@@ -161,6 +164,7 @@
             return evaluacionCargoViewModel;
         }
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult eliminarEvaluacion(int ideEvaluacion)
         {
@@ -174,7 +178,8 @@
 
             return result;
         }
-        
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult getTipoExamen(int ideExamen)
         {

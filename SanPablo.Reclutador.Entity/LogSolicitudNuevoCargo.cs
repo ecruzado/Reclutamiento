@@ -14,12 +14,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeSolicitudNuevoCargo { get; set; }
         public virtual string TipoEtapa { get; set; }
         public virtual string TipoSuceso { get; set; }
-        public virtual string RolResponsable { get; set; }
+        public virtual int RolResponsable { get; set; }
+        public virtual int UsuarioResponsable { get; set; }
         public virtual string Observacion { get; set; }
   
         public virtual DateTime FechaSuceso { get; set; }
-        public virtual string UsuarioSuceso { get; set; }
-
+        public virtual int UsuarioSuceso { get; set; }
+        public virtual int RolSuceso { get; set; }
 
 
 

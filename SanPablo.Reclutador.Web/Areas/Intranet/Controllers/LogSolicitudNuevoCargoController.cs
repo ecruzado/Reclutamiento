@@ -32,6 +32,7 @@
         }
 
         #region LOGSOLICITUD NUEVO CARGO
+
         [ValidarSesion]
         public ActionResult Edit(string ideSolicitud)
         {
@@ -59,9 +60,9 @@
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
-                    aprobarRechazarNuevaSolicitud(model);
+                    string resultado = aprobarRechazarNuevaSolicitud(model);
 
-                    objJsonMessage.Mensaje = "Enviado Correctamente";
+                    objJsonMessage.Mensaje = resultado;
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
 
@@ -90,80 +91,97 @@
 
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.Observacion = "";
 
-            var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(ideSolicitud);
-            if (estadoSolicitud.TipoSuceso == SucesoSolicitud.Pendiente)
-            {
-                switch (estadoSolicitud.TipoEtapa)
-                {
-                    case EtapasSolicitud.PendienteAprobacionGerenteArea :
-                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionGerenteGralAdj;
-                        break;
+            logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-                    case EtapasSolicitud.PendienteAprobacionGerenteGralAdj:
-                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteElaboracionPerfil;
-                        break;
-
-                    case EtapasSolicitud.PendienteElaboracionPerfil:
-                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionPerfilJefeArea;
-                        break;
-
-                    case EtapasSolicitud.PendienteAprobacionPerfilJefeArea:
-                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion;
-                        break;
-
-                    case EtapasSolicitud.PendienteAprobacionPerfilEncargSeleccion:
-                        logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.TipoEtapa = EtapasSolicitud.PendientePublicacion;
-                        break;
-                }
-            }
+           
 
             return logSolicitudNuevoCargoViewModel;
         }
 
-        public void aprobarRechazarNuevaSolicitud(LogSolicitudNuevoCargoViewModel model)
+        public string aprobarRechazarNuevaSolicitud(LogSolicitudNuevoCargoViewModel model)
         {
-            SendMail enviar = new SendMail();
-            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
-            enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
-            enviar.Sede = Session[ConstanteSesion.SedeDes].ToString();
-            enviar.Area = "AREA 1";
-            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             int ideUsuarioResp;
+            LogSolicitudNuevoCargo logSolicitud = model.LogSolicitudNuevoCargo;
+
+            logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            logSolicitud.IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
+
+            var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
+            
+            string indArea = "NO";
             try
             {
-                
+               
+                var estadoSolicitud = solicitud.TipoEtapa;
+                switch (estadoSolicitud)
+                {
+                    case Etapa.Pendiente:
+                        logSolicitud.TipoEtapa = Etapa.Validado;
+                        logSolicitud.RolResponsable = Roles.Gerente_General_Adjunto;
+                        break;
+
+                    case Etapa.Validado:
+                        logSolicitud.TipoEtapa = Etapa.Aprobado;
+                        logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                        break;
+
+                    case Etapa.Generacion_Perfil:
+                        logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
+                        logSolicitud.RolResponsable = Roles.Jefe;//solicitante
+                        break;
+
+                    case Etapa.Aprobacion_Perfil:
+                        logSolicitud.TipoEtapa = Etapa.Aceptado;
+                        var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
+                        logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
+                        break;
+
+                    case Etapa.Observado:
+                        logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
+                        logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                        break;
+
+                }
                 if (model.Aprobado)
                 {
-                    model.LogSolicitudNuevoCargo.TipoSuceso = SucesoSolicitud.Aprobado;
-                    model.LogSolicitudNuevoCargo.Observacion = "";
+                    logSolicitud.Observacion = "";
                 }
                 else
                 {
-                    model.LogSolicitudNuevoCargo.TipoSuceso = SucesoSolicitud.Rechazado;
-                   
+                    logSolicitud.TipoEtapa = Etapa.Rechazado;
+                    logSolicitud.RolResponsable = Roles.Jefe;
+                    indArea = "SI";
                 }
-                LogSolicitudNuevoCargo logSolicitudNuevo = model.LogSolicitudNuevoCargo;
-                int IdeSolicitudNuevoCargo = model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo;
-                ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(model.SolicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
-                                                                                       model.LogSolicitudNuevoCargo.Observacion, model.LogSolicitudNuevoCargo.TipoSuceso, model.LogSolicitudNuevoCargo.TipoEtapa);
 
-                if (ideUsuarioResp != 0)
+
+                var solicitudNuevo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
+
+                ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevo.IdeSede, solicitudNuevo.IdeArea, indArea);
+
+                if (ideUsuarioResp != -1)
                 {
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
-                    var SedeDesc = Session[ConstanteSesion.SedeDes];
-                    string SedeDescripcion = "";
-                    if (SedeDesc != null)
-                    {
-                        SedeDescripcion = SedeDesc.ToString();
-                    }
 
-                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudNuevoCargo.TipoEtapa, usuario.DscNombres, "NUEVO CARGO", model.LogSolicitudNuevoCargo.Observacion, model.SolicitudNuevoCargo.NombreCargo, model.SolicitudNuevoCargo.CodigoCargo, usuario.Email,model.LogSolicitudNuevoCargo.TipoSuceso);
+                    if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, model.SolicitudNuevoCargo))
+                    {
+                        return "Se envio la Aprobación correctamente";
+                    }
+                    else
+                    {
+                        return "ERROR: No se pudo enviar el correo al responsable";
+                    }
+                }
+                else
+                {
+                    return "ERROR: No se pudo realizar la aprobacion intente de nuevo";
                 }
 
             }
             catch (Exception ex)
             {
-                //manejar el error
+                return "ERROR"+ex;
             }
         }
 
@@ -177,19 +195,19 @@
             {
                 LogSolicitudNuevoCargoValidator validator = new LogSolicitudNuevoCargoValidator();
                 ValidationResult result = validator.Validate(model.LogSolicitudNuevoCargo, "Observacion");
-                var RolSession = Convert.ToString(Session[ConstanteSesion.Rol]);
+                var RolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 var estadoSolicitud = _logSolicitudNuevoCargoRepository.estadoSolicitud(model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
                 if(estadoSolicitud.RolResponsable == RolSession)
                 {
                     if (!result.IsValid)
                     {
-                        objJsonMessage.Mensaje = "ERROR: No se ha enviado la aprobacion intente de nuevo";
+                        objJsonMessage.Mensaje = "ERROR: verifique los datos ingresados";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
-                    aprobarRechazarNuevaSolicitud(model);
+                    string resultado = aprobarRechazarNuevaSolicitud(model);
 
-                    objJsonMessage.Mensaje = "Enviado Correctamente";
+                    objJsonMessage.Mensaje = resultado;
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
 
@@ -206,6 +224,26 @@
                 return Json(objJsonMessage);
             }
 
+        }
+
+        public bool enviarCorreo(LogSolicitudNuevoCargo logSolicitud, Usuario usuario, SolicitudNuevoCargo solicitudNuevo)
+        {
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            SendMail enviar = new SendMail();
+            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
+            enviar.Sede = usuarioSession.SEDEDES;
+            enviar.Area = usuarioSession.AREADES;
+            try
+            {
+                enviar.EnviarCorreo(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "NUEVO CARGO", logSolicitud.Observacion, solicitudNuevo.NombreCargo, solicitudNuevo.CodigoCargo, usuario.Email, "Suceso");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         #endregion
     }

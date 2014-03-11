@@ -70,6 +70,8 @@
             }
         }
 
+
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var discapacidadViewModel = inicializarDiscapacidad();

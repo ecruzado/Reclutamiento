@@ -1,4 +1,5 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
+﻿@using SanPablo.Reclutador.Entity
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
 @{
     ViewBag.Title = "Solicitud Nuevo Cargo";
 }
@@ -74,12 +75,12 @@
                                     title: 'SAN PABLO',
                                     modal: true,
                                     buttons: {
-                                        "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $(this).dialog("close"); }
+                                        "Ok": function () { actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); $("#updateDialogConfirmacion").dialog("close"); }
                                     }
                                 });
                             }
                             else {
-                                $(this).dialog("close");
+                                $("#updateDialogConfirmacion").dialog("close");
                                 mensajeResultado(respuesta.Mensaje);
                             }
                         });
@@ -224,6 +225,7 @@
             if ($("#solicitudNuevoCargoForm").validate().form()) {
                 mostrarConfirmacion();
             }
+            else { mensajeResultado("Verifique que los campos esten llenados correctamente"); }
         }
         else {
             mensajeResultado("Solicitud en estado: 'INACTIVO'");
@@ -336,8 +338,6 @@
                                 <div class="">
                                     <label class="control-label" for="selectError">Dependencia</label>
                                     <div class="controles">
-                                        @*@Html.TextBoxFor(model => model.DependenciaSession.NombreDependencia, new { @disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.DependenciaSession.IdeDependencia)*@
                                         @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
@@ -391,7 +391,7 @@
                                     <div class="controles">
                                          @* @Html.TextBoxFor(model => model.AreaSession.NombreArea, new { @disabled = "disabled" })
                                         @Html.HiddenFor(model => model.AreaSession.IdeArea)*@
-                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Dependencias, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
+                                        @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
                                         </div>
@@ -462,8 +462,20 @@
             </div>
             <div class="form-actions">     
                 <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
+
+                @if (Accion.Aprobar.Equals(Model.Accion))
+                {
+                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
+                }
+               
+                
+                
+                @if (Accion.Enviar.Equals(Model.Accion))
+                {
+                  <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
+                }
+                
+                
 
                 
                   

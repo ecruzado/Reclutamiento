@@ -169,7 +169,6 @@
                              }
 
                              <br />
-                             @* <a id="btnSubirFoto" class="btn btn-info" > Subir Foto</a>*@
                              @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
                                   
                         </td>
@@ -409,7 +408,7 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Teléfono Fijo</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.TelefonoFijo)
+                            @Html.TextBoxFor(model => model.Postulante.TelefonoFijo, new {placeholder="(054)-000-0000" })
                         </td>
                         <td style="width:10px;"></td>
                         <td class="colEtiqueta">

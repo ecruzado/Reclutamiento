@@ -153,9 +153,6 @@
             var estudioPostulanteGeneralViewModel = new EstudioPostulanteGeneralViewModel();
             estudioPostulanteGeneralViewModel.Estudio = new EstudioPostulante();
 
-            estudioPostulanteGeneralViewModel.Estudio.FechaEstudioInicio = DateTime.Now;
-            estudioPostulanteGeneralViewModel.Estudio.FechaEstudioFin = DateTime.Now;
-
             estudioPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));

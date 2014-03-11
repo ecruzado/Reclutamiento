@@ -51,21 +51,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult Edit(string id)
         {
-            var ideSolicitud = id;
             SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo();
+            
             var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            
             SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
 
-            var ideSolicitudAmp = Convert.ToInt32(ideSolicitud);
-            if (ideSolicitudAmp != 0)
+            IdeSolicitudAmpliacion = Convert.ToInt32(id);
+
+            if (IdeSolicitudAmpliacion != 0)
             {
-                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == ideSolicitudAmp);
-                IdeSolicitudAmpliacion = ideSolicitudAmp;
-                solicitudModel.Accion = Accion.Consultar;
+                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                
+                var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                
+                if ((rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
+                {
+                    solicitudModel.Accion = Accion.Aprobar;
+                }
+                else
+                {
+                    solicitudModel.Accion = Accion.Publicar;
+                }
             }
             else
             {
-                solicitudModel.Accion = Accion.Nuevo;
+                solicitudModel.Accion = Accion.Enviar;
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
                 solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
                 solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;
@@ -105,24 +116,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 /// 
                 ///enviar dependiendo el usuario que registra la solicitud
                 /// 
-                if (rolSuceso == Roles.Jefe)
+                switch (rolSuceso)
                 {
-                    rolResponsable = Roles.Gerente;
-                    etapaInicio = Etapa.Pendiente;
-                }
-                else {
-                    if (rolSuceso == Roles.Gerente)
-                    {
+                    case Roles.Jefe:
+                        rolResponsable = Roles.Gerente;
+                        etapaInicio = Etapa.Pendiente;
+                        break;
+
+                    case Roles.Gerente:
                         rolResponsable = Roles.Gerente_General_Adjunto;
                         etapaInicio = Etapa.Validado;
-                    }
-                    else
-                        if (rolSuceso == Roles.Gerente_General_Adjunto)
-                        {
-                            //determinar responsable de publicación
-                            rolResponsable = _solicitudAmpliacionPersonal.responsablePublicacion(cargoSol.IdeCargo, solicitudAmpliacion.IdeSede);
-                            etapaInicio = Etapa.Aprobado;
-                        }
+                        break;
+
+                    case Roles.Gerente_General_Adjunto:
+                        rolResponsable = Roles.Encargado_Seleccion;
+                        etapaInicio = Etapa.Aceptado;
+                        break;
                 }
 
                 if ((rolResponsable != 0) && (etapaInicio != ""))
@@ -153,7 +162,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 else
                 {
                     objJsonMessage.Mensaje = "No puede realizar esta accion, revise sus permisos";
-                    objJsonMessage.Resultado = true;
+                    objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
             }
@@ -171,7 +180,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudAmpliacionCargoViewModel model = new SolicitudAmpliacionCargoViewModel();
 
             model.SolicitudRequerimiento = new SolReqPersonal();
-            model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+            //model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
 
             model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
@@ -990,6 +999,124 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
+        /// <summary>
+        /// view de publicacion
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ValidarSesion]
+        public ActionResult Publica(string id)
+        {
+            SolicitudRempCargoViewModel model;
+            model = new SolicitudRempCargoViewModel();
+            model.SolReqPersonal = new SolReqPersonal();
+            
+            var ObjSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
+
+            if (ObjSol != null)
+            {
+                model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
+                model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
+                model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+
+                var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
+                                                        && x.IdeArea == ObjSol.IdeArea);
+
+                model.SolReqPersonal.Area_des = objArea.NombreArea;
+
+                int TipoPuesto = Convert.ToInt32(TipoCampo.TipoSalario);
+
+                var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto
+                                                                            && x.Valor == ObjSol.TipPuesto);
+
+                model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion == null ? "" : ObjDetalleGeneral.Descripcion;
+
+                model.SolReqPersonal.NumVacantes = ObjSol.NumVacantes;
+                model.SolReqPersonal.FuncionesCargo = ObjSol.FuncionesCargo;
+
+                model.listaRangoSalarial =
+                    new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
+                model.listaRangoSalarial.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+                model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario == null ? "" : ObjSol.TipoRangoSalario;
+
+            }
+
+
+
+            return View("Publicacion", model);
+        }
+
+
+        /// <summary>
+        /// Realiza la publicacion de la solicitud de reemplazo de personal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ValidarSesion]
+        public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model)
+        {
+            JsonMessage objJson = new JsonMessage();
+            var verSalario = model.verSalario;
+            string IndVerSalario;
+
+            if (verSalario)
+            {
+                IndVerSalario = "S";
+            }
+            else
+            {
+                IndVerSalario = "N";
+            }
+
+
+            if (model != null)
+            {
+
+                var objSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
+                if (objSol != null)
+                {
+
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
+                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+                    objSol.FechaModificacion = FechaSistema;
+                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                    objSol.TipEtapa = EtapasSolicitud.Publicado;
+                    objSol.IndicadorSalario = IndVerSalario;
+                    objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
+
+                    _solicitudAmpliacionPersonal.Update(objSol);
+
+                    model.LogSolReqPersonal = new LogSolReqPersonal();
+                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
+                    model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
+
+                    _solicitudAmpliacionPersonal.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+                    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se publico la Solicitud";
+                }
+            }
+            else
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
+            }
+
+
+
+            return Json(objJson);
+        }
 
 
         #endregion

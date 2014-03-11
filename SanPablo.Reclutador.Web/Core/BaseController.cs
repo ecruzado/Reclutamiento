@@ -320,8 +320,8 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get
             {
-                //return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeSolicitudAmpliacion];
-                return 4;
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeSolicitudAmpliacion];
+                //return 4;
             }
             set
             {
@@ -336,8 +336,8 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get
             {
-                //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
-                return 55;
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdePostulante]; 
+                //return 55;
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdePostulante, value); }
         }

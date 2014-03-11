@@ -477,6 +477,21 @@
             }
         });
 
+        $('#btnPublicar').click(function () {
+
+            if (validaEnvio()) {
+
+                id = $("#SolicitudRequerimiento_IdeSolReqPersonal").val();
+
+                if (id != null && id > 0) {
+                    window.location = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + id;
+                } else {
+                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            }
+
+        });
+
     });
 
   function confirmarEnvio()
@@ -549,6 +564,40 @@
         );
     }
 
+    function validaEnvio() {
+
+        var solReqIdeCargo = $('#SolicitudRequerimiento_Idecargo').val();
+        var numVacante = parseInt($('#SolicitudRequerimiento_NumVacantes').val());
+
+        var observ = $('#SolicitudRequerimiento_Observacion').val();
+        var motivo = $('#SolicitudRequerimiento_Motivo').val();
+
+
+
+        //if (tipVacante == "0") {
+        //    notificacionExito("Seleccione un tipo de vacante");
+        //    return false;
+        //}
+
+        if (solReqIdeCargo == 0) {
+            notificacionExito("Seleccione cargo");
+            return false;
+        }
+
+        if (numVacante == 0) {
+            notificacionExito("Ingrese el numero de vacantes ");
+            return false;
+        }
+
+        if (observ == "") {
+            notificacionExito("Ingrese las observaciones");
+            return false;
+        }
+        return true;
+
+    }
+
+
 </script>
 }
 @using (Html.BeginForm("Edit", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "solicitudAmpliacionCargoForm" }))
@@ -562,6 +611,7 @@
                 <div class="opciones">
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.SolicitudRequerimiento.IdeSede)
+                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {@type = "hidden"})
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
                 </div>            
             </div>
@@ -572,7 +622,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { @class = "input-small", disabled = "disabled" })
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { @class = "input-small", disabled = "disabled" })
                             </div>
                         </div>
                     </td>
@@ -657,7 +707,7 @@
                     </td>   
                 </tr>
           </table>
-          @if (Accion.Nuevo.Equals(Model.Accion))
+          @if (Accion.Enviar.Equals(Model.Accion))
           {
 		           <span></span>
           }
@@ -704,17 +754,31 @@
                   </div>
               
                 </div>     
-                <div class="container">
-                </div>  
                  </div>  
                
           
           }
+            
             <div class="form-actions">
-                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
-                <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                
+                <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                
+                @if (Accion.Aprobar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                }
+               
+                
+                
+                @if (Accion.Enviar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                }
+                
+                @if (Accion.Publicar.Equals(Model.Accion))
+                {
+                <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                }
             </div>
        
        
