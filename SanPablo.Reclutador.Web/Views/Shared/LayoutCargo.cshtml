@@ -1,4 +1,5 @@
 ﻿@using SanPablo.Reclutador.Web.Models
+@using SanPablo.Reclutador.Entity
 @model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
 @{
     ViewBag.Title = "Perfil";
@@ -98,9 +99,18 @@
             </div>
             <div class="form-actions">     
                 <a class="btn" href="@Url.Action("Index", "Cargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "PublicacionCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                @if (Accion.Aprobar.Equals(Model.Accion))
+                {
+                    <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
+                }
+                @if (Accion.Enviar.Equals(Model.Accion))
+                {
+                    <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                }
+                @if (Accion.Publicar.Equals(Model.Accion))
+                {
+                    <a class="btn btn-info" href="@Url.Action("Edit", "PublicacionCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                }
             </div>
         </div>
     </div>

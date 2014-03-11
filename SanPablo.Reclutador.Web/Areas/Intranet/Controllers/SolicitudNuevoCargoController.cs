@@ -198,7 +198,7 @@
             return Json(objJsonMessage);
         }
 
-
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var solicitudNuevoCargoViewModel = inicializarSolicitudNuevoCargo();
@@ -212,7 +212,12 @@
                     solicitudNuevoCargoViewModel.Estado = "Activo";
                 }
                 else
-                {  solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
+                { solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
+                solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
+            }
+            else
+            {
+                solicitudNuevoCargoViewModel.Accion = Accion.Enviar;
             }
             return View(solicitudNuevoCargoViewModel);
         }
@@ -247,28 +252,6 @@
             solicitudNuevoViewModel.Departamentos = new List<Departamento>();
             solicitudNuevoViewModel.Areas = new List<Area>();
 
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.Gerente_General_Adjunto)
-            {
-                solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
-                solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
-
-                solicitudNuevoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
-                
-                solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
-            }
-            else
-            {
-                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-                solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
-                
-                solicitudNuevoViewModel.Dependencias.Add(new Dependencia { IdeDependencia = usuarioSession.IDEDEPENDENCIA, NombreDependencia = usuarioSession.DEPENDENCIADES });
-
-                solicitudNuevoViewModel.Departamentos.Add(new Departamento { IdeDepartamento = usuarioSession.IDEDEPARTAMENTO, NombreDepartamento = usuarioSession.DEPARTAMENTODES });
-              
-                solicitudNuevoViewModel.Areas.Add(new Area { IdeArea = usuarioSession.IDEAREA, NombreArea = usuarioSession.AREADES });
-            }
-
-
             return solicitudNuevoViewModel;
         }
 
@@ -293,34 +276,64 @@
                 }
                 if (nuevaSolicitudCargo.IdeSolicitudNuevoCargo == 0)
                 {
+
                     int Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
                     int UsuarioSession = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    
                     nuevaSolicitudCargo.IdeSede = Sede;
-                    nuevaSolicitudCargo.EstadoActivo = "A";
+                    nuevaSolicitudCargo.EstadoActivo = IndicadorActivo.Activo;
                     nuevaSolicitudCargo.FechaCreacion = FechaCreacion;
                     nuevaSolicitudCargo.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString();
-                    _solicitudNuevoCargoRepository.Add(nuevaSolicitudCargo);
-                    var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == nuevaSolicitudCargo.CodigoCargo);
-                    string SedeDescripcion = "-";
 
-                    //Enviar para aprobacion
+                    var RolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(nuevaSolicitudCargo, UsuarioSession,Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
-                    if (ideUsuarioResp != 0)
+                    LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+                    logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    logSolicitud.RolSuceso = RolSession;
+
+                    string indArea = "NO";
+
+                    switch (RolSession)
+                    {
+                        case Roles.Jefe:
+                            logSolicitud.RolResponsable = Roles.Gerente;
+                            logSolicitud.TipoEtapa = Etapa.Pendiente;
+                            indArea = "SI";
+                            break;
+
+                        case Roles.Gerente:
+                            logSolicitud.RolResponsable = Roles.Gerente_General_Adjunto;
+                            logSolicitud.TipoEtapa = Etapa.Validado;
+                            break;
+
+                        case Roles.Gerente_General_Adjunto:
+                            logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            logSolicitud.TipoEtapa = Etapa.Aprobado;
+                            break;
+                    }
+
+                    
+                    ideUsuarioResp = _solicitudNuevoCargoRepository.insertarSolicitudNuevo(nuevaSolicitudCargo, logSolicitud, indArea);
+
+                   // ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(nuevaSolicitudCargo, UsuarioSession, Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
+                   
+                    if (ideUsuarioResp != -1)
                     {
                         Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
                         var SedeDesc = Session[ConstanteSesion.SedeDes];
-                        if (SedeDesc != null)
-                        {
-                            SedeDescripcion = SedeDesc.ToString();
-                        }
 
-                        enviarMail.EnviarCorreo(dir.ToString(), EtapasSolicitud.PendienteAprobacionGerenteArea, usuario.DscNombres, "Nuevo Cargo", null, "cargo", solicitud.CodigoCargo, usuario.Email, SucesoSolicitud.Pendiente);
+                        enviarMail.EnviarCorreo(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", null, nuevaSolicitudCargo.NombreCargo, nuevaSolicitudCargo.CodigoCargo, usuario.Email, "suceso");
+
+                        objJsonMessage.Mensaje = "Solicitud enviada exitosamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
                     }
-                    objJsonMessage.IdDato = solicitud.IdeSolicitudNuevoCargo;
-                    objJsonMessage.Mensaje = "Agregado Correctamente";
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    else
+                    {
+                        objJsonMessage.Mensaje = "ERROR: no se puede enviar enviar la solicitud, intente de nuevo";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
@@ -349,15 +362,29 @@
             var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             if (usuarioSede != null)
             {
-                solicitudCargoViewModel.SolicitudNuevoCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
-                solicitudCargoViewModel.SolicitudNuevoCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
-                solicitudCargoViewModel.SolicitudNuevoCargo.IdeArea = usuarioSede.IDEAREA;
+                var rolUsuario = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                if ((rolUsuario == Roles.Jefe) || (rolUsuario == Roles.Gerente))
+                {
+                    solicitudCargoViewModel.Dependencias = new List<Dependencia>();
+                    solicitudCargoViewModel.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA));
+                    
+                    solicitudCargoViewModel.Departamentos = new List<Departamento>();
+                    solicitudCargoViewModel.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO));
 
-                solicitudCargoViewModel.DependenciaSession = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA);
-                solicitudCargoViewModel.DepartamentoSession = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
-                solicitudCargoViewModel.AreaSession = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
+                    solicitudCargoViewModel.Areas = new List<Area>();
+                    solicitudCargoViewModel.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA));
+                }
+                else
+                {
+                    solicitudCargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+                    solicitudCargoViewModel.Dependencias.Insert(0,new Dependencia{IdeDependencia = 0,NombreDependencia = "Seleccionar"});
+                    
+                    solicitudCargoViewModel.Departamentos = new List<Departamento>();
+                    solicitudCargoViewModel.Departamentos.Insert(0, new Departamento {IdeDepartamento = 0, NombreDepartamento = "Seleccionar"});
 
-
+                    solicitudCargoViewModel.Areas = new List<Area>();
+                    solicitudCargoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+                }
             }
             return solicitudCargoViewModel;
         }
@@ -383,9 +410,13 @@
         public void actualizarDatosAreas(SolicitudNuevoCargoViewModel model, int ideArea)
         {
             List<string> datosArea = _solicitudNuevoCargoRepository.obtenerDatosArea(ideArea);
-            model.AreaSession = _areaRepository.GetSingle(x => x.IdeArea == ideArea);
-            model.DepartamentoSession = new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] };
-            model.DependenciaSession = new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] };
+
+            model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
+            model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
+            model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
+            //model.AreaSession = _areaRepository.GetSingle(x => x.IdeArea == ideArea);
+            //model.DepartamentoSession = new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] };
+            //model.DependenciaSession = new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] };
         }
 
         [HttpPost]
@@ -456,6 +487,7 @@
                 return Json(objJsonMessage);
             }
         }
+        
        
     }
 }

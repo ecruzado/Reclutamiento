@@ -61,11 +61,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == ideSolicitudAmp);
                 IdeSolicitudAmpliacion = ideSolicitudAmp;
-                solicitudModel.Accion = Accion.Consultar;
+                var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                if ((rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
+                {
+                    solicitudModel.Accion = Accion.Aprobar;
+                }
+                else
+                {
+                    solicitudModel.Accion = Accion.Publicar;
+                }
             }
             else
             {
-                solicitudModel.Accion = Accion.Nuevo;
+                solicitudModel.Accion = Accion.Enviar;
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
                 solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
                 solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;

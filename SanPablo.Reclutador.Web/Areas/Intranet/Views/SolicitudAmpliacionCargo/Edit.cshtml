@@ -657,7 +657,7 @@
                     </td>   
                 </tr>
           </table>
-          @if (Accion.Nuevo.Equals(Model.Accion))
+          @if (Accion.Enviar.Equals(Model.Accion))
           {
 		           <span></span>
           }
@@ -704,17 +704,31 @@
                   </div>
               
                 </div>     
-                <div class="container">
-                </div>  
                  </div>  
                
           
           }
+            
             <div class="form-actions">
-                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" onclick="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                <a class="btn btn-info" onclick="confirmarEnvio();"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                
+                <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                
+                @if (Accion.Aprobar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                }
+               
+                
+                
+                @if (Accion.Enviar.Equals(Model.Accion))
+                {
+                  <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                }
+                
+                @if (Accion.Publicar.Equals(Model.Accion))
+                {
                 <a class="btn btn-info" href="@Url.Action("Publicacion", "SolicitudCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                }
             </div>
        
        

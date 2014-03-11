@@ -34,6 +34,8 @@
 
         #region CENTRO ESTUDIOS
 
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public virtual JsonResult ListaCentroEstudio(GridTable grid)
         {
@@ -70,6 +72,7 @@
             }
         }
 
+        [ValidarSesion]
         public ActionResult Edit(string id)
         {
             var centroEstudioViewModel = inicializarCentroEstudio();

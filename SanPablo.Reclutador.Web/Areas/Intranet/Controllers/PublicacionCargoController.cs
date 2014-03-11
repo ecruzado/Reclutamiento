@@ -288,8 +288,10 @@
                     solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
                     int ideUsuarioResp = 0;
-                    ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(solicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
-                                                                                           "", SucesoSolicitud.Publicado, EtapasSolicitud.Publicado);
+                    //ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(solicitudNuevoCargo, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]),
+                    //                                                                       "", SucesoSolicitud.Publicado, EtapasSolicitud.Publicado);
+                    
+
                     objJsonMessage.Mensaje = "Publicado Correctamente";
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);

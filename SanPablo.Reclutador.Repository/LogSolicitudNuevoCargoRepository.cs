@@ -48,32 +48,31 @@
                            // .SingleOrDefault();
         }
 
-        public int solicitarAprobacion(SolicitudNuevoCargo solicitud, int ideUsuario, 
-                                       int ideRol, string observacion, string suceso, string etapa)
+        public int solicitarAprobacion(LogSolicitudNuevoCargo logSolicitud,int idSede, int idArea, string indArea)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
             {
                 lcon.Open();
-                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.FN_APROBACION_NUEVO");
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_INSERTAR_LOG");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = lcon;
 
-                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = solicitud.IdeSede;
-                cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = solicitud.IdeArea;
-                cmd.Parameters.Add("p_ideSolCargo", OracleType.Int32).Value = solicitud.IdeSolicitudNuevoCargo;
-                cmd.Parameters.Add("p_ideUsuario", OracleType.Int32).Value = ideUsuario;
-                cmd.Parameters.Add("p_ideRol", OracleType.Int32).Value = ideRol;
-                cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = observacion;
-                cmd.Parameters.Add("p_suceso", OracleType.VarChar).Value = suceso;
-                cmd.Parameters.Add("p_etapa", OracleType.VarChar).Value = etapa;
-                cmd.Parameters.Add("c_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.ReturnValue;
+                cmd.Parameters.Add("p_ideSolicitudNuevo", OracleType.Int32).Value = logSolicitud.IdeSolicitudNuevoCargo;
+                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = idSede;
+                cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = idArea;
+                cmd.Parameters.Add("p_ideUsuarioSuceso", OracleType.Int32).Value = logSolicitud.UsuarioSuceso;
+                cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = logSolicitud.RolSuceso;
+                cmd.Parameters.Add("p_ideRolResponsable", OracleType.Int32).Value = logSolicitud.RolResponsable;
+                cmd.Parameters.Add("p_indArea", OracleType.VarChar).Value = indArea;
+                cmd.Parameters.Add("p_etapa", OracleType.VarChar).Value = logSolicitud.TipoEtapa;
+                cmd.Parameters.Add("p_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
-                
-                int ideResponsable = Convert.ToInt32(cmd.Parameters[cmd.Parameters.IndexOf("c_ideUsuarioResp")].Value);
+
+                int ideResponsable = Convert.ToInt32(cmd.Parameters[cmd.Parameters.IndexOf("p_ideUsuarioResp")].Value);
                 if (ideResponsable == null)
-                { return 0; } else
+                { return -1; } else
                 return ideResponsable;
             }
             catch (Exception ex)
@@ -106,8 +105,7 @@
                     if (lector.Read())
                     {
                         estadoSolicitud.TipoEtapa = Convert.ToString(lector["TIPETAPA"]);
-                        estadoSolicitud.TipoSuceso = Convert.ToString(lector["TIPSUCESO"]);
-                        estadoSolicitud.RolResponsable = Convert.ToString(lector["ROLRESPONSABLE"]);
+                        estadoSolicitud.RolResponsable = Convert.ToInt32(lector["ROLRESPONSABLE"]);
                     }
                 }
 

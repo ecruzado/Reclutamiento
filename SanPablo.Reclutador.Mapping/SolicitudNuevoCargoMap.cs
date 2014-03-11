@@ -34,7 +34,7 @@
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICA");
             Map(x => x.FechaModificacion, "FECMODIFICA");
-
+            Map(x => x.TipoEtapa, "TIPETAPA");
 
             Table("SOLNUEVO_CARGO");
         }
