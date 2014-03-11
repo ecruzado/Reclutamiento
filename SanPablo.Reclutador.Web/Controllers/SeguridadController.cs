@@ -132,7 +132,11 @@ namespace SanPablo.Reclutador.Web.Controllers
             return View("PopupLogeo",model);
         }
 
-
+        /// <summary>
+        /// Realiza el logeo de lusuario de extranet
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public ActionResult LogeoUsuario(SeguridadViewModel model){
 
             
@@ -144,7 +148,12 @@ namespace SanPablo.Reclutador.Web.Controllers
             string pass=null;
             string confPass=null;
 
-            
+            SendMail envioEmail = new SendMail();
+            string rutaHTML = null;
+            List<String> listaParemetros = new List<String>();
+            List<String> listaValores = new List<String>();
+            string destino = null;
+            string asunto = null;
 
 
             if (model != null)
@@ -220,8 +229,33 @@ namespace SanPablo.Reclutador.Web.Controllers
 
                     _usuarioRolSedeRepository.Add(objUsuarioRolSede);
 
+
+                    rutaHTML = Server.MapPath(@"~/TemplateEmail/Bienvenido.htm");
+                    destino = objUsuarioIntranet.Email;
+                    asunto = "Bienvenido(a)";
+                    listaParemetros.Add("cuerpo");
+                    listaValores.Add("¡Te damos la más cordial Bienvenida al sistema de Reclutamiento y Selección de Personal del Complejo Hospitalario San Pablo!<br /><br />"
+                    +"Somos la red privada de salud más grande del país, con un staff de más 1,700 médicos y alrededor de 4,000 colaboradores a nivel nacional.<br />"
+                    + "Contamos con más de 22 años siendo una empresa líder, mejorando la calidad de vida de los peruanos.<br /><br />"
+                    +"Te ofrecemos la oportunidad de formar parte de nuestro equipo humano, en donde podrás aportar a la empresa y crecer profesionalmente, en diversas áreas como:<br />"
+                    + "administrativas, personal médico, asistencial, operarios, área comercial y ventas, entre otras.<br />"
+                    + "<br />"
+                    + "<br />"
+                    +"Bienvenido a tu familia, La Familia San Pablo.");
+                   
+
+                    string retorno = envioEmail.ObtenerCuerpoCorreo(rutaHTML, listaParemetros, listaValores);
+
+                    envioEmail.EnviarMail(destino, asunto, null, retorno);
+
+
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se registro el usuario correctamente";
+
+
+
+
+
 
                 }
 
@@ -260,7 +294,16 @@ namespace SanPablo.Reclutador.Web.Controllers
         public ActionResult RestablecePass(SeguridadViewModel model) 
         {
             JsonMessage objJsonMensaje = new JsonMessage();
-            string codUsuario;
+
+            SendMail envioEmail = new SendMail();
+            string rutaHTML = null;
+            List<String> listaParemetros = new List<String>();
+            List<String> listaValores = new List<String>();
+            string destino = null;
+            string asunto = null;
+            
+
+            //string codUsuario;
             try
             {
                 if (model != null)
@@ -270,8 +313,24 @@ namespace SanPablo.Reclutador.Web.Controllers
 
                    if (objUsuario!=null)
                    {
-                       codUsuario = objUsuario.Email;
-                       //envia Emial;
+                       //codUsuario = objUsuario.Email;
+                       rutaHTML = Server.MapPath(@"~/TemplateEmail/RestablecerPassword.htm");
+                       destino = objUsuario.Email;
+                       asunto = "Se restablece el password";
+                       listaParemetros.Add("cuerpo");
+                       listaParemetros.Add("usuario");
+                       listaParemetros.Add("password");
+
+                       listaValores.Add("¡Te damos la más cordial Bienvenida al sistema de Reclutamiento y Selección de Personal del Complejo Hospitalario San Pablo!<br />");
+                       listaValores.Add(objUsuario.CodUsuario);
+                       listaValores.Add(objUsuario.CodContrasena);
+
+                       string retorno = envioEmail.ObtenerCuerpoCorreo(rutaHTML, listaParemetros, listaValores);
+
+                       envioEmail.EnviarMail(destino, asunto, null, retorno);
+
+                       //envioEmail.ObtenerCuerpoCorreo
+
                        objJsonMensaje.Resultado = true;
                        objJsonMensaje.Mensaje = "Se envio la contraseña a su correo electrónico";
 
