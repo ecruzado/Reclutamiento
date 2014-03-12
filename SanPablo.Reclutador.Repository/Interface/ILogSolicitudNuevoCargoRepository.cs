@@ -10,6 +10,8 @@
     {
         LogSolicitudNuevoCargo getMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
 
+        LogSolicitudNuevoCargo getFirthValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
+
         IList<LogSolicitudNuevoCargo> getTwoMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
 
         int solicitarAprobacion(LogSolicitudNuevoCargo logSolicitud, int idSede, int idArea, string indArea);

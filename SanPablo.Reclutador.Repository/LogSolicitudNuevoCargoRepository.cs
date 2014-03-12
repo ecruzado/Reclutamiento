@@ -32,6 +32,20 @@
                             .SingleOrDefault();
         }
 
+
+        public LogSolicitudNuevoCargo getFirthValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition)
+        {
+            var minResultDate = QueryOver.Of<LogSolicitudNuevoCargo>()
+                .Where(condition)
+                .Select(Projections.Min<LogSolicitudNuevoCargo>(x => x.FechaSuceso));
+
+            return _session.QueryOver<LogSolicitudNuevoCargo>()
+                           .Where(condition)
+                           .WithSubquery.WhereProperty(x => x.FechaSuceso).Eq(minResultDate)
+                           .SingleOrDefault();
+        }
+
+
         public IList<LogSolicitudNuevoCargo> getTwoMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition)
         {
             var maxResultDate = QueryOver.Of<LogSolicitudNuevoCargo>()

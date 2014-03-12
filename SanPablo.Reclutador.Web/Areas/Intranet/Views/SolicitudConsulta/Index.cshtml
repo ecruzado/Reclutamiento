@@ -215,7 +215,7 @@
             <div class="widget-title">
                 <h5>Listado Solicitud de Ampliacion de Cargo</h5>
             </div>
-@using (Html.BeginForm("Index", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmBusListaReemplazo", @class = "formulario-busqueda" }))
+@using (Html.BeginForm("Index", "SolicitudConsulta", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmBusListaReemplazo", @class = "formulario-busqueda" }))
 {
     @Html.ValidationSummary(true)
           <table class="formulario-busqueda">        
@@ -230,8 +230,8 @@
                     <td class="span5" style="width:500px">
                             <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
-                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaInicioBus, new {style = "width: 130px;"})      
-                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaFinBus, new {@style=" width: 130px;"})      
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaInicioBus, new {@style="width:130px"})      
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaFinBus, new {@style="width:130px"})      
                             </div>
                      </td>
                 </tr>
@@ -314,10 +314,6 @@
                 <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
         }
         </div>

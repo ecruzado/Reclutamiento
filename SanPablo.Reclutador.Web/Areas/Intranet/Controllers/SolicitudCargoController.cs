@@ -2170,7 +2170,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objSol.FechaModificacion = FechaSistema;
                     objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
-                    objSol.TipEtapa = EtapasSolicitud.Publicado;
+                    objSol.TipEtapa = Etapa.Publicado;
                     objSol.IndicadorSalario = IndVerSalario;
                     objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
 
@@ -2182,7 +2182,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
-                    model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
+                    model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
 
                     _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
 

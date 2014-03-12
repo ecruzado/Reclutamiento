@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudAmpliacionCargoController.cs" />
@@ -407,6 +408,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Publicacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudConsulta\Index.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

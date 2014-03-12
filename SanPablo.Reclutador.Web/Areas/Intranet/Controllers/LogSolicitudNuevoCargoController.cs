@@ -129,7 +129,7 @@
 
                     case Etapa.Generacion_Perfil:
                         logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
-                        logSolicitud.RolResponsable = Roles.Jefe;//solicitante
+                        logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
                         break;
 
                     case Etapa.Aprobacion_Perfil:

@@ -274,7 +274,7 @@
                 traditional: true,
                 success: function (data) {
                     if (data.Resultado == true) {
-                        if (estado == "A") {
+                        if (estado != "I") {
                             window.location = '@Url.Action("Index", "Perfil", new { ideSolicitud = "-id"})'.replace("-id", ideSolicitud);
                         }
                         else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva"); }

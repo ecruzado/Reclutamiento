@@ -12,6 +12,8 @@
 
         //IList<LogSolicitudNuevoCargo> getTwoMostRecentValue(Expression<Func<LogSolicitudNuevoCargo, bool>> condition);
 
+        LogSolReqPersonal getFirthValue(Expression<Func<LogSolReqPersonal, bool>> condition);
+
         int solicitarAprobacion(LogSolReqPersonal logSolicitud, int ideSolicitudRequerimiento, int ideSede, int ideArea, string indArea);
 
         LogSolReqPersonal estadoSolicitud(int ideSolicitud);
