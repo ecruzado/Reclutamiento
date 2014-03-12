@@ -301,9 +301,8 @@ namespace SanPablo.Reclutador.Repository
              try
              {
 
-                
-                 string cFechaIncial = obj.FechaInicioBus==null?"":String.Format("{0:MM/dd/yyyy}", obj.FechaInicioBus);
-                 string cFechaFinal = obj.FechaFinBus == null ? "" : String.Format("{0:MM/dd/yyyy}", obj.FechaFinBus);
+                 string cFechaIncial = obj.FechaInicioBus == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FechaInicioBus);
+                 string cFechaFinal = obj.FechaFinBus == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FechaFinBus);
 
                  IDataReader ldrSolReqPersonal;
                  SolReqPersonal lobSolReqPersonal;

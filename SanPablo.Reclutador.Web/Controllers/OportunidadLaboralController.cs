@@ -180,75 +180,64 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// </summary>
         /// <param name="grid"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //public ActionResult ListOportunidadesLaborales(GridTable grid)
-        //{
+        [HttpPost]
+        public ActionResult ListOportunidadesLaborales(GridTable grid)
+        {
 
-        //    OportunidadLaboral oportunidadLaboral;
-        //    List<OportunidadLaboral> lista = new List<OportunidadLaboral>();
-        //    try
-        //    {
-        //        Accion
-        //        oportunidadLaboral = new OportunidadLaboral();
+            OportunidadLaboral oportunidadLaboral;
+            List<OportunidadLaboral> lista = new List<OportunidadLaboral>();
+            try
+            {
+                
+                oportunidadLaboral = new OportunidadLaboral();
 
-        //        oportunidadLaboral.IdeSede = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
-        //        oportunidadLaboral.TipoHorario = (grid.rules[1].data == null ? "" : Convert.ToString(grid.rules[1].data));
-        //        oportunidadLaboral.IdeCargo = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+                oportunidadLaboral.IdeSede = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+                oportunidadLaboral.TipoHorario = grid.rules[1].data=="0"?"":grid.rules[1].data;
+                oportunidadLaboral.IdeCargo = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
 
-        //        if (grid.rules[3].data != null && grid.rules[4].data != null)
-        //        {
-        //            oportunidadLaboral.FecInicial = Convert.ToDateTime(grid.rules[3].data);
-        //            oportunidadLaboral.FecFinal = Convert.ToDateTime(grid.rules[4].data);
-        //        }
+                if (grid.rules[3].data != null && grid.rules[4].data != null)
+                {
+                    oportunidadLaboral.FecInicial = Convert.ToDateTime(grid.rules[3].data);
+                    oportunidadLaboral.FecFinal = Convert.ToDateTime(grid.rules[4].data);
+                }
 
+                
 
-        //        lista = _postulanteRepository.GetObtieneOpurtunidad(oportunidadLaboral);
-
-
-
-        //        var generic = GetListar(lista,
-        //                                 grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
-
-        //        generic.Value.rows = generic.List.Select(item => new Row
-        //        {
-        //            id = item.IdeCargo.ToString(),
-        //            cell = new string[]
-        //                    {
-                               
-        //                        item.IdeCargo==null?"":item.IdeCargo.ToString(),
-        //                        item.IdeSede==null?"":item.IdeSede.ToString(),
-        //                        item.SedeDes==null?"":item.SedeDes,
-        //                        item.FecInicial==null?"":item.FecInicial.ToString(),
-        //                        item.CodSolReqPersonal==null?"":item.CodSolReqPersonal.ToString(),
-        //                        item.IdeCargo==null?"":item.IdeCargo.ToString(),
-        //                        item.DesCargo==null?"":item.DesCargo,
-        //                        item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
-        //                        item.Dependencia_des==null?"":item.Dependencia_des,
+                lista = _postulanteRepository.GetObtieneOpurtunidad(oportunidadLaboral);
 
 
-        //            //            lobOportunidadLaboral = new OportunidadLaboral();
-        //            //lobOportunidadLaboral.TipoHorario = Convert.ToString(ldrOportunidadLaboral["TIPPUESTO"]);
-        //            //lobOportunidadLaboral.IdeCargo = (ldrOportunidadLaboral["IDECARGO"]==null?0:Convert.ToInt32(ldrOportunidadLaboral["IDECARGO"]));
-        //            //lobOportunidadLaboral.IdeSede = (ldrOportunidadLaboral["IDESEDE"]==null?0:Convert.ToInt32(ldrOportunidadLaboral["IDESEDE"]));
-        //            //lobOportunidadLaboral.SedeDes = Convert.ToString(ldrOportunidadLaboral["DESSEDE"]);
-        //            //lobOportunidadLaboral.TipoHorarioDes = Convert.ToString(ldrOportunidadLaboral["DESPUESTO"]);
-        //            //lobOportunidadLaboral.CargoDes = Convert.ToString(ldrOportunidadLaboral["NOMCARGO"]);
-        //            //lobOportunidadLaboral.FecInicial = Convert.ToDateTime(ldrOportunidadLaboral["FECINICIALMAX"]);
-        //            //lobOportunidadLaboral.FecFinal = Convert.ToDateTime(ldrOportunidadLaboral["FECFINALMAX"]);
-        //            //lobOportunidadLaboral.NumVacantes = Convert.ToInt32(ldrOportunidadLaboral["NUMVACANTES"]);
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.IdeCargo.ToString() + '/' + item.IdeSede+"/"+item.TipoHorario + "/" + item.FecInicial.ToString()+"/"+item.FecFinal.ToString()),
+                    cell = new string[]
+                            {
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
+                                item.IdeSede==null?"":item.IdeSede.ToString(),
+                                item.SedeDes==null?"":item.SedeDes,
+                                item.CargoDes==null?"":item.CargoDes,
+                                item.FecInicial==null?"":String.Format("{0:dd/MM/yyyy}", item.FecInicial),
+                                item.FecFinal==null?"":String.Format("{0:dd/MM/yyyy}", item.FecFinal),
+                                item.TipoHorario==null?"":item.TipoHorario,
+                                item.TipoHorarioDes==null?"":item.TipoHorarioDes
                                 
-        //                    }
-        //        }).ToArray();
+                                
+                            }
+                }).ToArray();
 
-        //        return Json(generic.Value);
+                return Json(generic.Value);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
+            }
+            catch (Exception ex)
+            {
 
-        //        return MensajeError();
-        //    }
-        //}
+                return MensajeError();
+            }
+        }
 
 
 

@@ -32,6 +32,14 @@
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
             {
+               
+
+                string cFechaIncial = obj.FecInicial == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FecInicial);
+                string cFechaFinal = obj.FecFinal == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FecFinal);
+
+               
+               
+
                 IDataReader ldrOportunidadLaboral;
                 OportunidadLaboral lobOportunidadLaboral;
                 List<OportunidadLaboral> llstOportunidadLaboral;
@@ -40,22 +48,17 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
 
-              
-
-
-                lspcmd.Parameters.Add("p_ctippuesto", OracleType.Int32).Value = obj.TipoHorario;
-                lspcmd.Parameters.Add("p_nidcargo", OracleType.Int32).Value = obj.IdeCargo;
-                lspcmd.Parameters.Add("p_nidsede", OracleType.Int32).Value = obj.IdeSede;
-                lspcmd.Parameters.Add("p_cfechainicio", OracleType.Int32).Value = obj.FecInicial;
-                lspcmd.Parameters.Add("p_cfecfin", OracleType.Int32).Value = obj.FecFinal;
+                lspcmd.Parameters.Add("p_cTipPuesto", OracleType.VarChar).Value = (obj.TipoHorario==null?"":obj.TipoHorario);
+                lspcmd.Parameters.Add("p_nIdCargo", OracleType.Number).Value = obj.IdeCargo;
+                lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdeSede;
+                lspcmd.Parameters.Add("p_cFechaInicio", OracleType.VarChar).Value = cFechaIncial;
+                lspcmd.Parameters.Add("p_cFecFin", OracleType.VarChar).Value = cFechaFinal;
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
                 ldrOportunidadLaboral = (OracleDataReader)lspcmd.ExecuteReader();
                 lobOportunidadLaboral = null;
                 llstOportunidadLaboral = new List<OportunidadLaboral>();
 
-
-          
-   
 
                 while (ldrOportunidadLaboral.Read())
                 {
@@ -84,6 +87,13 @@
                 lcon.Close();
             }
         }
+
+
+
+
+
+
+
 
     }
 }
