@@ -103,7 +103,7 @@
         /// Realiza la validacion si tiene permisos para acceder a la pagina
         /// </summary>
         /// <returns></returns>
-        public System.Web.Routing.RouteValueDictionary Autentificacion() 
+        public RouteValueDictionary verificaLogeo() 
         {
 
             var myListOp = (List<SanPablo.Reclutador.Entity.MenuItem>)Session["ListaMenu"];
@@ -113,7 +113,8 @@
             int indWeb = rutaAbsoluta.IndexOf("/INTRANET/");
             var tieneAcceso = myListOp.Where(x => x.DSCURL == Request.Path).ToList();
 
-            if (tieneAcceso != null && tieneAcceso.Count > 0)
+            
+            if (tieneAcceso != null )
             {
                 return null;
             }
@@ -122,7 +123,7 @@
                 if (indWeb != -1)
                 {
                     //intranet
-                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    var routeValues = new RouteValueDictionary();
                     routeValues["controller"] = "Seguridad";
                     routeValues["action"] = "Login";
                     routeValues["area"] = "Intranet";
@@ -132,7 +133,7 @@
                 else
                 {
                     //extranet
-                    var routeValues = new System.Web.Routing.RouteValueDictionary();
+                    var routeValues = new RouteValueDictionary();
                     routeValues["controller"] = "Seguridad";
                     routeValues["action"] = "Login";
                     return routeValues;
@@ -145,13 +146,13 @@
         public ActionResult General()
         {
 
-            //RouteValueDictionary retorno = new RouteValueDictionary();
-            //retorno = Autentificacion();
-                
-            //if (retorno!=null)
-            //{
-            //    return RedirectToRoute(retorno);
-            //}
+            RouteValueDictionary retorno = new RouteValueDictionary();
+            retorno = verificaLogeo();
+
+            if (retorno != null)
+            {
+                return RedirectToRoute(retorno);
+            }
            
             
             var postulanteGeneralViewModel = inicializarPostulante();

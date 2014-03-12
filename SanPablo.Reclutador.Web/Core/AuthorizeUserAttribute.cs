@@ -29,11 +29,12 @@ namespace SanPablo.Reclutador.Web.Core
                 
 
                 var tieneAcceso = myListOp.Where(x => x.DSCURL == httpContext.Request.Path).ToList();
-                log.Info("tieneAcceso.Count");
+               
 
-                if (tieneAcceso != null && tieneAcceso.Count > 0)
+                if (tieneAcceso != null)
                 {
                     return true;
+                    
                 }
                 else
                 {
