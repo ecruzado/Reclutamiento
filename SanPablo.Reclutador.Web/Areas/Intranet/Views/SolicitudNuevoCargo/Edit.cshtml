@@ -97,7 +97,7 @@
             }
          });
 
-        $('select#Dependencias').change(function () {
+        $('select#SolicitudNuevoCargo_IdeDependencia').change(function () {
             var ideDependencia = $(this).val();
             $("select#SolicitudNuevoCargo_IdeArea").empty();
             $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
@@ -106,10 +106,10 @@
                 url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
                 data: { ideDependencia: ideDependencia },
                 success: function (respuesta) {
-                    $("select#Departamentos").empty();
-                    $("select#Departamentos").append("<option value='0'> Seleccionar </option>");
+                    $("select#SolicitudNuevoCargo_IdeDepartamento").empty();
+                    $("select#SolicitudNuevoCargo_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
-                        $("select#Departamentos").append("<option value='"
+                        $("select#SolicitudNuevoCargo_IdeDepartamento").append("<option value='"
                         + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
                     }
                 );
@@ -117,7 +117,7 @@
             });
         })
 
-        $('select#Departamentos').change(function () {
+        $('select#SolicitudNuevoCargo_IdeDepartamento').change(function () {
             var ideDepartamento = $(this).val();        
             $.ajax({
                 type: "POST",

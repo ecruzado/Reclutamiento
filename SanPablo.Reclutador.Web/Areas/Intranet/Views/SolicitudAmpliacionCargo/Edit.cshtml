@@ -640,17 +640,17 @@
                 </tr>
                 <tr class="formulario-fila">
                     <td class="span5">
-                      <div class="">
-                        <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
-                        <div class="controles">
-                            @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo))
-                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeCargo)
-                             </div>
+                        <div class="">
+                            <label class="control-label" for="selectError">Tipo de Puesto </label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipPuesto, new SelectList(Model.TipoPuestos, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipPuesto))
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.TipPuesto)
+                                </div>
+                            </div>
                         </div>
-                       </div>
                     </td>
-                   <td class="span5">
+                    <td class="span5">
                         <div class="">
                             <label class="control-label" for="selectError">Departamento </label>
                             <div class="controles">
@@ -664,14 +664,16 @@
                 </tr>
                 <tr class="formulario-fila">
                     <td class="span5">
-                            <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
-                            <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small" })
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.NumVacantes)
-                                </div>
-                            </div>
-                    </td>                    
+                      <div class="">
+                        <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
+                        <div class="controles">
+                            @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo))
+                             <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeCargo)
+                             </div>
+                        </div>
+                       </div>
+                    </td>
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
@@ -680,25 +682,41 @@
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeArea)
                                 </div>
                             </div>
-                    </td> 
+                   </td> 
+                </tr >
+                <tr class="formulario-fila">
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.NumVacantes)
+                                </div>
+                            </div>
+                    </td>                    
+                    
                 </tr>
+            </table>
+            <table class="formulario-busqueda">
                 <tr class="formulario-fila">
                     <td class="span5">
                          <div class="">
                             <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { @class = "input-large", rows = "3" })
+                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Observacion)
                              </div>
                             </div>
                         </div>
                     </td>
+                </tr>
+                <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Motivos <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { @class = "input-large", rows = "3" })
+                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Motivo)
                                 </div>

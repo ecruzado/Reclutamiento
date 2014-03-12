@@ -48,6 +48,18 @@
         //                   // .SingleOrDefault();
         //}
 
+        public LogSolReqPersonal getFirthValue(Expression<Func<LogSolReqPersonal, bool>> condition)
+        {
+            var minResultDate = QueryOver.Of<LogSolReqPersonal>()
+                .Where(condition)
+                .Select(Projections.Min<LogSolReqPersonal>(x => x.FechaCreacion));
+
+            return _session.QueryOver<LogSolReqPersonal>()
+                           .Where(condition)
+                           .WithSubquery.WhereProperty(x => x.FechaCreacion).Eq(minResultDate)
+                           .SingleOrDefault();
+        }
+
         public int solicitarAprobacion(LogSolReqPersonal logSolicitud,int ideSolicitudRequerimiento, int ideSede, int ideArea, string indArea)
         {
 

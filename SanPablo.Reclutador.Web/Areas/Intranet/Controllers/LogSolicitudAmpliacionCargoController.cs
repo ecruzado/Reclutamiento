@@ -122,6 +122,11 @@
 
                 case Etapa.Validado:
                     logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.TipEtapa = Etapa.Aprobado;
+                    logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.RolResponsable = Roles.Encargado_Seleccion;
+                    break;
+
+                case Etapa.Aprobado:
+                    logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.TipEtapa = Etapa.Aceptado;
                     if (solicitud.TipoRequerimiento == TipoRequerimientos.jefe_corporativo_administrativo)
                     {
                         logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.RolResponsable = Roles.Encargado_Seleccion;
@@ -144,14 +149,19 @@
         public void aprobarRechazarSolicitud(LogSolicitudAmpliacionCargoViewModel model)
         {
             SendMail enviar = new SendMail();
+           
             SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            
             enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
             enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
             enviar.Sede = Session[ConstanteSesion.SedeDes].ToString();
             enviar.Area = usuarioSession.AREADES;
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            
             int ideUsuarioResp;
+            
             string indicadorArea="NO";
+            
             try
             {
                 
@@ -162,8 +172,15 @@
                 else
                 {
                     model.LogSolicitudAmpliacion.TipEtapa = Etapa.Rechazado;
-                    model.LogSolicitudAmpliacion.RolResponsable = Roles.Jefe;
-                    indicadorArea = "SI";
+
+                    var solicitudInicial = _logSolicitudAmpliacionRepository.getFirthValue(x => x.IdeSolReqPersonal == model.SolicitudRequerimiento.IdeSolReqPersonal);
+
+                    model.LogSolicitudAmpliacion.RolResponsable = solicitudInicial.RolSuceso;
+
+                    if (solicitudInicial.RolSuceso == Roles.Jefe)
+                    {
+                        indicadorArea = "SI";
+                    }
                 }
                 LogSolReqPersonal logSolicitudAmpliacion = model.LogSolicitudAmpliacion;
                 int IdeSolicitud = model.LogSolicitudAmpliacion.IdeSolReqPersonal;

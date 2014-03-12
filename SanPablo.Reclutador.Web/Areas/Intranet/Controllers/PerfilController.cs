@@ -390,15 +390,26 @@
                 if ((solicitud.TipoEtapa == Etapa.Aprobado) && (Roles.Jefe_Corporativo_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))
                 {
 
-                    //int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(solicitud, Convert.ToInt32(Session[ConstanteSesion.Usuario]), Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Aprobado, EtapasSolicitud.PendienteAprobacionPerfilJefeArea);
+                    string IndArea = "NO";
+
                     LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+                    
                     logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
-                    logSolicitud.RolResponsable = Roles.Jefe;
+                    
+                    var logSolicitudInicial = _logSolicitudNuevoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
+                    
+                    logSolicitud.RolResponsable = logSolicitudInicial.RolSuceso;
+                    logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioResponsable;
                     logSolicitud.TipoEtapa = Etapa.Generacion_Perfil;
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
-                    int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, "SI");
+                    if (logSolicitud.RolResponsable == Roles.Jefe)
+                    {
+                        IndArea = "SI";
+                    }
+
+                    int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, IndArea);
 
                     if (ideUsuario != -1)
                     {

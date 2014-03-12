@@ -18,7 +18,7 @@
             Map(x => x.TipoSuceso, "TIPSUCESO");
             Map(x => x.FechaSuceso, "FECSUCESO");
             Map(x => x.UsuarioSuceso, "USRSUCESO");
-     
+            Map(x => x.RolSuceso, "ROLSUCESO");
             Table("LOGSOLNUEVO_CARGO");
 
         }

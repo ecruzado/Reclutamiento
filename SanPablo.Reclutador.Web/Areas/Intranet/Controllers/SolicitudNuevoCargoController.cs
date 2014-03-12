@@ -319,6 +319,12 @@
                    
                     if (ideUsuarioResp != -1)
                     {
+                        SedeNivel datosSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                        enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                        enviarMail.Sede = datosSession.SEDEDES;
+                        enviarMail.Area = datosSession.AREADES;
+
                         Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
                         var SedeDesc = Session[ConstanteSesion.SedeDes];
 
@@ -449,7 +455,7 @@
             try
             {
                 LogSolicitudNuevoCargo estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
-                if ((EtapasSolicitud.PendienteAprobacionGerenteArea != estado.TipoEtapa) && (EtapasSolicitud.PendienteAprobacionGerenteGralAdj != estado.TipoEtapa))
+                if ((Etapa.Pendiente != estado.TipoEtapa) && (Etapa.Validado != estado.TipoEtapa))
                 {
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);

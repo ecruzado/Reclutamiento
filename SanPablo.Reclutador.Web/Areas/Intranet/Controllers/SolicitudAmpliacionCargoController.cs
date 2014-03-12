@@ -61,15 +61,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (IdeSolicitudAmpliacion != 0)
             {
-                solicitudModel.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                solicitudModel.SolicitudRequerimiento = solicitud;
                 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 
-                if ((rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
+                if ((rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto)|| (solicitud.TipEtapa== Etapa.Aprobado))
                 {
                     solicitudModel.Accion = Accion.Aprobar;
                 }
-                else
+                if (solicitud.TipEtapa == Etapa.Aceptado)
                 {
                     solicitudModel.Accion = Accion.Publicar;
                 }
@@ -130,7 +131,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     case Roles.Gerente_General_Adjunto:
                         rolResponsable = Roles.Encargado_Seleccion;
-                        etapaInicio = Etapa.Aceptado;
+                        etapaInicio = Etapa.Aprobado;
                         break;
                 }
 
@@ -190,6 +191,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             model.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
             model.TiposRequerimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
+            model.TipoPuestos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
+            model.TipoPuestos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
 
             model.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             model.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -1083,7 +1088,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objSol.FechaModificacion = FechaSistema;
                     objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
-                    objSol.TipEtapa = EtapasSolicitud.Publicado;
+                    objSol.TipEtapa = Etapa.Publicado;
                     objSol.IndicadorSalario = IndVerSalario;
                     objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
 
@@ -1095,7 +1100,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
-                    model.LogSolReqPersonal.TipEtapa = EtapasSolicitud.Publicado;
+                    model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
 
                     _solicitudAmpliacionPersonal.ActualizaLogSolReq(model.LogSolReqPersonal);
 

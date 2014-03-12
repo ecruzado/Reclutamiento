@@ -35,7 +35,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public List<DetalleGeneral> Etapas { get; set; }
         public List<DetalleGeneral> Estados { get; set; }
-        public List<DetalleGeneral> TipoPuesto { get; set; }
+        public List<DetalleGeneral> TipoPuestos { get; set; }
 
 
     }
