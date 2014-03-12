@@ -168,17 +168,7 @@
         public const string Hijo = "03";
     }
 
-    public sealed class EtapasSolicitud
-    {
-        public const string PendienteAprobacionGerenteArea = "01";
-        public const string PendienteAprobacionGerenteGralAdj = "02";
-        public const string PendienteElaboracionPerfil = "03";
-        public const string PendienteAprobacionPerfilJefeArea = "04";
-        public const string PendienteAprobacionPerfilEncargSeleccion = "05";
-        public const string PendientePublicacion = "06";
-        public const string Publicado = "07";
-        public const string Finalizado = "99";
-    }
+   
    
     public sealed class SucesoSolicitud
     {

@@ -336,7 +336,8 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get
             {
-                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdePostulante]; 
+                var idPostulante = System.Web.HttpContext.Current.Session[ConstanteSesion.IdePostulante];
+                return (int)(idPostulante==null?0:idPostulante);
                 //return 55;
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdePostulante, value); }

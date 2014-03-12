@@ -21,6 +21,13 @@ namespace SanPablo.Reclutador.Entity
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecFinal { get; set; }
 
+        public virtual string SedeDes { get; set; }
+        public virtual string CargoDes { get; set; }
+        public virtual int NumVacantes { get; set; }
+        public virtual string TipoHorarioDes { get; set; }
+
+
+
 
     }
 }

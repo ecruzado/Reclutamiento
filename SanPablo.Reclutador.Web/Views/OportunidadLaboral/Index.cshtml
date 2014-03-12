@@ -122,7 +122,7 @@
                 <td class="span5">
                     <label class="control-label" for="inputSuccess">Lugar</label>
                     <div class="controles">
-                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeSede, new SelectList(Model.listaSede, "Valor", "Descripcion", Model.oportunidadLaboral.IdeSede),new {  data_val = "false"})
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeSede, new SelectList(Model.listaSede, "CodigoSede", "DescripcionSede", Model.oportunidadLaboral.IdeSede),new {  data_val = "false"})
                     </div>
                 </td>
 
