@@ -67,10 +67,6 @@ namespace SanPablo.Reclutador.Web.Core
                     filterContext.Result = new RedirectToRouteResult(routeValues);
                 }
 
-               
-                
-                
-
             }
             else if (TipoDevolucionError == Core.TipoDevolucionError.Json)
             {

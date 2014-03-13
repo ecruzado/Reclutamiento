@@ -70,7 +70,7 @@
                 }
             });
         },
-                  colNames: ['Postular','', '', 'Sede', 'Cargo/Posición', 'Fecha Publicación', 'Fecha Experización', '', 'Tipo'],
+                  colNames: ['Postular','', '', 'Sede', 'Cargo/Posición', 'Fecha Publicación', 'Fecha Experización', '', 'Tipo',''],
                   colModel: [
                     { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, width: 95, formatter: PostularFormatter },
                     { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, hidden: true },
@@ -80,7 +80,8 @@
                     { name: 'FecInicial', index: 'FecInicial', align: 'left', width: 180 },
                     { name: 'FecFinal', index: 'FecFinal', align: 'left', width: 180 },
                     { name: 'TipoHorario', index: 'TipoHorario', align: 'left', hidden: true },
-                    { name: 'TipoHorarioDes', index: 'TipoHorarioDes', align: 'left', width: 300 }
+                    { name: 'TipoHorarioDes', index: 'TipoHorarioDes', align: 'left', width: 300 },
+                    { name: 'NumVacantes', index: 'NumVacantes', align: 'left', hidden: true }
                   
             ],
             pager: jQuery('#grdPagerOportunidadLaboral'),
@@ -124,10 +125,30 @@
 
         });
 
-        function DetalleCargoFormatter(cellvalue, options, rowObject) {          
-            var a = '<a href="@Url.Action("DetalleCargo", "Postulante")" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
+
+       
+
+
+
+        function DetalleCargoFormatter(cellvalue, options, rowObject) {
+            var tipo = "'" + rowObject[7] + "'";
+            var fechaIncial = "'"+rowObject[5].toString("dd-MM-yyyy")+"'";
+            var fechaFinal = "'" + rowObject[6].toString("dd-MM-yyyy") + "'";
+            var idCargo =  rowObject[1];
+            var idSede = rowObject[2];
+            var numVacantes = rowObject[9];
+            
+            
+            var a = '<a onclick="detalleGrupoCargo(' + idCargo + ',' + idSede + ',' + fechaIncial + ',' + fechaFinal + ',' + tipo + ',' + numVacantes + ');" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
+            
+
+            
             return a;
+
         }
+
+
+        //public ActionResult inicioDetalleCargo(string idCargo,string idSede,string fechaInicio,string fechaFin,string tipo,int numVacantes)
 
         function PostularFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
@@ -139,6 +160,23 @@
         function confirmapostulacion() {
             $("#dialogconfirm1").dialog("open");
         }
+
+        function detalleGrupoCargo(idCargo, idSede, fechaInicio, fechaFin, tipo, numVacantes) {
+           
+
+            var url = '@Url.Action("inicioDetalleCargo", "OportunidadLaboral", new { id = ""})?id='+ idCargo + '&idSede=' + idSede + '&fechaInicio=' + fechaInicio + '&fechaFin=' + fechaFin + '&tipo=' + tipo + '&numVacantes=' + numVacantes;
+            window.location = url;
+
+        }
+
+
+       @* $.get('@Url.Action("popupSedeNivel", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogSedeNivel"));
+            dialogDiv.dialog('open');
+        });*@
+
     
     </script>
 }

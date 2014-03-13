@@ -19,6 +19,7 @@
     {
 
         List<OportunidadLaboral> GetObtieneOpurtunidad(OportunidadLaboral obj);
+        SolReqPersonal GetDatosSolGrupo(OportunidadLaboral obj);
     }
 
 
