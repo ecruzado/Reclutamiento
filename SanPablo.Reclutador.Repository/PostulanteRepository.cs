@@ -173,6 +173,46 @@
             }
         }
 
+        /// <summary>
+        /// Relaliza la validacion del postulante 
+        /// valida que el usuario tenfa todos los datos necesarios para postular
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int ValidaPostulacion(OportunidadLaboral obj)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            int retorno = 0;
+
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_VALIDA_POSTULACION");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nIPostulante", OracleType.VarChar).Value = obj.IdPostulante;
+                lspcmd.Parameters.Add("p_retorno", OracleType.Number).Direction = ParameterDirection.Output;
+
+
+                lspcmd.ExecuteNonQuery();
+
+                retorno = (lspcmd.Parameters["p_retorno"].Value == null ? 0 : Convert.ToInt32(lspcmd.Parameters["p_retorno"].Value));
+
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
 
 

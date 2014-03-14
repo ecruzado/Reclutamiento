@@ -7,6 +7,7 @@
 }
 @section Head{
     <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
+    
 }
 
 @section Scripts{
@@ -114,8 +115,11 @@
                 modal: true,
                 buttons: {
                     "Aceptar": function () {
-                        //grabar(); /*return true;*/
-                        $(this).dialog("close");
+                        var selr = jQuery('#grdListOportunidadLaboral').jqGrid('getGridParam', 'selrow');
+                        var rowData = jQuery('#grdListOportunidadLaboral').jqGrid('getRowData', selr);
+                        var idCargo = rowData.IdeCargo;
+                        PostulanteValida(idCargo);
+
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
@@ -147,9 +151,6 @@
 
         }
 
-
-        //public ActionResult inicioDetalleCargo(string idCargo,string idSede,string fechaInicio,string fechaFin,string tipo,int numVacantes)
-
         function PostularFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'right_2.png';
@@ -158,24 +159,43 @@
         }
 
         function confirmapostulacion() {
-            $("#dialogconfirm1").dialog("open");
+           $("#dialogconfirm1").dialog("open");
         }
 
         function detalleGrupoCargo(idCargo, idSede, fechaInicio, fechaFin, tipo, numVacantes) {
            
-
             var url = '@Url.Action("inicioDetalleCargo", "OportunidadLaboral", new { id = ""})?id='+ idCargo + '&idSede=' + idSede + '&fechaInicio=' + fechaInicio + '&fechaFin=' + fechaFin + '&tipo=' + tipo + '&numVacantes=' + numVacantes;
             window.location = url;
 
         }
 
 
-       @* $.get('@Url.Action("popupSedeNivel", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
+        function PostulanteValida(idCargo) {
 
-            dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#popupDialogSedeNivel"));
-            dialogDiv.dialog('open');
-        });*@
+            $.ajax({
+                data: {
+                    id: idCargo
+                },
+                type: "POST",
+                url: '@Url.Action("validaPostulacion", "OportunidadLaboral")',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado) {
+                            $('#dialogconfirm1').dialog("close");
+                            $('#grdListOportunidadLaboral').trigger('reloadGrid');
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        } else {
+                            $('#dialogconfirm1').dialog("close");
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        }
+                    }
+             });
+
+        }
+
+        function MostrarMensaje(mensaje, titulo) {
+            Funciones.Alert("divMensajePos", "spnMensajePos", mensaje, titulo);
+        }
 
     
     </script>
@@ -248,4 +268,6 @@
 <div id="dialogconfirm1" title="Confirmación">
 <p><span class="ui-icon ui-icon-info" style="float: left; margin: 0 7px 20px 0;"></span>Confirme que desea postular al cargo seleccionado</p>
 </div>
-
+<div id="divMensajePos">
+        <span id="spnMensajePos"></span>
+</div>

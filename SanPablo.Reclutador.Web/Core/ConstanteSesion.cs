@@ -24,7 +24,7 @@ namespace SanPablo.Reclutador.Web.Core
         public const string ObjUsuario = "ObjUsuario";
 
         /// <summary>
-        /// obtiene los datos de un usuario de extranet
+        /// obtiene los datos de un usuario de extranet hace referencia al objeto Usuario
         /// </summary>
         public const string ObjUsuarioExtranet = "ObjUsuarioExtranet";
 

@@ -20,6 +20,7 @@
 
         List<OportunidadLaboral> GetObtieneOpurtunidad(OportunidadLaboral obj);
         SolReqPersonal GetDatosSolGrupo(OportunidadLaboral obj);
+        int ValidaPostulacion(OportunidadLaboral obj);
     }
 
 
