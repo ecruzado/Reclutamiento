@@ -48,6 +48,9 @@ namespace SanPablo.Reclutador.Web.Controllers
         private INivelAcademicoCargoRepository _nivelAcademicoCargoRepository;
         private ICompetenciaCargoRepository _competenciaCargoRepository;
         private IOfrecemosCargoRepository _ofrecemosCargoRepository;
+        private IEstudioPostulanteRepository _estudioPostulanteRepository;
+        private IExperienciaPostulanteRepository _experienciaPostulanteRepository;
+        private IConocimientoGeneralPostulanteRepository _conocimientoGeneralPostulanteRepository; 
 
         public OportunidadLaboralController(IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -68,7 +71,10 @@ namespace SanPablo.Reclutador.Web.Controllers
             INivelAcademicoCargoRepository nivelAcademicoCargoRepository,
             IExperienciaCargoRepository experienciaCargoRepository,
             ICompetenciaCargoRepository competenciaCargoRepository,
-            IOfrecemosCargoRepository ofrecemosCargoRepository
+            IOfrecemosCargoRepository ofrecemosCargoRepository,
+            IEstudioPostulanteRepository estudioPostulanteRepository,
+            IExperienciaPostulanteRepository experienciaPostulanteRepository,
+            IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -91,7 +97,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             _experienciaCargoRepository = experienciaCargoRepository;
             _competenciaCargoRepository = competenciaCargoRepository;
             _ofrecemosCargoRepository = ofrecemosCargoRepository;
-
+            _experienciaPostulanteRepository = experienciaPostulanteRepository;
+            _conocimientoGeneralPostulanteRepository = conocimientoGeneralPostulanteRepository;
         }
 
 
@@ -578,6 +585,83 @@ namespace SanPablo.Reclutador.Web.Controllers
                 return MensajeError("ERROR: " + ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Realiza la validacion del postulante
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult validaPostulacion(int id) 
+        {
+
+            JsonMessage ObjJson = new JsonMessage();
+            Usuario usuario = new Usuario();
+            OportunidadLaboral objOportunidad;
+            int retorno=0;
+
+
+            int idPostulante;
+
+            var objUsuario = Session[ConstanteSesion.ObjUsuarioExtranet];
+            if (objUsuario!=null)
+            {
+                usuario = (Usuario)objUsuario;
+            }
+
+            idPostulante = usuario.IdePostulante;
+            if (idPostulante!=null && idPostulante>0)
+            {
+
+                objOportunidad = new OportunidadLaboral();
+                objOportunidad.IdPostulante = idPostulante;
+                retorno = _postulanteRepository.ValidaPostulacion(objOportunidad);
+
+                if (retorno>0)
+                {
+                    if (retorno==1)
+                    {
+                        ObjJson.Resultado = false;
+                        ObjJson.Mensaje = "Ingrese sus estudios";
+                        return Json(ObjJson);
+
+                    }
+
+                    if (retorno == 2)
+                    {
+                        ObjJson.Resultado = false;
+                        ObjJson.Mensaje = "Ingrese sus experiencias";
+                        return Json(ObjJson);
+
+                    }
+
+                    if (retorno == 3)
+                    {
+                        ObjJson.Resultado = false;
+                        ObjJson.Mensaje = "Ingrese sus conocimientos";
+                        return Json(ObjJson);
+
+                    }
+                }
+               
+            }
+            else
+            {
+                ObjJson.Resultado = false;
+                ObjJson.Mensaje = "Debe registrase para postular";
+                return Json(ObjJson);
+
+            }
+
+            if (retorno==0)
+            {
+                ObjJson.Mensaje = "Se realizo la postulación";
+            }
+
+            return Json(ObjJson);
+        }
+
 
 
     }
