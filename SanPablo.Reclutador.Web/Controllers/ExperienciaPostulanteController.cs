@@ -26,6 +26,7 @@
             _postulanteRepository = postulanteRepository;
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Index()
         {
             var experienciaViewModel = InicializarExperiencia();
@@ -79,6 +80,7 @@
             }
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ViewResult Edit(string id)
         {
             var experienciaGeneralViewModel = InicializarExperiencia();
@@ -158,6 +160,18 @@
             experienciaPostulanteGeneralViewModel.TipoCargosReferente.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             return experienciaPostulanteGeneralViewModel;
+        }
+
+        [HttpPost]
+        public ActionResult eliminarExperiencia(int ideExperiencia)
+        {
+            
+            ActionResult result = null;
+
+            var experienciaEliminar = new ExperienciaPostulante();
+            experienciaEliminar = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == ideExperiencia);
+            _experienciaPostulanteRepository.Remove(experienciaEliminar);
+            return result;
         }
 
 

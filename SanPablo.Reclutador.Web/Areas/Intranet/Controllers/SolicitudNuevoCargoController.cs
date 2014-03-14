@@ -452,12 +452,22 @@
             try
             {
                 LogSolicitudNuevoCargo estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
+
                 if ((Etapa.Pendiente != estado.TipoEtapa) && (Etapa.Validado != estado.TipoEtapa))
                 {
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    if (estado.RolResponsable == Convert.ToInt32(Session[ConstanteSesion.Rol]))
+                    {
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "No tiene pendiente ninguna Acción";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
-                else
+                else  
                 {
                     objJsonMessage.Mensaje = "ERROR: La solicitud no tiene las aprobaciones necesarias";
                     objJsonMessage.Resultado = false;

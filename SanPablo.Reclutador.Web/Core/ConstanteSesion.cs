@@ -13,6 +13,7 @@ namespace SanPablo.Reclutador.Web.Core
         public const string SedeDes = "SedeDes";
         public const string RolDes = "RolDes";
         public const string UsuarioDes = "UsuarioDes";
+        public const string Modo = "Modo";
         /// <summary>
         /// obtiene la sede, depencia, departamento, area por usuario hace referencia al Objeto SedeNivel
         /// </summary>

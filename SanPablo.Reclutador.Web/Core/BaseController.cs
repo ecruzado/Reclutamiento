@@ -316,6 +316,18 @@ namespace SanPablo.Reclutador.Web.Core
                 System.Web.HttpContext.Current.Session.Add(ConstanteSesion.CargoPerfil, value);
             }
         }
+
+        protected string  ModoAccion
+        {
+            get
+            {
+                return (string)System.Web.HttpContext.Current.Session[ConstanteSesion.Modo];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Modo, value);
+            }
+        }
         protected int IdeSolicitudAmpliacion
         {
             get

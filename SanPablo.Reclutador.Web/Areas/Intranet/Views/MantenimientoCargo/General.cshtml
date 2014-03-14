@@ -1,12 +1,12 @@
 ﻿@using SanPablo.Reclutador.Entity
-@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-       ViewBag.Title = "Perfil";
-       Layout = "~/Views/Shared/LayoutCargo.cshtml";
+       ViewBag.Title = "Mantenimiento Cargo";
+       Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 
 
-@using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
+@using (Html.BeginForm("General", "MantenimientoCargo", FormMethod.Post, new { @id = "generalPerfilForm" }))
 {
 <!--General Inicio -->
     @Html.ValidationSummary(true)
@@ -43,53 +43,91 @@
                             <label class="control-label" for="input01">Postulante Interno</label>
                         </td>
                         <td>
+                        @if (Accion.Editar == Model.Accion)
+                        {
                             @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeTotalPostulanteInterno)
                             </div>
+                        }
+                        else
+                        {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini", disabled = "disabled" })
+                        }
                         </td>
                         <td></td>
                         <td>
                             <label class="control-label" for="input01">Rango Edad</label>
                         </td>
                         <td>
+                        
                             @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" }) -  @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
                             </div>
+
                         </td>
                         <td style="width:80px">
+                        @if (Accion.Editar == Model.Accion)
+                        {
                             @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" })
                             @Html.CheckBoxFor(model =>model.Cargo.IndicadorEdadRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
                             </div>
-                        @*<td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>*@
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" , disabled = "disabled"})
+                            @Html.CheckBoxFor(model =>model.Cargo.IndicadorEdadRanking, new { @style = "display:inline-block", disabled = "disabled" }) <label style="display:inline-block">**</label>
+                        }
                        </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td class="td-label">
                             <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
-                            @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.Sexo)
-                            </div>
+                            @if (Accion.Editar == Model.Accion)
+                            {
+                                @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.Cargo.Sexo)
+                                </div>
+                            }
+                            else
+                            {
+                                    @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block", disabled = "disabled" })
+                            }
                         </td>
                         <td style="width:80px" >
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
-                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeSexo)
-                            </div>
+                            @if (Accion.Editar == Model.Accion)
+                            {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeSexo)
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini", disabled = "disabled" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block", disabled = "disabled" }) <label style="display:inline-block">**</label>
+                            }
                         </td>                                       
                         <td></td>
                         <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
                         <td style="width:110px"> 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.TipoRequerimiento)
-                            </div>
+                            @if (Accion.Editar == Model.Accion)
+                            {
+                                @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.Cargo.TipoRequerimiento)
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento), new { disabled="disabled"})                                        
+                            }
                         </td>
                         <td>
                         </td>
@@ -110,17 +148,33 @@
                         <td></td>
                         <td style =" width:450px" >
                             <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
-                            </div>
+                            @if (Accion.Editar == Model.Accion)
+                            {
+                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })
+                            }
                         </td>
                         <td style="width:80px">
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
-                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeSalario)
-                            </div>
+                            @if (Accion.Editar == Model.Accion)
+                            {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeSalario)
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini", disabled= "disabled" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block", disabled = "disabled" })<label style="display:inline-block">**</label>
+                            }
+                            
                         </td>
                         <td></td>                                     
                         <td></td>
@@ -139,12 +193,12 @@
         <div class="grilla-opciones">
             <h6>Horario</h6>
             <div class="opciones">
-             @if (Accion.Enviar == Model.Accion)
-             {
-                <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+                @if(Accion.Editar == Model.Accion)
+                {
+                    <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -157,12 +211,12 @@
         <div class="grilla-opciones">
             <h6>Ubigeo</h6>
             <div class="opciones">
-             @if (Accion.Enviar == Model.Accion)
-             {
-                <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+                @if(Accion.Editar == Model.Accion)
+                {
+                    <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -175,12 +229,12 @@
                                             
         <div class="formulario-accion">
             <div class="opciones">
-             @if (Accion.Enviar == Model.Accion)
-             {
-                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-             }
-                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
-                <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                @if(Accion.Editar == Model.Accion)
+                {
+                    <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                }
+                <a class="btn btn-info" href="@Url.Action("Index", "MantenimientoCargo")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("Estudio", "MantenimientoCargo")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                 
             </div>
 

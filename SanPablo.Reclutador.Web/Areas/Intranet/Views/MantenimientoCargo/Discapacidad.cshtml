@@ -1,8 +1,8 @@
 ﻿@using SanPablo.Reclutador.Entity
-@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-    ViewBag.Title = "Perfil";
-    Layout = "~/Views/Shared/LayoutCargo.cshtml";
+    ViewBag.Title = "Mantenimiento Cargo";
+    Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 @section ScriptsCargo{ 
 <script type="text/javascript">
@@ -156,12 +156,12 @@
         <div class="grilla-opciones">
             <h6>Discapacidad</h6>
             <div class="opciones">
-             @if (Accion.Enviar == Model.Accion)
-             {
-                <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+               @if (Accion.Editar == Model.Accion)
+               {
+                  <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                  <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                  <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+               }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -175,8 +175,8 @@
                         
         <div class="formulario-accion">               
             <div class="opciones">
-            <a class="btn" href="@Url.Action("Conocimientos", "Perfil")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-            <a class="btn btn-info" href="@Url.Action("Evaluacion", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+            <a class="btn" href="@Url.Action("Conocimientos", "MantenimientoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn btn-info" href="@Url.Action("Evaluacion", "MantenimientoCargo")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
 
             </div>
         </div> 

@@ -1,8 +1,8 @@
 ﻿@using SanPablo.Reclutador.Web.Models
 @using SanPablo.Reclutador.Entity
-@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-    ViewBag.Title = "Perfil";
+    ViewBag.Title = "Mantenimiento Cargo";
     Layout = "~/Views/Shared/_LayoutIntranet.cshtml";
 }
 
@@ -10,12 +10,12 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Cargo</h5>
+                <h5>Mantenimiento de Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.Cargo.EstadoActivo)
                     @Html.HiddenFor(model=>model.IdeSolicitud)
-                    @Html.TextBoxFor(model => model.EstadoRegistro, new {@class="btn btn-primary btn-small disabled" ,disabled="disabled" , style ="width:60px"})
+                    @Html.TextBoxFor(model => model.EstadoRegistro, new {@class="btn btn-primary btn-small disabled" ,disabled="disabled" , style ="width:50px"})
                     @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>
             </div>
@@ -23,12 +23,18 @@
             <form class="formulario-busqueda">
                 <table>
                     <tr class="formulario-fila">
-                        <td class="colEtiqueta">
+                        @*<td class="colEtiqueta">
                            <label class="control-label" for="inputSuccess">Código</label>
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Cargo.IdeCargo, new { @disabled = "disabled"})
                         
+                        </td>*@
+                        <td class="colEtiqueta">
+                            <label class="control-label" for="inputSuccess">Código de Cargo</label>
+                        </td>
+                        <td class ="colImput">
+                            @Html.TextBoxFor(model=>model.Cargo.CodigoCargo,  new { @disabled = "disabled"})
                         </td>
                         <td class="colEtiqueta">
                             <label class="control-label" for="selectError">Dependencia</label>
@@ -38,27 +44,19 @@
                         </td>
                     </tr>
                     <tr class="formulario-fila">
-                        <td class="colEtiqueta">
+                        @*<td class="colEtiqueta">
                           <label class="control-label" for="inputSuccess">Cargo</label>
                        </td>
                         <td class="colImput">
                            @Html.TextBoxFor(model=>model.Cargo.NombreCargo,  new { @disabled = "disabled"})
-                       </td>
+                       </td>*@
                         <td class="colEtiqueta">
                             <label class="control-label" for="selectError">Departamento</label>
                         </td>
                         <td class="colImput">
                              @Html.TextBoxFor(model =>model.Departamento,  new { @disabled = "disabled"})
                         </td>
-                    </tr>
-                    <tr class="formulario-fila">
-                        <td class="colEtiqueta">
-                            <label class="control-label" for="inputSuccess">Descripción</label>
-                        </td>
-                        <td class="colImput">
-                                @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo,  new { @disabled = "disabled"})
-                        </td>
-                        <td class="colEtiqueta">
+                         <td class="colEtiqueta">
                           <label class="control-label" for="selectError">Área</label>
                         </td>
                         <td class="colImput">
@@ -66,51 +64,49 @@
                         </td>
                     </tr>
                     <tr class="formulario-fila">
+                        @*<td class="colEtiqueta">
+                            <label class="control-label" for="inputSuccess">Descripción</label>
+                        </td>
+                        <td class="colImput">
+                                @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo,  new { @disabled = "disabled"})
+                        </td>*@
+                       
+                    </tr>
+                   @* <tr class="formulario-fila">
                         <td class="colEtiqueta">
                             <label class="control-label" for="inputSuccess">Nro Posiciones</label>
                         </td>
                         <td class="colImput">
-                            @Html.TextBoxFor(model=>model.Cargo.NumeroPosiciones,  new { @disabled = "disabled"})
+                                @Html.TextBoxFor(model=>model.Cargo.NumeroPosiciones,  new { @disabled = "disabled"})
                         </td>
-                        <td class="colEtiqueta">
-                            <label class="control-label" for="inputSuccess">Código de Cargo</label>
-                        </td>
-                        <td class ="colImput">
-                            @Html.TextBoxFor(model=>model.Cargo.CodigoCargo,  new { @disabled = "disabled"})
-                        </td>
-                    </tr>
+                        
+                    </tr>*@
                 </table>
+
+                <div style="clear:both"></div>
+                <div>
+                    <h5> Datos Generales</h5>
+                    @Html.Partial("DatosGenerales");
+                </div>
             </form>
 
-            <h5>Perfil</h5>
+            <h5>Datos de Perfil</h5>
             <ul class="nav nav-tabs" data-tabs="tabs">
             <li><div style="width:110px;display:inline-block"></div></li>
-                @Html.MenuIntranet("Puesto", "Index", "Perfil")
-                @Html.MenuIntranet("General", "General", "Perfil")
-                @Html.MenuIntranet("Estudios", "Estudio", "Perfil")
-                @Html.MenuIntranet("Experiencia", "Experiencia", "Perfil")
-                @Html.MenuIntranet("Conocimientos", "Conocimientos", "Perfil")
-                @Html.MenuIntranet("Discapacidad", "Discapacidad", "Perfil")
-                @Html.MenuIntranet("Evaluación", "Evaluacion", "Perfil")
-                @Html.MenuIntranet("Conf. Perfil", "ConfiguracionPerfil", "Perfil")
+                @Html.MenuIntranet("Puesto", "Index", "MantenimientoCargo")
+                @Html.MenuIntranet("General", "General", "MantenimientoCargo")
+                @Html.MenuIntranet("Estudios", "Estudio", "MantenimientoCargo")
+                @Html.MenuIntranet("Experiencia", "Experiencia", "MantenimientoCargo")
+                @Html.MenuIntranet("Conocimientos", "Conocimientos", "MantenimientoCargo")
+                @Html.MenuIntranet("Discapacidad", "Discapacidad", "MantenimientoCargo")
+                @Html.MenuIntranet("Evaluación", "Evaluacion", "MantenimientoCargo")
+                @Html.MenuIntranet("Conf. Perfil", "ConfiguracionPerfil", "MantenimientoCargo")
             </ul>
             <div class="container">
             @RenderBody() 
             </div>
             <div class="form-actions">     
-                <a class="btn" href="@Url.Action("Index", "Cargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                @if (Accion.Aprobar.Equals(Model.Accion))
-                {
-                    <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                }
-                @if (Accion.Enviar.Equals(Model.Accion))
-                {
-                    <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
-                }
-                @if (Accion.Publicar.Equals(Model.Accion))
-                {
-                    <a class="btn btn-info" href="@Url.Action("Edit", "PublicacionCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
-                }
+                <a class="btn" href="@Url.Action("ListaCargos", "MantenimientoCargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Lista Cargos</a>
             </div>
         </div>
     </div>

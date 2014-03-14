@@ -18,6 +18,7 @@ namespace SanPablo.Reclutador.Mapping
             Id(x => x.IdeSolicitudNuevoCargo, "IDESOLNUEVOCARGO");
             Map(x => x.EstadoActivo, "ESTADO");
             Map(x => x.CodigoCargo, "CODCARGO");
+            Map(x => x.IdeCargo, "IDECARGO");
             Map(x => x.NombreCargo, "NOMBRE");
             Map(x => x.IdeDependencia, "IDEDEPENDENCIA");
             Map(x => x.NombreDependencia, "NOMDEPENDENCIA");

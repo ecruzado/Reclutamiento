@@ -96,7 +96,7 @@
                 else {
                     $("#spanMensaje").html('Seleccionar un item a editar');
                     $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
+                        title: 'Seleccion y Reclutamiento de Personal',
                         modal: true,
                         buttons: {
                             "Ok": function () { $(this).dialog("close"); }
@@ -108,10 +108,10 @@
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
+                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?');
                 $("#divMensaje").dialog({
-                    title: 'CONVOCATORIAS SAN PABLO',
+                    title: 'Seleccion y Reclutamiento de Personal',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); location.reload(true) },
@@ -137,9 +137,9 @@
         function eliminarExperiencia(id) {
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("eliminarExperiencia","EstudioPostulante")',
-            data: { ideEstudio: id },
-            success: function (respuesta) {
+                url: '@Url.Action("eliminarExperiencia","ExperienciaPostulante")',
+                data: { ideExperiencia: id },
+                success: function (respuesta) {
                 alert(respuesta);
             }
             });
@@ -195,7 +195,7 @@
     </div>
 </div>
 <div id="updateDialog" title="Agregar Experiencia"  ></div>
-    <div id="divMensaje" style="background-color:#772953">
+    <div id="divMensaje">
         <span id="spanMensaje" ></span>
     </div>
 

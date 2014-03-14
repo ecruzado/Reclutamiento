@@ -28,6 +28,7 @@
             _postulanteRepository = postulanteRepository;
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Index()
         {
             var conocimientoViewModel = InicializarConocimiento();
@@ -155,6 +156,7 @@
             }
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ViewResult Ofimatica(string id)
         {
             var conocimientoGeneralViewModel = InicializarConocimiento();
