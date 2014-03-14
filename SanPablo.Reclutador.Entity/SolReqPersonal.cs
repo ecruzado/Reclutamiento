@@ -253,5 +253,10 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual string ObservacionPublica { get; set; }
 
+        /// <summary>
+        /// nombre del usuario responsable
+        /// </summary>
+        public virtual string NombreResponsable { get; set; }
+
     }
 }

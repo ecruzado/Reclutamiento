@@ -293,12 +293,14 @@
                     solicitudNuevoCargoEditar.RangoSalarioPublicar = solicitudNuevoCargo.RangoSalarioPublicar;
                     solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
                     solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
+                    solicitudNuevoCargoEditar.ObservacionPublicacion = solicitudNuevoCargo.ObservacionPublicacion;
 
+                    logSolicitud.IdeSolicitudNuevoCargo = solicitudNuevoCargo.IdeSolicitudNuevoCargo;
                     logSolicitud.TipoEtapa = Etapa.Publicado;
                     logSolicitud.RolSuceso = rolActual;
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     logSolicitud.RolResponsable = 0;
-                    logSolicitud.UsuarioSuceso = 0;
+                    logSolicitud.UsuarioResponsable = 0;
 
                     _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargo.IdeSede, solicitudNuevoCargo.IdeArea, "NO");
 

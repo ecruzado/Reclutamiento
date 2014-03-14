@@ -181,6 +181,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudConsultaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudAmpliacionCargoViewModel.cs" />

@@ -58,10 +58,10 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripcion con un mínimo de 5 y un máximo de 255 caracteres");
 
-            RuleFor(x => x.DescripcionObservaciones)
+            RuleFor(x => x.ObservacionPublicacion)
                 .NotEmpty()
                 .WithMessage("Ingresar una descripcion de Observaciones");
-            RuleFor(x => x.DescripcionObservaciones)
+            RuleFor(x => x.ObservacionPublicacion)
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripcion con un mínimo de 5 y un máximo de 255 caracteres");
 

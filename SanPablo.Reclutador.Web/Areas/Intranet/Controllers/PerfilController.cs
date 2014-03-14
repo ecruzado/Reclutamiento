@@ -39,8 +39,9 @@
         }
 
         [ValidarSesion]
-        public ActionResult Index(string ideSolicitud)
+        public ActionResult Index(string id)
         {
+            var ideSolicitud = id;
             try
             {
                 var solicitud = _solicitudNuevoCargo.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
@@ -458,6 +459,9 @@
                     perfilViewModel.Accion = Accion.Aprobar;
                     break;
                 case Etapa.Aprobacion_Perfil:
+                    perfilViewModel.Accion = Accion.Aprobar;
+                    break;
+                case Etapa.Aceptado:
                     perfilViewModel.Accion = Accion.Publicar;
                     break;
                 case Etapa.Observado:
