@@ -254,9 +254,15 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ObservacionPublica { get; set; }
 
         /// <summary>
+        /// nombre del usuario responsable
+        /// </summary>
+        public virtual string NombreResponsable { get; set; }
+        
+        /// <summary>
         /// descripcion del rango salarial
         /// </summary>
         public virtual string TipoRangoSalarioDes { get; set; }
+
 
         
 

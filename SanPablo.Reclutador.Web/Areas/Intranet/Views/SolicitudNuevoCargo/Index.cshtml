@@ -95,7 +95,7 @@
                     { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
                     { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
                     { field: 'responsable', data: $("Select#Responsables").val() },
-                    { field: 'etapa', data: $("Select#Usuario_DscApePaterno").val() },
+                    { field: 'etapa', data: $("Select#Etapas").val() },
                     { field: 'estado', data: $("Select#Estados").val() },
                     { field: 'fechaInicial', data: $("#fechaInicio").val() },
                     { field: 'fechaFin', data: $("#fechaFin").val() }
@@ -127,7 +127,7 @@
                     }
                 });
             },
-            colNames: ['Estado','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre','', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa', '','Estado'],
+            colNames: ['Estado','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre','', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa'],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
@@ -152,9 +152,8 @@
                             { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
                             { name: 'Publicado', index: 'Publicado', align: 'left', width: 100 },
                             { name: 'ideEtapa', index: 'ideEtapa', align: 'left', hidden: true },
-                            { name: 'Etapa', index: 'Etapa', align: 'center', width: 160 },
-                            { name: 'TipoEstado',index: 'TipoEstado', align: 'left', hidden: true  },
-                            { name: 'Estado', index: 'Estado', align: 'center', width: 100 }
+                            { name: 'Etapa', index: 'Etapa', align: 'center', width: 160 }
+                          
                     ],
 
                     pager: jQuery('#grdPager'),
@@ -275,7 +274,7 @@
                 success: function (data) {
                     if (data.Resultado == true) {
                         if (estado != "I") {
-                            window.location = '@Url.Action("Index", "Perfil", new { ideSolicitud = "-id"})'.replace("-id", ideSolicitud);
+                            window.location = '@Url.Action("Index", "Perfil", new { id = "-id"})'.replace("-id", ideSolicitud);
                         }
                         else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva"); }
                     } else { MostrarMensaje(data.Mensaje); }
@@ -450,7 +449,7 @@
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
+                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
                 <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>

@@ -61,7 +61,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (IdeSolicitudAmpliacion != 0)
             {
-                var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
                 solicitudModel.SolicitudRequerimiento = solicitud;
                 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
@@ -181,7 +181,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudAmpliacionCargoViewModel model = new SolicitudAmpliacionCargoViewModel();
 
             model.SolicitudRequerimiento = new SolReqPersonal();
-            //model.SolicitudRequerimiento = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
 
             model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
@@ -236,7 +235,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (ideSolicitud != null)
                 {
                     IdeSolicitudAmpliacion = Convert.ToInt32(ideSolicitud);
-                    var cargoAmpliacion = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion);
+                    var cargoAmpliacion = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
                     perfilAmpliacionViewModel.SolicitudRequerimiento = cargoAmpliacion;
                 }
 
@@ -305,61 +304,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return cargoViewModel;
         }
-        #region INICIALIZACIONES
-        //public ActionResult Estudio()
-        //{
-        //    var estudioCargoViewModel = inicializarDatosCargo();
-        //    return View(estudioCargoViewModel);
-        //}
 
-        //public ActionResult Experiencia()
-        //{
-
-        //    var experienciaCargoViewModel = inicializarDatosCargo();
-        //    return View(experienciaCargoViewModel);
-        //}
-
-        //public ActionResult Conocimientos()
-        //{
-        //    var conocimientosCargoViewModel = inicializarDatosCargo();
-        //    return View(conocimientosCargoViewModel);
-        //}
-
-        //public ActionResult Discapacidad()
-        //{
-        //    var discapacidadCargoViewModel = inicializarDatosCargo();
-        //    return View(discapacidadCargoViewModel);
-        //}
-
-        //public ActionResult ConfiguracionPerfil()
-        //{
-        //    int IdeCargo = CargoPerfil.IdeCargo;
-        //    var discapacidadCargoViewModel = inicializarDatosConfig(IdeSolicitudAmpliacion);
-        //    return View(discapacidadCargoViewModel);
-        //}
-
-        //public PerfilAmpliacionViewModel inicializarDatosCargo()
-        //{
-        //    var discapacidadCargoViewModel = new PerfilAmpliacionViewModel();
-        //    discapacidadCargoViewModel.SolicitudRequerimiento = new SolReqPersonal();
-        //    return discapacidadCargoViewModel;
-        //}
-
-        //public PerfilAmpliacionViewModel inicializarDatosConfig(int IdeSolicitud)
-        //{
-        //    var solicitudViewModel = new PerfilAmpliacionViewModel();
-        //    var solicitudActual = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitud);
-        //    solicitudViewModel.SolicitudRequerimiento = solicitudActual;
-        //    return solicitudViewModel;
-        //}
-
-        //public ActionResult Evaluacion()
-        //{
-        //    var evaluacionCargoViewModel = inicializarDatosCargo();
-        //    return View(evaluacionCargoViewModel);
-        //}
-
-        #endregion
 
         #region GRILLAS PERFIL AMPLIACION
         ///

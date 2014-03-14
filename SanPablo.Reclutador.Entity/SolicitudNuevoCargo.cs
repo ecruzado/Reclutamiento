@@ -38,6 +38,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string  Motivo { get; set; }
         public virtual string EstadoActivo { get; set; }
         public virtual string TipoEtapa { get; set; }
+        public virtual string ObservacionPublicacion { get; set; }
 
         public virtual bool RangoSalarioPublicar
         {

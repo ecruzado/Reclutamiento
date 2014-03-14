@@ -1,10 +1,10 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudConsultaViewModel
 @using SanPablo.Reclutador.Entity
 @using System.Collections.Generic
 
 
 @{
-    ViewBag.Title = "Listado Solicitudes Ampliacion";
+    ViewBag.Title = "Listado Solicitudes";
 }
 @section Head{
 }
@@ -12,25 +12,30 @@
 @section Scripts{
 
 <script type="text/javascript">
+
     $("#txtfechainicio").datepicker();
     $("#txtfechafin").datepicker();
 
+
     $('#btnBuscarReemplazo').click(function () {
 
-        //validacionBuscar();
         $('#grdList').trigger('reloadGrid');
     });
 
-    $('#btnAproRechaSol').click(function () {
-        var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        if (ideSolAmpliacion != null) {
-            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSolAmpliacion;
-            }
-            else {
-                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
-            }
+    $('#btnConsultarSolicitud').click(function () {
 
-     });
+        var ideSol = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', ideSol);
+        var tipoSolicitud = rowData.TipoSol;
+        var idCargo = rowData.Idecargo;
+        if (ideSol != null) {
+            consultarSolicitud(ideSol, tipoSolicitud, idCargo);
+        }
+        else {
+            MostrarMensaje("Seleccione una solicitud para la consulta ");
+        }
+        
+    });
 
 
     $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
@@ -39,7 +44,7 @@
         $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
         $.ajax({
             type: "POST",
-            url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet"})',
+            url: '@Url.Action("listaDepartamentos", "SolicitudConsulta", new { area = "Intranet"})',
             data: { ideDependencia: ideDependencia },
             success: function (respuesta) {
                 $("select#SolicitudRequerimiento_IdeDepartamento").empty();
@@ -57,7 +62,7 @@
         var ideDepartamento = $(this).val();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("listaAreas","SolicitudAmpliacionCargo",new { area = "Intranet"})',
+            url: '@Url.Action("listaAreas","SolicitudConsulta",new { area = "Intranet"})',
                 data: { ideDepartamento: ideDepartamento },
                 success: function (respuesta) {
                     $("select#SolicitudRequerimiento_IdeArea").empty();
@@ -92,7 +97,10 @@
                 { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
                 { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
                 { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
-                { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() }
+                { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() },
+                { field: 'tipSol', data: $("#SolicitudRequerimiento_TipoSolicitud").val() },
+                { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
+                
 
             ];
             if (migrilla._search == true) {
@@ -103,7 +111,7 @@
             var params = { grid: migrilla };
 
             $.ajax({
-                url: '@Url.Action("ListBusquedaAmpliacion", "SolicitudAmpliacionCargo", new { area="Intranet"})',
+                url: '@Url.Action("ListBusqueda", "SolicitudConsulta", new { area="Intranet"})',
                 type: 'post',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(params),
@@ -119,7 +127,7 @@
                 }
             });
         },
-     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
+     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
      colModel: [
              { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
              { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
@@ -133,19 +141,21 @@
              { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
              { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
              { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
-
-             { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
-             { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
-             { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
-             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
-             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
+             { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 50 },
+             { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 50 },
+             { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 50 },
+             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 50 },
+             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 50 },
              { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
              { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
              { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
              { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
              { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300 },
-             { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
-             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
+             { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 100 },
+             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50, hidden: true },
+             { name: 'Etapa', index: 'Etapa', align: 'center', width: 100 },
+             { name: 'TipoSol', index: 'TipoSol', align: 'center', width: 50, hidden: true },
+             { name: 'TipoSolicitud', index: 'TipSolicitud', align: 'center', width: 100 }
      ],
      pager: jQuery('#grdPager'),
      rowNum: 10,
@@ -167,40 +177,58 @@
      }
  });
 
-        function RadioFormatter(cellvalue, options, rowObject) {
-            var strRdo = '<input type ="radio" name = "codigo">';
-            return strRdo;
+
+    function consultarSolicitud(ideSol, tipoSolicitud, idCargo) {
+        if (tipoSolicitud == "01") {
+            if (idCargo != 0) {
+                window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;
+            }
+            else {
+                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;
+            }
         }
+        else {
+            if (tipoSolicitud == "02") {
+                window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSol;
+            }
+            else {
+                window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + ideSol;
+            }
+        }
+    }
 
+    function RadioFormatter(cellvalue, options, rowObject) {
+        var strRdo = '<input type ="radio" name = "codigo">';
+        return strRdo;
+    }
 
-     function HabilitarFormatter(cellvalue, options, rowObject) {
-     var imgPath = '@Url.Content("~/Content/images/")';
-     var archivo = 'enabled.png';
-     var title = "Habilitar";
-                
-     if (rowObject[1] == "V") {
-         archivo = 'enabled.png';
-         var title = "Habilitar";
+    function HabilitarFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'enabled.png';
+        var title = "Habilitar";
 
-     }
-     else {
-         if (rowObject[1] == "M") {
-             archivo = 'ekiga.png';
-             var title = "Habilitar";
-         }
-         else {
-             if (rowObject[1] == "R") {
-                 archivo = 'red.png';
-                 var title = "Habilitar";
-             }
-             else {
-                 if (rowObject[1] == "I") {
-                     archivo = 'enigma.png';
-                     var title = "Habilitar";
-                 }
-             }
-         }
-     }
+        if (rowObject[1] == "V") {
+            archivo = 'enabled.png';
+            var title = "Habilitar";
+        }
+        else {
+            if (rowObject[1] == "M") {
+                archivo = 'ekiga.png';
+                var title = "Habilitar";
+            }
+            else {
+                if (rowObject[1] == "R") {
+                    archivo = 'red.png';
+                    var title = "Habilitar";
+                }
+                else {
+                    if (rowObject[1] == "I") {
+                        archivo = 'enigma.png';
+                        var title = "Habilitar";
+                    }
+                }
+            }
+        }
 
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
         return strImg;
@@ -213,7 +241,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Listado Solicitud de Ampliacion de Cargo</h5>
+                <h5>Listado Solicitudes de Requerimientos</h5>
             </div>
 @using (Html.BeginForm("Index", "SolicitudConsulta", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmBusListaReemplazo", @class = "formulario-busqueda" }))
 {
@@ -229,9 +257,9 @@
                     </td>
                     <td class="span5" style="width:500px">
                             <label class="control-label" for="selectError">Fecha Solicitud</label>
-                            <div class="controles">
-                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaInicioBus, new {@style="width:130px"})      
-                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaFinBus, new {@style="width:130px"})      
+                            <div class ="controles">
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaInicioBus, new {@class = "input-editorFor"})      
+                                @Html.EditorFor(model => model.SolicitudRequerimiento.FechaFinBus, new {@class = "input-editorFor"})      
                             </div>
                      </td>
                 </tr>
@@ -291,6 +319,21 @@
                        
                     </td>
                 </tr>
+
+               <tr class="formulario-fila">
+                    <td class="span5">
+                            <label class="control-label" for="inputSuccess">Tipo Solicitud</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipoSolicitud, new SelectList(Model.TiposSolicitudes, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipoSolicitud),new {  data_val = "false"})
+                            </div>
+                    </td>
+                   <td class="span5">
+                            <label class="control-label" for="inputSuccess">Codigo Solicitud</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal)
+                            </div>
+                    </td>
+                </tr>
              
              </table>
            
@@ -313,7 +356,7 @@
            <div class="form-actions">
                 <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                <a class="btn btn-info" id="btnConsultarSolicitud"><i class="icon-zoom-in icon-white"></i> Consultar</a>
             </div>
         }
         </div>

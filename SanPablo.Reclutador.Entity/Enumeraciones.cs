@@ -168,18 +168,6 @@
         public const string Hijo = "03";
     }
 
-    //public sealed class EtapasSolicitud
-    //{
-    //    public const string PendienteAprobacionGerenteArea = "01";
-    //    public const string PendienteAprobacionGerenteGralAdj = "02";
-    //    public const string PendienteElaboracionPerfil = "03";
-    //    public const string PendienteAprobacionPerfilJefeArea = "04";
-    //    public const string PendienteAprobacionPerfilEncargSeleccion = "05";
-    //    public const string PendientePublicacion = "06";
-    //    public const string Publicado = "07";
-    //    public const string Finalizado = "99";
-    //}
-   
     public sealed class SucesoSolicitud
     {
         public const string Pendiente = "P";
@@ -204,37 +192,6 @@
         public const string Rechazado = "R";
     }
 
-    //public sealed class Asunto 
-    //{
-    //    public const string Solicitado = "solicitado";
-    //    public const string Aprobacion = "Aprobación";
-    //    public const string AprobacionFinal = "Aprobación final";
-    //    public const string Rechazo = "Rechazo";
-    //    public const string AprobacionPerfil = "Aprobación de perfil";
-    //    public const string RechazoPerfil = "Rechazo de perfil";
-    //}
-
-    //public sealed class AccionMail
-    //{
-    //    public const string  Solicitado = " solicitado un "; //1.
-    //    public const string  Aprobacion = " Aprobado el ";//2.4
-    //    public const string  Rechazo = " Rechazado el ";//3
-    //    public const string  ElaboracionPerfil = " Elaborado el perfil para el ";//5
-    //    public const string  AprobacionPerfil = " Aprobado el perfil del ";//6
-    //    public const string  RechazoPerfil = " Rechazado el perfil del ";//6
-    //}
-
-    //public sealed class Responsable
-    //{
-    //    public const string GerenteArea = "GA";
-    //    public const string GerenteAdministrativoSede = "GAS";
-    //    public const string GerenteGeneralAdjunto = "GGA";
-    //    public const string JefeProcesos = "JP";
-    //    public const string JefeArea = "JA";
-    //    public const string EncargadoSeleccion = "ES";
-    //    public const string AsistenteSeleccion = "AS";
-
-    //}
     /// <summary>
     /// Roles del Sistema 
     /// </summary>

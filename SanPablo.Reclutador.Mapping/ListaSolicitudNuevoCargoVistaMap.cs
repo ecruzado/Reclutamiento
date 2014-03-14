@@ -33,8 +33,6 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.NombreResponsable, "NOMRESPONSABLE");
             Map(x => x.TipoEtapa, "TIPETAPA");
             Map(x => x.Etapa, "TETAPA");
-            Map(x => x.TipoEstado, "TIPSUCESO");
-            Map(x => x.Estado, "SUCESO");
 
             Table("LISTA_SOLICITUD_NUEVO_CARGO");
         }

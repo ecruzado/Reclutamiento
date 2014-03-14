@@ -42,7 +42,9 @@
 }
 
 
-
+.input-editorFor {
+    width: 130px;
+}
 
 .input-xxmini {
   width: 20px;

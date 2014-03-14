@@ -95,13 +95,17 @@
                     }
                     if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
                     {
+                        where.Add(Expression.Eq("TipoEtapa", grid.rules[6].data));
+                    }
+                    if (!"".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+                    {
                         where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
                     }
-                    if (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+                    if (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
                     {
                         where.Add(Expression.Ge("FechaCreacion", Convert.ToDateTime(grid.rules[7].data)));
                     }
-                    if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
+                    if (!"Seleccionar".Equals(grid.rules[9].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
                     {
                         where.Add(Expression.Le("FechaCreacion", Convert.ToDateTime(grid.rules[8].data)));
                     }
@@ -142,8 +146,7 @@
                                 item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
                                 item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
                                 item.Etapa==null?"":item.Etapa,
-                                item.TipoEstado ==null?"":item.TipoEstado,
-                                item.Estado==null?"":item.Estado
+                                
                             }
 
 
@@ -248,9 +251,6 @@
 
             solicitudNuevoViewModel.Areas = new List<Area>();
             solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
-
-            solicitudNuevoViewModel.Departamentos = new List<Departamento>();
-            solicitudNuevoViewModel.Areas = new List<Area>();
 
             return solicitudNuevoViewModel;
         }
@@ -420,9 +420,6 @@
             model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
             model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
             model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
-            //model.AreaSession = _areaRepository.GetSingle(x => x.IdeArea == ideArea);
-            //model.DepartamentoSession = new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] };
-            //model.DependenciaSession = new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] };
         }
 
         [HttpPost]
