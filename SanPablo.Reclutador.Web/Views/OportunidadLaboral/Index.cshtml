@@ -19,55 +19,93 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $("#txtfechainicio").datepicker();
-            $("#txtfechafin").datepicker();
+            btnBuscarOportunidadLab
 
-            jQuery("#grdListBuscarOportunidad").jqGrid({
-                url: '@Url.Action("ListaOfertasLaborales", "Postulante")',
-                datatype: 'json',
-                mtype: 'POST',
-                colNames: ['Fecha', 'Lugar', 'Cargo/Posición', 'Tipo', 'Fecha Expiración', 'Area', 'Postular'],
-                colModel: [
-                        { name: 'Fecha', index: 'Fecha', align: 'center', width: 80, sortable: false },
-                        { name: 'Lugar', index: 'Lugar', align: 'left', width: 150, sortable: false },
-                        //{ name: 'CargoPosicion', index: 'CargoPosicion', width: 180, align: 'left', sortable: false, formatter: DetalleCargoFormatter },
-                        { name: 'Tipo', index: 'Tipo', align: 'center', sortable: false, width: 90 },
-                        { name: 'FechaExpiracion', index: 'FechaExpiracion', align: 'center', sortable: false, width: 80},
-                        { name: 'Area', index: 'Area', hidden: true, visible: false, width: 80 },
-                        { name: 'Postular', index: 'Postular', align: 'center', sortable: false, width: 40, formatter: PostularFormatter }
-                ],
-                pager: jQuery('#grdPagerBuscarOportunidad'),
-                rowNum: 10,
-                rowList: [10, 30, 50],
-                sortname: 'Fecha',
-                sortorder: 'desc',
-                viewrecords: true,
-                height: 320,
-                width: 850,
-                rowNum: 0,
-                cellsubmit: 'clientArray',
-                hidegrid: false,
-                postData: {
+            $('#btnBuscarOportunidadLab').click(function () {
 
-                },
-                loadComplete: function (data) {
-                    if (data != null) {
-                        if (data.rows.length > 0) {
-                            var cRows = data.rows.length;
-                            for (iRow = 0; iRow <= cRows; iRow++) {
-                                //jQuery("#grdList").setCell(iRow, 2, '', { background: '#c7c5c5' });
-                            }
-                        }
-                    }
-
-                },
-                grouping: true,
-                groupingView: {
-                    groupField: ['Area'],
-                    groupDataSorted: true
-                }
+                $('#grdListOportunidadLaboral').trigger('reloadGrid');
             });
 
+
+            jQuery("#grdListOportunidadLaboral").jqGrid({
+                datatype: function (postdata) {
+                    var migrilla = new Object();
+                    migrilla.page = postdata.page;
+                    migrilla.rows = postdata.rows;
+                    migrilla.sidx = postdata.sidx;
+                    migrilla.sord = postdata.sord;
+                    migrilla._search = postdata.isSearch;
+                    migrilla.filters = postdata.filters;
+                    migrilla.Rules = [
+
+                        { field: 'idSede', data: $("#oportunidadLaboral_IdeSede").val() },
+                        { field: 'tipHorario', data: $("#oportunidadLaboral_TipoHorario").val() },
+                        { field: 'idCargo', data: $("#oportunidadLaboral_IdeCargo").val() },
+                        { field: 'fecInicial', data: $("#oportunidadLaboral_FecInicial").val() },
+                        { field: 'fecFinal', data: $("#oportunidadLaboral_FecFinal").val() }
+                      
+
+                    ];
+                    if (migrilla._search == true) {
+                        migrilla.searchField = postdata.searchField;
+                        migrilla.searchOper = postdata.searchOper;
+                        migrilla.searchString = postdata.searchString;
+                    }
+                    var params = { grid: migrilla };
+
+                    $.ajax({
+                        url: '@Url.Action("ListOportunidadesLaborales", "OportunidadLaboral")',
+                type: 'post',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(params),
+                async: false,
+                success: function (data, st) {
+                    if (st == 'success') {
+                        var jq = $('#grdListOportunidadLaboral')[0];
+                        jq.addJSONData(data);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        },
+                  colNames: ['Postular','', '', 'Sede', 'Cargo/Posición', 'Fecha Publicación', 'Fecha Experización', '', 'Tipo',''],
+                  colModel: [
+                    { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, width: 95, formatter: PostularFormatter },
+                    { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, hidden: true },
+                    { name: 'IdeSede', index: 'IdeSede', align: 'center',  hidden: true },
+                    { name: 'SedeDes', index: 'SedeDes', align: 'left', width: 250 },
+                    { name: 'CargoDes', index: 'CargoDes', align: 'left', width: 300,formatter: DetalleCargoFormatter },
+                    { name: 'FecInicial', index: 'FecInicial', align: 'left', width: 180 },
+                    { name: 'FecFinal', index: 'FecFinal', align: 'left', width: 180 },
+                    { name: 'TipoHorario', index: 'TipoHorario', align: 'left', hidden: true },
+                    { name: 'TipoHorarioDes', index: 'TipoHorarioDes', align: 'left', width: 300 },
+                    { name: 'NumVacantes', index: 'NumVacantes', align: 'left', hidden: true }
+                  
+            ],
+            pager: jQuery('#grdPagerOportunidadLaboral'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IdeCargo',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 250,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
+            });
+
+
+         
 
             $("#dialogconfirm1").dialog({
                 autoOpen: false,
@@ -87,10 +125,30 @@
 
         });
 
-        function DetalleCargoFormatter(cellvalue, options, rowObject) {          
-            var a = '<a href="@Url.Action("DetalleCargo", "Postulante")" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
+
+       
+
+
+
+        function DetalleCargoFormatter(cellvalue, options, rowObject) {
+            var tipo = "'" + rowObject[7] + "'";
+            var fechaIncial = "'"+rowObject[5].toString("dd-MM-yyyy")+"'";
+            var fechaFinal = "'" + rowObject[6].toString("dd-MM-yyyy") + "'";
+            var idCargo =  rowObject[1];
+            var idSede = rowObject[2];
+            var numVacantes = rowObject[9];
+            
+            
+            var a = '<a onclick="detalleGrupoCargo(' + idCargo + ',' + idSede + ',' + fechaIncial + ',' + fechaFinal + ',' + tipo + ',' + numVacantes + ');" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
+            
+
+            
             return a;
+
         }
+
+
+        //public ActionResult inicioDetalleCargo(string idCargo,string idSede,string fechaInicio,string fechaFin,string tipo,int numVacantes)
 
         function PostularFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
@@ -102,6 +160,23 @@
         function confirmapostulacion() {
             $("#dialogconfirm1").dialog("open");
         }
+
+        function detalleGrupoCargo(idCargo, idSede, fechaInicio, fechaFin, tipo, numVacantes) {
+           
+
+            var url = '@Url.Action("inicioDetalleCargo", "OportunidadLaboral", new { id = ""})?id='+ idCargo + '&idSede=' + idSede + '&fechaInicio=' + fechaInicio + '&fechaFin=' + fechaFin + '&tipo=' + tipo + '&numVacantes=' + numVacantes;
+            window.location = url;
+
+        }
+
+
+       @* $.get('@Url.Action("popupSedeNivel", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogSedeNivel"));
+            dialogDiv.dialog('open');
+        });*@
+
     
     </script>
 }
@@ -154,15 +229,15 @@
 }
         <div class="formulario-accion">
             <div class="opciones">
-                <a class="btn btn-info" id="btnBuscarOportunidad"><i class="icon-search icon-white"></i> Buscar</a> 
+                <a class="btn btn-info" id="btnBuscarOportunidadLab"><i class="icon-search icon-white"></i> Buscar</a> 
             </div>
             </div>
         <div style="clear:both"></div>
             
         <div>
-            <table id="grdListBuscarOportunidad">
+            <table id="grdListOportunidadLaboral">
             </table>
-            <div id="grdPagerBuscarOportunidad">
+            <div id="grdPagerOportunidadLaboral">
             </div>
         </div>
                                       

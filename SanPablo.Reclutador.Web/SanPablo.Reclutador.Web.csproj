@@ -496,6 +496,7 @@
     <Content Include="Views\Shared\LayoutCargo.cshtml" />
     <Content Include="Views\Seguridad\PopupLogeo.cshtml" />
     <Content Include="Views\Seguridad\PopupRestablecePass.cshtml" />
+    <Content Include="Views\OportunidadLaboral\DetalleGrupoCargo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
