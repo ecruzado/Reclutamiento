@@ -1,14 +1,29 @@
 ﻿@using SanPablo.Reclutador.Entity
-@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-    ViewBag.Title = "Perfil";
-    Layout = "~/Views/Shared/LayoutCargo.cshtml";
+    ViewBag.Title = "Mantenimiento Cargo";
+    Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 @section ScriptsCargo{  
     <script type="text/javascript">
         $(document).ready(function () {
             calcularTotales();
+            calcularTotalMaximo();
         });
+
+        function calcularTotalMaximo() {
+            $.ajax({
+                data: { },
+                type: "POST",
+                url: "@Url.Action("calcularPuntajeTotal", "MantenimientoCargo")",
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado == true) {
+                        $("#TotalMaximo").val(data.IdDato);
+                    } else { MostrarMensaje(data.Mensaje); $("#TotalMaximo").val("0"); }
+                }
+            });
+        }
 
         function calcularTotales()
         {
@@ -76,10 +91,17 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalPostulanteInterno, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
-                                            </div>
+                                            @if (Accion.Editar == Model.Accion)
+                                            {
+                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                                     @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                 @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled= "disabled"})
+                                            }
 
                                     </tr>
                                     <tr>
@@ -89,10 +111,17 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
-                                            </div>
+                                            @if (Accion.Editar == Model.Accion)
+                                            {
+                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
+                                                </div>
+                                             }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
+                                            }
                                             </td>
                                     </tr>
                                     <tr>
@@ -311,11 +340,8 @@
         </form>
         <div class="formulario-accion">
             <div class="opciones">
-             @if (Accion.Enviar == Model.Accion)
-             {
                  <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-             }
-                 <a class="btn" href="@Url.Action("Evaluacion", "Perfil")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                 <a class="btn" href="@Url.Action("Evaluacion", "MantenimientoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             </div>
         </div>
     </div>

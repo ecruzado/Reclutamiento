@@ -25,6 +25,7 @@
             _postulanteRepository = postulanteRepository;
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Index()
         {
             var discapacidadViewModel = InicializarDiscapacidades();
@@ -70,6 +71,7 @@
             }
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ViewResult Edit(string id)
         {
             var discapacidadPostulanteViewModel = InicializarDiscapacidades();

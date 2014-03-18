@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\MantenimientoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudConsultaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
@@ -410,6 +412,17 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Publicacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudConsulta\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
+    <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\ListaCargos.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\DatosGenerales.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

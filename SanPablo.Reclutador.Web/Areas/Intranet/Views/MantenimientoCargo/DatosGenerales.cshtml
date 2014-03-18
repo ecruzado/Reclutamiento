@@ -1,72 +1,45 @@
 ﻿@using SanPablo.Reclutador.Entity
-@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PerfilViewModel
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-       ViewBag.Title = "Perfil";
-       Layout = "~/Views/Shared/LayoutCargo.cshtml";  
+       ViewBag.Title = "Mantenimiento Cargo";
 }
 
-
-@using (Html.BeginForm("Index", "Perfil", FormMethod.Post, new { @id = "puestoPerfilForm" }))
+@using (Html.BeginForm("DatosGenerales", "MantenimientoCargo", FormMethod.Post, new { @id = "puestoPerfilForm" }))
 {
 <!--PUESTO -->
-    <div class="tab-pane active" id="A">
-        <div class="grilla-opciones" style="margin-top:0px;">
-            <h6>Objetivos</h6>
-            <div style="clear:both"></div>
-        </div>
-            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
-        <div class="espacio-division-entre-fieldset"></div>
-        <div class="grilla-opciones">
-            <h6>Funciones</h6>
-            <div class="opciones">
-            </div>
-            <div style="clear:both"></div>
-        </div>
-            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
-        <div class="grilla-opciones">
-            <h6>Competencias</h6>
-            <div class="opciones">
-            @if (Accion.Enviar == Model.Accion)
-            {
-                <a id="btnAgregarCompetencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEliminarCompetencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-            }
-            </div>
-            <div style="clear:both"></div>
-        </div>
-        <div class="tabla-datos">
-            <table id="grdListCompetencias">
-            </table>
-            <div id="grdPagerCompetencia">
-            </div>
-        </div>
-
-        <div class="grilla-opciones">
-            <h6>Ofrecemos</h6>
-            <div class="opciones">
-            @if (Accion.Enviar == Model.Accion)
-            {
-                <a id="btnAgregarOfrecimiento" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>                                             
-                <a id="btnEliminarOfrecimiento" class="btn btn-small btn-info" href="#" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                   
-            }
-            </div>
-            <div style="clear:both"></div>
-        </div>
-        <div class="tabla-datos">
-            <table id="grdListOfrecemos">
-            </table>
-            <div id="grdPagerOfrecemos">
-            </div>
-        </div>
+        <div style="clear:both"></div>
+            <table>
+            <tr class="formulario-fila">
+                <td class="colEtiqueta">
+                    <label class="control-label" for="inputSuccess">Nombre Cargo</label>
+                </td>
+                <td class="colInput">
+                    @Html.TextBoxFor(model => model.Cargo.NombreCargo)
                         
+                </td>
+                <td class="colEtiqueta">
+                    <label class="control-label" for="inputSuccess">Descripcion Cargo</label>
+                </td>
+                <td class ="colImput">
+                    @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                </td>
+            </tr>
+            <tr class="formulario-fila">
+                <td class="colEtiqueta">
+                    <label class="control-label" for="inputSuccess">Número de Posiciones</label>
+                </td>
+                <td class="colImput">
+                    @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "imput-mini"})
+                </td>
+                
+            </tr>
+        </table>       
         <div class="formulario-accion">                                          
             <div class="opciones">
                 <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
             </div>
                             
         </div>
-    </div>
 }
 <!--PUESTO FIN -->
 

@@ -76,7 +76,6 @@
             
         }
 
-        
         public PerfilViewModel inicializarPerfil()
         {
             var cargoViewModel = new PerfilViewModel();
@@ -84,6 +83,7 @@
             return cargoViewModel;
         }
 
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Index([Bind(Prefix = "Cargo")]Cargo cargo)
         {
@@ -100,7 +100,7 @@
                     return View(cargoViewModel);
                 }
 
-                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
                 cargoEditar.ObjetivoCargo = cargo.ObjetivoCargo;
                 cargoEditar.FuncionCargo = cargo.FuncionCargo;
@@ -115,14 +115,15 @@
             }
         }
 
+        [ValidarSesion]
         public ActionResult General()
         {
             var perfilViewModel = inicializarGeneral();
             if (CargoPerfil != null)
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                actualizarDatosCargo(perfilViewModel, cargo);
                 perfilViewModel.Cargo = cargo;
+                actualizarDatosCargo(perfilViewModel, cargo);
                 actualizarAccion(perfilViewModel);
             }
             
@@ -148,7 +149,7 @@
                     cargoViewModel.Cargo = cargo;
                     return View(cargoViewModel);
                 }
-                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
                 cargoEditar.PuntajeTotalPostulanteInterno = cargo.PuntajeTotalPostulanteInterno;
                 cargoEditar.EdadInicio = cargo.EdadInicio;
@@ -298,7 +299,7 @@
                                                               "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
                                                               "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
 
-                cargoEditar.UsuarioModificacion = "USUA";
+                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
                 cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
                 cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
@@ -314,6 +315,7 @@
                 cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
                 cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+                cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
 
                 if (!result.IsValid)
                 {
@@ -360,9 +362,9 @@
             perfilViewModel.IdeSolicitud = CargoPerfil.IdeSolicitud;
 
             if (cargo.EstadoActivo == IndicadorActivo.Activo)
-            { perfilViewModel.EstadoRegistro = "ACTIVO"; }
+            { perfilViewModel.EstadoRegistro = "Activo"; }
             else
-            { perfilViewModel.EstadoRegistro = "INACTIVO"; }
+            { perfilViewModel.EstadoRegistro = "Inactivo"; }
         }
 
         [HttpPost]

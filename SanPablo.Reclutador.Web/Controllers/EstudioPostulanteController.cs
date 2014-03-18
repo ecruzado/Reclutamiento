@@ -25,6 +25,7 @@
             _postulanteRepository = postulanteRepository;
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Index()
         {
             var estudioGeneralViewModel = InicializarEstudio();
@@ -79,6 +80,7 @@
             return dato.Descripcion;
         }
 
+        
         public ViewResult Edit(string id)
         {
             var estudioGeneralViewModel = InicializarEstudio();

@@ -73,6 +73,7 @@
             }
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ViewResult Edit(string id)
         {
             var parientePostulanteViewModel = InicializarParientes();
