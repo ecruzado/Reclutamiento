@@ -77,6 +77,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntajeTotalExamen { get; set; }
         public virtual int PuntajeMinimoExamen { get; set; }
         public virtual int CantidadPreseleccionados { get; set; }
+
+        public virtual int PuntajeMinimoGeneral { get; set; }
                
         public virtual string EstadoActivo { get; set; }
 

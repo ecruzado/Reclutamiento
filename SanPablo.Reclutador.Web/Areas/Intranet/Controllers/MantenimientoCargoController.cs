@@ -122,6 +122,9 @@
             CargoPerfil = new DatosCargo();
             CargoPerfil.IdeCargo = cargo.IdeCargo;
             CargoPerfil.CodigoCargo = cargo.CodigoCargo;
+            CargoPerfil.NombreCargo = cargo.NombreCargo;
+            CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
+            CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
 
             var datosArea = _areaRepository.obtenerDatosArea(cargo.IdeArea);
             CargoPerfil.Area = datosArea[1];
@@ -635,6 +638,42 @@
 
 
             return model;
+        }
+
+        /// <summary>
+        /// Guardar datos editados de cargo
+        /// </summary>
+        /// <param name="cargo"></param>
+        /// <returns></returns>
+        [ValidarSesion]
+        [HttpPost]
+        public ActionResult DatosGenerales([Bind(Prefix = "Cargo")]Cargo cargo)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                Cargo cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                cargoEditar.NombreCargo = cargo.NombreCargo;
+                cargoEditar.DescripcionCargo = cargo.DescripcionCargo;
+                cargoEditar.NumeroPosiciones = cargo.NumeroPosiciones;
+                
+                _cargoRepository.Update(cargoEditar);
+                
+                //Actualizar los datos de session
+                CargoPerfil.NombreCargo = cargo.NombreCargo;
+                CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
+                CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
+
+                objJsonMessage.Mensaje = "Guardado exitosamente";
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "Error" + ex;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
         }
     }
 }

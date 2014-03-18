@@ -31,14 +31,11 @@
             try
             {
                 lcon.Open();
-                OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_ACTUALIZAR_PUNTAJES");
+                OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_PROMEDIO_EVAL_CARGO");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = lcon;
 
-                cmd.Parameters.Add("p_nombreCampoDestino", OracleType.VarChar).Value = "PUNTTOTEXAMEN";
                 cmd.Parameters.Add("p_ideCargo", OracleType.Int32).Value = IdeCargo;
-                cmd.Parameters.Add("p_valor", OracleType.Int32).Value = valor;
-                cmd.Parameters.Add("p_valorEliminar", OracleType.Int32).Value = valorEliminado;
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

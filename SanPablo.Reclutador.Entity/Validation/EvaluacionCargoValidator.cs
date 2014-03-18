@@ -20,16 +20,18 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.PuntajeExamen)
                  .NotEmpty()
                 .WithMessage("Ingresar un puntaje");
+
             RuleFor(x => x.PuntajeExamen)
-                .ExclusiveBetween(0,20)
-               .WithMessage("Ingresar un puntaje válido");
+                .InclusiveBetween(0, 10)
+               .WithMessage("Ingresar un puntaje entre 0 y 10");
 
             RuleFor(x => x.NotaMinimaExamen)
                  .NotEmpty()
                 .WithMessage("Ingresar una nota mínima");
+
             RuleFor(x => x.NotaMinimaExamen)
-                .ExclusiveBetween(0, 20)
-               .WithMessage("Ingresar una nota mínima válido");
+                .InclusiveBetween(0, 10)
+               .WithMessage("Ingresar un puntaje entre 0 y 10");
 
         }
 

@@ -34,11 +34,8 @@
                 .WithMessage("Ingresar Puntaje");
 
             RuleFor(x => x.PuntajeExperiencia)
-                .GreaterThan(-1)
-                .WithMessage("Ingresar un puntaje mayor igual a cero");
-            RuleFor(x => x.PuntajeExperiencia)
-                .LessThan(21)
-                .WithMessage("Cantidad máximo de puntaje es 20");
+               .InclusiveBetween(0, 10)
+               .WithMessage("Ingresar un puntaje entre 0 y 10");
 
          }
 

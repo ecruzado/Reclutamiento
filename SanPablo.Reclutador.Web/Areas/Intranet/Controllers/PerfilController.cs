@@ -265,6 +265,7 @@
         {
             var discapacidadCargoViewModel = new PerfilViewModel();
             discapacidadCargoViewModel.Cargo = new Cargo();
+
             return discapacidadCargoViewModel;
         }
 
@@ -274,7 +275,7 @@
             var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
 
             int puntajeTotal = Convert.ToInt32(cargoActual.PuntajeTotalCentroEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalConocimientoGeneral) + Convert.ToInt32(cargoActual.PuntajeTotalDiscapacidad)+
-                               Convert.ToInt32(cargoActual.PuntajeTotalEdad) + Convert.ToInt32(cargoActual.PuntajeTotalExamen) + Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalHorario)+
+                               Convert.ToInt32(cargoActual.PuntajeTotalEdad) + Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalHorario)+
                                Convert.ToInt32(cargoActual.PuntajeTotalIdioma) + Convert.ToInt32(cargoActual.PuntajeTotalNivelEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalOfimatica) + Convert.ToInt32(cargoActual.PuntajeTotalPostulanteInterno)+
                                Convert.ToInt32(cargoActual.PuntajeTotalSalario) + Convert.ToInt32(cargoActual.PuntajeTotalSexo) + Convert.ToInt32(cargoActual.PuntajeTotalUbigeo);
 
@@ -283,6 +284,7 @@
             actualizarAccion(cargoViewModel);
             return cargoViewModel;
         }
+
 
         [ValidarSesion]
         [HttpPost]
@@ -301,20 +303,21 @@
 
                 cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
-                cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
-                cargoEditar.PuntajeMinimoSexo = cargo.PuntajeMinimoSexo;
-                cargoEditar.PuntajeMinimoSalario = cargo.PuntajeMinimoSalario;
-                cargoEditar.PuntajeMinimoNivelEstudio = cargo.PuntajeMinimoNivelEstudio;
-                cargoEditar.PuntajeMinimoCentroEstudio = cargo.PuntajeMinimoCentroEstudio;
-                cargoEditar.PuntajeMinimoExperiencia = cargo.PuntajeMinimoExperiencia;
-                cargoEditar.PuntajeMinimoOfimatica = cargo.PuntajeMinimoOfimatica;
-                cargoEditar.PuntajeMinimoIdioma = cargo.PuntajeMinimoIdioma;
-                cargoEditar.PuntajeMinimoConocimientoGeneral = cargo.PuntajeMinimoConocimientoGeneral;
-                cargoEditar.PuntajeMinimoDiscapacidad = cargo.PuntajeMinimoDiscapacidad;
-                cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
-                cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
+                //cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
+                //cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
+                //cargoEditar.PuntajeMinimoSexo = cargo.PuntajeMinimoSexo;
+                //cargoEditar.PuntajeMinimoSalario = cargo.PuntajeMinimoSalario;
+                //cargoEditar.PuntajeMinimoNivelEstudio = cargo.PuntajeMinimoNivelEstudio;
+                //cargoEditar.PuntajeMinimoCentroEstudio = cargo.PuntajeMinimoCentroEstudio;
+                //cargoEditar.PuntajeMinimoExperiencia = cargo.PuntajeMinimoExperiencia;
+                //cargoEditar.PuntajeMinimoOfimatica = cargo.PuntajeMinimoOfimatica;
+                //cargoEditar.PuntajeMinimoIdioma = cargo.PuntajeMinimoIdioma;
+                //cargoEditar.PuntajeMinimoConocimientoGeneral = cargo.PuntajeMinimoConocimientoGeneral;
+                //cargoEditar.PuntajeMinimoDiscapacidad = cargo.PuntajeMinimoDiscapacidad;
+                //cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
+                //cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
                 cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
 
                 if (!result.IsValid)
@@ -338,6 +341,7 @@
 
         }
 
+        [ValidarSesion]
         public ActionResult Evaluacion()
         {
             var evaluacionCargoViewModel = inicializarDatosCargo();
@@ -345,6 +349,7 @@
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                 actualizarDatosCargo(evaluacionCargoViewModel,cargo);
+                actualizarAccion(evaluacionCargoViewModel);
             }
             return View(evaluacionCargoViewModel);
         }
@@ -360,7 +365,7 @@
             perfilViewModel.Dependencia = CargoPerfil.Dependencia;
             perfilViewModel.Departamento = CargoPerfil.Departamento;
             perfilViewModel.IdeSolicitud = CargoPerfil.IdeSolicitud;
-
+            
             if (cargo.EstadoActivo == IndicadorActivo.Activo)
             { perfilViewModel.EstadoRegistro = "Activo"; }
             else

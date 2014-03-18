@@ -102,19 +102,27 @@
                     OfrecemosViewModel.Ofrecimiento = ofrecemosCargo;
                     return View("Ofrecemos", OfrecemosViewModel);
                 }
-                ofrecemosCargo.EstadoActivo = "A";
-                ofrecemosCargo.FechaCreacion = FechaCreacion;
-                ofrecemosCargo.UsuarioCreacion = "YO";
-                ofrecemosCargo.FechaModificacion = FechaCreacion;
-                ofrecemosCargo.Cargo = new Cargo();
-                ofrecemosCargo.Cargo.IdeCargo = IdeCargo;
+                if (existe(ofrecemosCargo.TipoOfrecimiento))
+                {
+                    objJsonMessage.Mensaje = "No puede insertar elementos duplicados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    ofrecemosCargo.EstadoActivo = IndicadorActivo.Activo;
+                    ofrecemosCargo.FechaCreacion = FechaCreacion;
+                    ofrecemosCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    ofrecemosCargo.FechaModificacion = FechaCreacion;
+                    ofrecemosCargo.Cargo = new Cargo();
+                    ofrecemosCargo.Cargo.IdeCargo = IdeCargo;
 
-                //cargo.agregarCompetencia(competenciaCargo);
-                _ofrecemosCargoRepository.Add(ofrecemosCargo);
+                    _ofrecemosCargoRepository.Add(ofrecemosCargo);
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    objJsonMessage.Mensaje = "Agregado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -155,6 +163,25 @@
 
 
             return cargoViewModel;
+        }
+
+        /// <summary>
+        /// Determina si existe el item 
+        /// </summary>
+        /// <param name="descripcion"></param>
+        /// <returns></returns>
+        public bool existe(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _ofrecemosCargoRepository.CountByExpress(x => x.TipoOfrecimiento == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
     }

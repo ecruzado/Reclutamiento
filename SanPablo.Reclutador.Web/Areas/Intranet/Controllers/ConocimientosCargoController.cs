@@ -99,33 +99,62 @@
                 }
                 if (conocimientoGeneralCargo.IdeConocimientoGeneralCargo == 0)
                 {
-                    conocimientoGeneralCargo.EstadoActivo = "A";
-                    conocimientoGeneralCargo.FechaCreacion = FechaCreacion;
-                    conocimientoGeneralCargo.UsuarioCreacion = "YO";
-                    conocimientoGeneralCargo.FechaModificacion = FechaCreacion;
-                    conocimientoGeneralCargo.Cargo = new Cargo();
-                    conocimientoGeneralCargo.Cargo.IdeCargo = IdeCargo;
+                    if (existeOfimatica(conocimientoGeneralCargo.TipoNombreOfimatica))
+                    {
+                        objJsonMessage.Mensaje = "No puede insertar la misma descirpción más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        conocimientoGeneralCargo.EstadoActivo = IndicadorActivo.Activo;
+                        conocimientoGeneralCargo.FechaCreacion = FechaCreacion;
+                        conocimientoGeneralCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        conocimientoGeneralCargo.FechaModificacion = FechaCreacion;
+                        conocimientoGeneralCargo.Cargo = new Cargo();
+                        conocimientoGeneralCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
-                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento,0, IdeCargo, "Ofimatica");
+                        _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
+                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, 0, IdeCargo, "Ofimatica");
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+
+                    }
                 }
                 else
                 {
                     var ofimaticaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoGeneralCargo.IdeConocimientoGeneralCargo);
-                    int valorEliminar = ofimaticaCargoActualizar.PuntajeConocimiento;
-                    ofimaticaCargoActualizar.TipoConocimientoOfimatica = conocimientoGeneralCargo.TipoConocimientoOfimatica;
-                    ofimaticaCargoActualizar.TipoNombreOfimatica = conocimientoGeneralCargo.TipoNombreOfimatica;
-                    ofimaticaCargoActualizar.TipoNivelConocimiento = conocimientoGeneralCargo.TipoNivelConocimiento;
-                    ofimaticaCargoActualizar.PuntajeConocimiento = conocimientoGeneralCargo.PuntajeConocimiento;
-                    ofimaticaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    ofimaticaCargoActualizar.FechaModificacion = FechaModificacion;
-                    _conocimientoCargoRepository.Update(ofimaticaCargoActualizar);
-                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Ofimatica");
+
+                    int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoNombreOfimatica == conocimientoGeneralCargo.TipoNombreOfimatica
+                                                                               && x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.IdeConocimientoGeneralCargo != conocimientoGeneralCargo.IdeConocimientoGeneralCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede insertar la misma descirpción más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int valorEliminar = ofimaticaCargoActualizar.PuntajeConocimiento;
+                        ofimaticaCargoActualizar.TipoConocimientoOfimatica = conocimientoGeneralCargo.TipoConocimientoOfimatica;
+                        ofimaticaCargoActualizar.TipoNombreOfimatica = conocimientoGeneralCargo.TipoNombreOfimatica;
+                        ofimaticaCargoActualizar.TipoNivelConocimiento = conocimientoGeneralCargo.TipoNivelConocimiento;
+                        ofimaticaCargoActualizar.PuntajeConocimiento = conocimientoGeneralCargo.PuntajeConocimiento;
+                        ofimaticaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        ofimaticaCargoActualizar.FechaModificacion = FechaModificacion;
+                        _conocimientoCargoRepository.Update(ofimaticaCargoActualizar);
+                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Ofimatica");
+
+                        objJsonMessage.Mensaje = "Editado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                
             }
             catch (Exception ex)
             {
@@ -237,33 +266,59 @@
                 }
                 if (idiomaCargo.IdeConocimientoGeneralCargo == 0)
                 {
-                    idiomaCargo.EstadoActivo = "A";
-                    idiomaCargo.FechaCreacion = FechaCreacion;
-                    idiomaCargo.UsuarioCreacion = "YO";
-                    idiomaCargo.FechaModificacion = FechaCreacion;
-                    idiomaCargo.Cargo = new Cargo();
-                    idiomaCargo.Cargo.IdeCargo = IdeCargo;
+                    if (existeIdioma(idiomaCargo.TipoIdioma))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo idioma más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        idiomaCargo.EstadoActivo = IndicadorActivo.Activo;
+                        idiomaCargo.FechaCreacion = FechaCreacion;
+                        idiomaCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        idiomaCargo.FechaModificacion = FechaCreacion;
+                        idiomaCargo.Cargo = new Cargo();
+                        idiomaCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _conocimientoCargoRepository.Add(idiomaCargo);
-                    _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento,0,IdeCargo, "Idioma");
+                        _conocimientoCargoRepository.Add(idiomaCargo);
+                        _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, 0, IdeCargo, "Idioma");
+
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
                     var idiomaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == idiomaCargo.IdeConocimientoGeneralCargo);
-                    int valorEliminar = idiomaCargoActualizar.PuntajeConocimiento;
-                    idiomaCargoActualizar.TipoConocimientoIdioma = idiomaCargo.TipoConocimientoIdioma;
-                    idiomaCargoActualizar.TipoIdioma = idiomaCargo.TipoIdioma;
-                    idiomaCargoActualizar.TipoNivelConocimiento = idiomaCargo.TipoNivelConocimiento;
-                    idiomaCargoActualizar.PuntajeConocimiento = idiomaCargo.PuntajeConocimiento;
-                    idiomaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    idiomaCargoActualizar.FechaModificacion = FechaModificacion;
-                    _conocimientoCargoRepository.Update(idiomaCargo);
-                    _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Idioma");
+
+                    int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoIdioma == idiomaCargo.TipoIdioma && x.Cargo.IdeCargo == CargoPerfil.IdeCargo
+                                                                               && x.IdeConocimientoGeneralCargo != idiomaCargo.IdeConocimientoGeneralCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo idioma más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int valorEliminar = idiomaCargoActualizar.PuntajeConocimiento;
+                        idiomaCargoActualizar.TipoConocimientoIdioma = idiomaCargo.TipoConocimientoIdioma;
+                        idiomaCargoActualizar.TipoIdioma = idiomaCargo.TipoIdioma;
+                        idiomaCargoActualizar.TipoNivelConocimiento = idiomaCargo.TipoNivelConocimiento;
+                        idiomaCargoActualizar.PuntajeConocimiento = idiomaCargo.PuntajeConocimiento;
+                        idiomaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        idiomaCargoActualizar.FechaModificacion = FechaModificacion;
+                        _conocimientoCargoRepository.Update(idiomaCargo);
+                        _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Idioma");
+
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
 
                 }
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
             }
             catch (Exception ex)
@@ -376,34 +431,60 @@
                 }
                 if (conocimientoCargo.IdeConocimientoGeneralCargo == 0)
                 {
-                    conocimientoCargo.EstadoActivo = "A";
-                    conocimientoCargo.FechaCreacion = FechaCreacion;
-                    conocimientoCargo.UsuarioCreacion = "YO";
-                    conocimientoCargo.FechaModificacion = FechaCreacion;
-                    conocimientoCargo.Cargo = new Cargo();
-                    conocimientoCargo.Cargo.IdeCargo = IdeCargo;
+                    if (existeGenerales(conocimientoCargo.TipoNombreConocimientoGeneral))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar, conocimientos duplicados";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        conocimientoCargo.EstadoActivo = IndicadorActivo.Activo;
+                        conocimientoCargo.FechaCreacion = FechaCreacion;
+                        conocimientoCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        conocimientoCargo.FechaModificacion = FechaCreacion;
+                        conocimientoCargo.Cargo = new Cargo();
+                        conocimientoCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _conocimientoCargoRepository.Add(conocimientoCargo);
-                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento,0,IdeCargo, "Otros");
+                        _conocimientoCargoRepository.Add(conocimientoCargo);
+                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, 0, IdeCargo, "Otros");
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+
+                    }
                 }
                 else
                 {
                     var otrosConocimientosActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == conocimientoCargo.IdeConocimientoGeneralCargo);
-                    int valorEliminar = otrosConocimientosActualizar.PuntajeConocimiento;
-                    otrosConocimientosActualizar.TipoConocimientoGeneral = conocimientoCargo.TipoConocimientoGeneral;
-                    otrosConocimientosActualizar.TipoNombreConocimientoGeneral = conocimientoCargo.TipoNombreConocimientoGeneral;
-                    otrosConocimientosActualizar.TipoNivelConocimiento = conocimientoCargo.TipoNivelConocimiento;
-                    otrosConocimientosActualizar.PuntajeConocimiento = conocimientoCargo.PuntajeConocimiento;
-                    otrosConocimientosActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    otrosConocimientosActualizar.FechaModificacion = FechaModificacion;
-                    _conocimientoCargoRepository.Update(otrosConocimientosActualizar);
-                    _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Otros");
+
+                    int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoNombreConocimientoGeneral == conocimientoCargo.TipoNombreConocimientoGeneral
+                                                                                && x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.IdeConocimientoGeneralCargo != conocimientoCargo.IdeConocimientoGeneralCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar, conocimientos duplicados";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int valorEliminar = otrosConocimientosActualizar.PuntajeConocimiento;
+                        otrosConocimientosActualizar.TipoConocimientoGeneral = conocimientoCargo.TipoConocimientoGeneral;
+                        otrosConocimientosActualizar.TipoNombreConocimientoGeneral = conocimientoCargo.TipoNombreConocimientoGeneral;
+                        otrosConocimientosActualizar.TipoNivelConocimiento = conocimientoCargo.TipoNivelConocimiento;
+                        otrosConocimientosActualizar.PuntajeConocimiento = conocimientoCargo.PuntajeConocimiento;
+                        otrosConocimientosActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        otrosConocimientosActualizar.FechaModificacion = FechaModificacion;
+                        _conocimientoCargoRepository.Update(otrosConocimientosActualizar);
+                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Otros");
+
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
 
                 }
-
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                
+                
             }
             catch (Exception ex)
             {
@@ -461,6 +542,48 @@
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimientoModel.Conocimiento.TipoConocimientoGeneral.ToString()));
             conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
 
+        }
+
+        public bool existeOfimatica(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoNombreOfimatica == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public bool existeIdioma(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoIdioma == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public bool existeGenerales(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoNombreConocimientoGeneral == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
         #endregion
 

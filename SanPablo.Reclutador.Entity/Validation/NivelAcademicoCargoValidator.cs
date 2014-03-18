@@ -25,8 +25,8 @@
                 .WithMessage("Ingresar Puntaje");
 
             RuleFor(x => x.PuntajeNivelEstudio)
-                .InclusiveBetween(0, 20)
-                .WithMessage("Ingresar un puntaje válido");
+                .InclusiveBetween(0, 10)
+                .WithMessage("Ingresar un puntaje entre 0 y 10");
 
             RuleFor(x => x.CicloSemestre)
                .InclusiveBetween(0, 99)

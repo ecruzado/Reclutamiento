@@ -40,8 +40,8 @@
                 .NotEmpty()
                 .WithMessage("Ingresar Puntaje");
             RuleFor(x => x.PuntajeConocimiento)
-                .InclusiveBetween(0, 20)
-                .WithMessage("Ingresar un puntaje válido");
+                .InclusiveBetween(0, 10)
+                .WithMessage("Ingresar un puntaje entre 0 y 10");
 
          }
 
