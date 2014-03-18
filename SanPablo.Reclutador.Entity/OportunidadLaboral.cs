@@ -65,9 +65,31 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual int IdPostulante { get; set; }
 
+        /// <summary>
+        /// id de la solicitud
+        /// </summary>
+        public virtual int IdSolocitud { get; set; }
 
+        
+        /// <summary>
+        /// Tipo de Solicitud
+        /// </summary>
+        public virtual string TipoSol { get; set; }
 
+        /// <summary>
+        /// tipo de puesto
+        /// </summary>
+        public virtual string TipoPuesto { get; set; }
 
+        /// <summary>
+        /// nombre del cargo
+        /// </summary>
+        public virtual string NombreCargo { get; set; }
+
+        /// <summary>
+        /// Fecha de expiracion
+        /// </summary>
+        public virtual DateTime FechaExpiracion { get; set; }
 
 
     }

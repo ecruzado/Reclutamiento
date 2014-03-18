@@ -480,7 +480,7 @@
     <Content Include="Views\Postulante\General.cshtml" />
     <Content Include="Views\Postulante\InstruccionesExamen.cshtml" />
     <Content Include="Views\OportunidadLaboral\Index.cshtml" />
-    <Content Include="Views\Postulante\Postulaciones.cshtml" />
+    <Content Include="Views\OportunidadLaboral\Postulaciones.cshtml" />
     <Content Include="Views\Postulante\Reclutamientos.cshtml" />
     <Content Include="Views\Postulante\Referencias.cshtml" />
     <Content Include="Views\Shared\MenuCv.cshtml" />

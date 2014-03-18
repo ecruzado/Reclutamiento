@@ -70,6 +70,19 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionOtroMedio { get; set; }
         public virtual string TipoComoSeEntero { get; set; }
 
+        /// <summary>
+        /// tipo de puesto
+        /// </summary>
+        public virtual string TipoPuesto { get; set; }
+        /// <summary>
+        /// cargo a la que postula
+        /// </summary>
+        public virtual int IdCargo { get; set; }
+        /// <summary>
+        /// sede a la que postula
+        /// </summary>
+        public virtual int IdSede { get; set; }
+
         public virtual byte[] FotoPostulante { get; set; }
 
         public virtual string IndicadorRegistroCompleto { get; set; }

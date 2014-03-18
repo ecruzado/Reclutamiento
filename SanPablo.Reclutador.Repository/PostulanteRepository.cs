@@ -195,6 +195,12 @@
                 lspcmd.Connection = lcon;
 
                 lspcmd.Parameters.Add("p_nIPostulante", OracleType.VarChar).Value = obj.IdPostulante;
+                lspcmd.Parameters.Add("p_ctippuesto", OracleType.VarChar).Value = obj.TipoHorario;
+                lspcmd.Parameters.Add("p_nidcargo", OracleType.VarChar).Value = obj.IdeCargo;
+                lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.IdeSede;
+
+
+
                 lspcmd.Parameters.Add("p_retorno", OracleType.Number).Direction = ParameterDirection.Output;
 
 
@@ -214,6 +220,101 @@
             }
         }
 
+
+        /// <summary>
+        /// Relaiza la postulacion
+        /// </summary>
+        /// <param name="obj"></param>
+        public void Postulacion(Postulante obj)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_POSTULACION");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                lspcmd.Parameters.Add("p_ctippuesto", OracleType.VarChar).Value = obj.TipoPuesto;
+                lspcmd.Parameters.Add("p_nidcargo", OracleType.VarChar).Value = obj.IdCargo;
+                lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.IdSede;
+               
+                lspcmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        /// <summary>
+        /// obtiene las postulaciones del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<OportunidadLaboral> GetMisPostulaciones(OportunidadLaboral obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+
+                string cFechaIncial = obj.FecInicial == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FecInicial);
+                string cFechaFinal = obj.FecFinal == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FecFinal);
+
+
+                IDataReader ldrOportunidadLaboral;
+                OportunidadLaboral lobOportunidadLaboral;
+                List<OportunidadLaboral> llstOportunidadLaboral;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_MIS_POSTULACIONES");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nidpostulante", OracleType.VarChar).Value = obj.IdPostulante;
+                lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                ldrOportunidadLaboral = (OracleDataReader)lspcmd.ExecuteReader();
+                lobOportunidadLaboral = null;
+                llstOportunidadLaboral = new List<OportunidadLaboral>();
+
+
+                while (ldrOportunidadLaboral.Read())
+                {
+
+                    lobOportunidadLaboral = new OportunidadLaboral();
+                    lobOportunidadLaboral.IdeSede = Convert.ToInt32(ldrOportunidadLaboral["IDSEDE"]);
+                    lobOportunidadLaboral.SedeDes = (ldrOportunidadLaboral["DESSEDE"] == null ? "" : Convert.ToString(ldrOportunidadLaboral["DESSEDE"]));
+                    lobOportunidadLaboral.IdSolocitud = (ldrOportunidadLaboral["IDESOL"] == null ? 0 : Convert.ToInt32(ldrOportunidadLaboral["IDESOL"]));
+                    lobOportunidadLaboral.IdeCargo = (ldrOportunidadLaboral["IDECARGO"] == null ? 0 : Convert.ToInt32(ldrOportunidadLaboral["IDECARGO"]));
+                    lobOportunidadLaboral.TipoSol = Convert.ToString(ldrOportunidadLaboral["TIPSOL"]);
+                    lobOportunidadLaboral.TipoHorario = Convert.ToString(ldrOportunidadLaboral["TIPPUESTO"]);
+                    lobOportunidadLaboral.TipoHorarioDes = Convert.ToString(ldrOportunidadLaboral["DES_PUESTO"]);
+                    lobOportunidadLaboral.FechaCreacion = Convert.ToDateTime(ldrOportunidadLaboral["FECHAPOSTULACION"]);
+                    lobOportunidadLaboral.NombreCargo = Convert.ToString(ldrOportunidadLaboral["NOMBRE"]);
+                    lobOportunidadLaboral.FechaExpiracion = Convert.ToDateTime(ldrOportunidadLaboral["FECEXPIRACION"]);
+
+                    llstOportunidadLaboral.Add(lobOportunidadLaboral);
+                }
+                ldrOportunidadLaboral.Close();
+                return llstOportunidadLaboral;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
 
 

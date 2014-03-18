@@ -118,7 +118,10 @@
                         var selr = jQuery('#grdListOportunidadLaboral').jqGrid('getGridParam', 'selrow');
                         var rowData = jQuery('#grdListOportunidadLaboral').jqGrid('getRowData', selr);
                         var idCargo = rowData.IdeCargo;
-                        PostulanteValida(idCargo);
+                        var idSede = rowData.IdeSede;
+                        var idTipPuesto = rowData.TipoHorario;
+                       
+                        PostulanteValida(idCargo, idSede, idTipPuesto);
 
                     },
                     "Cancelar": function () {
@@ -170,11 +173,14 @@
         }
 
 
-        function PostulanteValida(idCargo) {
+        function PostulanteValida(idCargo, idSede, idTipPuesto) {
 
             $.ajax({
                 data: {
-                    id: idCargo
+                    id: idCargo,
+                    idSede: idSede,
+                    idTipPuesto: idTipPuesto
+                   
                 },
                 type: "POST",
                 url: '@Url.Action("validaPostulacion", "OportunidadLaboral")',
