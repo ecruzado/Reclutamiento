@@ -1,0 +1,148 @@
+﻿@model SanPablo.Reclutador.Web.Models.OportunidadLaboralViewModel
+@{
+    ViewBag.Title = "Postulaciones";
+    Layout = "~/Views/Shared/_LayoutExtranet.cshtml";
+}
+@section Head{
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            @*jQuery("#grdListPostulaciones").jqGrid({
+                url: '@Url.Action("ListaMisPostulaciones", "Postulante")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Cargo/Posición', 'Lugar', 'Postulación', 'Fecha Expiración', 'Estado'],
+                colModel: [
+                        { name: 'NombreOferta', index: 'NombreOferta', align: 'left', width: 236, sortable: false },
+                        { name: 'Ubicacion', index: 'Ubicacion', align: 'left', width: 180, sortable: false },
+                        { name: 'Postulacion', index: 'Postulacion', align: 'center', sortable: false },
+                        { name: 'Vigencia', index: 'Vigencia', align: 'center', sortable: false },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false }
+                ],
+                sortname: 'Fecha',
+                sortorder: 'desc',
+                viewrecords: true,
+                autowidth: true,
+                /*caption: 'Lista Referencias',*/
+                height: 300,
+                width: 736,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });*@
+
+
+            jQuery("#grdListPostulaciones").jqGrid({
+                datatype: function (postdata) {
+                    var migrilla = new Object();
+
+                    migrilla.page = postdata.page;
+                    migrilla.rows = postdata.rows;
+                    migrilla.sidx = postdata.sidx;
+                    migrilla.sord = postdata.sord;
+                    migrilla._search = postdata.isSearch;
+                    migrilla.filters = postdata.filters;
+                    migrilla.Rules = [
+                           { field: 'idPost', data: $("#oportunidadLaboral_IdPostulante").val() }
+                          
+                    ];
+
+                    if (migrilla._search == true) {
+                        migrilla.searchField = postdata.searchField;
+                        migrilla.searchOper = postdata.searchOper;
+                        migrilla.searchString = postdata.searchString;
+                    }
+
+                    var params = { grid: migrilla };
+
+                    $.ajax({
+                        url: '@Url.Action("ListMisPostulaciones", "OportunidadLaboral")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListPostulaciones')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+                colNames: ['','Cargo/Posición','', 'Lugar', 'Postulación', 'Fecha Expiración', 'Tipo Puesto'],
+                colModel: [
+                        { name: 'IdeCargo', index: 'IdeCargo', align: 'left', width: 236, sortable: false ,hidden:true},
+                        { name: 'NombreCargo', index: 'NombreCargo', align: 'left', width: 180, sortable: false,width: 300 },
+                        { name: 'IdeSede', index: 'IdeSede', align: 'center', sortable: false,hidden:true },
+                        { name: 'SedeDes', index: 'SedeDes', align: 'center', sortable: false,width: 300 },
+                        { name: 'FechaCreacion', index: 'FechaCreacion', align: 'center', sortable: false,width: 150 },
+                        { name: 'FechaExpiracion', index: 'FechaExpiracion', align: 'center', sortable: false,width: 150 },
+                        { name: 'TipoHorarioDes', index: 'TipoHorarioDes', align: 'center', sortable: false,width: 150 }
+                ],
+
+
+                pager: jQuery('#grdPagerListPostulaciones'),
+                rowNum: 10,
+                //rowList: [10, 30, 50],
+                autowidth: true,
+                rules: true,
+                sortname: 'NombreCargo',
+                sortorder: 'desc',
+                viewrecords: true,
+                height: 180,
+                width: 600,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                rownumbers: true,
+                shrinkToFit: false,
+
+                postData: {
+                },
+                loadComplete: function (data) {
+                }
+            });
+
+        });
+
+    </script>
+}
+@using (Html.BeginForm("Index", "OportunidadLaboral", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmListaPostulacines" }))
+{
+    @Html.ValidationSummary(true)
+
+      @Html.TextBoxFor(model => model.oportunidadLaboral.IdPostulante, new { style = "display: none;" })
+   
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Mis Postulaciones</h5>
+            </div>
+            <br />
+            <div style="width: 100%;">
+                <div>
+                    <table id="grdListPostulaciones">
+                    </table>
+                    <div id="grdPagerListPostulaciones">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+

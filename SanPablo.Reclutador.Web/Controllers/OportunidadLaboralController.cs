@@ -593,7 +593,7 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult validaPostulacion(int id) 
+        public ActionResult validaPostulacion(int id,int idSede,string idTipPuesto) 
         {
 
             JsonMessage ObjJson = new JsonMessage();
@@ -615,7 +615,11 @@ namespace SanPablo.Reclutador.Web.Controllers
             {
 
                 objOportunidad = new OportunidadLaboral();
+                objOportunidad.IdeCargo = id;
                 objOportunidad.IdPostulante = idPostulante;
+                objOportunidad.IdeSede = idSede;
+                objOportunidad.TipoHorario = idTipPuesto;
+
                 retorno = _postulanteRepository.ValidaPostulacion(objOportunidad);
 
                 if (retorno>0)
@@ -643,6 +647,14 @@ namespace SanPablo.Reclutador.Web.Controllers
                         return Json(ObjJson);
 
                     }
+
+                    if (retorno == 4)
+                    {
+                        ObjJson.Resultado = false;
+                        ObjJson.Mensaje = "Ya se realizo la postulación";
+                        return Json(ObjJson);
+
+                    }
                 }
                
             }
@@ -656,12 +668,88 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             if (retorno==0)
             {
+                Postulante objPostulante = new Postulante();
+                objPostulante.IdCargo=id;
+                objPostulante.IdSede = idSede;
+                objPostulante.TipoPuesto = idTipPuesto;
+                objPostulante.IdePostulante = idPostulante;
+                
+                _postulanteRepository.Postulacion(objPostulante);
                 ObjJson.Mensaje = "Se realizo la postulación";
             }
 
             return Json(ObjJson);
         }
 
+        /// <summary>
+        /// inicializa la lista de mis postulaciones
+        /// </summary>
+        /// <returns></returns>
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
+        public ActionResult Postulaciones() 
+        {
+            OportunidadLaboralViewModel model;
+            model = new OportunidadLaboralViewModel();
+            model.oportunidadLaboral = new OportunidadLaboral();
+
+            Usuario usuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+
+            model.oportunidadLaboral.IdPostulante = usuario.IdePostulante;
+
+
+            return View("Postulaciones", model);
+
+        }
+
+
+        /// <summary>
+        /// obtiene las postulaciones del postulante
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListMisPostulaciones(GridTable grid)
+        {
+
+            OportunidadLaboral oportunidadLaboral;
+            List<OportunidadLaboral> lista = new List<OportunidadLaboral>();
+            try
+            {
+                int idPostulante = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+
+                oportunidadLaboral = new OportunidadLaboral();
+                oportunidadLaboral.IdPostulante = idPostulante;
+
+                lista = _postulanteRepository.GetMisPostulaciones(oportunidadLaboral);
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.IdeCargo.ToString() + '/' + item.IdeSede + "/" + item.TipoHorario + "/" + item.FechaCreacion.ToString() + "/" + item.FechaExpiracion.ToString()),
+                    cell = new string[]
+                            {
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
+                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.IdeSede==null?"":item.IdeSede.ToString(),
+                                item.SedeDes==null?"":item.SedeDes,
+                                item.FechaCreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FechaCreacion),
+                                item.FechaExpiracion==null?"":String.Format("{0:dd/MM/yyyy}", item.FechaExpiracion),
+                                item.TipoHorarioDes==null?"":item.TipoHorarioDes
+                                
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
 
 
     }

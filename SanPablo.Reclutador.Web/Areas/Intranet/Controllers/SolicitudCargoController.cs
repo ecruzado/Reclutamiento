@@ -1123,6 +1123,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solReqPersonal.TipEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
                     solReqPersonal.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
+                    solReqPersonal.Tipsol = TipoSolicitud.Remplazo;
+
                     lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
                
 

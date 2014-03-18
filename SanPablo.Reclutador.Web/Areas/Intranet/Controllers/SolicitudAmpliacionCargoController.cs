@@ -895,6 +895,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solicitudRequerimiento.TipEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
                     solicitudRequerimiento.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
+                    solicitudRequerimiento.Tipsol = TipoSolicitud.Ampliacion;
+
+
                     lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
                 //}
 
