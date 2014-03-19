@@ -14,13 +14,21 @@ namespace SanPablo.Reclutador.Web.Core
         public const string RolDes = "RolDes";
         public const string UsuarioDes = "UsuarioDes";
         public const string Modo = "Modo";
+        
+        /// <summary>
+        /// Guarda el identificador de la tabla general
+        /// </summary>
+        public const string IdeGeneral = "IdeGeneral";
+        
         /// <summary>
         /// obtiene la sede, depencia, departamento, area por usuario hace referencia al Objeto SedeNivel
         /// </summary>
+        
         public const string UsuarioSede = "UsuarioSede";
         /// <summary>
         /// obtiene los datos de la tabla usaurio hace referencia al Objeto Usuario
         /// </summary>
+       
         public const string ObjUsuario = "ObjUsuario";
 
         /// <summary>

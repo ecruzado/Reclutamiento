@@ -14,6 +14,8 @@
             Map(x => x.NombreCargo, "NOMCARGO");
             Map(x => x.DescripcionCargo, "DESCARGO");
             Map(x => x.CodigoCargo, "CODCARGO");
+            Map(x => x.IdeDependencia, "IDEDEPENDENCIA");
+            Map(x => x.IdeDepartamento, "IDEDEPARTAMENTO");
             Map(x => x.IdeArea, "IDEAREA");
             Map(x => x.NumeroPosiciones, "NUMPOSICION");
             Map(x => x.Sexo, "SEXO");

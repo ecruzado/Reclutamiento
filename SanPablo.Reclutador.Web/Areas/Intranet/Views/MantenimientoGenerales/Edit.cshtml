@@ -1,0 +1,116 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoGeneralViewModel
+@{
+    Layout = "";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        jQuery("#grdList1").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaDetalle", "MantenimientoGenerales", new { area = "Intranet" })',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList1')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Valor', 'Descripcion'],
+            colModel: [
+                    { name: 'Valor', index: 'Valor', align: 'center', hidden: false, width: 100 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 380 }
+
+            ],
+            pager: jQuery('#grdPager1'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'Descripcion',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 340,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            autowidth: true,
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });
+    });
+
+
+</script>
+
+@using (Html.BeginForm("Edit", "MantenimientoGenerales", FormMethod.Post, new { @id = "mantenimientoGeneralesForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    <table style="margin-left:30px;">
+        <tr>
+            <td class="colEtiqueta">
+                @*@Html.HiddenFor(model => model.Evaluacion.IdeEvaluacionCargo)*@
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaDetalleGeneral.Descripcion)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaDetalleGeneral.Descripcion)
+                </div>
+            </td> 
+        </tr>
+
+    </table>
+    <div class="grilla-opciones">
+        <div class="opciones">
+            <a id="btnAgregarEvaluacion" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+            <a id="btnEditarEvaluacion" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+            <a id="btnEliminarEvaluacion" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+        </div>
+        <div style="clear:both"></div>
+        
+    </div>
+    <div class="tabla-datos">
+            <table id="grdList1">
+            </table>
+            <div id="grdPager1">
+            </div>
+        </div>
+}
+
+
+

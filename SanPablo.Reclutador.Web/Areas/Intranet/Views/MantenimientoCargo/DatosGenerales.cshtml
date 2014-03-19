@@ -9,38 +9,110 @@
 <!--PUESTO -->
      @Html.ValidationSummary(true)
     <form class="formulario-busqueda">
-        <div class =" span10">
-            <table >
+        <table >
             <tr class="formulario-fila">
-                <td class="control-label">
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Dependencia</label>
+                </td>
+                <td class="controls">
+                 @if (Accion.Editar == Model.Accion)
+                 {
+                    @Html.DropDownListFor(model => model.Cargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Cargo.IdeDependencia))
+                    <div class="tex-error" style="font-size:12px;color:red"> 
+                        @Html.ValidationMessageFor(model => model.Cargo.IdeDependencia)
+                    </div>
+                 }
+                 else
+                 {
+                     @Html.DropDownListFor(model => model.Cargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Cargo.IdeDependencia), new { disabled = "disabled"})
+                 }   
+                </td>
+                <td class="colEtiqueta" style="width:150px;text-align:right">
                     <label class="control-label" for="inputSuccess">Nombre Cargo</label>
                 </td>
                 <td class="controls">
-                    @Html.TextBoxFor(model => model.Cargo.NombreCargo)
-                </td>        
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NombreCargo)
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NombreCargo, new { disabled = "disabled"})
+                    }
+                </td> 
+            </tr>
+            <tr>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Departamento</label>
+                </td>
+                <td class="controls">
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Cargo.IdeDepartamento))
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                             @Html.ValidationMessageFor(model => model.Cargo.IdeDepartamento)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Cargo.IdeDepartamento), new { disabled = "disabled"})
+                    }
+                </td>
                 <td class="colEtiqueta" style="width:130px;text-align:right">
                     <label class="control-label" for="inputSuccess">Descripcion Cargo</label>
                 </td>
                 <td class ="colImput">
-                    @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                    }
+                    else
+                    {
+                       @Html.TextBoxFor(model => model.Cargo.DescripcionCargo, new { disabled = "disabled"})
+                    }
                 </td>
             </tr>
             <tr class="formulario-fila">
-                <td class="colEtiqueta">
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Área</label>
+                </td>
+                <td class="controles">
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea))
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                            @Html.ValidationMessageFor(model => model.Cargo.IdeArea)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea), new { disabled = "disabled"})
+                    }
+                </td>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
                     <label class="control-label" for="inputSuccess">Núm. Posiciones</label>
                 </td>
                 <td class="colImput">
-                    @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right"})
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right"})
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right", disabled = "disabled"})
+                    }
                 </td>
-                
             </tr>
         </table>
         <div class="formulario-accion">   
             <div class="opciones">
-        <a id="btnGrabarDatosGenerales" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>   
-        </div>    
+                @if (Accion.Editar == Model.Accion)
+                {
+                    <a id="btnGrabarDatosGenerales" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>   
+                }
+                
+            </div>    
        </div>  
-     </div>
    </form>
 }
 <!--PUESTO FIN -->
@@ -91,6 +163,8 @@
                 }
             }
         });
+
+       
 
     });
 

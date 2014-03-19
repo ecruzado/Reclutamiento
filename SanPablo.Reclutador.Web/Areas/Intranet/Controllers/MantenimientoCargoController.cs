@@ -26,6 +26,7 @@
         private IDependenciaRepository _dependenciaRepository;
         private IDepartamentoRepository _departamentoRepository;
         private IAreaRepository _areaRepository;
+        private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
 
         public MantenimientoCargoController(ICargoRepository cargoRepository,
                                             IDetalleGeneralRepository detalleGeneralRepository,
@@ -33,7 +34,8 @@
                                             IListaSolicitudNuevoCargoVistaRepository listaSolicitudRepository,
                                             IDependenciaRepository dependenciaRepository,
                                             IDepartamentoRepository departamentoRepository,
-                                            IAreaRepository areaRepository)
+                                            IAreaRepository areaRepository,
+                                            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -42,6 +44,7 @@
             _areaRepository = areaRepository;
             _usuarioRepository = usuarioRepository;
             _listaSolicitudRepository = listaSolicitudRepository;
+            _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
         }
 
         /// <summary>
@@ -59,20 +62,29 @@
             try
             {
                 if (ideCargo != 0)
-                {
-                    cargo = _cargoRepository.GetSingle(x => x.IdeCargo == ideCargo);
-                    actualizarDatosSession(cargo);
-                    ModoAccion = Accion.Editar;
-                    mantenimientoViewModel.Accion = Accion.Editar;
-                    mantenimientoViewModel.Cargo = cargo;
+                {   
+                    //primer ingreso al sistema
+                    int idNuevoCargo = _cargoRepository.mantenimientoCargo(ideCargo, Session[ConstanteSesion.UsuarioDes].ToString());
+                    if (idNuevoCargo != 0)
+                    {
+                        cargo = _cargoRepository.GetSingle(x => x.IdeCargo == idNuevoCargo);
+                        actualizarDatosSession(cargo);
+                        mantenimientoViewModel.Cargo = cargo;
+                    }
+                        ModoAccion = Accion.Editar;
+                        mantenimientoViewModel.Accion = Accion.Editar;
                 }
-                if (CargoPerfil != null)
+                else
                 {
-                    cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                    mantenimientoViewModel.Accion = ModoAccion;
-                    mantenimientoViewModel.Cargo = cargo;
-                    actualizarDatosCargo(mantenimientoViewModel, cargo);
+                    if (CargoPerfil != null)
+                    {
+                        cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                        mantenimientoViewModel.Accion = ModoAccion;
+                        mantenimientoViewModel.Cargo = cargo;
+                        actualizarDatosCargo(mantenimientoViewModel, cargo);
+                    }
                 }
+                
 
                 return View("Index", mantenimientoViewModel);
             }
@@ -127,8 +139,11 @@
             CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
 
             var datosArea = _areaRepository.obtenerDatosArea(cargo.IdeArea);
+            CargoPerfil.IdeArea = Convert.ToInt32(datosArea[0]);
             CargoPerfil.Area = datosArea[1];
+            CargoPerfil.IdeDepartamento = Convert.ToInt32(datosArea[2]);
             CargoPerfil.Departamento = datosArea[3];
+            CargoPerfil.IdeDependencia = Convert.ToInt32(datosArea[4]);
             CargoPerfil.Dependencia = datosArea[5];
             
         }
@@ -186,8 +201,15 @@
             cargoViewModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             cargoViewModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            cargoViewModel.Accion = Convert.ToString(Session[ConstanteSesion.Modo]);
+            cargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            cargoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
+            cargoViewModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x=>x.EstadoActivo == IndicadorActivo.Activo));
+            cargoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+            cargoViewModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            cargoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+            
             return cargoViewModel;
         }
 
@@ -349,7 +371,17 @@
             var mantenimientoViewModel = new MantenimientoCargoViewModel();
             mantenimientoViewModel.Cargo = new Cargo();
 
+            mantenimientoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            mantenimientoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+            mantenimientoViewModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            mantenimientoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+            mantenimientoViewModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            mantenimientoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
             mantenimientoViewModel.Accion = Convert.ToString(Session[ConstanteSesion.Modo]);
+
             return mantenimientoViewModel;
         }
 
@@ -361,6 +393,16 @@
         public MantenimientoCargoViewModel inicializarDatosConfig(int IdeCargo)
         {
             var cargoViewModel = new MantenimientoCargoViewModel();
+
+            cargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            cargoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+            cargoViewModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            cargoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+            cargoViewModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            cargoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
             var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             cargoViewModel.TotalMaximo = 0;
             cargoViewModel.Cargo = cargoActual;
@@ -377,7 +419,7 @@
             try
             {
                 int puntajeTotal = Convert.ToInt32(cargoActual.PuntajeTotalCentroEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalConocimientoGeneral) + Convert.ToInt32(cargoActual.PuntajeTotalDiscapacidad) +
-                                   Convert.ToInt32(cargoActual.PuntajeTotalEdad) + Convert.ToInt32(cargoActual.PuntajeTotalExamen) + Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalHorario) +
+                                   Convert.ToInt32(cargoActual.PuntajeTotalEdad)  + Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalHorario) +
                                    Convert.ToInt32(cargoActual.PuntajeTotalIdioma) + Convert.ToInt32(cargoActual.PuntajeTotalNivelEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalOfimatica) + Convert.ToInt32(cargoActual.PuntajeTotalPostulanteInterno) +
                                    Convert.ToInt32(cargoActual.PuntajeTotalSalario) + Convert.ToInt32(cargoActual.PuntajeTotalSexo) + Convert.ToInt32(cargoActual.PuntajeTotalUbigeo);
                 
@@ -473,10 +515,13 @@
             perfilViewModel.Cargo.CodigoCargo = CargoPerfil.CodigoCargo;
             perfilViewModel.Cargo.NombreCargo = CargoPerfil.NombreCargo;
             perfilViewModel.Cargo.DescripcionCargo = CargoPerfil.DescripcionCargo;
+            perfilViewModel.Cargo.NumeroPosiciones = CargoPerfil.NumeroPosiciones;
             perfilViewModel.Cargo.IdeCargo = CargoPerfil.IdeCargo;
-            perfilViewModel.Area = CargoPerfil.Area;
-            perfilViewModel.Dependencia = CargoPerfil.Dependencia;
-            perfilViewModel.Departamento = CargoPerfil.Departamento;
+            perfilViewModel.Cargo.IdeArea = CargoPerfil.IdeArea;
+            perfilViewModel.Cargo.IdeDependencia = CargoPerfil.IdeDependencia;
+            perfilViewModel.Cargo.IdeDepartamento = CargoPerfil.IdeDepartamento;
+
+            perfilViewModel.Accion = ModoAccion;
 
             if (cargo.EstadoActivo == IndicadorActivo.Activo)
             { perfilViewModel.EstadoRegistro = "ACTIVO"; }
@@ -503,109 +548,170 @@
         [HttpPost]
         public virtual JsonResult ListaSolicitudes(GridTable grid)
         {
+            #region otra consulta
+            //try
+            //{
+
+            //    DetachedCriteria where = null;
+            //    where = DetachedCriteria.For<ListaSolicitudNuevoCargo>();
+
+            //    if (
+            //        (!"Seleccionar".Equals(grid.rules[1].data) && grid.rules[1].data != null && grid.rules[1].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0") ||
+            //        (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
+            //       )
+            //    {
+
+            //        if (!"Seleccionar".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+            //        {
+            //            where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
+            //        {
+            //            where.Add(Expression.Eq("IdeDependencia", Convert.ToInt32(grid.rules[2].data)));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+            //        {
+            //            where.Add(Expression.Eq("IdeDepartamento", Convert.ToInt32(grid.rules[3].data)));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
+            //        {
+            //            where.Add(Expression.Eq("IdeArea", Convert.ToInt32(grid.rules[4].data)));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
+            //        {
+            //            where.Add(Expression.Eq("IdeResponsable", Convert.ToInt32(grid.rules[5].data)));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
+            //        {
+            //            where.Add(Expression.Eq("TipoEtapa", grid.rules[6].data));
+            //        }
+            //        if (!"".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+            //        {
+            //            where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
+            //        {
+            //            where.Add(Expression.Ge("FechaCreacion", Convert.ToDateTime(grid.rules[7].data)));
+            //        }
+            //        if (!"Seleccionar".Equals(grid.rules[9].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
+            //        {
+            //            where.Add(Expression.Le("FechaCreacion", Convert.ToDateTime(grid.rules[8].data)));
+            //        }
+
+            //    }
+
+            //    var generic = Listar(_listaSolicitudRepository,
+            //                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+            //    var i = grid.page * grid.rows;
+
+            //    generic.Value.rows = generic.List.Select(item => new Row
+            //    {
+            //        id = item.IdeSolicitudNuevoCargo.ToString(),
+            //        cell = new string[]
+            //                {
+            //                    "1",
+            //                    item.EstadoActivo==null?"":item.EstadoActivo,
+            //                    item.CodigoCargo==null?"":item.CodigoCargo,
+            //                    item.IdeCargo == null?"":item.IdeCargo.ToString(),
+            //                    item.NombreCargo==null?"":item.NombreCargo,
+            //                    item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
+            //                    item.NombreDependencia==null?"":item.NombreDependencia,
+            //                    item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
+            //                    item.NombreDepartamento==null?"":item.NombreDepartamento,
+            //                    item.IdeArea==0?"":item.IdeArea.ToString(),
+            //                    item.NombreArea==null?"":item.NombreArea,
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+            //                    item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
+            //                    item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
+            //                    item.IdeResponsable ==null?"":item.IdeResponsable.ToString(),
+            //                    item.Responsable==null?"":item.Responsable,
+                                
+            //                    item.NombreResponsable==null?"":item.NombreResponsable,
+            //                    item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
+            //                    item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
+            //                    item.Etapa==null?"":item.Etapa,
+                                
+            //                }
+
+
+            //    }).ToArray();
+
+            //    return Json(generic.Value);
+            //}
+            //catch (Exception ex)
+            //{
+            //    //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+            //    return MensajeError();
+            //}
+            #endregion
+
+            Cargo cargos;
+            List<ListaSolicitudNuevoCargo> lista = new List<ListaSolicitudNuevoCargo>();
             try
             {
+                string Estado = "A";
 
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<ListaSolicitudNuevoCargo>();
+                cargos = new Cargo();
 
-                if (
-                    (!"Seleccionar".Equals(grid.rules[1].data) && grid.rules[1].data != null && grid.rules[1].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
-                   )
+                cargos.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
+                cargos.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+                cargos.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+
+                if (grid.rules[5].data != null && grid.rules[6].data != null)
                 {
-
-                    if (!"Seleccionar".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                    {
-                        where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                    {
-                        where.Add(Expression.Eq("IdeDependencia", Convert.ToInt32(grid.rules[2].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeDepartamento", Convert.ToInt32(grid.rules[3].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeArea", Convert.ToInt32(grid.rules[4].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeResponsable", Convert.ToInt32(grid.rules[5].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                    {
-                        where.Add(Expression.Eq("TipoEtapa", grid.rules[6].data));
-                    }
-                    if (!"".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
-                    {
-                        where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
-                    {
-                        where.Add(Expression.Ge("FechaCreacion", Convert.ToDateTime(grid.rules[7].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[9].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
-                    {
-                        where.Add(Expression.Le("FechaCreacion", Convert.ToDateTime(grid.rules[8].data)));
-                    }
-
+                    cargos.FechaInicio = Convert.ToDateTime(grid.rules[5].data);
+                    cargos.FechaFin = Convert.ToDateTime(grid.rules[6].data);
                 }
 
-                var generic = Listar(_listaSolicitudRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
+                cargos.IdeDepartamento = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[7].data));
+                Estado = (grid.rules[9].data == null ? "A" : grid.rules[9].data);
+
+                lista = _cargoRepository.listaCargos(cargos, Estado, Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
+
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdeSolicitudNuevoCargo.ToString(),
+                    id = item.IdeCargo.ToString(),
                     cell = new string[]
                             {
+                               
                                 "1",
                                 item.EstadoActivo==null?"":item.EstadoActivo,
-                                item.CodigoCargo==null?"":item.CodigoCargo,
                                 item.IdeCargo == null?"":item.IdeCargo.ToString(),
+                                item.CodigoCargo ==null?"":item.CodigoCargo,
                                 item.NombreCargo==null?"":item.NombreCargo,
-                                item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
-                                item.NombreDependencia==null?"":item.NombreDependencia,
-                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
-                                item.NombreDepartamento==null?"":item.NombreDepartamento,
+                                //item.DescripcionCargo==null?"":item.DescripcionCargo,
                                 item.IdeArea==0?"":item.IdeArea.ToString(),
                                 item.NombreArea==null?"":item.NombreArea,
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.IdeResponsable ==null?"":item.IdeResponsable.ToString(),
-                                item.Responsable==null?"":item.Responsable,
-                                
-                                item.NombreResponsable==null?"":item.NombreResponsable,
-                                item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
-                                item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
-                                item.Etapa==null?"":item.Etapa,
-                                
+                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
+                                item.NombreDepartamento==null?"":item.NombreDepartamento,
+                                item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
+                                item.NombreDependencia==null?"":item.NombreDependencia,
+                                item.version==0?"":item.version.ToString(),
                             }
-
-
                 }).ToArray();
 
                 return Json(generic.Value);
+
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+
                 return MensajeError();
             }
         }
@@ -656,6 +762,9 @@
                 cargoEditar.NombreCargo = cargo.NombreCargo;
                 cargoEditar.DescripcionCargo = cargo.DescripcionCargo;
                 cargoEditar.NumeroPosiciones = cargo.NumeroPosiciones;
+                cargoEditar.IdeDependencia = cargo.IdeDependencia;
+                cargoEditar.IdeDepartamento = cargo.IdeDepartamento;
+                cargoEditar.IdeArea = cargo.IdeArea;
                 
                 _cargoRepository.Update(cargoEditar);
                 
@@ -663,6 +772,10 @@
                 CargoPerfil.NombreCargo = cargo.NombreCargo;
                 CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
                 CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
+                CargoPerfil.IdeArea = cargo.IdeArea;
+                CargoPerfil.IdeDepartamento = cargo.IdeDepartamento;
+                CargoPerfil.IdeDependencia = cargo.IdeDependencia;
+
 
                 objJsonMessage.Mensaje = "Guardado exitosamente";
                 objJsonMessage.Resultado = true;
@@ -675,5 +788,40 @@
                 return Json(objJsonMessage);
             }
         }
+
+        /// <summary>
+        /// Determminar la si la solicitud esta en etapa Finalizado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult consultaEditar(string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            int idCargo = Convert.ToInt32(id);
+            if (idCargo != 0)
+            {
+                var etapa = _cargoRepository.consultaEditarCargo(idCargo);
+
+                if ((etapa == Etapa.Finalizado)||(etapa == "version"))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "Revise que el cargo no este en  proceso de seleccion";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            }
+            else
+            {
+                objJsonMessage.Mensaje = "ERROR: Elija un cargo";
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
+
     }
 }

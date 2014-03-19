@@ -15,6 +15,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreCargo { get; set; }
         public virtual string DescripcionCargo { get; set; }
         public virtual string CodigoCargo { get; set; }
+        public virtual int IdeDependencia { get; set; }
+        public virtual int IdeDepartamento { get; set; }
         public virtual int IdeArea { get; set; }
         public virtual int NumeroPosiciones { get; set; }
         public virtual string IndicadorSexo { get; set; }
@@ -81,6 +83,16 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntajeMinimoGeneral { get; set; }
                
         public virtual string EstadoActivo { get; set; }
+
+
+        //buscador
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public virtual DateTime? FechaInicio { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public virtual DateTime? FechaFin { get; set; }
 
         public virtual bool IndicadorSexoRanking
         {

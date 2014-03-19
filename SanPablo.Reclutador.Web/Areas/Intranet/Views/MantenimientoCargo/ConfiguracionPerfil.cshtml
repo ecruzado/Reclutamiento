@@ -7,7 +7,6 @@
 @section ScriptsCargo{  
     <script type="text/javascript">
         $(document).ready(function () {
-            calcularTotales();
             calcularTotalMaximo();
         });
 
@@ -91,18 +90,10 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalPostulanteInterno, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                     @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                 @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled= "disabled"})
-                                            }
-
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoPostulanteInterno, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoPostulanteInterno)
+                                            </div>*@
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -111,18 +102,11 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
-                                                </div>
-                                             }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
-                                            </td>
+                                           @* @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoEdad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoEdad)
+                                            </div>*@
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -133,17 +117,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                     @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSexo)
-                                                </div>                                       
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSexo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSexo)
+                                            </div> *@                                      
                                          </td>
                                     </tr>
                                     <tr>
@@ -154,17 +131,10 @@
                                         </td>
                                          <td></td>
                                         <td>
-                                             @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                   @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSalario)
-                                                </div> 
-                                             }
-                                            else
-                                            {
-                                                 @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                             }
+                                           @* @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoSalario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoSalario)
+                                            </div> *@
                                         </td>
                                     </tr>
                                     <tr>
@@ -175,17 +145,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                           @* @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoNivelEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
+                                            </div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -196,17 +159,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoCentroEstudio, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoNivelEstudio)
+                                            </div>*@
                                         </td>
                                                 
                                     </tr>
@@ -218,17 +174,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExperiencia, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoCentroEstudio)
-                                                </div>                       
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExperiencia, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }    
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExperiencia, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoCentroEstudio)
+                                            </div> *@                      
                                         </td>
                                                 
                                     </tr>
@@ -240,17 +189,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoOfimatica)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoOfimatica)
+                                            </div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -260,19 +202,11 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalIdioma, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoIdioma)
-                                                </div>    
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled= "disabled"})
-                                            }                                
+                                        @*    @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoIdioma, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoIdioma)
+                                            </div>*@    
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -282,17 +216,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoConocimientoGeneral)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoConocimientoGeneral, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoConocimientoGeneral)
+                                            </div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -304,17 +231,10 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoDiscapacidad)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoDiscapacidad, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoDiscapacidad)
+                                            </div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -325,17 +245,10 @@
                                          </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoHorario)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model => model.Cargo.PuntajeMinimoHorario, new { @Class = "input-xxmini text-right", onblur = "calcularTotales();", disabled = "disabled" })
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoHorario, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoHorario)
+                                            </div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -345,31 +258,38 @@
                                             @Html.TextBoxFor(model=>model.Cargo.PuntajeTotalUbigeo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoUbigeo)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();", disabled = "disabled"})
-                                            }
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoUbigeo, new {@Class ="input-xxmini text-right",onblur = "calcularTotales();"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoUbigeo)
+                                            </div>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 80px;"></td>
+                                        <td></td>
+                                        <td>Ptje. Total
+                                        </td>
+                                        <td style="width: 10px;"></td>
+                                        <td>Ptje. Min
                                         </td>
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td class="td-label"><b>Totales</b></td>
+                                        <td class="td-label"><b></b></td>
                                         <td>
                                             @Html.TextBoxFor(model=>model.TotalMaximo, new {@class="input-xxmini text-right",disabled="disabled"})
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.TotalMinimo, new {@class="input-xxmini text-right",disabled="disabled"})
-
+                                            @if (Accion.Editar == Model.Accion)
+                                            {
+                                                @Html.TextBoxFor(model=>model.TotalMinimo, new {@class="input-xxmini text-right" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model=>model.TotalMinimo, new {@class="input-xxmini text-right", disabled = "disabled" })
+                                            }
                                     </tr>
                                 </table>
 
@@ -379,7 +299,7 @@
                                 <table border="0">
                                         <tr>
                                         <td></td>
-                                        <td>Ptje.
+                                        <td>Ptje. Prom.
                                             </td>
                                             <td style="width:10px;"></td>
                                         <td>Ptje.Min
@@ -393,18 +313,11 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @if (Accion.Editar == Model.Accion)
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
-                                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoExamen)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right", disabled = "disabled"})
-                                            }
-                                            </td>
+                                            @*@Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoExamen)
+                                            </div>*@
+                                        </td>
                                     </tr>                                                       
                                         <tr>
                                         <td colspan="4" style="height:20px;"></td>
@@ -419,11 +332,11 @@
                                         <td> 
                                             @if (Accion.Editar == Model.Accion)
                                             {
-                                                 @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"}) @*<input type="text" class="input-xxmini text-right" value="9">*@
+                                                 @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"})
                                             }
                                             else
                                             {
-                                                     @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right", disabled= "disabled"})
+                                                 @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right", disabled= "disabled"})
                                             }
                                         </td>
                                     </tr>
