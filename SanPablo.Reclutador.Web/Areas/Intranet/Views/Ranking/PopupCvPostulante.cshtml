@@ -1,0 +1,121 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.RankingViewModel
+@{
+    Layout = "";
+}
+
+
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    
+
+
+</script>
+
+
+@using (Html.BeginForm("Index", "Ranking", FormMethod.Post, new { id = "frmPopupCvPostulante" }))
+    {
+    @Html.ValidationSummary(true)
+   
+    <table style="margin-left:30px;">
+        <tr >
+
+            @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" ,data_val = "false" })  
+            @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" ,data_val = "false" })  
+            @Html.TextBoxFor(model => model.CvPostulanteEx.IdCvPostulante, new { style = "display: none;" ,data_val = "false" })  
+
+
+            <td class="colEtiqueta" >
+                <label class="etiquetaFormulario" >Nombres<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput" >
+               
+                @Html.TextBoxFor(model => model.CvPostulanteEx.Nombre, new { @class = "textoFormulario" , maxlength="100" })                      
+               
+            </td>
+        </tr>
+        
+        
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Apellido Paterno<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+
+                   @Html.TextBoxFor(model => model.CvPostulanteEx.ApePaterno, new { @class = "textoFormulario" , maxlength="100" })                      
+                   <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.CvPostulanteEx.ApePaterno)
+                   </div>
+            </td>
+        </tr>    
+        
+         <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Apellido Materno<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.ApeMaterno, new { @class = "textoFormulario" , maxlength="100" })                      
+               <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.CvPostulanteEx.ApeMaterno)
+                   </div>
+            </td>
+        </tr>    
+         <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >DNI<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.Dni, new { @class = "textoFormulario" , maxlength="100" })                      
+                 <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.CvPostulanteEx.Dni)
+                   </div>
+            </td>
+        </tr>    
+         <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Telefono<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="100" })                      
+               <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.CvPostulanteEx.Telefono)
+                   </div>
+            </td>
+        </tr>    
+
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Fecha de cita<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                  @Html.EditorFor(model => model.CvPostulanteEx.Fechacita, new { @class = "textoFormulario" ,  maxlength="15", placeholder="Fecha cita"})                            
+                <div class="tex-error" style="font-size:12px;color:red">    
+                    @Html.ValidationMessageFor(model => model.CvPostulanteEx.Fechacita)
+                </div>
+            </td>
+        </tr>    
+
+        <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Hora cita<span class="text-error">*</span></label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita, new { @class = "textoFormulario" ,  maxlength="15" })
+                <div class="tex-error" style="font-size:12px;color:red">    
+                    @Html.ValidationMessageFor(model => model.CvPostulanteEx.Fechacita)
+                </div>
+            </td>
+        </tr> 
+
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+       
+    </table>
+}

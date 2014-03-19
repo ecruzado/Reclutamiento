@@ -353,6 +353,15 @@
                     <legend></legend>
                     <table class="formulario-busqueda">
 
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Sede</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.solReqPersonal.Sede_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>
+
                    
                      <tr class="formulario-fila">
                         <td class="span5">
@@ -461,10 +470,6 @@
                     </tr>
                         <tr><td>&nbsp;</td></tr>	
 						
-                   
-					
-                   
-                  
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Competencias</label>
@@ -498,15 +503,15 @@
                         </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-						@*
+						
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})
+                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254",@disabled="disabled"})
                          </div>
                         </td>
-                    </tr>   *@
+                    </tr>   
                                                 
                   
                 </table>                       

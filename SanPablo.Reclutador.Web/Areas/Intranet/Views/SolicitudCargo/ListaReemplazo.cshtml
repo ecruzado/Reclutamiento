@@ -21,6 +21,23 @@
     });
 
 
+    $('#btnRankingSol').click(function () {
+        var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
+
+        if (selr != null) {
+           
+           
+            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol;
+            window.location = url;
+           
+
+        } else {
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    }); 
+
     $('#btnRequerimintoSol').click(function () {
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
 
@@ -30,9 +47,9 @@
             MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
         }
 
-    });
+     });
 
-   
+
    
 
 
@@ -122,7 +139,7 @@
                     }
                 });
             },
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo','', 'Dependencia','', 'Departamento','','Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio','Cierre', '','Responsable', 'Nom.Responsable', 'Publicado','Etapa',''],
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo','', 'Dependencia','', 'Departamento','','Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio','Cierre', '','Responsable', 'Nom.Responsable', 'Publicado','Etapa','',''],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
@@ -149,7 +166,8 @@
                 { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300},
                 { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
                 { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 },
-                { name: 'idUsuarioResp', index: 'idUsuarioResp', align: 'center', hidden: true }
+                { name: 'idUsuarioResp', index: 'idUsuarioResp', align: 'center', hidden: true },
+                { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true }
                 
         ],
         pager: jQuery('#grdPagerBusquedaReemplazo'),
@@ -229,6 +247,20 @@
            return strImg;
        }
 
+
+@*    function verRanking(selr, Tipsol) {
+       
+        $.get("@Url.Action("Index", "Ranking")?id=" + selr + "&tipSol=" + Tipsol,  
+           function (data) {
+               
+           }
+       );
+
+     
+        return false;
+
+        
+     }*@
 
     @*//-----------grilla anidada
     jQuery("#sg2").jqGrid({
@@ -422,6 +454,8 @@
                 <div id="psg1"></div>
             </div>
             <div class="form-actions">
+                
+                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>

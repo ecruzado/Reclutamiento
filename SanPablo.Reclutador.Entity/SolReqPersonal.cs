@@ -263,7 +263,10 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual string TipoRangoSalarioDes { get; set; }
 
-
+        /// <summary>
+        /// Descripcion del estado
+        /// </summary>
+        public virtual string DesEstado { get; set; }
         
 
     }

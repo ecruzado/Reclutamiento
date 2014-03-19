@@ -163,6 +163,10 @@
              builder.RegisterType<OfrecemosRequerimientoRepository>()
          .As<IOfrecemosRequerimientoRepository>();
 
+             builder.RegisterType<CvPostulanteRepository>()
+         .As<ICvPostulanteRepository>();
+
+
 
         }
     }
