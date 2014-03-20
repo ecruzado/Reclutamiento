@@ -66,6 +66,7 @@
     <Compile Include="CentroEstudioRequerimiento.cs" />
     <Compile Include="ConocimientoGeneralRequerimiento.cs" />
     <Compile Include="CvPostulante.cs" />
+    <Compile Include="ReclutamientoPersona.cs" />
     <Compile Include="SolicitudConsulta.cs" />
     <Compile Include="DiscapacidadRequerimiento.cs" />
     <Compile Include="EvaluacionRequerimiento.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
     <Compile Include="Validation\CompetenciaCargoValidator.cs" />
     <Compile Include="Validation\CargoValidator.cs" />
+    <Compile Include="Validation\CvPostulanteValidator.cs" />
     <Compile Include="Validation\DetalleGeneralValidator.cs" />
     <Compile Include="Validation\LogSolicitudRequerimientoValidator.cs" />
     <Compile Include="Validation\SolReqPersonalValidator.cs" />

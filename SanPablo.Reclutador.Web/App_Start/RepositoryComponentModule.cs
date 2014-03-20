@@ -169,6 +169,8 @@
              builder.RegisterType<CvPostulanteRepository>()
          .As<ICvPostulanteRepository>();
 
+            builder.RegisterType<ReclutamientoPersonaRepository>()
+         .As<IReclutamientoPersonaRepository>();
 
 
         }

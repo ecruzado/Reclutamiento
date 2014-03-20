@@ -68,6 +68,7 @@
     <Compile Include="LogSolicitudNuevoCargoMap.cs" />
     <Compile Include="NivelAcademicoRequerimientoMap.cs" />
     <Compile Include="OfrecemosRequerimientoMap.cs" />
+    <Compile Include="ReclutamientoPersonaMap.cs" />
     <Compile Include="ReemplazosMap.cs" />
     <Compile Include="SedeNivelMap.cs" />
     <Compile Include="SolicitudNuevoCargoMap.cs" />

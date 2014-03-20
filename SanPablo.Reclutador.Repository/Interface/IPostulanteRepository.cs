@@ -23,6 +23,12 @@
         int ValidaPostulacion(OportunidadLaboral obj);
         void Postulacion(Postulante obj);
         List<OportunidadLaboral> GetMisPostulaciones(OportunidadLaboral obj);
+        List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj);
+        List<ReclutamientoPersona> GetPostulantesPreseleccionado(ReclutamientoPersona obj);
+      
+
+        
+        void UpdateEstadoPostulante(ReclutamientoPersona obj);
     }
 
 

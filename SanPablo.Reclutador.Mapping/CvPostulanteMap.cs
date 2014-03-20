@@ -22,12 +22,18 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.HoraCita, "HORACITA");
             Map(x => x.Citado, "CITADO");
             Map(x => x.Asistio, "ASISTIO");
-            Map(x => x.FechaCreacion, "FECCREACION");
-            Map(x => x.FechaModificacion, "FECMODIFICACION");
-            Map(x => x.UsuarioCreacion, "USRCREACION");
-            Map(x => x.UsuarioModificacion, "USRCREACION");
+
+            Map(x => x.FecCreacion, "FECCREACION");
+            Map(x => x.FecModificacion, "FECMODIFICACION");
+            Map(x => x.UsrCreacion, "USRCREACION");
+            Map(x => x.UsrModifcacion, "USRMODIFCACION");
+            Map(x => x.IdSolicitud, "IDSOLICITUD");
+            Map(x => x.TipSol, "TIPOSOL");
+            
             Map(x => x.Nombre, "NOMBRE");
             
+            
+
             Table("CVPOSTULANTE");
 
         }

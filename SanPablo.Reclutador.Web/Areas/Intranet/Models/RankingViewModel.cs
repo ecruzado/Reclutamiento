@@ -13,6 +13,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
     {
         public CvPostulante CvPostulanteEx { get; set; }
         public SolReqPersonal Solicitud { get; set; }
+        public ReclutamientoPersona ReclutaPersonal { get; set; }
+
+        public List<DetalleGeneral> listaEstaPost { get; set; }
+
+        public string pagina { get; set; }
 
     }
 }

@@ -24,11 +24,11 @@
     $('#btnRankingSol').click(function () {
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
-
+        var pagina = '@TipoSolicitud.Remplazo';
         if (selr != null) {
            
            
-            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol;
+            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
             window.location = url;
            
 

@@ -71,6 +71,7 @@
     <Compile Include="Interface\ILogSolicitudRequerimientoRepository.cs" />
     <Compile Include="Interface\INivelAcademicoRequerimientoRepository.cs" />
     <Compile Include="Interface\IOfrecemosRequerimientoRepository.cs" />
+    <Compile Include="Interface\IReclutamientoPersonaRepository.cs" />
     <Compile Include="LogSolicitudRequerimientoRepository.cs" />
     <Compile Include="Interface\IListaSolicitudNuevoCargoVistaRepository.cs" />
     <Compile Include="Interface\IReemplazoRepository.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Interface\IOpcionRepository.cs" />
     <Compile Include="NivelAcademicoRequerimientoRepository.cs" />
     <Compile Include="OfrecemosRequerimientoRepository.cs" />
+    <Compile Include="ReclutamientoPersonaRepository.cs" />
     <Compile Include="ReemplazoRepository.cs" />
     <Compile Include="SedeNivelRepository.cs" />
     <Compile Include="SolicitudNuevoCargoRepository.cs" />

@@ -1,0 +1,351 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.RankingViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
+
+
+@using System.Configuration;
+@{
+    ViewBag.Title = "Postulantes Preseleccionados";
+}
+@section Head{
+}
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            
+            $('#btnAnteriorRanking').click(function () {
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                var pagina = '@TipoSolicitud.Remplazo';
+                if (idSol != null) {
+
+                    var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    window.location = url;
+                }
+            });
+
+            $('#btnContactado').click(function () {
+
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
+                var indContacto = rowData.IndicadorContactado;
+
+
+                if (selr != null && selr > 0) {
+                    contactaPostulante(selr, indContacto);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+
+            });
+
+
+            $('#btnExcluido').click(function () {
+
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
+                var indContacto = rowData.IndicadorContactado;
+
+                alert("Estamos trabajando xD");
+
+
+            });
+            
+
+
+
+
+
+            jQuery("#grdListEvaluacion").jqGrid({
+                datatype: function (postdata) {
+                    var migrilla = new Object();
+                    migrilla.page = postdata.page;
+                    migrilla.rows = postdata.rows;
+                    migrilla.sidx = postdata.sidx;
+                    migrilla.sord = postdata.sord;
+                    migrilla._search = postdata.isSearch;
+                    migrilla.filters = postdata.filters;
+                    migrilla.Rules = [
+
+                        { field: 'idSol', data: $("#Solicitud_IdeSolReqPersonal").val() },
+                        { field: 'tipSol', data: $("#Solicitud_Tipsol").val() }
+                        
+                    ];
+
+                    if (migrilla._search == true) {
+                        migrilla.searchField = postdata.searchField;
+                        migrilla.searchOper = postdata.searchOper;
+                        migrilla.searchString = postdata.searchString;
+                    }
+
+                    var params = { grid: migrilla };
+
+                    $.ajax({
+                        url: '@Url.Action("ListPostulantesPre", "Ranking", new { area = "Intranet"})',
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(params),
+                        async: false,
+                        success: function (data, st) {
+                            if (st == 'success') {
+                                var jq = $('#grdListEvaluacion')[0];
+                                jq.addJSONData(data);
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                },
+              colNames: ['', '', '', '', '', 'Apellidos', 'Nombres','Teléfono','Celular','Contactado', 'CV', '', 'Estado', 'Evaluación', 'Puntaje'],
+              colModel: [
+                      { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdeSol', index: 'IdeSol', align: 'center', editable: false, sortable: false, hidden: true },
+                      { name: 'IdSede', index: 'IdSede', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
+                      { name: 'IdeCargo', index: 'IdeCargo', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
+                      { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
+                      { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 300 },
+                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'IndicadorContactado', index: 'IndicadorContactado', align: 'center', sortable: false, width: 100, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
+                      { name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
+                      { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
+                      { name: 'EvalPostulante', index: 'EvalPostulante', align: 'center', sortable: false, width: 200 },
+                      { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 }
+
+              ],
+
+            
+
+              pager: jQuery('#grdPagerEvaluacion'),
+              rowNum: 10,
+              rowList: [10, 30, 50],
+              autowidth: true,
+              rules: true,
+              sortname: 'IdCvPostulante',
+              sortorder: 'desc',
+              viewrecords: true,
+              height: 350,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              rownumbers: true,
+              shrinkToFit: false,
+
+              postData: {
+              }, loadComplete: function (data) {
+              }
+          });
+
+
+
+
+            
+          @*  jQuery("#grdListEvaluacion").jqGrid({
+                url: '@Url.Action("ListaPostulantesPreSeleccionados", "SolicitudCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Apellidos', 'Nombres', "Teléfono", "Celular", "Contactado", "Ver C.V.", 'Estado', 'Evaluación', 'Ptje.Total'],
+                colModel: [
+                        { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false },
+                        { name: 'Nombres', index: 'Nombres', align: 'left', editable: false},
+                        { name: 'Telefono', index: 'Telefono', align: 'left', editable: false },
+                        { name: 'Celular', index: 'Celular', align: 'left', editable: false },
+                        { name: 'Contactado', index: 'Contactado', align: 'center', width: 60, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true} },
+                        { name: 'Imprimir', index: 'Imprimir', align: 'center', sortable: false, width: 50, formatter: ImprimirFormatter, editable:false },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, editable: false },
+                        { name: 'Evaluacion', index: 'Evaluacion', align: 'center', sortable: false, width: 50, editable: false},
+                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 50, editable: false }
+                ],
+                sortname: 'Apellidos',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: false,
+                /*caption: 'Lista Referencias',*/
+                height: 160,
+                autowidth: true,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+                    /**/
+                },
+                loadComplete: function (data) {
+
+                }
+            });*@
+        });
+        //jQuery("#cm1").click( function() {
+        //    var s;
+        //    s = jQuery("#grdList").jqGrid('getGridParam', 'selrow');
+        //    alert(s);
+        //});
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
+        }
+
+        function CheckboxFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="checkbox" name = "contactado">';
+            return strRdo;
+        }
+        function ImprimirFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+              var archivo = 'printer.png';
+              var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+              return strImg;
+        }
+
+        
+        function contactaPostulante(selr, indContacto) {
+
+            $.ajax({
+                data: {
+                    id: selr,
+                    indContacto: indContacto
+                },
+                type: "POST",
+                url: '@Url.Action("ContactaPostulante", "Ranking")',
+                traditional: true,
+                success: function (data) {
+                @*if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }*@
+                    if (data.Resultado) {
+                        $('#grdListEvaluacion').trigger('reloadGrid');
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                }
+            });
+
+        }
+
+  </script>
+}
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Postulantes Pre-Seleccionados</h5>
+            </div>
+@using (Html.BeginForm("Index", "Preseleccionado", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPreseleccionado", @class = "formulario-busqueda" }))
+{
+    @Html.ValidationSummary(true)
+
+     @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
+            @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" })  
+    
+           <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    @*<td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Solicitud</label>
+                            <div class="controles">
+                                <input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">
+                            </div>
+                        </div>
+                    </td>*@
+                     <td class="span5">
+			
+			            <label class="control-label" for="inputSuccess">Solicitud</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
+                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+		   
+		            </td>
+                     <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Cargo</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
+                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                        </div>
+		   
+		            </td>
+                    
+                </tr>
+                <tr class="formulario-fila">
+                   <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Dependencia</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+			
+		            </td>
+                     <td class="span5">
+		   
+			            <label class="control-label" for="inputSuccess">Departamento</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+			            </div>
+		   
+		            </td>
+		           
+                </tr>
+                <tr class="formulario-fila">
+                     <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Area</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+			            </div>
+			
+		            </td>
+                   <td class="span5">
+		  
+			            <label class="control-label" for="inputSuccess">Sede</label>
+			            <div class="controles">
+				           @* <input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
+                           @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+			
+		            </td>
+                </tr>
+                </table>
+}
+
+
+               <div style="clear:both"></div>
+                <div class="tabla-datos">
+                            <table id="grdListEvaluacion">
+                            </table>
+                            <div id="grdPagerEvaluacion">
+                            </div>
+                </div>
+                @*<div style="width: 100%;">
+                    <div>
+                        <table id="grdListEvaluacion">
+                        </table>
+                        <div id="grdPagerEvaluacion">
+                        </div>
+                    </div>
+                </div>*@
+            
+            <div class="form-actions">
+                <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                <a class="btn btn-info"><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
+                <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
+                <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
