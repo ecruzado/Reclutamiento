@@ -12,6 +12,7 @@
               .Sequence("IDECOMPETENCIACARGO_SQ");
             References(x => x.Cargo,"IDECARGO");
             Map(x => x.TipoCompetencia, "TIPCOMPETEN");
+            Map(x => x.Puntaje, "PUNTAJE");
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");

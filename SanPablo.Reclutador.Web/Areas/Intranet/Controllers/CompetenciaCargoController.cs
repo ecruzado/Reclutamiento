@@ -56,6 +56,7 @@
                         cell = new string[]
                             {
                                 item.DescripcionCompetencia,
+                                item.Puntaje.ToString(),
                             }
                     }).ToArray();
 
@@ -99,20 +100,27 @@
                     competenciaViewModel.Competencia = competenciaCargo;
                     return View("Competencia", competenciaViewModel);
                 }
-                //var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
-                competenciaCargo.EstadoActivo = "A";
-                competenciaCargo.FechaCreacion = FechaCreacion;
-                competenciaCargo.UsuarioCreacion = "YO";
-                competenciaCargo.FechaModificacion = FechaCreacion;
-                competenciaCargo.Cargo = new Cargo();
-                competenciaCargo.Cargo.IdeCargo = IdeCargo;
+                if (existe(competenciaCargo.TipoCompetencia))
+                {
+                    objJsonMessage.Mensaje = "No puede insertar elementos duplicados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    competenciaCargo.EstadoActivo = IndicadorActivo.Activo;
+                    competenciaCargo.FechaCreacion = FechaCreacion;
+                    competenciaCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    competenciaCargo.FechaModificacion = FechaCreacion;
+                    competenciaCargo.Cargo = new Cargo();
+                    competenciaCargo.Cargo.IdeCargo = IdeCargo;
 
-                //cargo.agregarCompetencia(competenciaCargo);
-                _competenciaCargoRepository.Add(competenciaCargo);
+                    _competenciaCargoRepository.Add(competenciaCargo);
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    objJsonMessage.Mensaje = "Agregado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -153,6 +161,20 @@
 
 
             return cargoViewModel;
+        }
+
+        public bool existe(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _competenciaCargoRepository.CountByExpress(x => x.TipoCompetencia == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
     }

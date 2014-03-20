@@ -185,10 +185,17 @@
         {
             JsonMessage objJsonMessage = new JsonMessage();
             var evaluacionBuscar = new Examen();
-            evaluacionBuscar = _examenRepository.GetSingle(x => x.IdeExamen == ideExamen);
-            objJsonMessage.Mensaje = evaluacionBuscar.TipExamenDes;
-            objJsonMessage.Accion = evaluacionBuscar.TipExamen;
-            objJsonMessage.Resultado = true;
+            if (ideExamen == 0)
+            {
+                objJsonMessage.Resultado = false;
+            }
+            else
+            {
+                evaluacionBuscar = _examenRepository.GetSingle(x => x.IdeExamen == ideExamen);
+                objJsonMessage.Mensaje = evaluacionBuscar.TipExamenDes;
+                objJsonMessage.Accion = evaluacionBuscar.TipExamen;
+                objJsonMessage.Resultado = true;
+            }
             return Json(objJsonMessage);
 
             

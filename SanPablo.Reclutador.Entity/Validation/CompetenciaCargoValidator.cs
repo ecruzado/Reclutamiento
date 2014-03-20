@@ -12,6 +12,14 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar una competenecia");
 
+
+            RuleFor(x => x.Puntaje)
+               .NotEmpty()
+               .WithMessage("Ingresar Puntaje");
+            RuleFor(x => x.Puntaje)
+                .InclusiveBetween(0, 10)
+                .WithMessage("Ingresar un puntaje entre 0 y 10");
+
          }
 
  

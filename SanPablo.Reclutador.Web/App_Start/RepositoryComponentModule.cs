@@ -14,6 +14,9 @@
             builder.RegisterType<PostulanteRepository>()
                 .As<IPostulanteRepository>();
 
+            builder.RegisterType<GeneralRepository>()
+                .As<IGeneralRepository>();
+
             builder.RegisterType<DetalleGeneralRepository>()
                 .As<IDetalleGeneralRepository>();
 

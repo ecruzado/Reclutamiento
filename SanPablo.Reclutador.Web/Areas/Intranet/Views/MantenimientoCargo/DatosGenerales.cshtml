@@ -4,54 +4,119 @@
        ViewBag.Title = "Mantenimiento Cargo";
 }
 
-@using (Html.BeginForm("DatosGenerales", "MantenimientoCargo", FormMethod.Post, new { @id = "puestoPerfilForm" }))
+@using (Html.BeginForm("DatosGenerales", "MantenimientoCargo", FormMethod.Post, new { @id = "datosGeneralesForm" }))
 {
 <!--PUESTO -->
-        <div style="clear:both"></div>
-            <table>
+     @Html.ValidationSummary(true)
+    <form class="formulario-busqueda">
+        <table >
             <tr class="formulario-fila">
-                <td class="colEtiqueta">
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Dependencia</label>
+                </td>
+                <td class="controls">
+                 @if (Accion.Editar == Model.Accion)
+                 {
+                    @Html.DropDownListFor(model => model.Cargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Cargo.IdeDependencia))
+                    <div class="tex-error" style="font-size:12px;color:red"> 
+                        @Html.ValidationMessageFor(model => model.Cargo.IdeDependencia)
+                    </div>
+                 }
+                 else
+                 {
+                     @Html.DropDownListFor(model => model.Cargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Cargo.IdeDependencia), new { disabled = "disabled"})
+                 }   
+                </td>
+                <td class="colEtiqueta" style="width:150px;text-align:right">
                     <label class="control-label" for="inputSuccess">Nombre Cargo</label>
                 </td>
-                <td class="colInput">
-                    @Html.TextBoxFor(model => model.Cargo.NombreCargo)
-                        
+                <td class="controls">
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NombreCargo)
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NombreCargo, new { disabled = "disabled"})
+                    }
+                </td> 
+            </tr>
+            <tr>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Departamento</label>
                 </td>
-                <td class="colEtiqueta">
+                <td class="controls">
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Cargo.IdeDepartamento))
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                             @Html.ValidationMessageFor(model => model.Cargo.IdeDepartamento)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Cargo.IdeDepartamento), new { disabled = "disabled"})
+                    }
+                </td>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
                     <label class="control-label" for="inputSuccess">Descripcion Cargo</label>
                 </td>
                 <td class ="colImput">
-                    @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                    }
+                    else
+                    {
+                       @Html.TextBoxFor(model => model.Cargo.DescripcionCargo, new { disabled = "disabled"})
+                    }
                 </td>
             </tr>
             <tr class="formulario-fila">
-                <td class="colEtiqueta">
-                    <label class="control-label" for="inputSuccess">Número de Posiciones</label>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="selectError">Área</label>
+                </td>
+                <td class="controles">
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea))
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                            @Html.ValidationMessageFor(model => model.Cargo.IdeArea)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea), new { disabled = "disabled"})
+                    }
+                </td>
+                <td class="colEtiqueta" style="width:130px;text-align:right">
+                    <label class="control-label" for="inputSuccess">Núm. Posiciones</label>
                 </td>
                 <td class="colImput">
-                    @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "imput-mini"})
+                    @if (Accion.Editar == Model.Accion)
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right"})
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right", disabled = "disabled"})
+                    }
                 </td>
-                
             </tr>
-        </table>       
-        <div class="formulario-accion">                                          
+        </table>
+        <div class="formulario-accion">   
             <div class="opciones">
-                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-            </div>
-                            
-        </div>
+                @if (Accion.Editar == Model.Accion)
+                {
+                    <a id="btnGrabarDatosGenerales" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>   
+                }
+                
+            </div>    
+       </div>  
+   </form>
 }
 <!--PUESTO FIN -->
 
-<div id="updateDialog" title="Agregar Competencia"></div>
-    <div id="divMensaje">
-        <span id="spanMensaje"></span>
-    </div>
-
-<div id="updateDialog2" title="Agregar Ofrecimiento"></div>
-    <div id="divMensaje2">
-        <span id="spanMensaje2"></span>
-    </div>
 
 
 @section ScriptsCargo{ 
@@ -60,8 +125,8 @@
     $(function () {
 
         //PERFIL PUESTO
-        $('#btnAgregarCompetencia').click(function () {
-            mostrarAgregarCompetencia();
+        $('#btnGrabarDatosGenerales').click(function () {
+            mostrarconfirmacion();
         });
 
         $('#updateDialog').dialog({
@@ -72,84 +137,14 @@
             buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var result = $('#competenciasForm').valid();
+                    var result = $('#ofrecemosForm').valid();
                     if (result) {
-                        $.post('@Url.Action("Edit", "CompetenciaCargo")',
-                                $("#competenciasForm").serialize(),
+                        $.post('@Url.Action("DatosGenerales", "MantenimientoCargo")',
+                                $("#datosGeneralesForm").serialize(),
                                 function (respuesta) {
                                     if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
-                                        $('#grdListCompetencias').trigger('reloadGrid');
-                                    }
-                                    else {
-                                        notificacionError(respuesta.Mensaje);
-                                    }
-                                }
-                            );
-                        }
-                        else {
-                            notificacionError("Seleccionar una competencia");
-
-                        }
-                    },
-                    "Cancelar": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-        // btn Eliminar
-        $('#btnEliminarCompetencia').click(function () {
-            var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
-            if (ideCompetencia != null) {
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
-                    }
-                });
-
-                return false;
-            }
-            else {
-                $("#spanMensaje").html('Seleccionar un item a eliminar');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
-            }
-        });
-
-
-
-
-        $('#btnAgregarOfrecimiento').click(function () {
-            mostrarAgregarOfrecimiento();
-        });
-
-
-        $('#updateDialog2').dialog({
-            autoOpen: false,
-            width: 600,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Grabar": function (e) {
-                    e.preventDefault();
-                    var result = $('#ofrecemosForm').valid();
-                    if (result) {
-                        $.post('@Url.Action("Edit", "OfrecimientoCargo")',
-                                $("#ofrecemosForm").serialize(),
-                                function (respuesta) {
-                                    if (respuesta.Resultado) {
-                                        $("#updateDialog2").dialog("close");
-                                        $('#grdListOfrecemos').trigger('reloadGrid');
+                                       // $('#grdListOfrecemos').trigger('reloadGrid');
                                     }
                                     else {
                                         notificacionError(respuesta.Mensaje)
@@ -159,7 +154,7 @@
                             );
                     }
                     else {
-                        notificacionError("Seleccionar una competencia");
+                        notificacionError("ERROR: --");
 
                     }
                 },
@@ -169,127 +164,15 @@
             }
         });
 
-        $('#btnEliminarOfrecimiento').click(function () {
-            var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
-            if (ideOfrecimiento != null) {
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
-                    }
-                });
+       
 
-                return false;
-            }
-            else {
-                $("#spanMensaje").html('Seleccionar un item a eliminar');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
-            }
-        });
-
-        jQuery("#grdListCompetencias").jqGrid({
-            url: '@Url.Action("ListarCompetencias", "CompetenciaCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
-            colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
-            ],
-            pager: jQuery('#grdPagerCompetencia'),
-            sortname: 'DescripcionCompetencia',
-            sortorder: 'desc',
-            viewrecords: false,
-            cellEdit: true,
-            height: 200,
-            width: 898,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            },
-            loadError: function (xhr, st, err) {
-
-            }
-        });
-
-        jQuery("#grdListOfrecemos").jqGrid({
-            url: '@Url.Action("ListarOfrecemos", "OfrecimientoCargo")',
-            datatype: 'json',
-            mtype: 'POST',
-            colNames: ['Codigo', 'Descripci&oacuten'],
-            colModel: [
-                    { name: 'Codigo', index: 'Codigo', align: 'center', editable: false, sortable: false, hidden: true },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-            ],
-            pager: jQuery('#grdPagerOfrecemos'),
-            sortname: 'DescripcionOfrecimiento',
-            sortorder: 'desc',
-            viewrecords: false,
-            cellEdit: true,
-            height: 200,
-            width: 898,
-            rowNum: 0,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            postData: {
-
-            },
-            loadComplete: function (data) {
-
-            }
-        });
     });
 
-    function mostrarAgregarCompetencia() {
-        var dialogDiv = $('#updateDialog');
-        $.get('@Url.Action("Edit", "CompetenciaCargo")', function (data) {
-            dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialog"));
-            dialogDiv.dialog('open');
-        });
-        return false;
-    }
-
-    function eliminarCompetencia(id) {
-        $.ajax({
-            async: false,
-            type: "POST",
-            url: '@Url.Action("eliminarCompetencia", "CompetenciaCargo")',
-            data: { ideCompetencia: id },
-        });
-    }
-
-    function mostrarAgregarOfrecimiento() {
-        var dialogDiv = $('#updateDialog2');
-        $.get('@Url.Action("Edit", "OfrecimientoCargo")', function (data) {
-            dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#updateDialog2"));
-            dialogDiv.dialog('open');
-        });
-        return false;
-    }
-
-    function eliminarOfrecimiento(id) {
-        $.ajax({
-            async: false,
-            type: "POST",
-            url: '@Url.Action("eliminarOfrecimiento", "OfrecimientoCargo")',
-            data: { ideOfrecimiento: id },
-        });
-    }
+      function mostrarconfirmacion() {
+          var dialogDiv = $('#updateDialog');
+              dialogDiv.dialog('open');
+          //return false;
+      }
 
   </script>
 

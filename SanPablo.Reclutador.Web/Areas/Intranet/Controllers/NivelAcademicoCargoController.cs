@@ -98,35 +98,65 @@
                     nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
                     return View("NivelAcademico", nivelAcademicoViewModel);
                 }
-                if (nivelAcademicoCargo.IdeNivelAcademicoCargo == 0)
-                {
-                    nivelAcademicoCargo.EstadoActivo = "A";
-                    nivelAcademicoCargo.FechaCreacion = FechaCreacion;
-                    nivelAcademicoCargo.UsuarioCreacion = "YO";
-                    nivelAcademicoCargo.FechaModificacion = FechaCreacion;
-                    nivelAcademicoCargo.Cargo = new Cargo();
-                    nivelAcademicoCargo.Cargo.IdeCargo = IdeCargo;
-                    _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
-                    _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio,0,IdeCargo);
-                }
+               
                 else
                 {
-                    var nivelAcedemicoCargoActualizar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == nivelAcademicoCargo.IdeNivelAcademicoCargo);
-                    int valorAnterior = nivelAcedemicoCargoActualizar.PuntajeNivelEstudio;
-                    nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
-                    nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
-                    nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
-                    nivelAcedemicoCargoActualizar.CicloSemestre = nivelAcademicoCargo.CicloSemestre;
-                    nivelAcedemicoCargoActualizar.PuntajeNivelEstudio = nivelAcademicoCargo.PuntajeNivelEstudio;
-                    nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;
-                    _nivelAcademicoCargoRepository.Update(nivelAcedemicoCargoActualizar);
-                    _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio,valorAnterior,IdeCargo);
-                }
+                    if (nivelAcademicoCargo.IdeNivelAcademicoCargo == 0)
+                    {
+                        if (existe(nivelAcademicoCargo.TipoEducacion))
+                        {
+                            objJsonMessage.Mensaje = "El tipo de Educación ya existe, no puede agregar otro igual";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
+                        else
+                        {
+                            nivelAcademicoCargo.EstadoActivo = "A";
+                            nivelAcademicoCargo.FechaCreacion = FechaCreacion;
+                            nivelAcademicoCargo.UsuarioCreacion = "YO";
+                            nivelAcademicoCargo.FechaModificacion = FechaCreacion;
+                            nivelAcademicoCargo.Cargo = new Cargo();
+                            nivelAcademicoCargo.Cargo.IdeCargo = IdeCargo;
+                            _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
+                            _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio, 0, IdeCargo);
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                            objJsonMessage.Mensaje = "Agregado Correctamente";
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
+                        }
+                    }
+                    else
+                    {
+                         int contador = _nivelAcademicoCargoRepository.CountByExpress(x => x.TipoEducacion == nivelAcademicoCargo.TipoEducacion && x.Cargo.IdeCargo == IdeCargo && x.IdeNivelAcademicoCargo != nivelAcademicoCargo.IdeNivelAcademicoCargo);
+
+                         if (contador > 0)
+                         {
+                             objJsonMessage.Mensaje = "El tipo de Educación ya existe, no puede agregar otro igual";
+                             objJsonMessage.Resultado = false;
+                             return Json(objJsonMessage);
+                         }
+                         else
+                         {
+                             var nivelAcedemicoCargoActualizar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == nivelAcademicoCargo.IdeNivelAcademicoCargo);
+                             int valorAnterior = nivelAcedemicoCargoActualizar.PuntajeNivelEstudio;
+                             nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
+                             nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
+                             nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
+                             nivelAcedemicoCargoActualizar.CicloSemestre = nivelAcademicoCargo.CicloSemestre;
+                             nivelAcedemicoCargoActualizar.PuntajeNivelEstudio = nivelAcademicoCargo.PuntajeNivelEstudio;
+                             nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                             nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;
+                             _nivelAcademicoCargoRepository.Update(nivelAcedemicoCargoActualizar);
+                             _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio, valorAnterior, IdeCargo);
+
+                             objJsonMessage.Mensaje = "Editado Correctamente";
+                             objJsonMessage.Resultado = true;
+                             return Json(objJsonMessage);
+                         }
+                    }
+
+                    
+                }
             }
             catch (Exception ex)
             {
@@ -155,6 +185,11 @@
             return nivelAcademicoViewModel;
         }
 
+        /// <summary>
+        /// Eliminar Item
+        /// </summary>
+        /// <param name="ideNivelAcademico"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult eliminarNivelAcademico(int ideNivelAcademico)
         {
@@ -165,6 +200,24 @@
             int puntajeEliminar = nivelAcademicoEliminar.PuntajeNivelEstudio;
             _nivelAcademicoCargoRepository.Remove(nivelAcademicoEliminar);
             _nivelAcademicoCargoRepository.actualizarPuntaje(0,puntajeEliminar,IdeCargo);
+            return result;
+        }
+
+        /// <summary>
+        /// Validar q el tipo de Educacion no sea duplicado
+        /// </summary>
+        /// <param name="tipoEducacion"></param>
+        /// <returns></returns>
+        public bool existe(string tipoEducacion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _nivelAcademicoCargoRepository.CountByExpress(x => x.TipoEducacion == tipoEducacion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
 
             return result;
         }

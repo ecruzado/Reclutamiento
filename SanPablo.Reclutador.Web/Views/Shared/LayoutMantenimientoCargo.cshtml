@@ -21,74 +21,28 @@
             </div>
 
             <form class="formulario-busqueda">
+                <div class="span12">
+                    <h5>Datos Generales</h5>
+                </div>
                 <table>
                     <tr class="formulario-fila">
-                        @*<td class="colEtiqueta">
-                           <label class="control-label" for="inputSuccess">Código</label>
-                        </td>
-                        <td class="colInput">
-                            @Html.TextBoxFor(model => model.Cargo.IdeCargo, new { @disabled = "disabled"})
-                        
-                        </td>*@
                         <td class="colEtiqueta">
                             <label class="control-label" for="inputSuccess">Código de Cargo</label>
                         </td>
                         <td class ="colImput">
                             @Html.TextBoxFor(model=>model.Cargo.CodigoCargo,  new { @disabled = "disabled"})
                         </td>
-                        <td class="colEtiqueta">
-                            <label class="control-label" for="selectError">Dependencia</label>
-                        </td>
-                        <td class="colInput" >
-                            @Html.TextBoxFor(model =>model.Dependencia,  new { @disabled = "disabled"})
-                        </td>
                     </tr>
-                    <tr class="formulario-fila">
-                        @*<td class="colEtiqueta">
-                          <label class="control-label" for="inputSuccess">Cargo</label>
-                       </td>
-                        <td class="colImput">
-                           @Html.TextBoxFor(model=>model.Cargo.NombreCargo,  new { @disabled = "disabled"})
-                       </td>*@
-                        <td class="colEtiqueta">
-                            <label class="control-label" for="selectError">Departamento</label>
-                        </td>
-                        <td class="colImput">
-                             @Html.TextBoxFor(model =>model.Departamento,  new { @disabled = "disabled"})
-                        </td>
-                         <td class="colEtiqueta">
-                          <label class="control-label" for="selectError">Área</label>
-                        </td>
-                        <td class="colImput">
-                            @Html.TextBoxFor(model=>model.Area,  new { @disabled = "disabled"})
-                        </td>
-                    </tr>
-                    <tr class="formulario-fila">
-                        @*<td class="colEtiqueta">
-                            <label class="control-label" for="inputSuccess">Descripción</label>
-                        </td>
-                        <td class="colImput">
-                                @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo,  new { @disabled = "disabled"})
-                        </td>*@
-                       
-                    </tr>
-                   @* <tr class="formulario-fila">
-                        <td class="colEtiqueta">
-                            <label class="control-label" for="inputSuccess">Nro Posiciones</label>
-                        </td>
-                        <td class="colImput">
-                                @Html.TextBoxFor(model=>model.Cargo.NumeroPosiciones,  new { @disabled = "disabled"})
-                        </td>
-                        
-                    </tr>*@
                 </table>
-
-                <div style="clear:both"></div>
-                <div>
-                    <h5> Datos Generales</h5>
-                    @Html.Partial("DatosGenerales");
-                </div>
             </form>
+                <div style="clear:both"></div>
+                <div class="span12">
+                    <div class="span10">
+                        @*<h5>Datos Generales</h5>*@
+                            @Html.Partial("DatosGenerales")
+                    </div>
+               </div>
+           
 
             <h5>Datos de Perfil</h5>
             <ul class="nav nav-tabs" data-tabs="tabs">
@@ -113,6 +67,9 @@
 </div>
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
+
+<div id="updateDialogDatos" title="Selección y Reclutamiento de Personal"><p>¿Está seguro de guardar los cambios?</p></div>
+
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="divMensaje">
     <span id="spanMensaje"></span>
@@ -127,6 +84,14 @@
 
 <script type="text/javascript">
     $(function () {
+        var estado = $('#Cargo_EstadoActivo').val();
+        if (estado = 'A') {
+            $('#EstadoRegistro').val('Activo');
+        }
+        else {
+            $('#EstadoRegistro').val('Inactivo');
+        }
+
         $('#updateDialogAprobacion').dialog({
             autoOpen: false,
             width: 400,
@@ -160,6 +125,28 @@
 
         // }
 
+        $('#updateDialogDatos').dialog({
+            autoOpen: false,
+            width: 400,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    e.preventDefault();
+                    var result = $("#datosGeneralesForm").valid();
+                    if (result) {
+                        grabarDatos();
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
             width: 300,
@@ -186,7 +173,73 @@
                 }
             }
         });
+
+        //datos generales
+        $('#btnGrabarDatosGenerales').click(function () {
+            var dialogDiv = $('#updateDialogDatos');
+            dialogDiv.dialog('open');
+            // mostrarconfirmacion();
+        });
+
+        $('select#Cargo_IdeDependencia').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#Cargo_IdeArea").empty();
+            $("select#Cargo_IdeArea").append("<option value='0'> Seleccionar </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos","SolicitudNuevoCargo")',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#Cargo_IdeDepartamento").empty();
+                    $("select#Cargo_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Cargo_IdeDepartamento").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+         })
+
+        $('select#Cargo_IdeDepartamento').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#Cargo_IdeArea").empty();
+                    $("select#Cargo_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Cargo_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+       
+
     });
+
+    
+    
+    function grabarDatos() {
+       $.post('@Url.Action("DatosGenerales", "MantenimientoCargo")',
+            $("#datosGeneralesForm").serialize(),
+            function (respuesta) {
+                if (respuesta.Resultado) {
+                    $("#updateDialogDatos").dialog("close");
+                    mensajeResultado(respuesta.Mensaje);
+                }
+                else {
+                    notificacionError(respuesta.Mensaje)
+
+                }
+            }
+        );
+    }
 
     function mostrarMensaje(msj)
     {
@@ -213,7 +266,7 @@
             }
         }
         else {
-            mensajeResultado("Solicitu en estado: 'INACTIVO'");
+            mensajeResultado("Solicitud en estado: 'INACTIVO'");
         }
     }
     function mostrarAprobarDesaprobar() {

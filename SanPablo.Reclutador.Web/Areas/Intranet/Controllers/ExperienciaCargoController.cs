@@ -106,33 +106,61 @@
                 }
                 if (experienciaCargo.IdeExperienciaCargo == 0)
                 {
-                    experienciaCargo.EstadoActivo = IndicadorActivo.Activo;
-                    experienciaCargo.FechaCreacion = FechaCreacion;
-                    experienciaCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                    experienciaCargo.FechaModificacion = FechaCreacion;
-                    experienciaCargo.Cargo = new Cargo();
-                    experienciaCargo.Cargo.IdeCargo = IdeCargo;
+                    if (existe(experienciaCargo.TipoExperiencia))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo tipo de experiencia más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        experienciaCargo.EstadoActivo = IndicadorActivo.Activo;
+                        experienciaCargo.FechaCreacion = FechaCreacion;
+                        experienciaCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        experienciaCargo.FechaModificacion = FechaCreacion;
+                        experienciaCargo.Cargo = new Cargo();
+                        experienciaCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _experienciaCargoRepository.Add(experienciaCargo);
-                    _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia,0, IdeCargo);
+                        _experienciaCargoRepository.Add(experienciaCargo);
+                        _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, 0, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
                     var experienciaCargoActualizar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == experienciaCargo.IdeExperienciaCargo);
-                    int valorEditar = experienciaCargoActualizar.PuntajeExperiencia;
-                    experienciaCargoActualizar.TipoExperiencia = experienciaCargo.TipoExperiencia;
-                    experienciaCargoActualizar.CantidadAnhosExperiencia = experienciaCargo.CantidadAnhosExperiencia;
-                    experienciaCargoActualizar.CantidadMesesExperiencia = experienciaCargo.CantidadMesesExperiencia;
-                    experienciaCargoActualizar.PuntajeExperiencia = experienciaCargo.PuntajeExperiencia;
-                    experienciaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    experienciaCargoActualizar.FechaModificacion = FechaModificacion;
-                    _experienciaCargoRepository.Update(experienciaCargoActualizar);
-                    _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, valorEditar, IdeCargo);
+
+                    int contador = _experienciaCargoRepository.CountByExpress(x => x.TipoExperiencia == experienciaCargo.TipoExperiencia && x.Cargo.IdeCargo == IdeCargo && x.IdeExperienciaCargo != experienciaCargo.IdeExperienciaCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo tipo de experiencia más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+
+                        int valorEditar = experienciaCargoActualizar.PuntajeExperiencia;
+                        experienciaCargoActualizar.TipoExperiencia = experienciaCargo.TipoExperiencia;
+                        experienciaCargoActualizar.CantidadAnhosExperiencia = experienciaCargo.CantidadAnhosExperiencia;
+                        experienciaCargoActualizar.CantidadMesesExperiencia = experienciaCargo.CantidadMesesExperiencia;
+                        experienciaCargoActualizar.PuntajeExperiencia = experienciaCargo.PuntajeExperiencia;
+                        experienciaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        experienciaCargoActualizar.FechaModificacion = FechaModificacion;
+                        _experienciaCargoRepository.Update(experienciaCargoActualizar);
+                        _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, valorEditar, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Editado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                
             }
             catch (Exception ex)
             {
@@ -178,6 +206,20 @@
                 return true;
             }
             else { return false; }
+        }
+
+        public bool existe(string tipoExperiencia)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _experienciaCargoRepository.CountByExpress(x => x.TipoExperiencia == tipoExperiencia && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         #endregion

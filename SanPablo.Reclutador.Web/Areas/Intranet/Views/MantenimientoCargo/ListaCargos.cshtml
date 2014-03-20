@@ -78,6 +78,25 @@
             }
         });
 
+        $("#spanMessageConfirmacion").html("¿Está seguro que desea realizar modificaciones al cargo?")
+        $('#updateDialogConfirmacion').dialogo({
+            buttons: {
+                "Si": function () {
+                    var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                    var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
+                    if (rowData.IdeCargo != null) {
+                        window.location = '@Url.Action("Index", "MantenimientoCargo")' + '/' + rowData.IdeCargo;
+                    }
+                    else {
+                        MostrarMensaje('Seleccione un cargo a editar');
+                    }
+                },
+                "No": function () {
+                    $('#updateDialogConfirmacion').dialog("close");
+                }
+            }
+        });
+
 
         jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
@@ -128,12 +147,12 @@
                     }
                 });
             },
-            colNames: ['Estado','', 'Codigo','', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Posiciones', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre','', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa'],
+            colNames: ['Estado','','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Version'],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
-                            { name: 'Codigo', index: 'Codigo', align: 'center', width: 80 },
                             { name: 'IdeCargo', index: 'IdeCargo', align: 'left', hidden: true },
+                            { name: 'Codigo', index: 'Codigo', align: 'center', width: 80 },
                             { name: 'Cargo', index: 'Cargo', align: 'left' },
                             { name: 'ideDependencia', index: 'Cargo', align: 'left', hidden: true },
                             { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
@@ -141,20 +160,8 @@
                             { name: 'Departamento', index: 'Departamento', align: 'left', width: 160 },
                             { name: 'ideArea', index: 'Cargo', align: 'left', hidden: true },
                             { name: 'Area', index: 'Area', align: 'left', width: 160 },
-                            { name: 'Posiciones', index: 'Posiciones', align: 'right', width: 60 },
-                            { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                            { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                            { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                            { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                            { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                            { name: 'Inicio', index: 'Inicio', align: 'left', width: 100 },
-                            { name: 'Cierre', index: 'Cierre', align: 'left', width: 100 },
-                            { name: 'ideResponsable', index: 'ideRol', align: 'left', hidden: true },
-                            { name: 'Responsable', index: 'Responsable', align: 'left', width: 120 },
-                            { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                            { name: 'Publicado', index: 'Publicado', align: 'left', width: 100 },
-                            { name: 'ideEtapa', index: 'ideEtapa', align: 'left', hidden: true },
-                            { name: 'Etapa', index: 'Etapa', align: 'center', width: 160 }
+                            { name: 'Version', index: 'Posiciones', align: 'right', width: 60 }
+                           
                           
                     ],
 
@@ -193,12 +200,11 @@
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
             if (rowData.IdeCargo != null) {
-                window.location = '@Url.Action("Index", "MantenimientoCargo")' + '/' + rowData.IdeCargo;
+                consultaEdit(ideSolicitud, rowData.IdeCargo);
             }
             else {
                 MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
             }
-
         });
         
         $('#btnConsultarSolicitud').click(function () {
@@ -224,8 +230,25 @@
 
     });
 
-    function ActivarDesactivarSolicitud(selr, estado) {
 
+    function consultaEdit(ideSolicitud,ideCargo)
+    {
+        $.ajax({
+           data: {id: ideSolicitud },
+           type: "POST",
+           url: "@Url.Action("consultaEditar", "MantenimientoCargo")",
+           traditional: true,
+           success: function (data) {
+               if (data.Resultado == true) {
+                   $('#updateDialogConfirmacion').dialog('open');
+                } else {
+                    MostrarMensaje(data.Mensaje);
+                }
+            }
+         });
+    }
+
+    function ActivarDesactivarSolicitud(selr, estado) {
         $.ajax({
             data: {
                 id: selr,
@@ -237,16 +260,14 @@
             success: function (data) {
                 if (data.Resultado == false) {
                     MostrarMensaje(data.Mensaje)
-                    
+
                 } else {
                     MostrarMensaje(data.Mensaje);
                     $('#grdList').trigger('reloadGrid');
                 }
             }
         });
-
     }
-
    
     function HabilitarFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
@@ -449,3 +470,4 @@
 }
 <div id="updateDialog" ><span id="spanMessage"></span></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>
+<div id="updateDialogConfirmacion" ><span id="spanMessageConfirmacion"></span></div>

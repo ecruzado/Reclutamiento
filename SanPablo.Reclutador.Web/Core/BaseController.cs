@@ -328,6 +328,17 @@ namespace SanPablo.Reclutador.Web.Core
                 System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Modo, value);
             }
         }
+        protected int IdeGeneral
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeGeneral];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdeGeneral, value);
+            }
+        }
         protected int IdeSolicitudAmpliacion
         {
             get

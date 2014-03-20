@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\MantenimientoGeneralViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\MantenimientoCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudConsultaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
@@ -425,8 +427,10 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\DatosGenerales.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupCvPostulante.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PostulantesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupExclucion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />

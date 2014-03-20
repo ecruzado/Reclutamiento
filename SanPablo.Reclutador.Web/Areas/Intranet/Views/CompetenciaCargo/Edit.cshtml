@@ -23,5 +23,16 @@
                 </div>
             </td>
         </tr>  
+        <tr>
+            <td class="colEtiqueta">
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.Competencia.Puntaje, new {@class="input-xxmini" })
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Competencia.Puntaje)
+                </div>
+            </td>
+        </tr> 
     </table>
 }

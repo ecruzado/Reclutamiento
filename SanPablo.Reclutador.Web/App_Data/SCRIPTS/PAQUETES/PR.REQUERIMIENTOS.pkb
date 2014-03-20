@@ -1,94 +1,4 @@
-CREATE OR REPLACE PACKAGE PR_REQUERIMIENTOS is
 
-
-PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
-                            p_ideArea           IN AREA.IDEAREA%TYPE,
-                            p_codCargo          IN SOLNUEVO_CARGO.CODCARGO%TYPE,
-                            p_nomCargo          IN SOLNUEVO_CARGO.NOMBRE%TYPE,
-                            p_descCargo         IN SOLNUEVO_CARGO.DESCRIPCION%TYPE,
-                            p_numPosiciones     IN SOLNUEVO_CARGO.NUMPOSICIONES%TYPE,
-                            p_tipRangoSalario   IN SOLNUEVO_CARGO.TIPRANSALARIO%TYPE,
-                            p_ideDependencia    IN SOLNUEVO_CARGO.IDEDEPENDENCIA%TYPE,
-                            p_ideDepartamento   IN SOLNUEVO_CARGO.IDEDEPARTAMENTO%TYPE,
-                            p_estudios          IN SOLNUEVO_CARGO.ESTUDIOS%TYPE,
-                            p_funciones         IN SOLNUEVO_CARGO.FUNCIONES%TYPE,
-                            p_competencias      IN SOLNUEVO_CARGO.COMPETENCIAS%TYPE,
-                            p_observacion       IN SOLNUEVO_CARGO.OBSERVACIONES%TYPE,                            
-                            p_ideUsuarioSuceso  IN USUARIO.IDUSUARIO%TYPE,
-                            p_ideRolSuceso      IN ROL.IDROL%TYPE,
-                            p_ideRolResponsable IN ROL.IDROL%TYPE,
-                            p_indArea           IN VARCHAR2,
-                            p_usuarioCreacion   IN SOLNUEVO_CARGO.USRCREACION%TYPE,
-                            p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
-                            p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);
-                            
-PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                          p_ideSede            IN SEDE.IDESEDE%TYPE,
-                          p_ideArea            IN AREA.IDEAREA%TYPE,
-                          p_ideUsuarioSuceso   IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
-                          p_ideRolSuceso       IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
-                          p_ideRolResponsable  IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
-                          p_indArea            IN VARCHAR2,
-                          p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
-                          p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);                         
-                              
-PROCEDURE SP_OBTENER_ETAPA_SOLICITUD(p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                                     p_cRetVal OUT SYS_REFCURSOR);
-                                     
-FUNCTION FN_RESPONSABLE_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)
-                            RETURN VARCHAR2;
-
-FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)
-                           RETURN VARCHAR2;
-                           
-FUNCTION FN_VERIFICAR_CODCARGO(p_codCargo IN SOLNUEVO_CARGO.CODCARGO%TYPE)RETURN NUMBER ;
-
-
-PROCEDURE COPIA_CARGO(p_ideCargo IN CARGO.IDECARGO%TYPE,
-                             p_ideSolReqPersonal IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                             p_usrCreacion IN SOLREQ_PERSONAL.USRCREACION%TYPE);
-                             
-PROCEDURE SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%TYPE,
-                                p_ideSede          IN SEDE.IDESEDE%TYPE,
-                                p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
-                                p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
-                                p_ideArea          IN AREA.IDEAREA%TYPE,
-                                p_numVacantes      IN SOLREQ_PERSONAL.NUMVACANTES%TYPE,
-                                p_motivo           IN SOLREQ_PERSONAL.MOTIVO%TYPE,
-                                p_observacion      IN SOLREQ_PERSONAL.OBSERVACION%TYPE,
-                                p_ideUsuarioSuceso IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
-                                p_ideRolSuceso     IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
-                                p_cEtapa           IN DETALLE_GENERAL.VALOR%TYPE,
-                                p_responsableSig   IN ROL.IDROL%TYPE,
-                                p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
-                                p_indicArea        IN VARCHAR2,
-                                p_cRetVal          OUT NUMBER);
-                                
-PROCEDURE SP_RESPONSABLE_PUBLICACION(p_idSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                                     p_idSede           IN SEDE.IDESEDE%TYPE,
-                                     p_idUsuarioResp    OUT USUARIO.IDUSUARIO%TYPE,
-                                     p_idRolResp        OUT ROL.IDROL%TYPE);
-                                
-PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idCargo       IN CARGO.IDECARGO%TYPE,
-                                   p_idSede         IN SEDE.IDESEDE%TYPE,
-                                   p_idUsuarioResp  OUT USUARIO.IDUSUARIO%TYPE); 
-                                   
-PROCEDURE SP_OBTENER_ETAPA_SOLREQ(p_ideSolRequerimiento IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                  p_cRetVal OUT SYS_REFCURSOR);
-                                  
-PROCEDURE SP_INSERTAR_APROB_AMP(p_ideSolRequerimiento IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                p_ideRolResponsable   IN ROL.IDROL%TYPE,
-                                p_ideSede             IN SEDE.IDESEDE%TYPE,
-                                p_ideArea             IN AREA.IDEAREA%TYPE,
-                                p_indicArea           IN VARCHAR2,
-                                p_tipoEtapa           IN LOGSOLREQ_PERSONAL.TIPETAPA%TYPE,
-                                p_usuarioSuceso       IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
-                                p_ideRolSuceso        IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
-                                p_observacion         IN LOGSOLREQ_PERSONAL.OBSERVACION%TYPE,
-                                c_ideUsuarioResp      IN OUT USUARIO.IDUSUARIO%TYPE);
-
-END PR_REQUERIMIENTOS;
-/
 CREATE OR REPLACE PACKAGE BODY PR_REQUERIMIENTOS is
 
 /* ------------------------------------------------------------
@@ -221,6 +131,9 @@ BEGIN
                 
   EXECUTE IMMEDIATE qQuery INTO p_ideUsuarioResp;
   
+  ELSE
+    p_ideUsuarioResp:=0;
+  
   END IF;
   
   BEGIN
@@ -285,19 +198,21 @@ END SP_OBTENER_ETAPA_SOLICITUD;
       Fecha       Autor                Descripcion
       24/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-FUNCTION FN_RESPONSABLE_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)RETURN VARCHAR2
+FUNCTION FN_RESPONSABLE_SOL(p_ideSolicitud    IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)RETURN VARCHAR2
 
 IS
 c_responsable ROL.DSCROL%TYPE;
 BEGIN
-  SELECT R.DSCROL
-  INTO c_responsable
-  FROM LOGSOLNUEVO_CARGO LG , ROL R   
-  WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
-                     FROM  LOGSOLNUEVO_CARGO SN
-                     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
-  AND R.IDROL = LG.ROLRESPONSABLE;
-
+    
+    SELECT R.DSCROL
+    INTO c_responsable
+    FROM LOGSOLNUEVO_CARGO LG , ROL R   
+    WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
+                       FROM  LOGSOLNUEVO_CARGO SN
+                       WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
+    AND R.IDROL = LG.ROLRESPONSABLE
+    AND LG.IDESOLNUEVOCARGO = p_ideSolicitud;
+    
   RETURN NVL(c_responsable,'');  
   
 END FN_RESPONSABLE_SOL;
@@ -312,19 +227,35 @@ END FN_RESPONSABLE_SOL;
       Fecha       Autor                Descripcion
       24/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE)RETURN VARCHAR2
+FUNCTION FN_NOMRESPONS_SOL(p_ideSolicitud IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                           p_tipoSolicitud   IN VARCHAR2)RETURN VARCHAR2
 
 IS
 c_responsable ROL.DSCROL%TYPE;
 BEGIN
-  SELECT US.DSCNOMBRES||' ' ||US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO
-  INTO c_responsable
-  FROM LOGSOLNUEVO_CARGO LG , USUARIO US   
-  WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
-                     FROM  LOGSOLNUEVO_CARGO SN
-                     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
-  AND US.IDUSUARIO = LG.USRESPONSABLE;
 
+  IF p_tipoSolicitud = 'N' THEN
+  
+    SELECT US.DSCNOMBRES||' ' ||US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO
+    INTO c_responsable
+    FROM LOGSOLNUEVO_CARGO LG , USUARIO US   
+    WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
+                       FROM  LOGSOLNUEVO_CARGO SN
+                       WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud)
+    AND US.IDUSUARIO = LG.USRESPONSABLE
+    AND LG.IDESOLNUEVOCARGO = p_ideSolicitud;
+  ELSE
+    
+    SELECT US.DSCNOMBRES||' ' ||US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO
+    INTO c_responsable
+    FROM LOGSOLREQ_PERSONAL LG , USUARIO US   
+    WHERE FECSUCESO = (SELECT MAX (FECSUCESO)
+                       FROM  LOGSOLREQ_PERSONAL SN
+                       WHERE SN.IDESOLREQPERSONAL = p_ideSolicitud)
+    AND US.IDUSUARIO = LG.USRESPONSABLE
+    AND LG.IDESOLREQPERSONAL = p_ideSolicitud;
+    
+  END IF;
   RETURN NVL(c_responsable,'');  
   
 END FN_NOMRESPONS_SOL;
@@ -555,6 +486,7 @@ PROCEDURE SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%
                                 p_ideArea          IN AREA.IDEAREA%TYPE,
                                 p_numVacantes      IN SOLREQ_PERSONAL.NUMVACANTES%TYPE,
                                 p_motivo           IN SOLREQ_PERSONAL.MOTIVO%TYPE,
+                                p_tipoPuesto       IN SOLREQ_PERSONAL.TIPPUESTO%TYPE, 
                                 p_observacion      IN SOLREQ_PERSONAL.OBSERVACION%TYPE,
                                 p_ideUsuarioSuceso IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
                                 p_ideRolSuceso     IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
@@ -611,8 +543,8 @@ BEGIN
    p_cRetVal := c_ideUsuarioResp;
   BEGIN 
     INSERT INTO SOLREQ_PERSONAL 
-    (IDESOLREQPERSONAL,CODSOLREQPERSONAL,IDESEDE,IDEDEPENDENCIA,IDEDEPARTAMENTO,IDEAREA,NUMVACANTES,MOTIVO,OBSERVACION,ESTACTIVO,TIPSOL,USRCREACION,FECCREACION,TIPETAPA)
-    VALUES(c_ideLogSequency, c_codAmpliacion,p_ideSede, p_ideDependencia,p_ideDepartamento,p_ideArea,p_numVacantes,p_motivo,p_observacion,'A',p_tipoSolicitud,c_descUsuario,SYSDATE,p_cEtapa);
+    (IDESOLREQPERSONAL,CODSOLREQPERSONAL,IDESEDE,IDEDEPENDENCIA,IDEDEPARTAMENTO,IDEAREA,NUMVACANTES,MOTIVO,OBSERVACION,ESTACTIVO,TIPSOL,USRCREACION,FECCREACION,TIPETAPA,TIPPUESTO)
+    VALUES(c_ideLogSequency, c_codAmpliacion,p_ideSede, p_ideDependencia,p_ideDepartamento,p_ideArea,p_numVacantes,p_motivo,p_observacion,'A',p_tipoSolicitud,c_descUsuario,SYSDATE,p_cEtapa,p_tipoPuesto);
     --realizar la copia de cargo a la tabla ampliacion 
     PR_REQUERIMIENTOS.COPIA_CARGO(p_ideCargo,c_ideLogSequency,c_descUsuario);
     --insertar el log de solicitud
@@ -798,6 +730,149 @@ BEGIN
   END;   
   
 END SP_INSERTAR_APROB_AMP;
+
+/* ------------------------------------------------------------
+    Nombre      : FN_GET_LISTAREQ
+    Proposito   : obtiene la lista de todas las solicitudes
+                 (Nuevo - Ampliacion - Reemplazo)
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_LISTA_SOLGRAL(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                           p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                           p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                           p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
+                           p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                           p_cTipResp        in NUMBER,   
+                           p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                           p_cFecIni         IN VARCHAR2,
+                           p_cFeFin          IN VARCHAR2,
+                           p_cTipoSolicitud  IN VARCHAR2,
+                           p_cCodSolicitud   IN VARCHAR2,
+                           p_cRetVal         OUT SYS_REFCURSOR)IS
+          
+c_Consulta1 VARCHAR2(2000):=NULL;
+c_Consulta2 VARCHAR2(2000):=NULL;
+c_Where VARCHAR2(1000):=NULL;
+c_Query VARCHAR2(4000):=NULL;
+          
+BEGIN
+  
+  DELETE T_RECLTEMP;   
+
+  INSERT INTO T_RECLTEMP
+  SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.IDESOLNUEVOCARGO,'N') ESTADO, SN.CODCARGO,NVL(SN.IDECARGO,0), SN.NOMBRE,
+       DE.IDEDEPENDENCIA,DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO,DP.NOMDEPARTAMENTO,AR.IDEAREA,AR.NOMAREA, SN.NUMPOSICIONES,0 POSTULANTE, 0 PRESELECCIONADOS, 0 EVALUADOS, 0 SELECCIONADOS, SN.FECCREACION,SN.FECCREACION CIERRE,NVL(R.IDROL,0), NVL(R.DSCROL,'') ,
+       (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SN.IDESOLNUEVOCARGO,'N')) NOMRESPONSABLE,SN.FECPUBLICACION,SN.FECEXPIRACION,DECODE(SN.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LS.TIPETAPA)) TETAPA,'01' TIPSOL ,'NUEVO' TIPOSOLICITUD  
+  FROM SOLNUEVO_CARGO SN, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R
+  ON (LS.ROLRESPONSABLE = R.IDROL)
+  WHERE SN.IDEAREA = AR.IDEAREA
+  AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
+  AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
+  AND LS.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO
+  AND LS.FECSUCESO = (SELECT MAX (FECSUCESO)
+                           FROM  LOGSOLNUEVO_CARGO LN
+                           WHERE LN.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO);
+                           
+  INSERT INTO T_RECLTEMP
+  SELECT SQ.IDESOLREQPERSONAL, PR_INTRANET.FN_ESTADO_SOLICITUD(SQ.IDESOLREQPERSONAL ,'O') ESTADO,TO_CHAR(SQ.CODSOLREQPERSONAL) CODSOLICITUD, NVL(SQ.IDECARGO,0), SQ.NOMCARGO,
+       DE.IDEDEPENDENCIA, DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO, DP.NOMDEPARTAMENTO,AR.IDEAREA, AR.NOMAREA, SQ.NUMVACANTES,0 POSTULANTE, 0 PRESELECCIONADOS, 0 EVALUADOS, 0 SELECCIONADOS, SQ.FECCREACION, SQ.FECCREACION CIERRE ,NVL(R.IDROL,0), NVL(R.DSCROL,'') ,
+       (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SQ.IDESOLREQPERSONAL,'O')) NOMRESPONSABLE,SQ.FECPUBLICACION,SQ.FECEXPIRACACION,DECODE(SQ.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, LQ.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LQ.TIPETAPA)) TETAPA,SQ.TIPSOL,(PR_INTRANET.FN_VALOR_GENERAL('TIPSOL',SQ.TIPSOL)) TIPOSOLICITUD
+  FROM SOLREQ_PERSONAL SQ, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLREQ_PERSONAL LQ LEFT JOIN ROL R 
+  ON (LQ.ROLRESPONSABLE = R.IDROL)
+  WHERE SQ.IDEAREA = AR.IDEAREA
+  AND LQ.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL
+  AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
+  AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
+  AND LQ.FECSUCESO = (SELECT MAX (FECSUCESO)
+                           FROM  LOGSOLREQ_PERSONAL LSQ
+                           WHERE LSQ.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL);  
+  
+  
+   IF p_nIdCargo>0 THEN
+    
+      c_Where := c_Where || ' AND  S.IDECARGO = '||p_nIdCargo;
+    
+    END IF;
+   
+   IF p_cCodSolicitud IS NOT NULL THEN
+        
+      c_Where := c_Where || '  AND S.CODIGO = ''' ||p_cCodSolicitud||''' ' ;
+        
+    END IF;
+   
+    IF p_nIdDependencia>0 THEN
+        
+      c_Where := c_Where || '  AND S.IDEDEPENDENCIA = '||p_nIdDependencia ;
+        
+    END IF;
+    
+    IF p_nIdDepartamento>0 THEN
+        
+      c_Where := c_Where || '  AND S.IDEDEPARTAMENTO = '||p_nIdDepartamento ;
+        
+    END IF;
+
+    IF p_nIdArea>0 THEN
+        
+      c_Where := c_Where || ' AND S.IDEAREA = '||p_nIdArea ;
+        
+    END IF;
+ 
+    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa<>'' THEN
+        
+      c_Where := c_Where || ' AND S.TIPETAPA = '||p_cTipEtapa ;
+                            
+    END IF;
+
+    IF p_cTipResp IS NOT NULL AND p_cTipResp<> 0 THEN
+        
+      c_Where := c_Where || ' AND '''||p_cTipResp||''' = S.IDRESPONSABLE ';
+        
+    END IF;
+    
+    IF p_cEstado IS NOT NULL AND p_cEstado<>'' THEN
+      
+      IF p_cEstado = 'I' THEN
+        c_Where := c_Where || ' AND '''||p_cEstado||''' = S.ESTADO ';
+      ELSE
+        c_Where := c_Where || ' AND S.ESTADO != ''I'' '; 
+      END IF;   
+    END IF;
+  
+    IF LENGTH(rtrim(p_cFecIni))>0 AND LENGTH(rtrim(p_cFeFin))>0 THEN
+       
+      c_Where := c_Where || ' AND S.INICIO >= to_date('''||p_cFecIni||''',''DD/MM/YYYY'')'
+                         || ' AND S.CIERRE < to_date('''||p_cFeFin||''',''DD/MM/YYYY'')+1';
+        
+    END IF;
+    
+    IF p_cTipoSolicitud IS NOT NULL THEN
+        
+      c_Where := c_Where || ' AND '''||p_cTipoSolicitud||''' = S.TIPSOL ';
+        
+    END IF;
+    
+   c_Where := c_Where || ' ORDER BY S.IDESOLICITUD ';
+  
+   c_Consulta1:= ' SELECT * FROM T_RECLTEMP  S WHERE 1=1 ';
+   
+   c_Query := c_Consulta1 || c_Where;
+   
+   INSERT INTO LOG_MENSAJE 
+   VALUES(c_Query);
+   
+   OPEN p_cRetVal FOR 
+   c_Query;
+   
+   COMMIT;
+   
+END SP_LISTA_SOLGRAL; 
 
 END PR_REQUERIMIENTOS;
 /

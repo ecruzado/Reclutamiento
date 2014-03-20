@@ -1,134 +1,4 @@
-create or replace package PR_INTRANET is
 
-  type cur_cursor is REF CURSOR;
-  
-  FUNCTION SP_LISTA_LVAL(p_idGeneral IN VARCHAR2,
-                         p_valor     IN VARCHAR2)
-  RETURN VARCHAR2;
-                       
-  
-  FUNCTION FN_GETMAXPUNTAJE(p_nIdCriterio IN NUMBER)RETURN NUMBER;   
-                          
-  PROCEDURE SP_GETREPEXAMEN(P_NIDEXAMEN IN NUMBER,
-                          p_cRetVal OUT CUR_CURSOR );       
-                          
-                          
-  FUNCTION FN_DURACIONEXAMEN(p_nIdExamen IN NUMBER)RETURN NUMBER;
-  
-  FUNCTION FN_ELIMINA_ROL(p_nIdRol IN NUMBER)RETURN NUMBER;
-  
-  FUNCTION FN_ELIMINA_ROL_OPCION(p_nIdRol IN NUMBER,
-                               p_nIdOp IN NUMBER)RETURN NUMBER; 
-  
-                               
-  PROCEDURE SP_ACTUALIZAR_PUNTAJES(p_nombreCampoDestino VARCHAR2,
-                                   p_ideCargo     CARGO.IDECARGO%TYPE, 
-                                   p_valor       IN NUMBER,
-                                   p_valorEliminar IN NUMBER); 
-  
-  PROCEDURE SP_OBTENER_CARGO(p_ideSolicitud  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                             p_ideUsuario    IN CARGO.USRCREACION%TYPE,
-                             p_cRetCursor    OUT SYS_REFCURSOR);  
-  
- PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea  IN AREA.IDEAREA%TYPE,
-                                  p_cRetCursor OUT SYS_REFCURSOR);
-                                  
- PROCEDURE SP_OBTENER_COMPETENCIAREMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                      p_cRetCursor OUT SYS_REFCURSOR);  
-                                      
- PROCEDURE SP_OBTENER_OFRECIMIENTO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                        p_cRetCursor OUT SYS_REFCURSOR);
-                                       
- PROCEDURE SP_OBTENER_HORARIO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                   p_cRetCursor OUT SYS_REFCURSOR);
-
- PROCEDURE SP_OBTENER_UBIGEO_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                  p_cRetCursor OUT SYS_REFCURSOR);
-                                  
- PROCEDURE SP_OBTENER_NIVELACAD_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                     p_cRetCursor OUT SYS_REFCURSOR);
-                                    
- PROCEDURE SP_OBTENER_CENT_EST_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                    p_cRetCursor OUT SYS_REFCURSOR);
-                                    
- PROCEDURE SP_OBTENER_CONOCIMIENTO_REMP(p_ideSolicitud     IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                        p_tipoConocimiento IN VARCHAR2,
-                                        p_cRetCursor OUT SYS_REFCURSOR);
-                                        
- PROCEDURE SP_OBTENER_EXPR_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                p_cRetCursor OUT SYS_REFCURSOR);
-                                    
- PROCEDURE SP_OBTENER_EVAL_REMP(p_ideSolicitud IN  SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                p_cRetCursor   OUT SYS_REFCURSOR);
-                                    
- PROCEDURE SP_OBTENER_DISCAP_REMP(p_ideSolicitud  IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                                  p_cRetCursor    OUT SYS_REFCURSOR);
-                           
- FUNCTION FN_GET_ROL(p_idUsuario IN NUMBER
-                    )RETURN VARCHAR2;
-                    
-FUNCTION FN_GET_SEDE(p_idUsuario IN NUMBER
-                    )RETURN VARCHAR2;
-                    
-PROCEDURE FN_GET_ROLXUSUARIO(
-          p_nIdUsua IN NUMBER,
-           p_cRetVal OUT CUR_CURSOR
-          );                                                                         
-          
-PROCEDURE FN_GET_SEDEXUSUARIO(
-           p_nIdUsua IN NUMBER,
-           p_nIdRol IN NUMBER,
-           p_cRetVal OUT CUR_CURSOR
-          );   
-          
-PROCEDURE FN_GET_OPCIONESxROL(p_nIdRol IN NUMBER,
-                              p_ctipMenu IN varchar2,            
-                              p_cRetVal OUT CUR_CURSOR
-          );
-          
-          
-PROCEDURE FN_GET_OPCIONESPADRExROL(p_nIdRol IN NUMBER,
-                                    p_ctipMenu IN varchar2,  
-                                   p_cRetVal OUT CUR_CURSOR
-          );          
-          
-             
-FUNCTION FN_VALOR_GENERAL(p_tipoTabla IN GENERAL.TIPTABLA%TYPE,
-                          p_valor     IN DETALLE_GENERAL.VALOR%TYPE)
-                          RETURN DETALLE_GENERAL.DESCRIPCION%TYPE;  
-                          
-PROCEDURE FN_GET_CARGO(p_nIdCargo IN NUMBER,
-                       p_cRetVal OUT CUR_CURSOR
-          );
-          
-PROCEDURE FN_GET_LISTAREQ(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
-                          p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
-                          p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
-                          p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
-                          p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
-                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
-                          p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
-                          p_cFecIni   IN    varchar2,
-                          p_cFeFin   IN     varchar2,
-                          p_cRetVal         OUT CUR_CURSOR
-          );
-          
-PROCEDURE FN_GET_LISTAREQ2(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
-                          p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
-                          p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
-                          p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
-                          p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
-                          p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,   
-                          p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
-                          p_cFecIni   IN    varchar2,
-                          p_cFeFin   IN     varchar2,
-                          p_cRetVal         OUT CUR_CURSOR
-          );
-          
-FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
-                             p_tipoSolicitud IN VARCHAR2)RETURN VARCHAR2;
-end PR_INTRANET;
-/
 create or replace package body PR_INTRANET is
 
  /* ------------------------------------------------------------
@@ -370,10 +240,12 @@ consulta02 VARCHAR2(100);
 BEGIN
 
 consulta01 := 'SELECT '||p_nombreCampoDestino ||
-              ' FROM Cargo FOR UPDATE';
-consulta02 := 'UPDATE CARGO SET '||p_nombreCampoDestino ||' = '
+              ' FROM CARGO C '||
+              ' WHERE C.IDECARGO = '||p_ideCargo||' FOR UPDATE';
+consulta02 := 'UPDATE CARGO C SET '||p_nombreCampoDestino ||' = '
                                  ||p_nombreCampoDestino||' + '
-                                 ||p_valor ||' - '||p_valorEliminar;
+                                 ||p_valor ||' - '||p_valorEliminar ||
+               ' WHERE C.IDECARGO = '||p_ideCargo;
 
 EXECUTE IMMEDIATE consulta01;
 
@@ -382,6 +254,54 @@ EXECUTE IMMEDIATE consulta02;
 commit;
 
 END SP_ACTUALIZAR_PUNTAJES;   
+
+/* ------------------------------------------------------------
+    Nombre      : SP_PROMEDIO_EVAL_CARGO
+    Proposito   : Actualizar los puntajes en la tabla cargo 
+                  al modificar tablas asociadas
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      13/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_PROMEDIO_EVAL_CARGO(p_ideCargo     IN CARGO.IDECARGO%TYPE)IS
+
+c_promedio EVALUACION_CARGO.PUNTEXAMEN%TYPE;
+c_Suma     number;
+c_contador number;
+
+CURSOR c_puntajes(p_idCargo CARGO.IDECARGO%TYPE) IS 
+SELECT EC.PUNTEXAMEN
+  FROM EVALUACION_CARGO EC 
+  WHERE EC.IDECARGO =  p_idCargo;                                 
+
+BEGIN
+  c_contador:=0;
+  c_Suma:=0;
+  c_promedio:=0;
+  BEGIN
+    FOR REG_PUNTAJES IN c_puntajes(p_ideCargo) LOOP        
+      c_contador:= c_contador + 1;
+      c_Suma:=c_Suma+ REG_PUNTAJES.PUNTEXAMEN;
+    END LOOP;
+    
+    IF (c_contador <> 0)THEN
+       c_promedio:= c_Suma/c_contador;
+    END IF;
+    
+    UPDATE CARGO C 
+    SET C.PUNTTOTEXAMEN = c_promedio
+    WHERE C.IDECARGO = p_ideCargo;
+    
+  EXCEPTION
+     WHEN OTHERS THEN
+     ROLLBACK;
+  END;
+
+
+END SP_PROMEDIO_EVAL_CARGO;
 
 /* ------------------------------------------------------------
     Nombre      : SP_CREAR_CARGO
@@ -399,13 +319,14 @@ PROCEDURE SP_OBTENER_CARGO(p_ideSolicitud  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TY
                            p_ideUsuario    IN CARGO.USRCREACION%TYPE,
                            p_cRetCursor    OUT SYS_REFCURSOR)IS
 
-nroCont    NUMBER;
-nCodCargo  CARGO.CODCARGO%TYPE;
-nIdeCargo  CARGO.IDECARGO%TYPE;
-nNomCargo  CARGO.NOMCARGO%TYPE;
-nDescCargo CARGO.DESCARGO%TYPE;
-nIdeArea   CARGO.IDEAREA%TYPE;
-nNumPosic  SOLNUEVO_CARGO.NUMPOSICIONES%TYPE;
+nroCont       NUMBER;
+nCodCargo     CARGO.CODCARGO%TYPE;
+nIdeCargo     CARGO.IDECARGO%TYPE;
+nNomCargo     CARGO.NOMCARGO%TYPE;
+nDescCargo    CARGO.DESCARGO%TYPE;
+nIdeArea      CARGO.IDEAREA%TYPE;
+nNumPosic     SOLNUEVO_CARGO.NUMPOSICIONES%TYPE;
+nIdeCargo_sq  CARGO.IDECARGO%TYPE;
 
 BEGIN
 
@@ -414,6 +335,7 @@ BEGIN
    FROM SOLNUEVO_CARGO SN
    WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
    
+   
    SELECT COUNT(*) INTO nroCont FROM CARGO WHERE CODCARGO = nCodCargo;
    IF (nroCont > 0) THEN
      SELECT C.IDECARGO INTO nIdeCargo
@@ -421,12 +343,28 @@ BEGIN
      WHERE C.CODCARGO = nCodCargo;
    END IF;
    
-   IF (nIdeCargo IS NULL) THEN
-   INSERT  INTO CARGO (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEAREA,ESTACTIVO,USRCREACION,FECCREACION)  
-               VALUES (IDECARGO_SQ.NEXTVAL,1,nCodCargo,nNomCargo,nDescCargo,nIdeArea,'A',p_ideUsuario,SYSDATE);
-   COMMIT;
-   END IF;
-     
+   SELECT IDECARGO_SQ.NEXTVAL
+   INTO nIdeCargo_sq
+   FROM DUAL;
+   
+   BEGIN
+     IF (nIdeCargo IS NULL) THEN
+     INSERT  INTO CARGO (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEAREA,NUMPOSICION ,ESTACTIVO,USRCREACION,FECCREACION,PUNTTOTPOSTUINTE,PUNTTOTEDAD,
+                         PUNTTOTSEXO,PUNTTOTSALARIO,PUNTTOTNIVELEST,PUNTTOTCENTROEST,PUNTTOTEXPLABORAL,PUNTTOTFUNDESE,PUNTTOTOFIMATI,PUNTTOTIDIOMA,PUNTTOTCONOGEN,
+                         PUNTTOTDISCAPA,PUNTTOTHORARIO,PUNTTOTUBIGEO,PUNTTOTEXAMEN,PUNTMINEXAMEN)  
+                 VALUES (nIdeCargo_sq,1,nCodCargo,nNomCargo,nDescCargo,nIdeArea,nNumPosic,'A',p_ideUsuario,SYSDATE,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+     UPDATE SOLNUEVO_CARGO SN
+     SET SN.IDECARGO = nIdeCargo_sq
+     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
+     COMMIT;
+     END IF;
+      
+   EXCEPTION 
+     WHEN OTHERS THEN
+     ROLLBACK;
+   END;  
+   
    OPEN  p_cRetCursor FOR
       SELECT   C.IDECARGO, C.CODCARGO, C.NOMCARGO, C.DESCARGO,C.NUMPOSICION, AR.NOMAREA, D.NOMDEPARTAMENTO,DE.NOMDEPENDENCIA,nNumPosic NUMPOSIC 
       FROM  CARGO C ,  AREA AR, DEPARTAMENTO D, DEPENDENCIA DE
@@ -434,6 +372,7 @@ BEGIN
       AND AR.IDEDEPARTAMENTO = D.IDEDEPARTAMENTO
       AND D.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
       AND AR.IDEAREA = nIdeArea;
+   
   
 END SP_OBTENER_CARGO;  
 
