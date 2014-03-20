@@ -1164,7 +1164,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
                                 item.TipEtapa==null?"":item.TipEtapa,
-                                item.idUsuarioResp ==null?"":item.idUsuarioResp.ToString()
+                                item.idUsuarioResp ==null?"":item.idUsuarioResp.ToString(),
+                                item.Tipsol==null?"":item.Tipsol
                                
                             }
                 }).ToArray();

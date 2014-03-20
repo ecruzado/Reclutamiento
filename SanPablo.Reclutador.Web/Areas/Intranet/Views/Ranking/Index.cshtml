@@ -1,0 +1,360 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.RankingViewModel
+
+
+@using System.Configuration;
+@{
+    ViewBag.Title = "PostulantesPorRequerimiento";
+}
+@section Head{
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+         $('#btnAgregarRanking').click(function () {
+             var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+             var tipSol = $("#Solicitud_Tipsol").val();
+             if (idSol != null && idSol > 0) {
+                 mostrarPopupCvPost(idSol, 0, tipSol);
+            } else {
+                MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+            
+
+         $('#popupDialogCv').dialog({
+             autoOpen: false,
+             width: 520,
+             height: 500,
+             resizable: false,
+             modal: true,
+             buttons: {
+                 "Grabar": function () {
+                     $('#confCv').dialog('open');
+
+                 },
+                 "Cancelar": function () {
+                     $(this).dialog("close");
+                 }
+             }
+         });
+
+
+            $("#spanConfCv").html("¿Desea guardar los cambios?")
+            $('#confCv').dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            buttons: {
+                "Si": function () {
+                    //if ($("#frmPopupCvPostulante").validate().form()) {
+                        $.ajax({
+                            type: "POST",
+                            data: $("#frmPopupCvPostulante").serialize(),
+                            url: '@Url.Action("SetCvPostulante", "Ranking", new { area = "Intranet"})',
+                            traditional: true,
+                            success: function (data) {
+                        if (data.Resultado) {
+                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            $('#ConfCv').dialog("close");
+                            $('#popupDialogCv').dialog("close");
+                           // $('#grdList').trigger('reloadGrid');
+
+                        }
+                    }
+                });
+            //}
+            },
+            "No": function () {
+            $(this).dialog("close");
+            }
+            }
+            });
+
+         @*  $('#btnAgregarRanking').click(function () {
+                      window.location = '@Url.Action("Consulta", "Rol")' + '/' + selr;
+
+            } else {
+                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+              });*@
+
+
+
+            jQuery("#grdList").jqGrid({
+                url: '@Url.Action("ListaPostulantesPorRequerimiento", "SolicitudCargo")',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames: ['Apellidos', 'Nombres', 'Ver C.V.', 'Estado', 'Comentario', 'Puntaje'],
+                colModel: [
+                        { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false, sortable: false },
+                        { name: 'Nombres', index: 'Nombres', align: 'left', editable: false, sortable: false },
+                        { name: 'Imprimir', index: 'Imprimir', align: 'center', sortable: false, width: 50, formatter: ImprimirFormatter },
+                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50 },
+                        { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false },
+                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 50, editable: true }
+                ],
+                sortname: 'Apellidos',
+                sortorder: 'desc',
+                viewrecords: true,
+                cellEdit: true,
+                /*caption: 'Lista Referencias',*/
+                height: 160,
+                /*width: 736,*/
+                autowidth: true,
+                rowNum: 0,
+                cellsubmit: 'clientArray',
+                hidegrid: false,
+                postData: {
+
+                },
+                loadComplete: function (data) {
+
+                }
+            });
+            //nueva grilla
+
+                 @*  jQuery("#grdListCV").jqGrid({
+                    url: '@Url.Action("ListaPostulantesPorRequerimientoCV", "SolicitudCargo")',
+                    datatype: 'json',
+                    mtype: 'POST',
+                    colNames: ['Apellidos', 'Nombres', 'DNI', 'Telefono', 'Fecha Cita','Hora Cita ','Citado','Asistio'],
+                    colModel: [
+                            { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false, sortable: false },
+                            { name: 'Nombres', index: 'Nombres', align: 'left', editable: false, sortable: false },
+                            { name: 'DNI', index: 'DNI', align: 'center', editable: false, sortable: false },
+                            { name: 'Telefono', index: 'Telefono', align: 'center', editable: false, sortable: false },
+                            { name: 'Fecha Cita', index: 'Fecha Cita', align: 'center', editable: false, sortable: false },
+                            { name: 'Hora Cita', index: 'Hora Cita', align: 'center', editable: false, sortable: false },
+                            { name: 'Citado', index: 'Comentario', align: 'center', sortable: false, width: 50, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
+                            { name: 'Asistio', index: 'Comentario', align: 'center', sortable: false, width: 50, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } }
+                    ],
+                    sortname: 'Apellidos',
+                    sortorder: 'desc',
+                    viewrecords: true,
+                    cellEdit: true,
+                    /*caption: 'Lista Referencias',*/
+                    height: 160,
+                    /*width: 736,*/
+                    autowidth: true,
+                    rowNum: 0,
+                    cellsubmit: 'clientArray',
+                    hidegrid: false,
+                    postData: {
+
+                    },
+                    loadComplete: function (data) {
+
+                    }
+                });*@
+
+                function ImprimirFormatter(cellvalue, options, rowObject) {
+                    var imgPath = '@Url.Content("~/Content/images/")';
+                    var archivo = 'printer.png';
+                    var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+                    return strImg;
+                }
+
+                function CellCheckBox(cellvalue, options, rowObject) {
+                    return '<input type="checkbox" name="selectedPostulantes"  value="' + cellvalue + '" />';
+                }
+
+            });
+        
+        function mostrarPopupCvPost(idSol, selr, tipSol) {
+            var dialogDiv = $('#popupDialogCv');
+
+            $.get('@Url.Action("inicoPopupCv", "Ranking", new { area = "Intranet"})?id=' + idSol + "&idPos=" + selr + "&tipSol=" + tipSol, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogCv"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+             
+    </script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+@using (Html.BeginForm("Index", "Ranking", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmRanking" }))
+{
+    @Html.ValidationSummary(true)
+
+
+            <div class="widget-title">
+                <h5>Ranking de Postulantes</h5>
+                <div class="opciones">
+                    <label>Estado</label>
+                   @* @Html.TextBoxFor(model => model.Solicitud.DesEstado, new { @class = "btn btn-primary btn-small disabled" ,disabled ="disabled" }) *@
+                    @*<a class="btn btn-primary btn-small disabled" disabled="disabled">Activo</a>*@
+
+                    <a class="btn btn-primary btn-small disabled"  id="@Model.Solicitud.DesEstado"  >@Model.Solicitud.DesEstado</a>
+                </div>
+            </div>
+           @* <form class="formulario-busqueda">*@
+            <div class="grilla-opciones" style="margin-top:0px;">
+                <h6>Solicitud</h6>
+                <div style="clear:both"></div>
+            </div>
+    
+            @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal) 
+            @Html.TextBoxFor(model => model.Solicitud.Tipsol)  
+           <table class="formulario-busqueda">
+	            
+                 
+                
+                <tr class="formulario-fila">
+		            <td class="span5">
+			
+			            <label class="control-label" for="inputSuccess">Solicitud</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
+                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+		   
+		            </td>
+		            <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Cargo</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
+                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                        </div>
+		   
+		            </td>
+	            </tr>
+	            <tr class="formulario-fila">
+		            <td class="span5">
+		  
+			            <label class="control-label" for="inputSuccess">Sede</label>
+			            <div class="controles">
+				           @* <input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
+                           @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+			
+		            </td>
+		            <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Dependencia</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+
+			            </div>
+			
+		            </td>
+	            </tr>
+	            <tr class="formulario-fila">
+		            <td class="span5">
+		   
+			            <label class="control-label" for="inputSuccess">Departamento</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+			            </div>
+		   
+		            </td>
+		            <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Area</label>
+			            <div class="controles">
+				            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
+                            @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+			            </div>
+			
+		            </td>
+	            </tr>
+            </table>    
+            <div class="grilla-opciones">
+                <h6>CV Externos</h6>
+                <div class="opciones">
+                    <a class="btn btn-small btn-info" id="btnAgregarRanking" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="tabla-datos">
+                <table id="grdListCV">
+                </table>
+                <div class="Opciones">
+            </div>
+                <div class="form-actions">
+                    <a class="btn btn-info"  title="Citado" onclick=""><i class="icon-edit icon-white" ></i> Citado</a> 
+                    <a class="btn btn-info" title="Asistio" onclick=""><i class="icon-edit icon-white" ></i> Asistió</a> 
+                </div> 
+            </div>
+                                        
+      
+               @* <div class="grilla-opciones">
+                    <h6>Postulantes</h6>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Apellidos</label>
+                            <div class="controles">
+                                <input type="text" class="input-large" id="txtapellidos"> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="selectError">Nombre</label>
+                            <div class="controles">
+                                <input type="text" class="input-large" id="txtnombres">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-fila">
+                    <div class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                                <select id="seestado">
+                                    <option>Seleccionar</option>
+                                    <option>Pre-Selecc</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formulario-accion">
+                    <div class="opciones">
+                        <a class="btn btn-info" href="#"><i class="icon-search icon-white"></i> Buscar</a>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <div class="tabla-datos">
+                            <table id="grdList">
+                            </table>
+                            <div id="grdPager">
+                            </div>
+                </div>
+                
+            *@
+            
+}
+                                                                                               
+                 <div class="form-actions">
+                <a class="btn" href="@Url.Action("ListaAmpliacion", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn btn-info" href="@Url.Action("PostulantesCV", "SolicitudCargo")"><i class="icon-edit icon-white"></i> CV-Aprobado</a>                        
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popupDialogCv" title="Postulante CV"></div>
+<div id="confCv"><span id="spanConfCv"></span></div>

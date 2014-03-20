@@ -50,7 +50,9 @@ namespace SanPablo.Reclutador.Web.Controllers
         private IOfrecemosCargoRepository _ofrecemosCargoRepository;
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IExperienciaPostulanteRepository _experienciaPostulanteRepository;
-        private IConocimientoGeneralPostulanteRepository _conocimientoGeneralPostulanteRepository; 
+        private IConocimientoGeneralPostulanteRepository _conocimientoGeneralPostulanteRepository;
+        private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
+
 
         public OportunidadLaboralController(IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -74,7 +76,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             IOfrecemosCargoRepository ofrecemosCargoRepository,
             IEstudioPostulanteRepository estudioPostulanteRepository,
             IExperienciaPostulanteRepository experienciaPostulanteRepository,
-            IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository
+            IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository,
+            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -99,6 +102,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             _ofrecemosCargoRepository = ofrecemosCargoRepository;
             _experienciaPostulanteRepository = experienciaPostulanteRepository;
             _conocimientoGeneralPostulanteRepository = conocimientoGeneralPostulanteRepository;
+            _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
         }
 
 
@@ -293,6 +297,13 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.solReqPersonal.FechaFinBus = Convert.ToDateTime(fechaFin);
             model.solReqPersonal.NumVacantes = (numVacantes == null ? 0 : Convert.ToInt32(numVacantes));
             model.solReqPersonal.IdeCargo = Convert.ToInt32(id);
+            
+
+            var objSede=_sedeRepository.GetSingle(x=>x.CodigoSede==idSede);
+            model.solReqPersonal.Sede_des = objSede.DescripcionSede;
+
+            
+
 
             return View("DetalleGrupoCargo", model);
         }

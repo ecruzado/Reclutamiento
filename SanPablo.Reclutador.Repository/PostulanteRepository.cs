@@ -63,10 +63,20 @@
                 while (ldrOportunidadLaboral.Read())
                 {
                     lobOportunidadLaboral = new OportunidadLaboral();
-                    lobOportunidadLaboral.TipoHorario = Convert.ToString(ldrOportunidadLaboral["TIPPUESTO"]);
-                    lobOportunidadLaboral.IdeCargo = (ldrOportunidadLaboral["IDECARGO"]==null?0:Convert.ToInt32(ldrOportunidadLaboral["IDECARGO"]));
+                    lobOportunidadLaboral.TipoHorario = (ldrOportunidadLaboral["TIPPUESTO"] == null ? "" : Convert.ToString(ldrOportunidadLaboral["TIPPUESTO"]));
+
+                    var idcargo = ldrOportunidadLaboral["IDECARGO"];
+                    if (idcargo != null && idcargo!="") 
+                    {
+                        lobOportunidadLaboral.IdeCargo = Convert.ToInt32(ldrOportunidadLaboral["IDECARGO"]);
+                    }else
+	                {
+                        lobOportunidadLaboral.IdeCargo=0;
+	                }
+                   
+                    
                     lobOportunidadLaboral.IdeSede = (ldrOportunidadLaboral["IDESEDE"]==null?0:Convert.ToInt32(ldrOportunidadLaboral["IDESEDE"]));
-                    lobOportunidadLaboral.SedeDes = Convert.ToString(ldrOportunidadLaboral["DESSEDE"]);
+                    lobOportunidadLaboral.SedeDes = (ldrOportunidadLaboral["DESSEDE"]==null?"":Convert.ToString(ldrOportunidadLaboral["DESSEDE"]));
                     lobOportunidadLaboral.TipoHorarioDes = Convert.ToString(ldrOportunidadLaboral["DESPUESTO"]);
                     lobOportunidadLaboral.CargoDes = Convert.ToString(ldrOportunidadLaboral["NOMCARGO"]);
                     lobOportunidadLaboral.FecInicial = Convert.ToDateTime(ldrOportunidadLaboral["FECINICIALMAX"]);
@@ -110,6 +120,7 @@
             string TipSol = null;
             string NombreCargo = null;
             string Funciones = null;
+            string Observacion = null;
 
             SolReqPersonal SolReqPersonal = null;
             try
@@ -133,6 +144,7 @@
                 lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("p_cNombreCargo", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("p_cFunciones", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("p_cObcervacion", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 
                 
 
@@ -147,8 +159,9 @@
                 TipSol = (lspcmd.Parameters["p_cTipSol"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cTipSol"].Value));
                 NombreCargo = (lspcmd.Parameters["p_cNombreCargo"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cNombreCargo"].Value));
                 Funciones = (lspcmd.Parameters["p_cFunciones"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cFunciones"].Value));
+                Observacion = (lspcmd.Parameters["p_cObcervacion"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cObcervacion"].Value));
 
-
+                    
                 SolReqPersonal = new SolReqPersonal();
 
                 SolReqPersonal.IdeSolReqPersonal = IdSol;
@@ -160,6 +173,7 @@
                 SolReqPersonal.Tipsol = TipSol;
                 SolReqPersonal.nombreCargo = NombreCargo;
                 SolReqPersonal.FuncionesCargo = Funciones;
+                SolReqPersonal.ObservacionPublica = Observacion;
 
                 return SolReqPersonal;
             }

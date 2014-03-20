@@ -26,6 +26,64 @@ namespace SanPablo.Reclutador.Repository
         { 
         }
 
+
+        /// <summary>
+        /// obtiene los dato de la solicitud
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public List<SolReqPersonal> GetDatosSol(SolReqPersonal obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+
+                 IDataReader ldrSolicitud;
+                 SolReqPersonal lobSolicitud;
+                 List<SolReqPersonal> llstSolicitud;
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_DATOS_SOL");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_nIdSol", OracleType.Number).Value = obj.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = obj.Tipsol;
+                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                 ldrSolicitud = (OracleDataReader)lspcmd.ExecuteReader();
+                 lobSolicitud = null;
+                 llstSolicitud = new List<SolReqPersonal>();
+
+                 while (ldrSolicitud.Read())
+                 {
+                     lobSolicitud = new SolReqPersonal();
+                     lobSolicitud.IdeCargo = Convert.ToInt32(ldrSolicitud["IDECARGO"]);
+                     lobSolicitud.nombreCargo = Convert.ToString(ldrSolicitud["NOMBRECARGO"]);
+                     lobSolicitud.IdeDependencia = Convert.ToInt32(ldrSolicitud["IDEDEPENDENCIA"]);
+                     lobSolicitud.IdeDepartamento = Convert.ToInt32(ldrSolicitud["IDEDEPARTAMENTO"]);
+                     lobSolicitud.IdeArea = Convert.ToInt32(ldrSolicitud["IDEAREA"]);
+                     lobSolicitud.IdeSede = Convert.ToInt32(ldrSolicitud["IDESEDE"]);
+                     lobSolicitud.Sede_des = Convert.ToString(ldrSolicitud["NOMBSEDE"]);
+                     lobSolicitud.Dependencia_des = Convert.ToString(ldrSolicitud["NOMBDEPENDENCIA"]);
+                     lobSolicitud.Departamento_des = Convert.ToString(ldrSolicitud["NOMBDEPARTAMENTO"]);
+                     lobSolicitud.Area_des = Convert.ToString(ldrSolicitud["NOMBAREA"]);
+                     lobSolicitud.DesEstado = Convert.ToString(ldrSolicitud["DESESTADO"]);
+                     lobSolicitud.CodSolReqPersonal = Convert.ToString(ldrSolicitud["CODCARGO"]);
+                   
+                     llstSolicitud.Add(lobSolicitud);
+                 }
+
+                 ldrSolicitud.Close();
+                 return llstSolicitud;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
         /// <summary>
         /// obtiene la lista de los cargos activos
         /// </summary>
@@ -376,7 +434,7 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal.NomPersonReemplazo = Convert.ToString(ldrSolReqPersonal["NOMPERSONREEMPLAZO"]);
                      lobSolReqPersonal.FlagPublicado = Convert.ToString(ldrSolReqPersonal["PUBLICADO"]);
                      lobSolReqPersonal.idUsuarioResp = Convert.ToInt32(ldrSolReqPersonal["ID_USUARIO_RESP"]);
-                     
+                     lobSolReqPersonal.Tipsol = Convert.ToString(ldrSolReqPersonal["TIPSOL"]);
 
                      llstSolReqPersonal.Add(lobSolReqPersonal);
                  }
@@ -983,7 +1041,7 @@ namespace SanPablo.Reclutador.Repository
          }
 
         /// <summary>
-         /// EnviaSolicitud
+        /// EnviaSolicitud
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
