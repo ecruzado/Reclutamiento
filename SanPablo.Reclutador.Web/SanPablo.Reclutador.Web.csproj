@@ -430,6 +430,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupCvPostulante.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\EditarDetalle.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

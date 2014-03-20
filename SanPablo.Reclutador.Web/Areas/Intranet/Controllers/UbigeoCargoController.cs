@@ -102,9 +102,9 @@
                 }
                 if (ubigeoCargo.IdeUbigeoCargo == 0)
                 {
-                    ubigeoCargo.EstadoActivo = "A";
+                    ubigeoCargo.EstadoActivo = IndicadorActivo.Activo;
                     ubigeoCargo.FechaCreacion = FechaCreacion;
-                    ubigeoCargo.UsuarioCreacion = "YO";
+                    ubigeoCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                     ubigeoCargo.FechaModificacion = FechaCreacion;
                     ubigeoCargo.Cargo = new Cargo();
                     ubigeoCargo.Cargo.IdeCargo = IdeCargo;

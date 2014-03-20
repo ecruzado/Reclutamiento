@@ -197,6 +197,7 @@
             var listaResultado = new List<DetalleGeneral>();
 
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion,tipoInstituto));
+            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
             result = Json(listaResultado);
             return result;
         }
@@ -207,6 +208,7 @@
             {
                 var listaResultado = new List<DetalleGeneral>();
                 listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, estudioPostulante.TipTipoInstitucion));
+                listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
                 estudioPostulanteGeneralViewModel.TipoNombreInstituciones = listaResultado;
             }
              return estudioPostulanteGeneralViewModel;

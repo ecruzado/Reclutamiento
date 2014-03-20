@@ -19,7 +19,12 @@ namespace SanPablo.Reclutador.Web.Core
         /// Guarda el identificador de la tabla general
         /// </summary>
         public const string IdeGeneral = "IdeGeneral";
-        
+
+        /// <summary>
+        /// Guarda el campo valor del detalle en session
+        /// </summary>
+        public const string DetalleValor = "DetalleValor";
+
         /// <summary>
         /// obtiene la sede, depencia, departamento, area por usuario hace referencia al Objeto SedeNivel
         /// </summary>

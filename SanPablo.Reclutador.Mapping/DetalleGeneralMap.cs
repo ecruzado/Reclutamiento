@@ -19,8 +19,12 @@
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Map(x => x.Descripcion , "DESCRIPCION");
             Map(x => x.Referencia, "REFERENCIA");
+            Map(x => x.UsuarioCreacion, "USRCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.UsuarioModificacion, "USRMODIFICA");
+            Map(x => x.FechaModificacion, "FECMODIFICA");
+            
             Table("DETALLE_GENERAL");
-
 
         }
 

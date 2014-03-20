@@ -2,23 +2,23 @@
 
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
-    using FluentValidation;
-    using FluentValidation.Results;
-    using Newtonsoft.Json;
-    using NHibernate.Criterion;
-    using SanPablo.Reclutador.Entity;
-    using SanPablo.Reclutador.Entity.Validation;
-    using SanPablo.Reclutador.Repository.Interface;
-    using SanPablo.Reclutador.Web.Areas.Intranet.Models;
-    using SanPablo.Reclutador.Web.Core;
-    using SanPablo.Reclutador.Web.Models.JQGrid;
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
+using FluentValidation;
+using FluentValidation.Results;
+using Newtonsoft.Json;
+using NHibernate.Criterion;
+using SanPablo.Reclutador.Entity;
+using SanPablo.Reclutador.Entity.Validation;
+using SanPablo.Reclutador.Repository.Interface;
+using SanPablo.Reclutador.Web.Areas.Intranet.Models;
+using SanPablo.Reclutador.Web.Core;
+using SanPablo.Reclutador.Web.Models.JQGrid;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
     [Authorize]
     public class MantenimientoGeneralesController : BaseController
@@ -58,8 +58,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             MantenimientoGeneralViewModel mantenimientoViewModel = new MantenimientoGeneralViewModel();
             mantenimientoViewModel.TablaGeneral = new General();
 
-            mantenimientoViewModel.tipoTablas = new List<General>(_generalRepository.All());
+            mantenimientoViewModel.tipoTablas = new List<General>(_generalRepository.GetBy(x => x.IdeGeneral != 46 && x.IdeGeneral != 47 && x.IdeGeneral != 51 && x.IdeGeneral != 50
+                                                                                            && x.IdeGeneral != 3 && x.IdeGeneral != 4 && x.IdeGeneral != 49 && x.IdeGeneral != 43));
 
+            mantenimientoViewModel.tipoTablas.Insert(0, new General { IdeGeneral = 0, TipoTabla = "Seleccionar" });
             return mantenimientoViewModel;
         }
 
@@ -69,9 +71,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult Edit([Bind(Prefix = "TablaDetalleGeneral")]DetalleGeneral detalleGeneral)
+        public ActionResult Edit(MantenimientoGeneralViewModel model)
         {
-            
+            DetalleGeneral detalleGeneral = model.TablaDetalleGeneral;
+            detalleGeneral.Valor = model.Valor;
+
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
@@ -81,40 +85,68 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     modelDetalle.TablaDetalleGeneral = detalleGeneral;
                     return View("Edit", modelDetalle);
                 }
-                if (detalleGeneral.Accion == Accion.Nuevo)
+                if ((detalleGeneral.Valor != null) && (detalleGeneral.Descripcion != null))
                 {
-                    detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
-                    detalleGeneral.FechaCreacion = FechaCreacion;
-                    detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                    _detalleGeneralRepository.Add(detalleGeneral);
-
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
-                }
-                else
-                {
-                    if (detalleGeneral.Accion == Accion.Editar)
+                    if (detalleGeneral.Accion == Accion.Nuevo)
                     {
-                        DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == detalleGeneral.Valor);
-                    
-                        detalleEditar.Valor = detalleGeneral.Valor;
-                        detalleEditar.Descripcion = detalleGeneral.Descripcion;
-                        detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                        detalleEditar.FechaModificacion = FechaModificacion;
-                        _detalleGeneralRepository.Update(detalleEditar);
+                        detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
+                        detalleGeneral.FechaCreacion = FechaCreacion;
+                        detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        detalleGeneral.General = new General();
+                        detalleGeneral.General.IdeGeneral = IdeGeneral;
+                        if (existeValor(detalleGeneral))
+                        {
+                            objJsonMessage.Mensaje = "Verifique que los valores ingresados no existan";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
+                        else
+                        {
+                            int result = _detalleGeneralRepository.insertarDetalle(detalleGeneral);
+                            if (result == 1)
+                            {
+                                objJsonMessage.Resultado = true;
+                                return Json(objJsonMessage);
+                            }
+                            else
+                            {
+                                objJsonMessage.Mensaje = "Error: Intente nuevamente";
+                                objJsonMessage.Resultado = false;
+                                return Json(objJsonMessage);
+                            }
 
-                        objJsonMessage.Resultado = true;
-                        return Json(objJsonMessage);
+                        }
                     }
                     else
                     {
-                        objJsonMessage.Mensaje = "No se pudo modificar el registro";
-                        objJsonMessage.Resultado = false;
-                        return Json(objJsonMessage);
+                        if (detalleGeneral.Accion == Accion.Editar)
+                        {
+                            DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == detalleGeneral.Valor);
+
+                            detalleEditar.Valor = detalleGeneral.Valor;
+                            detalleEditar.Descripcion = detalleGeneral.Descripcion;
+                            detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                            detalleEditar.FechaModificacion = FechaModificacion;
+                            _detalleGeneralRepository.Update(detalleEditar);
+
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
+                        }
+                        else
+                        {
+                            objJsonMessage.Mensaje = "No se pudo modificar el registro";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
                     }
                 }
+                else
+                {
+                    objJsonMessage.Mensaje = "Error:Seleccione un registro a modificar";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
 
-                
             }
             catch (Exception ex)
             {
@@ -124,224 +156,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
         }
-
-
-        /// <summary>
-        /// Edicion del usuario
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
-        //public ActionResult Edicion(UsuarioViewModel model)
-        //{
-        //    Usuario objUsuario;
-        //    JsonMessage jsonMessage = new JsonMessage();
-
-        //    if (model.Usuario.IdUsuario!=null && model.Usuario.IdUsuario > 0)
-        //    {
-
-        //        objUsuario = new Usuario();
-
-        //        objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(model.Usuario.IdUsuario));
-        //        objUsuario.DscApeMaterno = model.Usuario.DscApePaterno;
-        //        objUsuario.DscApePaterno = model.Usuario.DscApePaterno;
-        //        objUsuario.DscNombres = model.Usuario.DscNombres;
-        //        objUsuario.CodUsuario = model.Usuario.CodUsuario;
-        //        objUsuario.CodContrasena = model.Usuario.CodContrasena;
-        //        objUsuario.Email = model.Usuario.Email;
-        //        objUsuario.Telefono = model.Usuario.Telefono;
-        //        objUsuario.UsrModificacion = UsuarioActual.NombreUsuario;
-        //        objUsuario.FechaModificacion = FechaModificacion;
-
-        //        _usuarioRepository.Update(objUsuario);
-        //        jsonMessage.IdDato = objUsuario.IdUsuario;
-        //        jsonMessage.Mensaje = "Se actualizo el usuario";
-        //        jsonMessage.Resultado = true;
-
-
-        //    }
-        //    else
-        //    {
-        //        objUsuario = new Usuario();
-
-        //        objUsuario = model.Usuario;
-        //        objUsuario.FecCreacion = FechaCreacion;
-        //        objUsuario.UsrCreacion = UsuarioActual.NombreUsuario;
-        //        objUsuario.FlgEstado = IndicadorActivo.Activo;
-        //        objUsuario.TipUsuario = TipUsuario.Instranet;
-
-        //        _usuarioRepository.Add(model.Usuario);
-        //        jsonMessage.Mensaje = "Se registro el usuario";
-        //        jsonMessage.IdDato = objUsuario.IdUsuario;
-        //        jsonMessage.Resultado = true;
-
-        //    }
-
-        //    return Json(jsonMessage);
-        //}
-
-
-        /// <summary>
-        /// Editar obtiene los campos de los valores para editar
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //[ValidarSesion]
-        //public ActionResult Edit(string id)
-        //{
-
-        //    UsuarioViewModel model = new UsuarioViewModel();
-        //    model.Usuario = new Usuario();
-
-        //    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(id));
-
-        //    model.Usuario = objUsuario;
-
-        //    model.Accion = Accion.Editar;
-
-        //    return View("Edit", model);
-        //}
-        /// <summary>
-        /// Inicializa la Consulta
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        // [ValidarSesion]
-        //public ActionResult Consulta(string id)
-        //{
-        //    UsuarioViewModel model = new UsuarioViewModel();
-        //    model.Usuario = new Usuario();
-
-        //    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(id));
-
-        //    model.Usuario = objUsuario;
-
-        //    model.Accion = Accion.Consultar;
-
-        //    return View("Edit", model);
-        //}
-
-
-
-
-
-
-
-        //[HttpPost]
-        //public ActionResult ListaUsuarioRolSede(GridTable grid)
-        //{
-
-        //    UsuarioRolSede rs = new UsuarioRolSede();
-        //    try
-        //    {
-        //        DetachedCriteria where = null;
-
-        //        if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
-        //        {
-        //            where = DetachedCriteria.For<UsuarioRolSede>();
-
-        //            if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
-        //            {
-        //                int dato = Convert.ToInt32(grid.rules[0].data);
-        //                where.Add(Expression.Eq("IdUsuario", dato));
-        //            }
-
-        //        }
-
-        //        var generic = Listar(_usuarioRolSedeRepository,
-        //                             grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-        //        var i = grid.page * grid.rows;
-
-        //        generic.Value.rows = generic.List.Select(item => new Row
-        //        {
-        //            id = item.IdUsuarolSede.ToString(),
-        //            cell = new string[]
-        //                    {
-                               
-        //                        item.IdUsuarolSede==null?"":item.IdUsuarolSede.ToString(),
-        //                        item.IdSede==null?"":item.IdSede.ToString(),
-        //                        item.SedeDes==null?"No se requiere sede":item.SedeDes,
-        //                        item.IdUsuario==null?"":item.IdUsuario.ToString(),
-        //                        item.IdRol==null?"":item.IdRol.ToString(),
-        //                        item.RolDes==null?"":item.RolDes
-                    
-        //                    }
-        //        }).ToArray();
-
-        //        return Json(generic.Value);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
-        //        return MensajeError();
-        //    }
-        //}
-
-        /// <summary>
-        ///Inicializa el PopupSedeRol
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="idSel"></param>
-        /// <returns></returns>
-
-        //public ViewResult PopupSedeRol(int id, int idSel)
-        //{
-        //    UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
-        //    model.UsuarioRolSede = new UsuarioRolSede();
-
-        //    model = InicializarPopupSedeRol();
-
-        //    model.IdUsuario = id;
-        //    model.IdRolUsuario = idSel;
-
-
-
-        //    if (idSel>0)
-        //    {
-
-        //        var objUsuario = _usuarioRolSedeRepository.GetSingle(x => x.IdUsuarolSede == id);
-
-        //        if (objUsuario!=null)
-        //        {
-        //            model.UsuarioRolSede.IdSede = objUsuario.IdSede;
-        //            model.UsuarioRolSede.IdRol = objUsuario.IdRol;
-        //        }
-
-        //    }
-
-        //    return View("PopupSedeRol", model);
-
-
-        //}
-
-
-
-        /// <summary>
-        /// Iniciliza los parametros del popup
-        /// </summary>
-        /// <returns></returns>
-        //private UsuarioRolSedeViewModel InicializarPopupSedeRol()
-        //{
-        //    var objModel = new UsuarioRolSedeViewModel();
-        //    objModel.UsuarioRolSede = new UsuarioRolSede();
-
-
-        //    objModel.TipRol = new List<Rol>(_rolRepository.GetByTipRol());
-        //    objModel.TipRol.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
-
-
-        //    objModel.TipSede = new List<Sede>(_sedeRepository.GetByTipSede());
-        //    objModel.TipSede.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "Seleccionar" });
-        //    objModel.UsuarioRolSede = new UsuarioRolSede();
-        //    return objModel;
-        //}
-
-
-
-
-
-
 
         /// <summary>
         /// Lista las tablas generales
@@ -355,64 +169,40 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
 
                 DetachedCriteria where = null;
-                where = DetachedCriteria.For<UsuarioVista>();
+                where = DetachedCriteria.For<General>();
 
-                //ProjectionList lista = Projections.ProjectionList();
-                //lista.Add(Projections.Property("FLGESTADO"), "FLGESTADO");
-                //lista.Add(Projections.Property("IDUSUARIO"), "IDUSUARIO");
-                //lista.Add(Projections.Property("CODUSUARIO"), "CODUSUARIO");
-                //lista.Add(Projections.Property("DSCNOMBRES"), "DSCNOMBRES");
-                //lista.Add(Projections.Property("DSCAPEPATERNO"), "DSCAPEPATERNO");
-                //lista.Add(Projections.Property("DSCAPEMATERNO"), "DSCAPEMATERNO");
-                //lista.Add(Projections.Property("DESROL"), "DESROL");
-                //lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
-                //lista.Add(Projections.Property("TIPUSUARIO"), "TIPUSUARIO");
+                if (
+                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
+                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                   )
+                {
 
-                //where.SetProjection(Projections.Distinct(lista));
-                //where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
+                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    {
+
+                        where.Add(Expression.Eq("IdeGeneral", Convert.ToInt32(grid.rules[1].data)));
+                    }
+                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    {
+                        where.Add(Expression.Like("Descripcion", '%' + grid.rules[2].data + '%'));
+                    }
+                    
+                }
 
 
-                //if (
-                //    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
-                //    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data)) ||
-                //    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
-                //    (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
-                //    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
-                //    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                //   )
-                //{
+                //No mostrar las tablas generales criticas
 
-                //    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                //    {
-
-                //        where.Add(Expression.Eq("IDROL", Convert.ToInt32(grid.rules[1].data)));
-                //    }
-                //    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                //    {
-                //        where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
-                //    }
-                //    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
-                //    }
-                //    if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
-                //    {
-                //        where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
-
-                //    } if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
-                //    }
-                //    if (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCAPEMATERNO", '%' + grid.rules[6].data + '%'));
-                //    }
-                //}
-
-               // where.Add(Expression.Eq("TIPUSUARIO", TipUsuario.Instranet));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 46)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 47)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 51)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 3)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 4)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 49)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 50)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
 
                 var generic = Listar(_generalRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, null);
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
 
                 generic.Value.rows = generic.List.Select(item => new Row
@@ -443,10 +233,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Edit(string id)
         {
             var model = InicializarDetalleMantenimiento();
+            model.IndSubDetalle = Indicador.No;
+            model.TablaDetalleGeneral.Accion = Accion.Nuevo;
             int idGeneral = Convert.ToInt32(id);
             if (idGeneral != 0)
             {
                 IdeGeneral = idGeneral;
+                model.IndSubDetalle = determinarIndSubDetalle();
+
             }
             return View("Edit", model);
         }
@@ -459,6 +253,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return model;
         }
 
+        public MantenimientoGeneralViewModel InicializarSubDetalleMantenimiento()
+        {
+            MantenimientoGeneralViewModel model = new MantenimientoGeneralViewModel();
+            model.TablaSubDetalle = new DetalleGeneral();
+
+            return model;
+        }
+
         [HttpPost]
         public ActionResult ListaDetalle(GridTable grid)
         {
@@ -466,58 +268,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<DetalleGeneral>();
-
-                //ProjectionList lista = Projections.ProjectionList();
-                //lista.Add(Projections.Property("FLGESTADO"), "FLGESTADO");
-                //lista.Add(Projections.Property("IDUSUARIO"), "IDUSUARIO");
-                //lista.Add(Projections.Property("CODUSUARIO"), "CODUSUARIO");
-                //lista.Add(Projections.Property("DSCNOMBRES"), "DSCNOMBRES");
-                //lista.Add(Projections.Property("DSCAPEPATERNO"), "DSCAPEPATERNO");
-                //lista.Add(Projections.Property("DSCAPEMATERNO"), "DSCAPEMATERNO");
-                //lista.Add(Projections.Property("DESROL"), "DESROL");
-                //lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
-                //lista.Add(Projections.Property("TIPUSUARIO"), "TIPUSUARIO");
-
-                //where.SetProjection(Projections.Distinct(lista));
-                //where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
-
-
-                //if (
-                //    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
-                //    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data)) ||
-                //    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
-                //    (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
-                //    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
-                //    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                //   )
-                //{
-
-                //    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                //    {
-
-                //        where.Add(Expression.Eq("IDROL", Convert.ToInt32(grid.rules[1].data)));
-                //    }
-                //    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                //    {
-                //        where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
-                //    }
-                //    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
-                //    }
-                //    if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
-                //    {
-                //        where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
-
-                //    } if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
-                //    }
-                //    if (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                //    {
-                //        where.Add(Expression.Like("DSCAPEMATERNO", '%' + grid.rules[6].data + '%'));
-                //    }
-                //}
 
                 where.Add(Expression.Eq("IdeGeneral", IdeGeneral));
                 where.Add(Expression.IsNull("Referencia"));
@@ -532,7 +282,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     cell = new string[]
                         {
                             item.Valor==null?"":item.Valor.ToString(),
-                            item.Descripcion==null?"":item.Descripcion.ToString()
+                            item.Descripcion==null?"":item.Descripcion.ToString(),
+                            item.IndActivo == null?"":item.IndActivo
                         }
 
                 }).ToArray();
@@ -545,51 +296,225 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return MensajeError();
             }
         }
-        
+
+         
+        [HttpPost]
+        public ActionResult ListaSubDetalle(GridTable grid)
+        {
+            try
+            {
+                DetachedCriteria where = null;
+                where = DetachedCriteria.For<DetalleGeneral>();
+
+                where.Add(Expression.Eq("IdeGeneral", IdeGeneral));
+                where.Add(Expression.Eq("Referencia",DetalleValor));
+
+                var generic = Listar(_detalleGeneralRepository,
+                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var i = grid.page * grid.rows;
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeGeneral.ToString() + item.Valor.ToString(),
+                    cell = new string[]
+                        {
+                            item.Valor==null?"":item.Valor.ToString(),
+                            item.Descripcion==null?"":item.Descripcion.ToString(),
+                            item.IndActivo == null?"":item.IndActivo
+                        }
+
+                }).ToArray();
+
+                return Json(generic.Value);
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                return MensajeError();
+            }
+        }
+
+
+
+        [ValidarSesion]
+        public ActionResult SubDetalle(string id)
+        {
+            var model = InicializarSubDetalleMantenimiento();
+
+            model.TablaSubDetalle.Accion = Accion.Nuevo;
+            
+            if (id != null)
+            {
+                DetalleValor = id;
+            }
+            return View("EditarDetalle", model);
+        }
 
         /// <summary>
-        /// Activar y desactivar usuario
+        /// guardar subdetalle 
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="codEstado"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //[ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
-        //public ActionResult ActivarDesactivar(string id, string codEstado)
-        //{
-        //    JsonMessage objJsonMessage = new JsonMessage();
-        //    Usuario objUsuario = new Usuario();
-        //    try
-        //    {
-        //        objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(id));
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult SubDetalle(MantenimientoGeneralViewModel model)
+        {
+            DetalleGeneral detalleGeneral = model.TablaSubDetalle;
+            detalleGeneral.Referencia = DetalleValor;
 
-        //        if (IndicadorActivo.Activo.Equals(codEstado))
-        //        {
-        //            objUsuario.FlgEstado = IndicadorActivo.Inactivo;
-        //            objJsonMessage.Mensaje = "Se desactivado el usuario";
-        //        }
-        //        else
-        //        {
-        //            objUsuario.FlgEstado = IndicadorActivo.Activo;
-        //            objJsonMessage.Mensaje = "Se activo el usuario";
-        //        }
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var modelDetalle = InicializarDetalleMantenimiento();
+                    modelDetalle.TablaDetalleGeneral = detalleGeneral;
+                    return View("EditarDetalle", modelDetalle);
+                }
+                if (detalleGeneral.Accion == Accion.Nuevo)
+                {
+                    detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
+                    detalleGeneral.FechaCreacion = FechaCreacion;
+                    detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    detalleGeneral.General = new General();
+                    detalleGeneral.General.IdeGeneral = IdeGeneral;
+                    if (existeValor(detalleGeneral))
+                    {
+                        objJsonMessage.Mensaje = "Verifique que los valores ingresados no existan";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int result = _detalleGeneralRepository.insertarDetalle(detalleGeneral);
+                        if (result == 1)
+                        {
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
+                        }
+                        else
+                        {
+                            objJsonMessage.Mensaje = "Error: Intente nuevamente";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
 
-        //        objJsonMessage.Resultado = true;
+                    }
+                }
+                else
+                {
+                    if (detalleGeneral.Accion == Accion.Editar)
+                    {
+                        DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == detalleGeneral.Valor);
+
+                        detalleEditar.Valor = detalleGeneral.Valor;
+                        detalleEditar.Descripcion = detalleGeneral.Descripcion;
+                        detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        detalleEditar.FechaModificacion = FechaModificacion;
+                        _detalleGeneralRepository.Update(detalleEditar);
+
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "No se pudo modificar el registro";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                }
 
 
-        //    }
-        //    catch (Exception)
-        //    {
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
 
-        //        objJsonMessage.Resultado = false;
-        //        objJsonMessage.Mensaje = "Error en actualizar el estado";
-        //    }
 
-        //    _usuarioRepository.Update(objUsuario);
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult ActivarDesactivar(string valor, string descripcion)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                if ((valor != null)||(valor != ""))
+                {
+                    DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == valor);
 
-        //    return Json(objJsonMessage);
-        //}
+                    detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    detalleEditar.FechaModificacion = FechaModificacion;
+                    if (detalleEditar.EstadoActivo == IndicadorActivo.Activo)
+                    {
+                        detalleEditar.EstadoActivo = IndicadorActivo.Inactivo;
+                    }
+                    else
+                    {
+                        detalleEditar.EstadoActivo = IndicadorActivo.Activo;
+                    }
+                    _detalleGeneralRepository.Update(detalleEditar);
+                    objJsonMessage.Mensaje = "El registro se Activo/Desactivo exitosamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "Error: intente de nuevo";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
 
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+ 
+        }
+
+        /// <summary>
+        /// Determina si el Detalle tiene sub detalle
+        /// </summary>
+        /// <returns></returns>
+        public string determinarIndSubDetalle()
+        {
+            int contador = _detalleGeneralRepository.CountByExpress(x => x.IdeGeneral == IdeGeneral && x.Referencia != null);
+
+            if (contador == 0)
+            {
+                return Indicador.No;
+            }
+            else
+            {
+                return Indicador.Si;
+            }
+        }
+
+        /// <summary>
+        /// Determina si los valores que se quiere guardar no existan
+        /// </summary>
+        /// <param name="detalle"></param>
+        /// <returns></returns>
+        public bool existeValor(DetalleGeneral detalle)
+        {
+            int contador = _detalleGeneralRepository.CountByExpress(x => x.IdeGeneral == IdeGeneral && x.Valor == detalle.Valor);
+            int contDescripcion = _detalleGeneralRepository.CountByExpress(x => x.IdeGeneral == IdeGeneral && x.Descripcion == detalle.Descripcion);
+
+            if ((contador > 0) || (contDescripcion > 0))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
         

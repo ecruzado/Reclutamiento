@@ -27,7 +27,7 @@
             Map(x => x.DescripcionConocimientoOfimatica).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoOfimatica+ " AND DG.VALOR = TIPCONOFIMATICA)");
             Map(x => x.DescripcionIdioma).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoIdioma + " AND DG.VALOR = TIPIDIOMA)");
             Map(x => x.DescripcionNivelConocimiento).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoNivelConocimiento + " AND DG.VALOR = TIPNIVELCONOCIMIENTO)");
-            Map(x => x.DescripcionNombreConocimientoGeneral).Formula("(select CASE WHEN TIPNOMCONOCGRALES = 'X1' OR TIPNOMCONOCGRALES = 'X2' OR TIPNOMCONOCGRALES = 'X3' THEN NOMCONOCGRALES ELSE  DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoGral + " AND DG.VALOR = TIPNOMCONOCGRALES)");
+            Map(x => x.DescripcionNombreConocimientoGeneral).Formula("(select CASE WHEN TIPNOMCONOCGRALES = 'XX' THEN NOMCONOCGRALES ELSE  DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoGral + " AND DG.VALOR = TIPNOMCONOCGRALES)");
             Map(x => x.DescripcionNombreOfimatica).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TiponombreOfimatica + " AND DG.VALOR = TIPNOMOFIMATICA)");
             Map(x => x.DescripcionConocimientoGeneral).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoGral + " AND DG.VALOR = TIPCONOCGENERALES)");
 
