@@ -227,9 +227,10 @@
             url: '@Url.Action("ListarCompetencias", "CompetenciaCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
+            colNames: ['Descripci&oacuten', 'Puntaje'],
             colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false }
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false ,width :50}
             ],
             pager: jQuery('#grdPagerCompetencia'),
             sortname: 'DescripcionCompetencia',

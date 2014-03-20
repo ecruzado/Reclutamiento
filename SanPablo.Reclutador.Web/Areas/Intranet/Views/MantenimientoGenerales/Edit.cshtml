@@ -1,4 +1,5 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoGeneralViewModel
+﻿@using SanPablo.Reclutador.Entity
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoGeneralViewModel
 @{
     Layout = "";
 }
@@ -7,6 +8,23 @@
 
     $(document).ready(function () {
 
+        $('#btnNuevo').click(function () {
+            $('#TablaDetalleGeneral_Accion').val('N');
+            $('#TablaDetalleGeneral_Valor').removeAttr("disabled");
+            $('#TablaDetalleGeneral_Valor').val('');
+            $('#TablaDetalleGeneral_Descripcion').val('');
+        });
+
+        $('#btnGuardar').click(function () {
+            var valor = $('#TablaDetalleGeneral_Valor').val();
+            var descripcion = $('#TablaDetalleGeneral_Descripcion').val();
+            guardarDatos(valor, descripcion);
+        });
+
+        $('#btnEliminar').click(function () {
+            $('#TablaDetalleGeneral_Valor').val('');
+            $('#TablaDetalleGeneral_Descripcion').val('');
+        });
 
         jQuery("#grdList1").jqGrid({
             datatype: function (postdata) {
@@ -55,7 +73,7 @@
             //rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
-            sortname: 'Descripcion',
+            sortname: 'Valor',
             sortorder: 'desc',
             viewrecords: true,
             height: 340,
@@ -70,6 +88,39 @@
         });
     });
 
+    function guardarDatos(valor, descripcion)
+    {
+        var result = $('#mantenimientoGeneralesForm').valid();
+
+        if (result) {
+            $.post('@Url.Action("Edit", "MantenimientoGenerales")',
+                $("#mantenimientoGeneralesForm").serialize(),
+                function (respuesta) {
+                    if (respuesta.Resultado) {
+                        $('#grdList1').trigger('reloadGrid');
+                        $('#TablaDetalleGeneral_Valor').val('');
+                        $('#TablaDetalleGeneral_Descripcion').val('');
+                    }
+                    else {
+                        notificacionError(respuesta.Mensaje);
+                    }
+                }
+            );
+        }
+        else {
+            notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+        }
+        
+    }
+    function mostrarfila()
+    {
+        $('#TablaDetalleGeneral_Accion').val('E');
+        var id = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList1').jqGrid('getRowData', id);
+            $('#TablaDetalleGeneral_Valor').val(rowData.Valor);
+            $('#TablaDetalleGeneral_Descripcion').val(rowData.Descripcion);
+            $('#TablaDetalleGeneral_Valor').attr("disabled", "disabled");
+    }
 
 </script>
 
@@ -82,6 +133,21 @@
     </div>
     <table style="margin-left:30px;">
         <tr>
+
+            <td class="colEtiqueta">
+                @Html.TextBoxFor(model => model.TablaDetalleGeneral.Accion, new { style = "display : none;" })
+                @Html.TextBoxFor(Model => Model.TablaDetalleGeneral.IdeGeneral, new { style = "display : none;" })
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Valor <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaDetalleGeneral.Valor)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaDetalleGeneral.Valor)
+                </div>
+            </td> 
+        </tr>
+        <tr>
+
             <td class="colEtiqueta">
                 @*@Html.HiddenFor(model => model.Evaluacion.IdeEvaluacionCargo)*@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
@@ -93,19 +159,30 @@
                 </div>
             </td> 
         </tr>
+        <tr>
 
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Estado <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaDetalleGeneral.IndActivo, new { disabled = "disabled", value =""})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaDetalleGeneral.IndActivo)
+                </div>
+            </td> 
+        </tr>
     </table>
     <div class="grilla-opciones">
         <div class="opciones">
-            <a id="btnAgregarEvaluacion" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-            <a id="btnEditarEvaluacion" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-            <a id="btnEliminarEvaluacion" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+            <a id="btnNuevo" class="btn btn-small btn-info" title="Nuevo"><i class="icon-plus icon-white"></i></a>  
+            <a id="btnGuardar" class="btn btn-small btn-info" title="Guardar"><i class="icon-edit icon-white"></i></a>
+            <a id="btnEliminar" class="btn btn-small btn-info" title="Desactivar"><i class="icon-remove icon-white"></i></a>                                  
         </div>
         <div style="clear:both"></div>
         
     </div>
     <div class="tabla-datos">
-            <table id="grdList1">
+            <table id="grdList1" ondblclick="mostrarfila()">
             </table>
             <div id="grdPager1">
             </div>

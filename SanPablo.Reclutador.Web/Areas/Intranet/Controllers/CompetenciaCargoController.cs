@@ -56,6 +56,7 @@
                         cell = new string[]
                             {
                                 item.DescripcionCompetencia,
+                                item.Puntaje.ToString(),
                             }
                     }).ToArray();
 

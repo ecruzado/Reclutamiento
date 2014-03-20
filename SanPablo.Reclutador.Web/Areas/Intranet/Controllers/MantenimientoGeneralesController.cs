@@ -67,16 +67,63 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Crea un nuevo Usuario
         /// </summary>
         /// <returns></returns>
-        //[ValidarSesion]
-        //public ActionResult Nuevo()
-        //{
-        //    UsuarioViewModel usuModel = new UsuarioViewModel();
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult Edit([Bind(Prefix = "TablaDetalleGeneral")]DetalleGeneral detalleGeneral)
+        {
+            
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var modelDetalle = InicializarDetalleMantenimiento();
+                    modelDetalle.TablaDetalleGeneral = detalleGeneral;
+                    return View("Edit", modelDetalle);
+                }
+                if (detalleGeneral.Accion == Accion.Nuevo)
+                {
+                    detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
+                    detalleGeneral.FechaCreacion = FechaCreacion;
+                    detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    _detalleGeneralRepository.Add(detalleGeneral);
 
-        //    usuModel.Usuario = new Usuario();
-        //    usuModel.Accion = Accion.Nuevo;
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    if (detalleGeneral.Accion == Accion.Editar)
+                    {
+                        DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == detalleGeneral.Valor);
+                    
+                        detalleEditar.Valor = detalleGeneral.Valor;
+                        detalleEditar.Descripcion = detalleGeneral.Descripcion;
+                        detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        detalleEditar.FechaModificacion = FechaModificacion;
+                        _detalleGeneralRepository.Update(detalleEditar);
 
-        //    return View("Edit", usuModel);
-        //}
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "No se pudo modificar el registro";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+
+        }
 
 
         /// <summary>
@@ -473,6 +520,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //}
 
                 where.Add(Expression.Eq("IdeGeneral", IdeGeneral));
+                where.Add(Expression.IsNull("Referencia"));
 
                 var generic = Listar(_detalleGeneralRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -480,7 +528,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdeGeneral.ToString(),
+                    id = item.IdeGeneral.ToString()+item.Valor.ToString(),
                     cell = new string[]
                         {
                             item.Valor==null?"":item.Valor.ToString(),

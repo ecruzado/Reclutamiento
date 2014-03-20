@@ -18,14 +18,14 @@
         public IList<DetalleGeneral> GetByTipoTabla(TipoTabla tipoTabla)
         {
             var lista = GetBy(x => x.IdeGeneral == (int)tipoTabla 
-                && x.IndicadorActivo == IndicadorActivo.Activo && x.Referencia == null);
+                && x.EstadoActivo == IndicadorActivo.Activo && x.Referencia == null);
             return lista;
         }
 
         public IList<DetalleGeneral> GetByTableReference(TipoTabla tipoTabla, String referencia)
         {
             var lista = GetBy(x => x.IdeGeneral == (int)tipoTabla
-                           && x.IndicadorActivo == IndicadorActivo.Activo && x.Referencia == referencia);
+                           && x.EstadoActivo == IndicadorActivo.Activo && x.Referencia == referencia);
              
             return lista;
         }
@@ -33,7 +33,7 @@
         public string GetByTableDescription(TipoTabla tipoTabla, String valor)
         {
             var lista = GetSingle(x => x.IdeGeneral == (int)tipoTabla
-                           && x.IndicadorActivo == IndicadorActivo.Activo && x.Valor == valor);
+                           && x.EstadoActivo == IndicadorActivo.Activo && x.Valor == valor);
 
             return lista.Descripcion;
         }

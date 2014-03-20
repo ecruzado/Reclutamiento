@@ -168,16 +168,6 @@
         public const string Hijo = "03";
     }
 
-    public sealed class SucesoSolicitud
-    {
-        public const string Pendiente = "P";
-        public const string Aprobado = "A";
-        public const string Rechazado = "R";
-        public const string Publicado = "B";
-        public const string Finalizado = "F";
-        
-    }
-
     public sealed class TipoSolicitud
     {
         public const string Nuevo = "01";

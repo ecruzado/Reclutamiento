@@ -96,9 +96,9 @@
                 }
                 if (horarioCargo.IdeHorarioCargo == 0)
                 {
-                    horarioCargo.EstadoActivo = "A";
+                    horarioCargo.EstadoActivo = IndicadorActivo.Activo;
                     horarioCargo.FechaCreacion = FechaCreacion;
-                    horarioCargo.UsuarioCreacion = "YO";
+                    horarioCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                     horarioCargo.FechaModificacion = FechaCreacion;
                     horarioCargo.Cargo = new Cargo();
                     horarioCargo.Cargo.IdeCargo = IdeCargo;
