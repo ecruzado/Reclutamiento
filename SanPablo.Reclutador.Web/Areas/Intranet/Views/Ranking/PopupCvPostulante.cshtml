@@ -35,7 +35,9 @@
             <td class="colInput" >
                
                 @Html.TextBoxFor(model => model.CvPostulanteEx.Nombre, new { @class = "textoFormulario" , maxlength="100" })                      
-               
+                <div class="tex-error" style="font-size:12px;color:red">    
+                            @Html.ValidationMessageFor(model => model.CvPostulanteEx.Nombre)
+                   </div>
             </td>
         </tr>
         
@@ -104,9 +106,11 @@
                 <label class="etiquetaFormulario" >Hora cita<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita, new { @class = "textoFormulario" ,  maxlength="15" })
+                  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita,new { @class = "textoFormulario"})
+
+              
                 <div class="tex-error" style="font-size:12px;color:red">    
-                    @Html.ValidationMessageFor(model => model.CvPostulanteEx.Fechacita)
+                    @Html.ValidationMessageFor(model => model.CvPostulanteEx.HoraCita)
                 </div>
             </td>
         </tr> 

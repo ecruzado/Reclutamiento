@@ -75,7 +75,13 @@
         EstadoRegistro = 3,
         //Tipo de Vacante
         TipoVacante = 48,
-        TipoSolicitud = 49
+        TipoSolicitud = 49,
+        
+        /// <summary>
+        /// Estados del postulante
+        /// </summary>
+        EstadoPostulante = 51
+
 
     }
 
@@ -96,6 +102,16 @@
         public const string Si = "S";
         public const string No = "N";
     }
+
+
+    public sealed class Contactado
+    {
+        public const string Si = "Si";
+        public const string No = "No";
+    }
+
+
+
     public sealed class Accion
     {
         public const string Nuevo = "N";
@@ -228,5 +244,21 @@
         public const string POSTULANTE = "POSTULANTE";
     }
 
+
+    public sealed class PostulanteEstado
+    {
+        public const string REGISTRADO = "01";
+        public const string PRESELECCIONADO_AUTOMATICO = "02";
+        public const string PRESELECCIONADO_MANUAL = "03";
+        public const string NO_PRESELECCIONADO = "04";
+        public const string EXCLUIDO = "05";
+        public const string NO_APTO = "06";
+        public const string EN_EVALUACION = "07";
+        public const string SELECCIONADO = "08";
+        public const string CONTRATADO = "09";
+        public const string POSTULANTE_POTENCIAL = "10";
+        public const string FINALIZADO = "11";
+    
+    }
 
 }

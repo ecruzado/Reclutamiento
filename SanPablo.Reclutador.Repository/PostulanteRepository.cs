@@ -269,6 +269,37 @@
         }
 
         /// <summary>
+        /// actualiza estado del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        public void UpdateEstadoPostulante(ReclutamientoPersona obj)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CAMBIA_ESTADO_POST");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_nidregistro", OracleType.Number).Value = obj.IdeReclutaPersona;
+                lspcmd.Parameters.Add("p_ccodestadopost", OracleType.VarChar).Value = obj.EstPostulante;
+                lspcmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+       
+        /// <summary>
         /// obtiene las postulaciones del postulante
         /// </summary>
         /// <param name="obj"></param>
@@ -330,6 +361,158 @@
             }
         }
 
+
+        /// <summary>
+        /// obtiene los pustulantes para una determinada solicitud del ranking
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader ldrReclutamientoPersona;
+                ReclutamientoPersona lobReclutamientoPersona;
+                List<ReclutamientoPersona> llstReclutamientoPersona;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_POSTULANTES_RANKING");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+             
+                lspcmd.Parameters.Add("p_nidsol", OracleType.Number).Value = obj.IdeSol;
+                lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = obj.TipSol;
+                 lspcmd.Parameters.Add("p_capepaterno", OracleType.VarChar).Value = obj.ApePaterno;
+                 lspcmd.Parameters.Add("p_capematerno", OracleType.VarChar).Value = obj.ApeMaterno;
+                 lspcmd.Parameters.Add("p_nombre", OracleType.VarChar).Value = obj.Nombre;
+                 lspcmd.Parameters.Add("p_cEstado", OracleType.VarChar).Value = obj.EstPostulante;
+                lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                ldrReclutamientoPersona = (OracleDataReader)lspcmd.ExecuteReader();
+                lobReclutamientoPersona = null;
+                llstReclutamientoPersona = new List<ReclutamientoPersona>();
+
+
+                while (ldrReclutamientoPersona.Read())
+                {
+
+                    lobReclutamientoPersona = new ReclutamientoPersona();
+                    lobReclutamientoPersona.IdePostulante = (ldrReclutamientoPersona["IDEPOSTULANTE"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDEPOSTULANTE"]));
+                    lobReclutamientoPersona.IdeReclutaPersona = (ldrReclutamientoPersona["IDERECLUTAPERSONA"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDERECLUTAPERSONA"]));
+                    lobReclutamientoPersona.IdeSol = (ldrReclutamientoPersona["IDESOL"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDESOL"]));
+                    lobReclutamientoPersona.TipSol = (ldrReclutamientoPersona["TIPSOL"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TIPSOL"]));
+                    lobReclutamientoPersona.IdeCargo = (ldrReclutamientoPersona["IDECARGO"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDECARGO"]));
+                    lobReclutamientoPersona.EstActivo = (ldrReclutamientoPersona["ESTACTIVO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["ESTACTIVO"]));
+                    lobReclutamientoPersona.EstPostulante = (ldrReclutamientoPersona["ESTPOSTULANTE"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["ESTPOSTULANTE"]));
+                    lobReclutamientoPersona.IndContactado = (ldrReclutamientoPersona["INDCONTACTADO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["INDCONTACTADO"]));
+
+                    lobReclutamientoPersona.Evaluacion = (ldrReclutamientoPersona["EVALUACION"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["EVALUACION"]));
+                    lobReclutamientoPersona.PtoTotal = (ldrReclutamientoPersona["PTOTOTAL"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["PTOTOTAL"]));
+                    lobReclutamientoPersona.Comentario = (ldrReclutamientoPersona["COMENTARIO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["COMENTARIO"]));
+                    lobReclutamientoPersona.TipPuesto = (ldrReclutamientoPersona["TIPPUESTO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TIPPUESTO"]));
+                    lobReclutamientoPersona.IdSede = (ldrReclutamientoPersona["IDSEDE"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDSEDE"]));
+
+
+                    lobReclutamientoPersona.Apellidos = (ldrReclutamientoPersona["APELLIDOS"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["APELLIDOS"]));
+                    lobReclutamientoPersona.Nombres = (ldrReclutamientoPersona["NOMBRES"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NOMBRES"]));
+                    lobReclutamientoPersona.DesEstadoPostulante = (ldrReclutamientoPersona["DESESTADOPOSTULANTE"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["DESESTADOPOSTULANTE"]));
+                    
+                    lobReclutamientoPersona.FonoFijo = (ldrReclutamientoPersona["TELEFONO_FIJO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_FIJO"]));
+                    lobReclutamientoPersona.FonoMovil = (ldrReclutamientoPersona["TELEFONO_MOVIL"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_MOVIL"]));
+                    lobReclutamientoPersona.EvalPostulante = (ldrReclutamientoPersona["NUMERO_EVALUACION"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NUMERO_EVALUACION"]));
+
+                    llstReclutamientoPersona.Add(lobReclutamientoPersona);
+                }
+                ldrReclutamientoPersona.Close();
+                return llstReclutamientoPersona;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        /// <summary>
+        /// obtiene los pustulantes preseleccionados
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<ReclutamientoPersona> GetPostulantesPreseleccionado(ReclutamientoPersona obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader ldrReclutamientoPersona;
+                ReclutamientoPersona lobReclutamientoPersona;
+                List<ReclutamientoPersona> llstReclutamientoPersona;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_POSTULANTE_PRESELEC");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+
+                lspcmd.Parameters.Add("p_nidsol", OracleType.Number).Value = obj.IdeSol;
+                lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = obj.TipSol;
+                lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                ldrReclutamientoPersona = (OracleDataReader)lspcmd.ExecuteReader();
+                lobReclutamientoPersona = null;
+                llstReclutamientoPersona = new List<ReclutamientoPersona>();
+
+
+                while (ldrReclutamientoPersona.Read())
+                {
+
+                    lobReclutamientoPersona = new ReclutamientoPersona();
+                    lobReclutamientoPersona.IdePostulante = (ldrReclutamientoPersona["IDEPOSTULANTE"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDEPOSTULANTE"]));
+                    lobReclutamientoPersona.IdeReclutaPersona = (ldrReclutamientoPersona["IDERECLUTAPERSONA"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDERECLUTAPERSONA"]));
+                    lobReclutamientoPersona.IdeSol = (ldrReclutamientoPersona["IDESOL"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDESOL"]));
+                    lobReclutamientoPersona.TipSol = (ldrReclutamientoPersona["TIPSOL"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TIPSOL"]));
+                    lobReclutamientoPersona.IdeCargo = (ldrReclutamientoPersona["IDECARGO"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDECARGO"]));
+                    lobReclutamientoPersona.EstActivo = (ldrReclutamientoPersona["ESTACTIVO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["ESTACTIVO"]));
+                    lobReclutamientoPersona.EstPostulante = (ldrReclutamientoPersona["ESTPOSTULANTE"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["ESTPOSTULANTE"]));
+                    lobReclutamientoPersona.IndContactado = (ldrReclutamientoPersona["INDCONTACTADO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["INDCONTACTADO"]));
+
+                    lobReclutamientoPersona.Evaluacion = (ldrReclutamientoPersona["EVALUACION"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["EVALUACION"]));
+                    lobReclutamientoPersona.PtoTotal = (ldrReclutamientoPersona["PTOTOTAL"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["PTOTOTAL"]));
+                    lobReclutamientoPersona.Comentario = (ldrReclutamientoPersona["COMENTARIO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["COMENTARIO"]));
+                    lobReclutamientoPersona.TipPuesto = (ldrReclutamientoPersona["TIPPUESTO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TIPPUESTO"]));
+                    lobReclutamientoPersona.IdSede = (ldrReclutamientoPersona["IDSEDE"] == null ? 0 : Convert.ToInt32(ldrReclutamientoPersona["IDSEDE"]));
+
+
+                    lobReclutamientoPersona.Apellidos = (ldrReclutamientoPersona["APELLIDOS"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["APELLIDOS"]));
+                    lobReclutamientoPersona.Nombres = (ldrReclutamientoPersona["NOMBRES"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NOMBRES"]));
+                    lobReclutamientoPersona.DesEstadoPostulante = (ldrReclutamientoPersona["DESESTADOPOSTULANTE"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["DESESTADOPOSTULANTE"]));
+
+                    lobReclutamientoPersona.FonoFijo = (ldrReclutamientoPersona["TELEFONO_FIJO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_FIJO"]));
+                    lobReclutamientoPersona.FonoMovil = (ldrReclutamientoPersona["TELEFONO_MOVIL"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_MOVIL"]));
+                    lobReclutamientoPersona.EvalPostulante = (ldrReclutamientoPersona["NUMERO_EVALUACION"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NUMERO_EVALUACION"]));
+
+
+
+
+                    llstReclutamientoPersona.Add(lobReclutamientoPersona);
+                }
+                ldrReclutamientoPersona.Close();
+                return llstReclutamientoPersona;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+      
 
 
     }

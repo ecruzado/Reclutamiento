@@ -92,5 +92,12 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FechaExpiracion { get; set; }
 
 
+        /// <summary>
+        /// id de reclutamiento persona
+        /// </summary>
+        public virtual int IdReclutaPersona { get; set; }
+
+
+
     }
 }

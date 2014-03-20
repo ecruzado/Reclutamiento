@@ -136,6 +136,11 @@
             builder.RegisterType<LogSolicitudRequerimientoValidator>()
                 .Keyed<IValidator>(typeof(IValidator<LogSolReqPersonal>))
                 .As<IValidator>();
+
+
+            builder.RegisterType<CvPostulanteValidator>()
+               .Keyed<IValidator>(typeof(IValidator<CvPostulante>))
+               .As<IValidator>();
             
 
 
