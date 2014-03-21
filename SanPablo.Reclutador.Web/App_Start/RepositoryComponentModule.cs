@@ -95,6 +95,9 @@
             builder.RegisterType<EvaluacionCargoRepository>()
                 .As<IEvaluacionCargoRepository>();
 
+            builder.RegisterType<ReclutamientoPersonaExamenRepository>()
+                .As<IReclutamientoPersonaExamenRepository>();
+
             builder.RegisterType<RolRepository>()
                .As<IRolRepository>();
 
@@ -172,6 +175,7 @@
             builder.RegisterType<ReclutamientoPersonaRepository>()
          .As<IReclutamientoPersonaRepository>();
 
+           
 
         }
     }

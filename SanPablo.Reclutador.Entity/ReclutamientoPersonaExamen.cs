@@ -11,8 +11,8 @@ namespace SanPablo.Reclutador.Entity
     {
         public virtual int IdeReclutamientoPersonaExamen {get; set;}      
         public virtual int IdeReclutamientoPersona {get; set;}      
-        public virtual int IdeEvaluacionSolicitudRequerimiento {get; set;}      
-        public virtual int IdeEvaluacionCargo {get; set;}      
+        public virtual int IdeEvaluacion {get; set;}      
+        public virtual string TipoSolicitud {get; set;}      
         public virtual int IdeRolResponsable {get; set;}
         
         /// <summary>
@@ -32,7 +32,18 @@ namespace SanPablo.Reclutador.Entity
         public virtual int NotaFinal {get; set;}      
         public virtual string Archivo {get; set;}      
         public virtual string ComentarioResultado {get; set;}      
-        public virtual string EstadoEvaluacion {get; set;}      
+        public virtual string TipoEstadoEvaluacion {get; set;}
+
+        /// <summary>
+        /// Datos del reporte
+        /// </summary>
+        public virtual string DescripcionExamen { get; set; }
+
+        public virtual string TipoExamen { get; set; }
+
+        public virtual string ResponsableDescripcion { get; set; }
+
+        public virtual string EstadoEvaluacion { get; set; }
 
     }
 }

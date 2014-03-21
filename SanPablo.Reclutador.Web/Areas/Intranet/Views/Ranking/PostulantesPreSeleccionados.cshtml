@@ -18,6 +18,24 @@
         $(document).ready(function () {
 
             
+            $('#btnEvaluaciones').click(function () {
+
+                var id = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', id);
+
+                var idPost = rowData.IdePostulante;
+                var idReclu = rowData.IdeReclutaPersona;
+
+                if ((idPost != null && idPost > 0) || (idReclu != null && idReclu > 0)) {
+                    var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "",area="Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu;
+                    window.location = url;
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+
+            });
+
+
             $('#btnExcluido').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
@@ -411,7 +429,7 @@
             
             <div class="form-actions">
                 <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
                 <a class="btn btn-info"><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
                 <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
                 <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>

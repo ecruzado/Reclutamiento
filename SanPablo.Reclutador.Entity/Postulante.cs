@@ -83,6 +83,16 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual int IdSede { get; set; }
 
+        /// <summary>
+        /// Nombre Completo del postulante
+        /// </summary>
+        public virtual string NombreCompleto {
+            get 
+            {
+                return ApellidoPaterno + " " + ApellidoMaterno + " " + PrimerNombre + " " + SegundoNombre; 
+            }
+        }
+
         public virtual byte[] FotoPostulante { get; set; }
 
         public virtual string IndicadorRegistroCompleto { get; set; }

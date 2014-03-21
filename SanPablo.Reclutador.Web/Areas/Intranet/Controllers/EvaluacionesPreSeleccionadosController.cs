@@ -56,10 +56,29 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <returns></returns>
         [ValidarSesion]
-        public ActionResult Index()
+        public ActionResult Index(string id, string idRecluPost)
         {
             var modelEvaluaciones = inicializarEvaluacionesPreseleccionados();
-            return View("EvaluacionesPreSeleccionados");
+            int idePostulante = Convert.ToInt32(id);
+            int ideReclutamientoPersona = Convert.ToInt32(idRecluPost);
+
+            var reclutaPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == ideReclutamientoPersona);
+            
+            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == reclutaPersona.IdePostulante);
+            
+            modelEvaluaciones.Solicitud.IdeSolReqPersonal = reclutaPersona.IdeSol;
+            modelEvaluaciones.Solicitud.Tipsol = reclutaPersona.TipSol;
+            modelEvaluaciones.PostulantePreSel = postulante;
+
+
+            List<SolReqPersonal> listaSolicitud = _solReqPersonalRepository.GetDatosSol(modelEvaluaciones.Solicitud);
+
+            if (listaSolicitud != null && listaSolicitud.Count > 0)
+            {
+                modelEvaluaciones.Solicitud = (SolReqPersonal)listaSolicitud[0];
+            }
+
+            return View("EvaluacionesPreSeleccionados", modelEvaluaciones);
         }
 
         /// <summary>
@@ -72,68 +91,57 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.PostulantePreSel = new Postulante();
             model.Solicitud = new SolReqPersonal();
 
+
             return model;
         }
 
 
         [HttpPost]
-        public ActionResult ListPostulantesPre(GridTable grid)
-         {
+        public ActionResult ListEvaluacionesPost(GridTable grid)
+        {
 
-             ReclutamientoPersona reclutamientoPersona;
-             List<ReclutamientoPersona> lista = new List<ReclutamientoPersona>();
-             try
-             {
+            List<ReclutamientoPersonaExamen> lista = new List<ReclutamientoPersonaExamen>();
+            try
+            {
 
-                 reclutamientoPersona = new ReclutamientoPersona();
+                var ideRecluPersona = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+                var idePostulante = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
 
-                 reclutamientoPersona.IdeSol = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
-                 reclutamientoPersona.TipSol = (grid.rules[1].data == null ? "" : Convert.ToString(grid.rules[1].data));
-               
+                lista = _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(ideRecluPersona,idePostulante );
 
-                 if ("0".Equals(reclutamientoPersona.EstPostulante))
-                 {
-                     reclutamientoPersona.EstPostulante = "";
-                 }
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-                 lista = _postulanteRepository.GetPostulantesPreseleccionado(reclutamientoPersona);
-
-                 var generic = GetListar(lista,
-                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
-
-                 generic.Value.rows = generic.List.Select(item => new Row
-                 {
-                     id = (item.IdeReclutaPersona.ToString()),
-                     cell = new string[]
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.IdeReclutamientoPersonaExamen.ToString()),
+                    cell = new string[]
                             {
-                                item.IdeReclutaPersona==null?"":item.IdeReclutaPersona.ToString(),
-                                item.IdePostulante==null?"":item.IdePostulante.ToString(),
-                                item.IdeSol==null?"":item.IdeSol.ToString(),
-                                item.IdSede==null?"":item.IdSede.ToString(),
-                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
-                                item.Apellidos==null?"":item.Apellidos,
-                                item.Nombres==null?"":item.Nombres,
-                                item.FonoFijo==null?"":item.FonoFijo,
-                                item.FonoMovil==null?"":item.FonoMovil,
-                                item.IndicadorContactado==null?"":item.IndicadorContactado.ToString(),
-                                item.IdePostulante==null?"":item.IdePostulante.ToString(),
-                                item.EstPostulante==null?"":item.EstPostulante.ToString(),
-                                item.DesEstadoPostulante==null?"":item.DesEstadoPostulante,
-                                item.EvalPostulante==null?"":item.EvalPostulante,
-                                item.PtoTotal==null?"":item.PtoTotal.ToString()
-                                
+                                item.IdeReclutamientoPersonaExamen==0?"":item.IdeReclutamientoPersonaExamen.ToString(),
+                                item.IdeReclutamientoPersona==0?"":item.IdeReclutamientoPersona.ToString(),
+                                item.IdeEvaluacion==0?"":item.IdeEvaluacion.ToString(),
+                                item.DescripcionExamen==null?"":item.DescripcionExamen,
+                                item.TipoExamen==null?"":item.TipoExamen,
+                                item.FechaEvaluacion==null?"":item.FechaEvaluacion.ToString(),
+                                item.HoraEvaluacion==null?"":item.HoraEvaluacion.ToString(),
+                                item.IdeRolResponsable==null?"":item.IdeRolResponsable.ToString(),
+                                item.ResponsableDescripcion==null?"":item.ResponsableDescripcion,
+                                item.TipoEstadoEvaluacion==null?"":item.TipoEstadoEvaluacion,
+                                item.EstadoEvaluacion==null?"":item.EstadoEvaluacion,
+                                item.NotaFinal==0?"":item.NotaFinal.ToString(),
+                                item.ComentarioResultado==null?"":item.ComentarioResultado
                             }
-                 }).ToArray();
+                }).ToArray();
 
-                 return Json(generic.Value);
+                return Json(generic.Value);
 
-             }
-             catch (Exception ex)
-             {
+            }
+            catch (Exception ex)
+            {
 
-                 return MensajeError();
-             }
-         }
+                return MensajeError();
+            }
+        }
 
 
 
