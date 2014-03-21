@@ -426,6 +426,51 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
         }
 
+        /// <summary>
+        /// inicializa el popup de exclucion de postulante
+        /// </summary>
+        /// <returns></returns>
+        
+        public ActionResult ExclucionPostulante(int id, int idPos, string tipSol) 
+        {
+            RankingViewModel model = new RankingViewModel();
+
+            model.ReclutaPersonal = new ReclutamientoPersona();
+            model.Solicitud = new SolReqPersonal();
+            model.CvPostulanteEx = new CvPostulante();
+
+            model.ReclutaPersonal.IdeSol = id;
+            model.ReclutaPersonal.IdePostulante = idPos;
+            model.ReclutaPersonal.TipSol = tipSol;
+
+            return View("PopupExclucion", model);
+
+        }
+
+        [HttpPost]
+        public ActionResult AsignaExclucionPost(RankingViewModel model)
+        {
+
+            JsonMessage objJson = new JsonMessage();
+
+            var objReclutaPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeSol == model.ReclutaPersonal.IdeSol &&
+                                                       x.TipSol == model.ReclutaPersonal.TipSol
+                                                       && x.IdePostulante == model.ReclutaPersonal.IdePostulante);
+            
+            objReclutaPersona.EstPostulante = PostulanteEstado.EXCLUIDO;
+            objReclutaPersona.Comentario = model.ReclutaPersonal.Comentario.Trim();
+
+
+            _reclutamientoPersonaRepository.Update(objReclutaPersona);
+            
+            objJson.Resultado = true;
+            objJson.Mensaje = "Se excluyo al postulante";
+
+            return Json(objJson);
+
+        }
+
+
 
         /// <summary>
         /// Relaliza el contacto del postulante
