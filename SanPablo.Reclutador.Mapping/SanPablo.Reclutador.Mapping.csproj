@@ -62,6 +62,7 @@
     <Compile Include="CompetenciaCargoMap.cs" />
     <Compile Include="ConocimientoGeneralCargoMap.cs" />
     <Compile Include="ConocimientoGeneralRequerimientoMap.cs" />
+    <Compile Include="ReclutamientoPersonaExamenMap.cs" />
     <Compile Include="CvPostulanteMap.cs" />
     <Compile Include="ExperienciaRequerimientoMap.cs" />
     <Compile Include="ListaSolicitudNuevoCargoVistaMap.cs" />
