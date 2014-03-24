@@ -63,38 +63,23 @@
             Map(x => x.ObservacionCargo, "OBSERVACIONCARGO");
 
             Map(x => x.PuntajeTotalPostulanteInterno, "PUNTTOTPOSTUINTE");
-            Map(x => x.PuntajeMinimoPostulanteInterno, "PUNTMINPOSTUINTE");
             Map(x => x.PuntajeTotalEdad, "PUNTTOTEDAD");
-            Map(x => x.PuntajeMinimoEdad, "PUNTMINEDAD");
             Map(x => x.PuntajeTotalSexo, "PUNTTOTSEXO");
-            Map(x => x.PuntajeMinimoSexo, "PUNTMINSEXO");
             Map(x => x.PuntajeTotalSalario, "PUNTTOTSALARIO");
-            Map(x => x.PuntajeMinimoSalario, "PUNTMINSALARIO");
 
            
             
             Map(x => x.PuntajeTotalNivelEstudio, "PUNTTOTNIVELEST");
-            Map(x => x.PuntajeMinimoNivelEstudio, "PUNTMINNIVELEST");
             Map(x => x.PuntajeTotalCentroEstudio, "PUNTTOTCENTROEST");
-            Map(x => x.PuntajeMinimoCentroEstudio, "PUNTMINCENTROEST");
             Map(x => x.PuntajeTotalExperiencia, "PUNTTOTEXPLABORAL");
-            Map(x => x.PuntajeMinimoExperiencia, "PUNTMINEXPLABORAL");
-            Map(x => x.PuntajeTotalFuncionesDesempeñandas, "PUNTTOTFUNDESE");
-            Map(x => x.PuntajeMinimoFuncionesDesempeñandas, "PUNTMINFUNDESE");
 
             Map(x => x.PuntajeTotalOfimatica, "PUNTTOTOFIMATI");
-            Map(x => x.PuntajeMinimoOfimatica, "PUNTMINOFIMATI");
             Map(x => x.PuntajeTotalIdioma, "PUNTTOTIDIOMA");
-            Map(x => x.PuntajeMinimoIdioma, "PUNTMINIDIOMA");
             Map(x => x.PuntajeTotalConocimientoGeneral, "PUNTTOTCONOGEN");
-            Map(x => x.PuntajeMinimoConocimientoGeneral, "PUNTMINCONOGEN");
             Map(x => x.PuntajeTotalDiscapacidad, "PUNTTOTDISCAPA");
-            Map(x => x.PuntajeMinimoDiscapacidad, "PUNTMINDISCAPA");
 
             Map(x => x.PuntajeTotalHorario, "PUNTTOTHORARIO");
-            Map(x => x.PuntajeMinimoHorario, "PUNTMINHORARIO");
             Map(x => x.PuntajeTotalUbigeo, "PUNTTOTUBIGEO");
-            Map(x => x.PuntajeMinimoUbigeo, "PUNTMINUBIGEO");
             Map(x => x.PuntajeTotalExamen, "PUNTTOTEXAMEN");
             Map(x => x.PuntajeMinimoExamen, "PUNTMINEXAMEN");
             Map(x => x.CantidadPreseleccionados, "CANTPRESELEC");

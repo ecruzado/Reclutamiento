@@ -435,7 +435,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\EditarDetalle.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupExclucion.cshtml" />
-    <Content Include="Areas\Intranet\Views\EvaluacionPreseleccionados\EvaluacionesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\EvaluacionesPreSeleccionados.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

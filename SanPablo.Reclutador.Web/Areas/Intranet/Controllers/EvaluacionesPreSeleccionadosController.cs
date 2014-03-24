@@ -63,9 +63,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             int ideReclutamientoPersona = Convert.ToInt32(idRecluPost);
 
             var reclutaPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == ideReclutamientoPersona);
-            
             var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == reclutaPersona.IdePostulante);
-            
+
+            modelEvaluaciones.ReclutaPersona.IdeReclutaPersona = ideReclutamientoPersona;
             modelEvaluaciones.Solicitud.IdeSolReqPersonal = reclutaPersona.IdeSol;
             modelEvaluaciones.Solicitud.Tipsol = reclutaPersona.TipSol;
             modelEvaluaciones.PostulantePreSel = postulante;
@@ -88,6 +88,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public EvaluacionesPreSeleccionadosViewModel inicializarEvaluacionesPreseleccionados()
         {
             EvaluacionesPreSeleccionadosViewModel model = new EvaluacionesPreSeleccionadosViewModel();
+            model.ReclutaPersona = new ReclutamientoPersona();
             model.PostulantePreSel = new Postulante();
             model.Solicitud = new SolReqPersonal();
 
@@ -107,7 +108,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var ideRecluPersona = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
                 var idePostulante = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
 
-                lista = _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(ideRecluPersona,idePostulante );
+                lista = _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(idePostulante,ideRecluPersona);
 
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);

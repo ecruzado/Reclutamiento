@@ -46,36 +46,21 @@ namespace SanPablo.Reclutador.Entity
         public virtual string ObservacionCargo { get; set; }
 
         public virtual int PuntajeTotalPostulanteInterno { get; set; }
-        public virtual int PuntajeMinimoPostulanteInterno { get; set; }
         public virtual int PuntajeTotalEdad { get; set; }
-        public virtual int PuntajeMinimoEdad { get; set; }
         public virtual int PuntajeTotalSexo { get; set; }
-        public virtual int PuntajeMinimoSexo { get; set; }
         public virtual int PuntajeTotalSalario { get; set; }
-        public virtual int PuntajeMinimoSalario { get; set; }
        
         public virtual int PuntajeTotalNivelEstudio { get; set; }
-        public virtual int PuntajeMinimoNivelEstudio { get; set; }
         public virtual int PuntajeTotalCentroEstudio { get; set; }
-        public virtual int PuntajeMinimoCentroEstudio { get; set; }
         public virtual int PuntajeTotalExperiencia { get; set; }
-        public virtual int PuntajeMinimoExperiencia { get; set; }
-        public virtual int PuntajeTotalFuncionesDesempeñandas { get; set; }
-        public virtual int PuntajeMinimoFuncionesDesempeñandas { get; set; }
 
         public virtual int PuntajeTotalOfimatica { get; set; }
-        public virtual int PuntajeMinimoOfimatica { get; set; }
         public virtual int PuntajeTotalIdioma { get; set; }
-        public virtual int PuntajeMinimoIdioma { get; set; }
         public virtual int PuntajeTotalConocimientoGeneral { get; set; }
-        public virtual int PuntajeMinimoConocimientoGeneral { get; set; }
         public virtual int PuntajeTotalDiscapacidad { get; set; }
-        public virtual int PuntajeMinimoDiscapacidad { get; set; }
         
         public virtual int PuntajeTotalHorario { get; set; }
-        public virtual int PuntajeMinimoHorario { get; set; }
         public virtual int PuntajeTotalUbigeo { get; set; }
-        public virtual int PuntajeMinimoUbigeo { get; set; }
         public virtual int PuntajeTotalExamen { get; set; }
         public virtual int PuntajeMinimoExamen { get; set; }
         public virtual int CantidadPreseleccionados { get; set; }

@@ -22,8 +22,8 @@
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
 
-                    { field: 'idSol', data: $("#Solicitud_IdeSolReqPersonal").val() },
-                    { field: 'tipSol', data: $("#Solicitud_Tipsol").val() }
+                    { field: 'idRecluPers', data: $("#ReclutaPersona_IdeReclutaPersona").val() },
+                    { field: 'idPostulante', data: $("#PostulantePreSel_IdePostulante").val() }
 
                 ];
 
@@ -164,28 +164,27 @@
                 <h6>Datos Evaluación</h6>
                 <div style="clear:both"></div>
             </div>
-            <div class="formulario-fila">
-                <div class="span5">
-                    <div class="">
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <label class="control-label" for="inputSuccess">Solicitud</label>
-                        <div class="controles">
-                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
-                        </div>
+                    <div class="controles">
+                        @Html.TextBoxFor(model => model.ReclutaPersona.IdeReclutaPersona, new { style = "display: none"})
+                        @Html.TextBoxFor(model => model.PostulantePreSel.IdePostulante, new { style = "display: none"})
+                        @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { disabled = "disabled" })
+                        @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
                     </div>
-                </div>                    
-                <div class="span5">
-                    <div class="">
+                    </td>
+                    <td class="span5">
                         <label class="control-label" for="inputSuccess">Cargo</label>
                         <div class="controles">
-                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { disabled = "disabled" })
-                            @*<input type="text" class="input-xlarge" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                         @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { disabled = "disabled" })
+                         @*<input type="text" class="input-xlarge" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
+                       </div>
+                   </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Sede</label>
                         <div class="controles">
@@ -193,8 +192,8 @@
                             @*<input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Dependencia</label>
                         <div class="controles">
@@ -202,10 +201,10 @@
                             @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Departamento</label>
                         <div class="controles">
@@ -213,8 +212,8 @@
                             @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Area</label>
                         <div class="controles">
@@ -222,14 +221,17 @@
                             @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
                         </div>
                     </div>
-                </div>
-            </div>
+                </td>
+            </tr>
+            </table>
             <div class="grilla-opciones" style="margin-top:0px;">
                 <h6>Datos del Postulante</h6>
                 <div style="clear:both"></div>
             </div>
-            <div class="formulario-fila">
-                <div class="span5">
+
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Nombre</label>
                         <div class="controles">
@@ -237,8 +239,8 @@
                             @*<input type="text" class="input-xlarge" id="txtnombrepostulante" disabled="disabled" value="Linares Roca Miguel Fransisco">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Correo</label>
                         <div class="controles">
@@ -246,10 +248,10 @@
                             @*<input type="text" class="input-xlarge" id="txtcorreopostulante" disabled="disabled" value="lroca@gmail.com">*@
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Teléfono</label>
                         <div class="controles">
@@ -257,8 +259,8 @@
                             @*<input type="text" class="input-medium" id="txttelefonofijopostulante" disabled="disabled" value="2661960">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Móvil</label>
                         <div class="controles">
@@ -266,8 +268,10 @@
                             @*<input type="text" class="input-medium" id="txttelefonomovilpostulante" disabled="disabled" value="991148756">*@
                         </div>
                     </div>
-                </div>
-            </div>
+                </td>
+            </tr>
+            </table>
+                
             <div class="grilla-opciones" style="margin-top:0px;">
                 <h6>Evaluaciones</h6>
                 <div style="clear:both"></div>
