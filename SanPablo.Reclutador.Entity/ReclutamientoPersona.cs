@@ -155,6 +155,12 @@ namespace SanPablo.Reclutador.Entity
         /// fecha de modificacion
         /// </summary>
         public virtual DateTime FecModifica { get; set; }
+
+        /// <summary>
+        /// indicador de aprobacion si es S color  por defecto si es N color rojo
+        /// </summary>
+        public virtual string IndAprobacion { get; set; }
+        
         
 
     }

@@ -1,0 +1,285 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.RankingViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
+
+
+@using System.Configuration;
+@{
+    ViewBag.Title = "Postulantes Seleccionados";
+}
+@section Head{
+}
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            
+            $('#btnContrata').click(function () {
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                
+                if (idSol != null) {
+
+                 var url = '@Url.Action("Contratacion", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+            });
+
+
+
+
+            $('#btnExcluido').click(function () {
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+
+
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
+                var idPost = rowData.IdePostulante;
+
+                if (idPost != null && idPost > 0) {
+                    mostrarPopupExclucion(idSol, idPost, tipSol);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+
+            });
+
+            
+            $('#btnSeleccionado').click(function () {
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                if (selr != null && selr > 0) {
+                    seleccionaPost(selr);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            });
+
+
+
+
+            $('#btnAnteriorRanking').click(function () {
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                var pagina = $("#pagina").val();
+                if (idSol != null) {
+
+                    var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    window.location = url;
+                }
+            });
+
+
+            $('#btnContactado').click(function () {
+
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
+                var indContacto = rowData.IndicadorContactado;
+
+
+                if (selr != null && selr > 0) {
+                    contactaPostulante(selr, indContacto);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+
+            });
+
+
+
+            jQuery("#grdListSel").jqGrid({
+                datatype: function (postdata) {
+                    var migrilla = new Object();
+                    migrilla.page = postdata.page;
+                    migrilla.rows = postdata.rows;
+                    migrilla.sidx = postdata.sidx;
+                    migrilla.sord = postdata.sord;
+                    migrilla._search = postdata.isSearch;
+                    migrilla.filters = postdata.filters;
+                    migrilla.Rules = [
+
+                        { field: 'idSol', data: $("#Solicitud_IdeSolReqPersonal").val() },
+                        { field: 'tipSol', data: $("#Solicitud_Tipsol").val() }
+                        
+                    ];
+
+                    if (migrilla._search == true) {
+                        migrilla.searchField = postdata.searchField;
+                        migrilla.searchOper = postdata.searchOper;
+                        migrilla.searchString = postdata.searchString;
+                    }
+
+                    var params = { grid: migrilla };
+
+                    $.ajax({
+                        url: '@Url.Action("ListPostulantesSel", "Contrata", new { area = "Intranet" })',
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(params),
+                        async: false,
+                        success: function (data, st) {
+                            if (st == 'success') {
+                                var jq = $('#grdListSel')[0];
+                                jq.addJSONData(data);
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                },
+              colNames: ['', '', '', '', '', 'Apellidos', 'Nombres','Teléfono','Celular', '', 'Estado'],
+              colModel: [
+                      { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
+                      { name: 'IdeSol', index: 'IdeSol', align: 'center', editable: false, sortable: false, hidden: true },
+                      { name: 'IdSede', index: 'IdSede', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
+                      { name: 'IdeCargo', index: 'IdeCargo', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
+                      { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
+                      { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 300 },
+                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
+                      { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 }
+                      
+              ],
+
+              pager: jQuery('#grdPagerListSel'),
+              rowNum: 10,
+              rowList: [10, 30, 50],
+              autowidth: true,
+              rules: true,
+              sortname: 'IdeReclutaPersona',
+              sortorder: 'desc',
+              viewrecords: true,
+              height: 350,
+              cellsubmit: 'clientArray',
+              hidegrid: false,
+              rownumbers: true,
+              shrinkToFit: false,
+             
+              postData: {
+              }, loadComplete: function (data) {
+              }
+          });
+
+        });
+       
+
+  </script>
+}
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Postulantes Pre-Seleccionados</h5>
+            </div>
+@using (Html.BeginForm("Index", "Contrata", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmContratar", @class = "formulario-busqueda" }))
+{
+    @Html.ValidationSummary(true)
+
+    
+     @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
+            @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" })  
+    
+           <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                   
+                     <td class="span5">
+			
+			            <label class="control-label" for="inputSuccess">Solicitud</label>
+			            <div class="controles">
+				            
+                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario", disabled = "disabled" }) 
+
+			            </div>
+		   
+		            </td>
+                     <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Cargo</label>
+			            <div class="controles">
+				            
+                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario", disabled = "disabled" }) 
+                        </div>
+		   
+		            </td>
+                    
+                </tr>
+                <tr class="formulario-fila">
+                   <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Dependencia</label>
+			            <div class="controles">
+				            
+                            @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario", disabled = "disabled" }) 
+
+			            </div>
+			
+		            </td>
+                     <td class="span5">
+		   
+			            <label class="control-label" for="inputSuccess">Departamento</label>
+			            <div class="controles">
+				           
+                            @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario", disabled = "disabled" }) 
+			            </div>
+		   
+		            </td>
+		           
+                </tr>
+                <tr class="formulario-fila">
+                     <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Area</label>
+			            <div class="controles">
+				           
+                            @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
+			            </div>
+			
+		            </td>
+                   <td class="span5">
+		  
+			            <label class="control-label" for="inputSuccess">Sede</label>
+			            <div class="controles">
+				           
+                           @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario", disabled = "disabled" }) 
+
+			            </div>
+			
+		            </td>
+                </tr>
+                </table>
+}
+
+
+               <div style="clear:both"></div>
+                <div class="tabla-datos">
+                            <table id="grdListSel">
+                            </table>
+                            <div id="grdPagerListSel">
+                            </div>
+                </div>
+            
+            <div class="form-actions">
+                
+               
+                <a class="btn" id="btnAnteriorPre"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                <a class="btn btn-info" id="btnContratar"><i class="icon-edit icon-white"></i> Contratar</a>
+                <a class="btn btn-info" id="btnFinalizar"><i class="icon-edit icon-white"></i> Finalizar</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div id="popupDialogExclucion" title="Exclución postulante"></div>
+<div id="dialogExclucion"><span id="spandialogExclucion"></span></div>

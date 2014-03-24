@@ -21,6 +21,29 @@
     });
 
 
+    $('#btnPreseleccion').click(function () {
+
+        var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
+
+        var idSol = selr;
+        var tipSol = rowData.Tipsol;
+        var pagina = '@TipoSolicitud.Remplazo';
+        var indPagina = '@Indicador.No';
+
+             if (idSol != null) {
+
+                 var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+      });
+
+
+
     $('#btnRankingSol').click(function () {
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
@@ -457,7 +480,7 @@
                 
                 <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a class="btn btn-info" id ="btnRequerimintoSol"><i class="icon-pencil icon-white"></i> Requerimiento</a>

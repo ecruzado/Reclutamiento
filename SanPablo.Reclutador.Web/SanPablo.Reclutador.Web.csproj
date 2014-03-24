@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RepositoryComponentModule.cs" />
     <Compile Include="App_Start\ValidatorComponentModule.cs" />
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ContrataController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
@@ -424,6 +425,8 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
+    <Content Include="Scripts\html5shiv-printshiv.js" />
+    <Content Include="Scripts\html5shiv.js" />
     <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\ListaCargos.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
@@ -435,7 +438,10 @@
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\EditarDetalle.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupExclucion.cshtml" />
+    <Content Include="Areas\Intranet\Views\Contrata\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\EvaluacionesPreSeleccionados.cshtml" />
+
+    
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

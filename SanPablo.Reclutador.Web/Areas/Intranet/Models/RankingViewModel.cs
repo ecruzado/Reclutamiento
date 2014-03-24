@@ -18,6 +18,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> listaEstaPost { get; set; }
 
         public string pagina { get; set; }
+        public string indPagina { get; set; }
 
     }
 }

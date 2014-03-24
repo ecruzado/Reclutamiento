@@ -1124,6 +1124,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solReqPersonal.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
                     solReqPersonal.Tipsol = TipoSolicitud.Remplazo;
+                    int idRol = (int)Session[ConstanteSesion.Rol];
+                    int idusuario = (int)Session[ConstanteSesion.Usuario];
+
+
+                    solReqPersonal.idUsuarioResp = (int)Session[ConstanteSesion.Usuario];
 
                     lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
                
@@ -1893,7 +1898,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
-
+        /// <summary>
+        /// Inicializa la ventana de publicacion
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult Publica(string id) 
         {
@@ -2186,6 +2195,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
+                    //rol del responsable el que publica es el reponsable de trabajar la solicitud
+                    model.LogSolReqPersonal.UsResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
 
                     _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
 

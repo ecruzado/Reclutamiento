@@ -53,6 +53,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// inicializa el ranking
         /// </summary>
         /// <returns></returns>
+        
         public ActionResult Index(int id, string tipSol, string pagina)
         {
             RankingViewModel model;
@@ -590,7 +591,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
          /// <param name="tipSol"></param>
          /// <returns></returns>
    
-         public ActionResult Preseleccionado(int id, string tipSol)
+         public ActionResult Preseleccionado(int id, string tipSol,string pagina,string ind)
          {
              RankingViewModel model;
 
@@ -614,14 +615,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              model.listaEstaPost =
              new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoPostulante));
              model.listaEstaPost.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-
+             
+             model.pagina = pagina;
+             model.indPagina = ind;
              // consulta que obtiene los datos de la solicitud por id y Tipo de Puesto
 
              return View("PostulantesPreSeleccionados", model);
          }
 
 
+         [HttpPost]
+         public ActionResult SeleccionaPost(int id) 
+         {
+             JsonMessage objJson = new JsonMessage();
+
+             var objReclutaPer = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == id);
+             objReclutaPer.EstPostulante = PostulanteEstado.SELECCIONADO;
+             _reclutamientoPersonaRepository.Update(objReclutaPer);
+
+
+             objJson.Resultado = true;
+             objJson.Mensaje = "Se actualizo el registro";
+
+             return Json(objJson);
+         }
 
          /// <summary>
          /// lista de postulantes preseleccionados
@@ -673,7 +690,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.EstPostulante==null?"":item.EstPostulante.ToString(),
                                 item.DesEstadoPostulante==null?"":item.DesEstadoPostulante,
                                 item.EvalPostulante==null?"":item.EvalPostulante,
-                                item.PtoTotal==null?"":item.PtoTotal.ToString()
+                                item.PtoTotal==null?"":item.PtoTotal.ToString(),
+                                item.IndAprobacion==null?"":item.IndAprobacion
                                 
                             }
                  }).ToArray();

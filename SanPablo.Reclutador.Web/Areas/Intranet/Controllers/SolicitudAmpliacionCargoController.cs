@@ -896,7 +896,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solicitudRequerimiento.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
                     solicitudRequerimiento.Tipsol = TipoSolicitud.Ampliacion;
-
+                    solicitudRequerimiento.idUsuarioResp = (int)Session[ConstanteSesion.Usuario];
 
                     lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
                 //}
@@ -936,7 +936,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NomPersonReemplazo==null?"":item.NomPersonReemplazo,
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
-                                item.TipEtapa==null?"":item.TipEtapa
+                                item.TipEtapa==null?"":item.TipEtapa,
+                                item.Tipsol==null?"":item.Tipsol
                                
                             }
                 }).ToArray();

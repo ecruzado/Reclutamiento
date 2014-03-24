@@ -44,10 +44,12 @@
          $('#btnAprobarPre').click(function () {
              var idSol = $("#Solicitud_IdeSolReqPersonal").val();
              var tipSol = $("#Solicitud_Tipsol").val();
+             var pagina = $("#pagina").val();
+             var indPagina = '@Indicador.Si';
 
              if (idSol != null) {
                
-                var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
+                 var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind="+indPagina;
                 window.location = url;
 
             } else {
@@ -369,7 +371,7 @@
                 rowList: [10, 30, 50],
                 autowidth: true,
                 rules: true,
-                sortname: 'IdCvPostulante',
+                sortname: 'IdeReclutaPersona',
                 sortorder: 'desc',
                 viewrecords: true,
                 height: 350,
@@ -544,6 +546,7 @@
                 <div style="clear:both"></div>
             </div>
     
+            @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
             @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
             @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" })  
            <table class="formulario-busqueda">
