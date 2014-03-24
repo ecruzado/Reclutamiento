@@ -379,6 +379,7 @@
 
             conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales = new List<DetalleGeneral>();
             conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -392,6 +393,7 @@
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, tipoConocimiento));
+            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
             result = Json(listaResultado);
             return result;
         }
@@ -399,6 +401,7 @@
         {
             var listaResultado = new List<DetalleGeneral>();
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimientoModel.ConocimientoGeneral.TipoConocimientoGeneral.ToString()));
+            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
             conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
 
         }

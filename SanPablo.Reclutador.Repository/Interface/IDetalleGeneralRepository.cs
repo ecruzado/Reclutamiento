@@ -11,5 +11,7 @@
         IList<DetalleGeneral> GetByTableReference(TipoTabla tipoTabla, String referencia);
 
         string GetByTableDescription(TipoTabla tipoTabla, String valor);
+
+        int insertarDetalle(DetalleGeneral detalle);
     }
 }

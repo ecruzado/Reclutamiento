@@ -149,6 +149,18 @@
     }
 
     /// <summary>
+    /// Estados de la Evaluacion
+    /// </summary>
+    public sealed class EstadoEvaluacion
+    {
+        public const string Pendiente = "01";
+        public const string Programado = "02";
+        public const string Evaluado = "03";
+        public const string Aprobado = "04";
+        public const string Desaprobado = "05";
+    }
+
+    /// <summary>
     /// tipo de derivacion
     /// </summary>
     public sealed class TipoDerivacion

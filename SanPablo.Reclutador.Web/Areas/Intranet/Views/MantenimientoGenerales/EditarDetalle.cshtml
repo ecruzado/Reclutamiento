@@ -1,0 +1,248 @@
+﻿@using SanPablo.Reclutador.Entity
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoGeneralViewModel
+@{
+    Layout = "";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#TablaSubDetalle_IndActivo').val('');
+
+
+        $('#btnNuevoSubDetalle').click(function () {
+            $('#TablaSubDetalle_Accion').val('N');
+            $('#TablaSubDetalle_Valor').removeAttr("disabled");
+            limpiarCampos();
+           
+        });
+
+        $('#btnGuardarSubDetalle').click(function () {
+            var valor = $('#TablaSubDetalle_Valor').val();
+            var descripcion = $('#TablaSubDetalle_Descripcion').val();
+            $('#valorDetalle').val(valor);
+            if ((valor != null) || (valor != "")) {
+                guardarDatos(valor, descripcion);
+            }
+            else {
+                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+        $('#btnEliminarSubDetalle').click(function () {
+            var selr = jQuery('#grdListSubDetalle').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdListSubDetalle').jqGrid('getRowData', selr);
+            if (selr != null) {
+                activarDesactivar(rowData.Valor, rowData.Descripcion);
+            } else {
+                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+
+        jQuery("#grdListSubDetalle").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ListaSubDetalle", "MantenimientoGenerales", new { area = "Intranet" })',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListSubDetalle')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Valor', 'Descripcion', 'Estado'],
+            colModel: [
+                    { name: 'Valor', index: 'Valor', align: 'center', hidden: false, width: 100 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 380 },
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 100 },
+
+            ],
+            pager: jQuery('#grdPagerSubDetalle'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'Valor',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 340,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            autowidth: true,
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });
+    });
+
+    function guardarDatos(valor, descripcion) {
+        var result = $('#SubDetalleForm').valid();
+        if (result) {
+            $.post('@Url.Action("SubDetalle", "MantenimientoGenerales")',
+                $("#SubDetalleForm").serialize(),
+                function (respuesta) {
+                    if (respuesta.Resultado) {
+                        $('#grdListSubDetalle').trigger('reloadGrid');
+                        notificacionExito(respuesta.Mensaje);
+                        limpiarCampos();
+                    }
+                    else {
+                        notificacionError(respuesta.Mensaje);
+                    }
+                }
+            );
+        }
+        else {
+            notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+        }
+
+    }
+    function mostrarfilaSubDetalle() {
+
+        var mensj = document.getElementById("mensajeError");
+        mensj.style.display = "none";
+
+        $('#TablaSubDetalle_Accion').val('E');
+        var id = jQuery('#grdListSubDetalle').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdListSubDetalle').jqGrid('getRowData', id);
+
+        $('#valorDetalle').val(rowData.Valor);
+        $('#TablaSubDetalle_Valor').val(rowData.Valor);
+        $('#TablaSubDetalle_Descripcion').val(rowData.Descripcion);
+        $('#TablaSubDetalle_IndActivo').val(rowData.Estado);
+        $('#TablaSubDetalle_Valor').attr("disabled", "disabled");
+    }
+
+    function activarDesactivar(valor, descripcion) {
+
+        $.post('@Url.Action("ActivarDesactivar", "MantenimientoGenerales", new { area = "Intranet"})?valor=' + valor + "&descripcion=" + descripcion,
+        function (respuesta) {
+            if (respuesta.Resultado) {
+                $('#grdListSubDetalle').trigger('reloadGrid');
+                limpiarCampos();
+                notificacionExito(respuesta.Mensaje);
+            }
+            else {
+                notificacionError(respuesta.Mensaje);
+            }
+        }
+    );
+    }
+
+    function limpiarCampos()
+    {
+        $('#TablaSubDetalle_Valor').val('');
+        $('#TablaSubDetalle_Descripcion').val('');
+        $('#TablaSubDetalle_IndActivo').val('');
+    }
+
+</script>
+
+@using (Html.BeginForm("SubDetalle", "MantenimientoGenerales", FormMethod.Post, new { @id = "SubDetalleForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+    
+    <div id="divNotificacion" class="alert alert-success" style="display:none;margin-bottom:0px;">
+                    <a class="close" onclick="">×</a>
+                    <span></span>
+    </div>
+    
+    <table style="margin-left:30px;">
+        <tr>
+
+            <td class="colEtiqueta">
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Accion, new { style = "display : none;" })
+                @Html.TextBoxFor(Model => Model.TablaSubDetalle.IdeGeneral, new { style = "display : none;" })
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Valor <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Valor)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaSubDetalle.Valor)
+                </div>
+            </td> 
+        </tr>
+        <tr>
+
+            <td class="colEtiqueta">
+                @*@Html.HiddenFor(model => model.Evaluacion.IdeEvaluacionCargo)*@
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Descripcion)
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaSubDetalle.Descripcion)
+                </div>
+            </td> 
+        </tr>
+        <tr>
+
+            <td class="colEtiqueta">
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Estado <span class="text-error">*</span></label>
+            </td>
+            <td class="colInput">
+                @Html.TextBoxFor(model => model.TablaSubDetalle.IndActivo, new { disabled = "disabled", value =""})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.TablaSubDetalle.IndActivo)
+                </div>
+            </td> 
+        </tr>
+    </table>
+    
+    <div class="grilla-opciones">
+        <div class="opciones">
+            @*<a id="btnNuevoSubDetalle" class="btn btn-small btn-info" title="Nuevo"><i class="icon-plus icon-white"></i></a>*@  
+            @*<a id="btnGuardarSubDetalle" class="btn btn-small btn-info" title="Guardar"><i class="icon-edit icon-white"></i></a>*@
+            @*<a id="btnEliminarSubDetalle" class="btn btn-small btn-info" title="Desactivar"><i class="icon-remove icon-white"></i></a>*@                                  
+            <a id="btnNuevoSubDetalle" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
+            <a id="btnGuardarSubDetalle" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
+            <a id="btnEliminarSubDetalle" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
+        </div>
+        <div style="clear:both"></div>
+        
+    </div>
+    <div class="tabla-datos">
+            <table id="grdListSubDetalle" ondblclick="mostrarfilaSubDetalle()">
+            </table>
+            <div id="grdPagerSubDetalle">
+            </div>
+    </div>
+}
+
+               
+                    
+             
+

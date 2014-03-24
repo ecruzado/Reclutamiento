@@ -18,8 +18,8 @@
             window.location = '@Url.Action("Nuevo", "Usuario")';
         });
 
-        $('#btnBuscarUsuario').click(function () {
-            $('#grdListUsuario').trigger('reloadGrid');
+        $('#btnBuscar').click(function () {
+            $('#grdList').trigger('reloadGrid');
         });
 
         $('#btnEditar').click(function () {
@@ -29,9 +29,6 @@
             } else {
                 MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
-
-
-
         });
 
 
@@ -42,18 +39,14 @@
             resizable: false,
             modal: true,
             buttons: {
-                //"Grabar": function () {
-                //    $('#confSede').dialog('open');
-
-                //},
                 "Cerrar": function () {
                     $(this).dialog("close");
                 }
             }
         });
 
-        $('#btnConsultar').click(function () {
-            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+        @*$('#btnConsultar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
 
             if (selr != null) {
                 window.location = '@Url.Action("Consulta", "Usuario", new { id = ""})' + '/' + selr;
@@ -62,7 +55,7 @@
             }
 
 
-        });
+        });*@
 
         $('#btnSedeNivel').click(function () {
             var idUsu = $("#Usuario_IdUsuario").val();
@@ -87,17 +80,13 @@
                 migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
-                //migrilla.Rules = [
+                migrilla.Rules = [
 
-                //    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                //    { field: 'idRol', data: $("#UsuarioRolSede_IdRol").val() },
-                //    { field: 'idSede', data: $("#UsuarioRolSede_IdSede").val() },
-                //    { field: 'nombre', data: $("#Usuario_DscNombres").val() },
-                //    { field: 'codUsu', data: $("#Usuario_CodUsuario").val() },
-                //    { field: 'apellidoPat', data: $("#Usuario_DscApePaterno").val() },
-                //    { field: 'apellidoMat', data: $("#Usuario_DscApeMaterno").val() }
+                    { field: 'idgeneral', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                    { field: 'tipoTabla', data: $("#TablaGeneral_IdeGeneral").val() },
+                    { field: 'Descripcion', data: $("#TablaGeneral_Descripcion").val() },
 
-                //];
+                ];
 
                 if (migrilla._search == true) {
                     migrilla.searchField = postdata.searchField;
@@ -238,8 +227,8 @@
                 
                 <tr class="formulario-accion offset9">
                     <td>
-                    <a id="btnBuscarUsuario"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    <a id="btnBuscar"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                    <button id ="btnLimpiar" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
                     </td>
                 </tr>
                  <tr>

@@ -112,9 +112,9 @@
                 }
                 if (evaluacionCargo.IdeEvaluacionCargo == 0)
                 {
-                    evaluacionCargo.EstadoActivo = "A";
+                    evaluacionCargo.EstadoActivo = IndicadorActivo.Activo;
                     evaluacionCargo.FechaCreacion = FechaCreacion;
-                    evaluacionCargo.UsuarioCreacion = "YO";
+                    evaluacionCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                     evaluacionCargo.FechaModificacion = FechaCreacion;
                     evaluacionCargo.Cargo = new Cargo();
                     evaluacionCargo.Cargo.IdeCargo = IdeCargo;

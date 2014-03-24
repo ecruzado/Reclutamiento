@@ -13,9 +13,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public General TablaGeneral { get; set; }
         public DetalleGeneral TablaDetalleGeneral { get; set; }
+        public DetalleGeneral TablaSubDetalle { get; set; }
 
         public virtual List<General> tipoTablas { get; set; }
-        public string Accion;
+        public string Accion {get; set;}
+        public string IndSubDetalle { get; set; }
+        public string Valor { get; set; }
 
     }
 }
