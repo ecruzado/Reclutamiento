@@ -496,8 +496,9 @@
                     lobReclutamientoPersona.EvalPostulante = (ldrReclutamientoPersona["NUMERO_EVALUACION"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NUMERO_EVALUACION"]));
 
 
-
-
+                    
+                    lobReclutamientoPersona.IndAprobacion = (ldrReclutamientoPersona["INDAPROB"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["INDAPROB"]));
+                    
                     llstReclutamientoPersona.Add(lobReclutamientoPersona);
                 }
                 ldrReclutamientoPersona.Close();

@@ -18,6 +18,24 @@
         $(document).ready(function () {
 
             
+            $('#btnContrata').click(function () {
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                
+                if (idSol != null) {
+
+                 var url = '@Url.Action("Contratacion", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+            });
+
+
+
+
             $('#btnExcluido').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
@@ -35,18 +53,30 @@
 
             });
 
+            
+            $('#btnSeleccionado').click(function () {
+                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                if (selr != null && selr > 0) {
+                    seleccionaPost(selr);
+                } else {
+                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            });
+
+
 
 
             $('#btnAnteriorRanking').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
-                var pagina = '@TipoSolicitud.Remplazo';
+                var pagina = $("#pagina").val();
                 if (idSol != null) {
 
-                    var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
                     window.location = url;
                 }
             });
+
 
             $('#btnContactado').click(function () {
 
@@ -62,12 +92,6 @@
                 }
 
             });
-
-
-            
-            
-
-
 
 
 
@@ -96,7 +120,7 @@
                     var params = { grid: migrilla };
 
                     $.ajax({
-                        url: '@Url.Action("ListPostulantesPre", "Ranking", new { area = "Intranet"})',
+                        url: '@Url.Action("ListPostulantesPre", "Ranking", new { area = "Intranet" })',
                         type: 'post',
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(params),
@@ -112,7 +136,7 @@
                         }
                     });
                 },
-              colNames: ['', '', '', '', '', 'Apellidos', 'Nombres','Teléfono','Celular','Contactado', 'CV', '', 'Estado', 'Evaluación', 'Puntaje'],
+              colNames: ['', '', '', '', '', 'Apellidos', 'Nombres','Teléfono','Celular','Contactado', 'CV', '', 'Estado', 'Evaluación', 'Puntaje',''],
               colModel: [
                       { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
@@ -128,18 +152,17 @@
                       { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
                       { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                       { name: 'EvalPostulante', index: 'EvalPostulante', align: 'center', sortable: false, width: 200 },
-                      { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 }
+                      { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
+                      { name: 'IndAprobacion', index: 'IndAprobacion', align: 'center', sortable: false, hidden:true }
 
               ],
-
-            
 
               pager: jQuery('#grdPagerEvaluacion'),
               rowNum: 10,
               rowList: [10, 30, 50],
               autowidth: true,
               rules: true,
-              sortname: 'IdCvPostulante',
+              sortname: 'IdeReclutaPersona',
               sortorder: 'desc',
               viewrecords: true,
               height: 350,
@@ -147,7 +170,16 @@
               hidegrid: false,
               rownumbers: true,
               shrinkToFit: false,
-
+              afterInsertRow: function(rowid, aData){
+                  switch (aData.IndAprobacion) {
+                      case 'S':
+                          jQuery("#grdListEvaluacion").jqGrid('setCell', rowid, 'PtoTotal', '', { color: 'blue' });
+                          break;
+                      case 'N':
+                          jQuery("#grdListEvaluacion").jqGrid('setCell', rowid, 'PtoTotal', '', { color: 'red' });
+                          break;
+                    }
+              },
               postData: {
               }, loadComplete: function (data) {
               }
@@ -183,7 +215,7 @@
                             $.ajax({
                                 type: "POST",
                                 data: $("#frmPopuExclucion").serialize(),
-                                url: '@Url.Action("AsignaExclucionPost", "Ranking", new { area = "Intranet"})',
+                                url: '@Url.Action("AsignaExclucionPost", "Ranking", new { area = "Intranet" })',
 	            traditional: true,
 	            success: function (data) {
 		            if (data.Resultado) {
@@ -264,7 +296,7 @@
         function mostrarPopupExclucion(idSol, selr, tipSol) {
             var dialogDiv = $('#popupDialogExclucion');
 
-            $.get('@Url.Action("ExclucionPostulante", "Ranking", new { area = "Intranet"})?id=' + idSol + "&idPos=" + selr + "&tipSol=" + tipSol, function (data) {
+            $.get('@Url.Action("ExclucionPostulante", "Ranking", new { area = "Intranet" })?id=' + idSol + "&idPos=" + selr + "&tipSol=" + tipSol, function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#popupDialogExclucion"));
@@ -299,6 +331,32 @@
 
         }
 
+        function seleccionaPost(selr) {
+
+            $.ajax({
+                data: {
+                    id: selr
+                },
+                type: "POST",
+                url: '@Url.Action("SeleccionaPost", "Ranking")',
+                traditional: true,
+                success: function (data) {
+                @*if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }*@
+                    if (data.Resultado) {
+                        $('#grdListEvaluacion').trigger('reloadGrid');
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                }
+            });
+
+        }
+
+
+
   </script>
 }
 
@@ -312,6 +370,8 @@
 {
     @Html.ValidationSummary(true)
 
+     @Html.TextBoxFor(model => model.indPagina, new { style = "display: none;" }) 
+     @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
      @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
             @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" })  
     
@@ -330,7 +390,7 @@
 			            <label class="control-label" for="inputSuccess">Solicitud</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
-                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
 		   
@@ -340,7 +400,7 @@
 			            <label class="control-label" for="selectError">Cargo</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
-                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </div>
 		   
 		            </td>
@@ -352,7 +412,7 @@
 			            <label class="control-label" for="selectError">Dependencia</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
-                            @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
 			
@@ -362,7 +422,7 @@
 			            <label class="control-label" for="inputSuccess">Departamento</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
-                            @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 			            </div>
 		   
 		            </td>
@@ -374,7 +434,7 @@
 			            <label class="control-label" for="selectError">Area</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
-                            @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 			            </div>
 			
 		            </td>
@@ -383,7 +443,7 @@
 			            <label class="control-label" for="inputSuccess">Sede</label>
 			            <div class="controles">
 				           @* <input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
-                           @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                           @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
 			
@@ -410,11 +470,32 @@
                 </div>*@
             
             <div class="form-actions">
-                <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                
+                @if (Indicador.Si.Equals(Model.indPagina))
+                {
+                <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                }
+                else
+                {
+                    if (TipoSolicitud.Remplazo.Equals(Model.pagina))
+                    {
+                       <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>         
+                    }
+                
+                     if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
+                     {
+                       <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                     }
+                    //falta el nuevo
+                }
+                
+                
+                
                 <a class="btn btn-info" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
-                <a class="btn btn-info"><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
+                <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
                 <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
                 <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
+                <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>
                 
             </div>
         </div>

@@ -21,6 +21,51 @@
         $('#grdList').trigger('reloadGrid');
     });
 
+
+    $('#btnPreseleccion').click(function () {
+
+        var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+
+        var idSol = selr;
+        var tipSol = rowData.Tipsol;
+        var pagina = '@TipoSolicitud.Ampliacion';
+        var indPagina = '@Indicador.No';
+
+         if (idSol != null) {
+
+             var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+     });
+
+
+
+
+
+    $('#btnRankingSol').click(function () {
+        var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+        var pagina = '@TipoSolicitud.Ampliacion';
+        if (selr != null) {
+
+
+            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
+            window.location = url;
+
+
+        } else {
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+     });
+
+
+
     $('#btnAproRechaSol').click(function () {
         var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         if (ideSolAmpliacion != null) {
@@ -119,7 +164,7 @@
                 }
             });
         },
-     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa'],
+     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa',''],
      colModel: [
              { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
              { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
@@ -145,7 +190,8 @@
              { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
              { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300 },
              { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
-             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 }
+             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 },
+             { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true }
      ],
      pager: jQuery('#grdPager'),
      rowNum: 10,
@@ -311,8 +357,8 @@
             </div>
 
            <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
