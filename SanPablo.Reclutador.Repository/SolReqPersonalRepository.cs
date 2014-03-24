@@ -381,6 +381,8 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = obj.Tipsol;
                  lspcmd.Parameters.Add("p_nIdUsuario", OracleType.Number).Value = obj.idUsuarioResp;
 
+                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdeSede;
+                 
                  lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
                  ldrSolReqPersonal = (OracleDataReader)lspcmd.ExecuteReader();
                  lobSolReqPersonal = null;

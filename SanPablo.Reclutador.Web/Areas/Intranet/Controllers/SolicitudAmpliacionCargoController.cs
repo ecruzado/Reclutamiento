@@ -899,7 +899,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var idusuario = Session[ConstanteSesion.Usuario];
                     solicitudRequerimiento.idUsuarioResp = (int)idusuario;
-
+                    var idSede = Session[ConstanteSesion.Sede];
+                    solicitudRequerimiento.IdeSede = Convert.ToInt32(idSede);
 
                     lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
                 //}
