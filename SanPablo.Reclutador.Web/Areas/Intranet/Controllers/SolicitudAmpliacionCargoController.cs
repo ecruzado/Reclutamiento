@@ -896,7 +896,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solicitudRequerimiento.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
                     solicitudRequerimiento.Tipsol = TipoSolicitud.Ampliacion;
-                    solicitudRequerimiento.idUsuarioResp = (int)Session[ConstanteSesion.Usuario];
+
+                    var idusuario = Session[ConstanteSesion.Usuario];
+                    solicitudRequerimiento.idUsuarioResp = (int)idusuario;
+
 
                     lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
                 //}
