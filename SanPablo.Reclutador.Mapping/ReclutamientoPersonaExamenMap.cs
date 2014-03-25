@@ -16,11 +16,13 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IdeReclutamientoPersona, "IDERECLUTAPERSONA");
             Map(x => x.IdeEvaluacion, "IDEEVALUACION");
             Map(x => x.TipoSolicitud, "TIPSOLICITUD");
-            Map(x => x.IdeRolResponsable, "IDROLRESPONSABLE");
+            Map(x => x.IdeUsuarioResponsable, "IDUSUARESPONS");
             Map(x => x.FechaEvaluacion, "FECEVALUACION");
             Map(x => x.HoraEvaluacion, "HORAEVALUACION");
+            Map(x => x.Observacion, "OBSERVACION");
             Map(x => x.NotaFinal, "NOTAFINAL");
             Map(x => x.Archivo, "ARCHIVO");
+            Map(x => x.nombreArchivo, "NOMARCHIVO");
             Map(x => x.ComentarioResultado, "COMENTARIORESUL");
             Map(x => x.TipoEstadoEvaluacion, "TIPESTEVALUACION");
             Map(x => x.UsuarioCreacion, "USRCREACION");

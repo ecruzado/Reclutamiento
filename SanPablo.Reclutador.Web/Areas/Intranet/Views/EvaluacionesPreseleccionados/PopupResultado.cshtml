@@ -1,0 +1,230 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.EvaluacionesPreSeleccionadosViewModel
+@{
+    Layout = "";
+}
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
+ <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#image").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+            'script': '@Url.Action("Upload", "EvaluacionesPreSeleccionados")',
+            'scriptData': { ext: '.jpeg;.jpg;.gif;.bmp;.png;.pdf' },
+            'fileDataName': 'file',
+            'buttonText': 'Subir',
+            'fileDesc': 'Image Files',
+            'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+            'multi': false,
+            'auto': true,
+            'queueSizeLimit': '90',
+            'sizeLimit': 2147483647,
+            'removeCompleted': true,
+            'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
+
+            'onError': function (a, b, c, d) {
+                if (d.status == 404)
+                    alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                else if (d.type === "HTTP")
+                    alert("error " + d.type + ": " + d.status);
+                else if (d.type === "File Size")
+                    alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                else
+                    alert("error " + d.type + ": " + d.text);
+            },
+            'onSelect': function (e, q, f) {
+                var estado = true;
+                var fileName = f.name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                switch (fileNameExt) {
+                    case 'jpeg':
+                        break;
+                    case 'jpg':
+                        break;
+                    case 'gif':
+                        break;
+                    case 'bmp':
+                        break;
+                    case 'png':
+                        break;
+                    case 'pdf':
+                        break;
+                    default:
+                        MotoTravel.ShowAlert('', "extensión no válida");
+                        $("#fileInput").uploadifyCancel(q);
+                        $("#fileInput").uploadifyClearQueue();
+                        estado = false;
+                        break;
+                }
+
+                return estado;
+
+            },
+            'onComplete': function (event, queueId, fileObj, response, data) {
+
+                var rsp = jQuery.parseJSON(response);
+
+                if (rsp.Success == true) {
+                    $("#ReclutaPersonaExamen_rutaArchivo").val(rsp.Data.NombreArchivo);
+                    $("#nombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+
+
+                }
+                else {
+
+                }
+            }
+        });
+
+        var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
+          {
+              autoOpen: false,
+              modal: true,
+              title: "Cargar Imagen",
+              width: 500,
+              height: 240,
+              buttons: {
+                  "Subir": function () {
+                      //Guardar();
+                      return true;
+                  },
+                  "Cancelar": function () {
+                      $(this).dialog("close");
+                      return false;
+                  }
+              }
+          });
+    });
+
+
+    function getPdf()
+    {
+        var idReclutaExamen = $('#ReclutaPersonaExamen_IdeReclutamientoPersonaExamen').val();
+
+        window.open('@Url.Action("GetPdf", "EvaluacionesPreSeleccionados")' + '/' + idReclutaExamen);
+    }
+
+    function getImagen() {
+        var idReclutaExamen = $('#ReclutaPersonaExamen_IdeReclutamientoPersonaExamen').val();
+
+        window.open('@Url.Action("GetImage", "EvaluacionesPreSeleccionados")' + '/' + idReclutaExamen);
+    }
+
+    function information(selectorDiv, selectorSpan, msg, title, selr, accion) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaCriterio(selr, accion);
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+   
+</script>
+
+
+@using (Html.BeginForm("PopupResultado", "EvaluacionesPreSeleccionados", FormMethod.Post, new {enctype = "multipart/form-data", id = "PopupResultadoForm" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('mensajeError')" >×</a>
+         <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
+    </div>
+
+       <table style="width:100%;">         
+           <tr>               
+               <td colspan="2" style="height:10px;"></td>               
+           </tr>
+           <tr>
+               <td class="td-label" style="vertical-align:text-top"> Comentarios</td>
+               <td>
+                   @Html.TextAreaFor(model => model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen, new { style = "display: none;" })
+                   @Html.TextAreaFor(model=>model.ReclutaPersonaExamen.ComentarioResultado)
+                   <div class="tex-error" style="font-size:12px;color:red">    
+                      @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.ComentarioResultado)
+                   </div>
+               </td>
+           </tr>
+           <tr>               
+               <td colspan="2" style="height:5px;"></td>               
+           </tr>
+           <tr>               
+               <td class="td-label" style="vertical-align:text-top"> Resultado</td> 
+               <td>    
+                   @Html.DropDownListFor(model => model.ReclutaPersonaExamen.TipoEstadoEvaluacion, new SelectList(Model.ListaAprobadoDesaprobado, "Valor", "Descripcion", Model.ReclutaPersonaExamen.TipoEstadoEvaluacion))
+                   <div class="tex-error" style="font-size:12px;color:red">    
+                     @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.TipoEstadoEvaluacion)
+                   </div>
+               </td>
+           </tr>           
+            <tr>               
+               <td colspan="2" style="height:5px;"></td>               
+           </tr>
+            <tr>               
+               <td class="td-label">Archivo</td>
+               <td> <input class="input-file" id="fileInput" type="file"> </td>
+           </tr>  
+           <tr id="nombreImagen">
+                                   
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario" for="setInstitucion">Nombre Archivo</label>
+                                    </td>
+                                    <td class="colInput;input-xxlarge">
+                                        @Html.TextBoxFor(model => model.ReclutaPersonaExamen.rutaArchivo, new { @class = "textoFormulario" , @readonly = "readonly"})
+                                    </td>
+                                    
+                                    <td>
+                                 
+                                </tr>
+                                @* @if (!@Accion.Consultar.Equals(Model.Criterio.IndPagina)){
+                                *@<tr id="selecImagen">
+                                    <td class="colEtiqueta">
+                                        <label class="etiquetaFormulario">Archivo</label>
+                                    </td>
+                                    <td >
+                                        <div id="divImagen">
+                                           
+                                        <input type="file" name="image" id="image" />
+                                        
+                                        @Html.TextBoxFor(model => model.nombreTemporalArchivo,  new { style = "display: none;" })
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                 @*}*@
+                                 <tr id="verImagen">
+                                   @if (Model.ReclutaPersonaExamen.Archivo != null)
+                                   {
+                                       if (Model.tipoArchivo == "pdf")
+                                       { 
+                                           <td>
+                                            <a id="btnGetPDF" class="btn btn-info" onclick="getPdf()"><i class="icon-edit icon-white"></i> Mostrar PDF</a>
+                                           </td>
+                                       }
+                                       
+                                        <td class="colEtiqueta"></td>
+                                        <td class ="colInput" >
+                                            <img ref="#" id="ImgCriterio" onclick="mostrarImagen()" height ="150" width="150" src="@Url.Action("GetImage", "EvaluacionesPreSeleccionados", new { id = Model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen })" /> 
+                                        </td>
+                                            
+                                   }
+                                 </tr>
+
+          
+       </table>
+             
+
+            
+
+}

@@ -12,6 +12,8 @@
         Int32 insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea);
 
         LogSolicitudNuevoCargo responsablePublicacion(int ideCargo, int ideSede);
+
+        List<SolicitudNuevoCargo> GetListaSolicitudNuevo(SolicitudNuevoCargo solicitud);
     }
 
 }

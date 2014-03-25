@@ -7,7 +7,7 @@ namespace SanPablo.Reclutador.Repository.Interface
     
     public interface IReclutamientoPersonaExamenRepository : IRepository<ReclutamientoPersonaExamen>
     {
-        List<ReclutamientoPersonaExamen> obtenerEvaluacionesPostulante(int idePostulante, int idReclutaPersona);
+        List<ReclutamientoPersonaExamen> obtenerEvaluacionesPostulante(int idePostulante, int idReclutaPersona, string usuarioSession);
     }
 
     

@@ -1,0 +1,133 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.EvaluacionesPreSeleccionadosViewModel
+@{
+    ViewBag.Title = "ProgramarEvaluacion";
+}
+@section Head{
+}
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+
+            
+            $('#btnBusquedaUsuario').click(function () {
+                mostrarBusquedaUsuario();
+            });
+
+            $('#updateDialog').dialog({
+                autoOpen: false,
+                width: 500,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function (e) {
+                        e.preventDefault();
+                        var idUsuario = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
+                        var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', idUsuario)
+                        if (idUsuario != null) {
+                            $('#ReclutaPersonaExamen_IdeUsuarioResponsable').val(idUsuario);
+                            $('#nombreUsuario').val(rowData.ApePaterno + ' ' + rowData.ApeMaterno + ' ' + rowData.Nombres);
+                            $(this).dialog("close");
+                        }
+                        else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+              });
+
+            $("#txtecha").datepicker();      
+
+        });
+
+        function mostrarBusquedaUsuario() {
+            var dialogDiv = $('#updateDialog');
+            $.get('@Url.Action("Index", "BusquedaUsuario")', function (data) {
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+    </script>
+}
+
+@using (Html.BeginForm("ProgramarEvaluacion", "EvaluacionesPreseleccionados", FormMethod.Post, new { id = "frmPopupCvPostulante" }))
+{
+    @Html.ValidationSummary(true)
+
+<div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Programar Evaluación</h5>
+            </div>
+            <form class="formulario-busqueda">
+                <div class="grilla-opciones" style="margin-top:0px;">
+                    <h6>Examen</h6>
+                    <div style="clear:both"></div>
+                </div>
+                <table class="formulario-busqueda">
+                   <tr class="formulario-fila">
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Fecha</label>
+                        <div class="controles">
+                            @Html.TextBoxFor(model=>model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen, new {style = "display:none"})
+                            @Html.EditorFor(model=>model.ReclutaPersonaExamen.FechaEvaluacion,new { @class = "textoFormulario" ,  maxlength="15", placeholder="Fecha Evaluación"})
+                            <div class="tex-error" style="font-size:12px;color:red">    
+                                @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.FechaEvaluacion)
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <label class="control-label" for="selectError">Hora</label>
+                        <div class="controles">
+                             @Html.EditorFor(model=>model.ReclutaPersonaExamen.HoraEvaluacion, new { @class = "textoFormulario"})
+                            <div class="tex-error" style="font-size:12px;color:red">    
+                                @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.HoraEvaluacion)
+                            </div>
+                         </div>
+                    </td>
+                </tr>
+                   <tr class="formulario-fila">
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Responsable</label>
+                        <div class="controles">
+                            @Html.TextBoxFor(model => model.ReclutaPersonaExamen.IdeUsuarioResponsable, new { style="display: none;" })
+                            @Html.TextBoxFor(model => model.nombreUsuario, new { disabled = "disabled" })
+                            <div class="tex-error" style="font-size:12px;color:red">    
+                                @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.IdeUsuarioResponsable)
+                            </div>
+                            <a href="#" id="btnBusquedaUsuario"><img src="@Url.Content("~/Content/images/action_search.gif")" /> </a>
+                        </div>
+                    </td>
+                    <td class="span5">
+                            <label class="control-label" for="selectError">Observación</label>
+                            <div class="controles">
+                               @Html.TextAreaFor(model => model.ReclutaPersonaExamen.Observacion, new {@class="input-large" })
+                               <div class="tex-error" style="font-size:12px;color:red">    
+                                @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.Observacion)
+                              </div>
+                            </div>
+                    </td>
+                </tr>
+                </table>
+            </form>
+            <div class="form-actions">                        
+                <a class="btn" href="@Url.Action("EvaluacionesPreSeleccionados", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <button class="btn btn-info" type ="submit" ><i class="icon-check icon-white"></i> Grabar</button>                        
+            </div>
+        </div>
+    </div>
+</div>
+    
+}
+
+<div id="updateDialog" title="Busqueda Usuario"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>

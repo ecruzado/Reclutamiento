@@ -55,108 +55,81 @@
         [HttpPost]
         public virtual JsonResult ListaSolicitudes(GridTable grid)
         {
+            SolicitudNuevoCargo solicitudNuevo;
+            List<SolicitudNuevoCargo> lista = new List<SolicitudNuevoCargo>();
             try
             {
 
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<ListaSolicitudNuevoCargo>();
+                solicitudNuevo = new SolicitudNuevoCargo();
 
-                if (
-                    (!"Seleccionar".Equals(grid.rules[1].data) && grid.rules[1].data != null && grid.rules[1].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0") ||
-                    (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
-                   )
+                solicitudNuevo.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
+                solicitudNuevo.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+                solicitudNuevo.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+                solicitudNuevo.TipoResponsable = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
+
+                if (grid.rules[5].data != null && grid.rules[6].data != null)
                 {
-
-                    if (!"Seleccionar".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                    {
-                        where.Add(Expression.Eq("NombreCargo", grid.rules[1].data));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                    {
-                        where.Add(Expression.Eq("IdeDependencia", Convert.ToInt32(grid.rules[2].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeDepartamento", Convert.ToInt32(grid.rules[3].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeArea", Convert.ToInt32(grid.rules[4].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
-                    {
-                        where.Add(Expression.Eq("IdeResponsable",Convert.ToInt32(grid.rules[5].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
-                    {
-                        where.Add(Expression.Eq("TipoEtapa", grid.rules[6].data));
-                    }
-                    if (!"".Equals(grid.rules[7].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
-                    {
-                        where.Add(Expression.Eq("EstadoActivo", grid.rules[6].data));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[8].data) && grid.rules[7].data != null && grid.rules[7].data != "0")
-                    {
-                        where.Add(Expression.Ge("FechaCreacion", Convert.ToDateTime(grid.rules[7].data)));
-                    }
-                    if (!"Seleccionar".Equals(grid.rules[9].data) && grid.rules[8].data != null && grid.rules[8].data != "0")
-                    {
-                        where.Add(Expression.Le("FechaCreacion", Convert.ToDateTime(grid.rules[8].data)));
-                    }
-
+                    solicitudNuevo.FechaBusquedaInicio = Convert.ToDateTime(grid.rules[5].data);
+                    solicitudNuevo.FechaBusquedaFin = Convert.ToDateTime(grid.rules[6].data);
                 }
 
-                var generic = Listar(_listaSolicitudRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
+                solicitudNuevo.IdeDepartamento = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[7].data));
+                solicitudNuevo.TipoEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
+                solicitudNuevo.TipoEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
+
+                solicitudNuevo.IdeUsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+
+                solicitudNuevo.IdeSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                lista = _solicitudNuevoCargoRepository.GetListaSolicitudNuevo(solicitudNuevo);
+
+
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
                     id = item.IdeSolicitudNuevoCargo.ToString(),
                     cell = new string[]
                             {
+                               
                                 "1",
-                                item.EstadoActivo==null?"":item.EstadoActivo,
-                                item.CodigoCargo==null?"":item.CodigoCargo,
+                                item.TipoEstado==null?"":item.TipoEstado,
+                                item.IdeSolicitudNuevoCargo==null?"":item.IdeSolicitudNuevoCargo.ToString(),
+                                item.CodigoCargo==null?"":item.CodigoCargo.ToString(),
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
                                 item.NombreCargo==null?"":item.NombreCargo,
-                                item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
-                                item.NombreDependencia==null?"":item.NombreDependencia,
-                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
-                                item.NombreDepartamento==null?"":item.NombreDepartamento,
-                                item.IdeArea==0?"":item.IdeArea.ToString(),
-                                item.NombreArea==null?"":item.NombreArea,
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
-                                item.NumeroPosiciones==0?"0":item.NumeroPosiciones.ToString(),
+                                item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
+                                item.DependenciaDescripcion==null?"":item.DependenciaDescripcion,
+                                item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
+                                item.DepartamentoDescripcion==null?"":item.DepartamentoDescripcion,
+                                item.IdeArea==null?"":item.IdeArea.ToString(),
+                                item.AreaDescripcion==null?"":item.AreaDescripcion,
+                                item.NumeroPosiciones==null?"":item.NumeroPosiciones.ToString(),
+                                item.Postulantes==null?"":item.Postulantes.ToString(),
+                                item.PreSeleccionados==null?"":item.PreSeleccionados.ToString(),
+                                item.Evaluados==null?"":item.Evaluados.ToString(),
+                                item.Seleccionados==null?"":item.Seleccionados.ToString(),
                                 item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.IdeResponsable ==null?"":item.IdeResponsable.ToString(),
-                                item.Responsable==null?"":item.Responsable,
-                                
+                                item.FechaExpiracion==null?"":item.FechaExpiracion.ToString(),
+                               
+                                item.IdRolSuceso==null?"":item.IdRolSuceso.ToString(),
+                                item.RolSuceso==null?"":item.RolSuceso,
                                 item.NombreResponsable==null?"":item.NombreResponsable,
-                                item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
-                                item.TipoEtapa==null?"":item.TipoEtapa.ToString(),
-                                item.Etapa==null?"":item.Etapa,
                                 
+                                item.IndicadoPublicado==null?"":item.IndicadoPublicado,
+                                item.TipoEtapa==null?"":item.TipoEtapa,
+                                item.IdeUsuarioResponsable ==null?"":item.IdeUsuarioResponsable.ToString(),
+                               
                             }
-
-
                 }).ToArray();
 
                 return Json(generic.Value);
+
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+
                 return MensajeError();
             }
         }

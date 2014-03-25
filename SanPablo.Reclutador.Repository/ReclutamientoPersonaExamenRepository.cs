@@ -26,11 +26,12 @@ namespace SanPablo.Reclutador.Repository
         {
         }
 
-        public List<ReclutamientoPersonaExamen> obtenerEvaluacionesPostulante(int idePostulante, int idReclutaPersona)
+        public List<ReclutamientoPersonaExamen> obtenerEvaluacionesPostulante(int idePostulante, int idReclutaPersona, string usuarioSession)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
             {
+               
 
                 IDataReader drEvaluaciones;
                 ReclutamientoPersonaExamen objEvaluacion;
@@ -41,6 +42,7 @@ namespace SanPablo.Reclutador.Repository
                 lspcmd.Connection = lcon;
                 lspcmd.Parameters.Add("p_idePostulante", OracleType.Int32).Value = idePostulante;
                 lspcmd.Parameters.Add("p_ideReclutPost", OracleType.Int32).Value = idReclutaPersona;
+                lspcmd.Parameters.Add("p_usuarioCreacion", OracleType.VarChar).Value = usuarioSession;
                 lspcmd.Parameters.Add("p_cuExamenes", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 drEvaluaciones = (OracleDataReader)lspcmd.ExecuteReader();
@@ -53,30 +55,31 @@ namespace SanPablo.Reclutador.Repository
                     objEvaluacion.IdeReclutamientoPersonaExamen = Convert.ToInt32(drEvaluaciones["IDERECLUPERSOEXAMEN"]);
                     objEvaluacion.IdeReclutamientoPersona = Convert.ToInt32(drEvaluaciones["IDERECLUTAPERSONA"]);
                     objEvaluacion.IdeEvaluacion = Convert.ToInt32(drEvaluaciones["IDEEVALUACION"]);
-                    objEvaluacion.IdeRolResponsable = Convert.ToInt32(drEvaluaciones["IDROLRESPONSABLE"]);
-                    objEvaluacion.FechaEvaluacion = Convert.ToDateTime(drEvaluaciones["FECEVALUACION"]);
-                    objEvaluacion.HoraEvaluacion = Convert.ToDateTime(drEvaluaciones["HORAEVALUACION"]);
-                    objEvaluacion.TipoEstadoEvaluacion = Convert.ToString(drEvaluaciones["NOMBSEDE"]);
-                    objEvaluacion.NotaFinal = Convert.ToInt32(drEvaluaciones["NOTAFINAL"]);
-                    objEvaluacion.ComentarioResultado = Convert.ToString(drEvaluaciones["COMENTARIORESUL"]);
                     objEvaluacion.DescripcionExamen = Convert.ToString(drEvaluaciones["NOMEXAMEN"]);
                     objEvaluacion.TipoExamen = Convert.ToString(drEvaluaciones["TIPOEXAMEN"]);
-                    objEvaluacion.ResponsableDescripcion = Convert.ToString(drEvaluaciones["DSCROL"]);
+                    objEvaluacion.IdeUsuarioResponsable = Convert.ToInt32(drEvaluaciones["IDUSUARESPONS"]);
+                    objEvaluacion.UsuarioResponsable = Convert.ToString(drEvaluaciones["USUARIORESP"]);
+
+                    objEvaluacion.TipoEstadoEvaluacion = Convert.ToString(drEvaluaciones["TIPESTEVALUACION"]);
                     objEvaluacion.EstadoEvaluacion = Convert.ToString(drEvaluaciones["ESTADOEVALUACION"]);
+
+                    var fecEvaluacion = Convert.ToString(drEvaluaciones["FECEVALUACION"]);
+                    if (fecEvaluacion.Length > 0)
+                    {
+                        objEvaluacion.FechaEvaluacion = Convert.ToDateTime(drEvaluaciones["FECEVALUACION"]);
+                    }
+                    
+                    var horaEvaluacion = Convert.ToString(drEvaluaciones["HORAEVALUACION"]);
+                    if (horaEvaluacion.Length > 0)
+                    {
+                        objEvaluacion.HoraEvaluacion = Convert.ToDateTime(drEvaluaciones["HORAEVALUACION"]);
+                    }
+
+                    objEvaluacion.NotaFinal = Convert.ToInt32(drEvaluaciones["NOTAFINAL"]);
+                    objEvaluacion.ComentarioResultado = Convert.ToString(drEvaluaciones["COMENTARIORESUL"]);
+                    
                     listaEvaluaciones.Add(objEvaluacion);
                 }
-
-
-                
-
-
-
-
-
-
-
-
-
 
                 drEvaluaciones.Close();
                 return listaEvaluaciones;

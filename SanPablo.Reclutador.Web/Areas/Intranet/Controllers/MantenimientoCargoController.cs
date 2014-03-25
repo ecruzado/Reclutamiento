@@ -453,21 +453,9 @@
 
                 cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
-                cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
-                cargoEditar.PuntajeMinimoSexo = cargo.PuntajeMinimoSexo;
-                cargoEditar.PuntajeMinimoSalario = cargo.PuntajeMinimoSalario;
-                cargoEditar.PuntajeMinimoNivelEstudio = cargo.PuntajeMinimoNivelEstudio;
-                cargoEditar.PuntajeMinimoCentroEstudio = cargo.PuntajeMinimoCentroEstudio;
-                cargoEditar.PuntajeMinimoExperiencia = cargo.PuntajeMinimoExperiencia;
-                cargoEditar.PuntajeMinimoOfimatica = cargo.PuntajeMinimoOfimatica;
-                cargoEditar.PuntajeMinimoIdioma = cargo.PuntajeMinimoIdioma;
-                cargoEditar.PuntajeMinimoConocimientoGeneral = cargo.PuntajeMinimoConocimientoGeneral;
-                cargoEditar.PuntajeMinimoDiscapacidad = cargo.PuntajeMinimoDiscapacidad;
-                cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
-                cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
                 cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
+                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
 
                 if (!result.IsValid)
                 {

@@ -10,6 +10,22 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $('#btnProgramarEvaluacion').click(function () {
+
+            var id = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdList').jqGrid('getRowData', id);
+
+            var idReclutaExamen = rowData.IdeRecluPersoExam;
+            var nombreResponsable = rowData.Responsable;
+            if (idReclutaExamen != null && idReclutaExamen > 0)  {
+                var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "",area="Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable;
+                window.location = url;
+            } else {
+                MostrarMensaje('Seleccione un exámen a programar', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+
 
         jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
@@ -22,8 +38,8 @@
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
 
-                    { field: 'idSol', data: $("#Solicitud_IdeSolReqPersonal").val() },
-                    { field: 'tipSol', data: $("#Solicitud_Tipsol").val() }
+                    { field: 'idRecluPers', data: $("#ReclutaPersona_IdeReclutaPersona").val() },
+                    { field: 'idPostulante', data: $("#PostulantePreSel_IdePostulante").val() }
 
                 ];
 
@@ -37,78 +53,95 @@
 
                 $.ajax({
                     url: '@Url.Action("ListEvaluacionesPost", "EvaluacionesPreSeleccionados", new { area = "Intranet"})',
-                        type: 'post',
-                        contentType: 'application/json; charset=utf-8',
-                        data: JSON.stringify(params),
-                        async: false,
-                        success: function (data, st) {
-                            if (st == 'success') {
-                                var jq = $('#grdList')[0];
-                                jq.addJSONData(data);
-                            }
-                        },
-                        error: function (e) {
-                            console.log(e);
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList')[0];
+                            jq.addJSONData(data);
                         }
-                    });
-                },
-            colNames: ['Descripci&oacuten', 'Tipo', 'Archivo', 'Fecha', 'Hora', 'Responsable', 'Estado', 'Ptje.Total', 'Resultado'],
-             colModel: [
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['','','','Descripci&oacuten', 'Tipo', 'Fecha', 'Hora','', 'Responsable','', 'Estado', 'Ptje.Total', 'Resultado',''],
+            colModel: [
+                     { name: 'IdeRecluPersoExam', index: 'IdeRecluPersoExam', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
+                     { name: 'IdeEvaluacion', index: 'IdeEvaluacion', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', formatter: DescripcionFormatter },
                      { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                     { name: 'Archivo', index: 'Archivo', align: 'center', editable: false, sortable: false },
-                     { name: 'Fecha', index: 'Fecha', align: 'center', editable: false, sortable: false, width: 300 },
-                     { name: 'Hora', index: 'Hora', align: 'center', editable: false, sortable: false, width: 300 },
+                     { name: 'Fecha', index: 'Fecha', align: 'center', editable: false, sortable: false, width: 100 },
+                     { name: 'Hora', index: 'Hora', align: 'center', editable: false, sortable: false, width: 90 },
+                     { name: 'IdeUsuarioResp', index: 'IdeUsuarioResp', align: 'center', editable: false, sortable: false, hidden: true },
                      { name: 'Responsable', index: 'Responsable', align: 'center', editable: false, sortable: false, width: 300 },
-                     { name: 'Estado', index: 'Estado', align: 'center', editable: false, sortable: false, width: 300 },
+                     { name: 'TipoEstado', index: 'TipoEstado', align: 'center', editable: false, sortable: false, hidden:true },
+                     { name: 'Estado', index: 'Estado', align: 'center', editable: false, sortable: false, width: 130 },
                      { name: 'PuntajeTotal', index: 'PuntajeTotal', align: 'center', editable: false, sortable: false, width: 150 },
-                     { name: 'Notas', index: 'Notas', align: 'center', sortable: false, width: 60, formatter: NotaFormatter }
+                     { name: 'Notas', index: 'Notas', align: 'center', sortable: false, width: 60, formatter: NotaFormatter },
+                     { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, hidden: true }
 
-             ],
+            ],
 
-             pager: jQuery('#grdPager'),
-             rowNum: 10,
-             rowList: [10, 30, 50],
-             autowidth: true,
-             rules: true,
-             //sortname: 'Descripcion', actualizar dato
-             sortorder: 'desc',
-             viewrecords: true,
-             height: 350,
-             cellsubmit: 'clientArray',
-             hidegrid: false,
-             rownumbers: true,
-             shrinkToFit: false,
+            pager: jQuery('#grdPager'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            //sortname: 'Descripcion', actualizar dato
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 350,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
 
-             postData: {
-             }, loadComplete: function (data) {
-             }
-         });
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });
 
 
         
+        $('#updateDialog').dialog({
+            autoOpen: false,
+            width: 460,
+            height: 270,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Grabar": function (e) {
+                    e.preventDefault();
+                    var result = $('#PopupResultadoForm').valid();
+                    if (result) {
+                        $.post('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")',
+                                $("#PopupResultadoForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        $("#updateDialog").dialog("close");
+                                        $('#grdList').trigger('reloadGrid');
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                });
+                    }
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
                 
-
-
-       var dlgobservacion = $("#dlgcomentario").dialog(
-       {
-           autoOpen: false,
-           modal: true,
-           title: "Resultado",
-           width: 460,
-           height: 270,
-           buttons: {
-               "Grabar": function () {
-                   //AsociarReciboAPolizaCorrecta();
-                   return true;
-               },
-               "Cancelar": function () {
-                   $(this).dialog("close");
-                   return false;
-               }
-           }
-       });
-
     });
 
     function DescripcionFormatter(cellvalue, options, rowObject) {
@@ -141,9 +174,17 @@
             return strImg;
         }
 
-        function mostraringresoocomentario() {
-            $("#dlgcomentario").dialog('open');
+    function mostraringresoocomentario() {
+        var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
+            var dialogDiv = $('#updateDialog');
+            $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
+                dialogDiv.html(data);
+                $.validator.unobtrusive.parse($("#updateDialog"));
+                dialogDiv.dialog('open');
+            });
         }
+   }
 
 </script>
 }
@@ -164,110 +205,104 @@
                 <h6>Datos Evaluación</h6>
                 <div style="clear:both"></div>
             </div>
-            <div class="formulario-fila">
-                <div class="span5">
-                    <div class="">
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    <td class="span5">
                         <label class="control-label" for="inputSuccess">Solicitud</label>
-                        <div class="controles">
-                            @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
-                        </div>
+                    <div class="controles">
+                        @Html.TextBoxFor(model => model.ReclutaPersona.IdeReclutaPersona, new { style = "display: none"})
+                        @Html.TextBoxFor(model => model.PostulantePreSel.IdePostulante, new { style = "display: none"})
+                        @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { disabled = "disabled" })
                     </div>
-                </div>                    
-                <div class="span5">
-                    <div class="">
+                    </td>
+                    <td class="span5">
                         <label class="control-label" for="inputSuccess">Cargo</label>
                         <div class="controles">
-                            @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { disabled = "disabled" })
-                            @*<input type="text" class="input-xlarge" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                         @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { disabled = "disabled" })
+                       </div>
+                   </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Sede</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Dependencia</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Departamento</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Area</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.Solicitud.Area_des, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
                         </div>
                     </div>
-                </div>
-            </div>
+                </td>
+            </tr>
+            </table>
             <div class="grilla-opciones" style="margin-top:0px;">
                 <h6>Datos del Postulante</h6>
                 <div style="clear:both"></div>
             </div>
-            <div class="formulario-fila">
-                <div class="span5">
+
+            <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Nombre</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.PostulantePreSel.NombreCompleto, new { disabled = "disabled" })
-                            @*<input type="text" class="input-xlarge" id="txtnombrepostulante" disabled="disabled" value="Linares Roca Miguel Fransisco">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Correo</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.PostulantePreSel.Correo, new { disabled = "disabled" })
-                            @*<input type="text" class="input-xlarge" id="txtcorreopostulante" disabled="disabled" value="lroca@gmail.com">*@
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="formulario-fila">
-                <div class="span5">
+                </td>
+            </tr>
+                <tr class="formulario-fila">
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Teléfono</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.PostulantePreSel.TelefonoFijo, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txttelefonofijopostulante" disabled="disabled" value="2661960">*@
                         </div>
                     </div>
-                </div>                    
-                <div class="span5">
+                </td>                    
+                <td class="span5">
                     <div class="">
                         <label class="control-label" for="inputSuccess">Móvil</label>
                         <div class="controles">
                             @Html.TextBoxFor(model => model.PostulantePreSel.TelefonoMovil, new { disabled = "disabled" })
-                            @*<input type="text" class="input-medium" id="txttelefonomovilpostulante" disabled="disabled" value="991148756">*@
                         </div>
                     </div>
-                </div>
-            </div>
+                </td>
+            </tr>
+            </table>
+                
             <div class="grilla-opciones" style="margin-top:0px;">
                 <h6>Evaluaciones</h6>
                 <div style="clear:both"></div>
@@ -285,42 +320,15 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("ProgramarEvaluacion", "SolicitudCargo")"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
+                <a class="btn btn-info" id="btnProgramarEvaluacion"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
             </div>
         </div>
     </div>
 </div>
 
 }
-<div id="dlgcomentario">
 
-       <table style="width:100%;">         
-           <tr>               
-               <td colspan="2" style="height:10px;"></td>               
-           </tr>
-           <tr>
-               <td class="td-label" style="vertical-align:text-top"> Comentarios</td>
-               <td><textarea class="input-porce" id="tacomentario" rows="5"></textarea></td>
-           </tr>
-           <tr>               
-               <td colspan="2" style="height:5px;"></td>               
-           </tr>
-           <tr>               
-               <td class="td-label" style="vertical-align:text-top"> Resultado</td> 
-               <td>    
-                <select class="input-medium">
-                    <option>Aprobado</option>
-                    <option>Desaprobado</option>
-                </select>
-               </td>
-           </tr>           
-            <tr>               
-               <td colspan="2" style="height:5px;"></td>               
-           </tr>
-            <tr>               
-               <td class="td-label">Archivo</td>
-               <td> <input class="input-file" id="fileInput" type="file"> </td>
-           </tr>         
-       </table>
-            
-
-        </div>
+<div id="updateDialog" title="Resultado"></div>
+    <div id="divMensaje">
+        <span id="spanMensaje"></span>
+    </div>

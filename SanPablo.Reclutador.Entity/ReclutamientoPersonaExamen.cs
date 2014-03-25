@@ -13,8 +13,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeReclutamientoPersona {get; set;}      
         public virtual int IdeEvaluacion {get; set;}      
         public virtual string TipoSolicitud {get; set;}      
-        public virtual int IdeRolResponsable {get; set;}
-        
+        public virtual int IdeUsuarioResponsable {get; set;}
+        public virtual string UsuarioResponsable { get; set; }
+        public virtual string Observacion { get; set; }
         /// <summary>
         /// fecha de programacion de evaluacion
         /// </summary>
@@ -26,11 +27,14 @@ namespace SanPablo.Reclutador.Entity
         /// Hora de programacion de evaluacion
         /// </summary>
         [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]   
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 
         public virtual DateTime? HoraEvaluacion {get; set;}      
 
-        public virtual int NotaFinal {get; set;}      
-        public virtual string Archivo {get; set;}      
+        public virtual int NotaFinal {get; set;}
+
+        public virtual string rutaArchivo { get; set; }
+        public virtual string nombreArchivo { get; set; }
+        public virtual byte[] Archivo {get; set;}      
         public virtual string ComentarioResultado {get; set;}      
         public virtual string TipoEstadoEvaluacion {get; set;}
 
@@ -41,8 +45,7 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual string TipoExamen { get; set; }
 
-        public virtual string ResponsableDescripcion { get; set; }
-
+        
         public virtual string EstadoEvaluacion { get; set; }
 
     }
