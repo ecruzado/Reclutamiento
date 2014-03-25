@@ -305,6 +305,28 @@ namespace SanPablo.Reclutador.Web.Core
             get { return DateTime.Now; }
         }
 
+        protected int IdePostulantePreSeleccion
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdePostulantePreSele];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdePostulantePreSele, value);
+            }
+        }
+        protected int IdeReclutaPersona
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeReclutaPersona];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdeReclutaPersona, value);
+            }
+        }
         protected DatosCargo CargoPerfil
         {
             get 

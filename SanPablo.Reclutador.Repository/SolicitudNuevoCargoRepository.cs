@@ -173,5 +173,110 @@
             }
 
         }
+        /// <summary>
+        /// obtiene las solicitudes resultado de la busqueda inicial
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<SolicitudNuevoCargo> GetListaSolicitudNuevo(SolicitudNuevoCargo solicitud)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                string cFechaIncial = solicitud.FechaBusquedaInicio == null ? "" : String.Format("{0:dd/MM/yyyy}", solicitud.FechaBusquedaInicio);
+                string cFechaFinal = solicitud.FechaBusquedaFin == null ? "" : String.Format("{0:dd/MM/yyyy}", solicitud.FechaBusquedaFin);
+
+                IDataReader drSolicitudNuevo;
+                SolicitudNuevoCargo solicitudNuevo;
+                List<SolicitudNuevoCargo> listaSolicitudesNuevo;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.FN_GET_LISTACARGO");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = solicitud.IdeCargo;
+                lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = solicitud.IdeDependencia;
+                lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = solicitud.IdeDepartamento;
+                lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = solicitud.IdeArea;
+                lspcmd.Parameters.Add("p_cTipEtapa", OracleType.VarChar).Value = solicitud.TipoEtapa;
+                lspcmd.Parameters.Add("p_cTipResp", OracleType.Int32).Value = solicitud.TipoResponsable;
+                lspcmd.Parameters.Add("p_cEstado", OracleType.VarChar).Value = solicitud.TipoEstado;
+                lspcmd.Parameters.Add("p_cFecIni", OracleType.VarChar).Value = cFechaIncial;
+                lspcmd.Parameters.Add("p_cFeFin", OracleType.VarChar).Value = cFechaFinal;
+                lspcmd.Parameters.Add("p_nIdUsuario", OracleType.Number).Value = solicitud.IdeUsuarioResponsable;
+
+                lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = solicitud.IdeSede;
+
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                drSolicitudNuevo = (OracleDataReader)lspcmd.ExecuteReader();
+                solicitudNuevo = null;
+                listaSolicitudesNuevo = new List<SolicitudNuevoCargo>();
+
+
+
+                while (drSolicitudNuevo.Read())
+                {
+                    solicitudNuevo = new SolicitudNuevoCargo();
+                    solicitudNuevo.IdeSolicitudNuevoCargo = Convert.ToInt32(drSolicitudNuevo["IDESOLNUEVOCARGO"]);
+                    solicitudNuevo.CodigoCargo = Convert.ToString(drSolicitudNuevo["CODCARGO"]);
+                    solicitudNuevo.IdeCargo = Convert.ToInt32(drSolicitudNuevo["IDECARGO"]);
+                    solicitudNuevo.NombreCargo = Convert.ToString(drSolicitudNuevo["NOMCARGO"]);
+                    solicitudNuevo.IdeDependencia = Convert.ToInt32(drSolicitudNuevo["IDEDEPENDENCIA"]);
+                    solicitudNuevo.DependenciaDescripcion = Convert.ToString(drSolicitudNuevo["DESDEPENDENCIA"]);
+                    solicitudNuevo.IdeDepartamento = Convert.ToInt32(drSolicitudNuevo["IDEDEPARTAMENTO"]);
+                    solicitudNuevo.DepartamentoDescripcion = Convert.ToString(drSolicitudNuevo["DESDEPARTAMENTO"]);
+                    solicitudNuevo.IdeArea = Convert.ToInt32(drSolicitudNuevo["IDEAREA"]);
+                    solicitudNuevo.AreaDescripcion = Convert.ToString(drSolicitudNuevo["DESAREA"]);
+
+                    solicitudNuevo.NumeroPosiciones = Convert.ToInt32(drSolicitudNuevo["NUMPOSICION"]);
+                    solicitudNuevo.Postulantes = Convert.ToInt32(drSolicitudNuevo["POSTULANTES"]);
+                    solicitudNuevo.PreSeleccionados = Convert.ToInt32(drSolicitudNuevo["PRESELECCIONADOS"]);
+                    solicitudNuevo.Evaluados = Convert.ToInt32(drSolicitudNuevo["EVALUADOS"]);
+                    solicitudNuevo.Seleccionados = Convert.ToInt32(drSolicitudNuevo["SELECCIONADOS"]);
+
+
+                    solicitudNuevo.IdRolSuceso = Convert.ToInt32(drSolicitudNuevo["ROLRESP"]);
+                    solicitudNuevo.RolSuceso = Convert.ToString(drSolicitudNuevo["DESROL"]);
+
+                    solicitudNuevo.TipoEstado = Convert.ToString(drSolicitudNuevo["ESTADO"]);
+                    solicitudNuevo.TipoEtapa = Convert.ToString(drSolicitudNuevo["TIPETAPA"]);
+
+                    var fecPublicacion = Convert.ToString(drSolicitudNuevo["FECPUBLICACION"]);
+                    if (fecPublicacion.Length > 0)
+                    {
+                        solicitudNuevo.FechaPublicacion = Convert.ToDateTime(drSolicitudNuevo["FECPUBLICACION"]);
+                    }
+                    var fecCreacion = Convert.ToString(drSolicitudNuevo["FECCREACION"]);
+                    if (fecCreacion.Length > 0)
+                    {
+                        solicitudNuevo.FechaCreacion = Convert.ToDateTime(drSolicitudNuevo["FECCREACION"]);
+                    }
+
+                    var fecExpiracion = Convert.ToString(drSolicitudNuevo["FECEXPIRACION"]);
+                    if (fecExpiracion.Length > 0)
+                    {
+                        solicitudNuevo.FechaExpiracion = Convert.ToDateTime(drSolicitudNuevo["FECEXPIRACION"]);
+                    }
+
+
+                    solicitudNuevo.NombreResponsable = Convert.ToString(drSolicitudNuevo["NOMPERSONREEMPLAZO"]);
+                    solicitudNuevo.IndicadoPublicado = Convert.ToString(drSolicitudNuevo["PUBLICADO"]);
+                    solicitudNuevo.IdeUsuarioResponsable = Convert.ToInt32(drSolicitudNuevo["ID_USUARIO_RESP"]);
+
+                    listaSolicitudesNuevo.Add(solicitudNuevo);
+                }
+                drSolicitudNuevo.Close();
+                return listaSolicitudesNuevo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
     }
 }

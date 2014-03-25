@@ -80,7 +80,9 @@
         /// <summary>
         /// Estados del postulante
         /// </summary>
-        EstadoPostulante = 51
+        EstadoPostulante = 51,
+
+        EstadoEvaluacion = 52
 
 
     }
@@ -158,6 +160,15 @@
         public const string Evaluado = "03";
         public const string Aprobado = "04";
         public const string Desaprobado = "05";
+    }
+
+    /// <summary>
+    /// Notas referenciales
+    /// </summary>
+    public sealed class NotaEvaluacion
+    {
+        public const int Aprobado = 16;
+        public const int Desaprobado = 8;
     }
 
     /// <summary>
