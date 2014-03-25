@@ -25,7 +25,7 @@
         List<OportunidadLaboral> GetMisPostulaciones(OportunidadLaboral obj);
         List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj);
         List<ReclutamientoPersona> GetPostulantesPreseleccionado(ReclutamientoPersona obj);
-      
+        List<ReclutamientoPersona> GetPostulantesSeleccionados(ReclutamientoPersona obj);
 
         
         void UpdateEstadoPostulante(ReclutamientoPersona obj);

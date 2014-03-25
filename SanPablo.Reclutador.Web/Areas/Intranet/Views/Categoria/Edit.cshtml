@@ -134,7 +134,8 @@
 
                     },
                     type: "POST",
-                    url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
+                    //url: "/Intranet/Categoria/OrdenarSubCategorias",
                     traditional: true,
                     success: function () {
                         flag = selr;
@@ -165,7 +166,8 @@
                         accion: "Bajar",
                     },
                     type: "POST",
-                    url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    //url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
                       
@@ -201,7 +203,9 @@
 
                     },
                     type: "POST",
-                    url: "/Intranet/Categoria/OrdenarCriterios",
+                    //url: "/Intranet/Categoria/OrdenarCriterios",
+
+                    url: '@Url.Action("OrdenarCriterios", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
                         flag2 = selr;
@@ -236,7 +240,8 @@
 
                     },
                     type: "POST",
-                    url: "/Intranet/Categoria/OrdenarCriterios",
+                    url: '@Url.Action("OrdenarCriterios", "Categoria", new { area="Intranet"})',
+                    //url: "/Intranet/Categoria/OrdenarCriterios",
                     traditional: true,
                     success: function (data) {
                         flag2 = selr;
@@ -315,8 +320,9 @@
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
                 "Si": function () {
-                    $.post("/Intranet/Categoria/PopupSubCategoria",
-                    $("#frmPopupSubCategoria").serialize(),
+                   // $.post("/Intranet/Categoria/PopupSubCategoria",
+                    $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
+                      $("#frmPopupSubCategoria").serialize(),
                         function (data) {
                             $("#ValSubCat").dialog("close");
                             $("#updateDialog").dialog("close");
@@ -384,7 +390,9 @@
 
                         },
                         type: "POST",
-                        url: "/Intranet/Criterio/GetListaCriterio",
+                        //url: "/Intranet/Criterio/GetListaCriterio",
+                        url: '@Url.Action("GetListaCriterio", "Criterio", new { area="Intranet"})',
+
                         traditional: true,
                         success: function () {
                             $('#ValCriterio').dialog("close");
@@ -404,7 +412,7 @@
 
 
         jQuery("#grdList").jqGrid({
-            url: '@Url.Action("ListaSubCategoria", "Categoria")' + '?idCategoria=' + $("#Categoria_IDECATEGORIA").val(),
+            url: '@Url.Action("ListaSubCategoria", "Categoria", new { area="Intranet"})' + '?idCategoria=' + $("#Categoria_IDECATEGORIA").val(),
             datatype: 'json',
             mtype: 'POST',
             colNames: ['Codigo','Estado','Nombre', 'Descripci&oacuten', 'Orden de impresión','Duración(Min)','Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
@@ -540,7 +548,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("ListaCriterioxSub", "Categoria")',
+                    url: '@Url.Action("ListaCriterioxSub", "Categoria", new { area="Intranet"})',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -641,7 +649,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("ListCriterioxAlternativa", "Categoria")',
+                    url: '@Url.Action("ListCriterioxAlternativa", "Categoria", new { area="Intranet"})',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -816,7 +824,7 @@
         var test = "";
         var idAlter = cellvalue;
         if ("01" != tipo) {
-            test = "<img height ='50' width='50' src='@Url.Action("ObtenerSubImagen", "Criterio")/" + idAlter + "' />";
+            test = "<img height ='50' width='50' src='@Url.Action("ObtenerSubImagen", "Criterio", new {area="Intranet" })/" + idAlter + "' />";
         }
 
         return test;
@@ -852,7 +860,7 @@
                     codSub: idSubCategoria
                   },
             type: "POST",
-            url: '@Url.Action("EliminarSubCategoria", "Categoria")',
+            url: '@Url.Action("EliminarSubCategoria", "Categoria", new {area="Intranet" })',
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
@@ -877,7 +885,7 @@
                 codSub: idSubCategoria
             },
             type: "POST",
-            url: "@Url.Action("EliminarCritxSub", "Categoria")",
+            url: "@Url.Action("EliminarCritxSub", "Categoria", new {area="Intranet" })",
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
@@ -895,7 +903,10 @@
 
     function mostrarAgregar(id, idSubCategoria) {
         var dialogDiv = $('#updateDialog');
-        $.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        
+
+        //$.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        $.get('@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})?id=' + id + "&idSubCategoria=" + idSubCategoria, function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialog"));
             dialogDiv.dialog('open');
@@ -905,7 +916,8 @@
 
     function mostrarEditarSub(id, idSubCategoria) {
         var dialogDiv = $('#updateDialog');
-        $.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        //$.get("/Intranet/Categoria/PopupSubCategoria/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        $.get('@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})?id=' + id + "&idSubCategoria=" + idSubCategoria, function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#updateDialog"));
             dialogDiv.dialog('open');
@@ -917,7 +929,9 @@
 
     function mostrarCriterios(id, idSubCategoria) {
         var dialogDiv = $('#criterioDialog');
-        $.get("/Intranet/Criterio/PopupListaCriterio/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+
+        //$.get("/Intranet/Criterio/PopupListaCriterio/" + id + "?idSubCategoria=" + idSubCategoria, function (data) {
+        $.get('@Url.Action("PopupListaCriterio", "Criterio", new { area = "Intranet"})?id=' + id + "&idSubCategoria=" + idSubCategoria, function (data) {
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#criterioDialog"));
             dialogDiv.dialog('open');
