@@ -662,7 +662,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                     if (retorno == 4)
                     {
                         ObjJson.Resultado = false;
-                        ObjJson.Mensaje = "Ya se realizo la postulación";
+                        ObjJson.Mensaje = "La postulación ya fue realizada para la oportunidad laboral seleccionada";
                         return Json(ObjJson);
 
                     }

@@ -170,6 +170,19 @@
         });
 
         
+        $('#btnEditarExamen').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+
+            if (selr != null) {
+                window.location = '@Url.Action("Edicion", "Examen", new { area="Intranet",id=""})' + '/' + selr;
+
+            } else {
+                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+         });
+
+        
         
 
         $('#btnGetPDF').click(function () {
