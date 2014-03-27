@@ -65,6 +65,9 @@
     <Compile Include="CompetenciaRequerimiento.cs" />
     <Compile Include="CentroEstudioRequerimiento.cs" />
     <Compile Include="ConocimientoGeneralRequerimiento.cs" />
+    <Compile Include="ListaCriterios.cs" />
+    <Compile Include="ReclutamientoPersonaAlternativa.cs" />
+    <Compile Include="ReclutamientoPersonaCriterio.cs" />
     <Compile Include="ReclutamientoPersonaExamen.cs" />
     <Compile Include="CvPostulante.cs" />
     <Compile Include="ReclutamientoPersona.cs" />

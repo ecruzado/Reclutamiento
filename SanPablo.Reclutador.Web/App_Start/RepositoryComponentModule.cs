@@ -175,7 +175,11 @@
             builder.RegisterType<ReclutamientoPersonaRepository>()
          .As<IReclutamientoPersonaRepository>();
 
-           
+            builder.RegisterType<ReclutamientoPersonaCriterioRepository>()
+                .As<IReclutamientoPersonaCriterioRepository>();
+
+            builder.RegisterType<ReclutamientoPersonaAlternativaRepository>()
+                .As<IReclutamientoPersonaAlternativaRepository>();
 
         }
     }

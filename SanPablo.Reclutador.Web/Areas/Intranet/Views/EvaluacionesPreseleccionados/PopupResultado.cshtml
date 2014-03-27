@@ -69,7 +69,7 @@
                 var rsp = jQuery.parseJSON(response);
 
                 if (rsp.Success == true) {
-                    $("#ReclutaPersonaExamen_rutaArchivo").val(rsp.Data.NombreArchivo);
+                    $("#ReclutaPersonaExamen_nombreArchivo").val(rsp.Data.NombreArchivo);
                     $("#nombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
 
 
@@ -108,7 +108,7 @@
         window.open('@Url.Action("GetPdf", "EvaluacionesPreSeleccionados")' + '/' + idReclutaExamen);
     }
 
-    function getImagen() {
+    function mostrarImagen() {
         var idReclutaExamen = $('#ReclutaPersonaExamen_IdeReclutamientoPersonaExamen').val();
 
         window.open('@Url.Action("GetImage", "EvaluacionesPreSeleccionados")' + '/' + idReclutaExamen);
@@ -147,7 +147,9 @@
                <td colspan="2" style="height:10px;"></td>               
            </tr>
            <tr>
-               <td class="td-label" style="vertical-align:text-top"> Comentarios</td>
+               <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Comentarios</label>
+                </td>
                <td>
                    @Html.TextAreaFor(model => model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen, new { style = "display: none;" })
                    @Html.TextAreaFor(model=>model.ReclutaPersonaExamen.ComentarioResultado)
@@ -159,8 +161,10 @@
            <tr>               
                <td colspan="2" style="height:5px;"></td>               
            </tr>
-           <tr>               
-               <td class="td-label" style="vertical-align:text-top"> Resultado</td> 
+           <tr>            
+               <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Resultado</label>
+                </td>   
                <td>    
                    @Html.DropDownListFor(model => model.ReclutaPersonaExamen.TipoEstadoEvaluacion, new SelectList(Model.ListaAprobadoDesaprobado, "Valor", "Descripcion", Model.ReclutaPersonaExamen.TipoEstadoEvaluacion))
                    <div class="tex-error" style="font-size:12px;color:red">    
@@ -171,55 +175,49 @@
             <tr>               
                <td colspan="2" style="height:5px;"></td>               
            </tr>
-            <tr>               
-               <td class="td-label">Archivo</td>
-               <td> <input class="input-file" id="fileInput" type="file"> </td>
-           </tr>  
            <tr id="nombreImagen">
-                                   
-                                    <td class="colEtiqueta">
-                                        <label class="etiquetaFormulario" for="setInstitucion">Nombre Archivo</label>
-                                    </td>
-                                    <td class="colInput;input-xxlarge">
-                                        @Html.TextBoxFor(model => model.ReclutaPersonaExamen.rutaArchivo, new { @class = "textoFormulario" , @readonly = "readonly"})
-                                    </td>
+                <td class="colEtiqueta">
+                    <label class="etiquetaFormulario" for="setInstitucion">Nombre Archivo</label>
+                </td>
+                <td class="colInput;input-xxlarge">
+                    @Html.TextBoxFor(model => model.ReclutaPersonaExamen.nombreArchivo, new { @class = "textoFormulario" , @readonly = "readonly"})
+                </td>
+            </tr>
+            <tr id="selecImagen">
+                <td class="colEtiqueta">
+                    <label class="etiquetaFormulario">Archivo</label>
+                </td>
                                     
-                                    <td>
-                                 
-                                </tr>
-                                @* @if (!@Accion.Consultar.Equals(Model.Criterio.IndPagina)){
-                                *@<tr id="selecImagen">
-                                    <td class="colEtiqueta">
-                                        <label class="etiquetaFormulario">Archivo</label>
-                                    </td>
-                                    <td >
-                                        <div id="divImagen">
+                <td >
+                    <div id="divImagen">
+                        <input type="file" name="image" id="image" />
+                    @Html.TextBoxFor(model => model.nombreTemporalArchivo,  new { style = "display: none;" })
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr id="verImagen">
+                @if (Model.ReclutaPersonaExamen.Archivo != null)
+                {
+                    if (Model.tipoArchivo == "pdf")
+                    { 
                                            
-                                        <input type="file" name="image" id="image" />
-                                        
-                                        @Html.TextBoxFor(model => model.nombreTemporalArchivo,  new { style = "display: none;" })
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                 @*}*@
-                                 <tr id="verImagen">
-                                   @if (Model.ReclutaPersonaExamen.Archivo != null)
-                                   {
-                                       if (Model.tipoArchivo == "pdf")
-                                       { 
-                                           <td>
-                                            <a id="btnGetPDF" class="btn btn-info" onclick="getPdf()"><i class="icon-edit icon-white"></i> Mostrar PDF</a>
-                                           </td>
-                                       }
-                                       
-                                        <td class="colEtiqueta"></td>
-                                        <td class ="colInput" >
-                                            <img ref="#" id="ImgCriterio" onclick="mostrarImagen()" height ="150" width="150" src="@Url.Action("GetImage", "EvaluacionesPreSeleccionados", new { id = Model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen })" /> 
-                                        </td>
-                                            
-                                   }
-                                 </tr>
+                        <td class="colEtiqueta">
+                            <label class="etiquetaFormulario" for="setInstitucion">Ver PDF</label>
+                        </td>
+                        <td>
+                        <a id="btnGetPDF" class="btn btn-info" onclick="getPdf()"><i class="icon-edit icon-white"></i>PDF</a>
+                        </td>
+                    }
+                    else
+                    {
+                    <td class="colEtiqueta"></td>
+                    <td class ="colInput" >
+                        <img id="ImgCriterio" onclick="mostrarImagen()" height ="150" width="150" src="@Url.Action("GetImage", "EvaluacionesPreSeleccionados", new { id = Model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen })" /> 
+                    </td>
+                    }
+                }
+            </tr>
 
           
        </table>

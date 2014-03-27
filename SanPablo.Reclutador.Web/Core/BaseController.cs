@@ -299,6 +299,10 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get { return DateTime.Now; }
         }
+        public DateTime HoraInicio
+        {
+            get { return DateTime.Now; }
+        }
 
         public DateTime FechaModificacion
         {
@@ -339,6 +343,17 @@ namespace SanPablo.Reclutador.Web.Core
             }
         }
 
+        protected ListaCriterios ListaCriterios 
+        {
+            get
+            {
+                return (ListaCriterios)System.Web.HttpContext.Current.Session[ConstanteSesion.ListaCriterios];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.ListaCriterios, value);
+            }
+        }
         protected string  ModoAccion
         {
             get

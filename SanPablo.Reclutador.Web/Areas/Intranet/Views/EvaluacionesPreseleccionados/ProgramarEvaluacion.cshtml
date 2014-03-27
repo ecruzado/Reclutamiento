@@ -21,7 +21,7 @@
                 resizable: false,
                 modal: true,
                 buttons: {
-                    "Grabar": function (e) {
+                    "Seleccionar": function (e) {
                         e.preventDefault();
                         var idUsuario = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
                         var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', idUsuario)
@@ -95,15 +95,17 @@
                 </tr>
                    <tr class="formulario-fila">
                     <td class="span5">
-                        <label class="control-label" for="inputSuccess">Responsable</label>
+                            <label class="control-label" for="inputSuccess">Responsable</label>
+
                         <div class="controles">
                             @Html.TextBoxFor(model => model.ReclutaPersonaExamen.IdeUsuarioResponsable, new { style="display: none;" })
                             @Html.TextBoxFor(model => model.nombreUsuario, new { disabled = "disabled" })
+                             <a href="#" id="btnBusquedaUsuario" style="display:inline-block"><img src="@Url.Content("~/Content/images/action_search.gif")" /> </a>
                             <div class="tex-error" style="font-size:12px;color:red">    
                                 @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.IdeUsuarioResponsable)
                             </div>
-                            <a href="#" id="btnBusquedaUsuario"><img src="@Url.Content("~/Content/images/action_search.gif")" /> </a>
-                        </div>
+                               
+                            </div>    
                     </td>
                     <td class="span5">
                             <label class="control-label" for="selectError">Observación</label>
@@ -113,6 +115,14 @@
                                 @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.Observacion)
                               </div>
                             </div>
+                    </td>
+                </tr>
+                <tr class="formulario-fila">
+                    <td class="span5">
+                        <label class="control-label" for="inputSuccess">Entrevista Final</label>
+                        <div class="controles">
+                            @Html.CheckBoxFor(model => model.ReclutaPersonaExamen.EsEntrevistaFinal)
+                       </div>
                     </td>
                 </tr>
                 </table>

@@ -15,7 +15,7 @@
         {
         }
 
-        public DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion)
+        public DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion, int IdeSede)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
@@ -27,6 +27,7 @@
 
                 cmd.Parameters.Add("p_ideSolicitud", OracleType.Int32).Value = IdeSolicitud;
                 cmd.Parameters.Add("p_ideUsuario", OracleType.VarChar).Value = IdeUSuarioCreacion;
+                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = IdeSede;
                 cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 DatosCargo cargo;

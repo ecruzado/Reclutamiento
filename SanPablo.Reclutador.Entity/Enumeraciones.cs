@@ -87,6 +87,12 @@
 
     }
 
+    public sealed class TipoModo
+    {
+        public const string Texto = "01";
+        public const string Imagen = "02";
+    }
+
     public sealed class TipoCampo
     {
         public const string TipoSalario = "14";

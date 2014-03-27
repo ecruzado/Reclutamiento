@@ -7,7 +7,7 @@ using System.Data;
 
     public interface ICargoRepository : IRepository<Cargo>
     {
-        DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion);
+        DatosCargo obtenerDatosCargo(int IdeSolicitud, string IdeUSuarioCreacion, int IdeSede);
 
         /// <summary>
         /// CREA UNA COPIA DE CARGO PARA REALIZAR MODIFICACIONES

@@ -16,6 +16,7 @@ namespace SanPablo.Reclutador.Web.Core
         public const string Modo = "Modo";
         public const string IdePostulantePreSele = "IdePostPreSel";
         public const string IdeReclutaPersona = "IdeReclutaPersona";
+        public const string ListaCriterios = "ListaCriterios";
         
         /// <summary>
         /// Guarda el identificador de la tabla general

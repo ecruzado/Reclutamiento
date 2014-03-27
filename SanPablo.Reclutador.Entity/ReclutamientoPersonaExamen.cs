@@ -16,6 +16,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeUsuarioResponsable {get; set;}
         public virtual string UsuarioResponsable { get; set; }
         public virtual string Observacion { get; set; }
+
+        public virtual string IndicadorEntrevistaFinal { get; set; }
         /// <summary>
         /// fecha de programacion de evaluacion
         /// </summary>
@@ -48,5 +50,19 @@ namespace SanPablo.Reclutador.Entity
         
         public virtual string EstadoEvaluacion { get; set; }
 
+        public virtual bool EsEntrevistaFinal
+        {
+            get
+            {
+                return IndicadorEntrevistaFinal == Indicador.Si? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndicadorEntrevistaFinal = Indicador.Si;
+                else
+                    IndicadorEntrevistaFinal = Indicador.No;
+            }
+        }
     }
 }
