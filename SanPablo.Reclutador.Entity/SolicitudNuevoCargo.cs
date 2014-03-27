@@ -65,6 +65,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreResponsable { get; set; }
         public virtual string IndicadoPublicado { get; set; }
 
+        public virtual int  RolResponsableActual { get; set; }
 
         public virtual bool RangoSalarioPublicar
         {

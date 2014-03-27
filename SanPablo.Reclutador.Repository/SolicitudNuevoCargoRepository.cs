@@ -203,8 +203,8 @@
                 lspcmd.Parameters.Add("p_cEstado", OracleType.VarChar).Value = solicitud.TipoEstado;
                 lspcmd.Parameters.Add("p_cFecIni", OracleType.VarChar).Value = cFechaIncial;
                 lspcmd.Parameters.Add("p_cFeFin", OracleType.VarChar).Value = cFechaFinal;
-                lspcmd.Parameters.Add("p_nIdUsuario", OracleType.Number).Value = solicitud.IdeUsuarioResponsable;
-
+                lspcmd.Parameters.Add("p_cRolResp", OracleType.Number).Value = solicitud.RolResponsableActual;
+                lspcmd.Parameters.Add("p_cUsrResponsable", OracleType.Number).Value = solicitud.IdeUsuarioResponsable;
                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = solicitud.IdeSede;
 
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
@@ -222,24 +222,24 @@
                     solicitudNuevo.IdeCargo = Convert.ToInt32(drSolicitudNuevo["IDECARGO"]);
                     solicitudNuevo.NombreCargo = Convert.ToString(drSolicitudNuevo["NOMCARGO"]);
                     solicitudNuevo.IdeDependencia = Convert.ToInt32(drSolicitudNuevo["IDEDEPENDENCIA"]);
-                    solicitudNuevo.DependenciaDescripcion = Convert.ToString(drSolicitudNuevo["DESDEPENDENCIA"]);
+                    solicitudNuevo.DependenciaDescripcion = Convert.ToString(drSolicitudNuevo["NOMDEPENDENCIA"]);
                     solicitudNuevo.IdeDepartamento = Convert.ToInt32(drSolicitudNuevo["IDEDEPARTAMENTO"]);
-                    solicitudNuevo.DepartamentoDescripcion = Convert.ToString(drSolicitudNuevo["DESDEPARTAMENTO"]);
+                    solicitudNuevo.DepartamentoDescripcion = Convert.ToString(drSolicitudNuevo["NOMDEPARTAMENTO"]);
                     solicitudNuevo.IdeArea = Convert.ToInt32(drSolicitudNuevo["IDEAREA"]);
-                    solicitudNuevo.AreaDescripcion = Convert.ToString(drSolicitudNuevo["DESAREA"]);
+                    solicitudNuevo.AreaDescripcion = Convert.ToString(drSolicitudNuevo["NOMAREA"]);
 
-                    solicitudNuevo.NumeroPosiciones = Convert.ToInt32(drSolicitudNuevo["NUMPOSICION"]);
+                    solicitudNuevo.NumeroPosiciones = Convert.ToInt32(drSolicitudNuevo["NUMPOSICIONES"]);
                     solicitudNuevo.Postulantes = Convert.ToInt32(drSolicitudNuevo["POSTULANTES"]);
                     solicitudNuevo.PreSeleccionados = Convert.ToInt32(drSolicitudNuevo["PRESELECCIONADOS"]);
                     solicitudNuevo.Evaluados = Convert.ToInt32(drSolicitudNuevo["EVALUADOS"]);
                     solicitudNuevo.Seleccionados = Convert.ToInt32(drSolicitudNuevo["SELECCIONADOS"]);
 
 
-                    solicitudNuevo.IdRolSuceso = Convert.ToInt32(drSolicitudNuevo["ROLRESP"]);
-                    solicitudNuevo.RolSuceso = Convert.ToString(drSolicitudNuevo["DESROL"]);
+                    solicitudNuevo.IdRolSuceso = Convert.ToInt32(drSolicitudNuevo["IDROL"]);
+                    solicitudNuevo.RolSuceso = Convert.ToString(drSolicitudNuevo["DSCROL"]);
 
                     solicitudNuevo.TipoEstado = Convert.ToString(drSolicitudNuevo["ESTADO"]);
-                    solicitudNuevo.TipoEtapa = Convert.ToString(drSolicitudNuevo["TIPETAPA"]);
+                    solicitudNuevo.TipoEtapa = Convert.ToString(drSolicitudNuevo["TETAPA"]);
 
                     var fecPublicacion = Convert.ToString(drSolicitudNuevo["FECPUBLICACION"]);
                     if (fecPublicacion.Length > 0)
@@ -259,9 +259,9 @@
                     }
 
 
-                    solicitudNuevo.NombreResponsable = Convert.ToString(drSolicitudNuevo["NOMPERSONREEMPLAZO"]);
+                    solicitudNuevo.NombreResponsable = Convert.ToString(drSolicitudNuevo["NOMRESPONSABLE"]);
                     solicitudNuevo.IndicadoPublicado = Convert.ToString(drSolicitudNuevo["PUBLICADO"]);
-                    solicitudNuevo.IdeUsuarioResponsable = Convert.ToInt32(drSolicitudNuevo["ID_USUARIO_RESP"]);
+                    solicitudNuevo.IdeUsuarioResponsable = Convert.ToInt32(drSolicitudNuevo["USRESPONSABLE"]);
 
                     listaSolicitudesNuevo.Add(solicitudNuevo);
                 }
