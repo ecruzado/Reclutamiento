@@ -77,9 +77,10 @@
                 solicitudNuevo.TipoEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
                 solicitudNuevo.TipoEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
+                solicitudNuevo.RolResponsableActual = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 solicitudNuevo.IdeUsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-
                 solicitudNuevo.IdeSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+
                 lista = _solicitudNuevoCargoRepository.GetListaSolicitudNuevo(solicitudNuevo);
 
 
@@ -235,7 +236,7 @@
             var enviarMail = new SendMail();
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             JsonMessage objJsonMessage = new JsonMessage();
-            int ideUsuarioResp;
+            int ideUsuarioResp =-1;
             try
             {
                 SolicitudNuevoCargoValidator solicitudValidator = new SolicitudNuevoCargoValidator();
@@ -265,7 +266,8 @@
                     logSolicitud.RolSuceso = RolSession;
 
                     string indArea = "NO";
-
+                    
+                    
                     switch (RolSession)
                     {
                         case Roles.Jefe:
@@ -283,11 +285,14 @@
                             logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
                             logSolicitud.TipoEtapa = Etapa.Aprobado;
                             break;
+
                     }
 
-                    
-                    ideUsuarioResp = _solicitudNuevoCargoRepository.insertarSolicitudNuevo(nuevaSolicitudCargo, logSolicitud, indArea);
+                    if ((logSolicitud.RolResponsable != null) && (logSolicitud.RolResponsable != 0))
+                    {
 
+                        ideUsuarioResp = _solicitudNuevoCargoRepository.insertarSolicitudNuevo(nuevaSolicitudCargo, logSolicitud, indArea);
+                    }
                    // ideUsuarioResp = _logSolicitudNuevoCargoRepository.solicitarAprobacion(nuevaSolicitudCargo, UsuarioSession, Convert.ToInt32(Session[ConstanteSesion.Rol]), "", SucesoSolicitud.Pendiente, EtapasSolicitud.PendienteAprobacionGerenteArea);
                    
                     if (ideUsuarioResp != -1)
@@ -309,7 +314,7 @@
                     }
                     else
                     {
-                        objJsonMessage.Mensaje = "ERROR: no se puede enviar enviar la solicitud, intente de nuevo";
+                        objJsonMessage.Mensaje = "ERROR: no se puede enviar enviar la solicitud, revise sus permisos o intente nuevamente";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
