@@ -24,7 +24,7 @@
                 
                 if (idSol != null) {
 
-                 var url = '@Url.Action("Contratacion", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
+                 var url = '@Url.Action("Index", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
                  window.location = url;
 
              } else {
@@ -32,6 +32,9 @@
              }
 
             });
+
+
+
             $('#btnEvaluaciones').click(function () {
 
                 var id = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');

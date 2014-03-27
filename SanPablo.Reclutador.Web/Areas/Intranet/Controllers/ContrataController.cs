@@ -20,9 +20,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
+  
     
     
-    public class ContrataController : Controller
+    public class ContrataController : BaseController
     {
 
         private ISolReqPersonalRepository _solReqPersonalRepository;
@@ -71,6 +72,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
            if (listaSol != null && listaSol.Count > 0)
            {
                model.Solicitud = (SolReqPersonal)listaSol[0];
+               
+
            }
            // se incializa
            model.Solicitud.IdeSolReqPersonal = id;
@@ -81,6 +84,146 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
 
+        /// <summary>
+        /// lista de postulantes seleccionados listos para contratacion
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListPostulantesSel(GridTable grid)
+        {
+
+            ReclutamientoPersona reclutamientoPersona;
+            List<ReclutamientoPersona> lista = new List<ReclutamientoPersona>();
+            try
+            {
+
+                reclutamientoPersona = new ReclutamientoPersona();
+
+                reclutamientoPersona.IdeSol = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+                reclutamientoPersona.TipSol = (grid.rules[1].data == null ? "" : Convert.ToString(grid.rules[1].data));
+
+
+                if ("0".Equals(reclutamientoPersona.EstPostulante))
+                {
+                    reclutamientoPersona.EstPostulante = "";
+                }
+
+                lista = _postulanteRepository.GetPostulantesSeleccionados(reclutamientoPersona);
+
+                
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.IdeReclutaPersona.ToString()),
+                    cell = new string[]
+                            {
+                                item.IdeReclutaPersona==null?"":item.IdeReclutaPersona.ToString(),
+                                item.IdePostulante==null?"":item.IdePostulante.ToString(),
+                                item.IdeSol==null?"":item.IdeSol.ToString(),
+                                item.IdSede==null?"":item.IdSede.ToString(),
+                                item.IdeCargo==null?"":item.IdeCargo.ToString(),
+                                item.Apellidos==null?"":item.Apellidos,
+                                item.Nombres==null?"":item.Nombres,
+                                item.FonoFijo==null?"":item.FonoFijo,
+                                item.FonoMovil==null?"":item.FonoMovil,
+                                item.EstPostulante==null?"":item.EstPostulante.ToString(),
+                                item.DesEstadoPostulante==null?"":item.DesEstadoPostulante
+                                
+
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
+
+
+        /// <summary>
+        /// Realiza el cambio de estado a contratado validado por el numero de vacantes
+        /// el numero de contrataciones no puede sobrepasar el numero de vacantes
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ContrataPost(int id, int numVac,int idSol,string tipSol)
+        {
+            JsonMessage objJson = new JsonMessage();
+
+            try
+            {
+                List<ReclutamientoPersona> lista = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == idSol
+                                                            && x.TipSol == tipSol
+                                                            && x.EstPostulante == PostulanteEstado.CONTRATADO);
+
+                if (numVac >= lista.Count())
+                {
+                    var objReclutaPer = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == id);
+                    objReclutaPer.EstPostulante = PostulanteEstado.CONTRATADO;
+                    _reclutamientoPersonaRepository.Update(objReclutaPer);
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se actualizo el registro";
+                }
+                else
+                {
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "A excedido el número de vacantes";
+                }    
+            }
+            catch (Exception)
+            {
+
+                objJson.Resultado = false;
+                objJson.Mensaje = "Error";
+            }
+          
+
+
+            return Json(objJson);
+        }
+
+        /// <summary>
+        /// Finaliza el proceso de contratacion de postulante y cierra la solicitud,
+        /// si hay solicitudes en cola realiza una migracion
+        /// </summary>
+        /// <param name="idSol"></param>
+        /// <param name="tipSol"></param>
+        /// <param name="tipPuesto"></param>
+        /// <param name="idSede"></param>
+        /// <param name="idCargo"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult FinalizaSol(int idSol, string tipSol, string tipPuesto, int idSede, int idCargo)
+        {
+
+            JsonMessage objJson = new JsonMessage();
+
+
+            ReclutamientoPersona objReluta = new ReclutamientoPersona();
+
+            objReluta.IdeSol = idSol;
+            objReluta.TipSol = tipSol;
+            objReluta.TipPuesto = tipPuesto;
+            objReluta.IdSede = idSede;
+            objReluta.IdeCargo = idCargo;
+
+
+            _reclutamientoPersonaRepository.FinalizaContratacion(objReluta);
+    
+
+            return Json(objJson);
+        }
+        
+       
 
 
     }

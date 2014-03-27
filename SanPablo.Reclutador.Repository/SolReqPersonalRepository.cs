@@ -67,7 +67,11 @@ namespace SanPablo.Reclutador.Repository
                      lobSolicitud.Area_des = Convert.ToString(ldrSolicitud["NOMBAREA"]);
                      lobSolicitud.DesEstado = Convert.ToString(ldrSolicitud["DESESTADO"]);
                      lobSolicitud.CodSolReqPersonal = Convert.ToString(ldrSolicitud["CODCARGO"]);
-                   
+                     lobSolicitud.NumVacantes = Convert.ToInt32(ldrSolicitud["NUMVACANTE"]);
+                     lobSolicitud.Tipsol = (ldrSolicitud["TIPSOL"]==null?"":Convert.ToString(ldrSolicitud["TIPSOL"]));
+                     lobSolicitud.TipPuesto = (ldrSolicitud["TIPPUESTO"] == null ? "" : Convert.ToString(ldrSolicitud["TIPPUESTO"]));
+                     
+
                      llstSolicitud.Add(lobSolicitud);
                  }
 
@@ -1087,6 +1091,41 @@ namespace SanPablo.Reclutador.Repository
          }
 
 
+         /// <summary>
+         /// Verifica si hay postulantes potenciales esperando la creacion de una solicitud con el mismo
+         /// codigo de cargo
+         /// </summary>
+         /// <param name="obj"></param>
+         public void verificaPotenciales(ReclutamientoPersona obj)
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+                 
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_POTENCIALES");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+
+                 lspcmd.Parameters.Add("p_nidsol", OracleType.Number).Value = obj.IdeSol;
+                 lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = obj.TipSol;
+                 lspcmd.Parameters.Add("p_ctippuesto", OracleType.VarChar).Value = obj.TipPuesto;
+                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.IdSede;
+                 lspcmd.Parameters.Add("p_nidcargo", OracleType.Number).Value = obj.IdeCargo;
+
+                 lspcmd.ExecuteNonQuery();
+
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
 
     }
 }

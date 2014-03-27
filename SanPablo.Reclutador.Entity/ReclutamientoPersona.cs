@@ -160,6 +160,11 @@ namespace SanPablo.Reclutador.Entity
         /// indicador de aprobacion si es S color  por defecto si es N color rojo
         /// </summary>
         public virtual string IndAprobacion { get; set; }
+
+        /// <summary>
+        /// Numerod de vacantes de las solicitud
+        /// </summary>
+        public virtual int NumVacantes { get; set; }
         
         
 

@@ -6,6 +6,9 @@ namespace SanPablo.Reclutador.Repository.Interface
     
     public interface IReclutamientoPersonaRepository : IRepository<ReclutamientoPersona>
     {
+
+        void FinalizaContratacion(ReclutamientoPersona objRecluta);
+
     }
 
     

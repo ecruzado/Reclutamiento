@@ -20,7 +20,7 @@
         $('#btnEditar').click(function () {
             var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
-                window.location = '@Url.Action("btnEditarDetalle", "Categoria")' + '/' + selr;
+                window.location = '@Url.Action("btnEditarDetalle", "Categoria",new { id = ""})' + '/' + selr;
             } else {
                 MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
@@ -30,7 +30,7 @@
         $('#btnNuevo').click(function () {
             var selr = 0;
             if (selr != null) {
-                window.location = '@Url.Action("Nuevo", "Categoria")' + '/' + selr;
+                window.location = '@Url.Action("Nuevo", "Categoria", new { id = ""})' + '/' + selr;
             } else {
                 MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
@@ -84,7 +84,7 @@
         $('#btnConsultar').click(function () {
             var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
-                window.location = '@Url.Action("btnConsultarDetalle", "Categoria")' + '/' + selr;
+                window.location = '@Url.Action("btnConsultarDetalle", "Categoria",new { id = ""})' + '/' + selr;
             } else {
                 MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }

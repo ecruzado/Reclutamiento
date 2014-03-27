@@ -18,57 +18,37 @@
         $(document).ready(function () {
 
             
-            $('#btnContrata').click(function () {
+            $('#btnContratar').click(function () {
+                var selr = jQuery('#grdListSel').jqGrid('getGridParam', 'selrow');
+                var numVacantes =$("#Solicitud_NumVacantes").val();
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
-                
-                if (idSol != null) {
-
-                 var url = '@Url.Action("Contratacion", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
-                 window.location = url;
-
-             } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
-             }
-
-            });
-
-
-
-
-            $('#btnExcluido').click(function () {
-                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
-                var tipSol = $("#Solicitud_Tipsol").val();
-
-
-                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
-                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
-                var idPost = rowData.IdePostulante;
-
-                if (idPost != null && idPost > 0) {
-                    mostrarPopupExclucion(idSol, idPost, tipSol);
-                } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
-                }
-
-            });
-
-            
-            $('#btnSeleccionado').click(function () {
-                var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
                 if (selr != null && selr > 0) {
-                    seleccionaPost(selr);
+                    contPostulante(selr, numVacantes, idSol, tipSol);
                 } else {
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
             });
 
+
+            $('#btnFinalizar').click(function () {
+                
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                var idSede = $("#Solicitud_IdeSede").val();
+                var idCargo = $("#Solicitud_IdeCargo").val();
+                var tipPuesto = $("#Solicitud_TipPuesto").val();
+                
+                finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo);
+
+            });
 
 
 
             $('#btnAnteriorRanking').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
+                
                 var pagina = $("#pagina").val();
                 if (idSol != null) {
 
@@ -172,6 +152,64 @@
           });
 
         });
+
+       
+        function contPostulante(selr, numVacantes, idSol, tipSol) {
+
+            $.ajax({
+                data: {
+                    id: selr,
+                    numVac: numVacantes,
+                    idSol : idSol,
+                    tipSol: tipSol
+
+                },
+                type: "POST",
+                url: '@Url.Action("ContrataPost", "Contrata")',
+                traditional: true,
+                success: function (data) {
+                @*if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }*@
+                    if (data.Resultado) {
+                        $('#grdListSel').trigger('reloadGrid');
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                }
+            });
+
+        }
+       
+        function finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo) {
+
+            $.ajax({
+                data: {
+                    idSol: idSol,
+                    tipSol: tipSol,
+                    tipPuesto: tipPuesto,
+                    idSede: idSede,
+                    idCargo: idCargo
+                },
+                type: "POST",
+                url: '@Url.Action("FinalizaSol", "Contrata")',
+                traditional: true,
+                success: function (data) {
+                @*if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }*@
+                    if (data.Resultado) {
+                        $('#grdListSel').trigger('reloadGrid');
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    } else {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+                }
+            });
+
+        }
+       
        
 
   </script>
@@ -181,7 +219,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Postulantes Pre-Seleccionados</h5>
+                <h5>Postulantes Seleccionados</h5>
             </div>
 @using (Html.BeginForm("Index", "Contrata", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmContratar", @class = "formulario-busqueda" }))
 {
@@ -189,7 +227,18 @@
 
     
      @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
-            @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" })  
+     @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" }) 
+     @Html.TextBoxFor(model => model.Solicitud.IdeSede, new { style = "display: none;" }) 
+    
+     @Html.TextBoxFor(model => model.Solicitud.IdeCargo)  
+     @Html.TextBoxFor(model => model.Solicitud.TipPuesto)
+    
+    @*
+    
+     @Html.TextBoxFor(model => model.Solicitud.IdeCargo, new { style = "display: none;" })  
+     @Html.TextBoxFor(model => model.Solicitud.TipPuesto, new { style = "display: none;" })
+    *@
+    
     
            <table class="formulario-busqueda">
                 <tr class="formulario-fila">
@@ -254,6 +303,19 @@
 				           
                            @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 
+			            </div>
+			
+		            </td>
+                </tr>
+
+              
+               <tr class="formulario-fila">
+                     <td class="span5">
+		   
+			            <label class="control-label" for="selectError">Vacantes</label>
+			            <div class="controles">
+				           
+                            @Html.TextBoxFor(model => model.Solicitud.NumVacantes, new { @class = "textoFormulario", disabled = "disabled" }) 
 			            </div>
 			
 		            </td>

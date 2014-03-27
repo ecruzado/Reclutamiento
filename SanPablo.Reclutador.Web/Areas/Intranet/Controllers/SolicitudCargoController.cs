@@ -2209,6 +2209,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";
+
+                    ReclutamientoPersona objRecluta = new ReclutamientoPersona();
+
+                    objRecluta.IdeSol = Convert.ToInt32(objSol.IdeSolReqPersonal);
+                    objRecluta.TipSol = TipoSolicitud.Remplazo;
+                    objRecluta.TipPuesto = objSol.TipPuesto;
+                    objRecluta.IdSede = objSol.IdeSede;
+                    objRecluta.IdeCargo = objSol.IdeCargo;
+
+                    _solReqPersonalRepository.verificaPotenciales(objRecluta);
+
                 }
             }
             else
