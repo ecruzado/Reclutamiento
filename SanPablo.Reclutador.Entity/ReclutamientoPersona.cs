@@ -165,8 +165,17 @@ namespace SanPablo.Reclutador.Entity
         /// Numerod de vacantes de las solicitud
         /// </summary>
         public virtual int NumVacantes { get; set; }
-        
-        
+
+
+        /// <summary>
+        /// Motivo de cierre de la solictud finalizada
+        /// </summary>
+        public virtual string MotivoCierre { get; set; }
+
+        /// <summary>
+        /// cargo a los que esta postulando en paralelo
+        /// </summary>
+        public virtual string PostulacionParalelo { get; set; }
 
     }
 }

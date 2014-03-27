@@ -13,23 +13,26 @@
 </script>
 
 
-@using (Html.BeginForm("Index", "Ranking", FormMethod.Post, new { id = "frmPopuExclucion" }))
+@using (Html.BeginForm("Index", "Contrata", FormMethod.Post, new { id = "frmPopuObserv" }))
     {
+  
          @Html.ValidationSummary(true)
          @Html.TextBoxFor(model => model.ReclutaPersonal.IdeSol, new { style = "display: none;" }) 
-         @Html.TextBoxFor(model => model.ReclutaPersonal.IdePostulante, new { style = "display: none;" }) 
+         @Html.TextBoxFor(model => model.ReclutaPersonal.IdeCargo, new { style = "display: none;" }) 
          @Html.TextBoxFor(model => model.ReclutaPersonal.TipSol, new { style = "display: none;" }) 
+         @Html.TextBoxFor(model => model.ReclutaPersonal.TipPuesto, new { style = "display: none;" }) 
+         @Html.TextBoxFor(model => model.ReclutaPersonal.IdSede, new { style = "display: none;" }) 
         
         <table style="margin-left:30px;">
         <tr >
             <td class="colEtiqueta" >
-                <label class="etiquetaFormulario" >Comentario<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Motivo de cierre<span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
                
-                @Html.TextAreaFor(model=>model.ReclutaPersonal.Comentario, new { @style = "width:300px;height:100px" ,maxlength="254"})
+                @Html.TextAreaFor(model=>model.ReclutaPersonal.MotivoCierre, new { @style = "width:300px;height:100px" ,maxlength="254"})
                 <div class="tex-error" style="font-size:12px;color:red">    
-                @Html.ValidationMessageFor(model => model.ReclutaPersonal.Comentario )
+                @Html.ValidationMessageFor(model => model.ReclutaPersonal.MotivoCierre )
                 </div>
             </td>
         </tr>

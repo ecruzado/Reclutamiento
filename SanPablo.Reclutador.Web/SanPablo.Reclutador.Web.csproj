@@ -447,6 +447,7 @@
     <Content Include="Areas\Intranet\Views\BusquedaUsuario\PopupUsuario.cshtml" />
     <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\PopupResultado.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Contrata\popupObserv.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Instrucciones.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />

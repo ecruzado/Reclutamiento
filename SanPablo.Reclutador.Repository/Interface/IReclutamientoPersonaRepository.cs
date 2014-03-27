@@ -8,7 +8,7 @@ namespace SanPablo.Reclutador.Repository.Interface
     {
 
         void FinalizaContratacion(ReclutamientoPersona objRecluta);
-
+        string validaFinSolicitud(ReclutamientoPersona objReCluta);
     }
 
     

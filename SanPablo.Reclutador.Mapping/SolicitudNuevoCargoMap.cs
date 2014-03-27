@@ -37,6 +37,11 @@
             Map(x => x.TipoEtapa, "TIPETAPA");
             Map(x => x.ObservacionPublicacion, "OBSPUBLICACION");
 
+
+            Map(x => x.MotivoCierre, "MOTIVOCIERRE");
+           
+
+
             Table("SOLNUEVO_CARGO");
         }
     }

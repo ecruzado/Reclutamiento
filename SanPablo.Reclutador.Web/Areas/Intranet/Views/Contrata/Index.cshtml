@@ -38,22 +38,30 @@
                 var idSede = $("#Solicitud_IdeSede").val();
                 var idCargo = $("#Solicitud_IdeCargo").val();
                 var tipPuesto = $("#Solicitud_TipPuesto").val();
+                var numVac = $("#Solicitud_NumVacantes").val();
+
                 
-                finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo);
+                finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo, numVac);
 
             });
 
 
 
-            $('#btnAnteriorRanking').click(function () {
+            $('#btnAnteriorPre').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
-                
+               
                 var pagina = $("#pagina").val();
+                var indPagina = $("#indPagina").val();
+
                 if (idSol != null) {
 
-                    var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    @* var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    window.location = url;*@
+
+                    var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
+
                 }
             });
 
@@ -71,6 +79,59 @@
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
 
+            });
+
+
+            $('#popupDialogObserv').dialog({
+                autoOpen: false,
+                width: 520,
+                height: 350,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Grabar": function () {
+                        if ($("#frmPopuObserv").validate().form()) {
+                            $('#dialogObserv').dialog('open');
+                        }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $("#spanDialogObserv").html("¿Desea guardar los cambios?")
+            $('#dialogObserv').dialog({
+                autoOpen: false,
+                modal: true,
+                title: "Sistema de Reclutamiento Y Seleccion de Personal",
+                buttons: {
+                    "Si": function () {
+                        if ($("#frmPopuObserv").validate().form()) {
+                            $.ajax({
+                                type: "POST",
+                                data: $("#frmPopuObserv").serialize(),
+                                url: '@Url.Action("FinalizaSolicitudObs", "Contrata", new { area = "Intranet" })',
+                                traditional: true,
+                                success: function (data) {
+                                    if (data.Resultado) {
+                                        $('#dialogObserv').dialog("close");
+                                        $('#popupDialogObserv').dialog("close");
+
+                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    } else {
+                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    }
+
+                                }
+                            });
+                        }
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+                    }
+                }
             });
 
 
@@ -168,9 +229,9 @@
                 url: '@Url.Action("ContrataPost", "Contrata")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -182,7 +243,7 @@
 
         }
        
-        function finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo) {
+        function finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo, numVac) {
 
             $.ajax({
                 data: {
@@ -190,20 +251,30 @@
                     tipSol: tipSol,
                     tipPuesto: tipPuesto,
                     idSede: idSede,
-                    idCargo: idCargo
+                    idCargo: idCargo,
+                    numVac: numVac
                 },
                 type: "POST",
                 url: '@Url.Action("FinalizaSol", "Contrata")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
-                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                if (data.redirecciona) {
+                    sanpablo.redirecciona('@Url.Action("login", "seguridad")');
+                }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        var dialogDiv = $('#popupDialogObserv');
+
+                        $.get('@Url.Action("popupObserv", "Contrata", new { area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&tipPuesto=" + tipPuesto + "&idSede=" + idSede + "&idCargo=" + idCargo, function (data) {
+
+                            dialogDiv.html(data);
+                            $.validator.unobtrusive.parse($("#popupDialogObserv"));
+                            dialogDiv.dialog('open');
+                        });
+                        return false;
+
                     }
                 }
             });
@@ -229,15 +300,11 @@
      @Html.TextBoxFor(model => model.Solicitud.IdeSolReqPersonal, new { style = "display: none;" }) 
      @Html.TextBoxFor(model => model.Solicitud.Tipsol, new { style = "display: none;" }) 
      @Html.TextBoxFor(model => model.Solicitud.IdeSede, new { style = "display: none;" }) 
-    
-     @Html.TextBoxFor(model => model.Solicitud.IdeCargo)  
-     @Html.TextBoxFor(model => model.Solicitud.TipPuesto)
-    
-    @*
-    
      @Html.TextBoxFor(model => model.Solicitud.IdeCargo, new { style = "display: none;" })  
      @Html.TextBoxFor(model => model.Solicitud.TipPuesto, new { style = "display: none;" })
-    *@
+
+     @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
+     @Html.TextBoxFor(model => model.indPagina, new { style = "display: none;" }) 
     
     
            <table class="formulario-busqueda">
@@ -343,5 +410,5 @@
         </div>
     </div>
 </div>
-<div id="popupDialogExclucion" title="Exclución postulante"></div>
-<div id="dialogExclucion"><span id="spandialogExclucion"></span></div>
+<div id="popupDialogObserv" title="Motivo de cierre de solicitud"></div>
+<div id="dialogObserv"><span id="spanDialogObserv"></span></div>

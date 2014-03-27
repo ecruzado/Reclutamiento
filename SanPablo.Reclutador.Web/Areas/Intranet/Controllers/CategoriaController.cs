@@ -232,6 +232,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             
             categoriaViewModel.Categoria.TIEMPO = contTiempo;
 
+            //Se actualiza el tiempo
+            var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+            obj.TIEMPO = categoriaViewModel.Categoria.TIEMPO;
+            _categoriaRepository.Update(obj);
+
             return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
 
 
@@ -309,6 +314,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
             objJsonMessge.IdDato = contTiempo;
+
+            var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == objCategoriaModel.SubCategoria.Categoria.IDECATEGORIA);
+            obj.TIEMPO = contTiempo;
+
+            _categoriaRepository.Update(obj);
 
             return Json(objJsonMessge);
            
@@ -804,6 +814,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model = InicializarCategoriaIndex();
             var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
             _categoriaRepository.Remove(objCategoria);
+
+
+
+
+
             return View("Index", model);
 
         }
@@ -849,6 +864,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
             }
+
+            //CALCULA EL TIEMPO
+            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+            int contTiempo = 0;
+            if (objLista != null)
+            {
+                foreach (SubCategoria item in objLista)
+                {
+                    contTiempo = contTiempo + item.TIEMPO;
+                }
+            }
+
+            jsonMessage.IdDato = contTiempo;
+
+            var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+            obj.TIEMPO = contTiempo;
+
+            _categoriaRepository.Update(obj);
+
+
 
             return Json(jsonMessage);
         }

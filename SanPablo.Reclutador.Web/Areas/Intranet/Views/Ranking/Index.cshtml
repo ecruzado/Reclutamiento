@@ -75,9 +75,12 @@
              buttons: {
                  "Si": function () {
                       var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
+                      var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
+                      var idPostulante = rowData.IdePostulante;
+                      var idSede = rowData.IdSede;
 
                      if (selr != null && selr > 0) {
-                         AprobarPostulante(selr);
+                         AprobarPostulante(selr, idPostulante, idSede);
                      } else {
                          MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                      }
@@ -349,7 +352,7 @@
                         }
                     });
                 },
-                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje'],
+                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje','Postulaciones previas'],
                 colModel: [
                         { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
@@ -362,7 +365,8 @@
                         { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
                         { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                         { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, width: 300 },
-                        { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100}
+                        { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
+                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 300 }
 
                 ],
 
@@ -470,20 +474,21 @@
 
         
 
-        function AprobarPostulante(selr) {
+        function AprobarPostulante(selr, idPostulante,idSede) {
 
             $.ajax({
                 data: {
-                    id: selr
-
+                    id: selr,
+                    idPostulante: idPostulante,
+                    idSede : idSede
                 },
                 type: "POST",
                 url: '@Url.Action("ApruebaPostulante", "Ranking")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                         if (data.Resultado) {
                             $('#grdListRankingPost').trigger('reloadGrid');
                             MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -508,9 +513,9 @@
                 url: '@Url.Action("EliminarPopupCv", "Ranking")',
                     traditional: true,
                     success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                     if (data.Resultado) {
                         $('#grdListCvPostulante').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");

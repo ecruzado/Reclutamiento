@@ -21,10 +21,13 @@
             $('#btnContrata').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
+                var pagina = $("#pagina").val();
+                var indPagina = $("#indPagina").val();
                 
+
                 if (idSol != null) {
 
-                 var url = '@Url.Action("Index", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol;
+                    var url = '@Url.Action("Index", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&indPagina=" + indPagina; 
                  window.location = url;
 
              } else {
@@ -267,39 +270,7 @@
               }
             });
             
-          @*  jQuery("#grdListEvaluacion").jqGrid({
-                url: '@Url.Action("ListaPostulantesPreSeleccionados", "SolicitudCargo")',
-                datatype: 'json',
-                mtype: 'POST',
-                colNames: ['Apellidos', 'Nombres', "Teléfono", "Celular", "Contactado", "Ver C.V.", 'Estado', 'Evaluación', 'Ptje.Total'],
-                colModel: [
-                        { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false },
-                        { name: 'Nombres', index: 'Nombres', align: 'left', editable: false},
-                        { name: 'Telefono', index: 'Telefono', align: 'left', editable: false },
-                        { name: 'Celular', index: 'Celular', align: 'left', editable: false },
-                        { name: 'Contactado', index: 'Contactado', align: 'center', width: 60, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true} },
-                        { name: 'Imprimir', index: 'Imprimir', align: 'center', sortable: false, width: 50, formatter: ImprimirFormatter, editable:false },
-                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, editable: false },
-                        { name: 'Evaluacion', index: 'Evaluacion', align: 'center', sortable: false, width: 50, editable: false},
-                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 50, editable: false }
-                ],
-                sortname: 'Apellidos',
-                sortorder: 'desc',
-                viewrecords: true,
-                cellEdit: false,
-                /*caption: 'Lista Referencias',*/
-                height: 160,
-                autowidth: true,
-                rowNum: 0,
-                cellsubmit: 'clientArray',
-                hidegrid: false,
-                postData: {
-                    /**/
-                },
-                loadComplete: function (data) {
-
-                }
-            });*@
+         
         });
         //jQuery("#cm1").click( function() {
         //    var s;
@@ -346,9 +317,9 @@
                 url: '@Url.Action("ContactaPostulante", "Ranking")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                     if (data.Resultado) {
                         $('#grdListEvaluacion').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -370,9 +341,9 @@
                 url: '@Url.Action("SeleccionaPost", "Ranking")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                     if (data.Resultado) {
                         $('#grdListEvaluacion').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");

@@ -278,6 +278,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult EliminarPopupCv(int id)
         {
@@ -309,31 +310,47 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult ApruebaPostulante(int id)
+        public ActionResult ApruebaPostulante(int id, int idPostulante, int idSede)
         {
             JsonMessage objJson = new JsonMessage();
             string estado = PostulanteEstado.PRESELECCIONADO_MANUAL;
+            string IndPostulacion = null;
             ReclutamientoPersona objReclutamientoPersona;
+            
+            objReclutamientoPersona = new ReclutamientoPersona();
+            objReclutamientoPersona.IdePostulante = idPostulante;
+            objReclutamientoPersona.IdSede = idSede;
 
-            if (id>0)
+            IndPostulacion = _postulanteRepository.ValidaSeleccion(objReclutamientoPersona);
+
+            if (Indicador.No.Equals(IndPostulacion))
             {
+               if (id > 0)
+                {
 
-                objReclutamientoPersona = new ReclutamientoPersona();
-                objReclutamientoPersona.IdeReclutaPersona = id;
-                objReclutamientoPersona.EstPostulante = estado;
+                    objReclutamientoPersona = new ReclutamientoPersona();
+                    objReclutamientoPersona.IdeReclutaPersona = id;
+                    objReclutamientoPersona.EstPostulante = estado;
 
 
-                _postulanteRepository.UpdateEstadoPostulante(objReclutamientoPersona);
+                    _postulanteRepository.UpdateEstadoPostulante(objReclutamientoPersona);
 
-                objJson.Resultado = true;
-                objJson.Mensaje = "Se actualizo el resgistro";
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se actualizo el resgistro";
 
+                }
+                else
+                {
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "No se pudo actualiza el registro";
+                }
             }
             else
             {
                 objJson.Resultado = false;
-                objJson.Mensaje = "No se pudo actualiza el registro";
+                objJson.Mensaje = "El postulante se encuentra preseleccionado en otra solicitud";
             }
 
 
@@ -479,6 +496,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id">id de reclutamiento persona</param>
         /// <param name="indContacto">indicador de contacto</param>
         /// <returns></returns>
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult ContactaPostulante(int id, string indContacto)
         {
@@ -568,7 +586,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.EstPostulante==null?"":item.EstPostulante.ToString(),
                                 item.DesEstadoPostulante==null?"":item.DesEstadoPostulante,
                                 item.Comentario==null?"":item.Comentario,
-                                item.PtoTotal==null?"":item.PtoTotal.ToString()
+                                item.PtoTotal==null?"":item.PtoTotal.ToString(),
+                                item.PostulacionParalelo ==null?"":item.PostulacionParalelo
                                 
                             }
                 }).ToArray();
@@ -623,7 +642,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              return View("PostulantesPreSeleccionados", model);
          }
 
-
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
          [HttpPost]
          public ActionResult SeleccionaPost(int id) 
          {

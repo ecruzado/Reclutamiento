@@ -31,6 +31,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICvPostulanteRepository _cvPostulanteRepository;
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IPostulanteRepository _postulanteRepository;
+        private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
 
 
 
@@ -38,7 +39,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                          ISolReqPersonalRepository solReqPersonalRepository,
                                          ICvPostulanteRepository cvPostulanteRepository,
                                         IReclutamientoPersonaRepository reclutamientoPersonaRepository,
-            IPostulanteRepository postulanteRepository
+            IPostulanteRepository postulanteRepository,
+            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -46,7 +48,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _cvPostulanteRepository = cvPostulanteRepository;
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _postulanteRepository = postulanteRepository;
-           
+            _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
         }
         
         /// <summary>
@@ -55,7 +57,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <param name="tipSol"></param>
         /// <returns></returns>
-        public ActionResult Index(int id, string tipSol)
+        public ActionResult Index(int id, string tipSol, string pagina, string indPagina)
         {
             
            RankingViewModel model = new RankingViewModel();
@@ -78,6 +80,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
            // se incializa
            model.Solicitud.IdeSolReqPersonal = id;
            model.Solicitud.Tipsol = tipSol;
+           model.indPagina = indPagina;
+           model.pagina = pagina;
 
            return View("Index", model);
         }
@@ -153,6 +157,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult ContrataPost(int id, int numVac,int idSol,string tipSol)
         {
@@ -201,29 +206,113 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="idSede"></param>
         /// <param name="idCargo"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult FinalizaSol(int idSol, string tipSol, string tipPuesto, int idSede, int idCargo)
+        public ActionResult FinalizaSol(int idSol, string tipSol, string tipPuesto, int idSede, int idCargo,int numVac)
         {
 
             JsonMessage objJson = new JsonMessage();
+            string rpta = null;
 
+            ReclutamientoPersona objReCluta = new ReclutamientoPersona();
 
-            ReclutamientoPersona objReluta = new ReclutamientoPersona();
+            objReCluta.IdeSol = idSol;
+            objReCluta.TipSol = tipSol;
+            objReCluta.TipPuesto = tipPuesto;
+            objReCluta.IdSede = idSede;
+            objReCluta.IdeCargo = idCargo;
+            objReCluta.NumVacantes = numVac;
 
-            objReluta.IdeSol = idSol;
-            objReluta.TipSol = tipSol;
-            objReluta.TipPuesto = tipPuesto;
-            objReluta.IdSede = idSede;
-            objReluta.IdeCargo = idCargo;
+            rpta = _reclutamientoPersonaRepository.validaFinSolicitud(objReCluta);
 
+            if (Indicador.Si.Equals(rpta))
+            {
+                _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
 
-            _reclutamientoPersonaRepository.FinalizaContratacion(objReluta);
-    
+                objJson.Resultado = true;
+                objJson.Mensaje = "Finalizo la solicitud";
+            }
+            else
+            {
+                objJson.Resultado = false;
+            }
+            
 
             return Json(objJson);
         }
+
+
+        /// <summary>
+        /// Inicializa al popup de las observaciones
+        /// </summary>
+        /// <param name="idSol"></param>
+        /// <param name="tipSol"></param>
+        /// <param name="tipPuesto"></param>
+        /// <param name="idSede"></param>
+        /// <param name="idCargo"></param>
+        /// <param name="numVac"></param>
+        /// <returns></returns>
+        public ActionResult popupObserv(int id, string tipSol, string tipPuesto, int idSede, int idCargo)
+        {
+
+            RankingViewModel model = new RankingViewModel();
+            model.ReclutaPersonal = new ReclutamientoPersona();
+
+            model.ReclutaPersonal.IdeSol = id;
+            model.ReclutaPersonal.TipSol = tipSol;
+            model.ReclutaPersonal.TipPuesto = tipPuesto;
+            model.ReclutaPersonal.IdeCargo = idCargo;
+            model.ReclutaPersonal.IdSede = idSede;
+           
+            return View("popupObserv", model);
+        }
         
-       
+        
+
+        /// <summary>
+        /// finaliza la solicitud con el comentario ingresado
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult FinalizaSolicitudObs(RankingViewModel model)
+        {
+
+            JsonMessage objJson = new JsonMessage();
+            ReclutamientoPersona objReCluta = new ReclutamientoPersona();
+
+            objReCluta.IdeSol = model.ReclutaPersonal.IdeSol;
+            objReCluta.TipSol = model.ReclutaPersonal.TipSol;
+            objReCluta.TipPuesto = model.ReclutaPersonal.TipPuesto;
+            objReCluta.IdSede = model.ReclutaPersonal.IdSede;
+            objReCluta.IdeCargo = model.ReclutaPersonal.IdeCargo;
+            objReCluta.MotivoCierre = model.ReclutaPersonal.MotivoCierre;
+
+            //actualiza el motivo de cierre
+            objReCluta.MotivoCierre = model.ReclutaPersonal.MotivoCierre;
+
+            if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
+            {
+                var objSolNuevo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.ReclutaPersonal.IdeSol);
+                objSolNuevo.MotivoCierre = model.ReclutaPersonal.MotivoCierre;
+                _solicitudNuevoCargoRepository.Update(objSolNuevo);
+
+            }
+            else
+            {
+                var objSolReq =_solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == model.ReclutaPersonal.IdeSol);
+                objSolReq.MotivoCierre=model.ReclutaPersonal.MotivoCierre;
+                _solReqPersonalRepository.Update(objSolReq);
+
+            }
+
+            _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
+
+            objJson.Resultado = true;
+            objJson.Mensaje = "Finalizo la solicitud";
+            
+            return Json(objJson);
+        }
 
 
     }
