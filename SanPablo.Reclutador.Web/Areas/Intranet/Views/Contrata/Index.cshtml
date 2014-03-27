@@ -47,15 +47,21 @@
 
 
 
-            $('#btnAnteriorRanking').click(function () {
+            $('#btnAnteriorPre').click(function () {
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
-                
+               
                 var pagina = $("#pagina").val();
+                var indPagina = $("#indPagina").val();
+
                 if (idSol != null) {
 
-                    var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    @* var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                    window.location = url;*@
+
+                    var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
+
                 }
             });
 
@@ -223,9 +229,9 @@
                 url: '@Url.Action("ContrataPost", "Contrata")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
+                if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -252,9 +258,9 @@
                 url: '@Url.Action("FinalizaSol", "Contrata")',
                 traditional: true,
                 success: function (data) {
-                @*if (data.redirecciona) {
-                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                }*@
+                if (data.redirecciona) {
+                    sanpablo.redirecciona('@Url.Action("login", "seguridad")');
+                }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -296,6 +302,10 @@
      @Html.TextBoxFor(model => model.Solicitud.IdeSede, new { style = "display: none;" }) 
      @Html.TextBoxFor(model => model.Solicitud.IdeCargo, new { style = "display: none;" })  
      @Html.TextBoxFor(model => model.Solicitud.TipPuesto, new { style = "display: none;" })
+
+     @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
+     @Html.TextBoxFor(model => model.indPagina, new { style = "display: none;" }) 
+    
     
            <table class="formulario-busqueda">
                 <tr class="formulario-fila">

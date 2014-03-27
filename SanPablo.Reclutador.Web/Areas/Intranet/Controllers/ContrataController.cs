@@ -57,7 +57,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <param name="tipSol"></param>
         /// <returns></returns>
-        public ActionResult Index(int id, string tipSol)
+        public ActionResult Index(int id, string tipSol, string pagina, string indPagina)
         {
             
            RankingViewModel model = new RankingViewModel();
@@ -80,6 +80,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
            // se incializa
            model.Solicitud.IdeSolReqPersonal = id;
            model.Solicitud.Tipsol = tipSol;
+           model.indPagina = indPagina;
+           model.pagina = pagina;
 
            return View("Index", model);
         }
@@ -155,6 +157,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult ContrataPost(int id, int numVac,int idSol,string tipSol)
         {
@@ -203,6 +206,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="idSede"></param>
         /// <param name="idCargo"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult FinalizaSol(int idSol, string tipSol, string tipPuesto, int idSede, int idCargo,int numVac)
         {

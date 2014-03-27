@@ -866,6 +866,7 @@
                 if (data.Resultado == false) {
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                 } else {
+                    $("#Categoria_TIEMPO").val(data.IdDato);
                     $('#grdList').trigger('reloadGrid');
                 }
             }

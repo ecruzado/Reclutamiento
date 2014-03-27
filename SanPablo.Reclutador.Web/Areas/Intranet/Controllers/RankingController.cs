@@ -278,6 +278,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult EliminarPopupCv(int id)
         {
@@ -309,8 +310,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult ApruebaPostulante(int id, int idPostulante)
+        public ActionResult ApruebaPostulante(int id, int idPostulante, int idSede)
         {
             JsonMessage objJson = new JsonMessage();
             string estado = PostulanteEstado.PRESELECCIONADO_MANUAL;
@@ -319,7 +321,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             
             objReclutamientoPersona = new ReclutamientoPersona();
             objReclutamientoPersona.IdePostulante = idPostulante;
-            
+            objReclutamientoPersona.IdSede = idSede;
 
             IndPostulacion = _postulanteRepository.ValidaSeleccion(objReclutamientoPersona);
 
@@ -494,6 +496,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id">id de reclutamiento persona</param>
         /// <param name="indContacto">indicador de contacto</param>
         /// <returns></returns>
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult ContactaPostulante(int id, string indContacto)
         {
@@ -639,7 +642,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              return View("PostulantesPreSeleccionados", model);
          }
 
-
+         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
          [HttpPost]
          public ActionResult SeleccionaPost(int id) 
          {

@@ -26,6 +26,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCriterio { get; set; }
         public virtual string TIPCATEGORIADES { get; set; }
         public virtual string NOMBREIMAGEN { get; set; }
+        
+        
         public virtual int TIEMPO { get; set; }
        
 
