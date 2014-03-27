@@ -75,9 +75,11 @@
              buttons: {
                  "Si": function () {
                       var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
+                      var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
+                      var idPostulante = rowData.IdePostulante;
 
                      if (selr != null && selr > 0) {
-                         AprobarPostulante(selr);
+                         AprobarPostulante(selr, idPostulante);
                      } else {
                          MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                      }
@@ -349,7 +351,7 @@
                         }
                     });
                 },
-                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje'],
+                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje','Postulación paralelo'],
                 colModel: [
                         { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
@@ -362,7 +364,8 @@
                         { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
                         { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                         { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, width: 300 },
-                        { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100}
+                        { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
+                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 250 }
 
                 ],
 
@@ -470,12 +473,12 @@
 
         
 
-        function AprobarPostulante(selr) {
+        function AprobarPostulante(selr, idPostulante) {
 
             $.ajax({
                 data: {
-                    id: selr
-
+                    id: selr,
+                    idPostulante: idPostulante
                 },
                 type: "POST",
                 url: '@Url.Action("ApruebaPostulante", "Ranking")',

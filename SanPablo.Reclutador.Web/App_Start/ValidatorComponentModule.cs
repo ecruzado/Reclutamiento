@@ -141,6 +141,11 @@
             builder.RegisterType<CvPostulanteValidator>()
                .Keyed<IValidator>(typeof(IValidator<CvPostulante>))
                .As<IValidator>();
+
+
+            builder.RegisterType<ReclutamientoPersonaValidator>()
+              .Keyed<IValidator>(typeof(IValidator<ReclutamientoPersona>))
+              .As<IValidator>();
             
 
 

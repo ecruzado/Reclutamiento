@@ -80,5 +80,13 @@ namespace SanPablo.Reclutador.Entity
                     IndicadorVerSalario = Indicador.No;
             }
         }
+
+        /// <summary>
+        /// Motivo de Cierre de una solicitud si no se opcuparon todas las vacantes
+        /// </summary>
+        public virtual string MotivoCierre { get; set; }
+        
+
+
     }
 }

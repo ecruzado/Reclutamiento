@@ -234,6 +234,50 @@
             }
         }
 
+       
+        /// <summary>
+        /// Validacion de seleccion de postulante
+        /// </summary>
+        /// <param name="obj">objeto del tipo ReclutamientoPersona</param>
+        /// <returns>retorna un valor de tipo string</returns>
+        public string ValidaSeleccion(ReclutamientoPersona obj)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            string retorno = "";
+
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_VALIDA_SELECCION");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nIdPostulante", OracleType.Number).Value = obj.IdePostulante;
+                lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdSede;
+                
+                lspcmd.Parameters.Add("p_cRpta", OracleType.VarChar,10).Direction = ParameterDirection.Output;
+
+
+                lspcmd.ExecuteNonQuery();
+
+                retorno = (lspcmd.Parameters["p_cRpta"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cRpta"].Value));
+
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
 
         /// <summary>
         /// Relaiza la postulacion
@@ -422,6 +466,8 @@
                     lobReclutamientoPersona.FonoFijo = (ldrReclutamientoPersona["TELEFONO_FIJO"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_FIJO"]));
                     lobReclutamientoPersona.FonoMovil = (ldrReclutamientoPersona["TELEFONO_MOVIL"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["TELEFONO_MOVIL"]));
                     lobReclutamientoPersona.EvalPostulante = (ldrReclutamientoPersona["NUMERO_EVALUACION"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["NUMERO_EVALUACION"]));
+                    lobReclutamientoPersona.PostulacionParalelo = (ldrReclutamientoPersona["POSTULACIONES"] == null ? "" : Convert.ToString(ldrReclutamientoPersona["POSTULACIONES"]));
+                    
 
                     llstReclutamientoPersona.Add(lobReclutamientoPersona);
                 }

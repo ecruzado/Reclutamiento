@@ -267,39 +267,7 @@
               }
             });
             
-          @*  jQuery("#grdListEvaluacion").jqGrid({
-                url: '@Url.Action("ListaPostulantesPreSeleccionados", "SolicitudCargo")',
-                datatype: 'json',
-                mtype: 'POST',
-                colNames: ['Apellidos', 'Nombres', "Teléfono", "Celular", "Contactado", "Ver C.V.", 'Estado', 'Evaluación', 'Ptje.Total'],
-                colModel: [
-                        { name: 'Apellidos', index: 'Apellidos', align: 'left', editable: false },
-                        { name: 'Nombres', index: 'Nombres', align: 'left', editable: false},
-                        { name: 'Telefono', index: 'Telefono', align: 'left', editable: false },
-                        { name: 'Celular', index: 'Celular', align: 'left', editable: false },
-                        { name: 'Contactado', index: 'Contactado', align: 'center', width: 60, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true} },
-                        { name: 'Imprimir', index: 'Imprimir', align: 'center', sortable: false, width: 50, formatter: ImprimirFormatter, editable:false },
-                        { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, editable: false },
-                        { name: 'Evaluacion', index: 'Evaluacion', align: 'center', sortable: false, width: 50, editable: false},
-                        { name: 'Puntaje', index: 'Puntaje', align: 'center', sortable: false, width: 50, editable: false }
-                ],
-                sortname: 'Apellidos',
-                sortorder: 'desc',
-                viewrecords: true,
-                cellEdit: false,
-                /*caption: 'Lista Referencias',*/
-                height: 160,
-                autowidth: true,
-                rowNum: 0,
-                cellsubmit: 'clientArray',
-                hidegrid: false,
-                postData: {
-                    /**/
-                },
-                loadComplete: function (data) {
-
-                }
-            });*@
+         
         });
         //jQuery("#cm1").click( function() {
         //    var s;

@@ -57,5 +57,54 @@ namespace SanPablo.Reclutador.Repository
             }
         }
 
+        /// <summary>
+        /// Realiza la validacion de la solicitud,
+        /// si el numero de vacantes es igual al numero de contratdos permite cerrar la solicitud si no muestra 
+        /// popup donde debe ingresar un motivo de para cerrar la solicitud
+        /// </summary>
+        /// <param name="objReCluta"></param>
+        /// <returns></returns>
+        public string validaFinSolicitud(ReclutamientoPersona obj)
+        {
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            string retorno = "";
+
+            try
+            {
+
+             
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_VALIDA_FIN_SOLICITUD");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nidsol", OracleType.Number).Value = obj.IdeSol;
+                lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = obj.TipSol;
+                lspcmd.Parameters.Add("p_ctippuesto", OracleType.VarChar).Value = obj.TipPuesto;
+                lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.IdSede;
+                lspcmd.Parameters.Add("p_nidcargo", OracleType.Number).Value = obj.IdeCargo;
+                lspcmd.Parameters.Add("p_nvancantes", OracleType.Number).Value = obj.NumVacantes;
+                lspcmd.Parameters.Add("p_crpta", OracleType.VarChar,200).Direction = ParameterDirection.Output;
+
+
+                lspcmd.ExecuteNonQuery();
+
+                retorno = (lspcmd.Parameters["p_crpta"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_crpta"].Value));
+
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
     }
 }

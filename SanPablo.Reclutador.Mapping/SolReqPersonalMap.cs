@@ -103,6 +103,7 @@ namespace SanPablo.Reclutador.Mapping
             
 
             Map(x => x.TipoSolicitud, "TIPSOL");
+            Map(x => x.MotivoCierre, "MOTIVOCIERRE");
 
             //Map(x => x.Sede_des).Formula("(SELECT nvl(s.descripcion,'') descripcion FROM SEDE S WHERE S.IDESEDE=IDESEDE)");
             //Map(x => x.Dependencia_des).Formula("(SELECT nvl(d.nomdependencia,'') nomdependencia FROM DEPENDENCIA d WHERE d.IDESEDE=IDESEDE AND d.idedependencia=IDEDEPENDENCIA)");

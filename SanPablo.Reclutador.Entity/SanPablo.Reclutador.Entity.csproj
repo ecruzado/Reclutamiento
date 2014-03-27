@@ -135,6 +135,7 @@
     <Compile Include="Validation\CvPostulanteValidator.cs" />
     <Compile Include="Validation\DetalleGeneralValidator.cs" />
     <Compile Include="Validation\LogSolicitudRequerimientoValidator.cs" />
+    <Compile Include="Validation\ReclutamientoPersonaValidator.cs" />
     <Compile Include="Validation\SolReqPersonalValidator.cs" />
     <Compile Include="Validation\PasswordValidator.cs" />
     <Compile Include="Validation\LogSolicitudNuevoCargoValidator.cs" />

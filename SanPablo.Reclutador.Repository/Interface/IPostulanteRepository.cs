@@ -26,7 +26,7 @@
         List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj);
         List<ReclutamientoPersona> GetPostulantesPreseleccionado(ReclutamientoPersona obj);
         List<ReclutamientoPersona> GetPostulantesSeleccionados(ReclutamientoPersona obj);
-
+        string ValidaSeleccion(ReclutamientoPersona obj);
         
         void UpdateEstadoPostulante(ReclutamientoPersona obj);
     }
