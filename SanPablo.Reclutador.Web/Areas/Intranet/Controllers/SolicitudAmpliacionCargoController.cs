@@ -864,20 +864,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             try
             {
 
-
-                //if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data) && !0.Equals(grid.rules[1].data)) ||
-                //    (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data) && !0.Equals(grid.rules[2].data)) ||
-                //    (!"".Equals(grid.rules[3].data) && !"0".Equals(grid.rules[3].data) && !0.Equals(grid.rules[3].data)) ||
-                //    (!"".Equals(grid.rules[4].data) && !"0".Equals(grid.rules[4].data) && !0.Equals(grid.rules[4].data)) ||
-                //    (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null) ||
-                //    (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null) ||
-                //    (!"".Equals(grid.rules[7].data) && !"0".Equals(grid.rules[7].data) && !0.Equals(grid.rules[7].data)) ||
-                //    (!"".Equals(grid.rules[8].data) && grid.rules[8].data != null && !"0".Equals(grid.rules[8].data)) ||
-                //    (!"".Equals(grid.rules[9].data) && grid.rules[9].data != null && !"0".Equals(grid.rules[9].data))
-
-                //    )
-                //{
-
                     solicitudRequerimiento = new SolReqPersonal();
 
                     solicitudRequerimiento.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));

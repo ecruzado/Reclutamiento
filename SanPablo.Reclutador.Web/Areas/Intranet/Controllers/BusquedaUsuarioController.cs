@@ -102,6 +102,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
 
                 where.Add(Expression.Eq("FlgEstado", IndicadorActivo.Activo));
+                where.Add(Expression.Eq("TipUsuario", TipUsuario.Instranet));
 
                 var generic = Listar(_usuarioRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);

@@ -1,8 +1,26 @@
-﻿
+﻿@using SanPablo.Reclutador.Entity
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.EvaluarPostulanteViewModel
 @{
     Layout = null;
 }
+@section Scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
 
+
+        $('#btnIniciarExamen').click(function () {
+            alert("hola hola");
+            window.open('@Url.Action("Examen", "Evaluacion")');
+        });
+
+    });
+    function mostrarExamen()
+    {
+        alert("hola funcion");
+        window.open('@Url.Action("Examen", "Evaluacion")');
+    }
+</script>
+}
 <!DOCTYPE html>
 
 <html>
@@ -29,11 +47,27 @@
                 <h5>Intrucciones</h5>
             </div>
             <h5>Postulante</h5>
-            <p style="margin-left:10px;margin-right:10px">Estimado usuario, el siguiente examen es para marcar una alternativa por cada pregunta.</p>
-            <p style="margin-left:10px;margin-right:10px">Toda pregunta marcada no puede ser cambiada. </p>
-            <p style="margin-left:10px;margin-right:10px">Para empezar de click en INICIAR</p>
+            <div style="margin-left:10px;margin-right:10px">
+            @Html.TextBoxFor(model => model.Categoria.IDECATEGORIA, new { style = "display:none;" })
+            @Html.DisplayFor(model=>model.Categoria.INSTRUCCIONES)
+            </div>
+            <h5>EJEMPLO</h5>
+            <div style="margin-left:10px;margin-right:10px" >
+               @if (Model.Categoria.TIPOEJEMPLO == TipoModo.Texto)
+               {
+                   <div>
+                       @Html.DisplayFor(model=>model.Categoria.TEXTOEJEMPLO)
+                   </div> 
+               }
+                else
+                {
+                   <div>
+                        <img id="ImgEjemplo"  height ="100" width="100" src="@Url.Action("GetImage", "Evaluacion", new { id = Model.Categoria.IDECATEGORIA })" /> 
+                   </div>
+               }
+            </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("Examen", "Evaluacion")"><i class="icon-time icon-white"></i> Iniciar</a>
+                <a class="btn btn-info" href= "@Url.Action("Examen", "Evaluacion",new { id = Model.Categoria.IDECATEGORIA })" ><i class="icon-time icon-white"></i> Iniciar</a>
             </div>
         </div>
 

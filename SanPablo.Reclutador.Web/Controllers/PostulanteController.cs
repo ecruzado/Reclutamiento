@@ -319,7 +319,23 @@
             result = Json(pestanas);
             return result;
         }
-        
+
+        public ActionResult IndicadorSession()
+        {
+            ActionResult result = null;
+            bool indicador = false;
+            if (IdePostulante != 0)
+            {
+                indicador = true;
+            }
+            else
+            {
+                indicador = false;
+            }
+            result = Json(indicador);
+            return result;
+        }
+
         [HttpPost]
         public ActionResult mostrarAlerta()
         {
@@ -347,6 +363,22 @@
         }
         #endregion
 
+        public ActionResult validarDocumento(string dni)
+        {
+            ActionResult result = null;
+            bool valido = false;
+            int nroDocumentos = _postulanteRepository.CountByExpress(x => x.NumeroDocumento == dni);
+
+            if (nroDocumentos == 0)
+            {
+                valido = true;
+            }
+            else
+            {
+                valido = false;
+            }
+            return result = Json(valido);
+        }
 
         #region DatosComplementarios
 
@@ -479,6 +511,9 @@
         {
             return View();
         }
+
+
+
 
         #region ListaOfertasLaborales
         /// <summary>

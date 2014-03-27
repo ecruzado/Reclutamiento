@@ -190,6 +190,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 reclutamientoExamenEditar.FechaModificacion = FechaModificacion;
                 reclutamientoExamenEditar.TipoEstadoEvaluacion = EstadoEvaluacion.Programado;
                 reclutamientoExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
+                reclutamientoExamenEditar.EsEntrevistaFinal = model.ReclutaPersonaExamen.EsEntrevistaFinal;
 
                 _reclutamientoPersonaExamenRepository.Update(reclutamientoExamenEditar);
 
@@ -219,10 +220,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var reclutamientoExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idRecluPersoExamen);
                 if (reclutamientoExamen.nombreArchivo != null)
                 {
-                    var nombre = reclutamientoExamen.nombreArchivo;
+                    string nombre = reclutamientoExamen.nombreArchivo;
                     int posicion = nombre.IndexOf(".", nombre.Length - 5);
                     int nroCaract = nombre.Length - posicion - 1;
-                    var extension = nombre.Substr(posicion, nroCaract);
+                    string extension = nombre.Substring(posicion+1, nroCaract);
                     modelResultado.tipoArchivo = extension;
 
                 }
@@ -251,7 +252,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 else
                 {
-                    
+                    var reclutaExamenEditar = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen);
+
                     if (!string.IsNullOrEmpty(model.nombreTemporalArchivo))
                     {
 
@@ -265,19 +267,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             s.Read(buffer, 0, (int)s.Length);
                             int len = (int)s.Length;
                             s.Close();
-                            model.ReclutaPersonaExamen.Archivo = buffer;
-                            model.ReclutaPersonaExamen.rutaArchivo = model.ReclutaPersonaExamen.rutaArchivo;
+                            //model.ReclutaPersonaExamen.Archivo = buffer;
+                            //model.ReclutaPersonaExamen.rutaArchivo = model.ReclutaPersonaExamen.rutaArchivo;
+                            reclutaExamenEditar.Archivo = buffer;
+                            //reclutaExamenEditar.nombreArchivo = model.ReclutaPersonaExamen.nombreArchivo;
 
-                            var nombreArchivo = model.ReclutaPersonaExamen.rutaArchivo;
+                            var nombreArchivo = model.ReclutaPersonaExamen.nombreArchivo;
                             if (nombreArchivo.Length > 150)
                             {
                                 nombreArchivo = nombreArchivo.Substr(nombreArchivo.Length-150,150);
                             }
-                            model.ReclutaPersonaExamen.nombreArchivo = nombreArchivo;
+                            reclutaExamenEditar.nombreArchivo = nombreArchivo;
                         }
                     }
 
-                    var reclutaExamenEditar = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen);
+                    
 
                     if (reclutaExamenEditar.TipoEstadoEvaluacion == EstadoEvaluacion.Pendiente)
                     {
@@ -298,9 +302,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     reclutaExamenEditar.ComentarioResultado = model.ReclutaPersonaExamen.ComentarioResultado;
                     reclutaExamenEditar.TipoEstadoEvaluacion = model.ReclutaPersonaExamen.TipoEstadoEvaluacion;
                     reclutaExamenEditar.FechaModificacion = FechaModificacion;
-                    reclutaExamenEditar.Archivo = model.ReclutaPersonaExamen.Archivo;
                     reclutaExamenEditar.NotaFinal = model.ReclutaPersonaExamen.NotaFinal;
-                    reclutaExamenEditar.nombreArchivo = model.ReclutaPersonaExamen.nombreArchivo;
+                    
                     reclutaExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
 
                     

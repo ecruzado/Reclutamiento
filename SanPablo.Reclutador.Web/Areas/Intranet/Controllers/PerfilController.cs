@@ -51,7 +51,7 @@
 
                 if (ideSolicitud != null)
                 {
-                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud),usuario);
+                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud),usuario,Convert.ToInt32(Session[ConstanteSesion.Sede]));
                    datosCargo.IdeSolicitud = Convert.ToInt32(ideSolicitud);
                    CargoPerfil = datosCargo;
                    CargoPerfil.TipoEtapa = solicitud.TipoEtapa;

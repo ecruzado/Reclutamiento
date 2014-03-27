@@ -87,7 +87,7 @@
 @using (Html.BeginForm("BusquedaUsuario", "EvaluacionesPreSeleccionados", FormMethod.Post, new { id = "busquedaUsuarioForm" }))
     {
     @Html.ValidationSummary(true)
-  
+  <form class="formulario-busqueda">
     <table class="formulario-busqueda">
         <tr >
             <td class="colEtiqueta" >
@@ -116,13 +116,11 @@
         </tr> 
     </table>
      
-      <div class="formulario-accion offset9">
-         <div>
+      <div class="form-actions">
           <a class="btn btn-info" id="btnBuscarUsuario"><i class="icon-search icon-white"></i> Buscar</a>
           <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-        </div>
      </div>
-    
+    </form>
     <div class="tabla-datos" id="tbUsuarios">
     <table id="grdListUsuario">
     </table>

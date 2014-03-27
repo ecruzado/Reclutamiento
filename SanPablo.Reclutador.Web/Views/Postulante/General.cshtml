@@ -24,6 +24,8 @@
             
         actualizarBarra();
 
+        habilitarPestanas();
+
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
@@ -101,6 +103,32 @@
          });
          return false;
     }
+
+    function verificarDocumento() {
+        var documento = $('#Postulante_NumeroDocumento').val();
+        if ((documento != null) && (documento != "")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("validarDocumento","Postulante")',
+                data: { dni: documento },
+                success: function (respuesta) {
+                    if (!respuesta)
+                    {
+                        $('#Postulante_NumeroDocumento').val('');
+                        $("#spanMensaje").html('El número de Documento ya existe');
+                        $("#divMensaje").dialog({
+                            title: 'ALERTA!!',
+                            modal: true,
+                            buttons: {
+                                "Ok": function () { $(this).dialog("close"); }
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+    }
 </script>
 }
 <div class="row">
@@ -168,7 +196,7 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número Documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario", @style="text-transform: uppercase", onblur="verificarDocumento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>

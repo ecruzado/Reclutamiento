@@ -6,5 +6,7 @@
     public interface ICriterioRepository : IRepository<Criterio>
     {
         IList<Criterio> ObtenerListaMarciana(string codigo);
+
+        ListaCriterios ObtenerCriteriosPorCategoria(int IdeCategoria);
     }
 }
