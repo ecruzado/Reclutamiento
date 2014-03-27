@@ -883,8 +883,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     solicitudRequerimiento.Tipsol = TipoSolicitud.Ampliacion;
 
-                    var idusuario = Session[ConstanteSesion.Usuario];
-                    solicitudRequerimiento.idUsuarioResp = (int)idusuario;
+                    var IdRolResp = Session[ConstanteSesion.Rol];
+                    solicitudRequerimiento.IdRolResp = Convert.ToInt32(IdRolResp);
+                    
+                    var idUsuarioResp = Session[ConstanteSesion.Usuario];
+                    solicitudRequerimiento.idUsuarioResp = Convert.ToInt32(idUsuarioResp);
+
                     var idSede = Session[ConstanteSesion.Sede];
                     solicitudRequerimiento.IdeSede = Convert.ToInt32(idSede);
 

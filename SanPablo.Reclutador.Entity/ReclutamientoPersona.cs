@@ -177,5 +177,11 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual string PostulacionParalelo { get; set; }
 
+
+        public virtual int idResponsable { get; set; }
+        public virtual int idSuceso { get; set; }
+        public virtual int idRolSuceso { get; set; }
+        public virtual int idRolResponsable { get; set; }
+
     }
 }
