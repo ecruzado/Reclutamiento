@@ -223,6 +223,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objReCluta.IdeCargo = idCargo;
             objReCluta.NumVacantes = numVac;
 
+            objReCluta.idResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            objReCluta.idRolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            objReCluta.idSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            objReCluta.idRolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
             rpta = _reclutamientoPersonaRepository.validaFinSolicitud(objReCluta);
 
             if (Indicador.Si.Equals(rpta))
@@ -305,6 +310,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 _solReqPersonalRepository.Update(objSolReq);
 
             }
+
+            objReCluta.idResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            objReCluta.idRolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            objReCluta.idSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            objReCluta.idRolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
 
             _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
 

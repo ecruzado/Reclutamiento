@@ -43,7 +43,15 @@ namespace SanPablo.Reclutador.Repository
                 lspcmd.Parameters.Add("p_ctippuesto", OracleType.VarChar).Value = obj.TipPuesto;
                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.IdSede;
                 lspcmd.Parameters.Add("p_nidcargo", OracleType.Number).Value = obj.IdeCargo;
+                
+                lspcmd.Parameters.Add("p_nIdResp", OracleType.Number).Value = obj.idResponsable;
+                lspcmd.Parameters.Add("p_nIdSuceso", OracleType.Number).Value = obj.idSuceso;
+                lspcmd.Parameters.Add("p_nIdRolResp", OracleType.Number).Value = obj.idRolResponsable;
+                lspcmd.Parameters.Add("p_nIdRolSuceso", OracleType.Number).Value = obj.idRolSuceso;
                
+               
+
+
                 lspcmd.ExecuteNonQuery();
 
             }

@@ -1124,10 +1124,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     solReqPersonal.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
 
                     solReqPersonal.Tipsol = TipoSolicitud.Remplazo;
-                    
-                
-                    var idusuario = Session[ConstanteSesion.Usuario];
-                    solReqPersonal.idUsuarioResp = (int)idusuario;
+
+
+                    var IdRolResp = Session[ConstanteSesion.Rol];
+                    solReqPersonal.IdRolResp = Convert.ToInt32(IdRolResp);
+
+                    var idUsuarioResp = Session[ConstanteSesion.Usuario];
+                    solReqPersonal.idUsuarioResp = Convert.ToInt32(idUsuarioResp);
+    
                     var idSede = Session[ConstanteSesion.Sede];
                     
                     solReqPersonal.IdeSede = Convert.ToInt32(idSede);
