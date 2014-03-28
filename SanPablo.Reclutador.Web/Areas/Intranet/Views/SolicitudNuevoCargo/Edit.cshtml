@@ -37,8 +37,8 @@
                             title: 'SAN PABLO',
                             modal: true,
                             buttons: {
-                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
-                                "No": function () { $(this).dialog("close");}
+                                "Si": function () { $("#divMensaje").dialog("close"); enviarAprobacionRechazo(); },
+                                "No": function () { $("#divMensaje").dialog("close"); }
                             }
                         });
                        
@@ -48,7 +48,7 @@
                     }
                 },
                 "Cancelar": function () {
-                    $(this).dialog("close");
+                    $('#updateDialogAprobacion').dialog("close");
                 }
             }
                 });
@@ -72,12 +72,15 @@
                                 deshabilitarControles();
                                 $("#spanMensaje").html("Solicitud enviada exitosamente");
                                 $("#divMensaje").dialog({
-                                    title: 'SAN PABLO',
-                                    modal: true,
-                                    buttons: {
-                                        "Ok": function () { $("#updateDialogConfirmacion").dialog("close"); actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val()); }
-                                    }
-                                });
+                                        title: 'Reclutamiento y Seleccion de personal',
+                                        modal: true,
+                                        buttons: [{
+                                            text: "Ok",
+                                            click: function () {
+                                                $("#divMensaje").dialog("close"); actualizarCodigo($('#SolicitudNuevoCargo_CodigoCargo').val());
+                                            }
+                                        }]
+                                    });
                             }
                             else {
                                 $("#updateDialogConfirmacion").dialog("close");
@@ -86,13 +89,13 @@
                         });
                     }
                     else {
-                        $(this).dialog("close");
+                        $('#updateDialogConfirmacion').dialog("close");
                         mensajeResultado("ERROR: Verifique que los datos ingresados son correctos");
                     }
                    
                  },
                  "Cancelar": function () {
-                     $(this).dialog("close");
+                     $('#updateDialogConfirmacion').dialog("close");
                   }
             }
          });
@@ -190,12 +193,16 @@
     function mensajeResultado(mensaje) {
         $("#spanMensaje").html(mensaje);
         $("#divMensaje").dialog({
-            title: 'SAN PABLO',
+            title: 'Reclutamiento y Seleccion de personal',
             modal: true,
-            buttons: {
-                "Ok": function () { $("#divMensaje").dialog("close"); }
-            }
+            buttons: [{
+                text: "Ok",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
         });
+
     }
     function deshabilita() {
         document.getElementById('idB1').style.display = "none";

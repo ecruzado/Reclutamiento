@@ -302,7 +302,7 @@
                     logSolicitud.RolResponsable = rolActual;
                     logSolicitud.UsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
-                    _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargo.IdeSede, solicitudNuevoCargo.IdeArea, "NO");
+                    _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargoEditar.IdeSede, solicitudNuevoCargoEditar.IdeArea, "NO");
 
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
 
