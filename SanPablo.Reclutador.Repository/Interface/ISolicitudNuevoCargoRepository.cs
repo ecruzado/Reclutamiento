@@ -14,6 +14,8 @@
         LogSolicitudNuevoCargo responsablePublicacion(int ideCargo, int ideSede);
 
         List<SolicitudNuevoCargo> GetListaSolicitudNuevo(SolicitudNuevoCargo solicitud);
+
+        List<SolicitudNuevoCargo> ListarCargos(int idSede, int idRolResponsable, int idUsuarioResponsable);
     }
 
 }

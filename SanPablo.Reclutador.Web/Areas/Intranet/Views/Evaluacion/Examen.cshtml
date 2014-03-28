@@ -4,9 +4,14 @@
     Layout = null;
 }
 
+
+@section Head{
+    }
 <!DOCTYPE html>
 
 <html>
+     <link href="@Url.Content("~/Scripts/uploadify/uploadify.css")" rel="stylesheet" type="text/css" />
+
     <head>
         <meta charset="utf-8">
         @*<title>Instrucciones Examen</title>*@
@@ -22,7 +27,11 @@
         <link href="@Url.Content("~/Content/jqGrid.overrides.css")" rel="stylesheet" type="text/css" />
         <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     </head>
+
+
 <body>
+     @using (Html.BeginForm("Examen", "Evaluacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     { 
     <div class="container">
         <div class="row">
     <div class="span12">
@@ -42,16 +51,17 @@
                 @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", disabled = "disabled" })
                 @*<input type="text" class="input-mini" id="txduracion" value="30 min." disabled="disabled">*@&nbsp;&nbsp;
                 <span>Inicio</span> 
-                @Html.DisplayFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
+                @Html.EditorFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
                 @*<input type="text" class="input-mini" id="txinicio" value="5:00 p.m." disabled="disabled">*@&nbsp-
                 <span>Fin</span>  
-                @Html.DisplayFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
+                @Html.EditorFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
                 @*<input type="text" class="input-mini" id="txtFin" value="5:30 p.m." disabled="disabled">*@
             </div>
             <div style="clear:both"></div>
             <div class="grilla-opciones">
                 @*<h6>Comunicación Interpersonal</h6>*@
                  <h6>@Html.DisplayFor(model=>model.SubCategoria.NOMSUBCATEGORIA)</h6>
+
                 @Html.TextBoxFor(model => model.SubCategoria.IDESUBCATEGORIA, new { style = "display:none;" })
                 <div class="opciones">
                 </div>
@@ -60,20 +70,12 @@
             <table style="width:100%;margin-left:10px;margin-right:10px;">                                         
                 <tbody><tr>                        
                     @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { style = "display:none;" })
-                    <td>1.- @Html.DisplayFor(model=>model.Criterio.Pregunta)
-                    </td>                     
-                </tr>
-                 @{ 
-                        var myList = (List<MenuPadre>)Session["listaPadre"];
-                        var myListOp = (List<MenuItem>)Session["ListaMenu"];
-                  }
-                  @foreach (MenuPadre Item in myList)
-                  {
-                      if(Model.Criterio.TipoModo == TipoModo.Texto)
+                     @if(Model.Criterio.TipoModo == TipoModo.Texto)
                       {
                     <tr>
                         <td>
-                            <input type="radio" name="pregunta2"> &nbsp;No muy Exacta 
+                            @*<input type="radio" name="pregunta2"> &nbsp;No muy Exacta*@ 
+                           @Html.DisplayFor(model =>model.Criterio.numeracion) .- &nbsp;@Html.DisplayFor(model => model.Criterio.Pregunta)
                         </td>
                     </tr>
                       }
@@ -82,19 +84,47 @@
                           <tr>
                             <td class="colEtiqueta"></td>
                             <td class ="colInput" >
-                                <img id="ImgAlternativa"  height ="100" width="100" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
+                                @Html.DisplayFor(model =>model.Criterio.numeracion) .- &nbsp;
+                                <img id="ImgCriterio"  height ="100" width="100" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
+                            </td>
+                          </tr>
+                      }                     
+                </tr>
+                 @{ 
+                        var myList = Model.Alternativas;
+                  
+                  }
+                  @foreach (Alternativa Item in myList)
+                  {
+                      if(Model.Criterio.TipoModo == TipoModo.Texto)
+                      {
+                    <tr>
+                        <td>
+                            @Html.RadioButtonFor(model => model.Alternativa.IndRespuesta, Item.IdeAlternativa) @Html.DisplayFor(model=>model.Alternativa.NombreAlternativa,Item.NombreAlternativa)
+                            @*<input type="radio" name="pregunta2"> &nbsp;No muy Exacta *@
+                        </td>
+                    </tr>
+                      }
+                      else
+                      {
+                          <tr>
+                            <td class="colEtiqueta"></td>
+                            <td class ="colInput" >
+                                 @Html.RadioButtonFor(model => model.Alternativa.IndRespuesta, Item.IdeAlternativa)
+                                <img id="ImgAlternativa"  height ="100" width="100" src="@Url.Action("GetImageAlternativa", "Alternativa", new { id = Item.IdeAlternativa })" /> 
                             </td>
                           </tr>
                       }
+                      
                   }
-                <tr><td><input type="radio" name="pregunta2"> &nbsp;No muy Exacta </td></tr>
+                @*<tr><td><input type="radio" name="pregunta2"> &nbsp;No muy Exacta </td></tr>
                 <tr><td><input type="radio" name="pregunta2"> &nbsp;Ligeramente Exacta</td></tr>
                 <tr><td><input type="radio" name="pregunta2"> &nbsp;Generalmente Exacta</td></tr>
-                <tr><td><input type="radio" name="pregunta2"> &nbsp;Muy Exacta</td></tr>
+                <tr><td><input type="radio" name="pregunta2"> &nbsp;Muy Exacta</td></tr>*@
                   
             </tbody></table>   
             <div class="form-actions">       
-                <a class="btn btn-info"href="@Url.Action("Examen1", "Evaluacion")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                <button type="submit" class="btn btn-info" @*href="@Url.Action("Examen", "Evaluacion")"*@><i class="icon-arrow-right icon-white"></i> Siguiente</button>
             </div>                     
         </div>
 
@@ -107,5 +137,6 @@
         <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/grid.locale-en.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
+     }
 </body>
 </html>

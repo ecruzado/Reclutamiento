@@ -41,12 +41,6 @@
                                         <td>
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntPostuinte, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinPostuinte, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinPostuinte)
-                                            </div>
-
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -54,12 +48,6 @@
                                         <td>
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinEdad, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinEdad)
-                                            </div>
-                                            </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -69,11 +57,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntSexo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinSexo, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinSexo)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -82,11 +65,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntSalario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                          <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinSalario, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinSalario)
-                                        </div>    </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -95,11 +73,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotNivelEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinNivelEst, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinNivelEst)
-                                        </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -108,11 +81,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotCentroEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinNivelEst, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinNivelEst)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -121,11 +89,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotExpLaboral, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinExplaboral, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinExplaboral)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -134,11 +97,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntajeTotalOfimatica, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntajeMinimoOfimatica)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -147,12 +105,7 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotConoIdioma, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinConoIdioma, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinConoIdioma)
-                                            </div>                                    </tr>
+                                    </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Generales</td>
@@ -160,11 +113,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotConoGen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinConoGen, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinConoGen)
-                                            </div> </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -174,12 +122,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotDisCapa, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinDisCapa, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinDisCapa)
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -188,12 +130,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotHorario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                          </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinHorario, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinHorario)
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -202,13 +138,6 @@
                                             @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntTotUbigeo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolicitudRequerimiento.PuntMinUbigeo, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.PuntMinUbigeo)
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -228,7 +157,7 @@
                                 <table border="0">
                                         <tr>
                                         <td></td>
-                                        <td>Ptje.
+                                        <td>Ptje.Prom
                                             </td>
                                             <td style="width:10px;"></td>
                                         <td>Ptje.Min

@@ -19,18 +19,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IExamenPorCategoriaRepository _examenPorCategoriaRepository;
         private ICategoriaRepository _categoriaRepository;
         private ICriterioRepository _criterioRepository;
+        private IAlternativaRepository _alternativaRepository;
 
         public EvaluacionController(IReclutamientoPersonaCriterioRepository reclutamientoPersonaCriterioRepository,
                                     IReclutamientoPersonaAlternativaRepository reclutamientoPersonaAlternativaRepository,
                                     IExamenPorCategoriaRepository examenPorCategoriaRepository,
                                     ICategoriaRepository categoriaRepository,
-                                    ICriterioRepository criterioRepository)
+                                    ICriterioRepository criterioRepository,
+                                    IAlternativaRepository alternativaRepository)
         {
             _reclutamientoPersonaCriterioRepository = reclutamientoPersonaCriterioRepository;
             _reclutamientoPersonaAlternativaRepository = reclutamientoPersonaAlternativaRepository;
             _examenPorCategoriaRepository = examenPorCategoriaRepository;
             _categoriaRepository = categoriaRepository;
             _criterioRepository = criterioRepository;
+            _alternativaRepository = alternativaRepository;
         }
 
         [ValidarSesion]
@@ -188,6 +191,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             return (ActionResult)this.View("InstruccionesExamen");
         }
+
+        [ValidarSesion]
         public ActionResult Examen(string id)
         {
             var modelExamen = inicializarExamenCategoria();
@@ -196,10 +201,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (idCategoria != 0)
             {
                 ListaCriterios = _criterioRepository.ObtenerCriteriosPorCategoria(idCategoria);
+
                 var criterio = ListaCriterios.criterios[0];
                 modelExamen.SubCategoria.NOMSUBCATEGORIA = criterio.NombreSubCategoria;
                 modelExamen.SubCategoria.IDESUBCATEGORIA = criterio.IdeSubCategoria;
                 modelExamen.Criterio = criterio;
+
+                modelExamen.Alternativas = new List<Alternativa>(_alternativaRepository.GetBy(x => x.Criterio.IdeCriterio == criterio.IdeCriterio && x.ESTACTIVO == IndicadorActivo.Activo));
 
                 //calcular la hora de inicio
                 modelExamen.Inicio = HoraInicio;
@@ -207,6 +215,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
             return (ActionResult)this.View("Examen",modelExamen);
+        }
+
+        [HttpPost]
+        public ActionResult Examen(EvaluarPostulanteViewModel model)
+        {
+            var criterio = model.Criterio;
+            return View("Examen");
         }
 
         public EvaluarPostulanteViewModel inicializarExamenCategoria()

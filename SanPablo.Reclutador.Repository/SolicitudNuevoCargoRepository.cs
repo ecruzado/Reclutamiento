@@ -194,7 +194,7 @@
                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET.FN_GET_LISTACARGO");
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
-                lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = solicitud.IdeCargo;
+                lspcmd.Parameters.Add("p_nIdSolicitud", OracleType.Int32).Value = solicitud.IdeSolicitudNuevoCargo;
                 lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = solicitud.IdeDependencia;
                 lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = solicitud.IdeDepartamento;
                 lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = solicitud.IdeArea;
@@ -278,5 +278,50 @@
             }
         }
 
+        public List<SolicitudNuevoCargo> ListarCargos(int idSede,int idRolResponsable, int idUsuarioResponsable )
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader drSolicitudNuevo;
+                SolicitudNuevoCargo solicitudNuevo;
+                List<SolicitudNuevoCargo> listaSolicitudesNuevo;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_CARGOS_SOLICITUD");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_idSede", OracleType.Int32).Value = idSede;
+                lspcmd.Parameters.Add("p_idUsrResp", OracleType.Int32).Value = idUsuarioResponsable;
+                lspcmd.Parameters.Add("p_idRolResp", OracleType.Int32).Value = idRolResponsable;
+
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drSolicitudNuevo = (OracleDataReader)lspcmd.ExecuteReader();
+                solicitudNuevo = null;
+                listaSolicitudesNuevo = new List<SolicitudNuevoCargo>();
+
+
+
+                while (drSolicitudNuevo.Read())
+                {
+                    solicitudNuevo = new SolicitudNuevoCargo();
+                    solicitudNuevo.IdeSolicitudNuevoCargo = Convert.ToInt32(drSolicitudNuevo["IDESOLNUEVOCARGO"]);
+                    solicitudNuevo.NombreCargo = Convert.ToString(drSolicitudNuevo["NOMBRE"]);
+                    listaSolicitudesNuevo.Add(solicitudNuevo);
+                }
+                drSolicitudNuevo.Close();
+                return listaSolicitudesNuevo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+        
     }
 }

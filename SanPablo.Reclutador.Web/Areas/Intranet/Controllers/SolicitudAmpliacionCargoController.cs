@@ -63,6 +63,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
                 solicitudModel.SolicitudRequerimiento = solicitud;
+
+                var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == solicitud.IdeDepartamento);
+                var area = _areaRepository.GetSingle(x => x.IdeArea == solicitud.IdeArea);
+
+                solicitudModel.Areas.Add(area);
+                solicitudModel.Departamentos.Add(departamento);
                 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 

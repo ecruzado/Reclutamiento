@@ -14,7 +14,7 @@
         public Criterio Criterio { get; set; }
 
         public List<Alternativa> Alternativas { get; set; }
-
+        public Alternativa Alternativa { get; set; }
 
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 

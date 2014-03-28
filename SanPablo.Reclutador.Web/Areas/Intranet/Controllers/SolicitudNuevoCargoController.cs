@@ -62,7 +62,7 @@
 
                 solicitudNuevo = new SolicitudNuevoCargo();
 
-                solicitudNuevo.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
+                solicitudNuevo.IdeSolicitudNuevoCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
                 solicitudNuevo.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
                 solicitudNuevo.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
                 solicitudNuevo.TipoResponsable = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
@@ -205,7 +205,8 @@
             
             solicitudNuevoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
 
-            solicitudNuevoViewModel.Cargos = new List<SolicitudNuevoCargo>(_solicitudNuevoCargoRepository.All());
+            solicitudNuevoViewModel.Cargos = new List<SolicitudNuevoCargo>(_solicitudNuevoCargoRepository.ListarCargos(
+                                             Convert.ToInt32(Session[ConstanteSesion.Sede]),Convert.ToInt32(Session[ConstanteSesion.Rol]),Convert.ToInt32(Session[ConstanteSesion.Usuario])));
             solicitudNuevoViewModel.Cargos.Insert(0, new SolicitudNuevoCargo { IdeSolicitudNuevoCargo = 0,NombreCargo="Seleccionar"});
 
             solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoRegistro));

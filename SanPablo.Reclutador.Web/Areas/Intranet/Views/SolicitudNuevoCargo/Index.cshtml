@@ -89,14 +89,14 @@
                 migrilla.Rules = [
 
                     { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'idCargo', data: $("Select#SolicitudNuevoCargo_NombreCargo").val() },
+                    { field: 'idCargo', data: $("Select#SolicitudNuevoCargo_IdeCargo").val() },
                     { field: 'ideDependencia', data: $("Select#Dependencias").val() },
                     { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
                     { field: 'responsable', data: $("Select#Responsables").val() },
                     { field: 'fechaInicial', data: $("#fechaInicio").val() },
-                    { field: 'fechaFin', data: $("Select#Etapas").val() },
+                    { field: 'fechaFin', data: $("#fechaFin").val() },
                     { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
-                    { field: 'etapa', data: $("#fechaFin").val() },
+                    { field: 'etapa', data: $("Select#Etapas").val() },
                     { field: 'estado', data: $("Select#Estados").val() }
 
                 ];

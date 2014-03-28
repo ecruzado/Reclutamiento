@@ -513,6 +513,7 @@
       $("#SolicitudRequerimiento_IdeDepartamento").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_IdeArea").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_Motivo").attr("disabled", "disabled");
+      $("#SolicitudRequerimiento_TipPuesto").attr("disabled", "disabled");
   }
 
   function habilitarControles()
@@ -524,6 +525,7 @@
       $("#SolicitudRequerimiento_IdeDepartamento").removeAttr("disabled");
       $("#SolicitudRequerimiento_IdeArea").removeAttr("disabled");
       $("#SolicitudRequerimiento_Motivo").removeAttr("disabled");
+      $("#SolicitudRequerimiento_TipPuesto").removeAttr("disabled");
   }
 
   function MostrarMensaje(mensaje, titulo)
@@ -738,7 +740,7 @@
               <h5>Perfil</h5>
             <ul class="nav nav-tabs">
                 <li><div style="width:110px;display:inline-block"></div></li>
-                <li class=""><a href="#A" data-toggle="tab">Puesto</a></li>
+                <li class="active"><a href="#A" data-toggle="tab">Puesto</a></li>
                 <li class=""><a href="#B" data-toggle="tab">General</a></li>
                 <li class=""><a href="#C" data-toggle="tab">Estudios</a></li>
                 <li class=""><a href="#D" data-toggle="tab">Experiencia</a></li>
@@ -749,7 +751,7 @@
             </ul>
             <div class="tabbable">
                 <div class="tab-content">
-                     <div class="tab-pane" id="A">
+                     <div class="tab-pane active" id="A">
                      @Html.Partial("Puesto")
                     </div>
                     <div class="tab-pane" id="B">

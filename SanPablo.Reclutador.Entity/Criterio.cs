@@ -27,7 +27,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCalificacionDes { get; set; }
         public virtual string EstadoDes { get; set; }
 
-
+        public virtual int numeracion { get; set; }
         public virtual int IdeSubCategoria { get; set; }
         public virtual string NombreSubCategoria { get; set; }
         public virtual int Tiempo { get; set; }

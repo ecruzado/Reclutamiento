@@ -44,11 +44,12 @@
                 drCriterios = (OracleDataReader)lspcmd.ExecuteReader();
                 objCriterio = null;
                 listaCriterios.criterios = new List<Criterio>();
-
+                int contador = 0;
                 while (drCriterios.Read())
                 {
                     objCriterio = new Criterio();
-                    
+
+                    objCriterio.numeracion = contador + 1;
                     objCriterio.IdeCriterio = Convert.ToInt32(drCriterios["IDECRITERIO"]);
                     objCriterio.IdeSubCategoria = Convert.ToInt32(drCriterios["IDESUBCATEGORIA"]);
                     objCriterio.NombreSubCategoria = Convert.ToString(drCriterios["NOMSUBCATEGORIA"]);
@@ -58,6 +59,7 @@
                     objCriterio.IndRespuesta = Indicador.No;
 
                     listaCriterios.criterios.Add(objCriterio);
+                    contador++;
                 }
 
                 drCriterios.Close();
