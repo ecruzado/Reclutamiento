@@ -1,4 +1,7 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudNuevoCargoViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
 @{
     ViewBag.Title = "Solicitud Nuevo Cargo";
 }
@@ -174,6 +177,49 @@
                     }, loadComplete: function (data) {
                     }
                 });
+
+
+        $('#btnRankingSol').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+            var pagina = '@TipoSolicitud.Nuevo';
+            var tipSol = '@TipoSolicitud.Nuevo';
+
+        if (selr != null) {
+
+
+            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + tipSol + "&pagina=" + pagina;
+            window.location = url;
+
+
+        } else {
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+        });
+
+
+        $('#btnPreseleccion').click(function () {
+
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+
+            var idSol = selr;
+            var tipSol = '@TipoSolicitud.Nuevo';
+            var pagina = '@TipoSolicitud.Nuevo';
+            var indPagina = '@Indicador.No';
+
+             if (idSol != null) {
+
+                 var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+         });
+
 
 
         $('#btnActivarDesactivar').click(function () {
@@ -445,8 +491,12 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                @*<a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>*@
+                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                @*<a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
+                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+
+
                 <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
                 <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
