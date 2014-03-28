@@ -130,6 +130,7 @@
         public const string Aprobar = "Aprobar";
         public const string Enviar = "Enviar";
         public const string Publicar = "Publicar";
+        public const string Aceptar = "Aceptar";
 
 
     }

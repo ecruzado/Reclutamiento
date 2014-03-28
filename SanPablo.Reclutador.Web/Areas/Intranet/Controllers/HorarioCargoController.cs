@@ -96,32 +96,56 @@
                 }
                 if (horarioCargo.IdeHorarioCargo == 0)
                 {
-                    horarioCargo.EstadoActivo = IndicadorActivo.Activo;
-                    horarioCargo.FechaCreacion = FechaCreacion;
-                    horarioCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                    horarioCargo.FechaModificacion = FechaCreacion;
-                    horarioCargo.Cargo = new Cargo();
-                    horarioCargo.Cargo.IdeCargo = IdeCargo;
-                    _horarioCargoRepository.Add(horarioCargo);
-                    
+                    if (existe(horarioCargo.TipoHorario))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo tipo de horario más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        horarioCargo.EstadoActivo = IndicadorActivo.Activo;
+                        horarioCargo.FechaCreacion = FechaCreacion;
+                        horarioCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        horarioCargo.FechaModificacion = FechaCreacion;
+                        horarioCargo.Cargo = new Cargo();
+                        horarioCargo.Cargo.IdeCargo = IdeCargo;
+                        _horarioCargoRepository.Add(horarioCargo);
+                        actualizarPuntaje(horarioCargo.PuntajeHorario, 0, IdeCargo);
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
 
                 }
                 else
                 {
                     var horarioCargoActualizar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == horarioCargo.IdeHorarioCargo);
-                    horarioCargoActualizar.TipoHorario = horarioCargo.TipoHorario;
-                    horarioCargoActualizar.PuntajeHorario = horarioCargo.PuntajeHorario;
-                    horarioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    horarioCargoActualizar.FechaModificacion = FechaModificacion;
-                    _horarioCargoRepository.Update(horarioCargoActualizar);
+
+                    int contador = _horarioCargoRepository.CountByExpress(x => x.TipoHorario == horarioCargo.TipoHorario && x.Cargo.IdeCargo == IdeCargo && x.IdeHorarioCargo != horarioCargo.IdeHorarioCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar el mismo tipo de horario más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int puntajeAnterior = horarioCargoActualizar.PuntajeHorario;
+                        horarioCargoActualizar.TipoHorario = horarioCargo.TipoHorario;
+                        horarioCargoActualizar.PuntajeHorario = horarioCargo.PuntajeHorario;
+                        horarioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        horarioCargoActualizar.FechaModificacion = FechaModificacion;
+                        _horarioCargoRepository.Update(horarioCargoActualizar);
+
+                        actualizarPuntaje(horarioCargo.PuntajeHorario, puntajeAnterior, IdeCargo);
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                     
                 }
-
-                actualizarPuntaje(horarioCargo.PuntajeHorario,0,IdeCargo);
-
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
             }
             catch (Exception ex)
             {
@@ -171,7 +195,20 @@
             _cargoRepository.Update(cargo);
         }
 
-        
+        public bool existe(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _horarioCargoRepository.CountByExpress(x => x.TipoHorario == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

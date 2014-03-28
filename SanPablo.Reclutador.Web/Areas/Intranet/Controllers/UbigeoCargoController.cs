@@ -80,7 +80,8 @@
             var ubigeoViewModel = inicializarUbigeos();
             if (id != "0")
             {
-                ubigeoViewModel.Ubigeo = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeo == Convert.ToInt32(id));
+                ubigeoViewModel.Ubigeo = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeo == Convert.ToInt32(id)&&x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                
                 mostrarUbigeo(ubigeoViewModel);
             }
             return View(ubigeoViewModel);
@@ -100,30 +101,44 @@
                     ubigeoViewModel.Ubigeo = ubigeoCargo;
                     return View("Ubigeo", ubigeoViewModel);
                 }
-                if (ubigeoCargo.IdeUbigeoCargo == 0)
-                {
-                    ubigeoCargo.EstadoActivo = IndicadorActivo.Activo;
-                    ubigeoCargo.FechaCreacion = FechaCreacion;
-                    ubigeoCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                    ubigeoCargo.FechaModificacion = FechaCreacion;
-                    ubigeoCargo.Cargo = new Cargo();
-                    ubigeoCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _ubigeoCargoRepository.Add(ubigeoCargo);
+                if (!existe(ubigeoCargo.IdeUbigeo, ubigeoCargo.IdeUbigeoCargo))
+                {
+                    if (ubigeoCargo.IdeUbigeoCargo == 0)
+                    {
+                        ubigeoCargo.EstadoActivo = IndicadorActivo.Activo;
+                        ubigeoCargo.FechaCreacion = FechaCreacion;
+                        ubigeoCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        ubigeoCargo.FechaModificacion = FechaCreacion;
+                        ubigeoCargo.Cargo = new Cargo();
+                        ubigeoCargo.Cargo.IdeCargo = IdeCargo;
+
+                        _ubigeoCargoRepository.Add(ubigeoCargo);
+                        actualizarPuntaje(ubigeoCargo.PuntajeUbigeo, 0, IdeCargo);
+                    }
+                    else
+                    {
+                        var ubigeoCargoActualizar = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeoCargo == ubigeoCargo.IdeUbigeoCargo);
+
+                        int puntajeAnterior = ubigeoCargoActualizar.PuntajeUbigeo;
+                        ubigeoCargoActualizar.IdeUbigeo = ubigeoCargo.IdeUbigeo;
+                        ubigeoCargoActualizar.PuntajeUbigeo = ubigeoCargo.PuntajeUbigeo;
+                        ubigeoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        ubigeoCargoActualizar.FechaModificacion = FechaModificacion;
+                        _ubigeoCargoRepository.Update(ubigeoCargoActualizar);
+                        actualizarPuntaje(ubigeoCargo.PuntajeUbigeo, puntajeAnterior, IdeCargo);
+                    }
+                    
+                    objJsonMessage.Mensaje = "Agregado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
                 }
                 else
                 {
-                    var ubigeoCargoActualizar = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeoCargo == ubigeoCargo.IdeUbigeoCargo);
-                    ubigeoCargoActualizar.IdeUbigeo = ubigeoCargo.IdeUbigeo;
-                    ubigeoCargoActualizar.PuntajeUbigeo = ubigeoCargo.PuntajeUbigeo;
-                    ubigeoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    ubigeoCargoActualizar.FechaModificacion = FechaModificacion;
-                    _ubigeoCargoRepository.Update(ubigeoCargoActualizar);
+                    objJsonMessage.Mensaje = "No puede agregar el ubigeo mas de una vez";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
-                actualizarPuntaje(ubigeoCargo.PuntajeUbigeo,0,IdeCargo);
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
             }
             catch (Exception ex)
             {
@@ -189,7 +204,7 @@
             model.Distritos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == provincia.IdeUbigeo));
             model.Provincias = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == departamento.IdeUbigeo));
             model.Departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
-            model.Departamentos.Insert(departamento.IdeUbigeo, departamento);
+            model.Departamentos.Insert(0, departamento);
 
 
         }
@@ -208,6 +223,29 @@
                 cargo.PuntajeTotalUbigeo = puntajeMax;
             }
             _cargoRepository.Update(cargo);
+        }
+
+
+        public bool existe(int ideUbigeo, int ideUbigeoCargo)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = 0;
+            if (ideUbigeoCargo == 0)
+            {
+                contador = _ubigeoCargoRepository.CountByExpress(x => x.IdeUbigeo == ideUbigeo && x.Cargo.IdeCargo == IdeCargo);
+            }
+            else
+            {
+                contador = _ubigeoCargoRepository.CountByExpress(x => x.IdeUbigeo == ideUbigeo && x.Cargo.IdeCargo == IdeCargo && x.IdeUbigeoCargo != ideUbigeoCargo);
+            }
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         #endregion

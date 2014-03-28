@@ -294,6 +294,7 @@
                     solicitudNuevoCargoEditar.FechaPublicacion = solicitudNuevoCargo.FechaPublicacion;
                     solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
                     solicitudNuevoCargoEditar.ObservacionPublicacion = solicitudNuevoCargo.ObservacionPublicacion;
+                    solicitudNuevoCargoEditar.TipoEtapa = Etapa.Publicado;
 
                     logSolicitud.IdeSolicitudNuevoCargo = solicitudNuevoCargo.IdeSolicitudNuevoCargo;
                     logSolicitud.TipoEtapa = Etapa.Publicado;
@@ -303,7 +304,6 @@
                     logSolicitud.UsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
                     _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargoEditar.IdeSede, solicitudNuevoCargoEditar.IdeArea, "NO");
-
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
 
                     objJsonMessage.Mensaje = "Publicado Correctamente";

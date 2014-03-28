@@ -110,7 +110,7 @@
                 migrilla.Rules = [
 
                     { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'nombreCargo', data: $("Select#SolicitudNuevoCargo_NombreCargo").val() },
+                    { field: 'idCargo', data: $("Select#Cargo_IdeCargo").val() },
                     { field: 'ideDependencia', data: $("Select#Dependencias").val() },
                     { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
                     { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
@@ -380,7 +380,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Cargo.NombreCargo, new SelectList(Model.Cargos, "NombreCargo","NombreCargo",Model.Cargo.NombreCargo ))
+                                @Html.DropDownListFor(model => model.Cargo.IdeCargo, new SelectList(Model.Cargos, "IdeCargo","NombreCargo",Model.Cargo.NombreCargo ))
                             </div>
                         </div>
                     </td>

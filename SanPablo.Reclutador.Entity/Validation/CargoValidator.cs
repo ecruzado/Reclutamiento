@@ -25,10 +25,9 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .NotEmpty()
-                .WithMessage("Debe ingresar el puntaje para el postulante interno");
-            RuleFor(x => x.PuntajeTotalPostulanteInterno)
-                .ExclusiveBetween(0,20)
-                .WithMessage("el rango de puntaje es de 0 a 20");
+                .WithMessage("Debe ingresar el puntaje para el postulante interno")
+                .ExclusiveBetween(0,10)
+                .WithMessage("el rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.EdadInicio)
                 .NotEmpty()
@@ -46,10 +45,9 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeEdad)
                 .NotEmpty()
-                .WithMessage("Debe ingresar puntaje de edad");
-            RuleFor(x => x.PuntajeEdad)
-                .ExclusiveBetween(0,20)
-                .WithMessage("El rango de puntaje es de 0 a 20");
+                .WithMessage("Debe ingresar puntaje de edad")
+                .ExclusiveBetween(0,10)
+                .WithMessage("El rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.Sexo)
                 .NotEqual("0")
@@ -57,14 +55,22 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeSexo)
                  .NotEmpty()
-                 .WithMessage("Debe ingresar puntaje de sexo");
-            RuleFor(x => x.PuntajeSexo)
-                .ExclusiveBetween(0, 20)
-                .WithMessage("El rango de puntaje es de 0 a 20");
+                 .WithMessage("Debe ingresar puntaje de sexo")
+                .ExclusiveBetween(0, 10)
+                .WithMessage("El rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.TipoRequerimiento)
                 .NotEqual("00")
                 .WithMessage("Seleccionar el tipo de Requerimiento");
+
+            RuleFor(x => x.PuntajeMinimoGeneral)
+                .NotEmpty()
+                .WithMessage("Debe ingresar el puntaje mínimo general");
+
+            RuleFor(x => x.CantidadPreseleccionados)
+                .NotEmpty()
+                .WithMessage("Debe ingresar la cantidad de pre seleccionados");
+                
 
             //RuleFor(x => x.PuntajeMinimoPostulanteInterno)
             //    .GreaterThanOrEqualTo(0)

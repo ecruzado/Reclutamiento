@@ -22,19 +22,19 @@
         private ICargoRepository _cargoRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoRepository;
-        private ISolicitudNuevoCargoRepository _solicitudNuevoCargo;
+        private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private IUsuarioRepository _usuarioRepository;
        
         public PerfilController(ICargoRepository cargoRepository,
                                 IDetalleGeneralRepository detalleGeneralRepository,
                                 ILogSolicitudNuevoCargoRepository logSolicitudNuevoRepository,
-                                ISolicitudNuevoCargoRepository solicitudNuevoCargo,
+                                ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                 IUsuarioRepository usuarioRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _logSolicitudNuevoRepository = logSolicitudNuevoRepository;
-            _solicitudNuevoCargo = solicitudNuevoCargo;
+            _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _usuarioRepository = usuarioRepository;
         }
 
@@ -44,7 +44,7 @@
             var ideSolicitud = id;
             try
             {
-                var solicitud = _solicitudNuevoCargo.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
+                var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
 
                 var perfilViewModel = inicializarPerfil();
                 var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
@@ -146,26 +146,32 @@
 
                 if (!resul.IsValid)
                 {
+                    cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                     cargoViewModel.Cargo = cargo;
+                    actualizarDatosCargo(cargoViewModel, cargo);
+                    actualizarAccion(cargoViewModel);
                     return View(cargoViewModel);
                 }
-                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajeTotalPostulanteInterno = cargo.PuntajeTotalPostulanteInterno;
-                cargoEditar.EdadInicio = cargo.EdadInicio;
-                cargoEditar.EdadFin = cargo.EdadFin;
-                cargoEditar.PuntajeEdad = cargo.PuntajeEdad;
-                cargoEditar.Sexo = cargo.Sexo;
-                cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
-                cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
-                cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
-                cargoEditar.IndicadorEdadRanking = cargo.IndicadorEdadRanking;
-                cargoEditar.IndicadorSalarioRanking = cargo.IndicadorSalarioRanking;
-                cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
-                cargoEditar.PuntajeSalario = cargo.PuntajeSalario;
-                _cargoRepository.Update(cargoEditar);
-
-                return RedirectToAction("../Perfil/Estudio");
+                else
+                {
+                    cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    cargoEditar.FechaModificacion = FechaCreacion;
+                    cargoEditar.PuntajeTotalPostulanteInterno = cargo.PuntajeTotalPostulanteInterno;
+                    cargoEditar.EdadInicio = cargo.EdadInicio;
+                    cargoEditar.EdadFin = cargo.EdadFin;
+                    cargoEditar.PuntajeEdad = cargo.PuntajeEdad;
+                    cargoEditar.PuntajeTotalEdad = cargo.PuntajeEdad;
+                    cargoEditar.Sexo = cargo.Sexo;
+                    cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
+                    cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
+                    cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+                    cargoEditar.IndicadorEdadRanking = cargo.IndicadorEdadRanking;
+                    cargoEditar.IndicadorSalarioRanking = cargo.IndicadorSalarioRanking;
+                    cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
+                    cargoEditar.PuntajeSalario = cargo.PuntajeSalario;
+                    _cargoRepository.Update(cargoEditar);
+                    return RedirectToAction("../Perfil/Estudio");
+                }
             }
             catch (Exception ex)
             {
@@ -297,25 +303,10 @@
             try
             {
                 CargoValidator validation = new CargoValidator();
-                ValidationResult result = validation.Validate(cargo, "PuntajeMinimoPostulanteInterno", "PuntajeMinimoEdad", "PuntajeMinimoSexo", "PuntajeMinimoSalario",
-                                                              "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
-                                                              "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
+                ValidationResult result = validation.Validate(cargo, "PuntajeMinimoExamen", "PuntajeMin");
 
                 cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
-                //cargoEditar.PuntajeMinimoPostulanteInterno = cargo.PuntajeMinimoPostulanteInterno;
-                //cargoEditar.PuntajeMinimoEdad = cargo.PuntajeMinimoEdad;
-                //cargoEditar.PuntajeMinimoSexo = cargo.PuntajeMinimoSexo;
-                //cargoEditar.PuntajeMinimoSalario = cargo.PuntajeMinimoSalario;
-                //cargoEditar.PuntajeMinimoNivelEstudio = cargo.PuntajeMinimoNivelEstudio;
-                //cargoEditar.PuntajeMinimoCentroEstudio = cargo.PuntajeMinimoCentroEstudio;
-                //cargoEditar.PuntajeMinimoExperiencia = cargo.PuntajeMinimoExperiencia;
-                //cargoEditar.PuntajeMinimoOfimatica = cargo.PuntajeMinimoOfimatica;
-                //cargoEditar.PuntajeMinimoIdioma = cargo.PuntajeMinimoIdioma;
-                //cargoEditar.PuntajeMinimoConocimientoGeneral = cargo.PuntajeMinimoConocimientoGeneral;
-                //cargoEditar.PuntajeMinimoDiscapacidad = cargo.PuntajeMinimoDiscapacidad;
-                //cargoEditar.PuntajeMinimoHorario = cargo.PuntajeMinimoHorario;
-                //cargoEditar.PuntajeMinimoUbigeo = cargo.PuntajeMinimoUbigeo;
                 cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
                 cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
                 cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
@@ -329,8 +320,8 @@
                              
                 _cargoRepository.Update(cargoEditar);
                 cargoViewModel.Cargo = cargoEditar;
-                actualizarDatosCargo(cargoViewModel,cargo);
-                
+                actualizarDatosCargo(cargoViewModel, cargoEditar);
+                actualizarAccion(cargoViewModel);
                 return View(cargoViewModel);
             }
             catch (Exception ex)
@@ -373,6 +364,111 @@
         }
 
         [HttpPost]
+        public ActionResult aceptarPerfil()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            var enviarMail = new SendMail();
+            SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var cargoEnviar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+            var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == cargoEnviar.CodigoCargo);
+
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+
+            var SedeSession = Session[ConstanteSesion.Sede];
+
+            string SedeDescripcion = "-";
+            if (SedeSession != null)
+            {
+                SedeDescripcion = Session[ConstanteSesion.SedeDes].ToString();
+            }
+            try
+            {
+
+                if ((solicitud.TipoEtapa == Etapa.Aprobacion_Perfil) && (Roles.Encargado_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))
+                {
+
+                    string IndArea = "NO";
+                    LogSolicitudNuevoCargo logSolicitud = new LogSolicitudNuevoCargo();
+                    
+                    logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
+
+                    var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
+                    logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
+                    logSolicitud.UsuarioResponsable = logSolResponsable.UsuarioResponsable;
+
+                    logSolicitud.TipoEtapa = Etapa.Aceptado;
+                    logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+
+                    int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, IndArea);
+
+                    if (ideUsuario != -1)
+                    {
+                        var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
+                        enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                        enviarMail.Sede = SedeDescripcion;
+                        enviarMail.Area = usuarioSession.AREADES;
+
+                        enviarMail.EnviarCorreo(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, usuarioResp.Email, "Suceso");
+
+                        objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "ERROR: no se pudo aceptar la solicitud intente de nuevo";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "ERROR no tiene permisos para la accion o el estado de la solicitud no requiere esta accion";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult verificarPerfilCompleto()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try 
+            {
+                var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                if ((cargo.PuntajeMinimoExamen != 0) && (cargo.PuntajeMinimoGeneral != 0) && (cargo.NumeroPosiciones != 0) &&
+                    (cargo.PuntajeTotalCentroEstudio != 0) && (cargo.PuntajeTotalConocimientoGeneral != 0) && (cargo.PuntajeTotalEdad != 0) &&
+                    (cargo.PuntajeTotalExamen != 0) && (cargo.PuntajeTotalExperiencia != 0) && (cargo.PuntajeTotalNivelEstudio != 0) &&
+                    (cargo.PuntajeTotalOfimatica != 0))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            } 
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
+
+
+        [HttpPost]
         public ActionResult enviarPerfil()
         {
             JsonMessage objJsonMessage = new JsonMessage();
@@ -381,7 +477,7 @@
             
             var cargoEnviar = _cargoRepository.GetSingle(x=>x.IdeCargo == CargoPerfil.IdeCargo);
             
-            var solicitud = _solicitudNuevoCargo.GetSingle(x=>x.CodigoCargo==cargoEnviar.CodigoCargo);
+            var solicitud = _solicitudNuevoCargoRepository.GetSingle(x=>x.CodigoCargo==cargoEnviar.CodigoCargo);
             
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
 
@@ -466,7 +562,7 @@
                     perfilViewModel.Accion = Accion.Aprobar;
                     break;
                 case Etapa.Aprobacion_Perfil:
-                    perfilViewModel.Accion = Accion.Aprobar;
+                    perfilViewModel.Accion = Accion.Aceptar;
                     break;
                 case Etapa.Aceptado:
                     perfilViewModel.Accion = Accion.Publicar;

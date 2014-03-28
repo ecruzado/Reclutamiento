@@ -107,6 +107,10 @@
                 {
                     <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 }
+                @if (Accion.Aceptar.Equals(Model.Accion))
+                {
+                    <a class="btn btn-info" onclick="mostrarConfirmaAceptar();" href="#"><i class="icon-list icon-white"></i> Aceptar</a>
+                }
                 @if (Accion.Publicar.Equals(Model.Accion))
                 {
                     <a class="btn btn-info" href="@Url.Action("Edit", "PublicacionCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
@@ -118,6 +122,8 @@
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
+<div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de nuevo cargo?</p></div>
+
 <div id="divMensaje">
     <span id="spanMensaje"></span>
 </div>  
@@ -164,6 +170,34 @@
 
         // }
 
+        $('#updateDialogAceptar').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    $.post('@Url.Action("aceptarPerfil", "Perfil")',
+                        //$("#solicitudNuevoCargoForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                $('#updateDialogAceptar').dialog("close");
+                                mostrarMensaje("Solicitud aceptada exitosamente");
+
+                            }
+                            else {
+                                $('#updateDialogAceptar').dialog("close");
+                                mostrarMensaje(respuesta.Mensaje);
+                            }
+                        });
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+                });
+
+
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
             width: 300,
@@ -205,9 +239,27 @@
         });
     }
 
-    function mostrarConfirmacion() {
-        var dialogDiv = $('#updateDialogConfirmacion');
+    function mostrarConfirmaAceptar() {
+        var dialogDiv = $('#updateDialogAceptar');
         dialogDiv.dialog('open');
+    }
+
+    function mostrarConfirmacion() {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("verificarPerfilCompleto", "Perfil")',
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+                    var dialogDiv = $('#updateDialogConfirmacion');
+                    dialogDiv.dialog('open');
+                }
+                else {
+                    mostrarMensaje("Debe completar el perfil con los datos obligatorios");
+                }
+            }
+        });
     }
 
     function validarFormulario() {
@@ -217,7 +269,7 @@
             }
         }
         else {
-            mensajeResultado("Solicitu en estado: 'INACTIVO'");
+            mensajeResultado("Solicitud en estado: 'INACTIVO'");
         }
     }
     function mostrarAprobarDesaprobar() {

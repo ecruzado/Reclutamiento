@@ -157,7 +157,7 @@
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
         if (rowObject[0] != "2100001") {            
-            strImg = '<img onclick="mostraringresoocomentario();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
         }            
         return strImg;
     }
@@ -174,16 +174,34 @@
             return strImg;
         }
 
-    function mostraringresoocomentario() {
-        var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
-            var dialogDiv = $('#updateDialog');
-            $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
+    function mostraringresoocomentario(idReclutaPersoExam) {
+        //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        //if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
+        $.ajax({
+            data: {
+                id: idReclutaPersoExam
+            },
+            type: "POST",
+            url: '@Url.Action("verificarProgramacion", "EvaluacionesPreSeleccionados")',
+            traditional: true,
+            success: function (data) {
+            if (data.Resultado) {
+                var dialogDiv = $('#updateDialog');
+                $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
                 dialogDiv.dialog('open');
-            });
-        }
+                });
+            }
+            else {
+                MostrarMensaje("Debe programar la evaluacion para ingresar los resultados","Reclutamiento y Selección de personal");
+            }
+         }
+        });
+
+
+            
+        //}
    }
 
 </script>

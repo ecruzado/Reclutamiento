@@ -34,13 +34,18 @@
                     if (result) {
                         $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
                         $("#divMensaje").dialog({
-                            title: 'SAN PABLO',
+                            title: 'Reclutamiento y Selección de personal',
                             modal: true,
-                            buttons: {
-                                "Si": function () { $("#divMensaje").dialog("close"); enviarAprobacionRechazo(); },
-                                "No": function () { $("#divMensaje").dialog("close"); }
-                            }
-                        });
+                            buttons: [{
+                                text: "Si",
+                                click: function () {
+                                    $(this).dialog("close");
+                                        enviarAprobacionRechazo();
+                                }},{
+                                text:"No",
+                                click: function () { $(this).dialog("close"); }
+                                }]
+                            });
                        
                     }
                     else {
@@ -263,6 +268,8 @@
         $('#Dependencias').attr("disabled", "disabled");
         $('#Departamentos').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_IdeArea').attr("disabled", "disabled");
+        $('#SolicitudNuevoCargo_IdeDependencia').attr("disabled", "disabled");
+        $('#SolicitudNuevoCargo_IdeDepartamento').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_DescripcionEstudios').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_DescripcionCompetencias').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_DescripcionFunciones').attr("disabled", "disabled");
@@ -280,6 +287,8 @@
         $('#Dependencias').removeAttr("disabled");
         $('#Departamentos').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
+        $('#SolicitudNuevoCargo_IdeDependencia').removeAttr("disabled");
+        $('#SolicitudNuevoCargo_IdeDepartamento').removeAttr("disabled");
         $('#SolicitudNuevoCargo_DescripcionEstudios').removeAttr("disabled");
         $('#SolicitudNuevoCargo_DescripcionCompetencias').removeAttr("disabled");
         $('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");

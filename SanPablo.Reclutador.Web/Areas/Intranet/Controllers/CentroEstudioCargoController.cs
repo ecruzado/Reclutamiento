@@ -99,34 +99,43 @@
                     centroEstudioViewModel.CentroEstudio = centroEstudioCargo;
                     return View("CentroEstudio", centroEstudioViewModel);
                 }
-                if (centroEstudioCargo.IdeCentroEstudioCargo == 0)
+                if (!existe(centroEstudioCargo.TipoCentroEstudio, centroEstudioCargo.TipoNombreCentroEstudio, centroEstudioCargo.IdeCentroEstudioCargo))
                 {
-                    centroEstudioCargo.EstadoActivo = "A";
-                    centroEstudioCargo.FechaCreacion = FechaCreacion;
-                    centroEstudioCargo.UsuarioCreacion = "YO";
-                    centroEstudioCargo.FechaModificacion = FechaCreacion;
-                    centroEstudioCargo.Cargo = new Cargo();
-                    centroEstudioCargo.Cargo.IdeCargo = IdeCargo;
-                    _centroEstudioCargoRepository.Add(centroEstudioCargo);
-                    _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios,0, IdeCargo);
+                    if (centroEstudioCargo.IdeCentroEstudioCargo == 0)
+                    {
+                        centroEstudioCargo.EstadoActivo = "A";
+                        centroEstudioCargo.FechaCreacion = FechaCreacion;
+                        centroEstudioCargo.UsuarioCreacion = "YO";
+                        centroEstudioCargo.FechaModificacion = FechaCreacion;
+                        centroEstudioCargo.Cargo = new Cargo();
+                        centroEstudioCargo.Cargo.IdeCargo = IdeCargo;
+                        _centroEstudioCargoRepository.Add(centroEstudioCargo);
+                        _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, 0, IdeCargo);
+                    }
+                    else
+                    {
+                        var centroEstudioCargoActualizar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == centroEstudioCargo.IdeCentroEstudioCargo);
+                        int valorEditar = centroEstudioCargoActualizar.PuntajeCentroEstudios;
+                        centroEstudioCargoActualizar.TipoCentroEstudio = centroEstudioCargo.TipoCentroEstudio;
+                        centroEstudioCargoActualizar.TipoNombreCentroEstudio = centroEstudioCargo.TipoNombreCentroEstudio;
+                        centroEstudioCargoActualizar.PuntajeCentroEstudios = centroEstudioCargo.PuntajeCentroEstudios;
+                        centroEstudioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        centroEstudioCargoActualizar.FechaModificacion = FechaModificacion;
+                        _centroEstudioCargoRepository.Update(centroEstudioCargoActualizar);
+                        _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, valorEditar, IdeCargo);
+
+                    }
+
+                    objJsonMessage.Mensaje = "Agregado Correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
                 }
                 else
                 {
-                    var centroEstudioCargoActualizar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == centroEstudioCargo.IdeCentroEstudioCargo);
-                    int valorEditar = centroEstudioCargoActualizar.PuntajeCentroEstudios;
-                    centroEstudioCargoActualizar.TipoCentroEstudio = centroEstudioCargo.TipoCentroEstudio;
-                    centroEstudioCargoActualizar.TipoNombreCentroEstudio = centroEstudioCargo.TipoNombreCentroEstudio;
-                    centroEstudioCargoActualizar.PuntajeCentroEstudios = centroEstudioCargo.PuntajeCentroEstudios;
-                    centroEstudioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    centroEstudioCargoActualizar.FechaModificacion = FechaModificacion;
-                    _centroEstudioCargoRepository.Update(centroEstudioCargoActualizar);
-                    _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, valorEditar, IdeCargo);
-                    
+                    objJsonMessage.Mensaje = "No puedes agregar la misma institución mas de una vez";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
-
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
             }
             catch (Exception ex)
             {
@@ -185,6 +194,28 @@
                 centroEstudioViewModel.Instituciones = listaResultado;
             }
             return centroEstudioViewModel;
+        }
+
+        public bool existe(string tipInstitucion,string tipNombInstitucion, int ideCentroEstudioCargo)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = 0;
+            if (ideCentroEstudioCargo == 0)
+            {
+                contador = _centroEstudioCargoRepository.CountByExpress(x => x.TipoCentroEstudio == tipInstitucion && x.TipoNombreCentroEstudio ==tipNombInstitucion && x.Cargo.IdeCargo == IdeCargo);
+            }
+            else
+            {
+                contador = _centroEstudioCargoRepository.CountByExpress(x => x.TipoCentroEstudio == tipInstitucion&&x.TipoNombreCentroEstudio == tipNombInstitucion && x.Cargo.IdeCargo == IdeCargo && x.IdeCentroEstudioCargo != ideCentroEstudioCargo);
+            }
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         #endregion

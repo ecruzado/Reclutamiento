@@ -437,5 +437,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return JsonConvert.SerializeObject(jsonResponse);
         }
 
+
+
+        public ActionResult verificarProgramacion(string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            int idReclutaPersonaExamen = Convert.ToInt32(id);
+
+            var reclutaPersExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idReclutaPersonaExamen);
+            if (reclutaPersExamen.IdeUsuarioResponsable != 0)
+            {
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+            }
+            else
+            {
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
     }
 }
