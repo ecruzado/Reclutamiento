@@ -722,6 +722,12 @@
                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                      }
+
+                      @if (TipoSolicitud.Nuevo.Equals(Model.pagina))
+                     {
+                       <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                     }
+
                 <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a> 
                 <a class="btn btn-info" id="btnAprobarPre"><i class="icon-edit icon-white"></i> CV-Preselección</a>                             
             </div>
