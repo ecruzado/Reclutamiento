@@ -169,7 +169,7 @@
                 modal: true,
                 buttons: {
                     "Grabar": function () {
-                        if ($("#frmPopupLogeoEx").validate().form()) {
+                        if ($("#frmLogeoExPopup").validate().form()) {
                             $('#LogeoExtranet').dialog('open');
                         }
                     },
@@ -276,8 +276,8 @@
                         $('#PopupDialogLogeoExtranet').dialog("close");
 
                         $.ajax({
-                            data: $("#frmPopupLogeoEx").serialize(),
                             type: "POST",
+                            data: $("#frmLogeoExPopup").serialize(),
                             url: '@Url.Action("LogeoUsuario", "Seguridad")',
                             traditional: true,
                                 success: function (data) {
