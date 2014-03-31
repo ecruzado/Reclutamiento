@@ -65,7 +65,6 @@
 
             postulanteGeneralViewModel.TipoDocumentos = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
-            postulanteGeneralViewModel.TipoDocumentos.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             
             postulanteGeneralViewModel.Nacionalidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Nacionalidad));
             postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
@@ -153,9 +152,13 @@
             {
                 return RedirectToRoute(retorno);
             }
-           
-            
             var postulanteGeneralViewModel = inicializarPostulante();
+            if (IdePostulante==0)
+            {
+                Usuario user = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(Session[ConstanteSesion.Usuario]));
+                postulanteGeneralViewModel.Postulante.Correo = user.CodUsuario;
+            }
+            
             if (IdePostulante != 0)
             {
                 postulanteGeneralViewModel.Postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);

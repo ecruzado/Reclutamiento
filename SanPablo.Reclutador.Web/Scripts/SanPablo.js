@@ -1,4 +1,9 @@
-﻿SanPablo = {
+﻿Number.prototype.formatMoney = function (c, d, t) {
+    var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
+SanPablo = {
     ShowElement: function (elemento) {
         $(elemento).slideDown(200).animate({ opacity: 1 }, 300);
     },
@@ -609,7 +614,31 @@
     },
 
 
+
     Redirecciona : function(url){
         window.location = url;
+    },
+
+
+
+
+
+    Numeros: function (selector) {
+        var $this = $('#' + selector);
+        $this.keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
+        });
+    },
+    Letras: function (selector) {
+        var $this = $('#' + selector);
+        $this.keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^a-zA-Z]/g)) return false;
+        });
+    },
+    Alfanumerico: function (selector) {
+        var $this = $('#' + selector);
+        $this.keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z]/g)) return false;
+        });
     }
 };

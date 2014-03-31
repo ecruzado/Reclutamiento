@@ -27,8 +27,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoEstadoCivil { get; set; }
         public virtual string TipoVia { get; set; }
         public virtual string NombreVia { get; set; }
-        public virtual int NumeroDireccion { get; set; }
-        public virtual int InteriorDireccion { get; set; }
+        public virtual int? NumeroDireccion { get; set; }
+        public virtual int? InteriorDireccion { get; set; }
         public virtual string Manzana { get; set; }
         public virtual string Lote { get; set; }
         public virtual string Bloque { get; set; }
@@ -36,14 +36,16 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual string Correo { get; set; }
         public virtual string Observacion { get; set; }
-        public virtual int TelefonoMovil { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        public virtual int? TelefonoMovil { get; set; }
 
         //[DataType(DataType.PhoneNumber)]
         //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         //
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Número no válido")]
+        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Número no válido")]
         [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
         public virtual string TelefonoFijo { get; set; }
         public virtual string TipoZona { get; set; }
@@ -136,5 +138,18 @@ namespace SanPablo.Reclutador.Entity
             discapacidadPostulante.Postulante = this;
             Discapacidades.Add(discapacidadPostulante);
         }
+
+        //private bool BeAValidDate(DateTime date)
+        //{
+        //    DateTime hoy = DateTime.Now;
+
+        //    hoy.
+
+        //    if (date == default(DateTime))
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
     }
 }
