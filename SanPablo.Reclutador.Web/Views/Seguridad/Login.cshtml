@@ -279,7 +279,7 @@
                             data: $("#frmPopupLogeoEx").serialize(),
                             type: "POST",
                             url: '@Url.Action("LogeoUsuario", "Seguridad")',
-                                traditional: true,
+                            traditional: true,
                                 success: function (data) {
                                     if (data.Resultado) {
                                         $.unblockUI();

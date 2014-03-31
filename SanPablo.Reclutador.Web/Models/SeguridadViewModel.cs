@@ -2,11 +2,11 @@
 
 namespace SanPablo.Reclutador.Web.Models
 {
-    using System;
+    using SanPablo.Reclutador.Entity;
     using System.Collections.Generic;
+    using System;
     using System.Linq;
     using System.Web;
-    using SanPablo.Reclutador.Entity;
 
     public class SeguridadViewModel
     {

@@ -137,9 +137,15 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public ActionResult LogeoUsuario(SeguridadViewModel model){
+        public ActionResult LogeoUsuario(SeguridadViewModel objModel){
 
-            
+
+
+            SeguridadViewModel model = new SeguridadViewModel();
+            model.UsuarioExtranet = new UsuarioExtranet();
+
+            model = objModel;
+
             JsonMessage objJson;
             objJson = new JsonMessage();
             Usuario objUsuarioExtranet;
@@ -157,20 +163,20 @@ namespace SanPablo.Reclutador.Web.Controllers
 
 
             if (model != null)
-            { 
+            {
 
-                //UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
-                //ValidationResult result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
-                //JsonMessage objJsonMensage = new JsonMessage();
-                
+                UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
+                ValidationResult result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
+                JsonMessage objJsonMensage = new JsonMessage();
 
-                //if (!result.IsValid)
-                //{
-                //    objJson.Resultado = false;
-                //    objJson.Mensaje = "los campos (*) son obligatorios";
-                    
-                //    return Json(objJsonMensage);
-                //}
+
+                if (!result.IsValid)
+                {
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "los campos (*) son obligatorios";
+
+                    return Json(objJsonMensage);
+                }
                 
                 
                 
