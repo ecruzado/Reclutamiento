@@ -37,9 +37,11 @@
         {
             var campo = document.getElementById('ConocimientoGeneral_NombreConocimientoGeneral');
             if (tipoNombre == "XX") {
-                $('#ConocimientoGeneral_NombreConocimientoGeneral').removeAttr("disabled");
+                campo.style.display = "block";
+                //$('#ConocimientoGeneral_NombreConocimientoGeneral').removeAttr("disabled");
             }
             else {
+                campo.style.display = "none";
                 $('#ConocimientoGeneral_NombreConocimientoGeneral').attr("disabled", "disabled");
             }
         }
