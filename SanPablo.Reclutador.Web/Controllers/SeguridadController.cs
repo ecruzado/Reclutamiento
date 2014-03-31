@@ -135,6 +135,7 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult LogeoUsuario(SeguridadViewModel model)
         {
 
@@ -164,7 +165,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                 ValidationResult result = new ValidationResult();
 
                 result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
-              
+
 
 
                 if (!result.IsValid)
