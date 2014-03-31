@@ -250,12 +250,7 @@ namespace SanPablo.Reclutador.Web.Controllers
 
 
                     objJson.Resultado = true;
-                    objJson.Mensaje = "Se registro el usuario correctamente";
-
-
-
-
-
+                    objJson.Mensaje = "Gracias por registrarte. Te recomendamos completar tus datos en la sección Mi CV, ahí podrás detallar tu información.";
 
                 }
 
