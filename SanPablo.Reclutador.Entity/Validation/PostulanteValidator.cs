@@ -46,9 +46,14 @@
             RuleFor(x => x.FechaNacimiento)
                 .NotEmpty()
                 .WithMessage("Ingresar fecha de nacimiento");
-            RuleFor(x => x.FechaNacimiento)
-                .GreaterThan(new DateTime(1980,01,01))
-                .WithMessage("Ingresar fecha de nacimiento válida");
+            //RuleFor(x => x.FechaNacimiento)
+            //    .GreaterThan( DateTime.Now.AddYears(-18))
+            //    .WithMessage("El postulante debe ser mayor de edad");
+
+            //RuleFor(x => x.FechaNacimiento)
+            //    .Must(BeAValidDate)
+            //    .WithMessage("El Postulante debe ser mayor de edad");
+
 
             RuleFor(x => x.IndicadorSexo)
                 .NotEmpty()
@@ -93,6 +98,22 @@
                 .NotEmpty()
                 .WithMessage("Seleccionar como se entero de la convocatoria");
 
+            RuleFor(x => x.TelefonoMovil)
+               .InclusiveBetween(900000000, 999999999)
+               .WithMessage("Ingresar telefono movil válido");
+
+
+            RuleFor(x => x.Observacion)
+                .Length(0, 255)
+                .WithMessage("La observacion no debe sobrepasar los 255 caracteres");
+
+
+            RuleFor(x => x.ReferenciaDireccion)
+                .NotEmpty()
+                .WithMessage("Ingresar una referencia");
+            RuleFor(x => x.ReferenciaDireccion)
+                .Length(5,100)
+                .WithMessage("Ingrese una referencia válida de hasta 100 caracteres");
             //RuleFor(x => x.TelefonoFijo)
             //    .Must()
             //    .withMessage("Ingresar un número telefonico válido");
