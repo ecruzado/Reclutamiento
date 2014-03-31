@@ -528,7 +528,7 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Referencia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion)
+                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion, new { @style="text-transform: uppercase"} )
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ReferenciaDireccion)
                             </div>

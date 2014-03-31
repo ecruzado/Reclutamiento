@@ -58,8 +58,9 @@
                             {
                                 item.NombreEmpresa.ToUpper(),
                                 item.DescripcionCargoTrabajo.ToUpper(),
-                                item.FechaTrabajoInicio.ToString(),
-                                item.FechaTrabajoFin.ToString(),
+                                String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoInicio),
+                                item.IndicadorActualmenteTrabajo== "S"?"Actualmente": String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoFin),
+                                //item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
                                 item.TiempoDeServicio,
                                 item.DescripcionMotivoCese,
@@ -137,6 +138,8 @@
                 experienciaEdit.FechaTrabajoInicio = experienciaPostulante.FechaTrabajoInicio;
                 experienciaEdit.FechaTrabajoFin = experienciaPostulante.FechaTrabajoFin;
                 experienciaEdit.CorreoReferente = experienciaPostulante.CorreoReferente;
+                experienciaEdit.FuncionesDesempenadas = experienciaPostulante.FuncionesDesempenadas;
+               
 
                 _experienciaPostulanteRepository.Update(experienciaEdit);
             }
@@ -152,13 +155,13 @@
 
             experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
             experienciaPostulanteGeneralViewModel.TipoCargos.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTROS" });
-            experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccione" });
 
             experienciaPostulanteGeneralViewModel.TipoMotivosCese = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoMotivoCese));
-            experienciaPostulanteGeneralViewModel.TipoMotivosCese.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            experienciaPostulanteGeneralViewModel.TipoMotivosCese.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccione" });
 
             experienciaPostulanteGeneralViewModel.TipoCargosReferente = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
-            experienciaPostulanteGeneralViewModel.TipoCargosReferente.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            experienciaPostulanteGeneralViewModel.TipoCargosReferente.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccione" });
 
             return experienciaPostulanteGeneralViewModel;
         }
@@ -175,7 +178,24 @@
             return result;
         }
 
+        [HttpPost]
+        public ActionResult calcularTiempoServicio(DateTime inicio, DateTime fin)
+        {
+            ActionResult result = null;
+            if (fin == null)
+            {
+                fin = DateTime.Now;
+            }
 
+            var days = fin - inicio;
+
+            int anhos = days.Days / 365;
+            int resto = days.Days % 365;
+            int meses = resto / 30;
+
+            string tiempoServicio = anhos.ToString() + " AÑO(S) Y " + meses.ToString() + " MES(ES)";
+            return result = Json(tiempoServicio);
+        }
 
     }
 }
