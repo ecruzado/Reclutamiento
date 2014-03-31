@@ -35,11 +35,12 @@
         });
         function habilitarTextOtro(tipoNombre)
         {
+            var campo = document.getElementById('ConocimientoGeneral_NombreConocimientoGeneral');
             if (tipoNombre == "XX") {
-                $('#nombreOtroConocimiento').removeAttr("disabled");
+                $('#ConocimientoGeneral_NombreConocimientoGeneral').removeAttr("disabled");
             }
             else {
-                $('#nombreOtroConocimiento').attr("disabled", "disabled");
+                $('#ConocimientoGeneral_NombreConocimientoGeneral').attr("disabled", "disabled");
             }
         }
 
@@ -56,7 +57,7 @@
             <td class="colEtiqueta">
                 @Html.HiddenFor(model=>model.porcentaje)
                  @Html.HiddenFor(model=>model.ConocimientoGeneral.IdeConocimientoGeneralPostulante)
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoConocimientoGeneral, new SelectList(Model.TipoConocimientoGenerales, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoConocimientoGeneral), new { @id="tipoConocimientoGral"})
@@ -67,7 +68,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario">Descripcion <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
                     @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoNombreConocimientoGeneral, new SelectList(Model.TipoNombresConocimientosGrales, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoNombreConocimientoGeneral), new { @id = "nombreConocimiento"})
@@ -78,10 +79,10 @@
         </tr> 
          <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario">Otro </label>
+                <label class="etiquetaFormulario" style =" display:none;">Otros </label>
             </td>
             <td class="colInput;input-xxlarge">
-                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @id="nombreOtroConocimiento", @disabled="disabled", @style="text-transform: uppercase"})
+                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @style="text-transform: uppercase; display:none;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral)
                 </div>

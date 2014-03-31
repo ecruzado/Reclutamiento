@@ -20,7 +20,7 @@
             <td class="colEtiqueta">
                 @Html.HiddenFor(model=>model.porcentaje)
                  @Html.HiddenFor(model=>model.ConocimientoGeneral.IdeConocimientoGeneralPostulante)
-                <label class="etiquetaFormulario" for="setInstitucion">Descripcion <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" for="setInstitucion">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
                     @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoIdioma, new SelectList(Model.TipoIdiomas, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoIdioma))
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de conocimiento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.ConocimientoGeneral.TipoConocimientoIdioma, new SelectList(Model.TipoConocimientoIdiomas, "Valor", "Descripcion", Model.ConocimientoGeneral.TipoConocimientoIdioma))
