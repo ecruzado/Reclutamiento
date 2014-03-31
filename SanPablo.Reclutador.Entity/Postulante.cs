@@ -139,17 +139,19 @@ namespace SanPablo.Reclutador.Entity
             Discapacidades.Add(discapacidadPostulante);
         }
 
-        //private bool BeAValidDate(DateTime date)
-        //{
-        //    DateTime hoy = DateTime.Now;
+        private bool beavaliddate(DateTime date)
+        {
 
-        //    hoy.
+            DateTime fechaValida = DateTime.Now.AddYears(-18);
 
-        //    if (date == default(DateTime))
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
+            if (date < fechaValida)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

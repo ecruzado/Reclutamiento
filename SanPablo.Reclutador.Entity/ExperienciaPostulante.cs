@@ -27,11 +27,14 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoMotivoCese { get; set; }
         public virtual string NombreReferente { get; set; }
         public virtual string CorreoReferente { get; set; }
-        public virtual int NumeroMovilReferencia { get; set; }
+        [DataType(DataType.PhoneNumber)]
+        public virtual int? NumeroMovilReferencia { get; set; }
         public virtual string TipoCargoTrabajoReferente { get; set; }
         
-        public virtual int NumeroFijoInstitucionReferente { get; set; }
-        public virtual int NumeroAnexoInstitucionReferente { get; set; }
+        public virtual int? NumeroFijoInstitucionReferente { get; set; }
+
+        public virtual int? NumeroAnexoInstitucionReferente { get; set; }
+        
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionCargoTrabajo { get; set; }

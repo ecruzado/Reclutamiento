@@ -46,9 +46,9 @@
             RuleFor(x => x.FechaNacimiento)
                 .NotEmpty()
                 .WithMessage("Ingresar fecha de nacimiento");
-            //RuleFor(x => x.FechaNacimiento)
-            //    .GreaterThan( DateTime.Now.AddYears(-18))
-            //    .WithMessage("El postulante debe ser mayor de edad");
+            RuleFor(x => x.FechaNacimiento)
+                .LessThan(DateTime.Now.AddYears(-18))
+                .WithMessage("El postulante debe ser mayor de edad");
 
             //RuleFor(x => x.FechaNacimiento)
             //    .Must(BeAValidDate)

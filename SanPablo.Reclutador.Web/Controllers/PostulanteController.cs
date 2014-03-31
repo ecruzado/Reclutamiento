@@ -365,7 +365,7 @@
             
         }
         #endregion
-
+        [HttpPost]
         public ActionResult validarDocumento(string dni)
         {
             ActionResult result = null;
@@ -382,6 +382,21 @@
             }
             return result = Json(valido);
         }
+
+        [HttpPost]
+        public ActionResult validarFechaNacimiento(DateTime date)
+        {
+            ActionResult result = null;
+            bool valido = false;
+            DateTime fechaValida = DateTime.Now.AddYears(-18);
+
+            if (date < fechaValida)
+            {
+                valido = true;
+            }
+            return result = Json(valido);
+        }
+
 
         #region DatosComplementarios
 

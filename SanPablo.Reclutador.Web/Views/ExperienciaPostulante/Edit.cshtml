@@ -2,9 +2,15 @@
 @{
     Layout = "";
 }
+
+    <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            SanPablo.Numeros('Experiencia_NumeroMovilReferencia');
+
             var indActual = $('#indActuaTrabajando').is(":checked");
             habilitarFecha(indActual);
 
@@ -25,13 +31,15 @@
         });
             
         function habilitarOtro(tipoNombre) {
-            if (tipoNombre == '99') {
-                $('#NombreCargo_otro').removeAttr('disabled');
+            var campo = document.getElementById("NombreCargo_otro");
+            if (tipoNombre == 'XX') {
+                campo.style.display = "block";
             }
             else {
-                $('#NombreCargo_otro').attr('disabled', 'disabled');
+                campo.style.display = "none";
             }
         }
+
         function habilitarFecha(opcion)
         {
             if (opcion == true){
@@ -85,7 +93,7 @@
                 <label class="etiquetaFormulario" style="width:160px"> Otro </label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id="NombreCargo_otro",@disabled = "disabled", @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "text-transform: uppercase ; display:none;" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreCargoTrabajo )
                 </div>
@@ -121,7 +129,7 @@
                 <label class="etiquetaFormulario" > Tiempo de Servicio </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @style="text-transform: uppercase",disabled = "diasbled"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
                 </div>

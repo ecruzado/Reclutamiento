@@ -71,6 +71,12 @@
             });
         })
 
+        $(function () {
+            $('#Postulante_FechaNacimiento').blur(function () {
+                validarFechaNacimiento();
+            });
+        });
+
         //MOSTRAR IMAGEN
         $(function () {
             $('#FotoPostulante').change(function (e) {
@@ -104,6 +110,38 @@
          });
          return false;
     }
+
+
+
+
+    function validarFechaNacimiento() {
+        var fecha = $('#Postulante_FechaNacimiento').val();
+        if ((fecha != null) && (fecha != "")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("validarFechaNacimiento","Postulante")',
+                data: { date: fecha },
+                success: function (respuesta) {
+                    if (!respuesta) {
+                        $('#Postulante_NumeroDocumento').val('');
+                        $("#spanMensaje").html('Fecha de nacimiento no válida, el postulante debe ser mayor de edad');
+                        $("#divMensaje").dialog({
+                            title: 'Sistema de Reclutamiento y Selección de Personal',
+                            modal: true,
+                            buttons: {
+                                "Ok": function () { $(this).dialog("close"); }
+                            }
+                        });
+
+                    }
+                    else {
+                        $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
+                    }
+                }
+            });
+        }
+    }
+
 
     function verificarDocumento() {
         var documento = $('#Postulante_NumeroDocumento').val();
@@ -260,7 +298,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de Nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario" })
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>

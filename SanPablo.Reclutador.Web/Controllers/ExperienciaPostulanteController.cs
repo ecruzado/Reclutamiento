@@ -151,6 +151,7 @@
             experienciaPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             experienciaPostulanteGeneralViewModel.TipoCargos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
+            experienciaPostulanteGeneralViewModel.TipoCargos.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTROS" });
             experienciaPostulanteGeneralViewModel.TipoCargos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             experienciaPostulanteGeneralViewModel.TipoMotivosCese = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoMotivoCese));
