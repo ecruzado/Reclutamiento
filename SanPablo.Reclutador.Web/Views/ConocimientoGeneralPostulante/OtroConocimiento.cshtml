@@ -36,13 +36,14 @@
         function habilitarTextOtro(tipoNombre)
         {
             var campo = document.getElementById('ConocimientoGeneral_NombreConocimientoGeneral');
+            var label = document.getElementById('labelOtros');
             if (tipoNombre == "XX") {
                 campo.style.display = "block";
-                //$('#ConocimientoGeneral_NombreConocimientoGeneral').removeAttr("disabled");
+                label.style.display = "block";
             }
             else {
                 campo.style.display = "none";
-                $('#ConocimientoGeneral_NombreConocimientoGeneral').attr("disabled", "disabled");
+                label.style.display = "none";
             }
         }
 
@@ -81,7 +82,7 @@
         </tr> 
          <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style =" display:none;">Otros </label>
+                <label class="etiquetaFormulario" id="labelOtros" style =" display:none;">Otros </label>
             </td>
             <td class="colInput;input-xxlarge">
                     @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @style="text-transform: uppercase; display:none;"})
