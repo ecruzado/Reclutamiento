@@ -124,9 +124,7 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// <returns></returns>
         public ActionResult InicializaPopupExtranet(){
 
-            SeguridadViewModel model;
-
-            model = new SeguridadViewModel();
+            SeguridadViewModel model = new SeguridadViewModel();
             model.UsuarioExtranet = new UsuarioExtranet();
 
             return View("PopupLogeo",model);
@@ -137,19 +135,16 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public ActionResult LogeoUsuario(SeguridadViewModel objModel){
+        public ActionResult LogeoUsuario(SeguridadViewModel model)
+        {
 
+            //[Bind(Prefix = "Postulante")]Postulante postulante
 
-
-            SeguridadViewModel model = new SeguridadViewModel();
-            model.UsuarioExtranet = new UsuarioExtranet();
-
-            model = objModel;
 
             JsonMessage objJson;
             objJson = new JsonMessage();
-            Usuario objUsuarioExtranet;
-            Usuario objUsuarioIntranet;
+            Usuario objUsuarioExtranet=null;
+            Usuario objUsuarioIntranet = null;
             string usuario=null;
             string pass=null;
             string confPass=null;
@@ -164,10 +159,12 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             if (model != null)
             {
-
-                UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
-                ValidationResult result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
                 JsonMessage objJsonMensage = new JsonMessage();
+                UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
+                ValidationResult result = new ValidationResult();
+
+                result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
+              
 
 
                 if (!result.IsValid)
