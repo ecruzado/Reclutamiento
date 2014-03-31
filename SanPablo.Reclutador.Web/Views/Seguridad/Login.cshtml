@@ -106,7 +106,7 @@
 }
     </div> <!-- /container -->
     <div id="PopupDialogLogeoExtranet" title="Registro de Nuevo Usuario"></div>
-    <div id="PopupDialogRestablePass" title="Restablecer Contraseña"></div>
+    <div id="PopupDialogRestablePass" title="Olvide mi contraseña. Ingrese su correo electrónico y le enviaremos su contraseña"></div>
     
     <div id="LogeoExtranet"><span id="spanLogeoExtranet"></span></div>
     <div id="DialogRestablePass"><span id="spanDialogRestablePass"></span></div>
@@ -129,7 +129,19 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-           
+            $('#UsuarioExtranet_Usuario').on('keypress', function (event) {
+                if (event.which == '13') {
+                    $("#btnIniciaSesion").trigger("click");
+                }
+            });
+
+
+            $('#UsuarioExtranet_Password').on('keypress', function (event) {
+                if (event.which == '13') {
+                    $("#btnIniciaSesion").trigger("click");
+                }
+            });
+
             //if ($.browser.msie) {
             //    alert($.browser.version);
             //}
@@ -181,8 +193,8 @@
 
             $('#PopupDialogRestablePass').dialog({
                 autoOpen: false,
-                width: 500,
-                height: 200,
+                width: 410,
+                height: 230,
                 resizable: false,
                 modal: true,
                 buttons: {

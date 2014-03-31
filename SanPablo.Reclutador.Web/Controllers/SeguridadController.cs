@@ -141,7 +141,6 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             //[Bind(Prefix = "Postulante")]Postulante postulante
 
-
             JsonMessage objJson;
             objJson = new JsonMessage();
             Usuario objUsuarioExtranet=null;
@@ -157,111 +156,122 @@ namespace SanPablo.Reclutador.Web.Controllers
             string destino = null;
             string asunto = null;
 
-
-            if (model != null)
+            try
             {
-                 JsonMessage objJsonMensage = new JsonMessage();
-                //UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
-                //ValidationResult result = new ValidationResult();
 
-                //result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
 
-                //if (!result.IsValid)
-                //{
-                //    objJson.Resultado = false;
-                //    objJson.Mensaje = "los campos (*) son obligatorios";
 
-                //    return Json(objJsonMensage);
-                //}
-                                           
-                
-                usuario = model.UsuarioExtranet.Usuario;
-                pass = model.UsuarioExtranet.Password;
-                confPass = model.UsuarioExtranet.PasswordConfirma;
-
-                var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario
-                                                    && x.CodContrasena == pass
-                                                    && x.TipUsuario == TipUsuario.Extranet
-                                                    );
-
-                if (lista != null && lista.Count>0)
+                if (model != null)
                 {
-                    objJson.Resultado = false;
-                    objJson.Mensaje = "El usuario ya se encuentra registrado, Ingrese un nuevo usuario";
+                    JsonMessage objJsonMensage = new JsonMessage();
+                    //UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
+                    //ValidationResult result = new ValidationResult();
+
+                    //result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
+
+                    //if (!result.IsValid)
+                    //{
+                    //    objJson.Resultado = false;
+                    //    objJson.Mensaje = "los campos (*) son obligatorios";
+
+                    //    return Json(objJsonMensage);
+                    //}
+
+
+                    usuario = model.UsuarioExtranet.Usuario;
+                    pass = model.UsuarioExtranet.Password;
+                    confPass = model.UsuarioExtranet.PasswordConfirma;
+
+                    var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario
+                                                        && x.CodContrasena == pass
+                                                        && x.TipUsuario == TipUsuario.Extranet
+                                                        );
+
+                    if (lista != null && lista.Count > 0)
+                    {
+                        objJson.Resultado = false;
+                        objJson.Mensaje = "El usuario ya se encuentra registrado, Ingrese un nuevo usuario";
+
+                    }
+                    else
+                    {
+
+
+                        objUsuarioExtranet = new Usuario();
+                        objUsuarioExtranet.CodUsuario = usuario;
+                        objUsuarioExtranet.CodContrasena = pass;
+                        objUsuarioExtranet.Email = usuario;
+                        objUsuarioExtranet.TipUsuario = TipUsuario.Extranet;
+                        objUsuarioExtranet.UsrCreacion = UsuarioInicio.Web;
+                        objUsuarioExtranet.FecCreacion = FechaCreacion;
+                        objUsuarioExtranet.FlgEstado = IndicadorActivo.Activo;
+
+                        _usuarioRepository.Add(objUsuarioExtranet);
+
+                        objUsuarioIntranet = new Usuario();
+                        objUsuarioIntranet.CodUsuario = usuario;
+                        objUsuarioIntranet.CodContrasena = pass;
+                        objUsuarioIntranet.Email = usuario;
+                        objUsuarioIntranet.TipUsuario = TipUsuario.Instranet;
+                        objUsuarioIntranet.UsrCreacion = UsuarioInicio.Web;
+                        objUsuarioIntranet.FecCreacion = FechaCreacion;
+                        objUsuarioIntranet.FlgEstado = IndicadorActivo.Inactivo;
+
+                        _usuarioRepository.Add(objUsuarioIntranet);
+
+                        UsuarioRolSede objUsuarioRolSede;
+                        objUsuarioRolSede = new UsuarioRolSede();
+
+                        objUsuarioRolSede.IdSede = 0;
+                        objUsuarioRolSede.IdUsuario = objUsuarioIntranet.IdUsuario;
+
+                        var objRol = _rolRepository.GetSingle(x => x.CodRol.Upper() == UsuarioInicio.POSTULANTE.Upper());
+
+                        objUsuarioRolSede.IdRol = objRol.IdRol;
+                        objUsuarioRolSede.UsuarioCreacion = UsuarioInicio.Web;
+                        objUsuarioRolSede.FechaCreacion = FechaCreacion;
+
+                        _usuarioRolSedeRepository.Add(objUsuarioRolSede);
+
+
+                        rutaHTML = Server.MapPath(@"~/TemplateEmail/Bienvenido.htm");
+                        destino = objUsuarioIntranet.Email;
+                        asunto = "Bienvenido(a)";
+                        listaParemetros.Add("cuerpo");
+                        listaValores.Add("¡Te damos la más cordial Bienvenida al sistema de Reclutamiento y Selección de Personal del Complejo Hospitalario San Pablo!<br /><br />"
+                        + "Somos la red privada de salud más grande del país, con un staff de más 1,700 médicos y alrededor de 4,000 colaboradores a nivel nacional.<br />"
+                        + "Contamos con más de 22 años siendo una empresa líder, mejorando la calidad de vida de los peruanos.<br /><br />"
+                        + "Te ofrecemos la oportunidad de formar parte de nuestro equipo humano, en donde podrás aportar a la empresa y crecer profesionalmente, en diversas áreas como:<br />"
+                        + "administrativas, personal médico, asistencial, operarios, área comercial y ventas, entre otras.<br />"
+                        + "<br />"
+                        + "<br />"
+                        + "Bienvenido a tu familia, La Familia San Pablo.");
+
+
+                        string retorno = envioEmail.ObtenerCuerpoCorreo(rutaHTML, listaParemetros, listaValores);
+
+                        envioEmail.EnviarMail(destino, asunto, null, retorno);
+
+
+                        objJson.Resultado = true;
+                        objJson.Mensaje = "Gracias por registrarte. Te recomendamos completar tus datos en la sección Mi CV, ahí podrás detallar tu información.";
+
+                    }
+
 
                 }
                 else
                 {
-                    
-                    
-                    objUsuarioExtranet = new Usuario();
-                    objUsuarioExtranet.CodUsuario = usuario;
-                    objUsuarioExtranet.CodContrasena = pass;
-                    objUsuarioExtranet.Email = usuario;
-                    objUsuarioExtranet.TipUsuario = TipUsuario.Extranet;
-                    objUsuarioExtranet.UsrCreacion = UsuarioInicio.Web;
-                    objUsuarioExtranet.FecCreacion = FechaCreacion;
-                    objUsuarioExtranet.FlgEstado = IndicadorActivo.Activo;
-
-                    _usuarioRepository.Add(objUsuarioExtranet);
-                    
-                    objUsuarioIntranet =new Usuario();
-                    objUsuarioIntranet.CodUsuario = usuario;
-                    objUsuarioIntranet.CodContrasena = pass;
-                    objUsuarioIntranet.Email = usuario;
-                    objUsuarioIntranet.TipUsuario = TipUsuario.Instranet;
-                    objUsuarioIntranet.UsrCreacion = UsuarioInicio.Web;
-                    objUsuarioIntranet.FecCreacion = FechaCreacion;
-                    objUsuarioIntranet.FlgEstado = IndicadorActivo.Inactivo;
-                    
-                    _usuarioRepository.Add(objUsuarioIntranet);
-
-                    UsuarioRolSede objUsuarioRolSede;
-                    objUsuarioRolSede = new UsuarioRolSede();
-
-                    objUsuarioRolSede.IdSede = 0;
-                    objUsuarioRolSede.IdUsuario = objUsuarioIntranet.IdUsuario;
-
-                    var objRol = _rolRepository.GetSingle(x => x.CodRol.Upper() == UsuarioInicio.POSTULANTE.Upper());
-
-                    objUsuarioRolSede.IdRol = objRol.IdRol;
-                    objUsuarioRolSede.UsuarioCreacion = UsuarioInicio.Web;
-                    objUsuarioRolSede.FechaCreacion = FechaCreacion;
-
-                    _usuarioRolSedeRepository.Add(objUsuarioRolSede);
-
-
-                    rutaHTML = Server.MapPath(@"~/TemplateEmail/Bienvenido.htm");
-                    destino = objUsuarioIntranet.Email;
-                    asunto = "Bienvenido(a)";
-                    listaParemetros.Add("cuerpo");
-                    listaValores.Add("¡Te damos la más cordial Bienvenida al sistema de Reclutamiento y Selección de Personal del Complejo Hospitalario San Pablo!<br /><br />"
-                    +"Somos la red privada de salud más grande del país, con un staff de más 1,700 médicos y alrededor de 4,000 colaboradores a nivel nacional.<br />"
-                    + "Contamos con más de 22 años siendo una empresa líder, mejorando la calidad de vida de los peruanos.<br /><br />"
-                    +"Te ofrecemos la oportunidad de formar parte de nuestro equipo humano, en donde podrás aportar a la empresa y crecer profesionalmente, en diversas áreas como:<br />"
-                    + "administrativas, personal médico, asistencial, operarios, área comercial y ventas, entre otras.<br />"
-                    + "<br />"
-                    + "<br />"
-                    +"Bienvenido a tu familia, La Familia San Pablo.");
-                   
-
-                    string retorno = envioEmail.ObtenerCuerpoCorreo(rutaHTML, listaParemetros, listaValores);
-
-                    envioEmail.EnviarMail(destino, asunto, null, retorno);
-
-
-                    objJson.Resultado = true;
-                    objJson.Mensaje = "Gracias por registrarte. Te recomendamos completar tus datos en la sección Mi CV, ahí podrás detallar tu información.";
-
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "Error en registrar el usuario";
                 }
-
-
             }
-            else {
+            catch (Exception)
+            {
                 objJson.Resultado = false;
-                objJson.Mensaje = "Error en registrar el usuario";
+                objJson.Mensaje = "Error en envio de correo";
+               
             }
-
 
             return Json(objJson);
         }
