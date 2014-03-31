@@ -125,6 +125,8 @@
     <script src="@Url.Content("~/Scripts/jquery.conastec.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.blockUI.js")" type="text/javascript"></script>
+    
 
     <script type="text/javascript">
 
@@ -135,6 +137,9 @@
 
         
         $('#btnIniciaSesion').click(function () {
+
+           
+
             var codUsuario = $("#Usuario_CodUsuario").val();
             var codPass = $("#Usuario_CodContrasena").val();
             var codRol = $("#Rol_IdRol").val();
@@ -154,9 +159,12 @@
                     traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
+                           
                            window.location = '@Url.Action("GetMenu", "Seguridad", new { id = "",  area = "Intranet"})' + '/' + data.IdDato;
                         } else {
+                           
                             MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            
                         }
 
                     }

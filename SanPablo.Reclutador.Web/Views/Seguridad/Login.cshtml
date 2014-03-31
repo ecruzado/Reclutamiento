@@ -124,6 +124,8 @@
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.blockUI.js")" type="text/javascript"></script>
+    
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -203,6 +205,22 @@
                 title: "Sistema de Reclutamiento Y Seleccion de Personal",
                 buttons: {
                     "Si": function () {
+
+                        $.blockUI({
+                            message: '<h1>Procesando...</h1>',
+                            css: { border: 'none',
+                                   padding: '15px',
+                                   backgroundColor: '#000',
+                                   '-webkit-border-radius': '10px',
+                                   '-moz-border-radius': '10px',
+                                   opacity: .5,
+                                   color: '#fff'
+                            }
+                        });
+
+                        $('#DialogRestablePass').dialog("close");
+                        $('#PopupDialogRestablePass').dialog("close");
+
                         $.ajax({
                             data: $("#frmPopupRestablecePass").serialize(),
                             type: "POST",
@@ -210,14 +228,14 @@
                             traditional: true,
                             success: function (data) {
                                 if (data.Resultado) {
-                                       
-                                        $('#DialogRestablePass').dialog("close");
-                                        $('#PopupDialogRestablePass').dialog("close");
-
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                    } else {
-                                        $('#DialogRestablePass').dialog("close");
-                                        $('#PopupDialogRestablePass').dialog("close");
+                                       $.unblockUI();
+                                      // $('#DialogRestablePass').dialog("close");
+                                      // $('#PopupDialogRestablePass').dialog("close");
+                                       MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                } else {
+                                        $.unblockUI();
+                                       // $('#DialogRestablePass').dialog("close");
+                                      //  $('#PopupDialogRestablePass').dialog("close");
 
                                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                     }
@@ -240,6 +258,23 @@
                 title: "Sistema de Reclutamiento Y Seleccion de Personal",
                 buttons: {
                     "Si": function () {
+
+                        $.blockUI({
+                            message: '<h1>Procesando...</h1>',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }
+                        });
+
+                        $('#LogeoExtranet').dialog("close");
+                        $('#PopupDialogLogeoExtranet').dialog("close");
+
                         $.ajax({
                             data: $("#frmPopupLogeoEx").serialize(),
                             type: "POST",
@@ -247,14 +282,15 @@
                                 traditional: true,
                                 success: function (data) {
                                     if (data.Resultado) {
-                                        @*SanPablo.Redirecciona('@Url.Action("GetMenuExtranet", "Seguridad")');*@
-                                        $('#LogeoExtranet').dialog("close");
-                                        $('#PopupDialogLogeoExtranet').dialog("close");
+                                        $.unblockUI();
+                                        //$('#LogeoExtranet').dialog("close");
+                                        //$('#PopupDialogLogeoExtranet').dialog("close");
 
                                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                     } else {
-                                        $('#LogeoExtranet').dialog("close");
-                                        $('#PopupDialogLogeoExtranet').dialog("close");
+                                        $.unblockUI();
+                                       // $('#LogeoExtranet').dialog("close");
+                                       // $('#PopupDialogLogeoExtranet').dialog("close");
                                         
                                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                     }
