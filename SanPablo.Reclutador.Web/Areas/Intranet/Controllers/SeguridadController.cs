@@ -357,7 +357,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             {
 
                                 objJsonMensaje.Resultado = false;
-                                objJsonMensaje.Mensaje = "Erro: Se econtro más de una sede configurada";
+                                objJsonMensaje.Mensaje = "Error: Se econtro más de una sede configurada";
                             }
                         }    
                        
