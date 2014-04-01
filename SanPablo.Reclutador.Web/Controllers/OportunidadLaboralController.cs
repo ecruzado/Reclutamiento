@@ -38,6 +38,9 @@ namespace SanPablo.Reclutador.Web.Controllers
         private ITipoRequerimiento _tipoRequerimiento;
         private ICargoRepository _cargoRepository;
         private IConocimientoGeneralRequerimientoRepository _ConocimientoGeneralRequerimientoRepository;
+        private IConocimientoGeneralCargoRepository _conocimientoCargoRepository;
+
+
         private INivelAcademicoRequerimientoRepository _nivelAcademicoRequerimientoRepository;
         private ICompetenciaRequerimientoRepository _competenciaRequerimientoRepository;
         private IExperienciaRequerimientoRepository _experienciaRequerimientoRepository;
@@ -77,7 +80,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             IEstudioPostulanteRepository estudioPostulanteRepository,
             IExperienciaPostulanteRepository experienciaPostulanteRepository,
             IConocimientoGeneralPostulanteRepository conocimientoGeneralPostulanteRepository,
-            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
+            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
+            IConocimientoGeneralCargoRepository conocimientoCargoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -103,6 +107,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             _experienciaPostulanteRepository = experienciaPostulanteRepository;
             _conocimientoGeneralPostulanteRepository = conocimientoGeneralPostulanteRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
+            _conocimientoCargoRepository = conocimientoCargoRepository;
         }
 
 
@@ -293,6 +298,21 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             model.solReqPersonal = _postulanteRepository.GetDatosSolGrupo(model.oportunidadLaboral);
 
+            if (TipoSolicitud.Nuevo.Equals(tipo))
+            {
+                var objSol = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo ==Convert.ToInt32(id) && x.EstadoActivo==IndicadorActivo.Activo);
+                model.solReqPersonal.IndVerSalario = objSol.IndicadorVerSalario;
+
+                
+            }
+            else
+            {
+                var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeCargo == Convert.ToInt32(id) && 
+                                                                    x.TipoSolicitud==tipo && x.EstadoActivo==IndicadorActivo.Activo);
+                model.solReqPersonal.IndVerSalario = objSolReq.IndVerSalario;
+            }
+
+
             model.solReqPersonal.FechaInicioBus = Convert.ToDateTime(fechaInicio);
             model.solReqPersonal.FechaFinBus = Convert.ToDateTime(fechaFin);
             model.solReqPersonal.NumVacantes = (numVacantes == null ? 0 : Convert.ToInt32(numVacantes));
@@ -377,6 +397,239 @@ namespace SanPablo.Reclutador.Web.Controllers
                 return MensajeError("ERROR: " + ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Conomientos Generales del Cargo
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Conocimientos(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            string tipSol = (grid.rules[1].data == null ? "" : grid.rules[1].data);
+            int IdeCargo = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                if (!"N".Equals(tipSol))
+                {
+
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                    where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+                   
+                    var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                            cell = new string[]
+                            {
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica,
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+                }
+                else
+                {
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
+                    where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
+                    where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+
+                    var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralCargo.ToString(),
+                            cell = new string[]
+                            {
+                                item.DescripcionConocimientoOfimatica,
+                                item.DescripcionNombreOfimatica
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Idiomas
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult Idiomas(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            string tipSol = (grid.rules[1].data == null ? "" : grid.rules[1].data);
+            int IdeCargo = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                if (!"N".Equals(tipSol))
+                {
+
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                    where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+                    where.Add(Expression.IsNotNull("TipoIdioma"));
+
+                    var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                            cell = new string[]
+                            {
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento
+
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+                }
+                else
+                {
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
+                    where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                    where.Add(Expression.IsNotNull("TipoIdioma"));
+
+                    var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralCargo.ToString(),
+                            cell = new string[]
+                            {
+
+                                item.DescripcionIdioma,
+                                item.DescripcionConocimientoIdioma,
+                                item.DescripcionNivelConocimiento
+
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Conocimientos Adicionales
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual JsonResult ConocimientoAdicionales(GridTable grid)
+        {
+            int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+            string tipSol = (grid.rules[1].data == null ? "" : grid.rules[1].data);
+            int IdeCargo = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
+
+            try
+            {
+
+                grid.page = (grid.page == 0) ? 1 : grid.page;
+                grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+                if (!"N".Equals(tipSol))
+                {
+
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                    where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+                    where.Add(Expression.IsNotNull("TipoConocimientoGeneral"));
+
+                    var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                            cell = new string[]
+                            {
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento
+
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+                }
+                else
+                {
+                    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
+                    where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                    where.Add(Expression.IsNotNull("TipoConocimientoGeneral"));
+
+                    var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+                    generic.Value.rows = generic.List
+                        .Select(item => new Row
+                        {
+                            id = item.IdeConocimientoGeneralCargo.ToString(),
+                            cell = new string[]
+                            {
+
+                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNivelConocimiento
+
+                            }
+                        }).ToArray();
+
+                    return Json(generic.Value);
+
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return MensajeError("ERROR: " + ex.Message);
+            }
+        }
+
+
 
         /// <summary>
         /// Experiencia

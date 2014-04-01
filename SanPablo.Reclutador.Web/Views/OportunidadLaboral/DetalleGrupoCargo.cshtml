@@ -17,8 +17,230 @@
         
     $(document).ready(function () {
 
+        
+
+
+        jQuery("#grdListOtrosConocimientos").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#solReqPersonal_IdeSolReqPersonal").val() },
+                       { field: 'tipoSol', data: $("#solReqPersonal_Tipsol").val() },
+                        { field: 'ideCargo', data: $("#solReqPersonal_IdeCargo").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("ConocimientoAdicionales", "OportunidadLaboral")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListOtrosConocimientos')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Conocimiento', 'Descripción', 'Nivel'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380 },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, sortable: false, width: 250 },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false, width: 150 }
+
+            ],
+          
+            //pager: jQuery('#grdPagerConocimientos'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'DescripcionConocimientoGeneral',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 180,
+            width: 780,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+
+
+
+
+        jQuery("#grdListIdiomas").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#solReqPersonal_IdeSolReqPersonal").val() },
+                       { field: 'tipoSol', data: $("#solReqPersonal_Tipsol").val() },
+                        { field: 'ideCargo', data: $("#solReqPersonal_IdeCargo").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Idiomas", "OportunidadLaboral")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListIdiomas')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['Idioma', 'Descripción','Nivel'],
+            colModel: [
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380 },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, sortable: false, width: 250 },
+                    { name: 'Nivel', index: 'Nivel', align: 'left', editable: false, sortable: false, width: 150 }
+                  
+            ],
+
+            //pager: jQuery('#grdPagerConocimientos'),
+            rowNum: 10,
+            //rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'DescripcionIdioma',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 180,
+            width: 780,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            },
+            loadComplete: function (data) {
+            }
+        });
+
+
+
 
         jQuery("#grdListConocimientos").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'idSol', data: $("#solReqPersonal_IdeSolReqPersonal").val() },
+                       { field: 'tipoSol', data: $("#solReqPersonal_Tipsol").val() },
+                        { field: 'ideCargo', data: $("#solReqPersonal_IdeCargo").val() }
+
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("Conocimientos", "OportunidadLaboral")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListConocimientos')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+             colNames: ['Tipo Conocimiento','Descripción'],
+             colModel: [
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 400 },
+                     { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, sortable: false, width: 380 }
+             ],
+
+             //pager: jQuery('#grdPagerConocimientos'),
+             rowNum: 10,
+             //rowList: [10, 30, 50],
+             autowidth: true,
+             rules: true,
+             sortname: 'DescripcionNombreOfimatica',
+             sortorder: 'desc',
+             viewrecords: true,
+             height: 180,
+             width: 780,
+             cellsubmit: 'clientArray',
+             hidegrid: false,
+             rownumbers: true,
+             shrinkToFit: false,
+
+             postData: {
+             },
+             loadComplete: function (data) {
+             }
+         });
+
+
+
+        jQuery("#grdListEstudios").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
 
@@ -51,7 +273,7 @@
                     async: false,
                     success: function (data, st) {
                         if (st == 'success') {
-                            var jq = $('#grdListConocimientos')[0];
+                            var jq = $('#grdListEstudios')[0];
                             jq.addJSONData(data);
                         }
                     },
@@ -60,12 +282,12 @@
                     }
                 });
             },
-            colNames: ['Descripci&oacuten'],
+            colNames: [''],
             colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 780 }
             ],
 
-            pager: jQuery('#grdPagerConocimientos'),
+            //pager: jQuery('#grdPagerConocimientos'),
             rowNum: 10,
             //rowList: [10, 30, 50],
             autowidth: true,
@@ -74,7 +296,7 @@
             sortorder: 'desc',
             viewrecords: true,
             height: 180,
-            width: 600,
+            width: 780,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -133,11 +355,11 @@
              },
              colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
              colModel: [
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 400 },
-                     { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false, width: 200 },
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 650 },
+                     { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false, width: 250 },
              ],
 
-             pager: jQuery('#grdPagerExperiencia'),
+             //pager: jQuery('#grdPagerExperiencia'),
              rowNum: 10,
              //rowList: [10, 30, 50],
              autowidth: true,
@@ -146,7 +368,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 600,
+             width: 780,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -202,12 +424,12 @@
                     }
                 });
             },
-              colNames: ['Descripci&oacuten'],
+              colNames: [''],
               colModel: [
-                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
+                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 780 }
               ],
 
-              pager: jQuery('#grdPagerCompetencias'),
+             // pager: jQuery('#grdPagerCompetencias'),
               rowNum: 10,
               //rowList: [10, 30, 50],
               autowidth: true,
@@ -216,7 +438,7 @@
               sortorder: 'desc',
               viewrecords: true,
               height: 180,
-              width: 600,
+              width: 780,
               cellsubmit: 'clientArray',
               hidegrid: false,
               rownumbers: true,
@@ -272,12 +494,12 @@
                     }
                 });
             },
-             colNames: ['Descripci&oacuten'],
+             colNames: [''],
              colModel: [
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 },
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 780 },
              ],
 
-             pager: jQuery('#grdPagerOfrecemos'),
+             //pager: jQuery('#grdPagerOfrecemos'),
              rowNum: 10,
              //rowList: [10, 30, 50],
              autowidth: true,
@@ -286,7 +508,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 600,
+             width: 780,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -338,7 +560,7 @@
         <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Detalle Cargo</h5>
+                <h5>@Model.solReqPersonal.nombreCargo</h5>
             </div>
 @using (Html.BeginForm("Index", "OportunidadLaboral", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmDetalleGrupoCargo" }))
 {
@@ -360,20 +582,7 @@
                               @Html.TextBoxFor(model => model.solReqPersonal.Sede_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
-
-                   
-                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess">Cargo</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.solReqPersonal.nombreCargo, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
-                        </td>
-                    </tr>
-					
-					 <tr class="formulario-fila">
-                        <td class="span5">
+                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Area</label>
                             <div class="controles">                         
                               @Html.TextBoxFor(model => model.solReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
@@ -381,23 +590,52 @@
                         </td>
                     </tr>
 
-                    <tr class="formulario-fila">
+                   
+                    @* <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.solReqPersonal.nombreCargo, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>*@
+					
+					@* <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Area</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.solReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>*@
+
+                   @* <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes</label>
                             <div class="controles">                         
                               @Html.TextBoxFor(model => model.solReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
+                    </tr>*@
 
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Rango salarial</label>
-                            <div class="controles">
-                               @Html.TextBoxFor(model => model.solReqPersonal.TipoRangoSalarioDes, new { @class = "textoFormulario" ,disabled ="disabled" })  
+                        
+                        @if (Indicador.Si.Equals(Model.solReqPersonal.IndVerSalario))
+                        {
+                           <td class="span5">
+                                <label class="control-label" for="selectError">Rango salarial</label>
+                                <div class="controles">
+                                   @Html.TextBoxFor(model => model.solReqPersonal.TipoRangoSalarioDes, new { @class = "textoFormulario" ,disabled ="disabled" })  
+                                </div>
+                            </td>     
+                        }
+                       
+                         <td class="span5">
+                            <label class="control-label" for="inputSuccess">Vacantes</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.solReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                        
                     </tr>
                    
                          
@@ -408,16 +646,23 @@
                                @Html.TextBoxFor(model => model.solReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,disabled ="disabled" })  
                             </div>
                         </td>
-                    </tr>
 
-                      <tr class="formulario-fila">
-                        <td class="span5">
+                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
                                @Html.TextBoxFor(model => model.solReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,disabled ="disabled" })  
                             </div>
                         </td>
                     </tr>
+
+                    @*  <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
+                            <div class="controles">
+                               @Html.TextBoxFor(model => model.solReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,disabled ="disabled" })  
+                            </div>
+                        </td>
+                    </tr>*@
 
 
                     </table>
@@ -429,14 +674,14 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.solReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:600px; height:100px"})
+                            @Html.TextAreaFor(model=>model.solReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:780px; height:100px"})
                          </div>
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
 				   
 				   
-				   <tr class="formulario-fila">
+                    <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Conocimientos</label>
                          <div class="controls">
@@ -444,8 +689,25 @@
                                 <div>
                                     <table id="grdListConocimientos">
                                     </table>
-                                    <div id="grdPagerConocimientos">
-                                    </div>
+                                    @*<div id="grdPagerConocimientos">
+                                    </div>*@
+                                </div>                                         
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+
+				   <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Estudios</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListEstudios">
+                                    </table>
+                                    @*<div id="grdPagerConocimientos">
+                                    </div>*@
                                 </div>                                         
                             </div>
                          </div>
@@ -461,8 +723,8 @@
                                 <div>
                                     <table id="grdListExperiencia">
                                     </table>
-                                    <div id="grdPagerExperiencia">
-                                    </div>
+                                    @*<div id="grdPagerExperiencia">
+                                    </div>*@
                                 </div>                                         
                             </div>
                          </div>
@@ -478,14 +740,52 @@
                                 <div>
                                     <table id="grdListCompetencias">
                                     </table>
-                                    <div id="grdPagerCompetencias">
-                                    </div>
+                                   @* <div id="grdPagerCompetencias">
+                                    </div>*@
                                 </div>                                         
                             </div>
                          </div>
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
+
+                       
+                        <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Idiomas</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListIdiomas">
+                                    </table>
+                                   @* <div id="grdPagerCompetencias">
+                                    </div>*@
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+                       
+                       
+                     <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Otros Conocimientos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListOtrosConocimientos">
+                                    </table>
+                                   @* <div id="grdPagerCompetencias">
+                                    </div>*@
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+
+                       
 						
                     <tr class="formulario-fila">
                         <td class="span5">
@@ -495,20 +795,22 @@
                                 <div>
                                     <table id="grdListOfrecemos">
                                     </table>
-                                    <div id="grdPagerOfrecemos">
-                                    </div>
+                                   @* <div id="grdPagerOfrecemos">
+                                    </div>*@
                                 </div>                                         
                             </div>
                          </div>
                         </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
+
+
 						
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254",@disabled="disabled"})
+                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:780px;height:100px" ,maxlength="254",@disabled="disabled"})
                          </div>
                         </td>
                     </tr>   

@@ -110,7 +110,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (id != null)
             {
 
-                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id && x.TipUsuario == TipUsuario.Instranet && x.FlgEstado==IndicadorActivo.Activo);
                 if (objUsuario!=null)
                 {
 
@@ -165,7 +165,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (id != null)
             {
 
-                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id && x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
                 if (objUsuario != null)
                 {
 
@@ -381,13 +381,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 Session["ListaMenu"] = objModel.listaMenu;
                 Session["listaPadre"] = objModel.listaPadre;
                
-                return RedirectToAction("ListaReemplazo", "SolicitudCargo");
+                //return RedirectToAction("ListaReemplazo", "SolicitudCargo");
+                return RedirectToAction("Inicio", "Seguridad");
             }
             else
             {
                 return RedirectToAction("Login", "Seguridad");
             }
            
+        }
+
+        /// <summary>
+        /// pagina inicial
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Inicio() 
+        { 
+            SeguridadViewModel model = new SeguridadViewModel();
+
+
+
+            return View("Inicio", model);
+        
         }
 
 
