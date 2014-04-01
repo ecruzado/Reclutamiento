@@ -12,5 +12,7 @@
 
         public virtual bool IndRespuesta { get; set; }
 
+
+
     }
 }

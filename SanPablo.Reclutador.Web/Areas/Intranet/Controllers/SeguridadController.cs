@@ -257,7 +257,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         public ActionResult Logon(string id, string codPass, string codRol, string codSede, string indSede)
-                        
         {
             JsonMessage objJsonMensaje = new JsonMessage();
             Usuario objUsuario = new Usuario();
@@ -266,30 +265,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             int reqSede = Convert.ToInt32(indSede);
 
-            if (String.IsNullOrEmpty(id) )
+            if (String.IsNullOrEmpty(id))
             {
                 objJsonMensaje.Mensaje = "Ingrese un usuario";
                 return Json(objJsonMensaje);
             }
-            
+
             if (String.IsNullOrEmpty(codPass))
             {
                 objJsonMensaje.Mensaje = "Ingrese un password";
                 return Json(objJsonMensaje);
-            } 
-            
+            }
+
             if (String.IsNullOrEmpty(codRol))
             {
                 objJsonMensaje.Mensaje = "Seleccione un roll";
                 return Json(objJsonMensaje);
             }
 
-            if (Convert.ToInt32(codRol)==0)
+            if (Convert.ToInt32(codRol) == 0)
             {
                 objJsonMensaje.Mensaje = "Seleccione un roll";
                 return Json(objJsonMensaje);
             }
-            
+
 
             if (Convert.ToInt32(codRol) > 0 && reqSede > 0)
             {
@@ -304,41 +303,41 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     return Json(objJsonMensaje);
                 }
             }
-            
 
-            objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim() 
+
+            objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim()
                                          && x.CodContrasena == codPass.Trim()
-                                         && x.TipUsuario == TipUsuario.Instranet 
+                                         && x.TipUsuario == TipUsuario.Instranet
                                          && x.FlgEstado == IndicadorActivo.Activo);
 
             var objRol = _rolRepository.GetSingle(x => x.IdRol == Convert.ToInt32(codRol));
 
-            
-            if (objUsuario!=null)
+
+            if (objUsuario != null)
             {
-                if (objUsuario.IdUsuario!=null)
+                if (objUsuario.IdUsuario != null)
                 {
                     objJsonMensaje.Resultado = true;
                     objJsonMensaje.IdDato = Convert.ToInt32(codRol);
 
                     Session[Core.ConstanteSesion.Usuario] = objUsuario.IdUsuario;
                     Session[Core.ConstanteSesion.UsuarioDes] = objUsuario.CodUsuario;
-                    
+
                     Session[Core.ConstanteSesion.Rol] = codRol;
                     Session[Core.ConstanteSesion.RolDes] = objRol.DscRol;
 
                     Session[Core.ConstanteSesion.UsuarioSede] = null;
 
                     Session[Core.ConstanteSesion.ObjUsuario] = objUsuario;
-                    
+
                     if (codSede != null && !"".Equals(codSede.Trim()) && !"0".Equals(codSede.Trim()))
                     {
                         var objSede = _sedeRepository.GetSingle(x => x.CodigoSede == codSede);
-                        
-                        Session[Core.ConstanteSesion.Sede] = codSede;
-                        Session[Core.ConstanteSesion.SedeDes] = objSede.DescripcionSede; 
 
-                        var objSedeNivel = _sedeNivelRepository.GetSingle(x => x.IDESEDE == Convert.ToInt32(codSede) 
+                        Session[Core.ConstanteSesion.Sede] = codSede;
+                        Session[Core.ConstanteSesion.SedeDes] = objSede.DescripcionSede;
+
+                        var objSedeNivel = _sedeNivelRepository.GetSingle(x => x.IDESEDE == Convert.ToInt32(codSede)
                                                        && x.IDUSUARIO == objUsuario.IdUsuario);
 
                         Session[Core.ConstanteSesion.UsuarioSede] = objSedeNivel;
@@ -359,8 +358,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 objJsonMensaje.Resultado = false;
                                 objJsonMensaje.Mensaje = "Error: Se econtro más de una sede configurada";
                             }
-                        }    
-                       
+                        }
+
 
                     }
 
@@ -370,6 +369,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJsonMensaje);
 
         }
+
 
 
         /// <summary>

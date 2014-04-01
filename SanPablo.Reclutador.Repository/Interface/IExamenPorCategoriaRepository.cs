@@ -5,6 +5,6 @@
 
     public interface IExamenPorCategoriaRepository : IRepository<ExamenPorCategoria>
     {
-        List<ExamenPorCategoria> ListarExamenesPorCategoria(int idePostulante, int ideSolicitud, string tipoSolicitud, int ideSede);
+        List<ExamenPorCategoria> ListarExamenesPorCategoria(int ideReclutaPersona, int ideSede);
     }
 }

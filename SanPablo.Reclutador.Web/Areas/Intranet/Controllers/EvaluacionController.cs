@@ -20,13 +20,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICategoriaRepository _categoriaRepository;
         private ICriterioRepository _criterioRepository;
         private IAlternativaRepository _alternativaRepository;
+        private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
+        private IUsuarioRepository _usuarioRepository;
+        private IReclutamientoPersonaExamenRepository _reclutamientoPersonaExamenRepository;
 
         public EvaluacionController(IReclutamientoPersonaCriterioRepository reclutamientoPersonaCriterioRepository,
                                     IReclutamientoPersonaAlternativaRepository reclutamientoPersonaAlternativaRepository,
                                     IExamenPorCategoriaRepository examenPorCategoriaRepository,
                                     ICategoriaRepository categoriaRepository,
                                     ICriterioRepository criterioRepository,
-                                    IAlternativaRepository alternativaRepository)
+                                    IAlternativaRepository alternativaRepository,
+                                    IReclutamientoPersonaRepository reclutamientoPersonaRepository,
+                                    IUsuarioRepository usuarioRepository,
+                                    IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository)
         {
             _reclutamientoPersonaCriterioRepository = reclutamientoPersonaCriterioRepository;
             _reclutamientoPersonaAlternativaRepository = reclutamientoPersonaAlternativaRepository;
@@ -34,12 +40,31 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _categoriaRepository = categoriaRepository;
             _criterioRepository = criterioRepository;
             _alternativaRepository = alternativaRepository;
+            _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
+            _usuarioRepository = usuarioRepository;
+            _reclutamientoPersonaExamenRepository = reclutamientoPersonaExamenRepository;
         }
 
         [ValidarSesion]
         [AuthorizeUser]
         public ActionResult Index()
         {
+           
+            int ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+            var usuario = _usuarioRepository.GetSingle(x=>x.IdUsuario == ideUsuario);
+
+            if(usuario.IdePostulante != 0)
+            {
+                int ideReclutamientoPersona = _reclutamientoPersonaRepository.getIdeReclutaPersona(usuario.IdePostulante, Convert.ToInt32(Session[ConstanteSesion.Sede]));
+                IdeReclutaPersona = ideReclutamientoPersona;
+
+                if (IdeReclutaPersona != 0)
+                {
+                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuario.CodUsuario);
+                }
+
+
+            }
             return View("Index");
         }
 
@@ -53,12 +78,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 examenesPost = new ExamenPorCategoria();
 
-                int idPostulante = 57;
-                int idSolicitud = 106;
-                string tipoSolicitud = TipoSolicitud.Remplazo;
                 int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
-                lista = _examenPorCategoriaRepository.ListarExamenesPorCategoria(idPostulante, idSolicitud, tipoSolicitud, idSede);
+                lista = _examenPorCategoriaRepository.ListarExamenesPorCategoria(IdeReclutaPersona,idSede);
 
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
@@ -73,15 +95,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Examen.IdeExamen==0?"":item.Examen.IdeExamen.ToString(),
                                 item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString(),
                                 item.Examen.NomExamen==null?"":item.Examen.NomExamen,
-                                //item.Examen.DescExamen==null?"":item.Examen.DescExamen,
-                                //item.Examen.TipExamen==null?"":item.Examen.TipExamen,
-                                //item.Examen.TipExamenDes==null?"":item.Examen.TipExamenDes,
-                                //item.Categoria.ORDENIMPRESION.ToString(),
                                 item.Categoria.NOMCATEGORIA==null?"":item.Categoria.NOMCATEGORIA,
-                                //item.Categoria.DESCCATEGORIA==null?"":item.Categoria.DESCCATEGORIA,
-                                //item.Categoria.TIPCATEGORIA==null?"":item.Categoria.TIPCATEGORIA,
-                                //item.Categoria.INSTRUCCIONES==null?"":item.Categoria.INSTRUCCIONES,
-                                //item.Categoria.TIPOEJEMPLO==null?"":item.Categoria.TIPOEJEMPLO,
                                 item.Categoria.TIEMPO.ToString(),
                                 "1",
                                 item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString()
@@ -158,7 +172,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 var categoria = _categoriaRepository.GetSingle(x=>x.IDECATEGORIA == idCategoria);
                 string Instrucciones = categoria.INSTRUCCIONES;
-                Instrucciones = Instrucciones.Replace(".", "." + Environment.NewLine);
+                if (Instrucciones != null)
+                {
+                    Instrucciones = Instrucciones.Replace(".", "." + Environment.NewLine);
+                    categoria.INSTRUCCIONES = Instrucciones;
+                }
+                else
 
                 modelEvaluacion.Categoria = categoria;
 
@@ -173,19 +192,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             EvaluarPostulanteViewModel model = new EvaluarPostulanteViewModel();
             model.Categoria = new Categoria();
             model.SubCategoria = new SubCategoria();
+            model.Criterio = new Criterio();
+            model.Alternativa = new Alternativa();
+            model.Alternativas = new List<Alternativa>();
 
             return model;
         }
-
-        #region Evaluacion Postulante
-        public void recuperarPregunta(int idCriterio)
-        {
-
-        }
-        #endregion
-
-
-
 
         public ActionResult InstruccionesExamen()
         {
@@ -195,33 +207,70 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult Examen(string id)
         {
+            
             var modelExamen = inicializarExamenCategoria();
             int idCategoria = Convert.ToInt32(id);
-            ListaCriterios = null;
+            ListaCriterioEval = null;
             if (idCategoria != 0)
             {
-                ListaCriterios = _criterioRepository.ObtenerCriteriosPorCategoria(idCategoria);
+                ListaCriterioEval = _criterioRepository.ObtenerCriteriosPorCategoria(idCategoria);
 
-                var criterio = ListaCriterios.criterios[0];
+                var criterio = ListaCriterioEval.criterios[0];
                 modelExamen.SubCategoria.NOMSUBCATEGORIA = criterio.NombreSubCategoria;
                 modelExamen.SubCategoria.IDESUBCATEGORIA = criterio.IdeSubCategoria;
                 modelExamen.Criterio = criterio;
-
+                modelExamen.nroPregunta = criterio.numeracion;
+                modelExamen.totalPreguntas = ListaCriterioEval.criterios.Count();
                 modelExamen.Alternativas = new List<Alternativa>(_alternativaRepository.GetBy(x => x.Criterio.IdeCriterio == criterio.IdeCriterio && x.ESTACTIVO == IndicadorActivo.Activo));
 
                 //calcular la hora de inicio
-                modelExamen.Inicio = HoraInicio;
-                modelExamen.Fin =  HoraInicio.AddMinutes(criterio.Tiempo);
+                Categoria categoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == idCategoria);
+                modelExamen.Categoria = categoria;
+
+                HoraInicioEvaluacion = HoraInicio;
+                TiempoEvaluacion = categoria.TIEMPO;
+                modelExamen.Inicio = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion);
+                modelExamen.Fin = String.Format("{0:HH:mm:ss}", HoraInicio.AddMinutes(TiempoEvaluacion));
+
+                
             }
 
             return (ActionResult)this.View("Examen",modelExamen);
         }
 
+
+        //[OutputCache(Duration = 50, VaryByParam = "idCriterio")]
         [HttpPost]
         public ActionResult Examen(EvaluarPostulanteViewModel model)
         {
+            var modelExamen = inicializarExamen();
+
+            if (_reclutamientoPersonaAlternativaRepository.guardarRespuesta(IdeReclutaPersona, model.Criterio.IdeCriterioPorSubcategoria, model.Alternativa.IdeAlternativa, Session[ConstanteSesion.UsuarioDes].ToString()))
+            {
+                ListaCriterioEval.criterios[model.Criterio.numeracion - 1].IndRespuesta = Indicador.Si;
+            }
+            else
+            {
+                ListaCriterioEval.criterios[model.Criterio.numeracion - 1].IndRespuesta = Indicador.No;
+            }
+            
+
+            Criterio criterioSgt = ListaCriterioEval.criterios[Convert.ToInt32(model.Criterio.numeracion)];
+            modelExamen.SubCategoria.NOMSUBCATEGORIA = criterioSgt.NombreSubCategoria;
+            modelExamen.SubCategoria.IDESUBCATEGORIA = criterioSgt.IdeSubCategoria;
+            modelExamen.Criterio = null;
+            //modelExamen.Criterio = criterioSgt;
+            //modelExamen.nroPregunta = criterioSgt.numeracion;
+            modelExamen.Alternativas = new List<Alternativa>(_alternativaRepository.GetBy(x => x.Criterio.IdeCriterio == criterioSgt.IdeCriterio && x.ESTACTIVO == IndicadorActivo.Activo));
+            modelExamen.totalPreguntas = ListaCriterioEval.criterios.Count();
+            modelExamen.Categoria.TIEMPO = TiempoEvaluacion;
+            modelExamen.Inicio = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion);
+            modelExamen.Fin = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion.AddMinutes(TiempoEvaluacion));
+
             var criterio = model.Criterio;
-            return View("Examen");
+
+            modelExamen.Criterio.numeracion = criterioSgt.numeracion;
+            return View("Examen", modelExamen);
         }
 
         public EvaluarPostulanteViewModel inicializarExamenCategoria()

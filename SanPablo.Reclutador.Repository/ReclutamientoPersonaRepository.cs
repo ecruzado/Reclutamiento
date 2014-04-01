@@ -113,6 +113,42 @@ namespace SanPablo.Reclutador.Repository
             }
         }
 
+        /// <summary>
+        /// Recuperar el IdeReclutamientoPersona
+        /// </summary>
+        /// <param name="idePostulante"></param>
+        /// <param name="ideSede"></param>
+        /// <param name="estadoPostulante"></param>
+        /// <returns></returns>
+        public int getIdeReclutaPersona(int idePostulante, int ideSede)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_GET_IDRECLU_PERSON");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
 
+                lspcmd.Parameters.Add("p_idePostulante", OracleType.Int32).Value = idePostulante;
+                lspcmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = ideSede;
+                lspcmd.Parameters.Add("p_RetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+
+                lspcmd.ExecuteNonQuery();
+
+                int resultado = Convert.ToInt32(lspcmd.Parameters[lspcmd.Parameters.IndexOf("p_RetVal")].Value);
+
+                return resultado;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
     }
 }

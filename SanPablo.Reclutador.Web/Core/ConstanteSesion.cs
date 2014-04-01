@@ -17,7 +17,10 @@ namespace SanPablo.Reclutador.Web.Core
         public const string IdePostulantePreSele = "IdePostPreSel";
         public const string IdeReclutaPersona = "IdeReclutaPersona";
         public const string ListaCriterios = "ListaCriterios";
-        
+
+        public const string HoraInicioEvaluacion = "HoraInicioEvaluacion";
+        public const string TiempoEvaluacion = "TiempoEvaluacion";
+
         /// <summary>
         /// Guarda el identificador de la tabla general
         /// </summary>

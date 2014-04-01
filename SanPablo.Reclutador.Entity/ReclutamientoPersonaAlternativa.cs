@@ -13,9 +13,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeReclutamientoPersonaAlternativa { get; set; }
         public virtual int IdeReclutaPersonaCriterio { get; set; }
         public virtual int IdeAlternativa { get; set; }
-        
 
-          
+        public virtual bool IndAlternativa { get; set; }
 
     }
 }

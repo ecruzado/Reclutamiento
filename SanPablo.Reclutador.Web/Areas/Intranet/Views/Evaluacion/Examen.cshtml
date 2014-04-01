@@ -3,7 +3,16 @@
 @{
     Layout = null;
 }
+@section script{
+    
+    <script type="text/javascript">
+        function limpiarNumeracion()
+        {
+            $('#Criterio_numeracion').val('');
+        }
 
+    </script>
+    }
 
 @section Head{
     }
@@ -14,7 +23,6 @@
 
     <head>
         <meta charset="utf-8">
-        @*<title>Instrucciones Examen</title>*@
         <title>@Html.DisplayFor(model=>model.Categoria.NOMCATEGORIA)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet" type="text/css" />
@@ -43,25 +51,24 @@
                 </div>
             </div>
             <div style="float:left;margin-top:5px;margin-left:10px;">
-                <span>Pregunta </span><input type="text" class="input-xmini" value="1"/> <span> de 4</span>
+
+                <span>Pregunta </span>@Html.TextBoxFor(model => model.Criterio.numeracion, new { @class="input-xmini"}) <span> de @Html.DisplayFor(model=>model.totalPreguntas)</span>
+
             </div>
             <a class="btn btn-info" style="margin:5px;">Ir a</a>
             <div style="float:right;margin-top:5px;">
                 <span>Duracion</span>  
                 @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", disabled = "disabled" })
-                @*<input type="text" class="input-mini" id="txduracion" value="30 min." disabled="disabled">*@&nbsp;&nbsp;
                 <span>Inicio</span> 
-                @Html.EditorFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
-                @*<input type="text" class="input-mini" id="txinicio" value="5:00 p.m." disabled="disabled">*@&nbsp-
+                @Html.TextBoxFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
                 <span>Fin</span>  
-                @Html.EditorFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
-                @*<input type="text" class="input-mini" id="txtFin" value="5:30 p.m." disabled="disabled">*@
+                @Html.TextBoxFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
             </div>
             <div style="clear:both"></div>
             <div class="grilla-opciones">
-                @*<h6>Comunicación Interpersonal</h6>*@
                  <h6>@Html.DisplayFor(model=>model.SubCategoria.NOMSUBCATEGORIA)</h6>
 
+                @Html.TextBoxFor(model => model.Criterio.IdeCriterioPorSubcategoria, new { style = "display:none;" })
                 @Html.TextBoxFor(model => model.SubCategoria.IDESUBCATEGORIA, new { style = "display:none;" })
                 <div class="opciones">
                 </div>
@@ -72,22 +79,18 @@
                     @Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { style = "display:none;" })
                      @if(Model.Criterio.TipoModo == TipoModo.Texto)
                       {
-                    <tr>
                         <td>
-                            @*<input type="radio" name="pregunta2"> &nbsp;No muy Exacta*@ 
-                           @Html.DisplayFor(model =>model.Criterio.numeracion) .- &nbsp;@Html.DisplayFor(model => model.Criterio.Pregunta)
+                          
+                           @Html.DisplayFor(model => model.nroPregunta) .- &nbsp;@Html.DisplayFor(model => model.Criterio.Pregunta)
                         </td>
-                    </tr>
                       }
                       else
                       {
-                          <tr>
                             <td class="colEtiqueta"></td>
                             <td class ="colInput" >
-                                @Html.DisplayFor(model =>model.Criterio.numeracion) .- &nbsp;
+                                @Html.DisplayFor(model => model.nroPregunta) .- &nbsp;
                                 <img id="ImgCriterio"  height ="100" width="100" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
                             </td>
-                          </tr>
                       }                     
                 </tr>
                  @{ 
@@ -100,8 +103,8 @@
                       {
                     <tr>
                         <td>
-                            @Html.RadioButtonFor(model => model.Alternativa.IndRespuesta, Item.IdeAlternativa) @Html.DisplayFor(model =>Item.NombreAlternativa)
-                            @*<input type="radio" name="pregunta2"> &nbsp;No muy Exacta *@
+                            @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa,Item.IdeAlternativa) @Html.DisplayFor(model =>Item.NombreAlternativa)
+                           @Html.TextBoxFor(model => Item.Peso, new { style = "display:none;" });
                         </td>
                     </tr>
                       }
@@ -110,7 +113,8 @@
                           <tr>
                             <td class="colEtiqueta"></td>
                             <td class ="colInput" >
-                                 @Html.RadioButtonFor(model => model.Alternativa.IndRespuesta, Item.IdeAlternativa)
+                                 @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa, Item.IdeAlternativa)
+                                @Html.TextBoxFor(model => Item.Peso, new { style = "display:none;" });
                                 <img id="ImgAlternativa"  height ="100" width="100" src="@Url.Action("GetImageAlternativa", "Alternativa", new { id = Item.IdeAlternativa })" /> 
                             </td>
                           </tr>
@@ -120,7 +124,7 @@
                   
             </tbody></table>   
             <div class="form-actions">       
-                <button type="submit" class="btn btn-info" @*href="@Url.Action("Examen", "Evaluacion")"*@><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                <button type="submit" class="btn btn-info" onclick="limpiarNumeracion();"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
             </div>                     
         </div>
 
