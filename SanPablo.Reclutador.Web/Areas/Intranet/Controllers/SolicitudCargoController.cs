@@ -1970,6 +1970,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
                 where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+               // where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
 
                 var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 

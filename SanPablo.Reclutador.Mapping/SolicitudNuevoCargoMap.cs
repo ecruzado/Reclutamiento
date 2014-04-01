@@ -29,6 +29,7 @@
             Map(x => x.FechaPublicacion, "FECPUBLICACION");
             Map(x => x.FechaExpiracion, "FECEXPIRACION");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+            Map(x => x.IdeCargo, "IDECARGO");
 
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");

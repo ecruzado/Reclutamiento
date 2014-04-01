@@ -71,15 +71,15 @@
                 }
             });
         },
-                  colNames: ['Postular','', '', 'Sede', 'Cargo/Posición', 'Fecha Publicación', 'Fecha Experización', '', 'Tipo',''],
+                  colNames: ['Postular','', '', 'Sede', 'Cargo', 'Fecha Publicación', 'Fecha Experización', '', 'Tipo',''],
                   colModel: [
                     { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, width: 95, formatter: PostularFormatter },
                     { name: 'IdeCargo', index: 'IdeCargo', align: 'center', sortable: false, hidden: true },
                     { name: 'IdeSede', index: 'IdeSede', align: 'center',  hidden: true },
                     { name: 'SedeDes', index: 'SedeDes', align: 'left', width: 250 },
                     { name: 'CargoDes', index: 'CargoDes', align: 'left', width: 300,formatter: DetalleCargoFormatter },
-                    { name: 'FecInicial', index: 'FecInicial', align: 'left', width: 180 },
-                    { name: 'FecFinal', index: 'FecFinal', align: 'left', width: 180 },
+                    { name: 'FecInicial', index: 'FecInicial', align: 'left', width: 125 },
+                    { name: 'FecFinal', index: 'FecFinal', align: 'left', width: 125 },
                     { name: 'TipoHorario', index: 'TipoHorario', align: 'left', hidden: true },
                     { name: 'TipoHorarioDes', index: 'TipoHorarioDes', align: 'left', width: 300 },
                     { name: 'NumVacantes', index: 'NumVacantes', align: 'left', hidden: true }
@@ -227,30 +227,44 @@
                     </div>
                 </td>
 
+               
+
+                 <td class="span5">
+                    <label class="control-label" for="selectError">Desde</label>
+                    <div class="controles">
+                        @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new {   maxlength="15", placeholder=" Inicial"})      
+                           
+                    </div>
+                </td>
+
+            </tr>       
+            <tr class="formulario-fila">
+               
+
                 <td class="span5">
                     <label class="control-label" for="selectError">Cargo</label>
                     <div class="controles">
                         @Html.DropDownListFor(model => model.oportunidadLaboral.IdeCargo, new SelectList(Model.listaCargos, "IdeCargo", "NombreCargo", Model.oportunidadLaboral.IdeCargo),new {  data_val = "false"})
                     </div> 
                 </td>
-            </tr>       
-            <tr class="formulario-fila">
+
                 <td class="span5">
-                    <label class="control-label" for="inputSuccess">Tipo</label>
+                    <label class="control-label" for="selectError">Hasta</label>
+                    <div class="controles">
+                        @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new {  maxlength="15", placeholder=" Final"})      
+                    </div>
+                </td>
+            </tr>     
+
+             <tr class="formulario-fila">
+               
+             <td class="span5">
+                    <label class="control-label" for="inputSuccess">Tipo de horario</label>
                    <div class="controles">
                         @Html.DropDownListFor(model => model.oportunidadLaboral.TipoHorario, new SelectList(Model.listaHorario, "Valor", "Descripcion", Model.oportunidadLaboral.TipoHorario),new {  data_val = "false"})
                     </div>
                 </td>
-                <td class="span5">
-                    <label class="control-label" for="selectError">Fecha</label>
-                    <div class="controles">
-                        @*<input type="text" placeholder=" Inicial"  class="input-small" id="txtfechainicio"> -  <input type="text" placeholder=" Final" class="input-small" id="txtfechafin">*@
-
-                           @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
-                           @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
-                    </div>
-                </td>
-            </tr>     
+                 </tr>  
         </table>
 }
         <div class="formulario-accion">

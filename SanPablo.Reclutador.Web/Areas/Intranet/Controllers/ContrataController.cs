@@ -173,6 +173,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     var objReclutaPer = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == id);
                     objReclutaPer.EstPostulante = PostulanteEstado.CONTRATADO;
+                    objReclutaPer.FecModifica = FechaModificacion;
+                    objReclutaPer.UsrModifica = UsuarioActual.NombreUsuario;
                     _reclutamientoPersonaRepository.Update(objReclutaPer);
 
                     objJson.Resultado = true;

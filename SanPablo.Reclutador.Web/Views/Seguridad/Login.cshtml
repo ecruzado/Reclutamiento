@@ -104,7 +104,7 @@
 }
     </div> <!-- /container -->
     <div id="PopupDialogLogeoExtranet" title="Registro de Nuevo Usuario"></div>
-    <div id="PopupDialogRestablePass" title="Olvide mi contraseña. Ingrese su correo electrónico y le enviaremos su contraseña"></div>
+    <div id="PopupDialogRestablePass" title="Olvide mi contraseña."></div>
     
     <div id="LogeoExtranet"><span id="spanLogeoExtranet"></span></div>
     <div id="DialogRestablePass"><span id="spanDialogRestablePass"></span></div>
@@ -178,9 +178,47 @@
                 resizable: false,
                 modal: true,
                 buttons: {
-                    "Grabar": function () {
+                    "Registrar": function () {
                         if ($("#frmLogeoExPopup").validate().form()) {
-                            $('#LogeoExtranet').dialog('open');
+                            // $('#LogeoExtranet').dialog('open');
+                            $.blockUI({
+                                message: '<h1>Procesando...</h1>',
+                                css: {
+                                    border: 'none',
+                                    padding: '15px',
+                                    backgroundColor: '#000',
+                                    '-webkit-border-radius': '10px',
+                                    '-moz-border-radius': '10px',
+                                    opacity: .5,
+                                    color: '#fff'
+                                }
+                            });
+
+                            $('#PopupDialogLogeoExtranet').dialog("close");
+
+                            $.ajax({
+                                type: "POST",
+                                data: $("#frmLogeoExPopup").serialize(),
+                                url: '@Url.Action("LogeoUsuario", "Seguridad")',
+                            traditional: true,
+                            success: function (data) {
+                                if (data.Resultado) {
+                                    $.unblockUI();
+                                    //$('#LogeoExtranet').dialog("close");
+                                    //$('#PopupDialogLogeoExtranet').dialog("close");
+
+                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                } else {
+                                    $.unblockUI();
+                                    // $('#LogeoExtranet').dialog("close");
+                                    // $('#PopupDialogLogeoExtranet').dialog("close");
+
+                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                }
+                            }
+                        });
+
+
                         }
                     },
                     "Cancelar": function () {
@@ -191,14 +229,53 @@
 
             $('#PopupDialogRestablePass').dialog({
                 autoOpen: false,
-                width: 410,
-                height: 230,
+                width: 460,
+                height: 270,
                 resizable: false,
                 modal: true,
                 buttons: {
                     "Restablecer": function () {
                         if ($("#frmPopupRestablecePass").validate().form()) {
-                            $('#DialogRestablePass').dialog('open');
+                            // $('#DialogRestablePass').dialog('open');
+                            $.blockUI({
+                                message: '<h1>Procesando...</h1>',
+                                css: {
+                                    border: 'none',
+                                    padding: '15px',
+                                    backgroundColor: '#000',
+                                    '-webkit-border-radius': '10px',
+                                    '-moz-border-radius': '10px',
+                                    opacity: .5,
+                                    color: '#fff'
+                                }
+                            });
+
+                           
+                            $('#PopupDialogRestablePass').dialog("close");
+
+                            $.ajax({
+                                data: $("#frmPopupRestablecePass").serialize(),
+                                type: "POST",
+                                url: '@Url.Action("RestablecePass", "Seguridad")',
+                            traditional: true,
+                            success: function (data) {
+                                if (data.Resultado) {
+                                    $.unblockUI();
+                                    // $('#DialogRestablePass').dialog("close");
+                                    // $('#PopupDialogRestablePass').dialog("close");
+                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                } else {
+                                    $.unblockUI();
+                                    // $('#DialogRestablePass').dialog("close");
+                                    //  $('#PopupDialogRestablePass').dialog("close");
+
+                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                }
+                            }
+                        });
+
+
+
                         }
                     },
                     "Cancelar": function () {
@@ -208,7 +285,7 @@
             });
 
             
-            $("#spanDialogRestablePass").html("¿Desea restablecer la contraseña?")
+          @*  $("#spanDialogRestablePass").html("¿Desea restablecer la contraseña?")
             $('#DialogRestablePass').dialog({
                 autoOpen: false,
                 modal: true,
@@ -257,11 +334,11 @@
                         $(this).dialog("close");
                     }
                 }
-            });
+            });*@
 
 
 
-            $("#spanLogeoExtranet").html("¿Desea registrar el usuario?")
+            @*$("#spanLogeoExtranet").html("¿Desea registrar el usuario?")
             $('#LogeoExtranet').dialog({
                 autoOpen: false,
                 modal: true,
@@ -312,7 +389,7 @@
                             $(this).dialog("close");
                         }
                     }
-                });
+                });*@
 
             $('#btnIniciaSesion').click(function () {
                 if ($("#frmLoginExtranet").validate().form()) {
@@ -325,7 +402,7 @@
                             if (data.Resultado) {
                                 window.location = '@Url.Action("GetMenuEx", "Seguridad")';
                             } else {
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                MostrarMensaje(data.Mensaje, "Mensaje");
                             }
                         }
                     });
