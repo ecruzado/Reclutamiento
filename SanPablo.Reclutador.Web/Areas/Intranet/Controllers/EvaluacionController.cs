@@ -253,30 +253,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             var modelExamen = inicializarExamen();
 
-            ReclutamientoPersonaCriterio respuestaCriterio = new ReclutamientoPersonaCriterio();
-
-            //obtener idCriterio
-            respuestaCriterio.IdeCriterioXSubcategoria = model.Criterio.IdeCriterioPorSubcategoria;
-            respuestaCriterio.IdeReclutaPersona = IdeReclutaPersona;
-            respuestaCriterio.PuntajeTotal = model.Alternativa.Peso;
-            respuestaCriterio.FechaCreacion = FechaCreacion;
-            respuestaCriterio.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString();
-            _reclutamientoPersonaCriterioRepository.Add(respuestaCriterio);
-
-            ReclutamientoPersonaAlternativa respuestaAlternativa = new ReclutamientoPersonaAlternativa();
-
-            respuestaAlternativa.IdeReclutaPersonaCriterio = 12;
-            respuestaAlternativa.IdeAlternativa = model.Alternativa.IdeAlternativa;
-            respuestaAlternativa.FechaCreacion = FechaCreacion;
-            respuestaAlternativa.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString();
-
-            _reclutamientoPersonaAlternativaRepository.Add(respuestaAlternativa);
+            if (_reclutamientoPersonaAlternativaRepository.guardarRespuesta(IdeReclutaPersona, model.Criterio.IdeCriterioPorSubcategoria, model.Alternativa.IdeAlternativa, Session[ConstanteSesion.UsuarioDes].ToString()))
+            {
+                ListaCriterioEval.criterios[model.Criterio.numeracion - 1].IndRespuesta = Indicador.Si;
+            }
+            else
+            {
+                ListaCriterioEval.criterios[model.Criterio.numeracion - 1].IndRespuesta = Indicador.No;
+            }
+            
 
             Criterio criterioSgt = ListaCriterioEval.criterios[Convert.ToInt32(model.Criterio.numeracion)];
             modelExamen.SubCategoria.NOMSUBCATEGORIA = criterioSgt.NombreSubCategoria;
             modelExamen.SubCategoria.IDESUBCATEGORIA = criterioSgt.IdeSubCategoria;
-            modelExamen.Criterio = criterioSgt;
-            modelExamen.nroPregunta = criterioSgt.numeracion;
+            modelExamen.Criterio = null;
+            //modelExamen.Criterio = criterioSgt;
+            //modelExamen.nroPregunta = criterioSgt.numeracion;
             modelExamen.Alternativas = new List<Alternativa>(_alternativaRepository.GetBy(x => x.Criterio.IdeCriterio == criterioSgt.IdeCriterio && x.ESTACTIVO == IndicadorActivo.Activo));
             modelExamen.totalPreguntas = ListaCriterioEval.criterios.Count();
             modelExamen.Categoria.TIEMPO = TiempoEvaluacion;
@@ -284,9 +276,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             modelExamen.Fin = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion.AddMinutes(TiempoEvaluacion));
 
             var criterio = model.Criterio;
-
-            List<Alternativa> alternativas = modelExamen.Alternativas;
-            ReclutamientoPersonaAlternativa alternativaResp = new ReclutamientoPersonaAlternativa();
 
             modelExamen.Criterio.numeracion = criterioSgt.numeracion;
             return View("Examen", modelExamen);
