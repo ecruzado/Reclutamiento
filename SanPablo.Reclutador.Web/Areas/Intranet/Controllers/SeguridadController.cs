@@ -395,6 +395,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// pagina inicial
         /// </summary>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Inicio() 
         { 
             SeguridadViewModel model = new SeguridadViewModel();
