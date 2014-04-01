@@ -343,17 +343,54 @@ namespace SanPablo.Reclutador.Web.Core
             }
         }
 
-        protected ListaCriterios ListaCriterios 
+        protected ListaCriterios ListaCriterioEval 
         {
             get
             {
-                return (ListaCriterios)System.Web.HttpContext.Current.Session[ConstanteSesion.ListaCriterios];
+                return (ListaCriterios)System.Web.HttpContext.Current.Session[ConstanteSesion.HoraInicioEvaluacion];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.HoraInicioEvaluacion, value);
+            }
+        }
+
+        //protected int  IdeReclutaPersona
+        //{
+        //    get
+        //    {
+        //        return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeReclutaPersona];
+        //    }
+        //    set
+        //    {
+        //        System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdeReclutaPersona, value);
+        //    }
+        //}
+
+        protected DateTime HoraInicioEvaluacion
+        {
+            get
+            {
+                return (DateTime)System.Web.HttpContext.Current.Session[ConstanteSesion.ListaCriterios];
             }
             set
             {
                 System.Web.HttpContext.Current.Session.Add(ConstanteSesion.ListaCriterios, value);
             }
         }
+
+        protected int TiempoEvaluacion
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.TiempoEvaluacion];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.TiempoEvaluacion, value);
+            }
+        }
+
         protected string  ModoAccion
         {
             get

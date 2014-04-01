@@ -15,7 +15,7 @@
         {
         }
 
-        public List<ExamenPorCategoria> ListarExamenesPorCategoria(int idePostulante, int ideSolicitud, string tipoSolicitud, int ideSede)
+        public List<ExamenPorCategoria> ListarExamenesPorCategoria(int ideReclutaPersona, int ideSede)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
@@ -28,9 +28,8 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
 
-                lspcmd.Parameters.Add("p_idPostulante", OracleType.Int32).Value = idePostulante;
-                lspcmd.Parameters.Add("p_idSolicitud", OracleType.Int32).Value = ideSolicitud;
-                lspcmd.Parameters.Add("p_idTipoSol", OracleType.VarChar).Value = tipoSolicitud;
+                //lspcmd.Parameters.Add("p_idPostulante", OracleType.Int32).Value = idePostulante;
+                lspcmd.Parameters.Add("p_idReclutaPerso", OracleType.Int32).Value = ideReclutaPersona;
                 lspcmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = ideSede;
                 lspcmd.Parameters.Add("p_cuRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
 

@@ -16,13 +16,17 @@
         public List<Alternativa> Alternativas { get; set; }
         public Alternativa Alternativa { get; set; }
 
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 
-        public DateTime Inicio { get; set; }
+        //[DataType(DataType.Time)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 
+        public string Inicio { get; set; }
 
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 
-        public DateTime Fin { get; set; }
+        //[DataType(DataType.Time)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")] 
+        public string Fin { get; set; }
+
+        public int nroPregunta { get; set; }
+
+        public int totalPreguntas { get; set; }
         
 
     }

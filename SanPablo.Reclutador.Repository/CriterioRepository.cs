@@ -52,6 +52,7 @@
                     objCriterio.numeracion = contador + 1;
                     objCriterio.IdeCriterio = Convert.ToInt32(drCriterios["IDECRITERIO"]);
                     objCriterio.IdeSubCategoria = Convert.ToInt32(drCriterios["IDESUBCATEGORIA"]);
+                    objCriterio.IdeCriterioPorSubcategoria = Convert.ToInt32(drCriterios["IDECRITERIOXSUBCATEGORIA"]);
                     objCriterio.NombreSubCategoria = Convert.ToString(drCriterios["NOMSUBCATEGORIA"]);
                     objCriterio.Tiempo = Convert.ToInt32(drCriterios["TIEMPO"]);
                     objCriterio.Pregunta = Convert.ToString(drCriterios["PREGUNTA"]);
