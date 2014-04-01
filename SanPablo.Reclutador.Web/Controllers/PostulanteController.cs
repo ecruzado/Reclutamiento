@@ -16,6 +16,7 @@
     using System;
     using System.Drawing;
     using System.Web.Routing;
+    using SanPablo.Reclutador.Web.Models.JQGrid;
 
    
     public class PostulanteController :  BaseController
@@ -67,29 +68,29 @@
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
             
             postulanteGeneralViewModel.Nacionalidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Nacionalidad));
-            postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
             
             postulanteGeneralViewModel.Sexo = new List<DetalleGeneral>( _detalleGeneralRepository.GetByTipoTabla(TipoTabla.Sexo));
-            postulanteGeneralViewModel.Sexo.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.Sexo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
             
             postulanteGeneralViewModel.EstadosCiviles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoCivil));
-            postulanteGeneralViewModel.EstadosCiviles.Insert(0,new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.EstadosCiviles.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
             
             postulanteGeneralViewModel.TipoVias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVia));
-            postulanteGeneralViewModel.TipoVias.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoVias.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.TipoZonas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoZona));
-            postulanteGeneralViewModel.TipoZonas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoZonas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.Departamentos = new List<Ubigeo>();
             postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
-            postulanteGeneralViewModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
+            postulanteGeneralViewModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONE" });
 
             postulanteGeneralViewModel.Provincias = new List<Ubigeo>();
-            postulanteGeneralViewModel.Provincias.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
+            postulanteGeneralViewModel.Provincias.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONE" });
 
             postulanteGeneralViewModel.Distritos = new List<Ubigeo>();
-            postulanteGeneralViewModel.Distritos.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
+            postulanteGeneralViewModel.Distritos.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONE" });
                      
             //identificar si el usuario tiene CV ingresado
             var idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
@@ -387,14 +388,27 @@
         public ActionResult validarFechaNacimiento(DateTime date)
         {
             ActionResult result = null;
+            //JsonMessage ObjJson = new JsonMessage();
+
             bool valido = false;
             DateTime fechaValida = DateTime.Now.AddYears(-18);
 
             if (date < fechaValida)
             {
                 valido = true;
+                
+                //ObjJson.Resultado = false;
+                //ObjJson.Mensaje = "Ingrese sus estudios";
+                //return Json(ObjJson);
             }
             return result = Json(valido);
+            //else
+            //{
+            //    Postulante postulante = new Postulante();
+
+            //    return View(new Postulante );
+            //}
+            
         }
 
 
@@ -405,23 +419,23 @@
             var postulanteGeneralViewModel = new PostulanteGeneralViewModel();
             postulanteGeneralViewModel.Postulante = new Postulante();
             postulanteGeneralViewModel.TipoSueldosBrutos = _detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario);
-            postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoSueldosBrutos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.TipoDisponibilidadesTrabajos = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.DisponibilidadTrabajo));
-            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDisponibilidadesTrabajos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.TipoDisponibilidadesHorarios = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.DisponibilidadHorario));
-            postulanteGeneralViewModel.TipoDisponibilidadesHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoDisponibilidadesHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.TipoHorarios = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
-            postulanteGeneralViewModel.TipoHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoHorarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.TipoParientesSedes = 
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoParienteSede));
-            postulanteGeneralViewModel.TipoParientesSedes.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            postulanteGeneralViewModel.TipoParientesSedes.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             return postulanteGeneralViewModel;
         }

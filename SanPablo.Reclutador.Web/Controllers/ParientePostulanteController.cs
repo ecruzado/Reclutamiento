@@ -139,7 +139,7 @@
             parientePostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             parientePostulanteGeneralViewModel.TipoVinculos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVinculo));
-            parientePostulanteGeneralViewModel.TipoVinculos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            parientePostulanteGeneralViewModel.TipoVinculos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             return parientePostulanteGeneralViewModel;
@@ -160,50 +160,50 @@
         }
 
 
-        #region METODOS
+        //#region METODOS
 
-        [HttpPost]
-        public ActionResult listarNombreInstitucion(string tipoInstituto)
-        {
-            ActionResult result = null;
-            var listaResultado = new List<DetalleGeneral>();
+        //[HttpPost]
+        //public ActionResult listarNombreInstitucion(string tipoInstituto)
+        //{
+        //    ActionResult result = null;
+        //    var listaResultado = new List<DetalleGeneral>();
 
-            switch (tipoInstituto)
-            {
-                case "01": //es Universidad
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-                    break;
-                case "02": // es Instituto
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-                    break;
-                case "03": // es Colegio
-                    listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
-                    break;
-            }
-            result = Json(listaResultado);
-            return result;
-        }
-        public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
-        {
-            if (estudioPostulante != null)
-            {
-                string tipTipoInst = estudioPostulante.TipTipoInstitucion;
-                switch (tipTipoInst)
-                {
-                    case "01":
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-                        break;
-                    case "02":
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-                        break;
-                    case "03":
-                        estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-                        break;
-                }
+        //    switch (tipoInstituto)
+        //    {
+        //        case "01": //es Universidad
+        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
+        //            break;
+        //        case "02": // es Instituto
+        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+        //            break;
+        //        case "03": // es Colegio
+        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
+        //            break;
+        //    }
+        //    result = Json(listaResultado);
+        //    return result;
+        //}
+        //public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
+        //{
+        //    if (estudioPostulante != null)
+        //    {
+        //        string tipTipoInst = estudioPostulante.TipTipoInstitucion;
+        //        switch (tipTipoInst)
+        //        {
+        //            case "01":
+        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
+        //                break;
+        //            case "02":
+        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+        //                break;
+        //            case "03":
+        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
+        //                break;
+        //        }
 
-            }
-            return estudioPostulanteGeneralViewModel;
-        }
-        #endregion
+        //    }
+        //    return estudioPostulanteGeneralViewModel;
+        //}
+        //#endregion
     }
 }

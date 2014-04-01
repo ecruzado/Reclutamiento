@@ -179,7 +179,7 @@
             nivelAcademicoViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
             nivelAcademicoViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            nivelAcademicoViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.NivelAlcanzado));
+            nivelAcademicoViewModel.NivelesAlcanzados = new List<DetalleGeneral>();
             nivelAcademicoViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             return nivelAcademicoViewModel;
@@ -219,6 +219,19 @@
                 result = true;
             }
 
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult listarNivelAlcanzado(string tipoEducacion)
+        {
+            ActionResult result = null;
+            var listaResultado = new List<DetalleGeneral>();
+
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, tipoEducacion));
+            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
+
+            result = Json(listaResultado);
             return result;
         }
 

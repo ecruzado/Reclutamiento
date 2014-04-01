@@ -13,6 +13,8 @@
             mostrarAlerta();
             actualizarBarra();
 
+            habilitarPestanas();
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "ParientePostulante")',
                 datatype: 'json',
@@ -46,7 +48,7 @@
 
             $('#updateDialog').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -192,7 +194,7 @@
             <div style="clear:both"></div>
         </div>
     </div>
-<div id="updateDialog" title="Agregar Datos Pariente"></div>
+<div id="updateDialog" title="Datos de familiar"></div>
  <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>

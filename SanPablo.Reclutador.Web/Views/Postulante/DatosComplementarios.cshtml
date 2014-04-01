@@ -14,6 +14,8 @@
         //verficar el radio button
         actualizarBarra();
 
+        habilitarPestanas();
+
         //Determinar el radio button
         actualizarDatosCHSP();
 
@@ -38,24 +40,33 @@
     });
     function actualizarDatosCHSP()
     {
-        var filaSede = document.getElementById('filaSede');
-        var filaNombre = document.getElementById('filaNombre');
-        var filaCargo = document.getElementById('filaCargo');
+        var labelSede = document.getElementById('labelSede');
+        var labelNombre = document.getElementById('labelNombre');
+        var labelCargo = document.getElementById('labelCargo');
+        var campoSede = document.getElementById('Postulante_TipoParienteSede');
+        var campoNombre = document.getElementById('Postulante_ParienteNombre');
+        var campoCargo = document.getElementById('Postulante_ParienteCargo');
 
         var selectedRadio = $("#rd-btn-parienteCHSP:checked").val();
         if (selectedRadio == 'S') {
 
-            filaSede.style.display('block');
-            filaNombre.style.display('block');
-            filaCargo.style.display('block');
+            labelSede.style.display = "block";
+            labelNombre.style.display = "block";
+            labelCargo.style.display = "block";
+            campoSede.style.display = "block";
+            campoNombre.style.display = "block";
+            campoCargo.style.display = "block";
             //$('#Postulante_TipoParienteSede').removeAttr('disabled');
             //$('#Postulante_ParienteNombre').removeAttr('disabled');
             //$('#Postulante_ParienteCargo').removeAttr('disabled');
         }
         else {
-            filaSede.style.display('none');
-            filaNombre.style.display('none');
-            filaCargo.style.display('none');
+            labelSede.style.display = "none";
+            labelNombre.style.display = "none";
+            labelCargo.style.display = "none";
+            campoSede.style.display = "none";
+            campoNombre.style.display = "none";
+            campoCargo.style.display = "none";
             //$('#Postulante_TipoParienteSede').attr('disabled', 'disabled');
             //$('#Postulante_ParienteNombre').attr('disabled', 'disabled');
             //$('#Postulante_ParienteCargo').attr('disabled', 'disabled');
@@ -85,7 +96,7 @@
             <table style="margin-left:100px;">
                 <tr>
                     <td class="colEtiqueta" style="width:190px;">
-                        <label class="etiquetaFormulario" for="setipodocumento">Sueldo Bruto (S/.) <span class="text-error">*</span></label>
+                        <label class="etiquetaFormulario" for="setipodocumento">Sueldo bruto (S/.) <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                          @Html.DropDownListFor(model => model.Postulante.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Valor", "Descripcion", Model.Postulante.TipoSalario))
@@ -118,7 +129,7 @@
                 </tr>
                 <tr>
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01">Horario de Trabajo</label>
+                        <label class="etiquetaFormulario" for="input01">Horario de trabajo</label>
                     </td>
                     <td class="colInput">
                         @Html.DropDownListFor(model => model.Postulante.TipoHorario, new SelectList(Model.TipoHorarios, "Valor", "Descripcion", Model.Postulante.TipoHorario))   
@@ -142,28 +153,28 @@
                         @Html.RadioButtonFor(model => model.Postulante.IndicadorParientesCHSP, "N", new { @id="rd-btn-parienteCHSP"}) @Html.Label("NO", new { @style = "display: inline-block" })
                     </td>
                 </tr>
-                <tr id="filaSede" style="display:none;">
+                <tr>
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01">¿En cuál de nuestras sedes?</label>
+                        <label class="etiquetaFormulario" for="input01" id="labelSede" style="display:none;">¿En cuál de nuestras sedes?</label>
                     </td>
                     <td class="colInput">
-                         @Html.DropDownListFor(model => model.Postulante.TipoParienteSede, new SelectList(Model.TipoParientesSedes, "Valor", "Descripcion", Model.Postulante.TipoParienteSede))   
+                         @Html.DropDownListFor(model => model.Postulante.TipoParienteSede, new SelectList(Model.TipoParientesSedes, "Valor", "Descripcion", Model.Postulante.TipoParienteSede), new { style="display:none;"})   
                     </td>
                 </tr>
-                <tr id="filaNombre" style="display:none;">
+                <tr>
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01" >Nombre del pariente</label>
+                        <label class="etiquetaFormulario" for="input01" id="labelNombre" style="display:none;" >Nombre del pariente</label>
                     </td>
                     <td class="colInput">
-                         @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario" , @style = "text-transform: uppercase"})
+                         @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario", @style = "text-transform: uppercase;display:none;" })
                     </td>
                 </tr>
-                <tr id ="filaCargo" style="display:none;">
+                <tr >
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01">Cargo</label>
+                        <label class="etiquetaFormulario" for="input01" id="labelCargo" style="display:none;">Cargo</label>
                     </td>
                     <td class="colInput">
-                         @Html.TextBoxFor(model => model.Postulante.ParienteCargo, new { @class = "textoFormulario" ,  @style = "text-transform: uppercase"})
+                         @Html.TextBoxFor(model => model.Postulante.ParienteCargo, new { @class = "textoFormulario", @style = "text-transform: uppercase; display:none;" })
                     </td>
                 </tr>
                 <tr >

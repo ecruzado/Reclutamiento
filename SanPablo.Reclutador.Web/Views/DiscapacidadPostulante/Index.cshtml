@@ -14,6 +14,8 @@
             mostrarAlerta();
             actualizarBarra();
 
+            habilitarPestanas();
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "DiscapacidadPostulante")',
                 datatype: 'json',
@@ -44,7 +46,7 @@
 
             $('#updateDialog').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -193,7 +195,7 @@
             <div style="clear:both"></div>
         </div>
     </div>
-<div id="updateDialog" title="Agregar Discapacidad"></div>
+<div id="updateDialog" title="Discapacidad"></div>
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>

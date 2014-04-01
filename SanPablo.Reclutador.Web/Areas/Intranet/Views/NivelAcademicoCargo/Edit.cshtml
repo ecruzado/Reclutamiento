@@ -7,11 +7,32 @@
     $(document).ready(function () {
 
         var tipoNivelAcad = $('#NivelAcademico_TipoNivelAlcanzado').val();
-        habilitarTextOtro(tipoNivelAcad);
+       // habilitarTextOtro(tipoNivelAcad);
 
-        $('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
-            var tipoNivelAcad = $(this).val();
-            habilitarTextOtro(tipoNivelAcad);
+        //$('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
+        //    var tipoNivelAcad = $(this).val();
+        //    habilitarTextOtro(tipoNivelAcad);
+        //})
+
+        $('select#NivelAcademico_TipoEducacion').change(function () {
+            var tipoEducacion = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listarNivelAlcanzado","NivelAcademicoCargo")',
+                    data: { tipoEducacion: tipoEducacion },
+                    success: function (respuesta) {
+                        $("select#NivelAcademico_TipoNivelAlcanzado").empty();
+                        $("select#NivelAcademico_TipoNivelAlcanzado").append("<option value='00'> SELECCIONE </option>");
+                        $.each(respuesta, function (i, items) {
+                            $("select#NivelAcademico_TipoNivelAlcanzado").append("<option value='"
+                            + items.Valor + "'>" + items.Descripcion + "</option>");
+                        }
+                        );
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
         })
         
     });
@@ -23,6 +44,7 @@
             $('#NivelAcademico_CicloSemestre').removeAttr('disabled');
         }
     }
+
 </script>
 
 
