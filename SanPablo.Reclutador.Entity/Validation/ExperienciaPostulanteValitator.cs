@@ -41,9 +41,9 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar el cargo de la persona de referencia");
 
-            RuleFor(x => x.NumeroFijoInstitucionReferente)
-                .NotEmpty()
-                .WithMessage("Ingresar telefono fijo de la institucion");
+            //RuleFor(x => x.NumeroFijoInstitucionReferente)
+            //    .NotEmpty()
+            //    .WithMessage("Ingresar telefono fijo de la institucion");
             RuleFor(x => x.NumeroFijoInstitucionReferente)
                 .InclusiveBetween(100000, 999999999)
                 .WithMessage("Ingresar telefono fijo válido");
@@ -64,6 +64,13 @@
                 .GreaterThan(x => x.FechaTrabajoInicio.Value).When(x => x.FechaTrabajoInicio != null)
                 .When(x => x.ActualmenteTrabajando.Equals(false))
                 .WithMessage("Ingresar una fecha final válida");
+
+
+            RuleFor(x => x.FuncionesDesempenadas)
+                .NotEmpty()
+                .WithMessage("Ingresar la descripcion de las funciones desempeñadas")
+                .Length(5, 255)
+                .WithMessage("Ingresar una descripción entre 5 y 255 caracteres");
 
             //When(x => x.ActualmenteTrabajando.Equals(false), () =>
             //{

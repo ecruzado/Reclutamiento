@@ -14,6 +14,7 @@
 
             mostrarAlerta();
             actualizarBarra();
+            habilitarPestanas();
 
             jQuery("#grdListOfimatica").jqGrid({
                 url: '@Url.Action("Listar", "ConocimientoGeneralPostulante")',
@@ -52,7 +53,7 @@
                 url: '@Url.Action("ListarIdiomas", "ConocimientoGeneralPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Código', 'Descripción', 'Tipo Conc.', 'Nivel', 'Certificación'],
+                colNames: ['Código', 'Idioma', 'Tipo de conocimiento', 'Nivel', 'Certificación'],
                 colModel: [
                         { name: 'Codigo', index: 'Codigo', align: 'left', sortable: false, hidden: true },
                         { name: 'Descripcion', index: 'Descripcion', align: 'left', sortable: false },
@@ -115,7 +116,7 @@
             });
             $('#updateDialog').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -148,7 +149,7 @@
 
             $('#updateDialogIdiomas').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -180,7 +181,7 @@
 
             $('#updateDialogOtro').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -417,7 +418,6 @@
     @Html.Partial("MenuCv")
 </div>
 
-   <div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
@@ -484,10 +484,9 @@
             <div style="clear:both"></div>
         </div>
     </div>
-</div>
-    <div id="updateDialog" title="Agregar Conocimientos Ofimática"></div>
-    <div id="updateDialogIdiomas" title="Agregar Conocimientos Idiomas"></div>
-    <div id="updateDialogOtro" title="Agregar Otros Conocimientos"></div>
+    <div id="updateDialog" title="Conocimientos de Ofimática"></div>
+    <div id="updateDialogIdiomas" title="Idioma"></div>
+    <div id="updateDialogOtro" title="Otros Conocimientos"></div>
         <div id="divMensaje">
             <span id="spanMensaje"></span>
         </div>

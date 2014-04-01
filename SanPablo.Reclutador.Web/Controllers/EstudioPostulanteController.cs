@@ -55,13 +55,12 @@
                         id = item.IdeEstudiosPostulante.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionTipoInstitucion,
+                                item.DescripcionEducacion,
                                 item.DescripcionNombreInstitucion.ToUpper(),
                                 item.DescripcionArea,
-                                item.DescripcionEducacion,
                                 item.DescripcionNivelAlcanzado,
-                                item.FechaEstudioInicio.ToString(),
-                                item.FechaEstudioFin.ToString()
+                                String.Format("{0:dd/MM/yyyy}", item.FechaEstudioInicio), 
+                                String.Format("{0:dd/MM/yyyy}", item.FechaEstudioFin)
                             }
                     }).ToArray();
 
@@ -158,19 +157,19 @@
             estudioPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             estudioPostulanteGeneralViewModel.TipoTipoInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoInstitucion));
-            estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.TipoTipoInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>();
-            estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
            
             estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
-            estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             estudioPostulanteGeneralViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEducacion));
-            estudioPostulanteGeneralViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.NivelAlcanzado));
-            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados = new List<DetalleGeneral>();
+            estudioPostulanteGeneralViewModel.NivelesAlcanzados.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             return estudioPostulanteGeneralViewModel;
         }
@@ -201,6 +200,21 @@
             result = Json(listaResultado);
             return result;
         }
+        
+
+        [HttpPost]
+        public ActionResult listarNivelAlcanzado(string tipoEducacion)
+        {
+            ActionResult result = null;
+            var listaResultado = new List<DetalleGeneral>();
+
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, tipoEducacion));
+            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
+
+            result = Json(listaResultado);
+            return result;
+        }
+
 
         public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
         {

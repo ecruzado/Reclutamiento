@@ -131,7 +131,7 @@
             discapacidadPostulanteGeneralViewModel.Discapacidad = new DiscapacidadPostulante();
 
             discapacidadPostulanteGeneralViewModel.TipoDiscapacidades = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDiscapacidad));
-            discapacidadPostulanteGeneralViewModel.TipoDiscapacidades.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            discapacidadPostulanteGeneralViewModel.TipoDiscapacidades.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             return discapacidadPostulanteGeneralViewModel;

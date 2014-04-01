@@ -39,8 +39,9 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual string DescripcionCargoTrabajo { get; set; }
         public virtual string DescripcionMotivoCese { get; set; } 
-        public virtual string DescripcionCargoReferente { get; set; } 
+        public virtual string DescripcionCargoReferente { get; set; }
 
+        public virtual string FuncionesDesempenadas { get; set; }
 
         public virtual bool ActualmenteTrabajando
         {

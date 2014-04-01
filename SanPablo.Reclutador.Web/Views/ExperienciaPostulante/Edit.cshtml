@@ -10,6 +10,8 @@
         $(document).ready(function () {
 
             SanPablo.Numeros('Experiencia_NumeroMovilReferencia');
+            SanPablo.Numeros('Experiencia_NumeroFijoInstitucionReferente');
+            SanPablo.Numeros('Experiencia_NumeroAnexoInstitucionReferente');
 
             var indActual = $('#indActuaTrabajando').is(":checked");
             habilitarFecha(indActual);
@@ -27,31 +29,55 @@
             //actualmente trabajando
             $('#indActuaTrabajando').change(function () {
                 habilitarFecha($(this).is(":checked"));
+
             })
+
+            $(function () {
+                $('#Experiencia_FechaTrabajoFin').blur(function () {
+                    calcularTiempoServicio();
+                });
+            });
         });
             
+        function calcularTiempoServicio() {
+            var fechaInicio = $('#Experiencia_FechaTrabajoInicio').val();
+            var fechaFin = $('#Experiencia_FechaTrabajoFin').val();
+            if ((fechaInicio != null) && (fechaInicio != "")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("calcularTiempoServicio","ExperienciaPostulante")',
+                    data: { inicio: fechaInicio , fin: fechaFin},
+                success: function (respuesta) {
+                    $('#Experiencia_TiempoDeServicio').val(respuesta);
+                }
+            });
+        }
+    }
+
         function habilitarOtro(tipoNombre) {
             var campo = document.getElementById("NombreCargo_otro");
+            var label = document.getElementById("labelOtro");
             if (tipoNombre == 'XX') {
                 campo.style.display = "block";
+                label.style.display = "block";
             }
             else {
                 campo.style.display = "none";
+                label.style.display = "none";
             }
         }
 
         function habilitarFecha(opcion)
         {
-            if (opcion == true){
+            if (opcion == true) {
                 $('#Experiencia_FechaTrabajoFin').val('');
-                $('#Experiencia_FechaTrabajoFin').attr("disabled", "disabled");
-                $('#Experiencia_TiempoDeServicio').attr("disabled", "disabled");
-                $('#Experiencia_TipoMotivoCese').attr("disabled", "disabled");
+                calcularTiempoServicio();
+                $('#Experiencia_FechaTrabajoFin').attr("readonly", true);
+                $('#Experiencia_TipoMotivoCese').attr("readonly", true);
             }
             else {
-                $('#Experiencia_FechaTrabajoFin').removeAttr("disabled");
-                $('#Experiencia_TiempoDeServicio').removeAttr("disabled");
-                $('#Experiencia_TipoMotivoCese').removeAttr("disabled");
+                $('#Experiencia_FechaTrabajoFin').attr("readonly",false);
+                $('#Experiencia_TipoMotivoCese').attr("readonly",false);
             }
         }
         </script>
@@ -69,7 +95,7 @@
                 <label class="etiquetaFormulario" style="width:160px">Empresa <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { @style="text-transform: uppercaseM; width:350px"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { @style="text-transform: uppercaseM;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
                 </div>
@@ -90,7 +116,7 @@
                 </div>
             </td>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="width:160px"> Otro </label>
+                <label class="etiquetaFormulario" style="width:160px;display:none" id="labelOtro"> Otro </label>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "text-transform: uppercase ; display:none;" })
@@ -100,7 +126,7 @@
           </td>
           <tr>
               <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Fecha Inicio <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" > Fecha inicio <span class="text-error">*</span></label>
               </td>
               <td class="colInput">
                   @Html.EditorFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker"})
@@ -109,7 +135,7 @@
                   </div>
               </td>
               <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Fecha Fin </label>
+                <label class="etiquetaFormulario" style="width:160px"> Fecha fin </label>
               </td>
               <td class="colInput">
                   @Html.EditorFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker"})
@@ -118,7 +144,7 @@
                   </div>
               </td>
               <td>
-                  <Label style="display:inline-block; font-size:10pt" for="estudiando">   Trabajando</Label>
+                  <Label style="display:inline-block; font-size:10pt" for="estudiando">   Actualmente</Label>
                   @Html.CheckBoxFor(model => model.Experiencia.ActualmenteTrabajando, new { @id="indActuaTrabajando"})
                 
               </td>
@@ -126,16 +152,16 @@
         <tr>
             
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Tiempo de Servicio </label>
+                <label class="etiquetaFormulario" > Tiempo de servicio </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @style="text-transform: uppercase",disabled = "diasbled"})
+                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @style = "text-transform: uppercase", @readonly = true })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
                 </div>
             </td>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Motivo de Cese </label>
+                <label class="etiquetaFormulario" > Motivo de cese </label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Experiencia.TipoMotivoCese, new SelectList(Model.TipoMotivosCese, "Valor", "Descripcion", Model.Experiencia.TipoMotivoCese))
@@ -144,12 +170,20 @@
                 </div>
             </td>
         </tr>
-
-        <tr>
-           
-        </tr>
-       
         </table>
+    <table style="margin-left:20px;">
+        <tr>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" style="width:160px" >Funciones </label>
+            </td>
+            <td class="colInput">
+                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style="width:600px"})
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Experiencia.FuncionesDesempenadas)
+                </div>
+            </td>
+        </tr>
+    </table>
     <section>
         <div>
             <h5> Datos de Referencia</h5>
@@ -158,7 +192,7 @@
        
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="width:160px" > Nombre de Referencia <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" style="width:160px" > Nombre de referencia <span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
                 @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { @style="text-transform: uppercase"})
@@ -179,7 +213,7 @@
         
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Celular de Referencia  </label>
+                <label class="etiquetaFormulario" > Celular de referencia  </label>
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia)
@@ -188,7 +222,7 @@
                 </div>
             </td>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Correo de Referencia  </label>
+                <label class="etiquetaFormulario" > Correo de referencia  </label>
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.CorreoReferente, new { @style="text-transform: uppercase"})
@@ -199,7 +233,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Telefono de Institucion <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" > Telefono de institución </label>
             </td>
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px"})

@@ -25,7 +25,7 @@
 
             Map(x => x.DescripcionTipoEducacion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoEducacion + " AND DG.VALOR = TIPEDUCACION AND DG.ESTACTIVO = 'A' )");
             Map(x => x.DescripcionAreaEstudio).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoArea + " AND DG.VALOR = TIPAREAESTUDIO AND DG.ESTACTIVO = 'A' )");
-            Map(x => x.DescripcionNivelAlcanzado).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.NivelAlcanzado + " AND DG.VALOR = TIPNIVELCANZADO AND DG.ESTACTIVO = 'A' )");
+            Map(x => x.DescripcionNivelAlcanzado).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoEducacion + " AND DG.VALOR = TIPNIVELCANZADO AND DG.ESTACTIVO = 'A' )");
             
             Table("NIVELACADEMICO_CARGO");
         }

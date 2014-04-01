@@ -22,7 +22,7 @@
         TipoNombreColegio = 23,
         TipoArea = 19,
         TipoEducacion = 20,
-        NivelAlcanzado = 21,
+        //NivelAlcanzado = 21,
 
         //EXPERIENCIA
         TipoCargo = 24,

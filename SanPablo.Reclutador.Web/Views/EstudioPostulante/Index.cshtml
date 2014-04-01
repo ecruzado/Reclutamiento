@@ -13,17 +13,17 @@
 
             mostrarAlerta();
             actualizarBarra();
+            habilitarPestanas();
 
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "EstudioPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Tipo de Institución', 'Institución', 'Área de Estudios', 'Tipo de Educación', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colNames: ['Nivel de estudios', 'Institución', 'Área de Estudios', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
                 colModel: [
-                        { name: 'Tipo', index: 'Tipo', align: 'left', sortable: false },
+                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
                         { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
                         { name: 'AreaEstudios', index: 'AreaEstudios', align: 'left', sortable: false },
-                        { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
                         { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', sortable: false },
                         { name: 'FechaInicio', index: 'FechaInicio', align: 'left', sortable: false },
                         { name: 'FechaFin', index: 'FechaFin', align: 'left', sortable: false },
@@ -51,7 +51,7 @@
 
             $('#updateDialog').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 550,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -171,11 +171,10 @@
     @Html.Partial("MenuCv")
 </div>
 
-<div class="row">
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Nivel Académico</h5>
+                <h5>Estudios realizados</h5>
             </div>
             <div class="grilla-opciones">
                 <div class="opciones">
@@ -202,7 +201,6 @@
             <div style="clear:both"></div>
         </div>
     </div>
-</div>
 <div id="updateDialog" title="Agregar Estudio" ></div>
     <div id="divMensaje">
         <span id="spanMensaje"></span>

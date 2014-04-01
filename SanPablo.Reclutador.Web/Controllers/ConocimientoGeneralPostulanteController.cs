@@ -211,14 +211,14 @@
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
 
             conocimientoPostulanteGeneralViewModel.TiposConocimientoOfimatica = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoOfimatica));
-            conocimientoPostulanteGeneralViewModel.TiposConocimientoOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TiposConocimientoOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             
             conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica));
-            conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             return conocimientoPostulanteGeneralViewModel;
@@ -299,14 +299,14 @@
             conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
             conocimientoPostulanteGeneralViewModel.TipoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
-            conocimientoPostulanteGeneralViewModel.TipoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma));
-            conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             return conocimientoPostulanteGeneralViewModel;
@@ -375,14 +375,14 @@
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
 
             conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));
-            conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales = new List<DetalleGeneral>();
-            conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
             
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
             return conocimientoPostulanteGeneralViewModel;

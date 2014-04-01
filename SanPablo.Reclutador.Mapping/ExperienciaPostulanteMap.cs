@@ -26,6 +26,7 @@
             Map(x => x.TipoCargoTrabajoReferente, "TIPCARGOTRABAJOREF");
             Map(x => x.NumeroFijoInstitucionReferente, "NUMTELEFONOFIJOINST");
             Map(x => x.NumeroAnexoInstitucionReferente, "NUMANEXOINST");
+            Map(x => x.FuncionesDesempenadas, "FUNCIONESDESEMP");
             Map(x => x.EstadoActivo, "ESTACTIVO");
 
             Map(x => x.DescripcionCargoTrabajo).Formula("(select CASE TIPCARGOTRABAJO WHEN 'XX'THEN NOMCARGOTRABAJO ELSE DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCargo + " AND DG.VALOR = TIPCARGOTRABAJO)");
