@@ -39,8 +39,10 @@ namespace SanPablo.Reclutador.Repository
                 lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Int32).Value = ideReclutaPersona;
                 lspcmd.Parameters.Add("p_ideCriterioSubCat", OracleType.Int32).Value = ideCriterioSubCategoria;
                 lspcmd.Parameters.Add("p_ideAlternativa", OracleType.Int32).Value = ideAlternativa;
-                lspcmd.Parameters.Add("p_usuarioCreacion", OracleType.Int32).Value = usuarioCreacion;
-                lspcmd.Parameters.Add("p_RetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("p_usuarioCreacion", OracleType.VarChar).Value = usuarioCreacion;
+                lspcmd.Parameters.Add("p_RetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+
+                lspcmd.ExecuteNonQuery();
 
                 int resultado = Convert.ToInt32(lspcmd.Parameters[lspcmd.Parameters.IndexOf("p_RetVal")].Value);
                 if (resultado == 0)
@@ -58,5 +60,7 @@ namespace SanPablo.Reclutador.Repository
                 lcon.Close();
             }
         }
+
+        
     }
 }

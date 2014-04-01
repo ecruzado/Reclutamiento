@@ -22,6 +22,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IAlternativaRepository _alternativaRepository;
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IUsuarioRepository _usuarioRepository;
+        private IReclutamientoPersonaExamenRepository _reclutamientoPersonaExamenRepository;
 
         public EvaluacionController(IReclutamientoPersonaCriterioRepository reclutamientoPersonaCriterioRepository,
                                     IReclutamientoPersonaAlternativaRepository reclutamientoPersonaAlternativaRepository,
@@ -30,7 +31,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                     ICriterioRepository criterioRepository,
                                     IAlternativaRepository alternativaRepository,
                                     IReclutamientoPersonaRepository reclutamientoPersonaRepository,
-                                    IUsuarioRepository usuarioRepository)
+                                    IUsuarioRepository usuarioRepository,
+                                    IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository)
         {
             _reclutamientoPersonaCriterioRepository = reclutamientoPersonaCriterioRepository;
             _reclutamientoPersonaAlternativaRepository = reclutamientoPersonaAlternativaRepository;
@@ -40,22 +42,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _alternativaRepository = alternativaRepository;
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _usuarioRepository = usuarioRepository;
+            _reclutamientoPersonaExamenRepository = reclutamientoPersonaExamenRepository;
         }
 
         [ValidarSesion]
         [AuthorizeUser]
         public ActionResult Index()
         {
-            ReclutamientoPersona reclutamiento = new ReclutamientoPersona();
+           
             int ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             var usuario = _usuarioRepository.GetSingle(x=>x.IdUsuario == ideUsuario);
 
-            if(usuario.IdePostulante != null)
+            if(usuario.IdePostulante != 0)
             {
-                reclutamiento = _reclutamientoPersonaRepository.GetSingle(x => x.IdePostulante == usuario.IdePostulante && x.IdSede == Convert.ToInt32(Session[ConstanteSesion.Sede]) && 
-                                                                         (x.EstPostulante == PostulanteEstado.PRESELECCIONADO_AUTOMATICO)||(x.EstPostulante==PostulanteEstado.PRESELECCIONADO_MANUAL));
+                int ideReclutamientoPersona = _reclutamientoPersonaRepository.getIdeReclutaPersona(usuario.IdePostulante, Convert.ToInt32(Session[ConstanteSesion.Sede]));
+                IdeReclutaPersona = ideReclutamientoPersona;
 
-                IdeReclutaPersona = reclutamiento.IdeReclutaPersona;
+                if (IdeReclutaPersona != 0)
+                {
+                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuario.CodUsuario);
+                }
+
+
             }
             return View("Index");
         }
@@ -70,9 +78,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 examenesPost = new ExamenPorCategoria();
 
-                //int idPostulante = 57;
-                //int idSolicitud = 106;
-                //string tipoSolicitud = TipoSolicitud.Remplazo;
                 int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
                 lista = _examenPorCategoriaRepository.ListarExamenesPorCategoria(IdeReclutaPersona,idSede);
@@ -90,15 +95,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Examen.IdeExamen==0?"":item.Examen.IdeExamen.ToString(),
                                 item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString(),
                                 item.Examen.NomExamen==null?"":item.Examen.NomExamen,
-                                //item.Examen.DescExamen==null?"":item.Examen.DescExamen,
-                                //item.Examen.TipExamen==null?"":item.Examen.TipExamen,
-                                //item.Examen.TipExamenDes==null?"":item.Examen.TipExamenDes,
-                                //item.Categoria.ORDENIMPRESION.ToString(),
                                 item.Categoria.NOMCATEGORIA==null?"":item.Categoria.NOMCATEGORIA,
-                                //item.Categoria.DESCCATEGORIA==null?"":item.Categoria.DESCCATEGORIA,
-                                //item.Categoria.TIPCATEGORIA==null?"":item.Categoria.TIPCATEGORIA,
-                                //item.Categoria.INSTRUCCIONES==null?"":item.Categoria.INSTRUCCIONES,
-                                //item.Categoria.TIPOEJEMPLO==null?"":item.Categoria.TIPOEJEMPLO,
                                 item.Categoria.TIEMPO.ToString(),
                                 "1",
                                 item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString()
@@ -175,7 +172,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 var categoria = _categoriaRepository.GetSingle(x=>x.IDECATEGORIA == idCategoria);
                 string Instrucciones = categoria.INSTRUCCIONES;
-                Instrucciones = Instrucciones.Replace(".", "." + Environment.NewLine);
+                if (Instrucciones != null)
+                {
+                    Instrucciones = Instrucciones.Replace(".", "." + Environment.NewLine);
+                    categoria.INSTRUCCIONES = Instrucciones;
+                }
+                else
 
                 modelEvaluacion.Categoria = categoria;
 
@@ -196,16 +198,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return model;
         }
-
-        #region Evaluacion Postulante
-        public void recuperarPregunta(int idCriterio)
-        {
-
-        }
-        #endregion
-
-
-
 
         public ActionResult InstruccionesExamen()
         {
