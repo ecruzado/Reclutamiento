@@ -343,14 +343,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         Session[Core.ConstanteSesion.UsuarioSede] = objSedeNivel;
                     }
+                    else
+                    {   //obtiene la sede para el postulante se maneja de uno a uno
+                        if (TipUsuario.Instranet.Equals(objUsuario.TipUsuario))
+                        {
+                            try
+                            {
+                                var objSedeNivel = _sedeNivelRepository.GetSingle(x => x.IDUSUARIO == objUsuario.IdUsuario && x.FLGESTADO == IndicadorActivo.Activo);
+                                Session[ConstanteSesion.Sede] = objSedeNivel.IDESEDE;
 
-                    
-                    
+                            }
+                            catch (Exception)
+                            {
+
+                                objJsonMensaje.Resultado = false;
+                                objJsonMensaje.Mensaje = "Erro: Se econtro más de una sede configurada";
+                            }
+                        }    
+                       
+
+                    }
 
                 }
             }
 
-            
             return Json(objJsonMensaje);
 
         }
