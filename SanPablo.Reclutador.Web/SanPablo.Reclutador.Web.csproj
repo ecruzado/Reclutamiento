@@ -321,7 +321,6 @@
     <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Criterio\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\Evaluacion\Examen.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen1.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen2.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen3.cshtml" />
@@ -452,6 +451,7 @@
     <Content Include="Areas\Intranet\Views\Contrata\popupObserv.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Instrucciones.cshtml" />
     <Content Include="Areas\Intranet\Views\Seguridad\Inicio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Examen.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
