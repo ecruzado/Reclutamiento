@@ -27,7 +27,7 @@
         public int nroPregunta { get; set; }
 
         public int totalPreguntas { get; set; }
-        
+
 
     }
 }
