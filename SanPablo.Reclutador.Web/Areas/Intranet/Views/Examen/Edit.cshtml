@@ -198,7 +198,10 @@
 
     function mostrarCategoria(id) {
         var dialogDiv = $('#categoriaDialog');
-        $.get("/Intranet/Categoria/IniciaPopupCategoria/" + id, function (data) {
+        //$.get("/Intranet/Categoria/IniciaPopupCategoria/" + id, function (data) {
+        
+            $.get('@Url.Action("IniciaPopupCategoria", "Categoria",new { area = "Intranet" })?id=' + id, function (data) {
+
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#categoriaDialog"));
             dialogDiv.dialog('open');
