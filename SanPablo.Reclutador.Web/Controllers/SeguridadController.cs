@@ -97,7 +97,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                 {
                     Usuario usuario = (Usuario)objUsuario;
                     codUsuario = usuario.CodUsuario;
-                    PassUsuario = usuario.ClaveUsuario; ;
+                    PassUsuario = usuario.CodContrasena; 
                 }
 
             }
@@ -273,7 +273,7 @@ namespace SanPablo.Reclutador.Web.Controllers
 
                         Usuario objUSaurioExtranet;
                         string codUsuario = objUsuarioIntranet.CodUsuario;
-                        string PassUsuario = objUsuarioIntranet.ClaveUsuario;
+                        string PassUsuario = objUsuarioIntranet.CodContrasena;
 
                         var ListaUsuario = (List<Usuario>)_usuarioRepository.GetBy(x => x.CodUsuario == codUsuario
                                                 && x.CodContrasena == PassUsuario
@@ -290,11 +290,12 @@ namespace SanPablo.Reclutador.Web.Controllers
                                 Session[ConstanteSesion.ObjUsuarioExtranet] = objUSaurioExtranet;
                                 Session[ConstanteSesion.Usuario] = objUSaurioExtranet.IdUsuario;
                                 Session[ConstanteSesion.Rol] = SanPablo.Reclutador.Entity.Roles.Postulante;
-
+                                
                             }
 
                         }
 
+                        
                         objJson.Resultado = true;
                         objJson.Mensaje = "Gracias por registrarte. Te recomendamos completar tus datos en la sección Mi CV, ahí podrás detallar tu información.";
 

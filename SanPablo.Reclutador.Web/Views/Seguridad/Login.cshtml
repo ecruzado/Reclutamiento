@@ -206,8 +206,10 @@
                                     $.unblockUI();
                                     //$('#LogeoExtranet').dialog("close");
                                     //$('#PopupDialogLogeoExtranet').dialog("close");
-
-                                   // validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet",data.Mensaje,"Mensaje");
+                                    //$('#UsuarioExtranet_Usuario').val(data.Iuser);
+                                    //$('#UsuarioExtranet_Password').val(data.Puser);
+                                    
+                                    validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet",data.Mensaje,"Mensaje");
                                 } else {
                                     $.unblockUI();
                                     // $('#LogeoExtranet').dialog("close");
@@ -348,7 +350,19 @@
                 modal: true,
                 buttons: {
                     "Aceptar": function () {
-                        $("#btnIniciaSesion").trigger("click");
+                        $.ajax({
+                            type: "POST",
+                            data: $("#frmLoginExtranet").serialize(),
+                            url: '@Url.Action("Logon", "Seguridad")',
+                            traditional: true,
+                            success: function (data) {
+                            if (data.Resultado) {
+                                window.location = '@Url.Action("GetMenuEx", "Seguridad")';
+                            } else {
+                                MostrarMensaje(data.Mensaje, "Mensaje");
+                            }
+                        }
+                      });
                     }
                 }
             };
