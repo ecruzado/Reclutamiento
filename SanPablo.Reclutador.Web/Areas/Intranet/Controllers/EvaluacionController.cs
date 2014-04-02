@@ -5,7 +5,9 @@ using SanPablo.Reclutador.Web.Core;
 using SanPablo.Reclutador.Web.Models.JQGrid;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,6 +25,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IUsuarioRepository _usuarioRepository;
         private IReclutamientoPersonaExamenRepository _reclutamientoPersonaExamenRepository;
+        private IReclutamientoPersonaExamenCategoriaRepository _reclutamientoExamenCategoriaRepository;
 
         public EvaluacionController(IReclutamientoPersonaCriterioRepository reclutamientoPersonaCriterioRepository,
                                     IReclutamientoPersonaAlternativaRepository reclutamientoPersonaAlternativaRepository,
@@ -32,7 +35,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                     IAlternativaRepository alternativaRepository,
                                     IReclutamientoPersonaRepository reclutamientoPersonaRepository,
                                     IUsuarioRepository usuarioRepository,
-                                    IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository)
+                                    IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository,
+                                    IReclutamientoPersonaExamenCategoriaRepository reclutamientoExamenCategoriaRepository)
         {
             _reclutamientoPersonaCriterioRepository = reclutamientoPersonaCriterioRepository;
             _reclutamientoPersonaAlternativaRepository = reclutamientoPersonaAlternativaRepository;
@@ -43,6 +47,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _usuarioRepository = usuarioRepository;
             _reclutamientoPersonaExamenRepository = reclutamientoPersonaExamenRepository;
+            _reclutamientoExamenCategoriaRepository = reclutamientoExamenCategoriaRepository;
         }
 
         [ValidarSesion]
@@ -57,13 +62,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 int ideReclutamientoPersona = _reclutamientoPersonaRepository.getIdeReclutaPersona(usuario.IdePostulante, Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 IdeReclutaPersona = ideReclutamientoPersona;
-
                 if (IdeReclutaPersona != 0)
                 {
-                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuario.CodUsuario);
+                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuario.CodUsuario.Substring(0,15));
+                    
+                    //generar los examenes por categorias
+                    int contador = _reclutamientoExamenCategoriaRepository.CountByExpress(x => x.IdeReclutaPersona == IdeReclutaPersona);
+                    if (contador == 0)
+                    {
+                        _reclutamientoExamenCategoriaRepository.obtenerExamenesPorCategoria(IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15));
+                    }
+                   
                 }
-
-
             }
             return View("Index");
         }
@@ -71,34 +81,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [HttpPost]
         public ActionResult ListaExamenesPendientes(GridTable grid)
         {
-            ExamenPorCategoria examenesPost;
-            List<ExamenPorCategoria> lista = new List<ExamenPorCategoria>();
+            DatosExamenPorCategoria examenesPost;
+            List<DatosExamenPorCategoria> lista = new List<DatosExamenPorCategoria>();
             try
             {
 
-                examenesPost = new ExamenPorCategoria();
+                examenesPost = new DatosExamenPorCategoria();
 
                 int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
-                lista = _examenPorCategoriaRepository.ListarExamenesPorCategoria(IdeReclutaPersona,idSede);
+                lista = _reclutamientoExamenCategoriaRepository.ListarExamenesPorCategoria(IdeReclutaPersona);
 
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdeExamenxCategoria.ToString(),
+                    id = item.IdeReclutamientoPersonaExamenCategoria.ToString(),
                     cell = new string[]
                             {
-                               
-                                item.IdeExamenxCategoria==0?"":item.IdeExamenxCategoria.ToString(),
-                                item.Examen.IdeExamen==0?"":item.Examen.IdeExamen.ToString(),
-                                item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString(),
-                                item.Examen.NomExamen==null?"":item.Examen.NomExamen,
-                                item.Categoria.NOMCATEGORIA==null?"":item.Categoria.NOMCATEGORIA,
-                                item.Categoria.TIEMPO.ToString(),
-                                "pendiente",
-                                item.Categoria.IDECATEGORIA==0?"":item.Categoria.IDECATEGORIA.ToString()
+                                item.IdeReclutamientoPersonaExamenCategoria ==0?"":item.IdeReclutamientoPersonaExamenCategoria.ToString(),
+                                item.IdeExamenCategoria==0?"":item.IdeExamenCategoria.ToString(),
+                                item.IdeExamen==0?"":item.IdeExamen.ToString(),
+                                item.IdeCategoria==0?"":item.IdeCategoria.ToString(),
+                                item.NombreExamen==null?"":item.NombreExamen,
+                                item.NombreCategoria==null?"":item.NombreCategoria,
+                                item.Tiempo.ToString(),
+                                item.Estado == null?"0":item.Estado,
+                                item.IdeCategoria==0?"":item.IdeCategoria.ToString()
                                 
                             }
                 }).ToArray();
@@ -174,7 +184,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 string Instrucciones = categoria.INSTRUCCIONES;
                 if (Instrucciones != null)
                 {
-                    Instrucciones = Instrucciones.Replace(".", "." + Environment.NewLine);
+                    Instrucciones = Instrucciones.Replace(".", ". <br /> " /*+ Environment.NewLine*/);
                     categoria.INSTRUCCIONES = Instrucciones;
                 }
                 modelEvaluacion.Categoria = categoria;
@@ -193,6 +203,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Alternativa = new Alternativa();
             model.Alternativas = new List<Alternativa>();
 
+            model.Accion = Accion.Terminar;
             return model;
         }
 
@@ -219,6 +230,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 HoraInicioEvaluacion = HoraInicio;
                 TiempoEvaluacion = categoria.TIEMPO;
                 cargarCriterio(Numeracion, modelExamen);
+                modelExamen.Accion = Accion.Siguiente;
 
             }
 
@@ -232,7 +244,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             var modelExamen = inicializarExamen();
             string usuario = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0,15);
-            if (model.Alternativa.IdeAlternativa != 0)
+            if (model.Alternativa != null)
             {
                 if (_reclutamientoPersonaAlternativaRepository.guardarRespuesta(IdeReclutaPersona, model.Criterio.IdeCriterioPorSubcategoria, model.Alternativa.IdeAlternativa, usuario))
                 {
@@ -244,10 +256,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (Numeracion < ListaCriterioEval.criterios.Count())
             {
                 cargarCriterio(Numeracion, modelExamen);
+                modelExamen.Accion = Accion.Siguiente;
             }
             else
             {
-                return View("Close");
+                modelExamen.Accion = Accion.Close;
                // return JavaScript("close();");
             }
             
@@ -298,6 +311,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
+        public void calcularTime()
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            Thread.Sleep(500);
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+
+        }
 
         public ActionResult Examen1()
         {

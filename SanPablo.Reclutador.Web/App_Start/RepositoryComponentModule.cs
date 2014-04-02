@@ -166,20 +166,24 @@
          .As<IExperienciaRequerimientoRepository>();
 
 
-             builder.RegisterType<OfrecemosRequerimientoRepository>()
-         .As<IOfrecemosRequerimientoRepository>();
+            builder.RegisterType<OfrecemosRequerimientoRepository>()
+                .As<IOfrecemosRequerimientoRepository>();
 
-             builder.RegisterType<CvPostulanteRepository>()
-         .As<ICvPostulanteRepository>();
+            builder.RegisterType<CvPostulanteRepository>()
+                .As<ICvPostulanteRepository>();
 
             builder.RegisterType<ReclutamientoPersonaRepository>()
-         .As<IReclutamientoPersonaRepository>();
+                .As<IReclutamientoPersonaRepository>();
 
             builder.RegisterType<ReclutamientoPersonaCriterioRepository>()
                 .As<IReclutamientoPersonaCriterioRepository>();
 
             builder.RegisterType<ReclutamientoPersonaAlternativaRepository>()
                 .As<IReclutamientoPersonaAlternativaRepository>();
+
+            builder.RegisterType<ReclutamientoPersonaExamenCategoriaRepository>()
+                .As<IReclutamientoPersonaExamenCategoriaRepository>();
+
 
         }
     }

@@ -4,7 +4,13 @@
     Layout = null;
 }
 @section script{
-    
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            alert("Hola mundo");
+        });
+
+        </script>
 
     }
 
@@ -32,11 +38,12 @@
 
 
 <body>
-    <script type="text/javascript">
-        function close() {
+    @if(Accion.Close == Model.Accion)
+    {
+       <script type="text/javascript">
             window.close();
-        }
-    </script>
+       </script>
+    }
      @using (Html.BeginForm("Examen", "Evaluacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
      { 
     <div class="container">
@@ -46,7 +53,7 @@
             <div class="widget-title">
                 <h5>Examen</h5>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" href="#" onclick="window.close();"><i class="icon-adjust icon-white"></i> Terminiar</a>
+                    <a class="btn btn-small btn-info" href="#" onclick="window.close();"><i class="icon-adjust icon-white"></i> Terminar</a>
                 </div>
             </div>
             <div style="float:left;margin-top:5px;margin-left:10px;">
@@ -120,8 +127,12 @@
                   }
                   
             </tbody></table>   
-            <div class="form-actions">       
-                <button type="submit" class="btn btn-info" onclick="limpiarNumeracion();"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+            <div class="form-actions"> 
+                @if(Accion.Siguiente == Model.Accion)
+                {    
+                    <button type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                }
+                    
             </div>                     
         </div>
 

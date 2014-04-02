@@ -68,6 +68,12 @@
             Map(x => x.FotoPostulante, "FOTOPOSTULANTE");
 
             Map(x => x.IndicadorRegistroCompleto, "INDTREGISTRO");
+            Map(x => x.EstadoActivo, "ESTACTIVO");
+
+            Map(x => x.UsuarioCreacion, "USRCREACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.UsuarioModificacion, "USRMODIFICACION");
+            Map(x => x.FechaModificacion, "FECMODIFICACION");
 
             Table("POSTULANTE");
         }

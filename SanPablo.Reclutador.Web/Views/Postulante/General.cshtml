@@ -123,7 +123,7 @@
                 data: { date: fecha },
                 success: function (respuesta) {
                     if (!respuesta) {
-                        $('#Postulante_NumeroDocumento').val('');
+                        $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
                         $("#spanMensaje").html('Fecha de nacimiento no válida, el postulante debe ser mayor de edad');
                         $("#divMensaje").dialog({
                             title: 'Sistema de Reclutamiento y Selección de Personal',
@@ -133,9 +133,6 @@
                             }
                         });
 
-                    }
-                    else {
-                        $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
                     }
                 }
             });
