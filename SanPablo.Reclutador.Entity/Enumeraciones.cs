@@ -131,6 +131,9 @@
         public const string Enviar = "Enviar";
         public const string Publicar = "Publicar";
         public const string Aceptar = "Aceptar";
+        public const string Siguiente = "S";
+        public const string Terminar = "T";
+        public const string Close = "Close";
 
 
     }
@@ -170,12 +173,20 @@
     }
 
     /// <summary>
+    /// Estados de la Categoria
+    /// </summary>
+    public sealed class EstadoCategoria
+    {
+        public const string Pendiente = "01";
+        public const string Evaluado = "02";
+    }
+    /// <summary>
     /// Notas referenciales
     /// </summary>
     public sealed class NotaEvaluacion
     {
         public const int Aprobado = 16;
-        public const int Desaprobado = 8;
+        public const int Desaprobado = 7;
     }
 
     /// <summary>

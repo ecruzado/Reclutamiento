@@ -61,6 +61,8 @@
     <Compile Include="CompetenciaRequerimientoRepository.cs" />
     <Compile Include="ConocimientoGeneralPostulanteRepository.cs" />
     <Compile Include="ConocimientoGeneralRequerimientoRepository.cs" />
+    <Compile Include="Interface\IReclutamientoPersonaExamenCategoriaRepository.cs" />
+    <Compile Include="ReclutamientoPersonaExamenCategoriaRepository.cs" />
     <Compile Include="ReclutamientoPersonaAlternativaRepository.cs" />
     <Compile Include="Interface\IReclutamientoPersonaAlternativaRepository.cs" />
     <Compile Include="Interface\IReclutamientoPersonaCriterioRepository.cs" />

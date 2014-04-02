@@ -205,8 +205,12 @@
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
+                    model.Postulante.EstadoActivo = IndicadorActivo.Activo;
+                    model.Postulante.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                    model.Postulante.FechaCreacion = FechaCreacion;
                     _postulanteRepository.Add(model.Postulante);
                     IdePostulante = model.Postulante.IdePostulante;
+
                     var ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
                     usuario.IdePostulante = IdePostulante;
@@ -251,6 +255,8 @@
                     postulanteEdit.Bloque = postulante.Bloque;
                     postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
                     postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;
+                    postulanteEdit.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                    postulanteEdit.FechaModificacion = FechaModificacion;
                     #endregion
                     _postulanteRepository.Update(postulanteEdit);
                 }
@@ -477,6 +483,8 @@
                 postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
                 postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
                 postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
+                postulanteEdit.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                postulanteEdit.FechaModificacion = FechaModificacion;
 
                 _postulanteRepository.Update(postulanteEdit);
             }

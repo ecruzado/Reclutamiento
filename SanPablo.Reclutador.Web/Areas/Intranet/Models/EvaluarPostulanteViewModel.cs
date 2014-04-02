@@ -28,6 +28,8 @@
 
         public int totalPreguntas { get; set; }
 
+        public string Accion { get; set; }
+
 
     }
 }

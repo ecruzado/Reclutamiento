@@ -8,7 +8,7 @@ using System.Web;
 namespace SanPablo.Reclutador.Entity
 {
     
-    public class Postulante
+    public class Postulante:BaseEntity
     {
         public virtual int IdePostulante { get; set; }
         public virtual string TipoDocumento { get; set; }
@@ -98,6 +98,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual byte[] FotoPostulante { get; set; }
 
         public virtual string IndicadorRegistroCompleto { get; set; }
+
+        public virtual string EstadoActivo { get; set; }
 
         public Postulante()
         {
