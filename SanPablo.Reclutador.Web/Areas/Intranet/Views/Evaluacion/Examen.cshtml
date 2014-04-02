@@ -5,13 +5,7 @@
 }
 @section script{
     
-    <script type="text/javascript">
-        function limpiarNumeracion()
-        {
-            $('#Criterio_numeracion').val('');
-        }
 
-    </script>
     }
 
 @section Head{
@@ -38,6 +32,11 @@
 
 
 <body>
+    <script type="text/javascript">
+        function close() {
+            window.close();
+        }
+    </script>
      @using (Html.BeginForm("Examen", "Evaluacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
      { 
     <div class="container">
@@ -52,13 +51,13 @@
             </div>
             <div style="float:left;margin-top:5px;margin-left:10px;">
 
-                <span>Pregunta </span>@Html.TextBoxFor(model => model.Criterio.numeracion, new { @class="input-xmini"}) <span> de @Html.DisplayFor(model=>model.totalPreguntas)</span>
+                <span>Pregunta </span>@Html.TextBoxFor(model => model.Criterio.numeracion, new { @class="input-xmini" , disabled= "disabled"}) <span> de @Html.DisplayFor(model=>model.totalPreguntas)</span>
 
             </div>
             <a class="btn btn-info" style="margin:5px;">Ir a</a>
             <div style="float:right;margin-top:5px;">
                 <span>Duracion</span>  
-                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", disabled = "disabled" })
+                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", disabled= "disabled" })
                 <span>Inicio</span> 
                 @Html.TextBoxFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
                 <span>Fin</span>  
@@ -104,7 +103,6 @@
                     <tr>
                         <td>
                             @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa,Item.IdeAlternativa) @Html.DisplayFor(model =>Item.NombreAlternativa)
-                           @Html.TextBoxFor(model => Item.Peso, new { style = "display:none;" });
                         </td>
                     </tr>
                       }
@@ -114,7 +112,6 @@
                             <td class="colEtiqueta"></td>
                             <td class ="colInput" >
                                  @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa, Item.IdeAlternativa)
-                                @Html.TextBoxFor(model => Item.Peso, new { style = "display:none;" });
                                 <img id="ImgAlternativa"  height ="100" width="100" src="@Url.Action("GetImageAlternativa", "Alternativa", new { id = Item.IdeAlternativa })" /> 
                             </td>
                           </tr>
