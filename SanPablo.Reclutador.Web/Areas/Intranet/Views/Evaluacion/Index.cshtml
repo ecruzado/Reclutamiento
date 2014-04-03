@@ -9,6 +9,9 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        
+
         $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
         $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });
 
@@ -68,6 +71,11 @@
     }
     function limpiarNumeracion() {
         $('#Criterio_numeracion').val('');
+    }
+
+    function actualizarGrilla()
+    {
+        $('#grdList').trigger('reloadGrid');
     }
 
 </script>

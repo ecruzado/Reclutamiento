@@ -452,6 +452,8 @@
     <Content Include="Areas\Intranet\Views\Contrata\popupObserv.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Instrucciones.cshtml" />
     <Content Include="Areas\Intranet\Views\Seguridad\Inicio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\ExamenCronometro.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

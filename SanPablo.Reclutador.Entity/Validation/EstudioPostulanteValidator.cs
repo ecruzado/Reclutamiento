@@ -32,18 +32,18 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar Nivel Alcanzado");
 
+
+            RuleFor(x => x.FechaEstudioInicio)
+               .LessThanOrEqualTo(x => x.FechaEstudioFin.Value)
+               .When(x => x.ActualmenteEstudiando.Equals(false))
+               .WithMessage("Ingresar una fecha final posterior a la fecha inicial");
             RuleFor(x => x.FechaEstudioInicio)
                 .NotEmpty()
                 .WithMessage("Ingresar Fecha de Inicio");
-            RuleFor(x => x.FechaEstudioInicio)
-                .GreaterThanOrEqualTo(new DateTime(1950, 01, 01))
-                .WithMessage("Ingresar Fecha de Inicio Válido");
+            
 
 
-            RuleFor(x => x.FechaEstudioInicio)
-                .LessThanOrEqualTo(x => x.FechaEstudioFin.Value)
-                .When(x => x.ActualmenteEstudiando.Equals(false))
-                .WithMessage("Ingresar una fecha final posterior a la fecha inicial");
+           
 
 
             RuleFor(x => x.NombreInstitucion)

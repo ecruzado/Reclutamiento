@@ -221,9 +221,14 @@
              if (estudioPostulante != null)
             {
                 var listaResultado = new List<DetalleGeneral>();
+                var listaResultadoNiveles = new List<DetalleGeneral>();
                 listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, estudioPostulante.TipTipoInstitucion));
                 listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
                 estudioPostulanteGeneralViewModel.TipoNombreInstituciones = listaResultado;
+
+                listaResultadoNiveles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion,estudioPostulante.TipoEducacion));
+                //listaResultadoNiveles.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
+                estudioPostulanteGeneralViewModel.NivelesAlcanzados = listaResultadoNiveles;
             }
              return estudioPostulanteGeneralViewModel;
         }

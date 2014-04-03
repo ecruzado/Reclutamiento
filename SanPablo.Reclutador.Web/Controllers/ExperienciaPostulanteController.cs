@@ -65,8 +65,8 @@
                                 item.TiempoDeServicio,
                                 item.DescripcionMotivoCese,
                                 item.NombreReferente.ToUpper(),
-                                item.DescripcionCargoReferente,
                                 item.NumeroMovilReferencia.ToString(),
+                                item.DescripcionCargoReferente,
                                 item.NumeroFijoInstitucionReferente.ToString(),
                                 item.NumeroAnexoInstitucionReferente.ToString()
                             }
