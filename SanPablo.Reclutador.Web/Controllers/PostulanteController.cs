@@ -331,18 +331,17 @@
 
         public ActionResult IndicadorSession()
         {
-            ActionResult result = null;
-            bool indicador = false;
+            JsonMessage objJson = new JsonMessage();
+            objJson.Resultado = false;
             if (IdePostulante != 0)
             {
-                indicador = true;
+                objJson.Resultado = true;
             }
             else
             {
-                indicador = false;
+                objJson.Resultado = false;
             }
-            result = Json(indicador);
-            return result;
+            return Json(objJson);
         }
 
         [HttpPost]

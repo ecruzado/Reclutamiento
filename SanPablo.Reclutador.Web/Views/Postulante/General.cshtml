@@ -19,6 +19,23 @@
 
     $(document).ready(function () {
 
+        window.onbeforeunload = function (e) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '@Url.Action("IndicadorSession","Postulante")',
+            success: function (respuesta) {
+                if (!respuesta.Resultado) {
+                    //MostrarMensaje("Debe registrar y guardar sus datos", "Sistema de reclutamiento y selección de personal");
+                    mensaje= "No ha registrado y guardado sus datos generales";
+                }
+                else { return null; }
+            }
+            });
+
+            return mensaje;
+        };
+
         SanPablo.Numeros('Postulante_NumeroDireccion');
         SanPablo.Numeros('Postulante_NumeroDocumento');
         SanPablo.Numeros('Postulante_TelefonoMovil');
@@ -140,6 +157,8 @@
 
     function verificarDocumento() {
         var documento = $('#Postulante_NumeroDocumento').val();
+        var msjError = document.getElementById('mesjErrorDocuemento');
+
         if ((documento != null) && (documento != "")) {
             $.ajax({
                 type: "POST",
@@ -147,23 +166,41 @@
                 data: { dni: documento },
                 success: function (respuesta) {
                     if (!respuesta) {
-                        
                         $('#Postulante_NumeroDocumento').val('');
-                        $("#spanMensaje").html('El número de Documento ya existe');
-                        $("#divMensaje").dialog({
-                            title: 'ALERTA!!',
-                            modal: true,
-                            buttons: {
-                                "Ok": function () { $(this).dialog("close"); }
-                            }
-                        });
+                        msjError.style.display = "block";
+                        //$("#spanMensaje").html('El número de Documento ya existe');
+                        //$("#divMensaje").dialog({
+                        //    title: 'Sistema de reclutamiento y seleccion de personal',
+                        //    modal: true,
+                        //    buttons: {
+                        //        "Ok": function () { $(this).dialog("close"); }
+                        //    }
+                        //});
 
                     }
+                    else { msjError.style.display = "none"; }
                     
                 }
             });
         }
     }
+
+    function validarPagina()
+    {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '@Url.Action("IndicadorSession","Postulante")',
+            success: function (respuesta) {
+                if (!respuesta.Resultado) {
+                    //MostrarMensaje("Debe registrar y guardar sus datos", "Sistema de reclutamiento y selección de personal");
+                    return "No ha registrado y guardado sus datos generales";
+                }
+                else { return true;}
+            }
+        });
+    }
+    
 </script>
 }
 <div class="row">
@@ -235,7 +272,9 @@
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>
-                            
+                            <div id="mesjErrorDocuemento" class="tex-error" style="font-size:12px;color:red;display:none;"> 
+                                El nro de documento yá existe.
+                            </div>
                         </td>
                     </tr>
                     <tr>

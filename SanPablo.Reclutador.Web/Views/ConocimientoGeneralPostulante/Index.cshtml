@@ -122,18 +122,20 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        var result = $('form').valid();
+                        var result = $('#ofimaticaForm').valid();
                         if (result) {
                             $.post( '@Url.Action("Ofimatica", "ConocimientoGeneralPostulante")',
                                 $("#ofimaticaForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
-                                        location.reload(true);
+                                        $('#grdListOfimatica').trigger('reloadGrid');
 
                                     }
                                     else {
+
                                         var mensj = document.getElementById("mensajeError");
+                                        mensj.innerHTML = respuesta.Mensaje;
                                         mensj.style.display = "block";
                                     }
                                 }
@@ -155,18 +157,18 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        var result = $('form').valid();
+                        var result = $('#idiomasForm').valid();
                         if (result) {
                             $.post('@Url.Action("Idiomas", "ConocimientoGeneralPostulante")',
                                 $("#idiomasForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialogIdiomas").dialog("close");
-                                        location.reload(true);
-
+                                        $('#grdListIdioma').trigger('reloadGrid');
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
+                                        mensj.innerHTML = respuesta.Mensaje;
                                         mensj.style.display = "block";
                                     }
                                 }
@@ -186,19 +188,21 @@
                 modal: true,
                 buttons: {
                     "Grabar": function (e) {
+                        validarOtros();
                         e.preventDefault();
-                        var result = $('form').valid();
+                        var result = $('#otroConocimientoForm').valid();
                         if (result) {
                             $.post('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante")',
                                 $("#otroConocimientoForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialogOtro").dialog("close");
-                                        location.reload(true);
+                                        $('#grdOtrosConocimientos').trigger('reloadGrid');
 
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
+                                        mensj.innerHTML = respuesta.Mensaje;
                                         mensj.style.display = "block";
                                     }
                                 }
@@ -409,6 +413,21 @@
                 var strRdo = '<input type="checkbox" disabled="disabled">';
             }
             return strRdo;
+        }
+
+        function validarOtros()
+        {
+            var msjError = document.getElementById('msjErrorOtro');
+            var tipoConocOtro = $('#ConocimientoGeneral_TipoNombreConocimientoGeneral').val();
+            var nombreConocimiento = $('#ConocimientoGeneral_NombreConocimientoGeneral').val();
+            if ((tipoConocOtro == "XX") && (nombreConocimiento == null))
+            {
+                msjError.style.display = "block";
+            }
+            else
+            {
+                msjError.style.display = "none";
+            }
         }
 
     </script>

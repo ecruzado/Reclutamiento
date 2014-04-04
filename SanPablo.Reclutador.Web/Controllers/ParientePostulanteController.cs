@@ -60,7 +60,7 @@
                                 item.ApellidoMaterno.ToUpper(),
                                 item.Nombres.ToUpper(),
                                 item.DescripcionVinculo,
-                                item.FechaNacimiento.ToString()
+                                String.Format("{0:dd/MM/yyyy}", item.FechaNacimiento)
                             }
                     }).ToArray();
 

@@ -53,6 +53,7 @@
                 modal: true,
                 buttons: {
                     "Grabar": function (e) {
+                        validarFechaNac();
                         e.preventDefault();
                         var result = $('form').valid();
                         if (result) {
@@ -157,6 +158,20 @@
             });
             return false;
         }
+
+        function validarFechaNac() {
+            var vinculo = $('#Pariente_TipoDeVinculo').val();
+            var menjError = document.getElementById("msjError");
+            if (vinculo == "03") {
+                var fecha = $("#fechaNacimiento").val();
+                if (fecha == null) {
+
+                    menjError.style.display = "block";
+                }
+                else { menjError.style.display = "none"; }
+            }
+            else { menjError.style.display = "none"; }
+        }
     </script>
 }
 <div class="span12">
@@ -169,6 +184,7 @@
                 <h5>Parientes</h5>
             </div>
             @Html.HiddenFor(model=>model.porcentaje)
+            <div style="margin-top:10px;margin-left:20px;" > Ingresar datos de la familia directa (padres, conyugue y/o hijos)</div>
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a id="btnAgregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  

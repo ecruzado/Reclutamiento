@@ -22,6 +22,9 @@
     @Html.MenuItem("7. Discapacidad", "Index", "DiscapacidadPostulante")
 
 </ul>
+
+ <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script>
    
     function mostrarAlerta() {
@@ -126,5 +129,9 @@
                 }
             }
         });
+    }
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 </script>

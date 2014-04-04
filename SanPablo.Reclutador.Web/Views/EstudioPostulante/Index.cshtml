@@ -66,13 +66,14 @@
                             $.post('@Url.Action("Edit", "EstudioPostulante")',
                                 $("#estudioPostulanteForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
-                                        location.reload(true);
+                                        $('#grdList').trigger('reloadGrid');
 
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
+                                        mensj.innerHTML = respuesta.Mensaje;
                                         mensj.style.display = "block";
                                     }
                                 }

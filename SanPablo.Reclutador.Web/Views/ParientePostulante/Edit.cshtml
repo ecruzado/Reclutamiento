@@ -4,6 +4,7 @@
 }
     <script type="text/javascript">
 
+        
     </script>
 @using (Html.BeginForm("Edit", "ParientePostulante", FormMethod.Post, new { @id = "parientePostulanteForm" }))
     {
@@ -54,7 +55,7 @@
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Pariente.TipoDeVinculo, new SelectList(Model.TipoVinculos, "Valor", "Descripcion", Model.Pariente.TipoDeVinculo))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Pariente.TipoDeVinculo)
+                    @Html.ValidationMessageFor(model => model.Pariente.TipoDeVinculo)
                 </div>
             </td>
         </tr>
@@ -63,9 +64,12 @@
                 <label class="etiquetaFormulario"> Fecha de nacimiento </label>
             </td>
             <td class="colInput" >
-                @Html.EditorFor(model => model.Pariente.FechaNacimiento, new { @id="fechaNacimiento" })
+                @Html.EditorFor(model => model.Pariente.FechaNacimiento, new { @id="fechaNacimiento", onblur="validarFechaNac();"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Pariente.FechaNacimiento)
+                    @Html.ValidationMessageFor(model => model.Pariente.FechaNacimiento)
+                </div>
+                <div id="msjError" class="tex-error" style="font-size:12px;color:red ; display:none" > 
+                    <span>Falta ingresar la fecha de nacimiento</span>
                 </div>
             </td>
         </tr>

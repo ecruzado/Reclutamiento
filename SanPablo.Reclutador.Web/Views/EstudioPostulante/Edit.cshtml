@@ -49,6 +49,22 @@
             })
 
 
+            $('select#Estudio_TipoNivelAlcanzado').change(function () {
+                var tipoNivel = $(this).val();
+                if ((tipoNivel == "05") || (tipoNivel == "08") || (tipoNivel == "12") || (tipoNivel == "18")) {
+
+                    document.getElementById("chbIndEstudiando").checked = true;
+                    $('#chbIndEstudiando').attr("disabled", "disabled");
+                    $('#Estudio_FechaEstudioFin').val("");
+                    $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
+                }
+                else {
+                    document.getElementById("chbIndEstudiando").checked = false;
+                    $('#chbIndEstudiando').removeAttr("disabled", "disabled");
+                    $('#Estudio_FechaEstudioFin').removeAttr("disabled");
+                }
+            })
+
             //cargar el nivel alcanzado
             $('select#Estudio_TipoEducacion').change(function () {
                 cargarInstituciones();
