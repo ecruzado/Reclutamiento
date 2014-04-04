@@ -14,31 +14,21 @@
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
-
-<script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
 
     $(document).ready(function () {
 
-        window.onbeforeunload = function (e) {
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: '@Url.Action("IndicadorSession","Postulante")',
-            success: function (respuesta) {
-                if (!respuesta.Resultado) {
-                    //MostrarMensaje("Debe registrar y guardar sus datos", "Sistema de reclutamiento y selección de personal");
-                    mensaje= "No ha registrado y guardado sus datos generales";
-                }
-                else { return null; }
-            }
-            });
-
-            return mensaje;
-        };
+        mostrarMensajeBienvenida();
 
         SanPablo.Numeros('Postulante_NumeroDireccion');
         SanPablo.Numeros('Postulante_NumeroDocumento');
         SanPablo.Numeros('Postulante_TelefonoMovil');
+
+        //SanPablo.Alfanumerico('Postulante_Observacion');
+        //SanPablo.Alfanumerico('Postulante_ReferenciaDireccion');
+        //SanPablo.Alfanumerico('Postulante_NombreZona');
 
         mostrarAlerta();
         actualizarBarra();
@@ -168,15 +158,6 @@
                     if (!respuesta) {
                         $('#Postulante_NumeroDocumento').val('');
                         msjError.style.display = "block";
-                        //$("#spanMensaje").html('El número de Documento ya existe');
-                        //$("#divMensaje").dialog({
-                        //    title: 'Sistema de reclutamiento y seleccion de personal',
-                        //    modal: true,
-                        //    buttons: {
-                        //        "Ok": function () { $(this).dialog("close"); }
-                        //    }
-                        //});
-
                     }
                     else { msjError.style.display = "none"; }
                     
@@ -185,18 +166,16 @@
         }
     }
 
-    function validarPagina()
+    function mostrarMensajeBienvenida()
     {
         $.ajax({
             type: "POST",
-            async: false,
             url: '@Url.Action("IndicadorSession","Postulante")',
             success: function (respuesta) {
                 if (!respuesta.Resultado) {
-                    //MostrarMensaje("Debe registrar y guardar sus datos", "Sistema de reclutamiento y selección de personal");
-                    return "No ha registrado y guardado sus datos generales";
+                    MostrarMensaje("Gracias por registrarse. Te recomentamos registrar tus datos en la sección mi CV","SAN PABLO");
+
                 }
-                else { return true;}
             }
         });
     }
@@ -273,7 +252,7 @@
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>
                             <div id="mesjErrorDocuemento" class="tex-error" style="font-size:12px;color:red;display:none;"> 
-                                El nro de documento yá existe.
+                                El nro de documento ya existe.
                             </div>
                         </td>
                     </tr>
@@ -358,7 +337,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", @style="text-transform: uppercase" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -566,10 +545,11 @@
                 </table>
                 <div class="formulario-accion">
                     <div class="opciones">
-                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                        @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
                                 
-                         <button type="reset" class="btn">Cancelar</button>
-                        <a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        <button type="reset" class="btn">Cancelar</button>
+                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                        @*<a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
                     </div>
                 </div>
                 <div style="clear:both"></div>

@@ -167,9 +167,13 @@
             return View(postulanteGeneralViewModel);
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         [HttpPost]
         public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
         {
+
+            var usuarioExtranet = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            var usuarioSession = usuarioExtranet.CodUsuario.Length <= 15 ? usuarioExtranet.CodUsuario : usuarioExtranet.CodUsuario.Substring(0, 15);
             try
             {
                 PostulanteValidator validator = new PostulanteValidator();
@@ -205,13 +209,13 @@
                 if (IdePostulante == 0)
                 {
                     model.Postulante.EstadoActivo = IndicadorActivo.Activo;
-                    model.Postulante.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                    model.Postulante.UsuarioCreacion = usuarioSession;
                     model.Postulante.FechaCreacion = FechaCreacion;
+                    model.Postulante.Correo = usuarioExtranet.CodUsuario;
                     _postulanteRepository.Add(model.Postulante);
                     IdePostulante = model.Postulante.IdePostulante;
 
-                    var ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
+                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(usuarioExtranet.IdUsuario));
                     usuario.IdePostulante = IdePostulante;
                     usuario.IndicadorPostulante = Indicador.Si;
                     _usuarioRepository.Update(usuario);
@@ -254,7 +258,8 @@
                     postulanteEdit.Bloque = postulante.Bloque;
                     postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
                     postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;
-                    postulanteEdit.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+
+                    postulanteEdit.UsuarioModificacion = usuarioSession;
                     postulanteEdit.FechaModificacion = FechaModificacion;
                     #endregion
                     _postulanteRepository.Update(postulanteEdit);
@@ -455,6 +460,7 @@
             return View(postulanteGeneralViewModel);
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         [HttpPost]
         public ActionResult DatosComplementarios([Bind(Prefix = "Postulante")]Postulante postulante)
         {
@@ -481,7 +487,9 @@
                 postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
                 postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
                 postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
-                postulanteEdit.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                var usuarioSession = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+
+                postulanteEdit.UsuarioModificacion = usuarioSession.CodUsuario.Length <= 15 ? usuarioSession.CodUsuario : usuarioSession.CodUsuario.Substring(0, 15);
                 postulanteEdit.FechaModificacion = FechaModificacion;
 
                 _postulanteRepository.Update(postulanteEdit);

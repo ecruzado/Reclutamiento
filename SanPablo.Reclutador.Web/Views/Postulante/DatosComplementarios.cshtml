@@ -14,8 +14,6 @@
         //verficar el radio button
         actualizarBarra();
 
-        habilitarPestanas();
-
         //Determinar el radio button
         actualizarDatosCHSP();
 
@@ -213,10 +211,11 @@
 
             <div class="formulario-accion">
                 <div class="opciones">
-                    <button class="btn btn-info" id="btnGrabar" type="submit"><i class="icon-hdd icon-white"></i> Grabar</button>
+                    @*<button class="btn btn-info" id="btnGrabar" type="submit"><i class="icon-hdd icon-white"></i> Grabar</button>*@
                    <!-- <a class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a> -->
                     <a class="btn" href="@Url.Action("Index", "ConocimientoGeneralPostulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
-                    <a class="btn btn-info" href="@Url.Action("Index", "ParientePostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                     <button class="btn btn-info" id="btnGrabar" type="submit"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                    @*<a class="btn btn-info" href="@Url.Action("Index", "ParientePostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
                 </div>
             </div>
             <div style="clear:both"></div>

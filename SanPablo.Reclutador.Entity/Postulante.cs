@@ -45,7 +45,7 @@ namespace SanPablo.Reclutador.Entity
         //
 
         [DataType(DataType.PhoneNumber)]
-        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Número no válido")]
+        [RegularExpression(@"^\(?([0-9]{2,3})\)?[-. ]?([0-9]{2,3})[-. ]?([0-9]{3,4})$", ErrorMessage = "Número no válido")]
         [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
         public virtual string TelefonoFijo { get; set; }
         public virtual string TipoZona { get; set; }

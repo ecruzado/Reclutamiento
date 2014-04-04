@@ -99,39 +99,8 @@
 
     }
 
-    function habilitarPestanas()
-    {
-        var pestan = document.getElementsByTagName("a");
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("IndicadorSession","Postulante")',
-            success: function (respuesta) {
-                if (!respuesta)
-                {
-                    for (var i = 0; i < pestan.length; i++)
-                    { 
-                        pestan[i].href = "";
-                    }
-                    $("#spanMensaje").html('Primero debes registrar tus datos generales');
-                    $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () {
-                                $(this).dialog("close");
-                                var url = '@Url.Action("General", "Postulante")';
-                                window.location = url;
-                                
-                            }
-                        }
-                    });
-                    
-                }
-            }
-        });
-    }
 
     function MostrarMensaje(mensaje, titulo) {
-        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+        Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
     }
 </script>

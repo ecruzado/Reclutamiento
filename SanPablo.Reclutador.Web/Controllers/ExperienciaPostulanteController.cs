@@ -182,7 +182,7 @@
         public ActionResult calcularTiempoServicio(DateTime inicio, DateTime fin)
         {
             ActionResult result = null;
-            if (fin == null)
+            if (fin.Year == 1000 )
             {
                 fin = DateTime.Now;
             }
