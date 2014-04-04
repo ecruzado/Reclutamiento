@@ -123,16 +123,14 @@
                 data: { date: fecha },
                 success: function (respuesta) {
                     if (!respuesta) {
+                        var msjError = document.getElementById('errorFechaNacimiento');
+                        msjError.style.display = "block";
                         $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
-                        $("#spanMensaje").html('Fecha de nacimiento no válida, el postulante debe ser mayor de edad');
-                        $("#divMensaje").dialog({
-                            title: 'Sistema de Reclutamiento y Selección de Personal',
-                            modal: true,
-                            buttons: {
-                                "Ok": function () { $(this).dialog("close"); }
-                            }
-                        });
 
+                    }
+                    else {
+                        var msjError = document.getElementById('errorFechaNacimiento');
+                        msjError.style.display = "none";
                     }
                 }
             });
@@ -148,8 +146,8 @@
                 url: '@Url.Action("validarDocumento","Postulante")',
                 data: { dni: documento },
                 success: function (respuesta) {
-                    if (!respuesta)
-                    {
+                    if (!respuesta) {
+                        
                         $('#Postulante_NumeroDocumento').val('');
                         $("#spanMensaje").html('El número de Documento ya existe');
                         $("#divMensaje").dialog({
@@ -161,6 +159,7 @@
                         });
 
                     }
+                    
                 }
             });
         }
@@ -232,10 +231,11 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número de documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario", @style="text-transform: uppercase", onblur="verificarDocumento();" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario",maxlength="8", @style="text-transform: uppercase", onblur="verificarDocumento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>
+                            
                         </td>
                     </tr>
                     <tr>
@@ -299,6 +299,9 @@
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
+                            <div  id="errorFechaNacimiento" class="tex-error" style="font-size:12px;color:red; display:none;" > 
+                             <span>  Debes ser mayor de edad.</span> 
+                            </div>
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
@@ -330,12 +333,15 @@
                             </div>
                         </td>
                     </tr>
+                    
+                </table>
+                <table style="margin-left:120px;" >
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="taobservaciongeneral">Observación</label>
+                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Observación</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="text-transform: uppercase;width:570px" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Observacion)
                             </div>
@@ -412,14 +418,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.NumeroDireccion)
-                            </div>*@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4" })                           
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.InteriorDireccion)
-                            </div>*@
+                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", style="text-transform: uppercase"})                           
+                            
                         </td>
                     </tr>
                     <tr>
@@ -439,14 +440,10 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase"})
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Manzana)
-                            </div>*@
+                            
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
                             @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Lote)
-                            </div>*@
+                            
                         </td>
                     </tr>
                     <tr>
@@ -465,14 +462,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", @style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Bloque)
-                            </div>*@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", @style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Etapa)
-                            </div>*@
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="2", @style="text-transform: uppercase" })
+                            
                         </td>
                     </tr>
                     <tr>

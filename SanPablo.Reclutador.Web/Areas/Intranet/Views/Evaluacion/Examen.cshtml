@@ -28,12 +28,6 @@
 
 
 <body onload="countDown();">
-    @if(Accion.Close == Model.Accion)
-    {
-       <script type="text/javascript">
-            window.close();
-       </script>
-    }
      @using (Html.BeginForm("Examen", "Evaluacion", FormMethod.Post, new { @id="examenForm", enctype = "multipart/form-data" }))
      { 
          
@@ -44,7 +38,7 @@
             <div class="widget-title">
                 <h5>Examen</h5>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" href="#" onclick="window.close();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    <a class="btn btn-small btn-info" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
                 </div>
             </div>
             <table>
@@ -137,6 +131,11 @@
                 {    
                     <button type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
                 }
+                else
+                {
+                    <a class="btn btn-info" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                }
+
                 
                  
             </div>                     
@@ -160,6 +159,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        $('.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close').remove();
 
         $('#btnBuscarPregunta').click(function () {
             guardarBuscarPregunta();
@@ -193,7 +194,7 @@
             var seconds_left = totalSegundos;
             if (totalSegundos <= 0)
             {
-                window.close();
+                cerrarPrueba();
             }
             hours = parseInt(seconds_left / 3600);
             seconds_left = seconds_left % 3600;
@@ -214,8 +215,8 @@
                $("#examenForm").serialize(),
                function (respuesta) {
                    if (respuesta.Resultado) {
-                       var nroPreg = parseInt(respuesta.IdDato) - 1;
-                       var url = '@Url.Action("MostrarPregunta", "Evaluacion", new { nroPregunta = "",area="Intranet" })?nroPregunta=' + nroPreg;
+                       var nroPreg = parseInt(respuesta.IdDato);
+                       var url = '@Url.Action("MostrarPregunta", "Evaluacion", new { nroPregunta = "", area = "Intranet" })?nroPregunta=' + nroPreg;
                       window.location = url;
                   }
                   else {
@@ -224,6 +225,25 @@
                }
         );
           }
+
+
+    function cerrarPrueba()
+    {
+
+        $.post('@Url.Action("terminarPrueba", "Evaluacion")',
+              $("#examenForm").serialize(),
+              function (respuesta) {
+                  if (respuesta.Resultado) {
+                      window.close();
+
+                  }
+                  else {
+                      alert(respuesta.Mensaje);
+                  }
+               }
+        );
+
+    }
 
     function guardarBuscarPregunta()
     {

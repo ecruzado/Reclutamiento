@@ -16,7 +16,7 @@
                 .WithMessage("Ingresar número documento");
             RuleFor(x => x.NumeroDocumento)
                 .Length(8)
-                .WithMessage("Ingresar número documento de 8 dígitos");
+                .WithMessage("Ingresar sólo 8 digitos");
 
             RuleFor(x => x.ApellidoPaterno)
                 .NotEmpty()
@@ -105,7 +105,7 @@
 
             RuleFor(x => x.Observacion)
                 .Length(0, 255)
-                .WithMessage("La observacion no debe sobrepasar los 255 caracteres");
+                .WithMessage("Máx. 255 caracteres");
 
 
             RuleFor(x => x.ReferenciaDireccion)
@@ -113,7 +113,7 @@
                 .WithMessage("Ingresar una referencia");
             RuleFor(x => x.ReferenciaDireccion)
                 .Length(5,100)
-                .WithMessage("Ingrese una referencia válida de hasta 100 caracteres");
+                .WithMessage("Ingrese una referencia válida de máximo 100 caracteres");
             //RuleFor(x => x.TelefonoFijo)
             //    .Must()
             //    .withMessage("Ingresar un número telefonico válido");

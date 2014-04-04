@@ -6,10 +6,30 @@
 
     public interface ISolicitudNuevoCargoRepository : IRepository<SolicitudNuevoCargo>
     {
+        /// <summary>
+        /// obtener los datos de Area
+        /// </summary>
+        /// <param name="ideArea"></param>
+        /// <returns></returns>
         List<string> obtenerDatosArea(int ideArea);
-        bool verificarCodCodigo(string codigoCargo);
 
+        /// <summary>
+        /// Verificar si el codigo de cargo ya existe en la sede
+        /// </summary>
+        /// <param name="codigoCargo"></param>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        bool verificarCodCodigo(string codigoCargo, int ideSede);
+
+        /// <summary>
+        /// insertar una nueva solicitud
+        /// </summary>
+        /// <param name="solicitudNuevo"></param>
+        /// <param name="logSolicitudNuevo"></param>
+        /// <param name="indArea"></param>
+        /// <returns></returns>
         Int32 insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea);
+
 
         LogSolicitudNuevoCargo responsablePublicacion(int ideCargo, int ideSede);
 

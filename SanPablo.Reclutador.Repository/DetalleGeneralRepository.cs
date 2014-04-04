@@ -54,6 +54,9 @@
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
             {
+                var usuario = detalle.UsuarioCreacion;
+                detalle.UsuarioCreacion = usuario.Length <= 15 ? usuario : usuario.Substring(0, 15);
+
                 lcon.Open();
                 OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_AGREGAR_DETALLE");
                 cmd.CommandType = CommandType.StoredProcedure;

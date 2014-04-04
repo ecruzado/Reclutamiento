@@ -91,6 +91,7 @@ using System.Web.Mvc;
                     {
                         detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
                         detalleGeneral.FechaCreacion = FechaCreacion;
+
                         detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                         detalleGeneral.General = new General();
                         detalleGeneral.General.IdeGeneral = IdeGeneral;
@@ -125,7 +126,9 @@ using System.Web.Mvc;
 
                             detalleEditar.Valor = detalleGeneral.Valor;
                             detalleEditar.Descripcion = detalleGeneral.Descripcion;
-                            detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+
+                            var usuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                            detalleEditar.UsuarioModificacion = usuario.Length <= 15 ? usuario : usuario.Substring(0, 15);
                             detalleEditar.FechaModificacion = FechaModificacion;
                             _detalleGeneralRepository.Update(detalleEditar);
 
@@ -235,6 +238,8 @@ using System.Web.Mvc;
             var model = InicializarDetalleMantenimiento();
             model.IndSubDetalle = Indicador.No;
             model.TablaDetalleGeneral.Accion = Accion.Nuevo;
+            model.AccionModel = Accion.Editar;
+
             int idGeneral = Convert.ToInt32(id);
             if (idGeneral != 0)
             {
@@ -342,6 +347,7 @@ using System.Web.Mvc;
             var model = InicializarSubDetalleMantenimiento();
 
             model.TablaSubDetalle.Accion = Accion.Nuevo;
+            model.AccionModel = Accion.Editar;
             
             if (id != null)
             {
@@ -375,7 +381,8 @@ using System.Web.Mvc;
                 {
                     detalleGeneral.EstadoActivo = IndicadorActivo.Activo;
                     detalleGeneral.FechaCreacion = FechaCreacion;
-                    detalleGeneral.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    string usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                    detalleGeneral.UsuarioCreacion = usuario.Length <= 15? usuario : usuario.Substring(0, 15);
                     detalleGeneral.General = new General();
                     detalleGeneral.General.IdeGeneral = IdeGeneral;
                     if (existeValor(detalleGeneral))
@@ -409,7 +416,9 @@ using System.Web.Mvc;
 
                         detalleEditar.Valor = detalleGeneral.Valor;
                         detalleEditar.Descripcion = detalleGeneral.Descripcion;
-                        detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        string usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        detalleEditar.UsuarioModificacion = usuario.Length <= 15 ? usuario : usuario.Substring(0, 15);
+
                         detalleEditar.FechaModificacion = FechaModificacion;
                         _detalleGeneralRepository.Update(detalleEditar);
 
@@ -445,8 +454,9 @@ using System.Web.Mvc;
                 if ((valor != null)||(valor != ""))
                 {
                     DetalleGeneral detalleEditar = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == IdeGeneral && x.Valor == valor);
-
-                    detalleEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                    string usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                    detalleEditar.UsuarioModificacion = usuario.Length <= 15 ? usuario : usuario.Substring(0, 15);
+                    
                     detalleEditar.FechaModificacion = FechaModificacion;
                     if (detalleEditar.EstadoActivo == IndicadorActivo.Activo)
                     {
@@ -514,6 +524,40 @@ using System.Web.Mvc;
             {
                 return false;
             }
+        }
+
+        [ValidarSesion]
+        public ActionResult ConsultarDetalle(string id)
+        {
+            var model = InicializarDetalleMantenimiento();
+            model.IndSubDetalle = Indicador.No;
+            model.TablaDetalleGeneral.Accion = Accion.Nuevo;
+            model.AccionModel = Accion.Consultar;
+
+            int idGeneral = Convert.ToInt32(id);
+            if (idGeneral != 0)
+            {
+                IdeGeneral = idGeneral;
+                model.IndSubDetalle = determinarIndSubDetalle();
+
+            }
+            return View("Edit", model);
+        }
+
+
+        [ValidarSesion]
+        public ActionResult ConsultarSubDetalle(string id)
+        {
+            var model = InicializarSubDetalleMantenimiento();
+
+            model.TablaSubDetalle.Accion = Accion.Nuevo;
+            model.AccionModel = Accion.Editar;
+
+            if (id != null)
+            {
+                DetalleValor = id;
+            }
+            return View("EditarDetalle", model);
         }
     }
 }

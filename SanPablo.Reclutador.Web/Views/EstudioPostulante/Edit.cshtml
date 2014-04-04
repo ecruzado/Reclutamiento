@@ -18,6 +18,13 @@
                 $('#Estudio_FechaEstudioFin').removeAttr("disabled");
             }
 
+            var tipoEducacion = $('#Estudio_TipoEducacion').val();
+            if (tipoEducacion == "01")
+            {   deshabilitarAreaEstudio(); }
+            else
+            {
+                habilitarAreaEstudio();
+            }
 
             //ELEGIR EL TIPO DE INSTITUCIONES
             $('select#tipoInstitucion').change(function () {
@@ -46,6 +53,10 @@
             $('select#Estudio_TipoEducacion').change(function () {
                 cargarInstituciones();
                 var tipoEducacion = $(this).val();
+                if (tipoEducacion == "01") {
+                    deshabilitarAreaEstudio();
+                }
+                else { habilitarAreaEstudio(); }
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("listarNivelAlcanzado","EstudioPostulante")',
@@ -133,6 +144,20 @@
                 campoOtro.style.display = "none";
             }
         }
+
+        function habilitarAreaEstudio() {
+            var labelArea = document.getElementById('labelAreaEstudios');
+            var campoArea = document.getElementById('tipoArea');
+            labelArea.style.display = "block";
+            campoArea.style.display = "block";
+        }
+
+        function deshabilitarAreaEstudio() {
+            var labelArea = document.getElementById('labelAreaEstudios');
+            var campoArea = document.getElementById('tipoArea');
+            labelArea.style.display = "none";
+            campoArea.style.display = "none";
+        }
     </script>
 @using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))
     {
@@ -183,10 +208,10 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="setAreaEstudio"> Área de estudio <span class="text-error">*</span></label>
+                <label id="labelAreaEstudios" class="etiquetaFormulario" for="setAreaEstudio" style="display:block"> Área de estudio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.Estudio.TipoArea), new { @id="tipoArea"})
+                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.Estudio.TipoArea), new { @id="tipoArea", style="display:block;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
                 </div>
@@ -216,7 +241,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario"> Fecha de Inicio <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario"> Desde <span class="text-error">*</span></label>
             </td>
             <td class="colInput" id="txtfechainicio">
                 @Html.EditorFor(model => model.Estudio.FechaEstudioInicio, new { @value = ""})
@@ -227,7 +252,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" > Fecha de Fin </label>
+                <label class="etiquetaFormulario" > Hasta </label>
             </td>
             <td class="colInput">
                 @Html.EditorFor(model => model.Estudio.FechaEstudioFin)

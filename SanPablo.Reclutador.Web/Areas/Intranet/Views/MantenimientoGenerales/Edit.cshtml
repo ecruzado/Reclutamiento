@@ -53,6 +53,17 @@
             }
         });
 
+        
+        $('#btnConsultarSubDetalle').click(function () {
+            var selr = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdList1').jqGrid('getRowData', selr);
+            if (selr != null) {
+                mostrarConsultarSubDetalle(rowData.Valor, rowData.Descripcion);
+            } else {
+                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
         jQuery("#grdList1").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
@@ -92,7 +103,7 @@
             colNames: ['Valor', 'Descripcion','estado'],
             colModel: [
                     { name: 'Valor', index: 'Valor', align: 'center', hidden: false, width: 100 },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 380 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 250 },
                     { name: 'IndicadorEstado', index: 'IndicadorEstado', align: 'center', sortable: false }
 
             ],
@@ -140,11 +151,13 @@
                 function (respuesta) {
                     if (respuesta.Resultado) {
                         $('#grdList1').trigger('reloadGrid');
-                        notificacionExito(respuesta.Mensaje);
+                        //notificacionExito(respuesta.Mensaje);
+                        notificacionError(respuesta.Mensaje);
                         $('#TablaDetalleGeneral_Valor').val('');
                         $('#TablaDetalleGeneral_Descripcion').val('');
                     }
                     else {
+                        //notificacionError(respuesta.Mensaje);
                         notificacionError(respuesta.Mensaje);
                     }
                 }
@@ -157,8 +170,8 @@
     }
     function mostrarfila()
     {
-        var mensj = document.getElementById("mensajeError");
-        mensj.style.display = "none";
+        //var mensj = document.getElementById("mensajeError");
+        //mensj.style.display = "none";
 
         $('#TablaDetalleGeneral_Accion').val('E');
         var id = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
@@ -178,11 +191,12 @@
             function (respuesta) {
                 if (respuesta.Resultado) {
                     $('#grdList1').trigger('reloadGrid');
-                    alert(respuesta.Mensaje);
+                    //alert(respuesta.Mensaje);
                     notificacionError(respuesta.Mensaje);
                     mostrarfila();
                 }
                 else {
+                    //notificacionError(respuesta.Mensaje);
                     notificacionError(respuesta.Mensaje);
                 }
             }
@@ -205,7 +219,30 @@
         return false;
     }
 
+    function mostrarConsultarSubDetalle(id, descripcion) {
 
+        var dialogDiv = $('#updateDialogSubDetalle');
+
+        $.get('@Url.Action("ConsultarSubDetalle", "MantenimientoGenerales", new { area = "Intranet"})?id=' + id, function (data) {
+
+            dialogDiv.html(data);
+            dialogDiv.dialog('option', 'title', descripcion);
+            $.validator.unobtrusive.parse($("#updateDialogSubDetalle"));
+            dialogDiv.dialog('open');
+
+        });
+        $('#updateDialog').dialog('close');
+        return false;
+    }
+
+    function notificacion(mensaje)
+    {
+        $("#mensajeError").html(mensaje);
+        var mensaje = document.getElementById('mensajeError');
+        mensaje.style.display = "block";
+
+        
+    }
 
 </script>
 
@@ -261,15 +298,18 @@
         </tr>
     </table>
     
-    <div class="grilla-opciones">
-        <div class="opciones">
-            <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
-            <a id="btnGuardar" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
-            <a id="btnEliminar" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
-        </div>
-        <div style="clear:both"></div>
+    if(Accion.Editar == Model.AccionModel)
+    {
+        <div class="grilla-opciones">
+            <div class="opciones">
+                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
+                <a id="btnGuardar" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
+                <a id="btnEliminar" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
+            </div>
+            <div style="clear:both"></div>
         
-    </div>
+        </div>
+    }
     <div class="tabla-datos">
             <table id="grdList1" ondblclick ="mostrarfila()">
             </table>
@@ -282,7 +322,15 @@
     {
         <div class="formulario-accion">
             <div class="opciones">
-                <a id="btnEditarDetalle" class="btn btn-info" ><i class="icon-arrow-rigth icon-white"></i> Ver Detalle</a>
+                @if(Accion.Editar == Model.AccionModel)
+                {
+                    <a id="btnEditarDetalle" class="btn btn-info" ><i class="icon-arrow-rigth icon-white"></i> Ver Detalle</a>
+                }
+                else
+                {
+                    <a id="btnConsultarSubDetalle" class="btn btn-info" ><i class="icon-arrow-rigth icon-white"></i> Ver Detalle</a>
+                }
+
             </div>
         </div> 
     }

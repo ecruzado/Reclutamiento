@@ -236,7 +236,7 @@
                 <label class="etiquetaFormulario" > Telefono de institución </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px"})
+                @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px", placeholder="(054)-000-0000" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroFijoInstitucionReferente)
                 </div>
@@ -245,7 +245,7 @@
                 <label class="etiquetaFormulario" > Anexo </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroAnexoInstitucionReferente, new { @style = "width: 70px"})
+                @Html.TextBoxFor(model => model.Experiencia.NumeroAnexoInstitucionReferente, new { @style = "width: 70px", maxlength="5"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroAnexoInstitucionReferente)
                 </div>

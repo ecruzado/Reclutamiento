@@ -23,6 +23,34 @@
             : base(session)
         {
         }
+        
+         public int obtenerIdentificadorCategoria(int idReclutaPersonaExamenCategoria)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+               
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_OBTENER_IDECATEGORIA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_idReclPerExaCat", OracleType.Int32).Value = idReclutaPersonaExamenCategoria;
+                lspcmd.Parameters.Add("p_RetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                lspcmd.ExecuteNonQuery();
+
+                int resultado = Convert.ToInt32(lspcmd.Parameters["p_RetVal"].Value) ;
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
         public bool obtenerExamenesPorCategoria(int idReclutaPersona, string usuarioSession)
         {

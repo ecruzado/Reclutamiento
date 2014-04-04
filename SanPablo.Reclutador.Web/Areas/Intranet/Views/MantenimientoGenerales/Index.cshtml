@@ -32,6 +32,16 @@
         });
 
 
+        
+        $('#btnConsultar').click(function () {
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                mostrarConsultarDetalle(selr);
+            } else {
+                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
         $('#updateDialog').dialog({
             autoOpen: false,
             width: 600,
@@ -158,6 +168,19 @@
         return false;
     }
 
+    function mostrarConsultarDetalle(id) {
+        var dialogDiv = $('#updateDialog');
+
+        $.get('@Url.Action("ConsultarDetalle", "MantenimientoGenerales", new { area = "Intranet"})?id=' + id, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#updateDialog"));
+            dialogDiv.dialog('open');
+
+        });
+        return false;
+    }
+
     function ActivarDesactivarUsuario(selr, estado) {
 
         $.ajax({
@@ -243,11 +266,8 @@
                 <div id="grdPager"></div>
             </div>
             <div class="form-actions">
-                @*<a  id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>*@
                 <a  id ="btnConsultar" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a  id ="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                @*<a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>*@
-                @*<a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>*@
                 
             </div>
         </div>
