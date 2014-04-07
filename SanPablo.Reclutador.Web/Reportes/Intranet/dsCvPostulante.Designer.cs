@@ -1882,6 +1882,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class DtExperienciaDataTable : global::System.Data.TypedTableBase<DtExperienciaRow> {
             
+            private global::System.Data.DataColumn columnCORREOREFERENTE;
+            
             private global::System.Data.DataColumn columnNOMEMPRESA;
             
             private global::System.Data.DataColumn columnTIEMPOSERVICIO;
@@ -1937,6 +1939,14 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             protected DtExperienciaDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CORREOREFERENTEColumn {
+                get {
+                    return this.columnCORREOREFERENTE;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2072,9 +2082,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DtExperienciaRow AddDtExperienciaRow(string NOMEMPRESA, string TIEMPOSERVICIO, string CARGO, string FUCNIONES, string MOTIVOCESE, string NOMREFERENTE, string FONOINST, string ANEXOINST, string CARGOREFERENTE, string FONOREFERENTE, string IDEEXPPOSTULANTE, string FECTRABAJO) {
+            public DtExperienciaRow AddDtExperienciaRow(string CORREOREFERENTE, string NOMEMPRESA, string TIEMPOSERVICIO, string CARGO, string FUCNIONES, string MOTIVOCESE, string NOMREFERENTE, string FONOINST, string ANEXOINST, string CARGOREFERENTE, string FONOREFERENTE, string IDEEXPPOSTULANTE, string FECTRABAJO) {
                 DtExperienciaRow rowDtExperienciaRow = ((DtExperienciaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        CORREOREFERENTE,
                         NOMEMPRESA,
                         TIEMPOSERVICIO,
                         CARGO,
@@ -2109,6 +2120,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
+                this.columnCORREOREFERENTE = base.Columns["CORREOREFERENTE"];
                 this.columnNOMEMPRESA = base.Columns["NOMEMPRESA"];
                 this.columnTIEMPOSERVICIO = base.Columns["TIEMPOSERVICIO"];
                 this.columnCARGO = base.Columns["CARGO"];
@@ -2126,6 +2138,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
+                this.columnCORREOREFERENTE = new global::System.Data.DataColumn("CORREOREFERENTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCORREOREFERENTE);
                 this.columnNOMEMPRESA = new global::System.Data.DataColumn("NOMEMPRESA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNOMEMPRESA);
                 this.columnTIEMPOSERVICIO = new global::System.Data.DataColumn("TIEMPOSERVICIO", typeof(string), null, global::System.Data.MappingType.Element);
@@ -5476,6 +5490,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CORREOREFERENTE {
+                get {
+                    try {
+                        return ((string)(this[this.tableDtExperiencia.CORREOREFERENTEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CORREOREFERENTE\' in table \'DtExperiencia\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtExperiencia.CORREOREFERENTEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string NOMEMPRESA {
                 get {
                     try {
@@ -5664,6 +5694,18 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 set {
                     this[this.tableDtExperiencia.FECTRABAJOColumn] = value;
                 }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCORREOREFERENTENull() {
+                return this.IsNull(this.tableDtExperiencia.CORREOREFERENTEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCORREOREFERENTENull() {
+                this[this.tableDtExperiencia.CORREOREFERENTEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
