@@ -85,8 +85,24 @@ namespace SanPablo.Reclutador.Web.Controllers
         {
             JsonMessage ObjJsonMessage = new JsonMessage();
             Usuario objUSaurioExtranet;
-            string codUsuario = model.UsuarioExtranet.Usuario;
-            string PassUsuario = model.UsuarioExtranet.Password;
+            string codUsuario = (model.UsuarioExtranet.Usuario == null ? "" : model.UsuarioExtranet.Usuario);
+            string PassUsuario = (model.UsuarioExtranet.Password==null?"":model.UsuarioExtranet.Password);
+
+            if ("".Equals(codUsuario) && "".Equals(PassUsuario))
+            {
+
+                var objUsuario = Session[ConstanteSesion.ObjUsuarioExtranet];
+                
+                if (objUsuario!=null)
+                {
+                    Usuario usuario = (Usuario)objUsuario;
+                    codUsuario = usuario.CodUsuario;
+                    PassUsuario = usuario.CodContrasena; 
+                }
+
+            }
+
+            
 
             var ListaUsuario = (List<Usuario>)_usuarioRepository.GetBy(x => x.CodUsuario == codUsuario
                                     && x.CodContrasena == PassUsuario
@@ -253,6 +269,33 @@ namespace SanPablo.Reclutador.Web.Controllers
                         envioEmail.EnviarMail(destino, asunto, null, retorno);
 
 
+                        //obtiene los datos del usuario registrado para un logueo automatico
+
+                        Usuario objUSaurioExtranet;
+                        string codUsuario = objUsuarioIntranet.CodUsuario;
+                        string PassUsuario = objUsuarioIntranet.CodContrasena;
+
+                        var ListaUsuario = (List<Usuario>)_usuarioRepository.GetBy(x => x.CodUsuario == codUsuario
+                                                && x.CodContrasena == PassUsuario
+                                                && x.TipUsuario == TipUsuario.Extranet
+                                                && x.FlgEstado == IndicadorActivo.Activo
+                                                );
+
+                        if (ListaUsuario != null && ListaUsuario.Count == 1)
+                        {
+
+                            foreach (Usuario item in ListaUsuario)
+                            {
+                                objUSaurioExtranet = item;
+                                Session[ConstanteSesion.ObjUsuarioExtranet] = objUSaurioExtranet;
+                                Session[ConstanteSesion.Usuario] = objUSaurioExtranet.IdUsuario;
+                                Session[ConstanteSesion.Rol] = SanPablo.Reclutador.Entity.Roles.Postulante;
+                                
+                            }
+
+                        }
+
+                        
                         objJson.Resultado = true;
                         objJson.Mensaje = "Gracias por registrarte. Te recomendamos completar tus datos en la sección Mi CV, ahí podrás detallar tu información.";
 
@@ -340,6 +383,11 @@ namespace SanPablo.Reclutador.Web.Controllers
                        objJsonMensaje.Resultado = true;
                        objJsonMensaje.Mensaje = "Se envio la contraseña a su correo electrónico";
 
+                   }
+                   else
+                   {
+                       objJsonMensaje.Resultado = false;
+                       objJsonMensaje.Mensaje = "El correo electrónico no se ecnuentra registrado";
                    }
                 }
                 else

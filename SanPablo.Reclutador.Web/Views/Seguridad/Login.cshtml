@@ -206,8 +206,10 @@
                                     $.unblockUI();
                                     //$('#LogeoExtranet').dialog("close");
                                     //$('#PopupDialogLogeoExtranet').dialog("close");
-
-                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                    //$('#UsuarioExtranet_Usuario').val(data.Iuser);
+                                    //$('#UsuarioExtranet_Password').val(data.Puser);
+                                    
+                                    validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet",data.Mensaje,"Mensaje");
                                 } else {
                                     $.unblockUI();
                                     // $('#LogeoExtranet').dialog("close");
@@ -285,111 +287,7 @@
             });
 
             
-          @*  $("#spanDialogRestablePass").html("¿Desea restablecer la contraseña?")
-            $('#DialogRestablePass').dialog({
-                autoOpen: false,
-                modal: true,
-                title: "Sistema de Reclutamiento Y Seleccion de Personal",
-                buttons: {
-                    "Si": function () {
-
-                        $.blockUI({
-                            message: '<h1>Procesando...</h1>',
-                            css: { border: 'none',
-                                   padding: '15px',
-                                   backgroundColor: '#000',
-                                   '-webkit-border-radius': '10px',
-                                   '-moz-border-radius': '10px',
-                                   opacity: .5,
-                                   color: '#fff'
-                            }
-                        });
-
-                        $('#DialogRestablePass').dialog("close");
-                        $('#PopupDialogRestablePass').dialog("close");
-
-                        $.ajax({
-                            data: $("#frmPopupRestablecePass").serialize(),
-                            type: "POST",
-                            url: '@Url.Action("RestablecePass", "Seguridad")',
-                            traditional: true,
-                            success: function (data) {
-                                if (data.Resultado) {
-                                       $.unblockUI();
-                                      // $('#DialogRestablePass').dialog("close");
-                                      // $('#PopupDialogRestablePass').dialog("close");
-                                       MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                } else {
-                                        $.unblockUI();
-                                       // $('#DialogRestablePass').dialog("close");
-                                      //  $('#PopupDialogRestablePass').dialog("close");
-
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                    }
-                                }
-                        });
-
-                    },
-                    "No": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });*@
-
-
-
-            @*$("#spanLogeoExtranet").html("¿Desea registrar el usuario?")
-            $('#LogeoExtranet').dialog({
-                autoOpen: false,
-                modal: true,
-                title: "Sistema de Reclutamiento Y Seleccion de Personal",
-                buttons: {
-                    "Si": function () {
-
-                        $.blockUI({
-                            message: '<h1>Procesando...</h1>',
-                            css: {
-                                border: 'none',
-                                padding: '15px',
-                                backgroundColor: '#000',
-                                '-webkit-border-radius': '10px',
-                                '-moz-border-radius': '10px',
-                                opacity: .5,
-                                color: '#fff'
-                            }
-                        });
-
-                        $('#LogeoExtranet').dialog("close");
-                        $('#PopupDialogLogeoExtranet').dialog("close");
-
-                        $.ajax({
-                            type: "POST",
-                            data: $("#frmLogeoExPopup").serialize(),
-                            url: '@Url.Action("LogeoUsuario", "Seguridad")',
-                            traditional: true,
-                                success: function (data) {
-                                    if (data.Resultado) {
-                                        $.unblockUI();
-                                        //$('#LogeoExtranet').dialog("close");
-                                        //$('#PopupDialogLogeoExtranet').dialog("close");
-
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                    } else {
-                                        $.unblockUI();
-                                       // $('#LogeoExtranet').dialog("close");
-                                       // $('#PopupDialogLogeoExtranet').dialog("close");
-                                        
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                    }
-                                }
-                            });
-
-                        },
-                        "No": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });*@
+        
 
             $('#btnIniciaSesion').click(function () {
                 if ($("#frmLoginExtranet").validate().form()) {
@@ -441,6 +339,39 @@
         function MostrarMensaje(mensaje, titulo) {
             Funciones.Alert("divMensajeExtranet", "spnMensajeExtranet", mensaje, titulo);
         }
+
+
+        function validaUsuarioEx(selectorDiv, selectorSpan, msg, title) {
+            $('#' + selectorSpan).html(msg);
+          
+            var opt = {
+                title: title,
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "Aceptar": function () {
+                        $.ajax({
+                            type: "POST",
+                            data: $("#frmLoginExtranet").serialize(),
+                            url: '@Url.Action("Logon", "Seguridad")',
+                            traditional: true,
+                            success: function (data) {
+                            if (data.Resultado) {
+                                window.location = '@Url.Action("GetMenuEx", "Seguridad")';
+                            } else {
+                                MostrarMensaje(data.Mensaje, "Mensaje");
+                            }
+                        }
+                      });
+                    }
+                }
+            };
+            $('#' + selectorDiv).dialog(opt).dialog('open');
+        }
+
+
+
+
 
     </script>
 </body>
