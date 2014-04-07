@@ -20,9 +20,9 @@
                 .Length(10, 100)
                 .WithMessage("Ingresar Nombre Universidad con longitud entre 10 a 100 caracteres");
 
-            RuleFor(x => x.TipoArea)
-                .NotEqual("00")
-                .WithMessage("Seleccionar área de estudio");
+            //RuleFor(x => x.TipoArea)
+            //    .NotEqual("00")
+            //    .WithMessage("Seleccionar área de estudio");
 
             RuleFor(x => x.TipoEducacion)
                 .NotEqual("00")
@@ -32,20 +32,16 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar Nivel Alcanzado");
 
+
+            RuleFor(x => x.FechaEstudioInicio)
+               .LessThanOrEqualTo(x => x.FechaEstudioFin.Value)
+               .When(x => x.ActualmenteEstudiando.Equals(false))
+               .WithMessage("Ingresar una fecha final posterior a la fecha inicial");
+           
             RuleFor(x => x.FechaEstudioInicio)
                 .NotEmpty()
                 .WithMessage("Ingresar Fecha de Inicio");
-            RuleFor(x => x.FechaEstudioInicio)
-                .GreaterThanOrEqualTo(new DateTime(1950, 01, 01))
-                .WithMessage("Ingresar Fecha de Inicio Válido");
-
-
-            RuleFor(x => x.FechaEstudioInicio)
-                .LessThanOrEqualTo(x => x.FechaEstudioFin.Value)
-                .When(x => x.ActualmenteEstudiando.Equals(false))
-                .WithMessage("Ingresar una fecha final posterior a la fecha inicial");
-
-
+            
             RuleFor(x => x.NombreInstitucion)
                 .NotEmpty()
                 .When(x => x.TipoNombreInstitucion.Equals("XX"))

@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
    
     public class ConocimientoGeneralPostulanteController : BaseController
     {
@@ -175,32 +176,50 @@
 
 
         [HttpPost]
-        public JsonResult Ofimatica([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
+        public ActionResult Ofimatica([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
         {
-
-
-            if (!ModelState.IsValid)
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
-            }
-            if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
-            {
-                conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-            }
-            else
-            {
-                var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                conocimientoEdit.TipoNombreOfimatica = conocimientoGeneralPostulante.TipoNombreOfimatica;
-                conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
-                conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-                _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
-            }
-            return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
+                ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
+                ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoConocimientoOfimatica", "TipoNombreOfimatica", "TipoNivelConocimiento");
+
+                if (!result.IsValid)
+                {
+                    var conocimientoGeneralViewModel = InicializarConocimiento();
+                    conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoGeneralPostulante;
+                    return View(conocimientoGeneralViewModel);
+                }
+                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                {
+                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                    conocimientoEdit.TipoNombreOfimatica = conocimientoGeneralPostulante.TipoNombreOfimatica;
+                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                    conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
+                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                
+                
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
         }
 
         public ConocimientoPostulanteGeneralViewModel InicializarConocimiento()
@@ -259,33 +278,52 @@
 
 
         [HttpPost]
-        public JsonResult Idiomas([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
+        public ActionResult Idiomas([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
         {
-            if (!ModelState.IsValid)
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
-            }
-            else
-            {
-                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+
+                ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
+                ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoIdioma", "TipoConocimientoIdioma", "TipoNivelConocimiento");
+
+                if (!result.IsValid)
                 {
-                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                                      
+                    var conocimientoGeneralViewModel = InicializarIdiomas();
+                    conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoGeneralPostulante;
+                    return View(conocimientoGeneralViewModel);
                 }
                 else
                 {
-                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                    conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
-                    conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
-                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                    if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                    {
+                        conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                        postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                        _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
 
-                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                    }
+                    else
+                    {
+                        var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                        conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                        conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
+                        conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
+                        conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+
+                        _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
-                return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             }
 
         }
@@ -336,34 +374,51 @@
 
 
         [HttpPost]
-        public JsonResult OtroConocimiento([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
+        public ActionResult OtroConocimiento([Bind(Prefix = "ConocimientoGeneral")]ConocimientoGeneralPostulante conocimientoGeneralPostulante)
         {
-
-
-            if (!ModelState.IsValid)
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
-            }
-            if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
-            {
-                conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
+                ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoConocimientoGeneral", "TipoNombreConocimientoGeneral", "NombreConocimientoGeneral", "TipoNivelConocimiento");
+
+                if (!result.IsValid)
+                {
+                    var conocimientoGeneralViewModel = InicializarOtroConocimiento();
+                    conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoGeneralPostulante;
+                    return View(conocimientoGeneralViewModel);
+                }
+                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                {
+                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+
+                }
+                else
+                {
+                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                    conocimientoEdit.TipoNombreConocimientoGeneral = conocimientoGeneralPostulante.TipoNombreConocimientoGeneral;
+                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                    conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
+                    conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
+                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+
+                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
                 
             }
-            else
+            catch (Exception ex)
             {
-                var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                conocimientoEdit.TipoNombreConocimientoGeneral = conocimientoGeneralPostulante.TipoNombreConocimientoGeneral;
-                conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
-                conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
-                conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-
-                _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             }
-            return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
         }
 

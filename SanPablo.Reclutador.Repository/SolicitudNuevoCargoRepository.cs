@@ -57,7 +57,7 @@
                 lcon.Close();
             }
         }
-        public bool verificarCodCodigo(string codigoCargo)
+        public bool verificarCodCodigo(string codigoCargo, int ideSede)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
@@ -69,6 +69,7 @@
                 cmd.Connection = lcon;
 
                 cmd.Parameters.Add("p_codCargo", OracleType.VarChar).Value = codigoCargo;
+                cmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
                 cmd.Parameters.Add("c_retVal", OracleType.Number).Direction = ParameterDirection.ReturnValue;
                 cmd.ExecuteNonQuery();
 

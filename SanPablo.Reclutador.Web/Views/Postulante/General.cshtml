@@ -14,14 +14,21 @@
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
-
-<script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script type="text/javascript">
 
     $(document).ready(function () {
+
+        mostrarMensajeBienvenida();
 
         SanPablo.Numeros('Postulante_NumeroDireccion');
         SanPablo.Numeros('Postulante_NumeroDocumento');
         SanPablo.Numeros('Postulante_TelefonoMovil');
+
+        //SanPablo.Alfanumerico('Postulante_Observacion');
+        //SanPablo.Alfanumerico('Postulante_ReferenciaDireccion');
+        //SanPablo.Alfanumerico('Postulante_NombreZona');
 
         mostrarAlerta();
         actualizarBarra();
@@ -123,16 +130,14 @@
                 data: { date: fecha },
                 success: function (respuesta) {
                     if (!respuesta) {
+                        var msjError = document.getElementById('errorFechaNacimiento');
+                        msjError.style.display = "block";
                         $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
-                        $("#spanMensaje").html('Fecha de nacimiento no válida, el postulante debe ser mayor de edad');
-                        $("#divMensaje").dialog({
-                            title: 'Sistema de Reclutamiento y Selección de Personal',
-                            modal: true,
-                            buttons: {
-                                "Ok": function () { $(this).dialog("close"); }
-                            }
-                        });
 
+                    }
+                    else {
+                        var msjError = document.getElementById('errorFechaNacimiento');
+                        msjError.style.display = "none";
                     }
                 }
             });
@@ -142,29 +147,39 @@
 
     function verificarDocumento() {
         var documento = $('#Postulante_NumeroDocumento').val();
+        var msjError = document.getElementById('mesjErrorDocuemento');
+
         if ((documento != null) && (documento != "")) {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("validarDocumento","Postulante")',
                 data: { dni: documento },
                 success: function (respuesta) {
-                    if (!respuesta)
-                    {
+                    if (!respuesta) {
                         $('#Postulante_NumeroDocumento').val('');
-                        $("#spanMensaje").html('El número de Documento ya existe');
-                        $("#divMensaje").dialog({
-                            title: 'ALERTA!!',
-                            modal: true,
-                            buttons: {
-                                "Ok": function () { $(this).dialog("close"); }
-                            }
-                        });
-
+                        msjError.style.display = "block";
                     }
+                    else { msjError.style.display = "none"; }
+                    
                 }
             });
         }
     }
+
+    function mostrarMensajeBienvenida()
+    {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("IndicadorSession","Postulante")',
+            success: function (respuesta) {
+                if (!respuesta.Resultado) {
+                    MostrarMensaje("Gracias por registrarse. Te recomentamos registrar tus datos en la sección mi CV","SAN PABLO");
+
+                }
+            }
+        });
+    }
+    
 </script>
 }
 <div class="row">
@@ -232,9 +247,12 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número de documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario", @style="text-transform: uppercase", onblur="verificarDocumento();" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario",maxlength="8", @style="text-transform: uppercase", onblur="verificarDocumento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
+                            </div>
+                            <div id="mesjErrorDocuemento" class="tex-error" style="font-size:12px;color:red;display:none;"> 
+                                El nro de documento ya existe.
                             </div>
                         </td>
                     </tr>
@@ -299,6 +317,9 @@
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
+                            <div  id="errorFechaNacimiento" class="tex-error" style="font-size:12px;color:red; display:none;" > 
+                             <span>  Debes ser mayor de edad.</span> 
+                            </div>
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
@@ -316,7 +337,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", @style="text-transform: uppercase" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -330,12 +351,15 @@
                             </div>
                         </td>
                     </tr>
+                    
+                </table>
+                <table style="margin-left:120px;" >
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="taobservaciongeneral">Observación</label>
+                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Observación</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="text-transform: uppercase;width:570px" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Observacion)
                             </div>
@@ -412,14 +436,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.NumeroDireccion)
-                            </div>*@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4" })                           
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.InteriorDireccion)
-                            </div>*@
+                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", style="text-transform: uppercase"})                           
+                            
                         </td>
                     </tr>
                     <tr>
@@ -439,14 +458,10 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase"})
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Manzana)
-                            </div>*@
+                            
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
                             @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Lote)
-                            </div>*@
+                            
                         </td>
                     </tr>
                     <tr>
@@ -465,14 +480,9 @@
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", @style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Bloque)
-                            </div>*@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", @style="text-transform: uppercase" })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.Etapa)
-                            </div>*@
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="2", @style="text-transform: uppercase" })
+                            
                         </td>
                     </tr>
                     <tr>
@@ -535,10 +545,11 @@
                 </table>
                 <div class="formulario-accion">
                     <div class="opciones">
-                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                        @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
                                 
-                         <button type="reset" class="btn">Cancelar</button>
-                        <a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                        <button type="reset" class="btn">Cancelar</button>
+                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                        @*<a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
                     </div>
                 </div>
                 <div style="clear:both"></div>

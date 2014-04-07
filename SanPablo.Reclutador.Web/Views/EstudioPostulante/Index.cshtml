@@ -7,19 +7,21 @@
 }
 
 @section Scripts{
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
 
             mostrarAlerta();
             actualizarBarra();
-            //habilitarPestanas();
 
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "EstudioPostulante")',
                 datatype: 'json',
                 mtype: 'POST',
-                colNames: ['Nivel de estudios', 'Institución', 'Área de Estudios', 'Nivel Alcanzado', 'Fecha Inicio', 'Fecha Fin'],
+                colNames: ['Nivel de estudios', 'Institución', 'Área de Estudios', 'Nivel Alcanzado', 'Desde', 'Hasta'],
                 colModel: [
                         { name: 'TipoEducacion', index: 'TipoEducacion', align: 'left', sortable: false },
                         { name: 'Institucion', index: 'Institucion', align: 'left', sortable: false },
@@ -63,13 +65,14 @@
                             $.post('@Url.Action("Edit", "EstudioPostulante")',
                                 $("#estudioPostulanteForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
-                                        location.reload(true);
+                                        $('#grdList').trigger('reloadGrid');
 
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
+                                        mensj.innerHTML = respuesta.Mensaje;
                                         mensj.style.display = "block";
                                     }
                                 }

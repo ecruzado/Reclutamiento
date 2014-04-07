@@ -1,4 +1,4 @@
-﻿article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
+﻿article,aside,details,figcaption,figure,footer,header,hgroup,menu,navui-dialog-titlebar,section{
 	display: block;
 }
 
@@ -64,6 +64,8 @@ body {
     position: relative;
     border-radius: 6px;
 }
+
+
 
 .widget-title{
     background-color: #f5f4f9;

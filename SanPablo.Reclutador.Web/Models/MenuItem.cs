@@ -27,7 +27,8 @@ namespace SanPablo.Reclutador.Web.Models
                 li.AddCssClass("active");
             }
 
-            li.InnerHtml = string.Format("<a href='{0}'><i id='checkInfo' class='icon-ok' style='visibility:hidden' ></i> {1} </a>", Utils.RelativeWebRoot + controller + "/" + action, text, action, controller);
+            li.InnerHtml = string.Format("<a ><i id='checkInfo' class='icon-ok' style='visibility:hidden' ></i> {1} </a>", Utils.RelativeWebRoot + controller + "/" + action, text, action, controller);
+            //li.InnerHtml = string.Format("<a href='{0}><i id='checkInfo' class='icon-ok' style='visibility:hidden' ></i> {1} </a>");
             return MvcHtmlString.Create(li.ToString());
         }
     }

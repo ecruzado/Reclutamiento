@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string Accion {get; set;}
         public string IndSubDetalle { get; set; }
         public string Valor { get; set; }
+        public string AccionModel { get; set; }
+
 
     }
 }

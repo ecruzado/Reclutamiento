@@ -30,7 +30,10 @@ namespace SanPablo.Reclutador.Entity
         [DataType(DataType.PhoneNumber)]
         public virtual int? NumeroMovilReferencia { get; set; }
         public virtual string TipoCargoTrabajoReferente { get; set; }
-        
+
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\(?([0-9]{2,3})\)?[-. ]?([0-9]{2,3})[-. ]?([0-9]{3,4})$", ErrorMessage = "Número no válido")]
+        [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
         public virtual int? NumeroFijoInstitucionReferente { get; set; }
 
         public virtual int? NumeroAnexoInstitucionReferente { get; set; }

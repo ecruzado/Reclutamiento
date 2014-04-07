@@ -30,6 +30,12 @@
 
         public string Accion { get; set; }
 
+        public int? buscarPregunta { get; set; }
+
+        public int segundos { get; set; }
+
+        public DateTime HoraFin { get; set; }
+
 
     }
 }

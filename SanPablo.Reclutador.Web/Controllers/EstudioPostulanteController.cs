@@ -100,14 +100,16 @@
 
 
         [HttpPost]
-        public JsonResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
+        public ActionResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
+            JsonMessage objJsonMessage = new JsonMessage();
             try
             {
                 if (!ModelState.IsValid)
                 {
-
-                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                    var estudioGeneralViewModel = InicializarEstudio();
+                    estudioGeneralViewModel.Estudio = estudioPostulante;
+                    return View(estudioGeneralViewModel);
                 }
                 if (estudioPostulante.IdeEstudiosPostulante == 0)
                 {
@@ -118,9 +120,14 @@
                         postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                         postulante.agregarEstudio(estudioPostulante);
                         _estudioPostulanteRepository.Add(estudioPostulante);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
                     }
                     else
-                    { return Json(new { msj = false }, JsonRequestBehavior.DenyGet); }
+                    {
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
@@ -136,15 +143,15 @@
                     estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
 
                     _estudioPostulanteRepository.Update(estudioEdit);
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
                 }
-                return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
             }
             catch (Exception ex)
             {
-                string error = string.Format("Error : {0}", ex.Message);
-                Response.StatusCode = 500;
-                Response.Write(error);
-                return Json(new { msj = false, e = error }, JsonRequestBehavior.DenyGet);
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             }
             
         }
@@ -221,9 +228,14 @@
              if (estudioPostulante != null)
             {
                 var listaResultado = new List<DetalleGeneral>();
+                var listaResultadoNiveles = new List<DetalleGeneral>();
                 listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion, estudioPostulante.TipTipoInstitucion));
                 listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
                 estudioPostulanteGeneralViewModel.TipoNombreInstituciones = listaResultado;
+
+                listaResultadoNiveles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion,estudioPostulante.TipoEducacion));
+                //listaResultadoNiveles.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
+                estudioPostulanteGeneralViewModel.NivelesAlcanzados = listaResultadoNiveles;
             }
              return estudioPostulanteGeneralViewModel;
         }

@@ -68,7 +68,6 @@
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoDocumento));
             
             postulanteGeneralViewModel.Nacionalidad = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Nacionalidad));
-            postulanteGeneralViewModel.Nacionalidad.Insert(0,new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
             
             postulanteGeneralViewModel.Sexo = new List<DetalleGeneral>( _detalleGeneralRepository.GetByTipoTabla(TipoTabla.Sexo));
             postulanteGeneralViewModel.Sexo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
@@ -168,9 +167,13 @@
             return View(postulanteGeneralViewModel);
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         [HttpPost]
         public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
         {
+
+            var usuarioExtranet = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            var usuarioSession = usuarioExtranet.CodUsuario.Length <= 15 ? usuarioExtranet.CodUsuario : usuarioExtranet.CodUsuario.Substring(0, 15);
             try
             {
                 PostulanteValidator validator = new PostulanteValidator();
@@ -206,13 +209,13 @@
                 if (IdePostulante == 0)
                 {
                     model.Postulante.EstadoActivo = IndicadorActivo.Activo;
-                    model.Postulante.UsuarioCreacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                    model.Postulante.UsuarioCreacion = usuarioSession;
                     model.Postulante.FechaCreacion = FechaCreacion;
+                    model.Postulante.Correo = usuarioExtranet.CodUsuario;
                     _postulanteRepository.Add(model.Postulante);
                     IdePostulante = model.Postulante.IdePostulante;
 
-                    var ideUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
+                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(usuarioExtranet.IdUsuario));
                     usuario.IdePostulante = IdePostulante;
                     usuario.IndicadorPostulante = Indicador.Si;
                     _usuarioRepository.Update(usuario);
@@ -345,18 +348,17 @@
 
         public ActionResult IndicadorSession()
         {
-            ActionResult result = null;
-            bool indicador = false;
+            JsonMessage objJson = new JsonMessage();
+            objJson.Resultado = false;
             if (IdePostulante != 0)
             {
-                indicador = true;
+                objJson.Resultado = true;
             }
             else
             {
-                indicador = false;
+                objJson.Resultado = false;
             }
-            result = Json(indicador);
-            return result;
+            return Json(objJson);
         }
 
         [HttpPost]
@@ -470,6 +472,7 @@
             return View(postulanteGeneralViewModel);
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         [HttpPost]
         public ActionResult DatosComplementarios([Bind(Prefix = "Postulante")]Postulante postulante)
         {
@@ -496,7 +499,9 @@
                 postulanteEdit.IndicadorReubicarseInterior = postulante.IndicadorReubicarseInterior;
                 postulanteEdit.IndicadorParientesCHSP = postulante.IndicadorParientesCHSP;
                 postulanteEdit.DescripcionOtroMedio = postulante.DescripcionOtroMedio;
-                postulanteEdit.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                var usuarioSession = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+
+                postulanteEdit.UsuarioModificacion = usuarioSession.CodUsuario.Length <= 15 ? usuarioSession.CodUsuario : usuarioSession.CodUsuario.Substring(0, 15);
                 postulanteEdit.FechaModificacion = FechaModificacion;
 
                 _postulanteRepository.Update(postulanteEdit);

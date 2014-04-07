@@ -80,7 +80,7 @@
             colNames: ['Valor', 'Descripcion', 'Estado'],
             colModel: [
                     { name: 'Valor', index: 'Valor', align: 'center', hidden: false, width: 100 },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 380 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 250 },
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 100 },
 
             ],
@@ -185,7 +185,7 @@
 
             <td class="colEtiqueta">
                 @Html.TextBoxFor(model => model.TablaSubDetalle.Accion, new { style = "display : none;" })
-                @Html.TextBoxFor(Model => Model.TablaSubDetalle.IdeGeneral, new { style = "display : none;" })
+                @Html.TextBoxFor(model => model.TablaSubDetalle.IdeGeneral, new { style = "display : none;" })
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Valor <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
@@ -198,7 +198,6 @@
         <tr>
 
             <td class="colEtiqueta">
-                @*@Html.HiddenFor(model => model.Evaluacion.IdeEvaluacionCargo)*@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
@@ -221,19 +220,18 @@
             </td> 
         </tr>
     </table>
-    
-    <div class="grilla-opciones">
-        <div class="opciones">
-            @*<a id="btnNuevoSubDetalle" class="btn btn-small btn-info" title="Nuevo"><i class="icon-plus icon-white"></i></a>*@  
-            @*<a id="btnGuardarSubDetalle" class="btn btn-small btn-info" title="Guardar"><i class="icon-edit icon-white"></i></a>*@
-            @*<a id="btnEliminarSubDetalle" class="btn btn-small btn-info" title="Desactivar"><i class="icon-remove icon-white"></i></a>*@                                  
-            <a id="btnNuevoSubDetalle" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
-            <a id="btnGuardarSubDetalle" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
-            <a id="btnEliminarSubDetalle" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
-        </div>
-        <div style="clear:both"></div>
+    if (Accion.Editar == Model.AccionModel)
+    {
+        <div class="grilla-opciones">
+            <div class="opciones">
+                <a id="btnNuevoSubDetalle" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
+                <a id="btnGuardarSubDetalle" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
+                <a id="btnEliminarSubDetalle" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
+            </div>
+            <div style="clear:both"></div>
         
-    </div>
+        </div>
+    }
     <div class="tabla-datos">
             <table id="grdListSubDetalle" ondblclick="mostrarfilaSubDetalle()">
             </table>

@@ -8,6 +8,13 @@ namespace SanPablo.Reclutador.Repository.Interface
     public interface IReclutamientoPersonaExamenCategoriaRepository : IRepository<ReclutamientoPersonaExamenCategoria>
     {
         /// <summary>
+        /// obtener el identificador de la categoria
+        /// </summary>
+        /// <param name="idReclutaPersonaExamenCategoria"></param>
+        /// <returns></returns>
+        int obtenerIdentificadorCategoria(int idReclutaPersonaExamenCategoria);
+
+        /// <summary>
         /// genera los examens por categorias
         /// </summary>
         /// <param name="idReclutaPersona"></param>

@@ -410,7 +410,8 @@
             {
 
                 var solicitudCargo = new SolicitudNuevoCargo();
-                solicitudCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == codigo);
+                int ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                solicitudCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == codigo && x.IdeSede == ideSede);
                 objJsonMessage.Mensaje = solicitudCargo.IdeSolicitudNuevoCargo.ToString();
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
@@ -468,7 +469,8 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
-                objJsonMessage.Resultado =  _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo);
+                int ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                objJsonMessage.Resultado =  _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo, ideSede);
                 objJsonMessage.Mensaje = "Codigo de cargo ya existe";
                 return Json(objJsonMessage);
             }

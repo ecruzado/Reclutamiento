@@ -37,11 +37,11 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual("00")
                 .WithMessage("Seleccione el nombre de conocimiento");
 
-            RuleFor(x => x.NombreConocimientoGeneral)
-                .NotEmpty().When(x => x.TipoNombreConocimientoGeneral.Equals("XX"))
-                .WithMessage("Ingrese la descripción del otro conocimiento")
-                .Length(3, 50)
-                .WithMessage("El máximo de caracteres permitidos es 50");
+            //RuleFor(x => x.NombreConocimientoGeneral)
+            //    .NotEmpty().When(x => x.TipoNombreConocimientoGeneral.Equals("XX"))
+            //    .WithMessage("Ingrese la descripción del otro conocimiento")
+            //    .Length(3, 50)
+            //    .WithMessage("Máx. 50 caracteres");
 
         }
 

@@ -354,15 +354,16 @@ namespace SanPablo.Reclutador.Web.Core
                 System.Web.HttpContext.Current.Session.Add(ConstanteSesion.HoraInicioEvaluacion, value);
             }
         }
-        protected int Numeracion
+
+        protected int IdeReclutamientoExamenCategoria
         {
             get
             {
-                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.Numeracion];
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.IdeReclutamientoExamenCategoria];
             }
             set
             {
-                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Numeracion, value);
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.IdeReclutamientoExamenCategoria, value);
             }
         }
         

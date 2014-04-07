@@ -65,8 +65,8 @@
                                 item.TiempoDeServicio,
                                 item.DescripcionMotivoCese,
                                 item.NombreReferente.ToUpper(),
-                                item.DescripcionCargoReferente,
                                 item.NumeroMovilReferencia.ToString(),
+                                item.DescripcionCargoReferente,
                                 item.NumeroFijoInstitucionReferente.ToString(),
                                 item.NumeroAnexoInstitucionReferente.ToString()
                             }
@@ -182,7 +182,7 @@
         public ActionResult calcularTiempoServicio(DateTime inicio, DateTime fin)
         {
             ActionResult result = null;
-            if (fin == null)
+            if (fin.Year == 1000 )
             {
                 fin = DateTime.Now;
             }
