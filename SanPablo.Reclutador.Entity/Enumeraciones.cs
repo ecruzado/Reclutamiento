@@ -27,7 +27,7 @@
         //EXPERIENCIA
         TipoCargo = 24,
         TipoMotivoCese = 25,
-        TipoCargoReferente = 19,
+        TipoCargoReferente = 24,
 
         //CONOCIMIENTOS GENERALES
         TipoConocimientoOfimatica = 27,

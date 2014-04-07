@@ -29,6 +29,16 @@
         string ValidaSeleccion(ReclutamientoPersona obj);
         
         void UpdateEstadoPostulante(ReclutamientoPersona obj);
+
+        DataTable getDataCvPostulante(Postulante obj);
+        DataTable getDataCvNivelAcademico(Postulante obj);
+        DataTable getDataCvExperiencias(Postulante obj);
+        DataTable getDataCvConOfimatica(Postulante obj);
+        DataTable getDataCvConIdiomas(Postulante obj);
+        DataTable getDataCvConOtros(Postulante obj);
+        DataTable getDataCvParientes(Postulante obj);
+        DataTable getDataCvDiscapacidad(Postulante obj);
+
     }
 
 

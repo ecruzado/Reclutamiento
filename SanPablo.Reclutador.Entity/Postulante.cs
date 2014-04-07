@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 
 namespace SanPablo.Reclutador.Entity
@@ -155,5 +156,42 @@ namespace SanPablo.Reclutador.Entity
                 return false;
             }
         }
+
+
+        /*-------------CvPostulante----------------------*/
+        /// <summary>
+        /// lista de postulantes para el Cv del postulante
+        /// </summary>
+        public virtual DataTable CurPostulante  { get; set; }
+        /// <summary>
+        /// lista de nivel academico para el Cv del postulante
+        /// </summary>
+        public virtual DataTable CurNivelAcademico { get; set; }
+        /// <summary>
+        /// lista de experiencias para el Cv del postulante
+        /// </summary>
+        public virtual DataTable CurExperiencia { get; set; }
+        /// <summary>
+        /// lista de conocimiento de ofimatico para el Cv del postulante
+        /// </summary>
+        public virtual DataTable CurConOfimatica { get; set; }
+        /// <summary>
+        /// lista de conocimientos de Idiomas para el Cv del postulante
+        /// </summary>
+        public virtual DataTable CurConIdioma { get; set; }
+        /// <summary>
+        /// lista de otros conocimientos para el postulante
+        /// </summary>
+        public virtual DataTable CurOtrosCon { get; set; }
+        /// <summary>
+        /// lista de parientes para el cv del postulante
+        /// </summary>
+        public virtual DataTable CurParientes { get; set; }
+        /// <summary>
+        /// lista de discapacidad para el cv del postulante
+        /// </summary>
+        public virtual DataTable CurDiscapacidad { get; set; }
+        /*-------------CvPostulante----------------------*/
+
     }
 }
