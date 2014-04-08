@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsExamenPostulante" targetNamespace="http://tempuri.org/dsExamenPostulante.xsd" xmlns:mstns="http://tempuri.org/dsExamenPostulante.xsd" xmlns="http://tempuri.org/dsExamenPostulante.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsExamenPostulante" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsExamenPostulante" msprop:Generator_UserDSName="dsExamenPostulante">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtExamen" msprop:Generator_TableClassName="dtExamenDataTable" msprop:Generator_TableVarName="tabledtExamen" msprop:Generator_RowChangedName="dtExamenRowChanged" msprop:Generator_TablePropName="dtExamen" msprop:Generator_RowDeletingName="dtExamenRowDeleting" msprop:Generator_RowChangingName="dtExamenRowChanging" msprop:Generator_RowEvHandlerName="dtExamenRowChangeEventHandler" msprop:Generator_RowDeletedName="dtExamenRowDeleted" msprop:Generator_RowClassName="dtExamenRow" msprop:Generator_UserTableName="dtExamen" msprop:Generator_RowEvArgName="dtExamenRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="IdeReclutaPersonaExamen" msprop:Generator_ColumnVarNameInTable="columnIdeReclutaPersonaExamen" msprop:Generator_ColumnPropNameInRow="IdeReclutaPersonaExamen" msprop:Generator_ColumnPropNameInTable="IdeReclutaPersonaExamenColumn" msprop:Generator_UserColumnName="IdeReclutaPersonaExamen" type="xs:int" minOccurs="0" />
+              <xs:element name="NombreExamen" msprop:Generator_ColumnVarNameInTable="columnNombreExamen" msprop:Generator_ColumnPropNameInRow="NombreExamen" msprop:Generator_ColumnPropNameInTable="NombreExamenColumn" msprop:Generator_UserColumnName="NombreExamen" type="xs:string" minOccurs="0" />
+              <xs:element name="DescripcionExamen" msprop:Generator_ColumnVarNameInTable="columnDescripcionExamen" msprop:Generator_ColumnPropNameInRow="DescripcionExamen" msprop:Generator_ColumnPropNameInTable="DescripcionExamenColumn" msprop:Generator_UserColumnName="DescripcionExamen" type="xs:string" minOccurs="0" />
+              <xs:element name="TipoExamen" msprop:Generator_ColumnVarNameInTable="columnTipoExamen" msprop:Generator_ColumnPropNameInRow="TipoExamen" msprop:Generator_ColumnPropNameInTable="TipoExamenColumn" msprop:Generator_UserColumnName="TipoExamen" type="xs:string" minOccurs="0" />
+              <xs:element name="NotaFinal" msprop:Generator_ColumnVarNameInTable="columnNotaFinal" msprop:Generator_ColumnPropNameInRow="NotaFinal" msprop:Generator_ColumnPropNameInTable="NotaFinalColumn" msprop:Generator_UserColumnName="NotaFinal" type="xs:int" minOccurs="0" />
+              <xs:element name="NombrePostulante" msprop:Generator_ColumnVarNameInTable="columnNombrePostulante" msprop:Generator_ColumnPropNameInRow="NombrePostulante" msprop:Generator_ColumnPropNameInTable="NombrePostulanteColumn" msprop:Generator_UserColumnName="NombrePostulante" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dtCategoriaExamen" msprop:Generator_TableClassName="dtCategoriaExamenDataTable" msprop:Generator_TableVarName="tabledtCategoriaExamen" msprop:Generator_TablePropName="dtCategoriaExamen" msprop:Generator_RowDeletingName="dtCategoriaExamenRowDeleting" msprop:Generator_RowChangingName="dtCategoriaExamenRowChanging" msprop:Generator_RowEvHandlerName="dtCategoriaExamenRowChangeEventHandler" msprop:Generator_RowDeletedName="dtCategoriaExamenRowDeleted" msprop:Generator_UserTableName="dtCategoriaExamen" msprop:Generator_RowChangedName="dtCategoriaExamenRowChanged" msprop:Generator_RowEvArgName="dtCategoriaExamenRowChangeEvent" msprop:Generator_RowClassName="dtCategoriaExamenRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="IdeReclutamientoExamenCategoria" msprop:Generator_ColumnVarNameInTable="columnIdeReclutamientoExamenCategoria" msprop:Generator_ColumnPropNameInRow="IdeReclutamientoExamenCategoria" msprop:Generator_ColumnPropNameInTable="IdeReclutamientoExamenCategoriaColumn" msprop:Generator_UserColumnName="IdeReclutamientoExamenCategoria" type="xs:int" />
+              <xs:element name="IdeReclutamientoExamen" msprop:Generator_ColumnVarNameInTable="columnIdeReclutamientoExamen" msprop:Generator_ColumnPropNameInRow="IdeReclutamientoExamen" msprop:Generator_ColumnPropNameInTable="IdeReclutamientoExamenColumn" msprop:Generator_UserColumnName="IdeReclutamientoExamen" type="xs:int" minOccurs="0" />
+              <xs:element name="NroPreguntas" msprop:Generator_ColumnVarNameInTable="columnNroPreguntas" msprop:Generator_ColumnPropNameInRow="NroPreguntas" msprop:Generator_ColumnPropNameInTable="NroPreguntasColumn" msprop:Generator_UserColumnName="NroPreguntas" type="xs:int" minOccurs="0" />
+              <xs:element name="NotaExamenCategoria" msprop:Generator_ColumnVarNameInTable="columnNotaExamenCategoria" msprop:Generator_ColumnPropNameInRow="NotaExamenCategoria" msprop:Generator_ColumnPropNameInTable="NotaExamenCategoriaColumn" msprop:Generator_UserColumnName="NotaExamenCategoria" type="xs:int" minOccurs="0" />
+              <xs:element name="NombreCategoria" msprop:Generator_ColumnVarNameInTable="columnNombreCategoria" msprop:Generator_ColumnPropNameInRow="NombreCategoria" msprop:Generator_ColumnPropNameInTable="NombreCategoriaColumn" msprop:Generator_UserColumnName="NombreCategoria" type="xs:string" minOccurs="0" />
+              <xs:element name="DescripcionCategoria" msprop:Generator_ColumnVarNameInTable="columnDescripcionCategoria" msprop:Generator_ColumnPropNameInRow="DescripcionCategoria" msprop:Generator_ColumnPropNameInTable="DescripcionCategoriaColumn" msprop:Generator_UserColumnName="DescripcionCategoria" type="xs:string" minOccurs="0" />
+              <xs:element name="Tiempo" msprop:Generator_ColumnVarNameInTable="columnTiempo" msprop:Generator_ColumnPropNameInRow="Tiempo" msprop:Generator_ColumnPropNameInTable="TiempoColumn" msprop:Generator_UserColumnName="Tiempo" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dtCriterioAlternativa" msprop:Generator_TableClassName="dtCriterioAlternativaDataTable" msprop:Generator_TableVarName="tabledtCriterioAlternativa" msprop:Generator_TablePropName="dtCriterioAlternativa" msprop:Generator_RowDeletingName="dtCriterioAlternativaRowDeleting" msprop:Generator_RowChangingName="dtCriterioAlternativaRowChanging" msprop:Generator_RowEvHandlerName="dtCriterioAlternativaRowChangeEventHandler" msprop:Generator_RowDeletedName="dtCriterioAlternativaRowDeleted" msprop:Generator_UserTableName="dtCriterioAlternativa" msprop:Generator_RowChangedName="dtCriterioAlternativaRowChanged" msprop:Generator_RowEvArgName="dtCriterioAlternativaRowChangeEvent" msprop:Generator_RowClassName="dtCriterioAlternativaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="IdeReclutamientoCriterio" msprop:Generator_ColumnVarNameInTable="columnIdeReclutamientoCriterio" msprop:Generator_ColumnPropNameInRow="IdeReclutamientoCriterio" msprop:Generator_ColumnPropNameInTable="IdeReclutamientoCriterioColumn" msprop:Generator_UserColumnName="IdeReclutamientoCriterio" type="xs:int" />
+              <xs:element name="IdeReclutamientoExamenCategoria" msprop:Generator_ColumnVarNameInTable="columnIdeReclutamientoExamenCategoria" msprop:Generator_ColumnPropNameInRow="IdeReclutamientoExamenCategoria" msprop:Generator_ColumnPropNameInTable="IdeReclutamientoExamenCategoriaColumn" msprop:Generator_UserColumnName="IdeReclutamientoExamenCategoria" type="xs:int" minOccurs="0" />
+              <xs:element name="Pregunta" msprop:Generator_ColumnVarNameInTable="columnPregunta" msprop:Generator_ColumnPropNameInRow="Pregunta" msprop:Generator_ColumnPropNameInTable="PreguntaColumn" msprop:Generator_UserColumnName="Pregunta" type="xs:string" minOccurs="0" />
+              <xs:element name="TipoModo" msprop:Generator_ColumnVarNameInTable="columnTipoModo" msprop:Generator_ColumnPropNameInRow="TipoModo" msprop:Generator_ColumnPropNameInTable="TipoModoColumn" msprop:Generator_UserColumnName="TipoModo" type="xs:string" minOccurs="0" />
+              <xs:element name="ImagenCriterio" msprop:Generator_ColumnVarNameInTable="columnImagenCriterio" msprop:Generator_ColumnPropNameInRow="ImagenCriterio" msprop:Generator_ColumnPropNameInTable="ImagenCriterioColumn" msprop:Generator_UserColumnName="ImagenCriterio" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="PuntajeCriterio" msprop:Generator_ColumnVarNameInTable="columnPuntajeCriterio" msprop:Generator_ColumnPropNameInRow="PuntajeCriterio" msprop:Generator_ColumnPropNameInTable="PuntajeCriterioColumn" msprop:Generator_UserColumnName="PuntajeCriterio" type="xs:string" minOccurs="0" />
+              <xs:element name="IdeAlternativa" msprop:Generator_ColumnVarNameInTable="columnIdeAlternativa" msprop:Generator_ColumnPropNameInRow="IdeAlternativa" msprop:Generator_ColumnPropNameInTable="IdeAlternativaColumn" msprop:Generator_UserColumnName="IdeAlternativa" type="xs:string" minOccurs="0" />
+              <xs:element name="Alternativa" msprop:Generator_ColumnVarNameInTable="columnAlternativa" msprop:Generator_ColumnPropNameInRow="Alternativa" msprop:Generator_ColumnPropNameInTable="AlternativaColumn" msprop:Generator_UserColumnName="Alternativa" type="xs:string" minOccurs="0" />
+              <xs:element name="ImagenAlternativa" msprop:Generator_ColumnVarNameInTable="columnImagenAlternativa" msprop:Generator_ColumnPropNameInRow="ImagenAlternativa" msprop:Generator_ColumnPropNameInTable="ImagenAlternativaColumn" msprop:Generator_UserColumnName="ImagenAlternativa" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="Peso" msprop:Generator_ColumnVarNameInTable="columnPeso" msprop:Generator_ColumnPropNameInRow="Peso" msprop:Generator_ColumnPropNameInTable="PesoColumn" msprop:Generator_UserColumnName="Peso" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="dtExamenKey1">
+      <xs:selector xpath=".//mstns:dtExamen" />
+      <xs:field xpath="mstns:IdeReclutaPersonaExamen" />
+    </xs:unique>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:dtCategoriaExamen" />
+      <xs:field xpath="mstns:IdeReclutamientoExamenCategoria" />
+    </xs:unique>
+    <xs:unique name="dtCriterioAlternativa_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:dtCriterioAlternativa" />
+      <xs:field xpath="mstns:IdeReclutamientoCriterio" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="dtCategoriaExamen_dtExamen" msdata:parent="dtCategoriaExamen" msdata:child="dtExamen" msdata:parentkey="IdeReclutamientoExamen" msdata:childkey="IdeReclutaPersonaExamen" msprop:Generator_UserChildTable="dtExamen" msprop:Generator_ChildPropName="GetdtExamenRows" msprop:Generator_UserRelationName="dtCategoriaExamen_dtExamen" msprop:Generator_RelationVarName="relationdtCategoriaExamen_dtExamen" msprop:Generator_UserParentTable="dtCategoriaExamen" msprop:Generator_ParentPropName="dtCategoriaExamenRow" />
+      <msdata:Relationship name="dtCriterioAlternativa_dtCategoriaExamen" msdata:parent="dtCriterioAlternativa" msdata:child="dtCategoriaExamen" msdata:parentkey="IdeReclutamientoExamenCategoria" msdata:childkey="IdeReclutamientoExamenCategoria" msprop:Generator_UserChildTable="dtCategoriaExamen" msprop:Generator_ChildPropName="GetdtCategoriaExamenRows" msprop:Generator_UserRelationName="dtCriterioAlternativa_dtCategoriaExamen" msprop:Generator_RelationVarName="relationdtCriterioAlternativa_dtCategoriaExamen" msprop:Generator_UserParentTable="dtCriterioAlternativa" msprop:Generator_ParentPropName="dtCriterioAlternativaRow" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

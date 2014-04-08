@@ -51,17 +51,19 @@
 
             $('select#Estudio_TipoNivelAlcanzado').change(function () {
                 var tipoNivel = $(this).val();
+                var msjError = document.getElementById('msjFechaFin');
                 if ((tipoNivel == "05") || (tipoNivel == "08") || (tipoNivel == "12") || (tipoNivel == "18")) {
 
                     document.getElementById("chbIndEstudiando").checked = true;
                    // $('#chbIndEstudiando').attr("disabled", "disabled");
-                    $('#Estudio_FechaEstudioFin').val("");
-                    $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
+                    $('#Estudio_FechaFin').val("");
+                    $('#Estudio_FechaFin').attr("disabled", "disabled");
+                    msjError.style.display = "none";
                 }
                 else {
                     document.getElementById("chbIndEstudiando").checked = false;
                    // $('#chbIndEstudiando').removeAttr("disabled", "disabled");
-                    $('#Estudio_FechaEstudioFin').removeAttr("disabled");
+                    $('#Estudio_FechaFin').removeAttr("disabled");
                 }
             })
 
@@ -108,12 +110,12 @@
 
             $('#chbIndEstudiando').change(function () {
                 if ($(this).is(":checked")) {
-                    $('#Estudio_FechaEstudioFin').val('');
-                    $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
+                    $('#Estudio_FechaFin').val('');
+                    $('#Estudio_FechaFin').attr("disabled", "disabled");
                     
                 }
                 else {
-                    $('#Estudio_FechaEstudioFin').removeAttr("disabled");
+                    $('#Estudio_FechaFin').removeAttr("disabled");
                 }
 
             })
@@ -174,6 +176,33 @@
             var campoArea = document.getElementById('tipoArea');
             labelArea.style.display = "none";
             campoArea.style.display = "none";
+        }
+
+        function validarFechaInicio()
+        {
+            var msjError = document.getElementById('msjFechaInicio');
+            var fechaInicio = $("#Estudio_FechaInicio").val();
+            if (fechaInicio.substring(2, 3) != "/") {
+                msjError.style.display = "block";
+                msjError.innerHTML = "Ingresar en el formato 01/2000";
+                $("#Estudio_FechaInicio").val("");
+            }
+            else {
+                msjError.style.display = "none";
+            }
+        }
+
+        function validarFechaFin() {
+            var msjError = document.getElementById('msjFechaFin');
+            var fechaFin = $("#Estudio_FechaFin").val();
+            if (fechaFin.substring(2, 3) != "/") {
+                msjError.style.display = "block";
+                msjError.innerHTML = "Ingresar en el formato 01/2000";
+                $("#Estudio_FechaFin").val("");
+            }
+            else {
+                msjError.style.display = "none";
+            }
         }
     </script>
 @using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))
@@ -261,10 +290,13 @@
                 <label class="etiquetaFormulario"> Desde <span class="text-error">*</span></label>
             </td>
             <td class="colInput" id="txtfechainicio">
-                @Html.EditorFor(model => model.Estudio.FechaEstudioInicio, new { @value = ""})
+                @*@Html.EditorFor(model => model.Estudio.FechaEstudioInicio, new { @value = ""})*@
+                @Html.TextBoxFor(model =>model.Estudio.FechaInicio, new {placeholder = "01/2000", onblur="validarFechaInicio();"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioInicio)
+                @Html.ValidationMessageFor(model => model.Estudio.FechaInicio)
                 </div>
+                @*<div id="msjFechaInicio" class="tex-error" style="font-size:12px;color:red;display:none;"> 
+                </div>*@
             </td>
         </tr>
         <tr>
@@ -272,9 +304,12 @@
                 <label class="etiquetaFormulario" > Hasta </label>
             </td>
             <td class="colInput">
-                @Html.EditorFor(model => model.Estudio.FechaEstudioFin)
+                @Html.TextBoxFor(model =>model.Estudio.FechaFin, new {placeholder = "01/2000",  onblur="validarFechaFin();"})
+                @*@Html.EditorFor(model => model.Estudio.FechaEstudioFin)*@
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Estudio.FechaEstudioFin)
+                @Html.ValidationMessageFor(model => model.Estudio.FechaFin)
+                </div>
+               <div id="msjFechaFin" class="tex-error" style="font-size:12px;color:red;display:none;"> 
                 </div>
             </td>
             <td>

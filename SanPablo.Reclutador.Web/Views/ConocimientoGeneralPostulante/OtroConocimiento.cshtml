@@ -85,7 +85,7 @@
                 <label class="etiquetaFormulario" id="labelOtros" style =" display:none;">Otros </label>
             </td>
             <td class="colInput;input-xxlarge">
-                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new { @style="text-transform: uppercase; display:none;"})
+                    @Html.TextBoxFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral, new {maxlength="50", @style="text-transform: uppercase; display:none;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.ConocimientoGeneral.NombreConocimientoGeneral)
                 </div>

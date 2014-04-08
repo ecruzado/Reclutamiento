@@ -58,17 +58,18 @@
                             {
                                 item.NombreEmpresa.ToUpper(),
                                 item.DescripcionCargoTrabajo.ToUpper(),
-                                String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoInicio),
-                                item.IndicadorActualmenteTrabajo== "S"?"Actualmente": String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoFin),
+                                //String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoInicio),
+                                item.FechaInicio,
+                                item.IndicadorActualmenteTrabajo== "S"?"Actualmente": item.FechaFin,
                                 //item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
-                                item.TiempoDeServicio,
-                                item.DescripcionMotivoCese,
+                                item.TiempoDeServicio == null?"":item.TiempoDeServicio,
+                                item.DescripcionMotivoCese == null?"":item.DescripcionMotivoCese,
                                 item.NombreReferente.ToUpper(),
-                                item.NumeroMovilReferencia.ToString(),
-                                item.DescripcionCargoReferente,
-                                item.NumeroFijoInstitucionReferente.ToString(),
-                                item.NumeroAnexoInstitucionReferente.ToString()
+                                item.NumeroMovilReferencia == null?"":item.NumeroMovilReferencia.ToString(),
+                                item.DescripcionCargoReferente == null?"":item.DescripcionCargoReferente,
+                                item.NumeroFijoInstitucionReferente == null?"":item.NumeroFijoInstitucionReferente.ToString(),
+                                item.NumeroAnexoInstitucionReferente == null?"":item.NumeroAnexoInstitucionReferente.ToString()
                             }
                     }).ToArray();
 
@@ -179,15 +180,19 @@
         }
 
         [HttpPost]
-        public ActionResult calcularTiempoServicio(DateTime inicio, DateTime fin)
+        public ActionResult calcularTiempoServicio(string inicio, string fin)
         {
+            DateTime fechaInicio = Convert.ToDateTime(inicio);
+            DateTime fechaFin = Convert.ToDateTime(fin);
+
             ActionResult result = null;
-            if (fin.Year == 1000 )
+
+            if (fechaFin.Year == 1000)
             {
-                fin = DateTime.Now;
+                fechaFin = DateTime.Now;
             }
 
-            var days = fin - inicio;
+            var days = fechaFin - fechaInicio;
 
             int anhos = days.Days / 365;
             int resto = days.Days % 365;

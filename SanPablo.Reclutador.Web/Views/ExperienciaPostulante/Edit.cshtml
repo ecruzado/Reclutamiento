@@ -24,7 +24,6 @@
                 habilitarOtro(tipoNombre);
             })
 
-
             //actualmente trabajando
             $('#indActuaTrabajando').change(function () {
                 habilitarFecha($(this).is(":checked"));
@@ -32,38 +31,58 @@
             })
 
             $(function () {
-                $('#Experiencia_FechaTrabajoFin').blur(function () {
-                    calcularTiempoServicio();
+                $('#Experiencia_FechaFin').blur(function () {
+                    validarFecha();
                 });
             });
         });
             
-        function calcularTiempoServicio() {
-            var fechaInicio = $('#Experiencia_FechaTrabajoInicio').val();
-            var fechaFin = $('#Experiencia_FechaTrabajoFin').val();
-            //if (fechaInicio > fechaFin) {
-            //    var mensaje = document.getElementById('msjErrorFecha');
-            //    mensaje.style.display = "block";
-            //}
-            //else {
-            //    mensaje.style.display = "none";
-            //}
-            if ((fechaInicio != null) && (fechaInicio != "")) {
-                if (( fechaFin == null) || (fechaFin == ""))
-                {
-                    fechaFin = "1000-01-01";
+        function validarFecha(){
+            var fechaInicio = $('#Experiencia_FechaInicio').val();
+            var fechaFin = $('#Experiencia_FechaFin').val();
+            var mensaje = document.getElementById('msjErrorFecha');
+            fechaInicio = "01/" + fechaInicio;
+            fechaFin = "01/" + fechaFin;
+            if ((fechaFin != null) || (fechaFin != "")) {
+                if (fechaInicio > fechaFin) {
+                    mensaje.style.display = "block";
+                    $('#Experiencia_FechaFin').val("");
                 }
+                else {
+
+                    mensaje.style.display = "none";
+                    calcularTiempoServicio();
+                }
+            }
+            else
+            {
+                calcularTiempoServicio();
+            }
+        }
+        function calcularTiempoServicio() {
+            var fechaInicio = $('#Experiencia_FechaInicio').val();
+            var fechaFin = $('#Experiencia_FechaFin').val();
+
+            if ((fechaInicio != null) && (fechaInicio != "")) {
+                if ((fechaFin == null) || (fechaFin == "")) {
+                    fechaFin = "01/1000";
+                }
+                fechaInicio = "01/" + fechaInicio;
+                fechaFin = "01/" + fechaFin;
+
                 $.ajax({
                     type: "POST",
                     async: "false",
                     url: '@Url.Action("calcularTiempoServicio","ExperienciaPostulante")',
-                    data: { inicio: fechaInicio , fin: fechaFin},
-                success: function (respuesta) {
-                    $('#Experiencia_TiempoDeServicio').val(respuesta);
-                }
-            });
+                    data: { inicio: fechaInicio, fin: fechaFin },
+                    success: function (respuesta) {
+                        $('#Experiencia_TiempoDeServicio').val(respuesta);
+                    }
+                });
+            }
         }
-    }
+        
+    
 
         function habilitarOtro(tipoNombre) {
             var campo = document.getElementById("NombreCargo_otro");
@@ -81,13 +100,13 @@
         function habilitarFecha(opcion)
         {
             if (opcion == true) {
-                $('#Experiencia_FechaTrabajoFin').val('');
+                $('#Experiencia_FechaFin').val('');
                 calcularTiempoServicio();
-                $('#Experiencia_FechaTrabajoFin').attr("readonly", true);
+                $('#Experiencia_FechaFin').attr("readonly", true);
                 $('#Experiencia_TipoMotivoCese').attr("readonly", true);
             }
             else {
-                $('#Experiencia_FechaTrabajoFin').attr("readonly",false);
+                $('#Experiencia_FechaFin').attr("readonly",false);
                 $('#Experiencia_TipoMotivoCese').attr("readonly",false);
             }
         }
@@ -142,21 +161,21 @@
                 <label class="etiquetaFormulario" > Fecha inicio <span class="text-error">*</span></label>
               </td>
               <td class="colInput">
-                  @Html.EditorFor(model => model.Experiencia.FechaTrabajoInicio, new {@class = "datepicker"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
-                      @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoInicio)
+                      @Html.ValidationMessageFor(model => model.Experiencia.FechaInicio)
                   </div>
               </td>
               <td class="colEtiqueta">
                 <label class="etiquetaFormulario" style="width:160px"> Fecha fin </label>
               </td>
               <td class="colInput">
-                  @Html.EditorFor(model => model.Experiencia.FechaTrabajoFin, new { @class = "datepicker"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaFin, new { placeholder = "01/2000"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
-                    @Html.ValidationMessageFor(model => model.Experiencia.FechaTrabajoFin)
+                    @Html.ValidationMessageFor(model => model.Experiencia.FechaFin)
                   </div>
                   <div id="msjErrorFecha" class="tex-error" style="font-size:12px;color:red;display:none;"> 
-                    Verifique las fechas ingresadas.
+                    Verifique que la fecha final sea posterior a la fecha de inicio.
                   </div>
               </td>
               <td>
@@ -211,7 +230,7 @@
                 <label class="etiquetaFormulario" style="width:160px" > Nombre de referencia <span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
-                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", @style="text-transform: uppercase"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
                 </div>
@@ -232,7 +251,7 @@
                 <label class="etiquetaFormulario" > Celular de referencia  </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia)
+                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia, new { maxlength="10"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
                 </div>
@@ -252,7 +271,7 @@
                 <label class="etiquetaFormulario" > Telefono de institución </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px", placeholder="(054)-000-0000" })
+                @Html.TextBoxFor(model => model.Experiencia.NumeroFijoInstitucionReferente, new { @style = "width: 100px",maxlength="14" ,placeholder="(054)-000-0000" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroFijoInstitucionReferente)
                 </div>

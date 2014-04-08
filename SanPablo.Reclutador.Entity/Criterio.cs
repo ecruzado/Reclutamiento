@@ -36,6 +36,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int Tiempo { get; set; }
         public virtual string IndRespuesta { get; set; }
         public virtual int IdeCriterioPorSubcategoria { get; set; }
+        public virtual int NotaCriterio { get; set; }
 
         public Criterio()
         {

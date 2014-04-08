@@ -29,7 +29,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoVia { get; set; }
         public virtual string NombreVia { get; set; }
         public virtual int? NumeroDireccion { get; set; }
-        public virtual int? InteriorDireccion { get; set; }
+        public virtual string InteriorDireccion { get; set; }
         public virtual string Manzana { get; set; }
         public virtual string Lote { get; set; }
         public virtual string Bloque { get; set; }
@@ -46,8 +46,7 @@ namespace SanPablo.Reclutador.Entity
         //
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{2,3})\)?[-. ]?([0-9]{2,3})[-. ]?([0-9]{3,4})$", ErrorMessage = "Número no válido")]
-        [DisplayFormat(DataFormatString = "{0:###-###-####}", ApplyFormatInEditMode = true)]
+        [RegularExpression(@"^\(?([0-9]{2,3})\)?([-]{1})([0-9]{3})([-]{1})([0-9]{3,4})$", ErrorMessage = "Formato de telefono no válido : (054)-124-1245")]
         public virtual string TelefonoFijo { get; set; }
         public virtual string TipoZona { get; set; }
         public virtual string NombreZona { get; set; }

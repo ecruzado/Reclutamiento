@@ -21,6 +21,7 @@ namespace SanPablo.Reclutador.Web.Core
         public const string HoraInicioEvaluacion = "HoraInicioEvaluacion";
         public const string TiempoEvaluacion = "TiempoEvaluacion";
         public const string IdeReclutamientoExamenCategoria = "IdeReclutamientoExamenCategoria";
+        public const string PreguntaActual = "PreguntaActual";
 
         /// <summary>
         /// Guarda el identificador de la tabla general

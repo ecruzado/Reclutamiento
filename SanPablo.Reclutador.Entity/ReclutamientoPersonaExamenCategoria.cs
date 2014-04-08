@@ -15,6 +15,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeReclutaPersonaExamen  { get; set; }
         public virtual int IdeExamenPorCategoria  { get; set; }
         public virtual string Estado  { get; set; }
+        public virtual int NumeroPreguntas { get; set; }
         public virtual int Nota { get; set; }
         public virtual string EstadoActivo { get; set; }
 

@@ -179,6 +179,43 @@
             }
         });
     }
+
+  
+
+    function guardarDatosGenerales() {
+
+        var nroMovil = $("#Postulante_TelefonoMovil").val();
+        var nroFijo = $("#Postulante_TelefonoFijo").val();
+        var msjError = document.getElementById('msjValidador');
+
+        if ((nroMovil == "") && (nroFijo == "")) {
+            msjError.innerHTML ="Debe ingresar un nro de contancto: movil y/o fijo";
+            msjError.style.display= "block";
+
+        }
+        else {
+            msjError.style.display ="none";
+            var result = $('#generalForm').valid();
+            if (result) {
+                $.post('@Url.Action("General", "Postulante")',
+                         $("#generalForm").serialize(),
+                        function (respuesta) {
+                            if (respuesta.Resultado) {
+                                window.location = '@Url.Action("Index", "EstudioPostulante")';
+
+                                }
+                            else {
+                                var mensj = document.getElementById("mensajeError");
+                                mensj.innerHTML = respuesta.Mensaje;
+                                mensj.style.display = "block";
+                                }
+                        });
+          }
+
+      }
+    }
+    
+
     
 </script>
 }
@@ -189,9 +226,11 @@
    </div>
     <div class="span12"> 
        
-     @using (Html.BeginForm("General", "Postulante", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     @using (Html.BeginForm("General", "Postulante", FormMethod.Post, new {@id="generalForm", enctype = "multipart/form-data" }))
      { 
-
+         <div class="alert alert-info" id="mensajeError" style="display:none" >
+        <a class="close" onclick="hide('alerta')" >×</a>
+        </div>
             <div class="widget-box">
                 <div class="widget-title">
                     <h5>Datos</h5>
@@ -479,7 +518,7 @@
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", @style="text-transform: uppercase" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
                             @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="2", @style="text-transform: uppercase" })
                             
@@ -487,7 +526,7 @@
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono movil <span class="text-error">*</span></label>
+                            <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono movil </label>
                         </td>
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.TelefonoMovil)
@@ -514,6 +553,8 @@
                             @Html.TextBoxFor(model => model.Postulante.TelefonoFijo, new {placeholder="(054)-000-0000" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.TelefonoFijo)
+                            </div>
+                            <div id="msjValidador" class="tex-error" style="font-size:12px;color:red;display:none;"> 
                             </div>
                         </td>
                         <td style="width:10px;"></td>
@@ -548,7 +589,8 @@
                         @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
                                 
                         <button type="reset" class="btn">Cancelar</button>
-                        <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                        @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>*@
+                        <a id="btnGrabar" onclick="guardarDatosGenerales();" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                         @*<a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
                     </div>
                 </div>
@@ -561,6 +603,6 @@
 
 <div id="updateDialog" title="Agregar Experiencia" ></div>
     <div id="divMensaje">
-        <span id="spanMensaje"></span>
+        <span id="spnMensaje"></span>
     </div>
 

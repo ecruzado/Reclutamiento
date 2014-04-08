@@ -171,7 +171,7 @@
         [HttpPost]
         public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
         {
-
+            JsonMessage objJsonMessage = new JsonMessage();
             var usuarioExtranet = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
             var usuarioSession = usuarioExtranet.CodUsuario.Length <= 15 ? usuarioExtranet.CodUsuario : usuarioExtranet.CodUsuario.Substring(0, 15);
             try
@@ -183,9 +183,13 @@
                 byte[] data;
                 if (!result.IsValid)
                 {
-                    postulanteModel = inicializarPostulante();
-                    postulanteModel.Postulante = model.Postulante;
-                    return View("General", postulanteModel);
+                    //postulanteModel = inicializarPostulante();
+                    //postulanteModel.Postulante = model.Postulante;
+                    //return View("General", postulanteModel);
+                    objJsonMessage.Mensaje = "Verificar los datos ingresados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+
                 }
 
                 //Guardar la foto del postulante
@@ -276,12 +280,18 @@
                     #endregion
                     _postulanteRepository.Update(postulanteEdit);
                 }
-                return RedirectToAction("../EstudioPostulante/Index");
+                objJsonMessage.Resultado = true;
+                return Json(objJsonMessage);
+                // return RedirectToAction("../EstudioPostulante/Index");
+
             }
             catch (InvalidCastException e)
             {
                // throw new Exception("ERROR.", e);
-                return View("General", postulanteModel);
+               // return View("General", postulanteModel);
+                objJsonMessage.Mensaje = "ERROR" + e;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             } 
         }
         

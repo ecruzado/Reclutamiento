@@ -59,8 +59,10 @@
                                 item.DescripcionNombreInstitucion.ToUpper(),
                                 item.DescripcionArea,
                                 item.DescripcionNivelAlcanzado,
-                                String.Format("{0:dd/MM/yyyy}", item.FechaEstudioInicio), 
-                                String.Format("{0:dd/MM/yyyy}", item.FechaEstudioFin)
+                                //String.Format("{0:dd/MM/yyyy}", item.FechaEstudioInicio), 
+                                //String.Format("{0:dd/MM/yyyy}", item.FechaEstudioFin)
+                                item.FechaInicio,
+                                item.FechaFin
                             }
                     }).ToArray();
 
@@ -110,6 +112,9 @@
                     var estudioGeneralViewModel = InicializarEstudio();
                     estudioGeneralViewModel.Estudio = estudioPostulante;
                     return View(estudioGeneralViewModel);
+                    //objJsonMessage.Mensaje = "Verifique que las fechas sean correctas y el todos los datos obligatorios esten llenos";
+                    //objJsonMessage.Resultado = true;
+                    //return Json(objJsonMessage);
                 }
                 if (estudioPostulante.IdeEstudiosPostulante == 0)
                 {
@@ -125,6 +130,7 @@
                     }
                     else
                     {
+                        objJsonMessage.Mensaje = "Verifique su session";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
@@ -139,8 +145,10 @@
                     estudioEdit.TipoArea = estudioPostulante.TipoArea;
                     estudioEdit.NombreInstitucion = estudioPostulante.NombreInstitucion;
                     estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
-                    estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
-                    estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
+                    estudioEdit.FechaInicio = estudioPostulante.FechaInicio;
+                    estudioEdit.FechaFin = estudioPostulante.FechaFin;
+                   // estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
+                    //estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
 
                     _estudioPostulanteRepository.Update(estudioEdit);
                     objJsonMessage.Resultado = true;

@@ -51,5 +51,39 @@ namespace SanPablo.Reclutador.Entity
             }
         }
 
+        [DataType(DataType.Date)]
+        [RegularExpression(@"^\d{2}\/\d{4}$", ErrorMessage = "Ingresar en el formato 'mm/aaaa'")]
+        public virtual string FechaInicio
+        {
+            get
+            {
+                return FechaEstudioInicio ==null?"":String.Format("{0:dd/MM/yyyy}", FechaEstudioInicio).Substring(3, 7);
+            }
+            set
+            {
+                if (value == null)
+                    FechaEstudioInicio = null;
+                else
+                    FechaEstudioInicio = Convert.ToDateTime(value.Insert(0, "01/"));
+            }
+        }
+
+        [DataType(DataType.Date)]
+        [RegularExpression(@"^\d{2}\/\d{4}$", ErrorMessage = "Ingresar en el formato 'mm/aaaa'")]
+        public virtual string FechaFin
+        {
+            get
+            {
+                return  FechaEstudioFin == null? "":String.Format("{0:dd/MM/yyyy}", FechaEstudioFin).Substring(3, 7);
+            }
+            set
+            {
+                if (value == null)
+                    FechaEstudioFin = null;
+                else
+                    FechaEstudioFin = Convert.ToDateTime(value.Insert(0, "01/"));
+            }
+        }
+
     }
 }

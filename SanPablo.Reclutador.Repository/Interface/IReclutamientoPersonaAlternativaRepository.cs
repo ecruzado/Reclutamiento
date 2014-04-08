@@ -14,7 +14,7 @@ namespace SanPablo.Reclutador.Repository.Interface
         /// <param name="ideAlternativa"></param>
         /// <param name="usuarioCreacion"></param>
         /// <returns></returns>
-        bool guardarRespuesta(int ideReclutaPersona, int ideCriterioSubCategoria, int ideAlternativa, string usuarioCreacion);
+        bool guardarRespuesta(int ideReclutaPersona, int ideCriterioSubCategoria, int ideReclutaPersonaExamenCategoria, int ideAlternativa, string usuarioCreacion);
 
     }
 

@@ -59,24 +59,32 @@
                 buttons: {
                     "Grabar": function (e) {
                         e.preventDefault();
-                        var result = $('#estudioPostulanteForm').valid();
-                        if (result)
-                        {
-                            $.post('@Url.Action("Edit", "EstudioPostulante")',
-                                $("#estudioPostulanteForm").serialize(),
-                                function (respuesta) {
-                                    if (respuesta.Resultado) {
-                                        $("#updateDialog").dialog("close");
-                                        $('#grdList').trigger('reloadGrid');
+                        var fechaFin = $('#Estudio_FechaFin').val();
+                        var indActual = $('#chbIndEstudiando').is(":checked");
+                        if ((fechaFin == "") && (indActual == false)) {
+                            var msj = document.getElementById('msjFechaFin');
+                            msj.innerHTML = "Indicar fecha fin";
+                            msj.style.display = "block";
+                        }
+                        else {
+                            var result = $('#estudioPostulanteForm').valid();
+                            if (result) {
+                                $.post('@Url.Action("Edit", "EstudioPostulante")',
+                                    $("#estudioPostulanteForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.Resultado) {
+                                            $("#updateDialog").dialog("close");
+                                            $('#grdList').trigger('reloadGrid');
 
+                                        }
+                                        else {
+                                            var mensj = document.getElementById("mensajeError");
+                                            mensj.innerHTML = respuesta.Mensaje;
+                                            mensj.style.display = "block";
+                                        }
                                     }
-                                    else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.innerHTML = respuesta.Mensaje;
-                                        mensj.style.display = "block";
-                                    }
-                                }
-                            );
+                                );
+                            }
                         }
                     },
                     "Cancelar": function () {
