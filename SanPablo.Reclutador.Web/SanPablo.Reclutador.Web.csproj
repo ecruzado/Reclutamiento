@@ -261,6 +261,17 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\CvPostulanteReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CvPostulanteReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\Intranet\dsCvPostulante.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reportes\Intranet\dsExamen.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -316,6 +327,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\logo_sanpablo.png" />
+    <Content Include="Content\images\logo_san_pablo1.jpg" />
     <Content Include="Content\images\printer.png" />
     <Content Include="Content\images\right_2.png" />
     <Content Include="Content\images\sanpablo_logo2.GIF" />
@@ -473,6 +485,17 @@
     <Content Include="Reportes\Intranet\dsExamen.xsc">
       <DependentUpon>dsExamen.xsd</DependentUpon>
     </Content>
+    <Content Include="Reportes\Intranet\dsCvPostulante.xsc">
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsCvPostulante.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCvPostulante.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsCvPostulante.xss">
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Content>
     <None Include="Reportes\Intranet\dsExamen.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -602,8 +625,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reportes\Intranet\ExamenPostulanteReport.rpt">
+    <EmbeddedResource Include="Reportes\Intranet\CvPostulanteReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ExamenPostulanteReport.cs</LastGenOutput>
+      <LastGenOutput>CvPostulanteReport.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Intranet\ExamenReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

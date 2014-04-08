@@ -5,7 +5,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
     using FluentValidation;
     using FluentValidation.Results;
-    using Newtonsoft.Json;
     using NHibernate.Criterion;
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Entity.Validation;
@@ -15,12 +14,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using SanPablo.Reclutador.Web.Models.JQGrid;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.IO;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Security;
+    using System.Data;
+    using System.Configuration;
+    using CrystalDecisions.Shared;
+    using CrystalDecisions.CrystalReports.Engine;
+    using CrystalDecisions.CrystalReports;
+    using CrystalDecisions.Web;
     
     public class RankingController : BaseController
     {
@@ -29,13 +32,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICvPostulanteRepository _cvPostulanteRepository;
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IPostulanteRepository _postulanteRepository;
-       
-
+        
 
         public RankingController(IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
                                          ICvPostulanteRepository cvPostulanteRepository,
                                         IReclutamientoPersonaRepository reclutamientoPersonaRepository,
+                                        
             IPostulanteRepository postulanteRepository
             )
         {
@@ -53,7 +56,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// inicializa el ranking
         /// </summary>
         /// <returns></returns>
-        
+        [ValidarSesion]
         public ActionResult Index(int id, string tipSol, string pagina)
         {
             RankingViewModel model;
@@ -609,7 +612,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
          /// <param name="id"></param>
          /// <param name="tipSol"></param>
          /// <returns></returns>
-   
+   [ValidarSesion]
          public ActionResult Preseleccionado(int id, string tipSol,string pagina,string ind)
          {
              RankingViewModel model;
@@ -725,6 +728,60 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              }
          }
 
+        /// <summary>
+        /// obtiene el Cv del postulante en formato PDF
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+         public ActionResult GetCvPDF(string id)
+         {
+             JsonMessage objJsonMessage = new JsonMessage();
+             string fullPath = null;
+             ReportDocument rep = new ReportDocument();
+             MemoryStream mem;
+             Postulante objPostulante;
+
+             try
+             {
+                 objPostulante = new Postulante();
+                 objPostulante.IdePostulante = Convert.ToInt32(id);
+
+
+                 DataTable dtPostulante = _postulanteRepository.getDataCvPostulante(objPostulante);
+                 DataTable dtNivelAcademico = _postulanteRepository.getDataCvNivelAcademico(objPostulante);
+                 DataTable dtExperiencias = _postulanteRepository.getDataCvExperiencias(objPostulante);
+                 DataTable dtConOfimatica = _postulanteRepository.getDataCvConOfimatica(objPostulante);
+                 DataTable dtConIdiomas = _postulanteRepository.getDataCvConIdiomas(objPostulante);
+                 DataTable dtConOtros = _postulanteRepository.getDataCvConOtros(objPostulante);
+                 DataTable dtParientes = _postulanteRepository.getDataCvParientes(objPostulante);
+                 DataTable dtCvDiscapacidad = _postulanteRepository.getDataCvDiscapacidad(objPostulante);
+
+
+                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                 string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                 string nomReporte = "CvPostulanteReport.rpt";
+                 fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                 rep.Load(fullPath);
+                 rep.Database.Tables["DtPostulante"].SetDataSource(dtPostulante);
+                 rep.Database.Tables["DtNivelAcademico"].SetDataSource(dtNivelAcademico);
+                 rep.Database.Tables["DtExperiencia"].SetDataSource(dtExperiencias);
+                 rep.Database.Tables["DtConOfimatica"].SetDataSource(dtConOfimatica);
+                 rep.Database.Tables["DtConIdioma"].SetDataSource(dtConIdiomas);
+                 rep.Database.Tables["DtConOtro"].SetDataSource(dtConOtros);
+                 rep.Database.Tables["DtPariente"].SetDataSource(dtParientes);
+                 rep.Database.Tables["DtDiscapacidad"].SetDataSource(dtCvDiscapacidad);
+
+                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+             }
+             catch (Exception)
+             {
+                 return MensajeError();
+             }
+             return File(mem, "application/pdf");
+
+         }
 
 
     }

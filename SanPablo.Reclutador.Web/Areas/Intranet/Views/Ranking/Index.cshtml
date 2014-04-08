@@ -361,7 +361,11 @@
                         { name: 'IdeCargo', index: 'IdeCargo', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
                         { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
                         { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 150 },
-                        { name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, sortable: false, width: 150 },
+
+                        { name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
+
+
+
                         { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
                         { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                         { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, width: 300 },
@@ -396,9 +400,13 @@
         function ImprimirFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'printer.png';
-            var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+            //var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
+            var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + cellvalue + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
             return strImg;
         }
+
+        
+
 
         function CellCheckBox(cellvalue, options, rowObject) {
             return '<input type="checkbox" name="selectedPostulantes"  value="' + cellvalue + '" />';

@@ -263,7 +263,19 @@
                     postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
                     postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;
 
-                    postulanteEdit.UsuarioModificacion = usuarioSession;
+                    var ObUsuarioExtranet = Session[ConstanteSesion.ObjUsuarioExtranet] == null ? "" : Session[ConstanteSesion.ObjUsuarioExtranet];
+                    Usuario objUsuario;
+                    string codUsuario = null;
+                    if (ObUsuarioExtranet != "")
+                    {
+                        objUsuario = new Usuario();
+                        objUsuario = (Usuario)ObUsuarioExtranet;
+
+                        codUsuario = objUsuario.CodUsuario;
+                    }
+
+                    postulanteEdit.UsuarioModificacion = codUsuario.ToString().Substring(0, 15);
+
                     postulanteEdit.FechaModificacion = FechaModificacion;
                     #endregion
                     _postulanteRepository.Update(postulanteEdit);
