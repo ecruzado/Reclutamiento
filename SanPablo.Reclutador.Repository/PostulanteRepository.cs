@@ -15,6 +15,11 @@
     using System.Linq;
     using System.Transactions;
 
+
+    
+    using System.Data;
+    
+
     public class PostulanteRepository : Repository<Postulante>, IPostulanteRepository
     {
         public PostulanteRepository(ISession session)
@@ -639,8 +644,388 @@
             }
         }
 
+        /// <summary>
+        /// obtiene los datos del cv del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvPostulante(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
 
-        
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_POSTULANTE");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+               
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+        /// <summary>
+        /// obtiene los daatos del nivel academico del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvNivelAcademico(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_NIVEL_ACADEMICO");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+        /// <summary>
+        /// obtiene las experiencias del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvExperiencias(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_EXPERIENCIA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// Obtiene los Conocimientos de ofimatica
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvConOfimatica(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_CONOFIMATICA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+        /// <summary>
+        /// obtiene los conocimientos de idiomas
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvConIdiomas(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_CONIDIOMA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// obtiene los otros conocimientos
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvConOtros(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_OTROSCONOCIMIENTOS");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+        /// <summary>
+        /// obtiene los parientes
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvParientes(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_PARIENTES");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+        /// <summary>
+        /// obtiene las discapacidades del postulante
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public DataTable getDataCvDiscapacidad(Postulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            Postulante objPostulante = new Postulante();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_DISCAPACIDAD");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                if (obj.IdePostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdePostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+
+
+                lspcmd.Parameters.Add("p_Rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                da.Dispose();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+
+
+        }
+
+
+
+
+
 
     }
 }
