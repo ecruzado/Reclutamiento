@@ -61,22 +61,32 @@
                 modal: true,
                 buttons: {
                 "Grabar": function (e) {
-                     e.preventDefault();
-                     var result = $('form').valid();
-                     if (result) {
-                         $.post('@Url.Action("Edit", "ExperienciaPostulante")',
-                         $("#experienciaPostulanteForm").serialize(),
-                         function (respuesta) {
-                             if (respuesta.msj) {
-                                 $("#updateDialog").dialog("close");
-                                 location.reload(true);
-                              }
-                              else {
-                                 var mensj = document.getElementById("mensajeError");
-                                 mensj.style.display = "block";
-                              }
-                          });
-                     }
+                    e.preventDefault();
+                    var fechaFin = $('#Experiencia_FechaFin').val();
+                    var indActual = $('#indActuaTrabajando').is(":checked");
+                    if ((fechaFin == "") && (indActual == false)) {
+                        var msj = document.getElementById('msjErrorFecha');
+                        msj.innerHTML = "Indicar fecha fin";
+                        msj.style.display = "block";
+                    }
+                    else
+                        {
+                        var result = $('#experienciaPostulanteForm').valid();
+                        if (result) {
+                            $.post('@Url.Action("Edit", "ExperienciaPostulante")',
+                            $("#experienciaPostulanteForm").serialize(),
+                            function (respuesta) {
+                                if (respuesta.msj) {
+                                    $("#updateDialog").dialog("close");
+                                    location.reload(true);
+                                }
+                                else {
+                                    var mensj = document.getElementById("mensajeError");
+                                    mensj.style.display = "block";
+                                }
+                            });
+                        }
+                    }
                 },
                 "Cancelar": function () {
                      $(this).dialog("close");

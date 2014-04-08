@@ -92,7 +92,73 @@ namespace SanPablo.Reclutador.Repository
             {
                 lcon.Close();
             }
+
+
         }
+
+        public void calificacionExamen(int ideReclutaPerExamenCat, int idReclutaPersona, string usuarioSession)
+        {
+
+            string usuarioModifica = usuarioSession.Length <= 15 ? usuarioSession : usuarioSession.Substring(0, 15); 
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_CALIFICAR_EXAMEN");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_ideReclPerExaCat", OracleType.Int32).Value = ideReclutaPerExamenCat;
+                lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Int32).Value = idReclutaPersona;
+                lspcmd.Parameters.Add("p_usuarioCreacion", OracleType.VarChar).Value = usuarioModifica;
+                lspcmd.Parameters.Add("p_retVal", OracleType.Number).Direction = ParameterDirection.Output;
+
+                lspcmd.ExecuteNonQuery();
+
+                int resultado = Convert.ToInt32(lspcmd.Parameters["p_retVal"].Value);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        //public  DataSet ObtenerEvaluacion(int idereclutaPersona, int ideReclutaPersonaExamen)
+        //{
+        //    OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+        //    try
+        //    {
+        //        lcon.Open();
+        //        OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_RECUPERAR_EXAMEN");
+        //        lspcmd.CommandType = CommandType.StoredProcedure;
+        //        lspcmd.Connection = lcon;
+        //        lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Number).Value = idereclutaPersona;
+        //        lspcmd.Parameters.Add("p_iderecluPersExamen", OracleType.Number).Value = ideReclutaPersonaExamen;
+        //        lspcmd.Parameters.Add("p_cursor1", OracleType.Cursor).Direction = ParameterDirection.Output;
+        //        lspcmd.Parameters.Add("p_cursor2", OracleType.Cursor).Direction = ParameterDirection.Output;
+        //        lspcmd.Parameters.Add("p_cursor3", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+        //        OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+        //        DataTable dt = new DataTable();
+
+        //        da.Fill(dt);
+        //        da.Dispose();
+        //        return dt;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        lcon.Close();
+        //    }
+        //}
 
     }
 }

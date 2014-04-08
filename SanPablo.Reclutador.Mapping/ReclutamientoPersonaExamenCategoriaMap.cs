@@ -16,6 +16,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IdeReclutaPersonaExamen, "IDERECLUPERSOEXAMEN");
             Map(x => x.IdeExamenPorCategoria, "IDEEXAMENXCATEGORIA");
             Map(x => x.Estado, "ESTADO");
+            Map(x => x.NumeroPreguntas, "NROPREGUNTAS");
             Map(x => x.Nota, "NOTAEXAMENCATEG");
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Map(x => x.UsuarioCreacion, "USRCREACION");

@@ -14,6 +14,8 @@ namespace SanPablo.Reclutador.Mapping
                     .Sequence("IDERECLUPERSOCRITERIO_SQ");
             Map(x => x.IdeReclutaPersona, "IDERECLUTAPERSONA");
             Map(x => x.IdeCriterioXSubcategoria, "IDECRITERIOXSUBCATEGORIA");
+            Map(x => x.IdeReclutamientoExamenCategoria, "IDERECLPERSOEXAMNCAT");
+            Map(x => x.IndicadorRespuesta, "INDRESPUESTA");
             Map(x => x.PuntajeTotal, "PUNTTOTAL");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");

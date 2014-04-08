@@ -114,6 +114,11 @@
             RuleFor(x => x.ReferenciaDireccion)
                 .Length(5,100)
                 .WithMessage("Máx. 100 caracteres");
+
+            RuleFor(x => x.NombreZona)
+                .Length(0, 100)
+                .WithMessage("Máx. 100 caracteres");
+
             //RuleFor(x => x.TelefonoFijo)
             //    .Must()
             //    .withMessage("Ingresar un número telefonico válido");

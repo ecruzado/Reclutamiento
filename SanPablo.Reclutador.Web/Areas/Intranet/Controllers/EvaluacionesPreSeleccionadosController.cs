@@ -2,6 +2,7 @@
 namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
 
+    using CrystalDecisions.CrystalReports.Engine;
     using FluentValidation;
     using FluentValidation.Results;
     using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -456,5 +458,40 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 return Json(objJsonMessage);
             }
         }
+
+       // #region MOSTRAR EVALUACIONES RENDIDAS
+
+        //public ActionResult resultadoEvaluacion(int idReclutaPersona, int idReclutaExamen)
+        //{
+        //    JsonMessage objJsonMessage = new JsonMessage();
+        //    string fullPath = null;
+        //    ReportDocument rep = new ReportDocument();
+        //    MemoryStream mem;
+
+        //    try
+        //    {
+
+        //        DataSet dtResultado = _reclutamientoPersonaExamenRepository.ObtenerEvaluacion(idReclutaPersona, idReclutaExamen);
+
+
+        //        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+        //        string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+        //        string nomReporte = "ExamenReport.rpt";
+        //        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+        //        rep.Load(fullPath);
+        //        rep.Database.Tables["DtExamen"].SetDataSource(dtResultado);
+
+        //        mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return MensajeError();
+        //    }
+        //    return File(mem, "application/pdf");
+
+        //}
+        //#endregion
     }
 }

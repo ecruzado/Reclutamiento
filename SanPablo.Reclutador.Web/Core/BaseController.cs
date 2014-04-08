@@ -355,6 +355,18 @@ namespace SanPablo.Reclutador.Web.Core
             }
         }
 
+        protected int  PreguntaActual
+        {
+            get
+            {
+                return (int)System.Web.HttpContext.Current.Session[ConstanteSesion.PreguntaActual];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.PreguntaActual, value);
+            }
+        }
+
         protected int IdeReclutamientoExamenCategoria
         {
             get

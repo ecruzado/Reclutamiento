@@ -266,6 +266,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsExamen.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reportes\Intranet\dsExamenPostulante.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamenPostulanteReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reportes\Intranet\ExamenReport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -470,6 +481,17 @@
     <Content Include="Reportes\Intranet\dsExamen.xss">
       <DependentUpon>dsExamen.xsd</DependentUpon>
     </Content>
+    <Content Include="Reportes\Intranet\dsExamenPostulante.xsc">
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsExamenPostulante.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsExamenPostulante.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsExamenPostulante.xss">
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\grid.locale-es.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -579,6 +601,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ExamenPostulanteReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ExamenPostulanteReport.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Intranet\ExamenReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ExamenReport.cs</LastGenOutput>

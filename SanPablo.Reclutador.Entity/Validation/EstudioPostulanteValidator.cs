@@ -46,6 +46,17 @@
                 .NotEmpty()
                 .When(x => x.TipoNombreInstitucion.Equals("XX"))
                 .WithMessage("Ingresar el nombre de la institución");
+
+            RuleFor(x => x.FechaInicio)
+                .NotEmpty()
+                .WithMessage("Ingresar una fecha");
+
+            When(x => x.ActualmenteEstudiando.Equals(false), () =>
+            {
+                RuleFor(x => x.FechaFin)
+                    .NotEmpty()
+                    .WithMessage("Ingresar una fecha fin");
+            });
             
             //When(x => x.ActualmenteEstudiando.Equals(false), () =>
             //{

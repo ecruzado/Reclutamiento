@@ -187,25 +187,31 @@
                 modal: true,
                 buttons: {
                     "Grabar": function (e) {
-                        validarOtros();
-                        e.preventDefault();
-                        var result = $('#otroConocimientoForm').valid();
-                        if (result) {
-                            $.post('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante")',
-                                $("#otroConocimientoForm").serialize(),
-                                function (respuesta) {
-                                    if (respuesta.Resultado) {
-                                        $("#updateDialogOtro").dialog("close");
-                                        $('#grdOtrosConocimientos').trigger('reloadGrid');
+                        var tipoConocOtro = $('#nombreConocimiento').val();
+                        var nombreConocimiento = $('#ConocimientoGeneral_NombreConocimientoGeneral').val();
+                        if ((tipoConocOtro == "XX") && (nombreConocimiento == "")) {
+                            validarOtros();
+                        }
+                        else {
+                            e.preventDefault();
+                            var result = $('#otroConocimientoForm').valid();
+                            if (result) {
+                                $.post('@Url.Action("OtroConocimiento", "ConocimientoGeneralPostulante")',
+                                    $("#otroConocimientoForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.Resultado) {
+                                            $("#updateDialogOtro").dialog("close");
+                                            $('#grdOtrosConocimientos').trigger('reloadGrid');
 
+                                        }
+                                        else {
+                                            var mensj = document.getElementById("mensajeError");
+                                            mensj.innerHTML = respuesta.Mensaje;
+                                            mensj.style.display = "block";
+                                        }
                                     }
-                                    else {
-                                        var mensj = document.getElementById("mensajeError");
-                                        mensj.innerHTML = respuesta.Mensaje;
-                                        mensj.style.display = "block";
-                                    }
-                                }
-                            );
+                                );
+                            }
                         }
                     },
                     "Cancelar": function () {
@@ -417,9 +423,9 @@
         function validarOtros()
         {
             var msjError = document.getElementById('msjErrorOtro');
-            var tipoConocOtro = $('#ConocimientoGeneral_TipoNombreConocimientoGeneral').val();
+            var tipoConocOtro = $('#nombreConocimiento').val();
             var nombreConocimiento = $('#ConocimientoGeneral_NombreConocimientoGeneral').val();
-            if ((tipoConocOtro == "XX") && (nombreConocimiento == null))
+            if ((tipoConocOtro == "XX") && (nombreConocimiento == ""))
             {
                 msjError.style.display = "block";
             }

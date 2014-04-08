@@ -44,9 +44,9 @@
             //RuleFor(x => x.NumeroFijoInstitucionReferente)
             //    .NotEmpty()
             //    .WithMessage("Ingresar telefono fijo de la institucion");
-            RuleFor(x => x.NumeroFijoInstitucionReferente)
-                .InclusiveBetween(100000, 999999999)
-                .WithMessage("Ingresar telefono fijo válido");
+            //RuleFor(x => x.NumeroFijoInstitucionReferente)
+            //    .InclusiveBetween(100000, 999999999)
+            //    .WithMessage("Ingresar telefono fijo válido");
 
             RuleFor(x => x.NumeroMovilReferencia)
                 .InclusiveBetween(900000000, 999999999)
@@ -72,6 +72,10 @@
                 .Length(5, 255)
                 .WithMessage("Ingresar una descripción entre 5 y 255 caracteres");
 
+
+            RuleFor(x => x.FechaInicio)
+                .NotEmpty()
+                .WithMessage("Ingresar la fecha de inicio");
             //When(x => x.ActualmenteTrabajando.Equals(false), () =>
             //{
             //    RuleFor(x => x.FechaTrabajoFin)

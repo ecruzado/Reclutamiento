@@ -141,7 +141,7 @@
                             {
                                 item.IdeConocimientoGeneralPostulante.ToString(),
                                 item.DescripcionConocimientoGeneral,
-                                item.DescripcionNombreConocimientoGeneral,
+                                item.DescripcionNombreConocimientoGeneral==null?"":item.DescripcionNombreConocimientoGeneral.ToUpper(),
                                 item.DescripcionNivelConocimiento,
                                 item.Certificacion.ToString()
                                 
