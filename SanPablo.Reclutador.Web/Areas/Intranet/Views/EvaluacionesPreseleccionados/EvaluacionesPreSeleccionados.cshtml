@@ -146,9 +146,8 @@
 
     function DescripcionFormatter(cellvalue, options, rowObject) {
         var strAref = cellvalue;
-        if (rowObject[0] == "2100001") {
-            strAref = '<a style="text-decoration: underline" href="@Url.Action("ResultadoExamen1", "SolicitudCargo")">' + cellvalue + '</a>';
-        }          
+        //validar si existe la evaluacion
+        strAref = '<a style="text-decoration: underline" href="@Url.Action("ResultadoEvaluacion", "EvaluacionPreseleccionados")">' + rowObject[0] + '/' + rowObject[1] + '</a>';
         return strAref;
       }
 
