@@ -459,39 +459,45 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
-       // #region MOSTRAR EVALUACIONES RENDIDAS
+        #region MOSTRAR EVALUACIONES RENDIDAS
 
-        //public ActionResult resultadoEvaluacion(int idReclutaPersona, int idReclutaExamen)
-        //{
-        //    JsonMessage objJsonMessage = new JsonMessage();
-        //    string fullPath = null;
-        //    ReportDocument rep = new ReportDocument();
-        //    MemoryStream mem;
+        public ActionResult ResultadoEvaluacion(int idReclutaPersona, int idReclutaExamen)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
+            ReportDocument rep = new ReportDocument();
+            MemoryStream mem;
+           // Postulante objPostulante;
 
-        //    try
-        //    {
+            try
+            {
+                //objPostulante = new Postulante();
+                //objPostulante.IdePostulante = Convert.ToInt32(id);
 
-        //        DataSet dtResultado = _reclutamientoPersonaExamenRepository.ObtenerEvaluacion(idReclutaPersona, idReclutaExamen);
+                DataSet dsEvaluacionPostulante = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReporte(idReclutaPersona, idReclutaExamen);
+                //DataTable dtPostulante = _postulanteRepository.getDataCvPostulante(objPostulante);
+                
 
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ExamenPostulanteReport.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
 
-        //        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-        //        string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
-        //        string nomReporte = "ExamenReport.rpt";
-        //        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+                rep.Load(fullPath);
+               // rep.Database.Tables["dtExamen"].SetDataSource(dsEvaluacionPostulante.
+                //rep.Database.Tables["DtPostulante"].SetDataSource(dtPostulante);
+                
 
-        //        rep.Load(fullPath);
-        //        rep.Database.Tables["DtExamen"].SetDataSource(dtResultado);
+                mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
-        //        mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            }
+            catch (Exception)
+            {
+                return MensajeError();
+            }
+            return File(mem, "application/pdf");
 
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return MensajeError();
-        //    }
-        //    return File(mem, "application/pdf");
-
-        //}
-        //#endregion
+        }
+        #endregion
     }
 }

@@ -169,8 +169,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                    objCvPostulante.FecModificacion = hoy;
                    objCvPostulante.UsrModifcacion = UsuarioActual.NombreUsuario;
                    
-                   
-
                    _cvPostulanteRepository.Update(objCvPostulante);
                    objJson.Resultado = true;
                    objJson.Mensaje = "Se actualizaron los datos del postulante";
@@ -228,12 +226,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
-
               
                 int idSolicitud = Convert.ToInt32(grid.rules[0].data);
                 string tipoSol = Convert.ToString(grid.rules[1].data);
-
-            
 
                 DetachedCriteria where = DetachedCriteria.For<CvPostulante>();
 

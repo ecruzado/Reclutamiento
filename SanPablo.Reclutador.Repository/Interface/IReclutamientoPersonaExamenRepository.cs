@@ -31,7 +31,7 @@ namespace SanPablo.Reclutador.Repository.Interface
         /// <param name="idereclutaPersona"></param>
         /// <param name="ideReclutaPersonaExamen"></param>
         /// <returns></returns>
-       // DataSet ObtenerEvaluacion(int idereclutaPersona, int ideReclutaPersonaExamen);
+        DataSet ObtenerEvaluacionReporte(int idereclutaPersona, int ideReclutaPersonaExamen);
     }
 
     

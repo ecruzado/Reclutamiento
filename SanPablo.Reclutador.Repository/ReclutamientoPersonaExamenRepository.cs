@@ -127,38 +127,38 @@ namespace SanPablo.Reclutador.Repository
             }
         }
 
-        //public  DataSet ObtenerEvaluacion(int idereclutaPersona, int ideReclutaPersonaExamen)
-        //{
-        //    OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+        public DataSet ObtenerEvaluacionReporte(int idereclutaPersona, int ideReclutaPersonaExamen)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
 
-        //    try
-        //    {
-        //        lcon.Open();
-        //        OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_RECUPERAR_EXAMEN");
-        //        lspcmd.CommandType = CommandType.StoredProcedure;
-        //        lspcmd.Connection = lcon;
-        //        lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Number).Value = idereclutaPersona;
-        //        lspcmd.Parameters.Add("p_iderecluPersExamen", OracleType.Number).Value = ideReclutaPersonaExamen;
-        //        lspcmd.Parameters.Add("p_cursor1", OracleType.Cursor).Direction = ParameterDirection.Output;
-        //        lspcmd.Parameters.Add("p_cursor2", OracleType.Cursor).Direction = ParameterDirection.Output;
-        //        lspcmd.Parameters.Add("p_cursor3", OracleType.Cursor).Direction = ParameterDirection.Output;
+            try
+            {
 
-        //        OracleDataAdapter da = new OracleDataAdapter(lspcmd);
-        //        DataTable dt = new DataTable();
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_RECUPERAR_EXAMEN");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Number).Value = idereclutaPersona;
+                lspcmd.Parameters.Add("p_iderecluPersExamen", OracleType.Number).Value = ideReclutaPersonaExamen;
+                lspcmd.Parameters.Add("dtExamen", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtCategoriaExamen", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtCriterioAlternativa", OracleType.Cursor).Direction = ParameterDirection.Output;
 
-        //        da.Fill(dt);
-        //        da.Dispose();
-        //        return dt;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        lcon.Close();
-        //    }
-        //}
+                DataSet ds = new DataSet();
+                OracleDataAdapter adapter = new OracleDataAdapter(lspcmd);
+                adapter.Fill(ds);
+                adapter.Dispose();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
     }
 }
