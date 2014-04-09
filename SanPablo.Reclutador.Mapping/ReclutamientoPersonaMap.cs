@@ -26,6 +26,10 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.Comentario, "COMENTARIO");
             Map(x => x.TipPuesto, "TIPPUESTO");
             Map(x => x.IdSede, "IDSEDE");
+            Map(x => x.PromedioExamen, "PROMEDIOEXAMEN");
+            
+
+
             Map(x => x.UsrModifica, "USRMODIFICA");
             Map(x => x.FecModifica, "FECMODIFICA");
             Map(x => x.FecCreacion, "FECCREACION");

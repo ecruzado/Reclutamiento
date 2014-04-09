@@ -15,13 +15,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingresar nombre alternativa");
             
-            RuleFor(x => x.Peso)
-                .NotEmpty()
-                .WithMessage("Ingresar Peso");
-
-            RuleFor(x => x.Peso)
-                .NotEqual(0)
-                .WithMessage ("Ingresar Peso mayor a cero");
+           
+           
            
         }
 

@@ -74,13 +74,14 @@
             DateTime Hoy = DateTime.Today;
 
             AlternativaValidator validator = new AlternativaValidator();
-            ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa", "Peso");
+            ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
             JsonMessage objJsonMensage = new JsonMessage();
             string fullPath = null;
 
 
             if (!result.IsValid)
             {
+                objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
                 return Json(objJsonMensage);
             }
 

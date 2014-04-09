@@ -183,5 +183,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual int idRolSuceso { get; set; }
         public virtual int idRolResponsable { get; set; }
 
+        /// <summary>
+        /// Promedio del examen
+        /// </summary>
+        public virtual double PromedioExamen { get; set; }
+        
+
     }
 }
