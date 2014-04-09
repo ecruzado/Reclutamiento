@@ -20,6 +20,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public string nombreUsuario { get; set; }
         public string pagina { get; set; }
+        public int IdeSolReqPersonal { get; set; }
+        public string Tipsol { get; set; }
+        public string IndPagina { get; set; }
+        public int idSol { get; set; }
 
         public HttpPostedFileBase ArchivoComentario { get; set; }
         public string nombreTemporalArchivo { get; set; }

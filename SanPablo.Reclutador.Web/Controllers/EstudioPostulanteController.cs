@@ -62,7 +62,7 @@
                                 //String.Format("{0:dd/MM/yyyy}", item.FechaEstudioInicio), 
                                 //String.Format("{0:dd/MM/yyyy}", item.FechaEstudioFin)
                                 item.FechaInicio,
-                                item.FechaFin
+                                item.IndicadorActualmenteEstudiando == "S"?"Actualmente":item.FechaFin 
                             }
                     }).ToArray();
 

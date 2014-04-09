@@ -48,6 +48,11 @@
 
             $('#btnEvaluaciones').click(function () {
 
+                var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                var tipSol = $("#Solicitud_Tipsol").val();
+                var pagina = $("#pagina").val();
+                var indPagina = '@Indicador.Si';
+
                 var id = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', id);
 
@@ -55,12 +60,14 @@
                 var idReclu = rowData.IdeReclutaPersona;
 
                 if ((idPost != null && idPost > 0) || (idReclu != null && idReclu > 0)) {
-                    var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "",area="Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu;
+                    var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "",area="Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu + '&idSol=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
                 } else {
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
 
+                //var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                //window.location = url;
             });
 
 
@@ -133,15 +140,6 @@
                 }
 
             });
-
-
-
-            
-            
-
-
-
-
 
             jQuery("#grdListEvaluacion").jqGrid({
                 datatype: function (postdata) {

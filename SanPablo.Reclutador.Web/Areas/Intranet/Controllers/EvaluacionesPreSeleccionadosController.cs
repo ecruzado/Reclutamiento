@@ -58,9 +58,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <returns></returns>
         [ValidarSesion]
-        public ActionResult Index(string id, string idRecluPost)
+        public ActionResult Index(string id, string idRecluPost, string idSol,string tipSol, string pagina, string ind)
         {
-            var modelEvaluaciones = inicializarEvaluacionesPreseleccionados();
+            var modelEvaluaciones = inicializarEvaluacionesPreseleccionados(idSol, tipSol,  pagina,  ind);
 
             if ((id != null) && (idRecluPost != null))
             {
@@ -93,14 +93,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// Inicializar el model de la evaluacion de preseleccionados
         /// </summary>
         /// <returns></returns>
-        public EvaluacionesPreSeleccionadosViewModel inicializarEvaluacionesPreseleccionados()
+        public EvaluacionesPreSeleccionadosViewModel inicializarEvaluacionesPreseleccionados(string idSol,string tipSol, string pagina, string ind)
         {
             EvaluacionesPreSeleccionadosViewModel model = new EvaluacionesPreSeleccionadosViewModel();
             model.ReclutaPersona = new ReclutamientoPersona();
             model.PostulantePreSel = new Postulante();
             model.Solicitud = new SolReqPersonal();
 
-
+            model.pagina = pagina;
+            model.Tipsol = tipSol;
+            model.IdeSolReqPersonal = Convert.ToInt32(idSol);
             return model;
         }
 
@@ -308,8 +310,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     
                     reclutaExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                    
-
                     _reclutamientoPersonaExamenRepository.Update(reclutaExamenEditar);
 
                     if (fullPath != null)
@@ -461,33 +461,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         #region MOSTRAR EVALUACIONES RENDIDAS
 
+
         public ActionResult ResultadoEvaluacion(int idRP, int idRE)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             string fullPath = null;
             ReportDocument rep = new ReportDocument();
             MemoryStream mem;
-           // Postulante objPostulante;
 
             try
             {
-                //objPostulante = new Postulante();
-                //objPostulante.IdePostulante = Convert.ToInt32(id);
 
-                DataSet dsEvaluacionPostulante = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReporte(idRP, idRE);
-                //DataTable dtPostulante = _postulanteRepository.getDataCvPostulante(objPostulante);
+                DataSet ds = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReporte(idRP, idRE);
                 
-
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
                 string nomReporte = "ExamenPostulanteReport.rpt";
                 fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
 
                 rep.Load(fullPath);
-               // rep.Database.Tables["dtExamen"].SetDataSource(dsEvaluacionPostulante.
-                //rep.Database.Tables["DtPostulante"].SetDataSource(dtPostulante);
                 
+                rep.Database.Tables["dtExamen"].SetDataSource(ds.Tables["Table"]);
+                rep.Database.Tables["dtCategoriaExamen"].SetDataSource(ds.Tables["Table1"]);
+                rep.Database.Tables["dtCategoriaSubCatego"].SetDataSource(ds.Tables["Table2"]);
+                rep.Database.Tables["dtCriterioAlternativa"].SetDataSource(ds.Tables["Table3"]);
 
+                Response.Clear();
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
             }

@@ -1,0 +1,671 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B977D52A-21E6-4C0C-BE0A-3824E02CB7B7}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SanPablo.Reclutador.Web</RootNamespace>
+    <AssemblyName>SanPablo.Reclutador.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.1.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.MVC4.5.0.0.1\lib\Net40\FluentValidation.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Composition.Registration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\AutofacValidatorFactory.cs" />
+    <Compile Include="App_Start\NHibernateConfigurator.cs" />
+    <Compile Include="App_Start\RepositoryComponentModule.cs" />
+    <Compile Include="App_Start\ValidatorComponentModule.cs" />
+    <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ContrataController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\BusquedaUsuarioController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudAmpliacionCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\PublicacionCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\LogSolicitudNuevoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudNuevoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\EvaluacionCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\OpcionController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CategoriaController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CentroEstudioCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CompetenciaCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ConocimientosCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\CriterioController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\DiscapacidadCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\EvaluacionController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ExamenController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ExperienciaCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\HorarioCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\NivelAcademicoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\OfrecimientoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\RolController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SeguridadController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\SolicitudReemplazoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\UbigeoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\UsuarioController.cs" />
+    <Compile Include="Areas\Intranet\IntranetAreaRegistration.cs" />
+    <Compile Include="Areas\Intranet\Models\AlternativaViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CompetenciaCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EvaluarPostulanteViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EvaluacionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EvaluacionesPreSeleccionadosViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\MantenimientoGeneralViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\MantenimientoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudConsultaViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudAmpliacionCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PublicacionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SeguridadViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\LogSolicitudNuevoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudNuevoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EvaluacionCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\DiscapacidadCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ExperienciaCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\NivelAcademicoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\EstudioCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\OpcionViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\RolViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\SolicitudRempCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UbigeoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\HorarioCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\OfrecimientoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\PerfilViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CategoriaViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\CriterioViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ExamenViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UbigeoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioRolSedeViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\UsuarioViewModel.cs" />
+    <Compile Include="Controllers\ConocimientoGeneralPostulanteController.cs" />
+    <Compile Include="Controllers\DiscapacidadPostulanteController.cs" />
+    <Compile Include="Controllers\EstudioPostulanteController.cs" />
+    <Compile Include="Controllers\ExperienciaPostulanteController.cs" />
+    <Compile Include="Controllers\GeneralController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OportunidadLaboralController.cs" />
+    <Compile Include="Controllers\ParientePostulanteController.cs" />
+    <Compile Include="Controllers\PostulanteController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\RankingController.cs" />
+    <Compile Include="Controllers\SedeController.cs" />
+    <Compile Include="Controllers\SeguridadController.cs" />
+    <Compile Include="Core\AuthorizeUserAttribute.cs" />
+    <Compile Include="Core\BaseController.cs" />
+    <Compile Include="Core\ConstanteSesion.cs" />
+    <Compile Include="Core\ImageFile.cs" />
+    <Compile Include="Core\JsonResponse.cs" />
+    <Compile Include="Core\TerminoSesionException.cs" />
+    <Compile Include="Core\Utils.cs" />
+    <Compile Include="Core\ValidarSesion.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConocimientoPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\MenuIntranet.cs" />
+    <Compile Include="Models\EstudioPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\ExperienciaPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\GenericDouble.cs" />
+    <Compile Include="Models\JQGrid\Filter.cs" />
+    <Compile Include="Models\JQGrid\GridTable.cs" />
+    <Compile Include="Models\JQGrid\JQgrid.cs" />
+    <Compile Include="Models\DiscapacidadPostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\JQGrid\JsonMessage.cs" />
+    <Compile Include="Models\JQGrid\ResponseData.cs" />
+    <Compile Include="Models\JQGrid\Row.cs" />
+    <Compile Include="Models\JQGrid\Rule.cs" />
+    <Compile Include="Models\MenuItem.cs" />
+    <Compile Include="Models\OportunidadLaboralViewModel.cs" />
+    <Compile Include="Models\ParientePostulanteGeneralViewModel.cs" />
+    <Compile Include="Models\PostulanteGeneralViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\RankingViewModel.cs" />
+    <Compile Include="Models\SeguridadViewModel.cs" />
+    <Compile Include="Models\UbigeoGeneralViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\dsCvPostulante1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\dsExamen.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\dsExamenPostulante.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamenPostulanteReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ExamenReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamenReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom-theme\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\custom-theme\images\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_f6cf3b_256x240.png" />
+    <Content Include="Content\custom-theme\jquery-ui-1.10.3.custom.css" />
+    <Content Include="Content\custom-theme\jquery-ui-1.9.2.custom.css" />
+    <Content Include="Content\custom-theme\jquery.ui.1.10.0.ie.css" />
+    <Content Include="Content\custom-theme\jquery.ui.1.9.2.ie.css" />
+    <Content Include="Content\images\action_search.gif" />
+    <Content Include="Content\images\application.gif" />
+    <Content Include="Content\images\Banner-Selección-03.png" />
+    <Content Include="Content\images\delete.gif" />
+    <Content Include="Content\images\enabled.png" />
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\logo_sanpablo.png" />
+    <Content Include="Content\images\printer.png" />
+    <Content Include="Content\images\right_2.png" />
+    <Content Include="Content\images\sanpablo_logo2.GIF" />
+    <Content Include="Content\images\time.gif" />
+    <Content Include="Content\images\user4.png" />
+    <Content Include="Content\jqGrid.overrides.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\ui.jqgrid.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Intranet\Views\Cargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Examen1.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Examen2.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Examen3.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Index1.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\InstruccionesExamen.cshtml" />
+    <Content Include="Areas\Intranet\Views\Examen\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Examen\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Rol\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Seguridad\Login.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\EvaluacionesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionAmpliacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaAmpliacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ListaReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPorRequerimiento.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ProgramarEvaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen1.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen2.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen3.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen4.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen5.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudPersonal\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\Intranet\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\PopupCriterio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\PopupSubCategoria.cshtml" />
+    <Content Include="Areas\Intranet\Views\Criterio\PopupListaCriterio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Categoria\PopupCategoria.cshtml" />
+    <Content Include="Areas\Intranet\Views\CompetenciaCargo\Edit.cshtml">
+      <BrowseToURL>~/Intranet/Cargo/Competencia</BrowseToURL>
+    </Content>
+    <Content Include="Areas\Intranet\Views\Alternativa\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\OfrecimientoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\HorarioCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\UbigeoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\NivelAcademicoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\CentroEstudioCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Ofimatica.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\Idioma.cshtml" />
+    <Content Include="Areas\Intranet\Views\ConocimientosCargo\OtrosConocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\ExperienciaCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\DiscapacidadCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\Rol\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Opcion\PopupOpcion.cshtml" />
+    <Content Include="Areas\Intranet\Views\Perfil\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudNuevoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSedeRol.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\InformacionNuevo.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupPassword.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudNuevoCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupTipoReq.cshtml" />
+    <Content Include="Areas\Intranet\Views\PublicacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionOpciones.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionTipoReq.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\EdicionSede.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\PopupSede.cshtml" />
+    <Content Include="Areas\Intranet\Views\Usuario\popupSedeNivel.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudReemplazoCargo\ListaReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupListaReemplazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Puesto.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\PopupAprobacionRechazo.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edita.cshtml" />
+    <Content Include="Areas\Intranet\Views\LogSolicitudAmpliacionCargo\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Experiencia.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Publicacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudConsulta\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\ConfiguracionPerfil.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Conocimientos.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
+    <Content Include="Scripts\html5shiv-printshiv.js" />
+    <Content Include="Scripts\html5shiv.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\ListaCargos.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\DatosGenerales.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Edit.cshtml" />
+    <Content Include="Areas\Intranet\Views\Ranking\PopupCvPostulante.cshtml" />
+    <Content Include="Areas\Intranet\Views\Ranking\PostulantesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoGenerales\EditarDetalle.cshtml" />
+    <Content Include="Areas\Intranet\Views\Ranking\PopupExclucion.cshtml" />
+    <Content Include="Areas\Intranet\Views\Contrata\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\EvaluacionesPreSeleccionados.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\ProgramarEvaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\BusquedaUsuario\PopupUsuario.cshtml" />
+    <Content Include="Areas\Intranet\Views\EvaluacionesPreseleccionados\PopupResultado.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Contrata\popupObserv.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Instrucciones.cshtml" />
+    <Content Include="Areas\Intranet\Views\Seguridad\Inicio.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\ExamenCronometro.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\Examen.cshtml" />
+    <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
+    <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
+    <Content Include="Scripts\bootswatch.js" />
+    <Content Include="Scripts\Funciones.js" />
+    <Content Include="Scripts\grid.locale-en.js" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
+    <Content Include="Reportes\Intranet\dsExamen.xsc">
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reportes\Intranet\dsCvPostulante.xsc">
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsCvPostulante.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCvPostulante1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Reportes\Intranet\dsCvPostulante.xss">
+      <DependentUpon>dsCvPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsExamen.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsExamen.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsExamen.xss">
+      <DependentUpon>dsExamen.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reportes\Intranet\dsExamenPostulante.xsc">
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsExamenPostulante.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsExamenPostulante.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsExamenPostulante.xss">
+      <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\grid.locale-es.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-migrate-1.2.1.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.custom.min.js" />
+    <Content Include="Scripts\jquery.conastec.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\SanPablo.js" />
+    <Content Include="Scripts\uploadify\cancel.png" />
+    <Content Include="Scripts\uploadify\expressInstall.swf" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.v2.1.4.js" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.v2.1.4.min.js" />
+    <Content Include="Scripts\uploadify\swfobject.js" />
+    <Content Include="Scripts\uploadify\uploadify.allglyphs.swf" />
+    <Content Include="Scripts\uploadify\uploadify.css" />
+    <Content Include="Scripts\uploadify\uploadify.swf" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\_LayoutIntranet.cshtml" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Postulante\DatosComplementarios.cshtml" />
+    <Content Include="Views\Postulante\DetalleCargo.cshtml" />
+    <Content Include="Views\Postulante\EvaluacionPostulante.cshtml" />
+    <Content Include="Views\Postulante\Examen.cshtml" />
+    <Content Include="Views\Postulante\General.cshtml" />
+    <Content Include="Views\Postulante\InstruccionesExamen.cshtml" />
+    <Content Include="Views\OportunidadLaboral\Index.cshtml" />
+    <Content Include="Views\OportunidadLaboral\Postulaciones.cshtml" />
+    <Content Include="Views\Postulante\Reclutamientos.cshtml" />
+    <Content Include="Views\Postulante\Referencias.cshtml" />
+    <Content Include="Views\Shared\MenuCv.cshtml" />
+    <Content Include="Views\Seguridad\Login.cshtml" />
+    <Content Include="Views\Sede\Edit.cshtml" />
+    <Content Include="Views\Sede\Index.cshtml" />
+    <Content Include="Views\EstudioPostulante\Edit.cshtml" />
+    <Content Include="Views\EstudioPostulante\Index.cshtml" />
+    <Content Include="Scripts\uploadify\check.php" />
+    <Content Include="Scripts\uploadify\uploadify.fla" />
+    <Content Include="Views\ExperienciaPostulante\Edit.cshtml" />
+    <Content Include="Views\ExperienciaPostulante\Index.cshtml" />
+    <Content Include="Scripts\uploadify\uploadify.php" />
+    <Content Include="Views\ParientePostulante\Edit.cshtml" />
+    <Content Include="Views\ParientePostulante\Index.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Ofimatica.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Index.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\Idiomas.cshtml" />
+    <Content Include="Views\ConocimientoGeneralPostulante\OtroConocimiento.cshtml" />
+    <Content Include="Views\DiscapacidadPostulante\Edit.cshtml" />
+    <Content Include="Views\DiscapacidadPostulante\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\NotAccess.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Postulante\AgregarFoto.cshtml" />
+    <Content Include="Views\Shared\LayoutCargo.cshtml" />
+    <Content Include="Views\Seguridad\PopupLogeo.cshtml" />
+    <Content Include="Views\Seguridad\PopupRestablecePass.cshtml" />
+    <Content Include="Views\OportunidadLaboral\DetalleGrupoCargo.cshtml" />
+    <Content Include="Areas\Intranet\Views\Ranking\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Archivos\Imagenes\" />
+    <Folder Include="Archivos\Pdf\" />
+    <Folder Include="Helper\" />
+    <Folder Include="TemplateEmail\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_LayoutExtranet.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SanPablo.Reclutador.Entity\SanPablo.Reclutador.Entity.csproj">
+      <Project>{f18ae36d-836e-47cb-b712-6287528c3310}</Project>
+      <Name>SanPablo.Reclutador.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SanPablo.Reclutador.Mapping\SanPablo.Reclutador.Mapping.csproj">
+      <Project>{55802a98-0786-44e9-92c8-f6b4651e31e2}</Project>
+      <Name>SanPablo.Reclutador.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SanPablo.Reclutador.Repository\SanPablo.Reclutador.Repository.csproj">
+      <Project>{4492ad21-c07e-497d-9214-1024cf2f1a03}</Project>
+      <Name>SanPablo.Reclutador.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ExamenPostulanteReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ExamenPostulanteReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\Intranet\CvPostulanteReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CvPostulanteReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\Intranet\ExamenReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ExamenReport.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:17962/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

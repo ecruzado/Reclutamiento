@@ -30,9 +30,13 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         
         private dtCriterioAlternativaDataTable tabledtCriterioAlternativa;
         
-        private global::System.Data.DataRelation relationdtCategoriaExamen_dtExamen;
+        private dtCategoriaSubCategoDataTable tabledtCategoriaSubCatego;
         
-        private global::System.Data.DataRelation relationdtCriterioAlternativa_dtCategoriaExamen;
+        private global::System.Data.DataRelation relationdtExamen_dtCategoriaExamen;
+        
+        private global::System.Data.DataRelation relationdtCategoriaExamen_dtCategoriaSubCatego;
+        
+        private global::System.Data.DataRelation relationdtCategoriaSubCatego_dtCriterioAlternativa;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -70,6 +74,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 }
                 if ((ds.Tables["dtCriterioAlternativa"] != null)) {
                     base.Tables.Add(new dtCriterioAlternativaDataTable(ds.Tables["dtCriterioAlternativa"]));
+                }
+                if ((ds.Tables["dtCategoriaSubCatego"] != null)) {
+                    base.Tables.Add(new dtCategoriaSubCategoDataTable(ds.Tables["dtCategoriaSubCatego"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -116,6 +123,16 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         public dtCriterioAlternativaDataTable dtCriterioAlternativa {
             get {
                 return this.tabledtCriterioAlternativa;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public dtCategoriaSubCategoDataTable dtCategoriaSubCatego {
+            get {
+                return this.tabledtCategoriaSubCatego;
             }
         }
         
@@ -195,6 +212,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 if ((ds.Tables["dtCriterioAlternativa"] != null)) {
                     base.Tables.Add(new dtCriterioAlternativaDataTable(ds.Tables["dtCriterioAlternativa"]));
                 }
+                if ((ds.Tables["dtCategoriaSubCatego"] != null)) {
+                    base.Tables.Add(new dtCategoriaSubCategoDataTable(ds.Tables["dtCategoriaSubCatego"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -246,8 +266,15 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                     this.tabledtCriterioAlternativa.InitVars();
                 }
             }
-            this.relationdtCategoriaExamen_dtExamen = this.Relations["dtCategoriaExamen_dtExamen"];
-            this.relationdtCriterioAlternativa_dtCategoriaExamen = this.Relations["dtCriterioAlternativa_dtCategoriaExamen"];
+            this.tabledtCategoriaSubCatego = ((dtCategoriaSubCategoDataTable)(base.Tables["dtCategoriaSubCatego"]));
+            if ((initTable == true)) {
+                if ((this.tabledtCategoriaSubCatego != null)) {
+                    this.tabledtCategoriaSubCatego.InitVars();
+                }
+            }
+            this.relationdtExamen_dtCategoriaExamen = this.Relations["dtExamen_dtCategoriaExamen"];
+            this.relationdtCategoriaExamen_dtCategoriaSubCatego = this.Relations["dtCategoriaExamen_dtCategoriaSubCatego"];
+            this.relationdtCategoriaSubCatego_dtCriterioAlternativa = this.Relations["dtCategoriaSubCatego_dtCriterioAlternativa"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -264,14 +291,20 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             base.Tables.Add(this.tabledtCategoriaExamen);
             this.tabledtCriterioAlternativa = new dtCriterioAlternativaDataTable();
             base.Tables.Add(this.tabledtCriterioAlternativa);
-            this.relationdtCategoriaExamen_dtExamen = new global::System.Data.DataRelation("dtCategoriaExamen_dtExamen", new global::System.Data.DataColumn[] {
-                        this.tabledtCategoriaExamen.IdeReclutamientoExamenColumn}, new global::System.Data.DataColumn[] {
-                        this.tabledtExamen.IdeReclutaPersonaExamenColumn}, false);
-            this.Relations.Add(this.relationdtCategoriaExamen_dtExamen);
-            this.relationdtCriterioAlternativa_dtCategoriaExamen = new global::System.Data.DataRelation("dtCriterioAlternativa_dtCategoriaExamen", new global::System.Data.DataColumn[] {
-                        this.tabledtCriterioAlternativa.IdeReclutamientoExamenCategoriaColumn}, new global::System.Data.DataColumn[] {
-                        this.tabledtCategoriaExamen.IdeReclutamientoExamenCategoriaColumn}, false);
-            this.Relations.Add(this.relationdtCriterioAlternativa_dtCategoriaExamen);
+            this.tabledtCategoriaSubCatego = new dtCategoriaSubCategoDataTable();
+            base.Tables.Add(this.tabledtCategoriaSubCatego);
+            this.relationdtExamen_dtCategoriaExamen = new global::System.Data.DataRelation("dtExamen_dtCategoriaExamen", new global::System.Data.DataColumn[] {
+                        this.tabledtExamen.IDERECLUPERSOEXAMENColumn}, new global::System.Data.DataColumn[] {
+                        this.tabledtCategoriaExamen.IDERECLUPERSOEXAMENColumn}, false);
+            this.Relations.Add(this.relationdtExamen_dtCategoriaExamen);
+            this.relationdtCategoriaExamen_dtCategoriaSubCatego = new global::System.Data.DataRelation("dtCategoriaExamen_dtCategoriaSubCatego", new global::System.Data.DataColumn[] {
+                        this.tabledtCategoriaExamen.IDERECLPERSOEXAMNCATColumn}, new global::System.Data.DataColumn[] {
+                        this.tabledtCategoriaSubCatego.IDERECLPERSOEXAMNCATColumn}, false);
+            this.Relations.Add(this.relationdtCategoriaExamen_dtCategoriaSubCatego);
+            this.relationdtCategoriaSubCatego_dtCriterioAlternativa = new global::System.Data.DataRelation("dtCategoriaSubCatego_dtCriterioAlternativa", new global::System.Data.DataColumn[] {
+                        this.tabledtCategoriaSubCatego.IDESUBCATEGORIAColumn}, new global::System.Data.DataColumn[] {
+                        this.tabledtCriterioAlternativa.IDESUBCATEGORIAColumn}, false);
+            this.Relations.Add(this.relationdtCategoriaSubCatego_dtCriterioAlternativa);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -289,6 +322,12 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializedtCriterioAlternativa() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializedtCategoriaSubCatego() {
             return false;
         }
         
@@ -356,6 +395,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void dtCriterioAlternativaRowChangeEventHandler(object sender, dtCriterioAlternativaRowChangeEvent e);
         
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void dtCategoriaSubCategoRowChangeEventHandler(object sender, dtCategoriaSubCategoRowChangeEvent e);
+        
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
@@ -363,17 +405,17 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class dtExamenDataTable : global::System.Data.TypedTableBase<dtExamenRow> {
             
-            private global::System.Data.DataColumn columnIdeReclutaPersonaExamen;
+            private global::System.Data.DataColumn columnIDERECLUPERSOEXAMEN;
             
-            private global::System.Data.DataColumn columnNombreExamen;
+            private global::System.Data.DataColumn columnNOMEXAMEN;
             
-            private global::System.Data.DataColumn columnDescripcionExamen;
+            private global::System.Data.DataColumn columnDESCEXAMEN;
             
-            private global::System.Data.DataColumn columnTipoExamen;
+            private global::System.Data.DataColumn columnTIPEXAMEN;
             
-            private global::System.Data.DataColumn columnNotaFinal;
+            private global::System.Data.DataColumn columnNOTAFINAL;
             
-            private global::System.Data.DataColumn columnNombrePostulante;
+            private global::System.Data.DataColumn columnNOMBPOSTULANTE;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -410,49 +452,49 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeReclutaPersonaExamenColumn {
+            public global::System.Data.DataColumn IDERECLUPERSOEXAMENColumn {
                 get {
-                    return this.columnIdeReclutaPersonaExamen;
+                    return this.columnIDERECLUPERSOEXAMEN;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombreExamenColumn {
+            public global::System.Data.DataColumn NOMEXAMENColumn {
                 get {
-                    return this.columnNombreExamen;
+                    return this.columnNOMEXAMEN;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn DescripcionExamenColumn {
+            public global::System.Data.DataColumn DESCEXAMENColumn {
                 get {
-                    return this.columnDescripcionExamen;
+                    return this.columnDESCEXAMEN;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn TipoExamenColumn {
+            public global::System.Data.DataColumn TIPEXAMENColumn {
                 get {
-                    return this.columnTipoExamen;
+                    return this.columnTIPEXAMEN;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NotaFinalColumn {
+            public global::System.Data.DataColumn NOTAFINALColumn {
                 get {
-                    return this.columnNotaFinal;
+                    return this.columnNOTAFINAL;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombrePostulanteColumn {
+            public global::System.Data.DataColumn NOMBPOSTULANTEColumn {
                 get {
-                    return this.columnNombrePostulante;
+                    return this.columnNOMBPOSTULANTE;
                 }
             }
             
@@ -493,18 +535,15 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtExamenRow AdddtExamenRow(dtCategoriaExamenRow parentdtCategoriaExamenRowBydtCategoriaExamen_dtExamen, string NombreExamen, string DescripcionExamen, string TipoExamen, int NotaFinal, string NombrePostulante) {
+            public dtExamenRow AdddtExamenRow(int IDERECLUPERSOEXAMEN, string NOMEXAMEN, string DESCEXAMEN, string TIPEXAMEN, int NOTAFINAL, string NOMBPOSTULANTE) {
                 dtExamenRow rowdtExamenRow = ((dtExamenRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        null,
-                        NombreExamen,
-                        DescripcionExamen,
-                        TipoExamen,
-                        NotaFinal,
-                        NombrePostulante};
-                if ((parentdtCategoriaExamenRowBydtCategoriaExamen_dtExamen != null)) {
-                    columnValuesArray[0] = parentdtCategoriaExamenRowBydtCategoriaExamen_dtExamen[1];
-                }
+                        IDERECLUPERSOEXAMEN,
+                        NOMEXAMEN,
+                        DESCEXAMEN,
+                        TIPEXAMEN,
+                        NOTAFINAL,
+                        NOMBPOSTULANTE};
                 rowdtExamenRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtExamenRow);
                 return rowdtExamenRow;
@@ -527,32 +566,32 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnIdeReclutaPersonaExamen = base.Columns["IdeReclutaPersonaExamen"];
-                this.columnNombreExamen = base.Columns["NombreExamen"];
-                this.columnDescripcionExamen = base.Columns["DescripcionExamen"];
-                this.columnTipoExamen = base.Columns["TipoExamen"];
-                this.columnNotaFinal = base.Columns["NotaFinal"];
-                this.columnNombrePostulante = base.Columns["NombrePostulante"];
+                this.columnIDERECLUPERSOEXAMEN = base.Columns["IDERECLUPERSOEXAMEN"];
+                this.columnNOMEXAMEN = base.Columns["NOMEXAMEN"];
+                this.columnDESCEXAMEN = base.Columns["DESCEXAMEN"];
+                this.columnTIPEXAMEN = base.Columns["TIPEXAMEN"];
+                this.columnNOTAFINAL = base.Columns["NOTAFINAL"];
+                this.columnNOMBPOSTULANTE = base.Columns["NOMBPOSTULANTE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnIdeReclutaPersonaExamen = new global::System.Data.DataColumn("IdeReclutaPersonaExamen", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeReclutaPersonaExamen);
-                this.columnNombreExamen = new global::System.Data.DataColumn("NombreExamen", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreExamen);
-                this.columnDescripcionExamen = new global::System.Data.DataColumn("DescripcionExamen", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionExamen);
-                this.columnTipoExamen = new global::System.Data.DataColumn("TipoExamen", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoExamen);
-                this.columnNotaFinal = new global::System.Data.DataColumn("NotaFinal", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNotaFinal);
-                this.columnNombrePostulante = new global::System.Data.DataColumn("NombrePostulante", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombrePostulante);
+                this.columnIDERECLUPERSOEXAMEN = new global::System.Data.DataColumn("IDERECLUPERSOEXAMEN", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLUPERSOEXAMEN);
+                this.columnNOMEXAMEN = new global::System.Data.DataColumn("NOMEXAMEN", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOMEXAMEN);
+                this.columnDESCEXAMEN = new global::System.Data.DataColumn("DESCEXAMEN", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESCEXAMEN);
+                this.columnTIPEXAMEN = new global::System.Data.DataColumn("TIPEXAMEN", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIPEXAMEN);
+                this.columnNOTAFINAL = new global::System.Data.DataColumn("NOTAFINAL", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOTAFINAL);
+                this.columnNOMBPOSTULANTE = new global::System.Data.DataColumn("NOMBPOSTULANTE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOMBPOSTULANTE);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("dtExamenKey1", new global::System.Data.DataColumn[] {
-                                this.columnIdeReclutaPersonaExamen}, false));
-                this.columnIdeReclutaPersonaExamen.Unique = true;
+                                this.columnIDERECLUPERSOEXAMEN}, false));
+                this.columnIDERECLUPERSOEXAMEN.Unique = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -686,19 +725,19 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class dtCategoriaExamenDataTable : global::System.Data.TypedTableBase<dtCategoriaExamenRow> {
             
-            private global::System.Data.DataColumn columnIdeReclutamientoExamenCategoria;
+            private global::System.Data.DataColumn columnIDERECLPERSOEXAMNCAT;
             
-            private global::System.Data.DataColumn columnIdeReclutamientoExamen;
+            private global::System.Data.DataColumn columnIDERECLUPERSOEXAMEN;
             
-            private global::System.Data.DataColumn columnNroPreguntas;
+            private global::System.Data.DataColumn columnNROPREGUNTAS;
             
-            private global::System.Data.DataColumn columnNotaExamenCategoria;
+            private global::System.Data.DataColumn columnNOTAEXAMENCATEG;
             
-            private global::System.Data.DataColumn columnNombreCategoria;
+            private global::System.Data.DataColumn columnNOMCATEGORIA;
             
-            private global::System.Data.DataColumn columnDescripcionCategoria;
+            private global::System.Data.DataColumn columnDESCCATEGORIA;
             
-            private global::System.Data.DataColumn columnTiempo;
+            private global::System.Data.DataColumn columnTIEMPO;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -735,57 +774,57 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeReclutamientoExamenCategoriaColumn {
+            public global::System.Data.DataColumn IDERECLPERSOEXAMNCATColumn {
                 get {
-                    return this.columnIdeReclutamientoExamenCategoria;
+                    return this.columnIDERECLPERSOEXAMNCAT;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeReclutamientoExamenColumn {
+            public global::System.Data.DataColumn IDERECLUPERSOEXAMENColumn {
                 get {
-                    return this.columnIdeReclutamientoExamen;
+                    return this.columnIDERECLUPERSOEXAMEN;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NroPreguntasColumn {
+            public global::System.Data.DataColumn NROPREGUNTASColumn {
                 get {
-                    return this.columnNroPreguntas;
+                    return this.columnNROPREGUNTAS;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NotaExamenCategoriaColumn {
+            public global::System.Data.DataColumn NOTAEXAMENCATEGColumn {
                 get {
-                    return this.columnNotaExamenCategoria;
+                    return this.columnNOTAEXAMENCATEG;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombreCategoriaColumn {
+            public global::System.Data.DataColumn NOMCATEGORIAColumn {
                 get {
-                    return this.columnNombreCategoria;
+                    return this.columnNOMCATEGORIA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn DescripcionCategoriaColumn {
+            public global::System.Data.DataColumn DESCCATEGORIAColumn {
                 get {
-                    return this.columnDescripcionCategoria;
+                    return this.columnDESCCATEGORIA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn TiempoColumn {
+            public global::System.Data.DataColumn TIEMPOColumn {
                 get {
-                    return this.columnTiempo;
+                    return this.columnTIEMPO;
                 }
             }
             
@@ -826,18 +865,18 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCategoriaExamenRow AdddtCategoriaExamenRow(dtCriterioAlternativaRow parentdtCriterioAlternativaRowBydtCriterioAlternativa_dtCategoriaExamen, int IdeReclutamientoExamen, int NroPreguntas, int NotaExamenCategoria, string NombreCategoria, string DescripcionCategoria, string Tiempo) {
+            public dtCategoriaExamenRow AdddtCategoriaExamenRow(int IDERECLPERSOEXAMNCAT, dtExamenRow parentdtExamenRowBydtExamen_dtCategoriaExamen, int NROPREGUNTAS, int NOTAEXAMENCATEG, string NOMCATEGORIA, string DESCCATEGORIA, string TIEMPO) {
                 dtCategoriaExamenRow rowdtCategoriaExamenRow = ((dtCategoriaExamenRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        IDERECLPERSOEXAMNCAT,
                         null,
-                        IdeReclutamientoExamen,
-                        NroPreguntas,
-                        NotaExamenCategoria,
-                        NombreCategoria,
-                        DescripcionCategoria,
-                        Tiempo};
-                if ((parentdtCriterioAlternativaRowBydtCriterioAlternativa_dtCategoriaExamen != null)) {
-                    columnValuesArray[0] = parentdtCriterioAlternativaRowBydtCriterioAlternativa_dtCategoriaExamen[1];
+                        NROPREGUNTAS,
+                        NOTAEXAMENCATEG,
+                        NOMCATEGORIA,
+                        DESCCATEGORIA,
+                        TIEMPO};
+                if ((parentdtExamenRowBydtExamen_dtCategoriaExamen != null)) {
+                    columnValuesArray[1] = parentdtExamenRowBydtExamen_dtCategoriaExamen[0];
                 }
                 rowdtCategoriaExamenRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtCategoriaExamenRow);
@@ -846,9 +885,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCategoriaExamenRow FindByIdeReclutamientoExamenCategoria(int IdeReclutamientoExamenCategoria) {
+            public dtCategoriaExamenRow FindByIDERECLPERSOEXAMNCAT(int IDERECLPERSOEXAMNCAT) {
                 return ((dtCategoriaExamenRow)(this.Rows.Find(new object[] {
-                            IdeReclutamientoExamenCategoria})));
+                            IDERECLPERSOEXAMNCAT})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -868,36 +907,36 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnIdeReclutamientoExamenCategoria = base.Columns["IdeReclutamientoExamenCategoria"];
-                this.columnIdeReclutamientoExamen = base.Columns["IdeReclutamientoExamen"];
-                this.columnNroPreguntas = base.Columns["NroPreguntas"];
-                this.columnNotaExamenCategoria = base.Columns["NotaExamenCategoria"];
-                this.columnNombreCategoria = base.Columns["NombreCategoria"];
-                this.columnDescripcionCategoria = base.Columns["DescripcionCategoria"];
-                this.columnTiempo = base.Columns["Tiempo"];
+                this.columnIDERECLPERSOEXAMNCAT = base.Columns["IDERECLPERSOEXAMNCAT"];
+                this.columnIDERECLUPERSOEXAMEN = base.Columns["IDERECLUPERSOEXAMEN"];
+                this.columnNROPREGUNTAS = base.Columns["NROPREGUNTAS"];
+                this.columnNOTAEXAMENCATEG = base.Columns["NOTAEXAMENCATEG"];
+                this.columnNOMCATEGORIA = base.Columns["NOMCATEGORIA"];
+                this.columnDESCCATEGORIA = base.Columns["DESCCATEGORIA"];
+                this.columnTIEMPO = base.Columns["TIEMPO"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnIdeReclutamientoExamenCategoria = new global::System.Data.DataColumn("IdeReclutamientoExamenCategoria", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeReclutamientoExamenCategoria);
-                this.columnIdeReclutamientoExamen = new global::System.Data.DataColumn("IdeReclutamientoExamen", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeReclutamientoExamen);
-                this.columnNroPreguntas = new global::System.Data.DataColumn("NroPreguntas", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNroPreguntas);
-                this.columnNotaExamenCategoria = new global::System.Data.DataColumn("NotaExamenCategoria", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNotaExamenCategoria);
-                this.columnNombreCategoria = new global::System.Data.DataColumn("NombreCategoria", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreCategoria);
-                this.columnDescripcionCategoria = new global::System.Data.DataColumn("DescripcionCategoria", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDescripcionCategoria);
-                this.columnTiempo = new global::System.Data.DataColumn("Tiempo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTiempo);
+                this.columnIDERECLPERSOEXAMNCAT = new global::System.Data.DataColumn("IDERECLPERSOEXAMNCAT", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLPERSOEXAMNCAT);
+                this.columnIDERECLUPERSOEXAMEN = new global::System.Data.DataColumn("IDERECLUPERSOEXAMEN", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLUPERSOEXAMEN);
+                this.columnNROPREGUNTAS = new global::System.Data.DataColumn("NROPREGUNTAS", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNROPREGUNTAS);
+                this.columnNOTAEXAMENCATEG = new global::System.Data.DataColumn("NOTAEXAMENCATEG", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOTAEXAMENCATEG);
+                this.columnNOMCATEGORIA = new global::System.Data.DataColumn("NOMCATEGORIA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOMCATEGORIA);
+                this.columnDESCCATEGORIA = new global::System.Data.DataColumn("DESCCATEGORIA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESCCATEGORIA);
+                this.columnTIEMPO = new global::System.Data.DataColumn("TIEMPO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIEMPO);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnIdeReclutamientoExamenCategoria}, true));
-                this.columnIdeReclutamientoExamenCategoria.AllowDBNull = false;
-                this.columnIdeReclutamientoExamenCategoria.Unique = true;
+                                this.columnIDERECLPERSOEXAMNCAT}, true));
+                this.columnIDERECLPERSOEXAMNCAT.AllowDBNull = false;
+                this.columnIDERECLPERSOEXAMNCAT.Unique = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1031,25 +1070,31 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class dtCriterioAlternativaDataTable : global::System.Data.TypedTableBase<dtCriterioAlternativaRow> {
             
-            private global::System.Data.DataColumn columnIdeReclutamientoCriterio;
+            private global::System.Data.DataColumn columnIDERECLUPERSOCRITERIO;
             
-            private global::System.Data.DataColumn columnIdeReclutamientoExamenCategoria;
+            private global::System.Data.DataColumn columnIDERECLPERSOEXAMNCAT;
             
-            private global::System.Data.DataColumn columnPregunta;
+            private global::System.Data.DataColumn columnIDECRITERIOXSUBCATEGORIA;
             
-            private global::System.Data.DataColumn columnTipoModo;
+            private global::System.Data.DataColumn columnIDESUBCATEGORIA;
             
-            private global::System.Data.DataColumn columnImagenCriterio;
+            private global::System.Data.DataColumn columnPREGUNTA;
             
-            private global::System.Data.DataColumn columnPuntajeCriterio;
+            private global::System.Data.DataColumn columnTIPMODO;
             
-            private global::System.Data.DataColumn columnIdeAlternativa;
+            private global::System.Data.DataColumn columnINDRESPUESTA;
             
-            private global::System.Data.DataColumn columnAlternativa;
+            private global::System.Data.DataColumn columnIMAGENCRIT;
             
-            private global::System.Data.DataColumn columnImagenAlternativa;
+            private global::System.Data.DataColumn columnPUNTTOTAL;
             
-            private global::System.Data.DataColumn columnPeso;
+            private global::System.Data.DataColumn columnIDEALTERNATIVA;
+            
+            private global::System.Data.DataColumn columnALTERNATIVA;
+            
+            private global::System.Data.DataColumn columnIMAGE;
+            
+            private global::System.Data.DataColumn columnPESO;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -1086,81 +1131,105 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeReclutamientoCriterioColumn {
+            public global::System.Data.DataColumn IDERECLUPERSOCRITERIOColumn {
                 get {
-                    return this.columnIdeReclutamientoCriterio;
+                    return this.columnIDERECLUPERSOCRITERIO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeReclutamientoExamenCategoriaColumn {
+            public global::System.Data.DataColumn IDERECLPERSOEXAMNCATColumn {
                 get {
-                    return this.columnIdeReclutamientoExamenCategoria;
+                    return this.columnIDERECLPERSOEXAMNCAT;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn PreguntaColumn {
+            public global::System.Data.DataColumn IDECRITERIOXSUBCATEGORIAColumn {
                 get {
-                    return this.columnPregunta;
+                    return this.columnIDECRITERIOXSUBCATEGORIA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn TipoModoColumn {
+            public global::System.Data.DataColumn IDESUBCATEGORIAColumn {
                 get {
-                    return this.columnTipoModo;
+                    return this.columnIDESUBCATEGORIA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ImagenCriterioColumn {
+            public global::System.Data.DataColumn PREGUNTAColumn {
                 get {
-                    return this.columnImagenCriterio;
+                    return this.columnPREGUNTA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn PuntajeCriterioColumn {
+            public global::System.Data.DataColumn TIPMODOColumn {
                 get {
-                    return this.columnPuntajeCriterio;
+                    return this.columnTIPMODO;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IdeAlternativaColumn {
+            public global::System.Data.DataColumn INDRESPUESTAColumn {
                 get {
-                    return this.columnIdeAlternativa;
+                    return this.columnINDRESPUESTA;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn AlternativaColumn {
+            public global::System.Data.DataColumn IMAGENCRITColumn {
                 get {
-                    return this.columnAlternativa;
+                    return this.columnIMAGENCRIT;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ImagenAlternativaColumn {
+            public global::System.Data.DataColumn PUNTTOTALColumn {
                 get {
-                    return this.columnImagenAlternativa;
+                    return this.columnPUNTTOTAL;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn PesoColumn {
+            public global::System.Data.DataColumn IDEALTERNATIVAColumn {
                 get {
-                    return this.columnPeso;
+                    return this.columnIDEALTERNATIVA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ALTERNATIVAColumn {
+                get {
+                    return this.columnALTERNATIVA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IMAGEColumn {
+                get {
+                    return this.columnIMAGE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PESOColumn {
+                get {
+                    return this.columnPESO;
                 }
             }
             
@@ -1201,19 +1270,25 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCriterioAlternativaRow AdddtCriterioAlternativaRow(int IdeReclutamientoCriterio, int IdeReclutamientoExamenCategoria, string Pregunta, string TipoModo, byte[] ImagenCriterio, string PuntajeCriterio, string IdeAlternativa, string Alternativa, byte[] ImagenAlternativa, string Peso) {
+            public dtCriterioAlternativaRow AdddtCriterioAlternativaRow(int IDERECLUPERSOCRITERIO, int IDERECLPERSOEXAMNCAT, int IDECRITERIOXSUBCATEGORIA, dtCategoriaSubCategoRow parentdtCategoriaSubCategoRowBydtCategoriaSubCatego_dtCriterioAlternativa, string PREGUNTA, string TIPMODO, string INDRESPUESTA, byte[] IMAGENCRIT, string PUNTTOTAL, string IDEALTERNATIVA, string ALTERNATIVA, byte[] IMAGE, string PESO) {
                 dtCriterioAlternativaRow rowdtCriterioAlternativaRow = ((dtCriterioAlternativaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        IdeReclutamientoCriterio,
-                        IdeReclutamientoExamenCategoria,
-                        Pregunta,
-                        TipoModo,
-                        ImagenCriterio,
-                        PuntajeCriterio,
-                        IdeAlternativa,
-                        Alternativa,
-                        ImagenAlternativa,
-                        Peso};
+                        IDERECLUPERSOCRITERIO,
+                        IDERECLPERSOEXAMNCAT,
+                        IDECRITERIOXSUBCATEGORIA,
+                        null,
+                        PREGUNTA,
+                        TIPMODO,
+                        INDRESPUESTA,
+                        IMAGENCRIT,
+                        PUNTTOTAL,
+                        IDEALTERNATIVA,
+                        ALTERNATIVA,
+                        IMAGE,
+                        PESO};
+                if ((parentdtCategoriaSubCategoRowBydtCategoriaSubCatego_dtCriterioAlternativa != null)) {
+                    columnValuesArray[3] = parentdtCategoriaSubCategoRowBydtCategoriaSubCatego_dtCriterioAlternativa[0];
+                }
                 rowdtCriterioAlternativaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtCriterioAlternativaRow);
                 return rowdtCriterioAlternativaRow;
@@ -1221,9 +1296,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCriterioAlternativaRow FindByIdeReclutamientoCriterio(int IdeReclutamientoCriterio) {
+            public dtCriterioAlternativaRow FindByIDERECLUPERSOCRITERIO(int IDERECLUPERSOCRITERIO) {
                 return ((dtCriterioAlternativaRow)(this.Rows.Find(new object[] {
-                            IdeReclutamientoCriterio})));
+                            IDERECLUPERSOCRITERIO})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1243,45 +1318,54 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnIdeReclutamientoCriterio = base.Columns["IdeReclutamientoCriterio"];
-                this.columnIdeReclutamientoExamenCategoria = base.Columns["IdeReclutamientoExamenCategoria"];
-                this.columnPregunta = base.Columns["Pregunta"];
-                this.columnTipoModo = base.Columns["TipoModo"];
-                this.columnImagenCriterio = base.Columns["ImagenCriterio"];
-                this.columnPuntajeCriterio = base.Columns["PuntajeCriterio"];
-                this.columnIdeAlternativa = base.Columns["IdeAlternativa"];
-                this.columnAlternativa = base.Columns["Alternativa"];
-                this.columnImagenAlternativa = base.Columns["ImagenAlternativa"];
-                this.columnPeso = base.Columns["Peso"];
+                this.columnIDERECLUPERSOCRITERIO = base.Columns["IDERECLUPERSOCRITERIO"];
+                this.columnIDERECLPERSOEXAMNCAT = base.Columns["IDERECLPERSOEXAMNCAT"];
+                this.columnIDECRITERIOXSUBCATEGORIA = base.Columns["IDECRITERIOXSUBCATEGORIA"];
+                this.columnIDESUBCATEGORIA = base.Columns["IDESUBCATEGORIA"];
+                this.columnPREGUNTA = base.Columns["PREGUNTA"];
+                this.columnTIPMODO = base.Columns["TIPMODO"];
+                this.columnINDRESPUESTA = base.Columns["INDRESPUESTA"];
+                this.columnIMAGENCRIT = base.Columns["IMAGENCRIT"];
+                this.columnPUNTTOTAL = base.Columns["PUNTTOTAL"];
+                this.columnIDEALTERNATIVA = base.Columns["IDEALTERNATIVA"];
+                this.columnALTERNATIVA = base.Columns["ALTERNATIVA"];
+                this.columnIMAGE = base.Columns["IMAGE"];
+                this.columnPESO = base.Columns["PESO"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnIdeReclutamientoCriterio = new global::System.Data.DataColumn("IdeReclutamientoCriterio", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeReclutamientoCriterio);
-                this.columnIdeReclutamientoExamenCategoria = new global::System.Data.DataColumn("IdeReclutamientoExamenCategoria", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeReclutamientoExamenCategoria);
-                this.columnPregunta = new global::System.Data.DataColumn("Pregunta", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPregunta);
-                this.columnTipoModo = new global::System.Data.DataColumn("TipoModo", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoModo);
-                this.columnImagenCriterio = new global::System.Data.DataColumn("ImagenCriterio", typeof(byte[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnImagenCriterio);
-                this.columnPuntajeCriterio = new global::System.Data.DataColumn("PuntajeCriterio", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPuntajeCriterio);
-                this.columnIdeAlternativa = new global::System.Data.DataColumn("IdeAlternativa", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIdeAlternativa);
-                this.columnAlternativa = new global::System.Data.DataColumn("Alternativa", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAlternativa);
-                this.columnImagenAlternativa = new global::System.Data.DataColumn("ImagenAlternativa", typeof(byte[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnImagenAlternativa);
-                this.columnPeso = new global::System.Data.DataColumn("Peso", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPeso);
+                this.columnIDERECLUPERSOCRITERIO = new global::System.Data.DataColumn("IDERECLUPERSOCRITERIO", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLUPERSOCRITERIO);
+                this.columnIDERECLPERSOEXAMNCAT = new global::System.Data.DataColumn("IDERECLPERSOEXAMNCAT", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLPERSOEXAMNCAT);
+                this.columnIDECRITERIOXSUBCATEGORIA = new global::System.Data.DataColumn("IDECRITERIOXSUBCATEGORIA", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDECRITERIOXSUBCATEGORIA);
+                this.columnIDESUBCATEGORIA = new global::System.Data.DataColumn("IDESUBCATEGORIA", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDESUBCATEGORIA);
+                this.columnPREGUNTA = new global::System.Data.DataColumn("PREGUNTA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPREGUNTA);
+                this.columnTIPMODO = new global::System.Data.DataColumn("TIPMODO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIPMODO);
+                this.columnINDRESPUESTA = new global::System.Data.DataColumn("INDRESPUESTA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnINDRESPUESTA);
+                this.columnIMAGENCRIT = new global::System.Data.DataColumn("IMAGENCRIT", typeof(byte[]), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIMAGENCRIT);
+                this.columnPUNTTOTAL = new global::System.Data.DataColumn("PUNTTOTAL", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPUNTTOTAL);
+                this.columnIDEALTERNATIVA = new global::System.Data.DataColumn("IDEALTERNATIVA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDEALTERNATIVA);
+                this.columnALTERNATIVA = new global::System.Data.DataColumn("ALTERNATIVA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnALTERNATIVA);
+                this.columnIMAGE = new global::System.Data.DataColumn("IMAGE", typeof(byte[]), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIMAGE);
+                this.columnPESO = new global::System.Data.DataColumn("PESO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPESO);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnIdeReclutamientoCriterio}, true));
-                this.columnIdeReclutamientoCriterio.AllowDBNull = false;
-                this.columnIdeReclutamientoCriterio.Unique = true;
+                                this.columnIDERECLUPERSOCRITERIO}, true));
+                this.columnIDERECLUPERSOCRITERIO.AllowDBNull = false;
+                this.columnIDERECLUPERSOCRITERIO.Unique = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1409,6 +1493,317 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class dtCategoriaSubCategoDataTable : global::System.Data.TypedTableBase<dtCategoriaSubCategoRow> {
+            
+            private global::System.Data.DataColumn columnIDESUBCATEGORIA;
+            
+            private global::System.Data.DataColumn columnIDERECLPERSOEXAMNCAT;
+            
+            private global::System.Data.DataColumn columnNOMSUBCATEGORIA;
+            
+            private global::System.Data.DataColumn columnDESCSUBCATEGORIA;
+            
+            private global::System.Data.DataColumn columnORDENIMPRESION;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoDataTable() {
+                this.TableName = "dtCategoriaSubCatego";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal dtCategoriaSubCategoDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected dtCategoriaSubCategoDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IDESUBCATEGORIAColumn {
+                get {
+                    return this.columnIDESUBCATEGORIA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IDERECLPERSOEXAMNCATColumn {
+                get {
+                    return this.columnIDERECLPERSOEXAMNCAT;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn NOMSUBCATEGORIAColumn {
+                get {
+                    return this.columnNOMSUBCATEGORIA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DESCSUBCATEGORIAColumn {
+                get {
+                    return this.columnDESCSUBCATEGORIA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ORDENIMPRESIONColumn {
+                get {
+                    return this.columnORDENIMPRESION;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRow this[int index] {
+                get {
+                    return ((dtCategoriaSubCategoRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event dtCategoriaSubCategoRowChangeEventHandler dtCategoriaSubCategoRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event dtCategoriaSubCategoRowChangeEventHandler dtCategoriaSubCategoRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event dtCategoriaSubCategoRowChangeEventHandler dtCategoriaSubCategoRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event dtCategoriaSubCategoRowChangeEventHandler dtCategoriaSubCategoRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AdddtCategoriaSubCategoRow(dtCategoriaSubCategoRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRow AdddtCategoriaSubCategoRow(int IDESUBCATEGORIA, dtCategoriaExamenRow parentdtCategoriaExamenRowBydtCategoriaExamen_dtCategoriaSubCatego, string NOMSUBCATEGORIA, string DESCSUBCATEGORIA, int ORDENIMPRESION) {
+                dtCategoriaSubCategoRow rowdtCategoriaSubCategoRow = ((dtCategoriaSubCategoRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        IDESUBCATEGORIA,
+                        null,
+                        NOMSUBCATEGORIA,
+                        DESCSUBCATEGORIA,
+                        ORDENIMPRESION};
+                if ((parentdtCategoriaExamenRowBydtCategoriaExamen_dtCategoriaSubCatego != null)) {
+                    columnValuesArray[1] = parentdtCategoriaExamenRowBydtCategoriaExamen_dtCategoriaSubCatego[0];
+                }
+                rowdtCategoriaSubCategoRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowdtCategoriaSubCategoRow);
+                return rowdtCategoriaSubCategoRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                dtCategoriaSubCategoDataTable cln = ((dtCategoriaSubCategoDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new dtCategoriaSubCategoDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnIDESUBCATEGORIA = base.Columns["IDESUBCATEGORIA"];
+                this.columnIDERECLPERSOEXAMNCAT = base.Columns["IDERECLPERSOEXAMNCAT"];
+                this.columnNOMSUBCATEGORIA = base.Columns["NOMSUBCATEGORIA"];
+                this.columnDESCSUBCATEGORIA = base.Columns["DESCSUBCATEGORIA"];
+                this.columnORDENIMPRESION = base.Columns["ORDENIMPRESION"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnIDESUBCATEGORIA = new global::System.Data.DataColumn("IDESUBCATEGORIA", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDESUBCATEGORIA);
+                this.columnIDERECLPERSOEXAMNCAT = new global::System.Data.DataColumn("IDERECLPERSOEXAMNCAT", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIDERECLPERSOEXAMNCAT);
+                this.columnNOMSUBCATEGORIA = new global::System.Data.DataColumn("NOMSUBCATEGORIA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNOMSUBCATEGORIA);
+                this.columnDESCSUBCATEGORIA = new global::System.Data.DataColumn("DESCSUBCATEGORIA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESCSUBCATEGORIA);
+                this.columnORDENIMPRESION = new global::System.Data.DataColumn("ORDENIMPRESION", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnORDENIMPRESION);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("dtCategoriaSubCategoKey1", new global::System.Data.DataColumn[] {
+                                this.columnIDESUBCATEGORIA,
+                                this.columnIDERECLPERSOEXAMNCAT}, false));
+                this.columnIDESUBCATEGORIA.AllowDBNull = false;
+                this.columnIDERECLPERSOEXAMNCAT.AllowDBNull = false;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRow NewdtCategoriaSubCategoRow() {
+                return ((dtCategoriaSubCategoRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new dtCategoriaSubCategoRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(dtCategoriaSubCategoRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.dtCategoriaSubCategoRowChanged != null)) {
+                    this.dtCategoriaSubCategoRowChanged(this, new dtCategoriaSubCategoRowChangeEvent(((dtCategoriaSubCategoRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.dtCategoriaSubCategoRowChanging != null)) {
+                    this.dtCategoriaSubCategoRowChanging(this, new dtCategoriaSubCategoRowChangeEvent(((dtCategoriaSubCategoRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.dtCategoriaSubCategoRowDeleted != null)) {
+                    this.dtCategoriaSubCategoRowDeleted(this, new dtCategoriaSubCategoRowChangeEvent(((dtCategoriaSubCategoRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.dtCategoriaSubCategoRowDeleting != null)) {
+                    this.dtCategoriaSubCategoRowDeleting(this, new dtCategoriaSubCategoRowChangeEvent(((dtCategoriaSubCategoRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemovedtCategoriaSubCategoRow(dtCategoriaSubCategoRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsExamenPostulante ds = new dsExamenPostulante();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "dtCategoriaSubCategoDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class dtExamenRow : global::System.Data.DataRow {
@@ -1424,181 +1819,181 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int IdeReclutaPersonaExamen {
+            public int IDERECLUPERSOEXAMEN {
                 get {
                     try {
-                        return ((int)(this[this.tabledtExamen.IdeReclutaPersonaExamenColumn]));
+                        return ((int)(this[this.tabledtExamen.IDERECLUPERSOEXAMENColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'IdeReclutaPersonaExamen\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDERECLUPERSOEXAMEN\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.IdeReclutaPersonaExamenColumn] = value;
+                    this[this.tabledtExamen.IDERECLUPERSOEXAMENColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombreExamen {
+            public string NOMEXAMEN {
                 get {
                     try {
-                        return ((string)(this[this.tabledtExamen.NombreExamenColumn]));
+                        return ((string)(this[this.tabledtExamen.NOMEXAMENColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NombreExamen\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOMEXAMEN\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.NombreExamenColumn] = value;
+                    this[this.tabledtExamen.NOMEXAMENColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string DescripcionExamen {
+            public string DESCEXAMEN {
                 get {
                     try {
-                        return ((string)(this[this.tabledtExamen.DescripcionExamenColumn]));
+                        return ((string)(this[this.tabledtExamen.DESCEXAMENColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'DescripcionExamen\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'DESCEXAMEN\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.DescripcionExamenColumn] = value;
+                    this[this.tabledtExamen.DESCEXAMENColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string TipoExamen {
+            public string TIPEXAMEN {
                 get {
                     try {
-                        return ((string)(this[this.tabledtExamen.TipoExamenColumn]));
+                        return ((string)(this[this.tabledtExamen.TIPEXAMENColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'TipoExamen\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIPEXAMEN\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.TipoExamenColumn] = value;
+                    this[this.tabledtExamen.TIPEXAMENColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int NotaFinal {
+            public int NOTAFINAL {
                 get {
                     try {
-                        return ((int)(this[this.tabledtExamen.NotaFinalColumn]));
+                        return ((int)(this[this.tabledtExamen.NOTAFINALColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NotaFinal\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOTAFINAL\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.NotaFinalColumn] = value;
+                    this[this.tabledtExamen.NOTAFINALColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombrePostulante {
+            public string NOMBPOSTULANTE {
                 get {
                     try {
-                        return ((string)(this[this.tabledtExamen.NombrePostulanteColumn]));
+                        return ((string)(this[this.tabledtExamen.NOMBPOSTULANTEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NombrePostulante\' in table \'dtExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOMBPOSTULANTE\' in table \'dtExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtExamen.NombrePostulanteColumn] = value;
+                    this[this.tabledtExamen.NOMBPOSTULANTEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCategoriaExamenRow dtCategoriaExamenRow {
-                get {
-                    return ((dtCategoriaExamenRow)(this.GetParentRow(this.Table.ParentRelations["dtCategoriaExamen_dtExamen"])));
+            public bool IsIDERECLUPERSOEXAMENNull() {
+                return this.IsNull(this.tabledtExamen.IDERECLUPERSOEXAMENColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetIDERECLUPERSOEXAMENNull() {
+                this[this.tabledtExamen.IDERECLUPERSOEXAMENColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsNOMEXAMENNull() {
+                return this.IsNull(this.tabledtExamen.NOMEXAMENColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetNOMEXAMENNull() {
+                this[this.tabledtExamen.NOMEXAMENColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDESCEXAMENNull() {
+                return this.IsNull(this.tabledtExamen.DESCEXAMENColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDESCEXAMENNull() {
+                this[this.tabledtExamen.DESCEXAMENColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTIPEXAMENNull() {
+                return this.IsNull(this.tabledtExamen.TIPEXAMENColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIPEXAMENNull() {
+                this[this.tabledtExamen.TIPEXAMENColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsNOTAFINALNull() {
+                return this.IsNull(this.tabledtExamen.NOTAFINALColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetNOTAFINALNull() {
+                this[this.tabledtExamen.NOTAFINALColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsNOMBPOSTULANTENull() {
+                return this.IsNull(this.tabledtExamen.NOMBPOSTULANTEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetNOMBPOSTULANTENull() {
+                this[this.tabledtExamen.NOMBPOSTULANTEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaExamenRow[] GetdtCategoriaExamenRows() {
+                if ((this.Table.ChildRelations["dtExamen_dtCategoriaExamen"] == null)) {
+                    return new dtCategoriaExamenRow[0];
                 }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["dtCategoriaExamen_dtExamen"]);
+                else {
+                    return ((dtCategoriaExamenRow[])(base.GetChildRows(this.Table.ChildRelations["dtExamen_dtCategoriaExamen"])));
                 }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsIdeReclutaPersonaExamenNull() {
-                return this.IsNull(this.tabledtExamen.IdeReclutaPersonaExamenColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetIdeReclutaPersonaExamenNull() {
-                this[this.tabledtExamen.IdeReclutaPersonaExamenColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNombreExamenNull() {
-                return this.IsNull(this.tabledtExamen.NombreExamenColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNombreExamenNull() {
-                this[this.tabledtExamen.NombreExamenColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsDescripcionExamenNull() {
-                return this.IsNull(this.tabledtExamen.DescripcionExamenColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetDescripcionExamenNull() {
-                this[this.tabledtExamen.DescripcionExamenColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsTipoExamenNull() {
-                return this.IsNull(this.tabledtExamen.TipoExamenColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetTipoExamenNull() {
-                this[this.tabledtExamen.TipoExamenColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNotaFinalNull() {
-                return this.IsNull(this.tabledtExamen.NotaFinalColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNotaFinalNull() {
-                this[this.tabledtExamen.NotaFinalColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNombrePostulanteNull() {
-                return this.IsNull(this.tabledtExamen.NombrePostulanteColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNombrePostulanteNull() {
-                this[this.tabledtExamen.NombrePostulanteColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -1618,205 +2013,203 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int IdeReclutamientoExamenCategoria {
+            public int IDERECLPERSOEXAMNCAT {
                 get {
-                    return ((int)(this[this.tabledtCategoriaExamen.IdeReclutamientoExamenCategoriaColumn]));
+                    return ((int)(this[this.tabledtCategoriaExamen.IDERECLPERSOEXAMNCATColumn]));
                 }
                 set {
-                    this[this.tabledtCategoriaExamen.IdeReclutamientoExamenCategoriaColumn] = value;
+                    this[this.tabledtCategoriaExamen.IDERECLPERSOEXAMNCATColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int IdeReclutamientoExamen {
+            public int IDERECLUPERSOEXAMEN {
                 get {
                     try {
-                        return ((int)(this[this.tabledtCategoriaExamen.IdeReclutamientoExamenColumn]));
+                        return ((int)(this[this.tabledtCategoriaExamen.IDERECLUPERSOEXAMENColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'IdeReclutamientoExamen\' in table \'dtCategoriaExamen\' is DBN" +
-                                "ull.", e);
-                    }
-                }
-                set {
-                    this[this.tabledtCategoriaExamen.IdeReclutamientoExamenColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int NroPreguntas {
-                get {
-                    try {
-                        return ((int)(this[this.tabledtCategoriaExamen.NroPreguntasColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NroPreguntas\' in table \'dtCategoriaExamen\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tabledtCategoriaExamen.NroPreguntasColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int NotaExamenCategoria {
-                get {
-                    try {
-                        return ((int)(this[this.tabledtCategoriaExamen.NotaExamenCategoriaColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NotaExamenCategoria\' in table \'dtCategoriaExamen\' is DBNull" +
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDERECLUPERSOEXAMEN\' in table \'dtCategoriaExamen\' is DBNull" +
                                 ".", e);
                     }
                 }
                 set {
-                    this[this.tabledtCategoriaExamen.NotaExamenCategoriaColumn] = value;
+                    this[this.tabledtCategoriaExamen.IDERECLUPERSOEXAMENColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombreCategoria {
+            public int NROPREGUNTAS {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCategoriaExamen.NombreCategoriaColumn]));
+                        return ((int)(this[this.tabledtCategoriaExamen.NROPREGUNTASColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NombreCategoria\' in table \'dtCategoriaExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NROPREGUNTAS\' in table \'dtCategoriaExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCategoriaExamen.NombreCategoriaColumn] = value;
+                    this[this.tabledtCategoriaExamen.NROPREGUNTASColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string DescripcionCategoria {
+            public int NOTAEXAMENCATEG {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCategoriaExamen.DescripcionCategoriaColumn]));
+                        return ((int)(this[this.tabledtCategoriaExamen.NOTAEXAMENCATEGColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'DescripcionCategoria\' in table \'dtCategoriaExamen\' is DBNul" +
-                                "l.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOTAEXAMENCATEG\' in table \'dtCategoriaExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCategoriaExamen.DescripcionCategoriaColumn] = value;
+                    this[this.tabledtCategoriaExamen.NOTAEXAMENCATEGColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Tiempo {
+            public string NOMCATEGORIA {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCategoriaExamen.TiempoColumn]));
+                        return ((string)(this[this.tabledtCategoriaExamen.NOMCATEGORIAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Tiempo\' in table \'dtCategoriaExamen\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOMCATEGORIA\' in table \'dtCategoriaExamen\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCategoriaExamen.TiempoColumn] = value;
+                    this[this.tabledtCategoriaExamen.NOMCATEGORIAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCriterioAlternativaRow dtCriterioAlternativaRow {
+            public string DESCCATEGORIA {
                 get {
-                    return ((dtCriterioAlternativaRow)(this.GetParentRow(this.Table.ParentRelations["dtCriterioAlternativa_dtCategoriaExamen"])));
+                    try {
+                        return ((string)(this[this.tabledtCategoriaExamen.DESCCATEGORIAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DESCCATEGORIA\' in table \'dtCategoriaExamen\' is DBNull.", e);
+                    }
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["dtCriterioAlternativa_dtCategoriaExamen"]);
+                    this[this.tabledtCategoriaExamen.DESCCATEGORIAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsIdeReclutamientoExamenNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.IdeReclutamientoExamenColumn);
+            public string TIEMPO {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCategoriaExamen.TIEMPOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIEMPO\' in table \'dtCategoriaExamen\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCategoriaExamen.TIEMPOColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetIdeReclutamientoExamenNull() {
-                this[this.tabledtCategoriaExamen.IdeReclutamientoExamenColumn] = global::System.Convert.DBNull;
+            public dtExamenRow dtExamenRow {
+                get {
+                    return ((dtExamenRow)(this.GetParentRow(this.Table.ParentRelations["dtExamen_dtCategoriaExamen"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["dtExamen_dtCategoriaExamen"]);
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNroPreguntasNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.NroPreguntasColumn);
+            public bool IsIDERECLUPERSOEXAMENNull() {
+                return this.IsNull(this.tabledtCategoriaExamen.IDERECLUPERSOEXAMENColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNroPreguntasNull() {
-                this[this.tabledtCategoriaExamen.NroPreguntasColumn] = global::System.Convert.DBNull;
+            public void SetIDERECLUPERSOEXAMENNull() {
+                this[this.tabledtCategoriaExamen.IDERECLUPERSOEXAMENColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNotaExamenCategoriaNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.NotaExamenCategoriaColumn);
+            public bool IsNROPREGUNTASNull() {
+                return this.IsNull(this.tabledtCategoriaExamen.NROPREGUNTASColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNotaExamenCategoriaNull() {
-                this[this.tabledtCategoriaExamen.NotaExamenCategoriaColumn] = global::System.Convert.DBNull;
+            public void SetNROPREGUNTASNull() {
+                this[this.tabledtCategoriaExamen.NROPREGUNTASColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNombreCategoriaNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.NombreCategoriaColumn);
+            public bool IsNOTAEXAMENCATEGNull() {
+                return this.IsNull(this.tabledtCategoriaExamen.NOTAEXAMENCATEGColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNombreCategoriaNull() {
-                this[this.tabledtCategoriaExamen.NombreCategoriaColumn] = global::System.Convert.DBNull;
+            public void SetNOTAEXAMENCATEGNull() {
+                this[this.tabledtCategoriaExamen.NOTAEXAMENCATEGColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsDescripcionCategoriaNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.DescripcionCategoriaColumn);
+            public bool IsNOMCATEGORIANull() {
+                return this.IsNull(this.tabledtCategoriaExamen.NOMCATEGORIAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetDescripcionCategoriaNull() {
-                this[this.tabledtCategoriaExamen.DescripcionCategoriaColumn] = global::System.Convert.DBNull;
+            public void SetNOMCATEGORIANull() {
+                this[this.tabledtCategoriaExamen.NOMCATEGORIAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsTiempoNull() {
-                return this.IsNull(this.tabledtCategoriaExamen.TiempoColumn);
+            public bool IsDESCCATEGORIANull() {
+                return this.IsNull(this.tabledtCategoriaExamen.DESCCATEGORIAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetTiempoNull() {
-                this[this.tabledtCategoriaExamen.TiempoColumn] = global::System.Convert.DBNull;
+            public void SetDESCCATEGORIANull() {
+                this[this.tabledtCategoriaExamen.DESCCATEGORIAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtExamenRow[] GetdtExamenRows() {
-                if ((this.Table.ChildRelations["dtCategoriaExamen_dtExamen"] == null)) {
-                    return new dtExamenRow[0];
+            public bool IsTIEMPONull() {
+                return this.IsNull(this.tabledtCategoriaExamen.TIEMPOColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIEMPONull() {
+                this[this.tabledtCategoriaExamen.TIEMPOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRow[] GetdtCategoriaSubCategoRows() {
+                if ((this.Table.ChildRelations["dtCategoriaExamen_dtCategoriaSubCatego"] == null)) {
+                    return new dtCategoriaSubCategoRow[0];
                 }
                 else {
-                    return ((dtExamenRow[])(base.GetChildRows(this.Table.ChildRelations["dtCategoriaExamen_dtExamen"])));
+                    return ((dtCategoriaSubCategoRow[])(base.GetChildRows(this.Table.ChildRelations["dtCategoriaExamen_dtCategoriaSubCatego"])));
                 }
             }
         }
@@ -1837,280 +2230,508 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int IdeReclutamientoCriterio {
+            public int IDERECLUPERSOCRITERIO {
                 get {
-                    return ((int)(this[this.tabledtCriterioAlternativa.IdeReclutamientoCriterioColumn]));
+                    return ((int)(this[this.tabledtCriterioAlternativa.IDERECLUPERSOCRITERIOColumn]));
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.IdeReclutamientoCriterioColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IDERECLUPERSOCRITERIOColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int IdeReclutamientoExamenCategoria {
+            public int IDERECLPERSOEXAMNCAT {
                 get {
                     try {
-                        return ((int)(this[this.tabledtCriterioAlternativa.IdeReclutamientoExamenCategoriaColumn]));
+                        return ((int)(this[this.tabledtCriterioAlternativa.IDERECLPERSOEXAMNCATColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'IdeReclutamientoExamenCategoria\' in table \'dtCriterioAltern" +
-                                "ativa\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDERECLPERSOEXAMNCAT\' in table \'dtCriterioAlternativa\' is D" +
+                                "BNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.IdeReclutamientoExamenCategoriaColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IDERECLPERSOEXAMNCATColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Pregunta {
+            public int IDECRITERIOXSUBCATEGORIA {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.PreguntaColumn]));
+                        return ((int)(this[this.tabledtCriterioAlternativa.IDECRITERIOXSUBCATEGORIAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Pregunta\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDECRITERIOXSUBCATEGORIA\' in table \'dtCriterioAlternativa\' " +
+                                "is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.PreguntaColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IDECRITERIOXSUBCATEGORIAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string TipoModo {
+            public int IDESUBCATEGORIA {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.TipoModoColumn]));
+                        return ((int)(this[this.tabledtCriterioAlternativa.IDESUBCATEGORIAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'TipoModo\' in table \'dtCriterioAlternativa\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tabledtCriterioAlternativa.TipoModoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte[] ImagenCriterio {
-                get {
-                    try {
-                        return ((byte[])(this[this.tabledtCriterioAlternativa.ImagenCriterioColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ImagenCriterio\' in table \'dtCriterioAlternativa\' is DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tabledtCriterioAlternativa.ImagenCriterioColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string PuntajeCriterio {
-                get {
-                    try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.PuntajeCriterioColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'PuntajeCriterio\' in table \'dtCriterioAlternativa\' is DBNull" +
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDESUBCATEGORIA\' in table \'dtCriterioAlternativa\' is DBNull" +
                                 ".", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.PuntajeCriterioColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IDESUBCATEGORIAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string IdeAlternativa {
+            public string PREGUNTA {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.IdeAlternativaColumn]));
+                        return ((string)(this[this.tabledtCriterioAlternativa.PREGUNTAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'IdeAlternativa\' in table \'dtCriterioAlternativa\' is DBNull." +
+                        throw new global::System.Data.StrongTypingException("The value for column \'PREGUNTA\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCriterioAlternativa.PREGUNTAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TIPMODO {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCriterioAlternativa.TIPMODOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIPMODO\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCriterioAlternativa.TIPMODOColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string INDRESPUESTA {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCriterioAlternativa.INDRESPUESTAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'INDRESPUESTA\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCriterioAlternativa.INDRESPUESTAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte[] IMAGENCRIT {
+                get {
+                    try {
+                        return ((byte[])(this[this.tabledtCriterioAlternativa.IMAGENCRITColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'IMAGENCRIT\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCriterioAlternativa.IMAGENCRITColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PUNTTOTAL {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCriterioAlternativa.PUNTTOTALColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PUNTTOTAL\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCriterioAlternativa.PUNTTOTALColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string IDEALTERNATIVA {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCriterioAlternativa.IDEALTERNATIVAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'IDEALTERNATIVA\' in table \'dtCriterioAlternativa\' is DBNull." +
                                 "", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.IdeAlternativaColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IDEALTERNATIVAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Alternativa {
+            public string ALTERNATIVA {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.AlternativaColumn]));
+                        return ((string)(this[this.tabledtCriterioAlternativa.ALTERNATIVAColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Alternativa\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ALTERNATIVA\' in table \'dtCriterioAlternativa\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.AlternativaColumn] = value;
+                    this[this.tabledtCriterioAlternativa.ALTERNATIVAColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte[] ImagenAlternativa {
+            public byte[] IMAGE {
                 get {
                     try {
-                        return ((byte[])(this[this.tabledtCriterioAlternativa.ImagenAlternativaColumn]));
+                        return ((byte[])(this[this.tabledtCriterioAlternativa.IMAGEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ImagenAlternativa\' in table \'dtCriterioAlternativa\' is DBNu" +
-                                "ll.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'IMAGE\' in table \'dtCriterioAlternativa\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.ImagenAlternativaColumn] = value;
+                    this[this.tabledtCriterioAlternativa.IMAGEColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Peso {
+            public string PESO {
                 get {
                     try {
-                        return ((string)(this[this.tabledtCriterioAlternativa.PesoColumn]));
+                        return ((string)(this[this.tabledtCriterioAlternativa.PESOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Peso\' in table \'dtCriterioAlternativa\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'PESO\' in table \'dtCriterioAlternativa\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tabledtCriterioAlternativa.PesoColumn] = value;
+                    this[this.tabledtCriterioAlternativa.PESOColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsIdeReclutamientoExamenCategoriaNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.IdeReclutamientoExamenCategoriaColumn);
+            public dtCategoriaSubCategoRow dtCategoriaSubCategoRow {
+                get {
+                    return ((dtCategoriaSubCategoRow)(this.GetParentRow(this.Table.ParentRelations["dtCategoriaSubCatego_dtCriterioAlternativa"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["dtCategoriaSubCatego_dtCriterioAlternativa"]);
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetIdeReclutamientoExamenCategoriaNull() {
-                this[this.tabledtCriterioAlternativa.IdeReclutamientoExamenCategoriaColumn] = global::System.Convert.DBNull;
+            public bool IsIDERECLPERSOEXAMNCATNull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IDERECLPERSOEXAMNCATColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsPreguntaNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.PreguntaColumn);
+            public void SetIDERECLPERSOEXAMNCATNull() {
+                this[this.tabledtCriterioAlternativa.IDERECLPERSOEXAMNCATColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetPreguntaNull() {
-                this[this.tabledtCriterioAlternativa.PreguntaColumn] = global::System.Convert.DBNull;
+            public bool IsIDECRITERIOXSUBCATEGORIANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IDECRITERIOXSUBCATEGORIAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsTipoModoNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.TipoModoColumn);
+            public void SetIDECRITERIOXSUBCATEGORIANull() {
+                this[this.tabledtCriterioAlternativa.IDECRITERIOXSUBCATEGORIAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetTipoModoNull() {
-                this[this.tabledtCriterioAlternativa.TipoModoColumn] = global::System.Convert.DBNull;
+            public bool IsIDESUBCATEGORIANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IDESUBCATEGORIAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsImagenCriterioNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.ImagenCriterioColumn);
+            public void SetIDESUBCATEGORIANull() {
+                this[this.tabledtCriterioAlternativa.IDESUBCATEGORIAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetImagenCriterioNull() {
-                this[this.tabledtCriterioAlternativa.ImagenCriterioColumn] = global::System.Convert.DBNull;
+            public bool IsPREGUNTANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.PREGUNTAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsPuntajeCriterioNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.PuntajeCriterioColumn);
+            public void SetPREGUNTANull() {
+                this[this.tabledtCriterioAlternativa.PREGUNTAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetPuntajeCriterioNull() {
-                this[this.tabledtCriterioAlternativa.PuntajeCriterioColumn] = global::System.Convert.DBNull;
+            public bool IsTIPMODONull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.TIPMODOColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsIdeAlternativaNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.IdeAlternativaColumn);
+            public void SetTIPMODONull() {
+                this[this.tabledtCriterioAlternativa.TIPMODOColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetIdeAlternativaNull() {
-                this[this.tabledtCriterioAlternativa.IdeAlternativaColumn] = global::System.Convert.DBNull;
+            public bool IsINDRESPUESTANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.INDRESPUESTAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsAlternativaNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.AlternativaColumn);
+            public void SetINDRESPUESTANull() {
+                this[this.tabledtCriterioAlternativa.INDRESPUESTAColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetAlternativaNull() {
-                this[this.tabledtCriterioAlternativa.AlternativaColumn] = global::System.Convert.DBNull;
+            public bool IsIMAGENCRITNull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IMAGENCRITColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsImagenAlternativaNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.ImagenAlternativaColumn);
+            public void SetIMAGENCRITNull() {
+                this[this.tabledtCriterioAlternativa.IMAGENCRITColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetImagenAlternativaNull() {
-                this[this.tabledtCriterioAlternativa.ImagenAlternativaColumn] = global::System.Convert.DBNull;
+            public bool IsPUNTTOTALNull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.PUNTTOTALColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsPesoNull() {
-                return this.IsNull(this.tabledtCriterioAlternativa.PesoColumn);
+            public void SetPUNTTOTALNull() {
+                this[this.tabledtCriterioAlternativa.PUNTTOTALColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetPesoNull() {
-                this[this.tabledtCriterioAlternativa.PesoColumn] = global::System.Convert.DBNull;
+            public bool IsIDEALTERNATIVANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IDEALTERNATIVAColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtCategoriaExamenRow[] GetdtCategoriaExamenRows() {
-                if ((this.Table.ChildRelations["dtCriterioAlternativa_dtCategoriaExamen"] == null)) {
-                    return new dtCategoriaExamenRow[0];
+            public void SetIDEALTERNATIVANull() {
+                this[this.tabledtCriterioAlternativa.IDEALTERNATIVAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsALTERNATIVANull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.ALTERNATIVAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetALTERNATIVANull() {
+                this[this.tabledtCriterioAlternativa.ALTERNATIVAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsIMAGENull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.IMAGEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetIMAGENull() {
+                this[this.tabledtCriterioAlternativa.IMAGEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPESONull() {
+                return this.IsNull(this.tabledtCriterioAlternativa.PESOColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPESONull() {
+                this[this.tabledtCriterioAlternativa.PESOColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class dtCategoriaSubCategoRow : global::System.Data.DataRow {
+            
+            private dtCategoriaSubCategoDataTable tabledtCategoriaSubCatego;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal dtCategoriaSubCategoRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tabledtCategoriaSubCatego = ((dtCategoriaSubCategoDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int IDESUBCATEGORIA {
+                get {
+                    return ((int)(this[this.tabledtCategoriaSubCatego.IDESUBCATEGORIAColumn]));
+                }
+                set {
+                    this[this.tabledtCategoriaSubCatego.IDESUBCATEGORIAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int IDERECLPERSOEXAMNCAT {
+                get {
+                    return ((int)(this[this.tabledtCategoriaSubCatego.IDERECLPERSOEXAMNCATColumn]));
+                }
+                set {
+                    this[this.tabledtCategoriaSubCatego.IDERECLPERSOEXAMNCATColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string NOMSUBCATEGORIA {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCategoriaSubCatego.NOMSUBCATEGORIAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'NOMSUBCATEGORIA\' in table \'dtCategoriaSubCatego\' is DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCategoriaSubCatego.NOMSUBCATEGORIAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DESCSUBCATEGORIA {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtCategoriaSubCatego.DESCSUBCATEGORIAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DESCSUBCATEGORIA\' in table \'dtCategoriaSubCatego\' is DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCategoriaSubCatego.DESCSUBCATEGORIAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int ORDENIMPRESION {
+                get {
+                    try {
+                        return ((int)(this[this.tabledtCategoriaSubCatego.ORDENIMPRESIONColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ORDENIMPRESION\' in table \'dtCategoriaSubCatego\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtCategoriaSubCatego.ORDENIMPRESIONColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaExamenRow dtCategoriaExamenRow {
+                get {
+                    return ((dtCategoriaExamenRow)(this.GetParentRow(this.Table.ParentRelations["dtCategoriaExamen_dtCategoriaSubCatego"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["dtCategoriaExamen_dtCategoriaSubCatego"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsNOMSUBCATEGORIANull() {
+                return this.IsNull(this.tabledtCategoriaSubCatego.NOMSUBCATEGORIAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetNOMSUBCATEGORIANull() {
+                this[this.tabledtCategoriaSubCatego.NOMSUBCATEGORIAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDESCSUBCATEGORIANull() {
+                return this.IsNull(this.tabledtCategoriaSubCatego.DESCSUBCATEGORIAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDESCSUBCATEGORIANull() {
+                this[this.tabledtCategoriaSubCatego.DESCSUBCATEGORIAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsORDENIMPRESIONNull() {
+                return this.IsNull(this.tabledtCategoriaSubCatego.ORDENIMPRESIONColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetORDENIMPRESIONNull() {
+                this[this.tabledtCategoriaSubCatego.ORDENIMPRESIONColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCriterioAlternativaRow[] GetdtCriterioAlternativaRows() {
+                if ((this.Table.ChildRelations["dtCategoriaSubCatego_dtCriterioAlternativa"] == null)) {
+                    return new dtCriterioAlternativaRow[0];
                 }
                 else {
-                    return ((dtCategoriaExamenRow[])(base.GetChildRows(this.Table.ChildRelations["dtCriterioAlternativa_dtCategoriaExamen"])));
+                    return ((dtCriterioAlternativaRow[])(base.GetChildRows(this.Table.ChildRelations["dtCategoriaSubCatego_dtCriterioAlternativa"])));
                 }
             }
         }
@@ -2203,6 +2824,40 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public dtCriterioAlternativaRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class dtCategoriaSubCategoRowChangeEvent : global::System.EventArgs {
+            
+            private dtCategoriaSubCategoRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRowChangeEvent(dtCategoriaSubCategoRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public dtCategoriaSubCategoRow Row {
                 get {
                     return this.eventRow;
                 }

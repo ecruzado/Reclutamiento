@@ -37,7 +37,36 @@
             });
         });
             
-        function validarFecha(){
+        function fechaValidaInicio() {
+            var mjs = document.getElementById('msjFechaInicio');
+            var fechaInicio = $('#Experiencia_FechaInicio').val();
+
+            if ((parseInt(fechaInicio.substring(0, 2)) > 12) ||
+                (parseInt(fechaInicio.substring(0, 2)) < 0)) {
+                $('#Experiencia_FechaInicio').val("");
+                mjs.innerHTML = "Ingresar una fecha válida";
+                mjs.style.display = "block";
+            }
+            else { mjs.style.display = "none"; }
+        }
+
+        function fechaValidaFin() {
+            var mjsFin = document.getElementById('msjErrorFecha');
+            var fechaFin = $('#Experiencia_FechaFin').val();
+
+            if ((parseInt(fechaFin.substring(0, 2)) > 12) ||
+                (parseInt(fechaFin.substring(0, 2)) < 0)) {
+                $('#Experiencia_FechaFin').val("");
+                mjsFin.innerHTML = "Ingresar una fecha válida";
+                mjsFin.style.display = "block";
+            }
+            else { mjsFin.style.display = "none"; }
+        }
+
+        function validarFecha() {
+
+            fechaValidaInicio();
+            fechaValidaFin();
             var fechaInicio = $('#Experiencia_FechaInicio').val();
             var fechaFin = $('#Experiencia_FechaFin').val();
             var mensaje = document.getElementById('msjErrorFecha');
@@ -164,6 +193,8 @@
                   @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
                       @Html.ValidationMessageFor(model => model.Experiencia.FechaInicio)
+                  </div>
+                  <div id="msjFechaInicio" class="tex-error" style="font-size:12px;color:red;display:none;"> 
                   </div>
               </td>
               <td class="colEtiqueta">
