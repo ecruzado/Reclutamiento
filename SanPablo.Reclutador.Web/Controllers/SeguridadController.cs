@@ -387,7 +387,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                    else
                    {
                        objJsonMensaje.Resultado = false;
-                       objJsonMensaje.Mensaje = "El correo electrónico no se ecnuentra registrado";
+                       objJsonMensaje.Mensaje = "El correo electrónico no se encuentra registrado";
                    }
                 }
                 else

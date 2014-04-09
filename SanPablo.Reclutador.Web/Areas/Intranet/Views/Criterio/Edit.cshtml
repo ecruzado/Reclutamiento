@@ -455,28 +455,25 @@
                 </div>
             </div>
 
-            <table style="margin-left:120px;">
+            <table class="formulario-busqueda">
                 <tr>
                     <td colspan="8">&nbsp;</td>
                 </tr>
-                <tr>
-                     <td class="colEtiqueta">
-                         
-                         <label class="etiquetaFormulario">Código</label>
-                    </td>
-                    <td class="colInput">
-                          
-                         @Html.TextBoxFor(model => model.Criterio.IndPagina,  new { style = "display: none;" })
+                <tr class="formulario-fila">
+                      <td class="span5">
+                        <label class="control-label">Código</label>
+                          <div class="controles">
+                            @Html.TextBoxFor(model => model.Criterio.IndPagina,  new { style = "display: none;" })
 
-                          @*@Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario"})                       *@
-                        <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.Criterio.IdeCriterio" readonly="readonly">
-                    </td>
+                        @*@Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario"})                       *@
+                            <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.Criterio.IdeCriterio" readonly="readonly">
+                          </div>
+                        </td>
                     <td style="width:40px;"></td>
                    
-                    <td class="colEtiqueta">
-                            <label class="etiquetaFormulario">Medición</label>
-                    </td>
-                     <td class="colInput">
+                    <td class="span5">
+                            <label class="control-label">Medición</label>
+                    <div class="controles">
                         @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                         {
                             @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { @readonly = "readonly" })
@@ -488,14 +485,16 @@
                         <div class="tex-error" style="font-size:12px;color:red">    
                         @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
                         </div>
+                     </div>
                     </td>
                  </tr>
-                 <tr>
+                 <tr class="formulario-fila">
 
-                    <td class="colEtiqueta">
-                      <label class="etiquetaFormulario">Tipo</label>
-                    </td>
-                   <td class="colInput">
+                    <td class="span5">
+                      <label  class="control-label">Tipo</label>
+                   <div class="controles">
+
+
                         @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                         { 
                         @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { @readonly = "readonly" }) 
@@ -507,46 +506,53 @@
                         <div class="tex-error" style="font-size:12px;color:red">         
                         @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
                         </div>
-                    </td>
+                    </div>
+                       </td>
                     <td style="width:40px;"></td>
-                    <td class="colEtiqueta">
-                    <label class="etiquetaFormulario">Modo</label>
-                    </td>
-                    <td class="colInput">
-                        @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
-                        {
-                          @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @readonly = "readonly"})
-                        }
-                        else
-                        {
-                          @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))  
-                        }
-                        <div class="tex-error" style="font-size:12px;color:red">     
-                        @Html.ValidationMessageFor(model => model.Criterio.TipoModo)
-                        </div>
+                    <td class="span5">
+                      <label class="control-label">Modo</label>
+                   
+                         <div class="controles">
+                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @readonly = "readonly"})
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))  
+                            }
+                         <div class="tex-error" style="font-size:12px;color:red">     
+                         @Html.ValidationMessageFor(model => model.Criterio.TipoModo)
+                         </div>
+                       </div>
                     </td>
 
                   </tr>
                 
-                   <tr>
-                       <td class="colEtiqueta">
-                         <label class="etiquetaFormulario">Pregunta</label>
-                       </td>
-                       <td class="colInput">
+                   <tr class="formulario-fila">
+                       <td class="span5">
+                         <label class="control-label">Pregunta</label>
+                      <div class="controles">
                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                            {
-                             @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" , @readonly = "readonly"})    
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly"})  
+                             
                            }
                            else
                            {
-                              @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario",@maxlength = "50" }) 
+                             @* @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario",@maxlength = "2000" }) *@
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" })  
+                             
+                        
+                               
                            } 
                             <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
                             </div>
+                          </div>
                        </td>
-                         
-                         <td style="width:40px;"></td>
+                        
+                        @* <td style="width:40px;"></td>
                          
                          <td class="colEtiqueta">
                             <label class="etiquetaFormulario">Calificación</label>
@@ -565,10 +571,29 @@
 		                    <div class="tex-error" style="font-size:12px;color:red">     
                             @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
                             </div>
-                          </td>
+                          </td>*@
                        
                              </tr>
                    
+                     <tr class="formulario-fila">
+                       <td class="span5">
+                         <label class="control-label">Calificación</label>
+                      <div class="controles">
+                           @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion), new { @readonly = "readonly"})
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))     
+                            }     
+                            
+		                    <div class="tex-error" style="font-size:12px;color:red">     
+                            @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
+                            </div>
+                          </div>
+                       </td>
+                      </tr>
                             
                              @*@if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                              { 
