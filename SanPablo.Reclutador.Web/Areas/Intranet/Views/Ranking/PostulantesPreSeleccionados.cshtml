@@ -30,12 +30,12 @@
                                 
                 if (idSol != null) {
 
-                    if ("S" == IndAprobacion) {
+                   // if ("S" == IndAprobacion) {
                         var url = '@Url.Action("Index", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&indPagina=" + indPagina;
                         window.location = url;
-                    } else {
-                        MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
-                    }
+                    //} else {
+                    //    MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    //}
                     
 
              } else {
@@ -71,7 +71,6 @@
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
 
-
                 var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);
                 var idPost = rowData.IdePostulante;
@@ -87,8 +86,19 @@
             
             $('#btnSeleccionado').click(function () {
                 var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+
+                var id = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', id);
+                var IndAprobacion = rowData.IndAprobacion;
+
                 if (selr != null && selr > 0) {
-                    seleccionaPost(selr);
+
+                    if ("S" == IndAprobacion) {
+                        seleccionaPost(selr);
+                    } else {
+                        MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
+
                 } else {
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
@@ -188,7 +198,7 @@
                       { name: 'IndicadorContactado', index: 'IndicadorContactado', align: 'center', sortable: false, width: 100, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
 
                       //{ name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, sortable: false, width: 150 },
-                      { name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
+                      { name: 'formatoCv', index: 'formatoCv', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
 
 
                       { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
@@ -348,7 +358,7 @@
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'printer.png';
             //var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
-            var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + cellvalue + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
+            var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + rowObject[1] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
             return strImg;
         }
 

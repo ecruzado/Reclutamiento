@@ -362,7 +362,7 @@
                         { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
                         { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 150 },
 
-                        { name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
+                        { name: 'FormatoCv', index: 'FormatoCv', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
 
 
 
@@ -401,7 +401,7 @@
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'printer.png';
             //var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
-            var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + cellvalue + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
+            var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + rowObject[1] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
             return strImg;
         }
 
