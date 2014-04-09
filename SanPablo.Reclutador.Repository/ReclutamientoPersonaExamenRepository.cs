@@ -135,7 +135,7 @@ namespace SanPablo.Reclutador.Repository
             {
 
                 lcon.Open();
-                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_RECUPERAR_EXAMEN");
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_RECUPERAR_EXAMEN");
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
                 lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Number).Value = idereclutaPersona;

@@ -26,6 +26,16 @@
 
         });
 
+        $('#btnAnterior').click(function () {
+
+            var id = $('#Solicitud_CodSolReqPersonal').val();
+
+            if (id != "")
+            {
+                var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + id + '&responsable=' + nombreResponsable;
+                window.location = url;
+            }
+        })
 
         jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
@@ -147,7 +157,8 @@
     function DescripcionFormatter(cellvalue, options, rowObject) {
         var strAref = cellvalue;
         //validar si existe la evaluacion
-        strAref = '<a style="text-decoration: underline" href="@Url.Action("ResultadoEvaluacion", "EvaluacionPreseleccionados")">' + rowObject[0] + '/' + rowObject[1] + '</a>';
+        strAref = '<a style="text-decoration: underline" href= ' + '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados")' + '?idRP=' + rowObject[1] + '&idRE=' + rowObject[0] + '>' + cellvalue + '</a>';
+        
         return strAref;
       }
 
@@ -335,8 +346,8 @@
             </form>
 
             <div class="form-actions">
-                <a class="btn" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                <a class="btn btn-info" href="@Url.Action("ProgramarEvaluacion", "SolicitudCargo")"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
+                <a class="btn" id="btnAnterior"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+               @* <a class="btn btn-info" href="@Url.Action("ProgramarEvaluacion", "SolicitudCargo")"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        *@
                 <a class="btn btn-info" id="btnProgramarEvaluacion"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
             </div>
         </div>
@@ -347,5 +358,5 @@
 
 <div id="updateDialog" title="Resultado"></div>
     <div id="divMensaje">
-        <span id="spanMensaje"></span>
+        <span id="spnMensaje"></span>
     </div>

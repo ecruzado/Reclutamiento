@@ -285,7 +285,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     
 
-                    if (reclutaExamenEditar.TipoEstadoEvaluacion == EstadoEvaluacion.Pendiente)
+                    if (reclutaExamenEditar.TipoEstadoEvaluacion == EstadoEvaluacion.Programado)
                     {
                         var reclutamientoPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == reclutaExamenEditar.IdeReclutamientoPersona);
                         reclutamientoPersona.Evaluacion = reclutamientoPersona.Evaluacion + 1;
@@ -461,7 +461,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         #region MOSTRAR EVALUACIONES RENDIDAS
 
-        public ActionResult ResultadoEvaluacion(int idReclutaPersona, int idReclutaExamen)
+        public ActionResult ResultadoEvaluacion(int idRP, int idRE)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             string fullPath = null;
@@ -474,7 +474,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //objPostulante = new Postulante();
                 //objPostulante.IdePostulante = Convert.ToInt32(id);
 
-                DataSet dsEvaluacionPostulante = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReporte(idReclutaPersona, idReclutaExamen);
+                DataSet dsEvaluacionPostulante = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReporte(idRP, idRE);
                 //DataTable dtPostulante = _postulanteRepository.getDataCvPostulante(objPostulante);
                 
 

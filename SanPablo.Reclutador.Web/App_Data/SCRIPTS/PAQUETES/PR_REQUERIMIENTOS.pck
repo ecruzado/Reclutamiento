@@ -148,10 +148,9 @@ PROCEDURE SP_CALIFICAR_EXAMEN(p_ideReclPerExaCat  IN RECL_PERS_EXAM_CAT.IDERECLP
                               
 PROCEDURE SP_RECUPERAR_EXAMEN(p_ideReclutaPersona  IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE,
                               p_iderecluPersExamen IN RECL_PERS_EXAM_CAT.IDERECLPERSOEXAMNCAT%TYPE,
-                              p_usuarioCreacion    IN RECLU_PERSO_EXAMEN.USRCREACION%TYPE,
-                              p_cursor1            OUT SYS_REFCURSOR,
-                              p_cursor2            OUT SYS_REFCURSOR,
-                              p_cursor3            OUT SYS_REFCURSOR);
+                              dtExamen              OUT SYS_REFCURSOR,
+                              dtCategoriaExamen     OUT SYS_REFCURSOR,
+                              dtCriterioAlternativa OUT SYS_REFCURSOR);
 
 END PR_REQUERIMIENTOS;
 /
@@ -1645,12 +1644,11 @@ END SP_CALIFICAR_EXAMEN;
       Fecha       Autor                Descripcion
       08/04/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_RECUPERAR_EXAMEN(p_ideReclutaPersona  IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE,
-                              p_iderecluPersExamen IN RECL_PERS_EXAM_CAT.IDERECLPERSOEXAMNCAT%TYPE,
-                              p_usuarioCreacion    IN RECLU_PERSO_EXAMEN.USRCREACION%TYPE,
-                              p_cursor1            OUT SYS_REFCURSOR,
-                              p_cursor2            OUT SYS_REFCURSOR,
-                              p_cursor3            OUT SYS_REFCURSOR)IS
+PROCEDURE SP_RECUPERAR_EXAMEN(p_ideReclutaPersona   IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE,
+                              p_iderecluPersExamen  IN RECL_PERS_EXAM_CAT.IDERECLPERSOEXAMNCAT%TYPE,
+                              dtExamen              OUT SYS_REFCURSOR,
+                              dtCategoriaExamen     OUT SYS_REFCURSOR,
+                              dtCriterioAlternativa OUT SYS_REFCURSOR)IS
 
     
 
@@ -1664,16 +1662,19 @@ BEGIN
   
   
   --Cursor de cabezera del examen
-  OPEN p_cursor1 FOR
-    SELECT EX.NOMEXAMEN, EX.DESCEXAMEN, EX.TIPEXAMEN, RPE.NOTAFINAL
+  OPEN dtExamen FOR
+    SELECT RPE.IDERECLUPERSOEXAMEN, EX.NOMEXAMEN, EX.DESCEXAMEN, EX.TIPEXAMEN, 
+           RPE.NOTAFINAL,PR_INTRANET.FN_OBTENER_NOMBRE_POST(p_ideReclutaPersona) NOMBPOSTULANTE
     FROM RECLU_PERSO_EXAMEN RPE, EXAMEN EX
-    WHERE RPE.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
+    WHERE RPE.IDEEXAMEN = EX.IDEEXAMEN
+    AND RPE.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
     AND RPE.IDERECLUTAPERSONA = p_ideReclutaPersona;    
   
   --Cursor de datos de la categoria
-  OPEN p_cursor2 FOR
-    SELECT RCAT.IDERECLPERSOEXAMNCAT, RCAT.NROPREGUNTAS,RCAT.NOTAEXAMENCATEG,CT.NOMCATEGORIA, CT.DESCCATEGORIA, CT.TIEMPO
-    FROM RECL_PERS_EXAM_CAT RCAT, EXAMEN_X_CATEGORIA EXC , CATEGORIA CT
+  OPEN dtCategoriaExamen FOR
+    SELECT RCAT.IDERECLPERSOEXAMNCAT, RCAT.IDERECLUPERSOEXAMEN, RCAT.NROPREGUNTAS,
+           RCAT.NOTAEXAMENCATEG,CT.NOMCATEGORIA, CT.DESCCATEGORIA, CT.TIEMPO 
+    FROM RECL_PERS_EXAM_CAT RCAT, EXAMEN_X_CATEGORIA EXC , CATEGORIA CT 
     WHERE RCAT.IDEEXAMENXCATEGORIA  = EXC.IDEEXAMENXCATEGORIA
     AND CT.IDECATEGORIA = EXC.IDECATEGORIA
     AND RCAT.IDERECLUTAPERSONA = p_ideReclutaPersona
@@ -1681,8 +1682,8 @@ BEGIN
     ORDER BY CT.ORDENIMPRESION;
  
  --Cursor de datos de la subcategoria  
-  OPEN p_cursor3 FOR
-    SELECT RCRIT.IDERECLUPERSOCRITERIO, CR.PREGUNTA,CR.TIPMODO, CR.IMAGENCRIT, RCRIT.PUNTTOTAL, 
+  OPEN dtCriterioAlternativa FOR
+    SELECT  RCRIT.IDERECLUPERSOCRITERIO,RCRIT.IDERECLPERSOEXAMNCAT, CR.PREGUNTA,CR.TIPMODO, CR.IMAGENCRIT, RCRIT.PUNTTOTAL, 
            RAL.IDEALTERNATIVA,AL.ALTERNATIVA, AL.IMAGE, AL.PESO
     FROM   CRITERIO CR, CRITERIO_X_SUBCATEGORIA CRSC, RECLU_PERSO_CRITERIO RCRIT
          LEFT JOIN  RECLU_PERSO_ALTERNATIVA RAL ON RCRIT.IDERECLUPERSOCRITERIO = RAL.IDERECLUPERSOCRITERIO

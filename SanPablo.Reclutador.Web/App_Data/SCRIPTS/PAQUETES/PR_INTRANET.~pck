@@ -176,9 +176,6 @@ create or replace package PR_INTRANET is
                                    
  PROCEDURE SP_OBTENER_IDECATEGORIA(p_idReclPerExaCat    IN RECL_PERS_EXAM_CAT.IDERECLPERSOEXAMNCAT%TYPE,
                                    p_RetVal           OUT NUMBER);
-                                   
- FUNCTION FN_OBTENER_NOMBRE_POST(p_idReclutaPersona    IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE
-                                  )RETURN VARCHAR2;
 
 end PR_INTRANET;
 /
@@ -2059,41 +2056,6 @@ create or replace package body PR_INTRANET is
    END;
       
  END SP_OBTENER_IDECATEGORIA;
- 
-    /* ------------------------------------------------------------
-    Nombre      : FN_OBTENER_NOMBRE_POST
-    Proposito   : Obtiene el nombre concatenado de un postulante
-    
-    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
-    Parametros  :               
-                                  
-    Log de Cambios
-      Fecha       Autor                Descripcion
-      08/04/2014  Jaqueline Ccana       Creaci?n    
-  ------------------------------------------------------------ */
-  FUNCTION FN_OBTENER_NOMBRE_POST(p_idReclutaPersona    IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE
-                                   ) RETURN VARCHAR2 IS
-  c_nombreCompleto   VARCHAR2(250);
- BEGIN
-     
-   BEGIN 
-    
-     SELECT P.APEPATERNO||' '||P.APEMATERNO||', '|| P.PRINOMBRE||' '||P.SEGNOMBRE
-     INTO c_nombreCompleto
-     FROM POSTULANTE P    
-     WHERE P.IDEPOSTULANTE = (SELECT RP.IDEPOSTULANTE
-                              FROM RECLUTAMIENTO_PERSONA RP
-                              WHERE RP.IDERECLUTAPERSONA = p_idReclutaPersona);
-      
-     
-   EXCEPTION
-     WHEN OTHERS THEN
-      c_nombreCompleto:= '';
-   END;
-      
-   RETURN c_nombreCompleto;
-   
- END FN_OBTENER_NOMBRE_POST;
 
 END PR_INTRANET;
 /
