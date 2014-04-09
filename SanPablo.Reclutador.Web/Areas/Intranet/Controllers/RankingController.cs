@@ -642,12 +642,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
          [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
          [HttpPost]
-         public ActionResult SeleccionaPost(int id) 
+         public ActionResult SeleccionaPost(int id,string promedio) 
          {
              JsonMessage objJson = new JsonMessage();
 
              var objReclutaPer = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == id);
              objReclutaPer.EstPostulante = PostulanteEstado.SELECCIONADO;
+             
+             if (promedio!=null)
+             {
+                 objReclutaPer.PromedioExamen = Convert.ToDouble(promedio);    
+             }
+             
              _reclutamientoPersonaRepository.Update(objReclutaPer);
 
 

@@ -90,11 +90,12 @@
                 var id = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', id);
                 var IndAprobacion = rowData.IndAprobacion;
+                var promedio = rowData.PtoTotal;
 
                 if (selr != null && selr > 0) {
 
                     if ("S" == IndAprobacion) {
-                        seleccionaPost(selr);
+                        seleccionaPost(selr,promedio);
                     } else {
                         MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
@@ -362,11 +363,12 @@
             return strImg;
         }
 
-        function seleccionaPost(selr) {
+        function seleccionaPost(selr, promedio) {
 
             $.ajax({
                 data: {
-                    id: selr
+                    id: selr,
+                    promedio: promedio
                 },
                 type: "POST",
                 url: '@Url.Action("SeleccionaPost", "Ranking")',
