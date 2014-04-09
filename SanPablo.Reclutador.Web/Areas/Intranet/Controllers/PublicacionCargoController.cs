@@ -30,6 +30,7 @@
         private ICargoRepository _cargoRepository;
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoCargoRepository;
         private IHorarioCargoRepository _horarioCargoRepository;
+        private ISolReqPersonalRepository _solReqPersonalRepository;
 
 
         public PublicacionCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -42,7 +43,9 @@
                                              IExperienciaCargoRepository experienciaCargoRepository,
                                              ICargoRepository cargoRespository,
                                              IHorarioCargoRepository horarioCargoRepository,   
-                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository)
+                                             ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository,
+                                             ISolReqPersonalRepository solReqPersonalRepository
+            )
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -55,6 +58,7 @@
             _cargoRepository = cargoRespository;
             _horarioCargoRepository = horarioCargoRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
+            _solReqPersonalRepository = solReqPersonalRepository;
         }
 
 
@@ -304,6 +308,20 @@
                     logSolicitud.UsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
                     _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargoEditar.IdeSede, solicitudNuevoCargoEditar.IdeArea, "NO");
+
+
+                    ReclutamientoPersona objRecluta = new ReclutamientoPersona();
+
+                    objRecluta.IdeSol =solicitudNuevoCargoEditar.IdeSolicitudNuevoCargo;
+                    objRecluta.TipSol = TipoSolicitud.Nuevo;
+
+                    var horario = _horarioCargoRepository.getMaxPuntValue(x => x.Cargo.IdeCargo == solicitudNuevoCargoEditar.IdeCargo);
+                    objRecluta.TipPuesto = horario.TipoHorario;
+                    objRecluta.IdSede = solicitudNuevoCargoEditar.IdeSede;
+                    objRecluta.IdeCargo = solicitudNuevoCargoEditar.IdeCargo;
+                    //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
+                    _solReqPersonalRepository.verificaPotenciales(objRecluta);
+					
                     _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
 
                     objJsonMessage.Mensaje = "Publicado Correctamente";
