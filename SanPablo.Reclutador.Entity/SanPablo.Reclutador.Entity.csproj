@@ -35,6 +35,12 @@
     <Reference Include="FluentValidation">
       <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\SanPablo.Reclutador.Web\bin\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\SanPablo.Reclutador.Web\bin\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
