@@ -72,6 +72,7 @@
     <Compile Include="CentroEstudioRequerimiento.cs" />
     <Compile Include="ConocimientoGeneralRequerimiento.cs" />
     <Compile Include="DatosExamenPorCategoria.cs" />
+    <Compile Include="PdfExamen.cs" />
     <Compile Include="ReclutamientoPersonaExamenCategoria.cs" />
     <Compile Include="ListaCriterios.cs" />
     <Compile Include="ReclutamientoPersonaAlternativa.cs" />
