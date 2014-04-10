@@ -258,7 +258,6 @@
                     }
                     postulanteEdit.FechaNacimiento = postulante.FechaNacimiento;
                     postulanteEdit.Etapa = postulante.Etapa;
-                    postulanteEdit.Correo = postulante.Correo;
                     postulanteEdit.Bloque = postulante.Bloque;
                     postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
                     postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;

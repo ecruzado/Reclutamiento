@@ -1217,7 +1217,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 UsuarioSede = new SedeNivel();
                 UsuarioSede = (SedeNivel)objUsuarioSede;
                 model = Inicializar(UsuarioSede);
-                
+                model.Pagina = TipoSolicitud.Remplazo;
                 model.SolReqPersonal = new SolReqPersonal();
 
                 if (idRol!=Roles.Gerente && idRol!=Roles.Gerente_General_Adjunto)
@@ -1385,7 +1385,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ValidarSesion]
-        public ActionResult Edit(string id) {
+        public ActionResult Edit(string id, string pagina ) {
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             string EtapaSol = null;
@@ -1404,7 +1404,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model = Inicializar(sedeNivel);
                 model.SolReqPersonal = new SolReqPersonal();
                 model.SolReqPersonal = ObjSol;
-
+                model.Pagina = pagina;
                 
                 model.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                     && x.IdeSede == model.SolReqPersonal.IdeSede

@@ -1028,7 +1028,14 @@
         
                     <div class="grilla-opciones">
                             <div class="opciones">
-                                <a  class="btn btn-info" id="btnGrabarSolReq" onclick="GeneraSolicitud()"><i class="icon-screenshot icon-white"></i> Grabar</a>
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    <span></span> 
+                                }
+                                else
+                                {
+                                    <a  class="btn btn-info" id="btnGrabarSolReq" onclick="GeneraSolicitud()"><i class="icon-screenshot icon-white"></i> Grabar</a>
+                                }
                             </div>
                             <div style="clear:both"></div>
                     </div>
@@ -1037,8 +1044,15 @@
                      <div class="grilla-opciones">
                         <h6>Reemplazos</h6>
                             <div class="opciones">
-                                <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
-                                <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    <span></span> 
+                                }
+                                else
+                                {
+                                    <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
+                                    <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                                }
                             </div>
                             <div style="clear:both"></div>
                     </div>
@@ -1110,22 +1124,35 @@
 
 
             <div class="form-actions">
-                
-                <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                
-                @if (Accion.Aprobar.Equals(Model.Accion))
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                 {
-                  <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                    <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 }
-                
-                @if (Accion.Enviar.Equals(Model.Accion))
+                else
                 {
-                  <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                   <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 }
-                
-                @if (Accion.Publicar.Equals(Model.Accion))
+
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                 {
-                <a class="btn btn-info" id ="btnPublicarSolReemplazo"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    <span></span> 
+                }
+                else
+                {
+                    if (Accion.Aprobar.Equals(Model.Accion))
+                    {
+                      <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                    }
+                
+                    if (Accion.Enviar.Equals(Model.Accion))
+                    {
+                      <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                    }
+                
+                    if (Accion.Publicar.Equals(Model.Accion))
+                    {
+                    <a class="btn btn-info" id ="btnPublicarSolReemplazo"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    }
                 }
             </div>
         

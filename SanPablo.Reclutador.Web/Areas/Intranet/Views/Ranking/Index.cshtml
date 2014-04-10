@@ -753,8 +753,15 @@
                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>   
                      }
-
-                <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a> 
+                     
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                {
+                    <span></span> 
+                }
+                else
+                {    
+                    <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a> 
+                }
                 <a class="btn btn-info" id="btnAprobarPre"><i class="icon-edit icon-white"></i> CV-Preselección</a>                             
             </div>
         </div>

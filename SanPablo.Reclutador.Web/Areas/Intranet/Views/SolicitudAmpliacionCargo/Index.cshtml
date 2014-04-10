@@ -43,7 +43,13 @@
 
      });
 
+    $('#btnNuevoAmpliacion').click(function () {
 
+        var pagina = '@TipoSolicitud.Ampliacion';
+        var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=0'+ "&pagina=" + pagina;
+        window.location = url;
+        
+    });
 
 
 
@@ -68,8 +74,11 @@
 
     $('#btnAproRechaSol').click(function () {
         var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
         if (ideSolAmpliacion != null) {
-            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSolAmpliacion;
+            @*window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSolAmpliacion;*@
+            var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + ideSolAmpliacion +"&pagina=" + pagina;
+            window.location = url;
             }
             else {
                 MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
@@ -359,9 +368,9 @@
            <div class="form-actions">
                 <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Aprob/Rech</a>
+                @*<a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>*@
+                <a id="btnNuevoAmpliacion" class="btn btn-info"@* href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"*@><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Requerimiento</a>
                 <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>

@@ -169,6 +169,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 solicitudRequerimiento = new SolReqPersonal();
 
+                solicitudRequerimiento.IdeSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
                 solicitudRequerimiento.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
                 solicitudRequerimiento.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
                 solicitudRequerimiento.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
@@ -194,7 +195,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdeSolicitud.ToString(),
+                    id = item.IdeSolicitud.ToString()+ item.CodigoSolicitud.ToString() + item.TipoSolicitud.ToString(),
                     cell = new string[]
                             {
                                

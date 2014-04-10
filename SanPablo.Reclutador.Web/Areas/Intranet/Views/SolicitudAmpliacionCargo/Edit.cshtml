@@ -616,6 +616,7 @@
                 <div class="opciones">
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.SolicitudRequerimiento.IdeSede)
+                    @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {@type = "hidden"})
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
                 </div>            
@@ -784,23 +785,38 @@
             
             <div class="form-actions">
                 
-                <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                
-                @if (Accion.Aprobar.Equals(Model.Accion))
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                 {
-                  <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                    <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>      
                 }
+                else
+                {
+                   <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>     
+                }
+
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                {
+                    <span></span> 
+                }
+                else
+                {
+
+                    if (Accion.Aprobar.Equals(Model.Accion))
+                    {
+                      <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                    }
                
                 
                 
-                @if (Accion.Enviar.Equals(Model.Accion))
-                {
-                  <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
-                }
+                    if (Accion.Enviar.Equals(Model.Accion))
+                    {
+                      <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                    }
                 
-                @if (Accion.Publicar.Equals(Model.Accion))
-                {
-                <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    if (Accion.Publicar.Equals(Model.Accion))
+                    {
+                    <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    }
                 }
             </div>
        

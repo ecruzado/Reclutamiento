@@ -332,7 +332,11 @@
                 success: function (data) {
                     if (data.Resultado == true) {
                         if (estado != "I") {
-                            window.location = '@Url.Action("Index", "Perfil", new { id = "-id"})'.replace("-id", ideSolicitud);
+                            var pagina = '@TipoSolicitud.Nuevo';
+                            var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + ideSolicitud + "&pagina=" + pagina;
+                            window.location = url;
+
+                            @*window.location = '@Url.Action("Index", "", new { id = "-id"})'.replace("-id", ideSolicitud);*@
                         }
                         else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva", "Sistema de reclutamiento y selección de personal"); }
                     } else { MostrarMensaje(data.Mensaje, "Sistema de reclutamietno y selección de personal"); }

@@ -181,9 +181,13 @@
         var strImg = "";
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
-        if (rowObject[0] != "2100001") {            
+        var pagina = $('#pagina').val();
+        if (pagina != "04") {
             strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
-        }            
+        }
+        else {
+            strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+        }
         return strImg;
     }
 
@@ -369,7 +373,14 @@
             <div class="form-actions">
                 <a class="btn" id="btnAnterior"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                @* <a class="btn btn-info" href="@Url.Action("ProgramarEvaluacion", "SolicitudCargo")"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        *@
-                <a class="btn btn-info" id="btnProgramarEvaluacion"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                {
+                    <span></span> 
+                }
+                else
+                {
+                    <a class="btn btn-info" id="btnProgramarEvaluacion"><i class="icon-time icon-white"></i> Progra. Evalu.</a>                        
+                }
             </div>
         </div>
     </div>

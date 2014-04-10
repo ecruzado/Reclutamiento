@@ -24,10 +24,11 @@
 
     $('#btnConsultarSolicitud').click(function () {
 
-        var ideSol = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        var rowData = jQuery('#grdList').jqGrid('getRowData', ideSol);
+        var ide = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', ide);
         var tipoSolicitud = rowData.TipoSol;
         var idCargo = rowData.Idecargo;
+        var ideSol = rowData.IdeSolReqPersonal;
         if (ideSol != null) {
             consultarSolicitud(ideSol, tipoSolicitud, idCargo);
         }
@@ -42,7 +43,7 @@
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
 
-        var idSol = selr;
+        var idSol = rowData.IdeSolReqPersonal;
         var tipSol = rowData.TipoSol;
         var pagina = '@TipoSolicitud.ConsultaRequerimientos';
         var indPagina = '@Indicador.No';
@@ -64,16 +65,13 @@
              var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
              var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
              var pagina = '@TipoSolicitud.ConsultaRequerimientos';
-        if (selr != null) {
-
-
-            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.TipoSol + "&pagina=" + pagina;
-            window.location = url;
-
-
-        } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
-        }
+             var idSol = rowData.IdeSolReqPersonal;
+             if (idSol != null) {
+                 var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + rowData.TipoSol + "&pagina=" + pagina;
+                 window.location = url;
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
 
     });
 
@@ -219,20 +217,35 @@
 
 
     function consultarSolicitud(ideSol, tipoSolicitud, idCargo) {
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
         if (tipoSolicitud == "01") {
             if (idCargo != 0) {
-                window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+                @* window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;*@
             }
             else {
-                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;*@
             }
         }
         else {
             if (tipoSolicitud == "02") {
-                window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSol;*@
             }
             else {
-                window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + ideSol;
+                var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + ideSol;*@
             }
         }
     }
