@@ -25,6 +25,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<Departamento> Departamentos { get; set; }
         public List<Area> Areas { get; set; }
         public string Accion { get; set; }
+
+        public string Pagina { get; set; }
         
     }
 }

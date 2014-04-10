@@ -37,6 +37,46 @@
         
     });
 
+    $('#btnPreseleccion').click(function () {
+
+        var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+
+        var idSol = selr;
+        var tipSol = rowData.TipoSol;
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+        var indPagina = '@Indicador.No';
+
+            if (idSol != null) {
+
+                var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+        });
+
+
+
+         $('#btnRankingSol').click(function () {
+             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+             var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+             var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+        if (selr != null) {
+
+
+            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.TipoSol + "&pagina=" + pagina;
+            window.location = url;
+
+
+        } else {
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+        }
+
+    });
+
 
     $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
         var ideDependencia = $(this).val();
@@ -354,8 +394,11 @@
             </div>
 
            <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                @*<a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
+                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+
                 <a class="btn btn-info" id="btnConsultarSolicitud"><i class="icon-zoom-in icon-white"></i> Consultar</a>
             </div>
         }

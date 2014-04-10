@@ -633,9 +633,16 @@
             <div class="grilla-opciones">
                 <h6>CV Externos</h6>
                 <div class="opciones">
+                    @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                    {
+                        <span></span> 
+                    }
+                    else
+                    {
                     <a class="btn btn-small btn-info" id="btnAgregarRanking" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                     <a class="btn btn-small btn-info" id="btnEditarRanking" title="Editar"><i class="icon-edit icon-white"></i></a>
                     <a class="btn btn-small btn-info" id="btnEliminarPos" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                    }
                 </div>
                 <div style="clear:both"></div>
             </div>
@@ -649,8 +656,15 @@
              <div class="Opciones">
             </div>
                 <div class="form-actions">
+                    @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                    {
+                        <span></span> 
+                    }
+                    else
+                    {
                     <a class="btn btn-info"  id="btnCitaPos" title="Citado" onclick=""><i class="icon-edit icon-white" ></i> Citado</a> 
                     <a class="btn btn-info" id="btnAsistioPos" title="Asistio" onclick=""><i class="icon-edit icon-white" ></i> Asistió</a> 
+                    }
                 </div> 
             </div>
                         
@@ -734,6 +748,10 @@
                       @if (TipoSolicitud.Nuevo.Equals(Model.pagina))
                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                     }
+                     @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                     {
+                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>   
                      }
 
                 <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a> 

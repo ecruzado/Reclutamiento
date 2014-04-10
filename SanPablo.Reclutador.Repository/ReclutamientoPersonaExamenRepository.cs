@@ -144,6 +144,7 @@ namespace SanPablo.Reclutador.Repository
                 lspcmd.Parameters.Add("dtCategoriaExamen", OracleType.Cursor).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("dtCategoriaSubCatego", OracleType.Cursor).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("dtCriterioAlternativa", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtAlternativas", OracleType.Cursor).Direction = ParameterDirection.Output;
                
                 DataSet ds = new DataSet();
                 OracleDataAdapter adapter = new OracleDataAdapter(lspcmd);

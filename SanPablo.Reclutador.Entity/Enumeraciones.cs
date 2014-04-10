@@ -231,6 +231,8 @@
         public const string Ampliacion = "02";
         public const string Remplazo = "03";
         
+        //caso de consulta de requerimientos
+        public const string ConsultaRequerimientos = "04";
     }
 
     public sealed class Decision

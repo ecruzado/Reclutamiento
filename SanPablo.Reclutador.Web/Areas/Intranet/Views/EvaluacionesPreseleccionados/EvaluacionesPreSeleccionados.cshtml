@@ -164,10 +164,18 @@
     function DescripcionFormatter(cellvalue, options, rowObject) {
         var strAref = cellvalue;
         //validar si existe la evaluacion
-        strAref = '<a style="text-decoration: underline" href= ' + '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados")' + '?idRP=' + rowObject[1] + '&idRE=' + rowObject[0] + '>' + cellvalue + '</a>';
+        @*strAref = '<a style="text-decoration: underline" href= ' + '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados")' + '?idRP=' + rowObject[1] + '&idRE=' + rowObject[0] + '>' + cellvalue + '</a>';*@
+        strAref = '<a style="text-decoration: underline" href= "#" onclick= "MostrarExamen(' + rowObject[1] + ',' + rowObject[0] + ')"; >' + cellvalue + '</a>';
         
         return strAref;
       }
+
+    function MostrarExamen(idRP, idRE)
+    {
+        var url = '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados", new { idRP = "", area = "Intranet" })?idRP=' + idRP + '&idRE=' + idRE ;
+        @*var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;*@
+        window.location = url;
+    }
 
     function NotaFormatter(cellvalue, options, rowObject) {
         var strImg = "";

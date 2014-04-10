@@ -485,6 +485,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 rep.Database.Tables["dtCategoriaExamen"].SetDataSource(ds.Tables["Table1"]);
                 rep.Database.Tables["dtCategoriaSubCatego"].SetDataSource(ds.Tables["Table2"]);
                 rep.Database.Tables["dtCriterioAlternativa"].SetDataSource(ds.Tables["Table3"]);
+                rep.Database.Tables["dtAlternativas"].SetDataSource(ds.Tables["Table4"]);
 
                 Response.Clear();
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);

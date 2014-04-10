@@ -70,7 +70,7 @@
                     if (selr != null) {
                         ActivarDesactivarSolicitud(selr, estado);
                     } else {
-                        MostrarMensaje('Seleccione una solicitud');
+                        MostrarMensaje('Seleccione una solicitud', "Sistema de reclutamiento y selección de personal");
                     }
                     $(this).dialog("close");
                 },
@@ -220,14 +220,21 @@
 
          });
 
+        $('#btnNuevo').click(function () {
 
+            var pagina = '@TipoSolicitud.Nuevo';
+            var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=0'+ "&pagina="+ pagina;
+            window.location = url;
+        });
+
+   
 
         $('#btnActivarDesactivar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
                 $('#updateDialog').dialog('open');
             } else {
-                MostrarMensaje('Seleccione una solicitud para Activar/Desactivar');
+                MostrarMensaje('Seleccione una solicitud para Activar/Desactivar', "Sistema de reclutamiento y selección de personal");
             }
 
         });
@@ -235,11 +242,16 @@
 
         $('#btnEditarSolicitud').click(function () {
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var pagina = '@TipoSolicitud.Nuevo'
+
             if (ideSolicitud != null) {
-                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo")' + '/' + ideSolicitud;
+
+                var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=' + ideSolicitud + "&pagina=" + pagina;
+                window.location = url;
+
             }
             else {
-                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo");
+                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo","Sistema de Reclutamiento y Selección de personal");
             }
 
         });
@@ -266,10 +278,10 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje)
+                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal")
                     
                 } else {
-                    MostrarMensaje(data.Mensaje);
+                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y seleccion de personal");
                     $('#grdList').trigger('reloadGrid');
                 }
             }
@@ -322,12 +334,12 @@
                         if (estado != "I") {
                             window.location = '@Url.Action("Index", "Perfil", new { id = "-id"})'.replace("-id", ideSolicitud);
                         }
-                        else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva"); }
-                    } else { MostrarMensaje(data.Mensaje); }
+                        else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva", "Sistema de reclutamiento y selección de personal"); }
+                    } else { MostrarMensaje(data.Mensaje, "Sistema de reclutamietno y selección de personal"); }
                 }
             });
         }
-        else { MostrarMensaje("Seleccione la solicitud asociada al perfil");}
+        else { MostrarMensaje("Seleccione la solicitud asociada al perfil", "Sistema de reclutamiento y selección de personal");}
     }
 
     function RadioFormatter(cellvalue, options, rowObject) {
@@ -335,16 +347,16 @@
         return strRdo;
     }
 
-    function MostrarMensaje(mensaje) {
-        $("#spanMensaje").html(mensaje);
-        $("#divMensaje").dialog({
-            title: 'SAN PABLO',
-            modal: true,
-            buttons: {
-                "Ok": function () { $(this).dialog("close"); }
-            }
-        });
-    }
+    //function MostrarMensaje(mensaje) {
+    //    $("#spanMensaje").html(mensaje);
+    //    $("#divMensaje").dialog({
+    //        title: 'SAN PABLO',
+    //        modal: true,
+    //        buttons: {
+    //            "Ok": function () { $(this).dialog("close"); }
+    //        }
+    //    });
+    //}
 
     $(function () {
 
@@ -498,9 +510,9 @@
 
 
                 <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
-                <a class="btn btn-info" href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnNuevo" class="btn btn-info" @*href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"*@><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
-                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
                 <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
             </div>
 
@@ -510,4 +522,4 @@
 </div>
 }
 <div id="updateDialog" ><span id="spanMessage"></span></div>
-<div id="divMensaje"><span id="spanMensaje"></span></div>
+<div id="divMensaje"><span id="spnMensaje"></span></div>
