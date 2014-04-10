@@ -657,7 +657,10 @@
             try
             {
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                DetachedCriteria where = null;
+                //DetachedCriteria where = null;
+                Criterio objCriterio = new Criterio();
+
+                List<Criterio> listaCriterios = new List<Criterio>();
 
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
                     (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
@@ -665,30 +668,89 @@
                     (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                    )
                 {
-                    where = DetachedCriteria.For<Criterio>();
 
-                    if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
-                    {
-                        where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
-                    }
-                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                    {
-                        where.Add(Expression.Eq("TipoMedicion", grid.rules[1].data));
-                    }
-                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
-                    {
-                        where.Add(Expression.Like("Pregunta", '%' + grid.rules[2].data + '%'));
-                    }
-                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
-                    }
+                if (grid.rules[0].data==null || grid.rules[0].data=="0")
+                {
+                    objCriterio.TipoCriterio = "";
+                }
+                else
+                {
+                    objCriterio.TipoCriterio = grid.rules[0].data;
+                }
+                //objCriterio.TipoCriterio = (grid.rules[0].data == null ? "" : grid.rules[0].data);
+
+                if (grid.rules[1].data == null || grid.rules[1].data == "0")
+                {
+                    objCriterio.TipoMedicion = "";
+                }
+                else
+                {
+                    objCriterio.TipoMedicion = grid.rules[1].data;
                 }
 
-                var generic = Listar(_criterioRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
+                
+                if (grid.rules[2].data == null)
+                {
+                    objCriterio.Pregunta = "";
+                }
+                else
+                {
+                    objCriterio.Pregunta = grid.rules[2].data;
+                }
 
+
+                if (grid.rules[3].data == null || grid.rules[3].data == "0")
+                {
+                    objCriterio.IndicadorActivo = "";
+                }
+                else
+                {
+                    objCriterio.IndicadorActivo = grid.rules[3].data;
+                }
+
+
+                    
+                   
+                    
+                    //objCriterio.Pregunta = (grid.rules[2].data == null ? "" : grid.rules[2].data);
+                    
+                    //objCriterio.IndicadorActivo = (grid.rules[3].data == null ? "" : grid.rules[3].data);
+                    
+                    //where = DetachedCriteria.For<Criterio>();
+
+                    //if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
+                    //{
+                    //    where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
+                    //}
+                    //if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
+                    //{
+                    //    where.Add(Expression.Eq("TipoMedicion", grid.rules[1].data));
+                    //}
+                    //if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    //{
+                    //    where.Add(Expression.Like("Pregunta", '%' + grid.rules[2].data + '%'));
+                    //}
+                    //if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    //{
+                    //    where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
+                    //}
+                }
+
+
+
+
+                listaCriterios = _criterioRepository.ObtenerCriterios(objCriterio);
+
+
+                //var generic = Lis(_criterioRepository,
+                //                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var generic = GetListar(listaCriterios,
+                                        grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                
+                //var i = grid.page * grid.rows;
+
+              
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
                     id = item.IdeCriterio.ToString(),

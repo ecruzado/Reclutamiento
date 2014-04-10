@@ -8,5 +8,7 @@
         IList<Criterio> ObtenerListaMarciana(string codigo);
 
         ListaCriterios ObtenerCriteriosPorCategoria(int IdeCategoria);
+
+        List<Criterio> ObtenerCriterios(Criterio obj);
     }
 }
