@@ -16,5 +16,6 @@
     {
         int getTiempoExamen(int idExamen);
         DataTable getDataRepExamen(int idExamen);
+        List<PdfExamen> ObtenerPdfExamens(PdfExamen obj);
     }
 }
