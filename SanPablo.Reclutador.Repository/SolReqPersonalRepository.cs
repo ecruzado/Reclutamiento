@@ -1103,7 +1103,7 @@ namespace SanPablo.Reclutador.Repository
 
              try
              {
-                 
+                 lcon.Open();
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_POTENCIALES");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;

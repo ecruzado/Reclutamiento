@@ -595,54 +595,51 @@
                        </td>
                       </tr>
                             
-                             @*@if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
-                             { 
-                              <span></span>
-                             }
-                             else
-                             {
-                               
-                                *@<tr id="nombreImagen">
+                            <tr id="nombreImagen" class="formulario-fila">
                                    
-                                    <td class="colEtiqueta">
-                                        <label class="etiquetaFormulario" for="setInstitucion">Nombre Imagen</label>
-                                    </td>
-                                    <td class="colInput;input-xxlarge">
+                                   <td class="span5">
+                                        <label class="control-label" for="setInstitucion">Nombre Imagen</label>
+                                    
+                                    @*<td class="colInput;input-xxlarge">*@
+
+                                   <div class="controles">
                                         @Html.TextBoxFor(model => model.Criterio.rutaImagen, new { @class = "textoFormulario" , @readonly = "readonly"})
-                                    </td>
+                                    </div>
+                                       @*</td>*@
                                     
                                     <td>
                                  
                                 </tr>
                                  @if (!@Accion.Consultar.Equals(Model.Criterio.IndPagina)){
-                                <tr id="selecImagen">
-                                    <td class="colEtiqueta">
-                                        <label class="etiquetaFormulario">Imagen</label>
-                                    </td>
-                                    <td >
+                                <tr id="selecImagen" class="formulario-fila">
+                                    <td class="span5">
+                                        <label class="control-label">Imagen</label>
+                                    <div class="controles">
                                         <div id="divImagen">
                                            
                                         <input type="file" name="image" id="image" />
                                         
                                         @Html.TextBoxFor(model => model.NombreTemporalArchivo,  new { style = "display: none;" })
                                         </div>
+                                        </div>
                                     </td>
                                     <td></td>
                                 </tr>
                                  }
-                                 <tr id="verImagen">
+                                 <tr id="verImagen" class="formulario-fila">
                                    @if (Model.Criterio.IMAGENCRIT != null)
                                    {
-                                        <td class="colEtiqueta"></td>
-                                                  <td class ="colInput" >
+                                        <td class="span5">
+                                            <div class="controles">
                                                      <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
-                                                  </td>
+                                                </div>  
+                                                </td>
                                             
                                    }
                                  </tr>
                                  
                                        
-                            @* } *@
+                            
                                  
                        
                     <tr>

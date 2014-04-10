@@ -2196,7 +2196,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     ReclutamientoPersona objRecluta = new ReclutamientoPersona();
 
                     objRecluta.IdeSol = Convert.ToInt32(objSol.IdeSolReqPersonal);
-                    objRecluta.TipSol = TipoSolicitud.Remplazo;
+
+                    //se obtiene el tipo de solicitud para saber si es una ampliacion o un reemplazo
+                    objRecluta.TipSol = objSol.TipoSolicitud;
+
                     objRecluta.TipPuesto = objSol.TipPuesto;
                     objRecluta.IdSede = objSol.IdeSede;
                     objRecluta.IdeCargo = objSol.IdeCargo;
