@@ -14,7 +14,9 @@ SanPablo = {
             $(elemento).slideUp(200);
         });
     },
+
     Mayuscula: function (e, elemento) {
+        tecla = (document.all) ? e.keyCode : e.which;
         elemento.value = elemento.value.toUpperCase();
     },
     MenuSelected: function (idFormulario) {

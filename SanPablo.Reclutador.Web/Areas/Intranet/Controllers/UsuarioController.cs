@@ -893,7 +893,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
 
                 where.Add(Expression.Eq("IdeGeneral", codReg));
-                where.Add(Expression.Eq("IndicadorActivo", "A"));
+                where.Add(Expression.Eq("EstadoActivo", IndicadorActivo.Activo));
 
                 var generic = Listar(_detalleGeneralRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);

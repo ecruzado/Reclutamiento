@@ -348,9 +348,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         {
                             try
                             {
-                                var objSedeNivel = _sedeNivelRepository.GetSingle(x => x.IDUSUARIO == objUsuario.IdUsuario && x.FLGESTADO == IndicadorActivo.Activo);
-                                Session[ConstanteSesion.Sede] = objSedeNivel.IDESEDE;
-
+                                var ObjRol = _rolRepository.GetSingle(x=> x.IdRol == Convert.ToInt32(codRol) && x.FlgEstado==IndicadorActivo.Activo);
+                                if (ObjRol!=null)
+                                {
+                                    if (Indicador.No.Equals(ObjRol.FlgSede))
+	                                {
+                                        int dato = 0;
+	                                }
+                                }
+                               
                             }
                             catch (Exception)
                             {
@@ -364,6 +370,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
 
                 }
+            }
+            else
+            {
+                objJsonMensaje.Resultado = false;
+                objJsonMensaje.Mensaje = "Usuario o contraseña incorrecta";
             }
 
             return Json(objJsonMensaje);

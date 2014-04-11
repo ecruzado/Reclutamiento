@@ -231,6 +231,11 @@
         return false;
     }
 
+    function aMays(e, elemento) {
+        tecla = (document.all) ? e.keyCode : e.which;
+        elemento.value = elemento.value.toUpperCase();
+    }
+
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -276,11 +281,11 @@
                         
                           @if (Accion.Consultar.Equals(Model.Accion)) 
                           { 
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled"})                      
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled",onkeyup="aMays(event, this)"})                      
                           }
                           else
                           {
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" })                     
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario", onkeyup="aMays(event, this)" })                     
                           }
                          
                         
@@ -298,11 +303,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled",onkeyup="aMays(event, this)" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
                        }
                        
                        
@@ -319,7 +324,7 @@
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                           @Html.DropDownListFor(model => model.rol.FlgSede, new SelectList(Model.listaIndSede, "Valor", "Descripcion", Model.rol.FlgSede), new { disabled="disabled"})  
+                           @Html.DropDownListFor(model => model.rol.FlgSede, new SelectList(Model.listaIndSede, "Valor", "Descripcion", Model.rol.FlgSede), new { disabled="disabled", @style="text-transform: uppercase"})  
                          }
                          else
                          {

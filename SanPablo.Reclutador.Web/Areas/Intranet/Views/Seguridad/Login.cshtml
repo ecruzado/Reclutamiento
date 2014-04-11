@@ -90,10 +90,16 @@
                 <label style="font-weight:bold;font-size:13px;">Rol</label>
                  @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.listaRol, "IdRol", "CodRol", Model.Rol.IdRol), new {  data_val = "false" ,@class="input-block-level"})     
             </div>
-            <div id="ListaSede">
-            <label style="font-weight:bold;font-size:13px;">Sede</label>
-                 @Html.DropDownListFor(model => model.Sede.CodigoSede, new SelectList(Model.listaSede, "CodigoSede", "DescripcionSede", Model.Sede.CodigoSede), new {  data_val = "false",@class="input-block-level" })     
-            </div>
+            
+            
+                 <div id="ListaSede">
+                    <label style="font-weight:bold;font-size:13px;">Sede</label>
+                         @Html.DropDownListFor(model => model.Sede.CodigoSede, new SelectList(Model.listaSede, "CodigoSede", "DescripcionSede", Model.Sede.CodigoSede), new {  data_val = "false",@class="input-block-level" })     
+                    </div>
+           
+           
+    
+    
         <br />
         <br />
         <div style="text-align:center">
