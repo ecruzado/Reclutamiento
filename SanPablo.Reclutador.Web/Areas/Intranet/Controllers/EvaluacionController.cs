@@ -69,6 +69,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var reclutaPersona = _reclutamientoPersonaRepository.GetSingle(X => X.IdeReclutaPersona == IdeReclutaPersona);
                     reclutaPersona.EstPostulante = PostulanteEstado.EN_EVALUACION;
+                    _reclutamientoPersonaRepository.Update(reclutaPersona);
                     //generar los examenes por categorias
                     int contador = _reclutamientoExamenCategoriaRepository.CountByExpress(x => x.IdeReclutaPersona == IdeReclutaPersona);
                     if (contador == 0)

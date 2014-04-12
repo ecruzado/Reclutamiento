@@ -63,9 +63,12 @@
 
     $('#btnRequerimintoSol').click(function () {
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
-
+        var pagina = '@TipoSolicitud.Remplazo';
         if (selr != null) {
-            window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + selr;
+
+            var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + selr +"&pagina=" + pagina;
+            window.location = url;
+            @*window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + selr;*@
         } else {
             MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
         }

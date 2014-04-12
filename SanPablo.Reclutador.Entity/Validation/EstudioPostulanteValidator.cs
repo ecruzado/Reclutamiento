@@ -17,8 +17,8 @@
                 .WithMessage("Seleccionar nombre de la institución");
 
             RuleFor(x => x.NombreInstitucion)
-                .Length(10, 100)
-                .WithMessage("Ingresar Nombre Universidad con longitud entre 10 a 100 caracteres");
+                .Length(3, 100)
+                .WithMessage("Debe ingresar la institución");
 
             //RuleFor(x => x.TipoArea)
             //    .NotEqual("00")

@@ -48,6 +48,19 @@
                 mjs.style.display = "block";
             }
             else { mjs.style.display = "none"; }
+
+            fecActual = new Date();
+            fechaInicio = "01/" + fechaInicio;
+            var mes = (fecActual.getMonth() + 1);
+            if (mes < 10) { mes = "0" + mes; }
+            fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
+            
+            if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
+                $('#Experiencia_FechaInicio').val("");
+                mjs.innerHTML = "Ingresar una fecha válida";
+                mjs.style.display = "block";
+            }
+            else { mjs.style.display = "none"; }
         }
 
         function fechaValidaFin() {
@@ -61,6 +74,20 @@
                 mjsFin.style.display = "block";
             }
             else { mjsFin.style.display = "none"; }
+            
+            fecActual = new Date();
+            fechaFin = "01/" + fechaFin;
+            var mes = (fecActual.getMonth() + 1);
+            if (mes < 10) { mes = "0" + mes; }
+            fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
+
+            if (Date.parse(fechaFin) > Date.parse(fechaActual)) {
+                $('#Experiencia_FechaFin').val("");
+                mjsFin.innerHTML = "No puede ingresar fecha superior a la actual";
+                mjsFin.style.display = "block";
+            }
+            else { mjsFin.style.display = "none"; }
+            
         }
 
         function validarFecha() {
@@ -73,7 +100,7 @@
             fechaInicio = "01/" + fechaInicio;
             fechaFin = "01/" + fechaFin;
             if ((fechaFin != null) || (fechaFin != "")) {
-                if (fechaInicio > fechaFin) {
+                if (Date.parse(fechaInicio) > Date.parse(fechaFin)) {
                     mensaje.style.display = "block";
                     $('#Experiencia_FechaFin').val("");
                 }
@@ -190,7 +217,7 @@
                 <label class="etiquetaFormulario" > Fecha inicio <span class="text-error">*</span></label>
               </td>
               <td class="colInput">
-                  @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000" , onblur = "fechaValidaInicio();"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
                       @Html.ValidationMessageFor(model => model.Experiencia.FechaInicio)
                   </div>
@@ -201,12 +228,12 @@
                 <label class="etiquetaFormulario" style="width:160px"> Fecha fin </label>
               </td>
               <td class="colInput">
-                  @Html.TextBoxFor(model => model.Experiencia.FechaFin, new { placeholder = "01/2000"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaFin, new { placeholder = "01/2000", onblur = "fechaValidaFin();"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaFin)
                   </div>
                   <div id="msjErrorFecha" class="tex-error" style="font-size:12px;color:red;display:none;"> 
-                    Verifique que la fecha final sea posterior a la fecha de inicio.
+                    La fecha fin no puede ser menor a la fecha inicial.
                   </div>
               </td>
               <td>

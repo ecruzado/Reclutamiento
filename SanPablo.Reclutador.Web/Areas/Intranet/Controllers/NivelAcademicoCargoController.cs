@@ -94,9 +94,9 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    var nivelAcademicoViewModel = inicializarNivelAcademico();
-                    nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
-                    return View("NivelAcademico", nivelAcademicoViewModel);
+                    objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
                
                 else
@@ -118,7 +118,7 @@
                             nivelAcademicoCargo.Cargo = new Cargo();
                             nivelAcademicoCargo.Cargo.IdeCargo = IdeCargo;
                             _nivelAcademicoCargoRepository.Add(nivelAcademicoCargo);
-                            _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio, 0, IdeCargo);
+                            _nivelAcademicoCargoRepository.actualizarPuntaje(Convert.ToInt32(nivelAcademicoCargo.PuntajeNivelEstudio), 0, IdeCargo);
 
                             objJsonMessage.Mensaje = "Agregado Correctamente";
                             objJsonMessage.Resultado = true;
@@ -138,7 +138,7 @@
                          else
                          {
                              var nivelAcedemicoCargoActualizar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == nivelAcademicoCargo.IdeNivelAcademicoCargo);
-                             int valorAnterior = nivelAcedemicoCargoActualizar.PuntajeNivelEstudio;
+                             int valorAnterior = Convert.ToInt32(nivelAcedemicoCargoActualizar.PuntajeNivelEstudio);
                              nivelAcedemicoCargoActualizar.TipoEducacion = nivelAcademicoCargo.TipoEducacion;
                              nivelAcedemicoCargoActualizar.TipoAreaEstudio = nivelAcademicoCargo.TipoAreaEstudio;
                              nivelAcedemicoCargoActualizar.TipoNivelAlcanzado = nivelAcademicoCargo.TipoNivelAlcanzado;
@@ -147,7 +147,7 @@
                              nivelAcedemicoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                              nivelAcedemicoCargoActualizar.FechaModificacion = FechaModificacion;
                              _nivelAcademicoCargoRepository.Update(nivelAcedemicoCargoActualizar);
-                             _nivelAcademicoCargoRepository.actualizarPuntaje(nivelAcademicoCargo.PuntajeNivelEstudio, valorAnterior, IdeCargo);
+                             _nivelAcademicoCargoRepository.actualizarPuntaje(Convert.ToInt32(nivelAcademicoCargo.PuntajeNivelEstudio), valorAnterior, IdeCargo);
 
                              objJsonMessage.Mensaje = "Editado Correctamente";
                              objJsonMessage.Resultado = true;
@@ -197,7 +197,7 @@
             ActionResult result = null;
             var nivelAcademicoEliminar = new NivelAcademicoCargo();
             nivelAcademicoEliminar = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == ideNivelAcademico);
-            int puntajeEliminar = nivelAcademicoEliminar.PuntajeNivelEstudio;
+            int puntajeEliminar = Convert.ToInt32(nivelAcademicoEliminar.PuntajeNivelEstudio);
             _nivelAcademicoCargoRepository.Remove(nivelAcademicoEliminar);
             _nivelAcademicoCargoRepository.actualizarPuntaje(0,puntajeEliminar,IdeCargo);
             return result;

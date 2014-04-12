@@ -70,7 +70,7 @@ namespace SanPablo.Reclutador.Entity
             }
             set
             {
-                if (value == null)
+                if ((value == null)||(value ==""))
                     FechaTrabajoInicio = null;
                 else
                     FechaTrabajoInicio = Convert.ToDateTime(value.Insert(0, "01/"));
@@ -87,7 +87,7 @@ namespace SanPablo.Reclutador.Entity
             }
             set
             {
-                if (value == null)
+                if ((value == null)||(value ==""))
                     FechaTrabajoFin = null;
                 else
                     FechaTrabajoFin = Convert.ToDateTime(value.Insert(0, "01/"));

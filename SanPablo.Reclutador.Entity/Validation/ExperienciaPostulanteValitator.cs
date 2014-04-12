@@ -69,8 +69,8 @@
             RuleFor(x => x.FuncionesDesempenadas)
                 .NotEmpty()
                 .WithMessage("Ingresar la descripcion de las funciones desempeñadas")
-                .Length(5, 255)
-                .WithMessage("Ingresar una descripción entre 5 y 255 caracteres");
+                .Length(1, 255)
+                .WithMessage("Ingrese las funciones desempeñadas - Máx. 255 caracteres");
 
 
             RuleFor(x => x.FechaInicio)

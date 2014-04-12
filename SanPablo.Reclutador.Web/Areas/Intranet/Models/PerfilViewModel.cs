@@ -24,6 +24,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> RangoSalariales { get; set; }
 
         public string Accion { get; set; }
+
+        public string Pagina { get; set; }
         
     }
 }

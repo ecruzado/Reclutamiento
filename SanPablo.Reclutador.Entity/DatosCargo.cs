@@ -23,7 +23,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Departamento { get; set; }
         public virtual int IdeSolicitud { get; set; }
         public virtual string TipoEtapa { get; set; }
-       
+        public virtual string Pagina { get; set; }
         
     }
 }

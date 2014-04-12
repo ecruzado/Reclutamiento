@@ -39,14 +39,14 @@
         }
 
         [ValidarSesion]
-        public ActionResult Index(string id)
+        public ActionResult Index(string id, string pagina)
         {
             var ideSolicitud = id;
             try
             {
                 var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
 
-                var perfilViewModel = inicializarPerfil();
+                var perfilViewModel = inicializarPerfil(pagina);
                 var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
                 if (ideSolicitud != null)
@@ -54,6 +54,7 @@
                    DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud),usuario,Convert.ToInt32(Session[ConstanteSesion.Sede]));
                    datosCargo.IdeSolicitud = Convert.ToInt32(ideSolicitud);
                    CargoPerfil = datosCargo;
+                   CargoPerfil.Pagina = pagina;
                    CargoPerfil.TipoEtapa = solicitud.TipoEtapa;
                    actualizarAccion(perfilViewModel);
                    
@@ -76,10 +77,11 @@
             
         }
 
-        public PerfilViewModel inicializarPerfil()
+        public PerfilViewModel inicializarPerfil(string pagina)
         {
             var cargoViewModel = new PerfilViewModel();
             cargoViewModel.Cargo = new Cargo();
+            cargoViewModel.Pagina = pagina;
             return cargoViewModel;
         }
 
@@ -356,7 +358,8 @@
             perfilViewModel.Dependencia = CargoPerfil.Dependencia;
             perfilViewModel.Departamento = CargoPerfil.Departamento;
             perfilViewModel.IdeSolicitud = CargoPerfil.IdeSolicitud;
-            
+            perfilViewModel.Pagina = CargoPerfil.Pagina;
+
             if (cargo.EstadoActivo == IndicadorActivo.Activo)
             { perfilViewModel.EstadoRegistro = "Activo"; }
             else

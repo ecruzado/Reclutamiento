@@ -97,9 +97,9 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    var ubigeoViewModel = inicializarUbigeos();
-                    ubigeoViewModel.Ubigeo = ubigeoCargo;
-                    return View("Ubigeo", ubigeoViewModel);
+                    objJsonMessage.Mensaje = "Ingrese un puntaje mayor a cero";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
 
                 if (!existe(ubigeoCargo.IdeUbigeo, ubigeoCargo.IdeUbigeoCargo))

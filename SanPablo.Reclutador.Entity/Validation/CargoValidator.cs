@@ -49,6 +49,13 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .ExclusiveBetween(0,10)
                 .WithMessage("El rango de puntaje es de 0 a 10");
 
+
+            RuleFor(x => x.PuntajeSalario)
+                .NotEmpty()
+                .WithMessage("Debe ingresar puntaje de edad")
+                .ExclusiveBetween(0, 10)
+                .WithMessage("El rango de puntaje es de 0 a 10");
+
             RuleFor(x => x.Sexo)
                 .NotEqual("0")
                 .WithMessage("Seleccionar Sexo");

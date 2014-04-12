@@ -157,6 +157,9 @@
                     </td>
                     <td class="colInput">
                          @Html.DropDownListFor(model => model.Postulante.TipoParienteSede, new SelectList(Model.TipoParientesSedes, "Valor", "Descripcion", Model.Postulante.TipoParienteSede), new { style="display:none;"})   
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Postulante.TipoParienteSede)
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -165,6 +168,9 @@
                     </td>
                     <td class="colInput">
                          @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario", @style = "text-transform: uppercase;display:none;" })
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Postulante.ParienteNombre)
+                        </div>
                     </td>
                 </tr>
                 <tr >
@@ -173,6 +179,9 @@
                     </td>
                     <td class="colInput">
                          @Html.TextBoxFor(model => model.Postulante.ParienteCargo, new { @class = "textoFormulario", @style = "text-transform: uppercase; display:none;" })
+                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Postulante.ParienteCargo)
+                        </div>
                     </td>
                 </tr>
                 <tr >

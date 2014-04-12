@@ -34,6 +34,7 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
                 lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = busqueda.IdeCargo;
+                lspcmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = busqueda.IdeSede;
                 lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = busqueda.IdeDependencia;
                 lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = busqueda.IdeDepartamento;
                 lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = busqueda.IdeArea;

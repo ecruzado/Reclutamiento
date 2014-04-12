@@ -12,9 +12,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeExperienciaCargo { get; set; }
         public virtual Cargo Cargo { get; set; }
         public virtual string TipoExperiencia { get; set; }
-        public virtual int CantidadAnhosExperiencia { get; set; }
-        public virtual int CantidadMesesExperiencia { get; set; }
-        public virtual int PuntajeExperiencia { get; set; }
+        public virtual int? CantidadAnhosExperiencia { get; set; }
+        public virtual int? CantidadMesesExperiencia { get; set; }
+        public virtual int? PuntajeExperiencia { get; set; }
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionExperiencia { get; set; }

@@ -74,11 +74,11 @@ namespace SanPablo.Reclutador.Entity
         {
             get
             {
-                return  FechaEstudioFin == null? "":String.Format("{0:dd/MM/yyyy}", FechaEstudioFin).Substring(3, 7);
+                return  FechaEstudioFin == null?"":String.Format("{0:dd/MM/yyyy}", FechaEstudioFin).Substring(3, 7);
             }
             set
             {
-                if (value == null)
+                if ((value == null) || (value == ""))
                     FechaEstudioFin = null;
                 else
                     FechaEstudioFin = Convert.ToDateTime(value.Insert(0, "01/"));

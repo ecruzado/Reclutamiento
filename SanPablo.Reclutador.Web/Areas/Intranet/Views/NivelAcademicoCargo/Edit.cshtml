@@ -9,13 +9,14 @@
         var tipoNivelAcad = $('#NivelAcademico_TipoNivelAlcanzado').val();
        // habilitarTextOtro(tipoNivelAcad);
 
-        //$('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
-        //    var tipoNivelAcad = $(this).val();
-        //    habilitarTextOtro(tipoNivelAcad);
-        //})
+        $('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
+            var tipoNivelAcad = $(this).val();
+            habilitarTextOtro(tipoNivelAcad);
+        })
 
         $('select#NivelAcademico_TipoEducacion').change(function () {
             var tipoEducacion = $(this).val();
+            habilitarAreaEstudio(tipoEducacion);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listarNivelAlcanzado","NivelAcademicoCargo")',
@@ -37,14 +38,30 @@
         
     });
     function habilitarTextOtro(tipoNivelAcad) {
-        if ((tipoNivelAcad == '00') || (tipoNivelAcad == '02') ) {
-            $('#NivelAcademico_CicloSemestre').attr('disabled', 'disabled');
+        var laCiclo = document.getElementById('laCiclo');
+        var textCiclo = document.getElementById('NivelAcademico_CicloSemestre');
+        if ((tipoNivelAcad == '08') || (tipoNivelAcad == '12') || (tipoNivelAcad == '05') || (tipoNivelAcad == '18')) {
+            laCiclo.style.display = "block";
+            textCiclo.style.display = "block";
         }
         else {
-            $('#NivelAcademico_CicloSemestre').removeAttr('disabled');
+            laCiclo.style.display = "none";
+            textCiclo.style.display = "none";
         }
     }
-
+    function habilitarAreaEstudio(tipoEducacion)
+    {
+        var labelArea = document.getElementById('laAreaEstudio');
+        var listArea = document.getElementById('NivelAcademico_TipoAreaEstudio');
+        if (tipoEducacion == "01") {
+            labelArea.style.display = "none";
+            listArea.style.display = "none";
+        }
+        else {
+            labelArea.style.display = "block";
+            listArea.style.display = "block";
+        }
+    }
 </script>
 
 
@@ -71,10 +88,10 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Área de Estudio <span class="text-error">*</span></label>
+                <label id="laAreaEstudio" style="width:130px; display:none;" class="etiquetaFormulario" for="setipoInstitucion">Área de Estudio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                 @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio))
+                 @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio), new { style="display:none;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.TipoAreaEstudio)
                 </div>
@@ -93,10 +110,10 @@
        </tr>
            <tr>
             <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>
+                <label id="laCiclo" style="width:130px;display:none;" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>
             </td>
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini" })
+                 @Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini", style = "display:none;" , maxlength="2" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.CicloSemestre)
                 </div>
@@ -107,7 +124,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
-                @Html.TextBoxFor(model => model.NivelAcademico.PuntajeNivelEstudio, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.NivelAcademico.PuntajeNivelEstudio, new {@class="input-xxmini" , maxlength="2" })
                <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.PuntajeNivelEstudio)
                 </div>

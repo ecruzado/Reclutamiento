@@ -49,9 +49,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         
         
         [ValidarSesion]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, string pagina)
         {
-            SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo();
+            SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo( pagina);
             
             var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             
@@ -98,8 +98,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult Edit([Bind(Prefix = "SolicitudRequerimiento")]SolReqPersonal solicitudAmpliacion)
+        public ActionResult Edit(SolicitudAmpliacionCargoViewModel model)
         {
+
+            SolReqPersonal solicitudAmpliacion = model.SolicitudRequerimiento;
             JsonMessage objJsonMessage = new JsonMessage();
             
             try
@@ -109,7 +111,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 if (!result.IsValid)
                 {
-                    var solicitudAmpliacionModel = inicializarAmpliacionCargo();
+                    var solicitudAmpliacionModel = inicializarAmpliacionCargo(model.Pagina);
                     solicitudAmpliacionModel.SolicitudRequerimiento = solicitudAmpliacion;
                     return View(solicitudAmpliacionModel);
                 }
@@ -182,11 +184,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
-        public SolicitudAmpliacionCargoViewModel inicializarAmpliacionCargo()
+        public SolicitudAmpliacionCargoViewModel inicializarAmpliacionCargo(string pagina)
         {
             SolicitudAmpliacionCargoViewModel model = new SolicitudAmpliacionCargoViewModel();
 
             model.SolicitudRequerimiento = new SolReqPersonal();
+
+            model.Pagina = pagina;
 
             model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });

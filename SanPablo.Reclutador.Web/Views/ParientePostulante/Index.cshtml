@@ -53,7 +53,7 @@
                     "Grabar": function (e) {
                         validarFechaNac();
                         e.preventDefault();
-                        var result = $('form').valid();
+                        var result = $('#parientePostulanteForm').valid();
                         if (result) {
                             $.post('@Url.Action("Edit", "ParientePostulante")',
                                 $("#parientePostulanteForm").serialize(),
@@ -65,7 +65,7 @@
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
-                                        mensj.style.display = "block";
+                                       // mensj.style.display = "block";
                                     }
                                 }
                             );
@@ -160,15 +160,27 @@
         function validarFechaNac() {
             var vinculo = $('#Pariente_TipoDeVinculo').val();
             var menjError = document.getElementById("msjError");
+            var fecha = $('#Pariente_FechaNacimiento').val();
             if (vinculo == "03") {
-                var fecha = $("#fechaNacimiento").val();
-                if (fecha == null) {
+                
+                if ((fecha == null)||(fecha =="")) {
 
                     menjError.style.display = "block";
                 }
-                else { menjError.style.display = "none"; }
+                else {
+                    var fechaActual = new Date();
+                    if (Date.parse(fecha) > Date.parse(fechaActual)) {
+                        $('#Pariente_FechaNacimiento').val("");
+                        menjError.innerHTML = "Ingresar una fecha válida"
+                        menjError.style.display = "block";
+                    }
+                    else { menjError.style.display = "none"; }
+                }
             }
             else { menjError.style.display = "none"; }
+
+           
+            
         }
     </script>
 }

@@ -24,10 +24,11 @@
 
     $('#btnConsultarSolicitud').click(function () {
 
-        var ideSol = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        var rowData = jQuery('#grdList').jqGrid('getRowData', ideSol);
+        var ide = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', ide);
         var tipoSolicitud = rowData.TipoSol;
         var idCargo = rowData.Idecargo;
+        var ideSol = rowData.IdeSolReqPersonal;
         if (ideSol != null) {
             consultarSolicitud(ideSol, tipoSolicitud, idCargo);
         }
@@ -35,6 +36,43 @@
             MostrarMensaje("Seleccione una solicitud para la consulta ");
         }
         
+    });
+
+    $('#btnPreseleccion').click(function () {
+
+        var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+
+        var idSol = rowData.IdeSolReqPersonal;
+        var tipSol = rowData.TipoSol;
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+        var indPagina = '@Indicador.No';
+
+            if (idSol != null) {
+
+                var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;
+
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
+        });
+
+
+
+         $('#btnRankingSol').click(function () {
+             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+             var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+             var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+             var idSol = rowData.IdeSolReqPersonal;
+             if (idSol != null) {
+                 var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + rowData.TipoSol + "&pagina=" + pagina;
+                 window.location = url;
+             } else {
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+             }
+
     });
 
 
@@ -179,20 +217,35 @@
 
 
     function consultarSolicitud(ideSol, tipoSolicitud, idCargo) {
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
         if (tipoSolicitud == "01") {
             if (idCargo != 0) {
-                window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+                @* window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;*@
             }
             else {
-                window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;*@
             }
         }
         else {
             if (tipoSolicitud == "02") {
-                window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSol;
+
+                var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSol;*@
             }
             else {
-                window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + ideSol;
+                var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
+                window.location = url;
+
+                @*window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + ideSol;*@
             }
         }
     }
@@ -354,8 +407,11 @@
             </div>
 
            <div class="form-actions">
-                <a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                @*<a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudAmpliacionCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
+                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+
                 <a class="btn btn-info" id="btnConsultarSolicitud"><i class="icon-zoom-in icon-white"></i> Consultar</a>
             </div>
         }

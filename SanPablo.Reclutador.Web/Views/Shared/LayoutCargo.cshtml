@@ -15,6 +15,7 @@
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.Cargo.EstadoActivo)
                     @Html.HiddenFor(model=>model.IdeSolicitud)
+                    @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.EstadoRegistro, new {@class="btn btn-primary btn-small disabled" ,disabled="disabled" , style ="width:60px"})
                     @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
                 </div>
@@ -98,7 +99,15 @@
             @RenderBody() 
             </div>
             <div class="form-actions">     
-                <a class="btn" href="@Url.Action("Index", "Cargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                { 
+                    <a class="btn" href="@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                }
+                else
+                {
+                    <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                }
+                
                 @if (Accion.Aprobar.Equals(Model.Accion))
                 {
                     <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>

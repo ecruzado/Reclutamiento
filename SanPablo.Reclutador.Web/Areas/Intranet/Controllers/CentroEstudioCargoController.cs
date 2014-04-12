@@ -95,9 +95,9 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    var centroEstudioViewModel = inicializarCentroEstudio();
-                    centroEstudioViewModel.CentroEstudio = centroEstudioCargo;
-                    return View("CentroEstudio", centroEstudioViewModel);
+                    objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
                 if (!existe(centroEstudioCargo.TipoCentroEstudio, centroEstudioCargo.TipoNombreCentroEstudio, centroEstudioCargo.IdeCentroEstudioCargo))
                 {

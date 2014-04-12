@@ -97,9 +97,9 @@
                                 "1",
                                 item.TipoEstado==null?"":item.TipoEstado,
                                 item.IdeSolicitudNuevoCargo==null?"":item.IdeSolicitudNuevoCargo.ToString(),
-                                item.CodigoCargo==null?"":item.CodigoCargo.ToString(),
+                                item.CodigoCargo==null?"":item.CodigoCargo.ToString().ToUpper(),
                                 item.IdeCargo==null?"":item.IdeCargo.ToString(),
-                                item.NombreCargo==null?"":item.NombreCargo,
+                                item.NombreCargo==null?"":item.NombreCargo.ToUpper(),
                                 item.IdeDependencia==null?"":item.IdeDependencia.ToString(),
                                 item.DependenciaDescripcion==null?"":item.DependenciaDescripcion,
                                 item.IdeDepartamento==null?"":item.IdeDepartamento.ToString(),
@@ -176,9 +176,9 @@
         }
 
         [ValidarSesion]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id , string pagina)
         {
-            var solicitudNuevoCargoViewModel = inicializarSolicitudNuevoCargo();
+            var solicitudNuevoCargoViewModel = inicializarSolicitudNuevoCargo(pagina);
             if (id != "0")
             {
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
@@ -232,8 +232,10 @@
 
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult Edit([Bind(Prefix = "SolicitudNuevoCargo")]SolicitudNuevoCargo nuevaSolicitudCargo)
+        public ActionResult Edit(SolicitudNuevoCargoViewModel model)
         {
+
+            SolicitudNuevoCargo nuevaSolicitudCargo = model.SolicitudNuevoCargo;
             var enviarMail = new SendMail();
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             JsonMessage objJsonMessage = new JsonMessage();
@@ -245,7 +247,7 @@
 
                 if (!result.IsValid)
                 {
-                    var nuevoCargoViewModel = inicializarSolicitudNuevoCargo();
+                    var nuevoCargoViewModel = inicializarSolicitudNuevoCargo(model.Pagina);
                     nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
                     return View(nuevoCargoViewModel);
                 }
@@ -335,7 +337,7 @@
             }
 
         }
-        public SolicitudNuevoCargoViewModel inicializarSolicitudNuevoCargo()
+        public SolicitudNuevoCargoViewModel inicializarSolicitudNuevoCargo(string pagina)
         {
             var solicitudCargoViewModel = new SolicitudNuevoCargoViewModel();
             solicitudCargoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
@@ -343,7 +345,8 @@
             solicitudCargoViewModel.RangosSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             solicitudCargoViewModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            
+            solicitudCargoViewModel.Pagina = pagina;
+
             var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             if (usuarioSede != null)
             {

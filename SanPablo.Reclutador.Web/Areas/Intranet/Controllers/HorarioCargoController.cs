@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
 
     [Authorize]
     public class HorarioCargoController : BaseController
@@ -88,11 +89,14 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
+                HorarioCargoValidator validator = new HorarioCargoValidator();
+                ValidationResult result = validator.Validate(horarioCargo, "TipoHorario", "PuntajeHorario");
+
                 if (!ModelState.IsValid)
                 {
-                    var horarioViewModel = inicializarHorarios();
-                    horarioViewModel.Horario = horarioCargo;
-                    return View("Horario", horarioViewModel);
+                    objJsonMessage.Mensaje = "Ingrese un puntaje mayor a cero";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
                 if (horarioCargo.IdeHorarioCargo == 0)
                 {
@@ -162,7 +166,7 @@
             horarioCargoViewModel.Horario = new HorarioCargo();
 
             horarioCargoViewModel.Horarios = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
-
+            horarioCargoViewModel.Horarios.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             return horarioCargoViewModel;
         }
 

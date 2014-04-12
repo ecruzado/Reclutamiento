@@ -26,9 +26,6 @@
         SanPablo.Numeros('Postulante_NumeroDocumento');
         SanPablo.Numeros('Postulante_TelefonoMovil');
 
-        //SanPablo.Alfanumerico('Postulante_Observacion');
-        //SanPablo.Alfanumerico('Postulante_ReferenciaDireccion');
-        //SanPablo.Alfanumerico('Postulante_NombreZona');
 
         mostrarAlerta();
         actualizarBarra();
@@ -156,8 +153,10 @@
                 data: { dni: documento },
                 success: function (respuesta) {
                     if (!respuesta) {
+
+                        MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe omunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
                         $('#Postulante_NumeroDocumento').val('');
-                        msjError.style.display = "block";
+                        //msjError.style.display = "block";
                     }
                     else { msjError.style.display = "none"; }
                     
@@ -395,7 +394,7 @@
                 <table style="margin-left:120px;" >
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Observación</label>
+                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil</label>
                         </td >
                         <td colspan="4" class="colInput">
                             @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="text-transform: uppercase;width:570px" })
@@ -419,7 +418,7 @@
                         <td class="colInput">
                             <select id="pais" class="textoFormulario">
                                 <option>Seleccionar</option>
-                                <option selected="selected">Peru</option>
+                                <option selected="selected">PERÚ</option>
                             </select>
                         </td>
                         <td style="width:40px;"></td>
@@ -520,7 +519,7 @@
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", @style="text-transform: uppercase" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="2", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="3", @style="text-transform: uppercase" })
                             
                         </td>
                     </tr>

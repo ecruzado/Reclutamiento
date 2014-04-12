@@ -109,12 +109,12 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    var estudioGeneralViewModel = InicializarEstudio();
-                    estudioGeneralViewModel.Estudio = estudioPostulante;
-                    return View(estudioGeneralViewModel);
-                    //objJsonMessage.Mensaje = "Verifique que las fechas sean correctas y el todos los datos obligatorios esten llenos";
-                    //objJsonMessage.Resultado = true;
-                    //return Json(objJsonMessage);
+                    //var estudioGeneralViewModel = InicializarEstudio();
+                    //estudioGeneralViewModel.Estudio = estudioPostulante;
+                    //return View(estudioGeneralViewModel);
+                    objJsonMessage.Mensaje = "Verifique que todos los datos obligatorios esten registrados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
                 if (estudioPostulante.IdeEstudiosPostulante == 0)
                 {

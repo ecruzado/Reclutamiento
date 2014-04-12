@@ -523,17 +523,27 @@
                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                      }
+                    if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                    {
+                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                    }
                      
                 }
                 
                 
                 
                 <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                {
+                    <span></span>
+                }
+                else
+                {
                 <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
                 <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
                 <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
                 <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>
-                
+                }
             </div>
         </div>
     </div>
