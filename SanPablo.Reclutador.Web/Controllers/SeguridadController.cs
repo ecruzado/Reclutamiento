@@ -84,7 +84,9 @@ namespace SanPablo.Reclutador.Web.Controllers
         public ActionResult Logon(SeguridadViewModel model)
         {
             JsonMessage ObjJsonMessage = new JsonMessage();
+            
             Usuario objUSaurioExtranet;
+            
             string codUsuario = (model.UsuarioExtranet.Usuario == null ? "" : model.UsuarioExtranet.Usuario);
             string PassUsuario = (model.UsuarioExtranet.Password==null?"":model.UsuarioExtranet.Password);
 

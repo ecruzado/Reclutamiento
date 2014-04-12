@@ -95,47 +95,69 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<Opcion>();
 
-                if ((!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null) ||
-                    (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null) ||
-                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                   )
-                {
+                Opcion objOpcion = new Opcion();
+                List<Opcion> ListaOpciones = new List<Opcion>();    
+
+                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+               // DetachedCriteria where = null;
+               // where = DetachedCriteria.For<Opcion>();
+
+                //if ((!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null) ||
+                //    (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null) ||
+                //    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
+                //    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                //   )
+                //{
                    
 
-                    if (!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null)
+                    objOpcion.DSCOPCION = (grid.rules[0].data==null?"":Convert.ToString(grid.rules[0].data));
+                    objOpcion.DESCRIPCION = (grid.rules[1].data == null ? "" : Convert.ToString(grid.rules[1].data));
+
+                    if (grid.rules[2].data!=null && grid.rules[2].data!="0")
                     {
-                        where.Add(Expression.Like("DSCOPCION", '%'+grid.rules[0].data+'%'));
+                        objOpcion.FLGHABILITADO = (grid.rules[2].data == null ? "" : Convert.ToString(grid.rules[2].data));    
                     }
-                    if (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null)
+                    
+                    if (grid.rules[3].data != null && grid.rules[3].data != "0")
                     {
-                        where.Add(Expression.Like("DESCRIPCION", '%'+grid.rules[1].data+'%'));
-                    }
-                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
-                    {
-                        where.Add(Expression.Eq("FLGHABILITADO", grid.rules[2].data));
-                    }
-                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Eq("TIPMENU", grid.rules[3].data));
+                        objOpcion.TIPMENU = (grid.rules[3].data == null ? "" : Convert.ToString(grid.rules[3].data));
                     }
 
+                   ListaOpciones =  _opcionRepository.GetOpcion(objOpcion);
+                   
 
-                }
+                    //if (!"".Equals(grid.rules[0].data) && grid.rules[0].data!=null)
+                    //{
+                    //    where.Add(Expression.Like("DSCOPCION", '%'+grid.rules[0].data+'%'));
+                    //}
+                    //if (!"".Equals(grid.rules[1].data) && grid.rules[1].data!=null)
+                    //{
+                    //    where.Add(Expression.Like("DESCRIPCION", '%'+grid.rules[1].data+'%'));
+                    //}
+                    //if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
+                    //{
+                    //    where.Add(Expression.Eq("FLGHABILITADO", grid.rules[2].data));
+                    //}
+                    //if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    //{
+                    //    where.Add(Expression.Eq("TIPMENU", grid.rules[3].data));
+                    //}
 
-                if (where != null)
-                {
-                    where.Add(Expression.IsNotNull("IDOPCION"));
-                }
 
-                var generic = Listar(_opcionRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
+               // }
 
+                //if (where != null)
+                //{
+                //    where.Add(Expression.IsNotNull("IDOPCION"));
+                //}
+
+                   //var generic = GetListar(ListaOpciones,
+                   //                  grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+               var generic = GetListar(ListaOpciones,
+                                           grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+               
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
                     id = item.IDITEM.ToString(),
