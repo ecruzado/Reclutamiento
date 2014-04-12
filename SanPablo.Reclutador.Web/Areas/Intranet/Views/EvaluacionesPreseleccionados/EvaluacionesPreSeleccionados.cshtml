@@ -174,7 +174,7 @@
     {
         var url = '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados", new { idRP = "", area = "Intranet" })?idRP=' + idRP + '&idRE=' + idRE ;
         @*var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;*@
-        window.location = url;
+        window.open(url);
     }
 
     function NotaFormatter(cellvalue, options, rowObject) {

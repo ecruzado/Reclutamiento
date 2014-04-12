@@ -162,5 +162,144 @@ namespace SanPablo.Reclutador.Repository
             }
         }
 
+
+        public ResultadoExamen ObtenerEvaluacionReportePdf(int idereclutaPersona, int ideReclutaPersonaExamen)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            ResultadoExamen resulExamen = new ResultadoExamen();
+            IDataReader drExamen;
+
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_RECUPERAR_EXAMEN");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_ideReclutaPersona", OracleType.Number).Value = idereclutaPersona;
+                lspcmd.Parameters.Add("p_iderecluPersExamen", OracleType.Number).Value = ideReclutaPersonaExamen;
+                lspcmd.Parameters.Add("dtExamen", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtCategoriaExamen", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtCategoriaSubCatego", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtCriterioAlternativa", OracleType.Cursor).Direction = ParameterDirection.Output;
+                lspcmd.Parameters.Add("dtAlternativas", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+
+                using (IDataReader lector = (OracleDataReader)lspcmd.ExecuteReader())
+                {
+                    resulExamen = null;
+                    resulExamen = new ResultadoExamen();
+
+                    //cursor 1
+                    if (lector.Read())
+                    {
+                        resulExamen.IdeREclutamientoPersonaExamen = Convert.ToInt32(lector["IDERECLUPERSOEXAMEN"]);
+                        resulExamen.NombreExamen = Convert.ToString(lector["NOMEXAMEN"]);
+                        resulExamen.DescripcionExamen = Convert.ToString(lector["DESCEXAMEN"]);
+                        resulExamen.TipoExamen = Convert.ToString(lector["TIPEXAMEN"]);
+                        resulExamen.NotaFinal = Convert.ToInt32(lector["NOTAFINAL"]);
+                        resulExamen.nombrePostulante = Convert.ToString(lector["NOMBPOSTULANTE"]);
+
+                    }
+
+                    lector.NextResult();
+                    resulExamen.Categorias = new List<ResultadoExamenCategoria>();
+
+                    while (lector.Read())
+                    {
+                        var item = new ResultadoExamenCategoria();
+                        item.IdeReclutamientoExamenCategoria = Convert.ToInt32(lector["IDERECLPERSOEXAMNCAT"]);
+                        item.IdeReclutamientoPersonaExamen = Convert.ToInt32(lector["IDERECLUPERSOEXAMEN"]);
+                        item.NumeroPreguntas = Convert.ToInt32(lector["NROPREGUNTAS"]);
+                        item.NotaCategoria = Convert.ToInt32(lector["NOTAEXAMENCATEG"]);
+                        item.NombreCategoria = Convert.ToString(lector["NOMCATEGORIA"]);
+                        item.DescripcionCategoria = Convert.ToString(lector["DESCCATEGORIA"]);
+                        item.Tiempo = Convert.ToInt32(lector["TIEMPO"]);
+
+                        resulExamen.Categorias.Add(item);
+
+                    }
+
+                    lector.NextResult();
+                    resulExamen.SubCategorias = new List<ResultadoExamenSubCategoria>();
+
+                    while (lector.Read())
+                    {
+                        var item = new ResultadoExamenSubCategoria();
+                        item.IdeSubCategoria = Convert.ToInt32(lector["IDESUBCATEGORIA"]);
+                        item.IdeReclutamientoExamenCategoria = Convert.ToInt32(lector["IDERECLPERSOEXAMNCAT"]);
+                        item.IdeReclutamientoPersonaExamen = Convert.ToInt32(lector["IDERECLUPERSOEXAMEN"]);
+                        item.NombreSubCategoria = Convert.ToString(lector["NOMSUBCATEGORIA"]);
+                        item.DescripcionSubCategoria = Convert.ToString(lector["DESCSUBCATEGORIA"]);
+                        item.OrdenImpresion = Convert.ToInt32(lector["ORDENIMPRESION"]);
+
+                        resulExamen.SubCategorias.Add(item);
+
+                    }
+
+                    lector.NextResult();
+                    resulExamen.Criterios = new List<ResultadoExamenCriterio>();
+
+                    while (lector.Read())
+                    {
+                        var item = new ResultadoExamenCriterio();
+                        item.IdeReclutaPersonaCriterio = Convert.ToInt32(lector["IDERECLUPERSOCRITERIO"]);
+                        item.IdeReclutamientoExamenCategoria = Convert.ToInt32(lector["IDERECLPERSOEXAMNCAT"]);
+                        item.IdeCriterioSubCategoria = Convert.ToInt32(lector["IDECRITERIOXSUBCATEGORIA"]);
+                        item.IdeSubCategoria = Convert.ToInt32(lector["IDESUBCATEGORIA"]);
+                        item.Pregunta = Convert.ToString(lector["PREGUNTA"]);
+                        item.TipoModo = Convert.ToString(lector["TIPMODO"]);
+
+                        if (lector["IMAGENCRIT"] != null && lector["IMAGENCRIT"] != DBNull.Value)
+                        {
+                            item.ImagenCriterio = (byte[])(lector["IMAGENCRIT"]);
+                        }
+
+                        item.IndicadorRespuesta = Convert.ToString(lector["INDRESPUESTA"]);
+                        item.PuntajeTotal = Convert.ToInt32(lector["PUNTTOTAL"]);
+
+                        resulExamen.Criterios.Add(item);
+                    }
+
+                    lector.NextResult();
+                    resulExamen.Alternativas = new List<ResultadoExamenAlternativa>();
+
+                    while (lector.Read())
+                    {
+                        var item = new ResultadoExamenAlternativa();
+                        item.IdeReclutaPersonaCriterio = Convert.ToInt32(lector["IDERECLUPERSOCRITERIO"]);
+                        item.IdeCriterio = Convert.ToInt32(lector["IDECRITERIO"]);
+                        item.IdeCriterioSubCategoria = Convert.ToInt32(lector["IDECRITERIOXSUBCATEGORIA"]);
+                        item.Alternativa = Convert.ToString(lector["ALTERNATIVA"]);
+                        item.IdeAlternativa = Convert.ToInt32(lector["IDEALTERNATIVA"]);
+                        item.Peso = Convert.ToInt32(lector["PESO"]);
+
+                        if (lector["IMAGE"] != null && lector["IMAGE"] != DBNull.Value)
+                        {
+                            item.ImagenAlternativa = (byte[])(lector["IMAGE"]);
+                        }
+
+                        item.Respuesta = Convert.ToString(lector["RESPUESTA"]);
+
+                        resulExamen.Alternativas.Add(item);
+                    }
+
+                    lector.Close();
+
+                }
+                    
+                return resulExamen;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
     }
 }

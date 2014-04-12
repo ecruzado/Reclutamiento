@@ -32,6 +32,14 @@ namespace SanPablo.Reclutador.Repository.Interface
         /// <param name="ideReclutaPersonaExamen"></param>
         /// <returns></returns>
         DataSet ObtenerEvaluacionReporte(int idereclutaPersona, int ideReclutaPersonaExamen);
+
+        /// <summary>
+        /// Obtiene el examen del postulante para el formato pdf
+        /// </summary>
+        /// <param name="idereclutaPersona"></param>
+        /// <param name="ideReclutaPersonaExamen"></param>
+        /// <returns></returns>
+        ResultadoExamen ObtenerEvaluacionReportePdf(int idereclutaPersona, int ideReclutaPersonaExamen);
     }
 
     

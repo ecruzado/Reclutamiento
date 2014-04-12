@@ -22,7 +22,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
-    
+
+
+    //Itext
+    using iTextSharp;
+    using iTextSharp.text;
+    using iTextSharp.text.pdf;
+
+
     public class EvaluacionesPreSeleccionadosController : BaseController
     {
         private ISolReqPersonalRepository _solReqPersonalRepository;
@@ -462,7 +469,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         #region MOSTRAR EVALUACIONES RENDIDAS
 
 
-        public ActionResult ResultadoEvaluacion(int idRP, int idRE)
+        public ActionResult ResultadoEvaluacion1(int idRP, int idRE)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             string fullPath = null;
@@ -498,6 +505,507 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return File(mem, "application/pdf");
 
         }
+
+
+        public ActionResult ResultadoEvaluacion(int idRP, int idRE)
+        {
+
+            ResultadoExamen resultadoExamen = new ResultadoExamen();
+            string NombreExamen = "";
+            string DesExamen = "";
+            string Nota = "";
+            string NombrePostulante = "";
+            
+            try
+            {
+
+                resultadoExamen = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReportePdf(idRP, idRE);
+            
+                    // tipo de letra
+            Font normal = new Font(FontFactory.GetFont("Arial", 10, Font.NORMAL));
+            Font negrita = new Font(FontFactory.GetFont("Arial", 10, Font.BOLD));
+            Font subRayado = new Font(FontFactory.GetFont("Arial", 10, Font.UNDERLINE));
+
+            Font letraTitulo = new Font(FontFactory.GetFont("Arial", 12, Font.BOLD));
+
+            // obtengo los datos de la cabecera
+            if (resultadoExamen != null)
+            {
+
+                NombreExamen = resultadoExamen.NombreExamen;
+                DesExamen = resultadoExamen.DescripcionExamen;
+                Nota =  resultadoExamen.NotaFinal.ToString();
+                NombrePostulante = resultadoExamen.nombrePostulante;
+            }
+
+            string ConcatenExamen = DesExamen + " - " + NombreExamen; 
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document doc = new Document(PageSize.A4, 20, 30, 30, 20);
+                PdfWriter writer = PdfWriter.GetInstance(doc, ms);
+               
+                //Se inicializa el archivo PDF
+                doc.Open();
+
+                
+                //se crea la  1 tabla que contiene las celdas
+                PdfPTable table1 = new PdfPTable(2);
+                
+                // se definen los anchos de la tabla
+                float[] anchos1 = new float[] { 20.0f, 80.0f };
+                table1.SetWidths(anchos1);
+
+                // se crea la celda con el valor que contiene
+                string imagepath = Server.MapPath(@"~/Content/images");
+                Image img = Image.GetInstance(imagepath + "/logo_sanpablo -prueba.png");
+                img.ScalePercent(80f);
+                PdfPCell logo = new PdfPCell(img);
+                logo.HorizontalAlignment = Element.ALIGN_LEFT;
+                // se quitan los bordes de la celda
+                logo.Border = Rectangle.NO_BORDER;
+                // se agrega la celda a la tabla
+                table1.AddCell(logo);
+
+
+                 PdfContentByte cb = writer.DirectContent;
+ 
+                //insertar cuadro
+                //cb.RoundRectangle(50f, 50f, 20f, 20f, 20f);
+                //cb.Stroke();
+         
+                //cb.MoveTo(118f, 520f);
+                //cb.LineTo(122f, 520f);
+                //cb.Stroke();
+                //cb.MoveTo(120f, 518f);
+                //cb.LineTo(120f, 522f);
+                //cb.Stroke();
+
+
+                PdfPCell cellTituloReporte = new PdfPCell(new Phrase(" RESULTADO DE EVALUACION ", letraTitulo));
+                // se alinea a la derecha
+                cellTituloReporte.HorizontalAlignment = Element.ALIGN_CENTER;
+                // se quitan los bordes de la celda
+                cellTituloReporte.Border = Rectangle.NO_BORDER;
+                // se agrega la celda a la tabla
+                table1.AddCell(cellTituloReporte);
+
+                //Espacios entre tablas
+                table1.SpacingBefore = 20f;
+                table1.SpacingAfter = 30f;
+
+                doc.Add(table1);
+
+                
+                PdfPTable table2 = new PdfPTable(4);
+                float[] anchos2 = new float[] { 20.0f, 65.0f , 10.0f, 5.0f  };
+                table2.SetWidths(anchos2);
+
+                PdfPCell cellNombExamen = new PdfPCell(new Phrase("EXAMEN :", negrita));
+                // se alinea a la derecha
+                cellNombExamen.HorizontalAlignment = Element.ALIGN_LEFT;
+                // se quitan los bordes de la celda
+                cellNombExamen.Border = Rectangle.NO_BORDER;
+                // se agrega la celda a la tabla
+                table2.AddCell(cellNombExamen);
+               
+                PdfPCell cellDesExamen = new PdfPCell(new Phrase(ConcatenExamen, normal));
+                cellDesExamen.Border = Rectangle.NO_BORDER;
+                cellDesExamen.HorizontalAlignment = Element.ALIGN_LEFT;
+                table2.AddCell(cellDesExamen);
+                
+                
+                PdfPCell CellTipoExamen = new PdfPCell(new Phrase("NOTA: ", negrita));
+                CellTipoExamen.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellTipoExamen.Border = Rectangle.NO_BORDER;
+                table2.AddCell(CellTipoExamen);
+
+                PdfPCell CellTipoExamenDes = new PdfPCell(new Phrase(Nota, normal));
+                CellTipoExamenDes.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellTipoExamenDes.Border = Rectangle.NO_BORDER;
+                table2.AddCell(CellTipoExamenDes);
+
+
+                //Espacios entre tablas
+                table2.SpacingBefore = 20f;
+                table2.SpacingAfter = 30f;
+
+                PdfPCell CellDuracion = new PdfPCell(new Phrase("POSTULANTE: ", negrita));
+                CellDuracion.HorizontalAlignment = Element.ALIGN_LEFT;
+                //CellDuracion.Colspan = 2;
+                CellDuracion.Border = Rectangle.NO_BORDER;
+                table2.AddCell(CellDuracion);
+
+                PdfPCell CellDuracionDes = new PdfPCell(new Phrase(NombrePostulante, normal));
+                CellDuracionDes.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellDuracionDes.Border = Rectangle.NO_BORDER;
+                // CellDuracion.Colspan = 3;
+                table2.AddCell(CellDuracionDes);
+
+                PdfPCell CellBlanco = new PdfPCell(new Phrase(""));
+                CellBlanco.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellBlanco.Border = Rectangle.NO_BORDER;
+                // CellDuracion.Colspan = 3;
+                table2.AddCell(CellBlanco);
+
+                PdfPCell CellBlanco1 = new PdfPCell(new Phrase(""));
+                CellBlanco1.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellBlanco1.Border = Rectangle.NO_BORDER;
+                // CellDuracion.Colspan = 3;
+                table2.AddCell(CellBlanco1);
+
+                //Espacios entre tablas
+                table2.SpacingBefore = 15f;
+                table2.SpacingAfter = 10f;
+
+                doc.Add(table2);
+               
+                //codigos unicos
+
+                var listaCategorias = resultadoExamen.Categorias;
+
+                // Agrupacion de categoria
+                foreach (ResultadoExamenCategoria itemCategoria in listaCategorias)
+                {
+                    // se crea la tercera tabla que es una agrupacion por categoria
+
+                    PdfPTable table3 = new PdfPTable(3);
+                    float[] ancho3 = new float[] { 40.0f,50.0f,10.0f };
+                    table3.SetWidths(ancho3);
+
+                    // celda 1
+
+                    PdfPCell CellTituloCat = new PdfPCell(new Phrase("CATEGORIA : ", negrita));
+                    CellTituloCat.HorizontalAlignment = Element.ALIGN_LEFT;
+                    CellTituloCat.Border = Rectangle.NO_BORDER;
+                    table3.AddCell(CellTituloCat);
+
+
+                    PdfPCell CelltCategoria = new PdfPCell(new Phrase(itemCategoria.NombreCategoria+"  TIEMPO :"+itemCategoria.Tiempo +"min" , normal));
+                    CelltCategoria.HorizontalAlignment = Element.ALIGN_LEFT;
+                    CelltCategoria.Border = Rectangle.NO_BORDER;
+                    CelltCategoria.Colspan = 2;
+                    table3.AddCell(CelltCategoria);
+                    
+                    //celda 2 de instrucciones
+                    PdfPCell CelltituloInstruccion = new PdfPCell(new Phrase("NOTA CATEGORIA:",negrita));
+                    CelltituloInstruccion.HorizontalAlignment = Element.ALIGN_LEFT;
+                    //CelltituloInstruccion.Colspan = 3;
+                    CelltituloInstruccion.Border = Rectangle.NO_BORDER;
+                    table3.AddCell(CelltituloInstruccion);
+
+                    ////celda enblanco
+                    //PdfPCell CellBlanco2 = new PdfPCell(new Phrase("", normal));
+                    //CellBlanco2.Colspan = 3;
+                    //CellBlanco2.Border = Rectangle.NO_BORDER;
+                    //table3.AddCell(CellBlanco2);
+
+                    // celda 3
+                    PdfPCell CellInstruccion = new PdfPCell(new Phrase(itemCategoria.NotaCategoria.ToString(), normal));
+                    CellInstruccion.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                    CellInstruccion.Border = Rectangle.NO_BORDER;
+                    // se le indica que ocupe las 3 columnas
+                    //CellInstruccion.Colspan = 2;
+                    table3.AddCell(CellInstruccion);
+
+                    table3.SpacingBefore = 10f;
+                    table3.SpacingAfter = 10f;
+
+                    doc.Add(table3);
+
+                    #region subcategoria
+
+                    // se obtiene los codigos de la subcategoria unicos por categoria 
+                    // la lista listaCategoria contiene solo los registros de dicha categoria
+                    
+                    //SUBCATEGORIA
+                    var listSubCategoria = resultadoExamen.SubCategorias.Where(x => x.IdeReclutamientoExamenCategoria == itemCategoria.IdeReclutamientoExamenCategoria);
+
+                    foreach (ResultadoExamenSubCategoria itemSubCategoria in listSubCategoria)
+                    {
+
+                        // se crea la cuarta tabla
+                        PdfPTable table4 = new PdfPTable(3);
+                        float[] ancho4 = new float[] { 30.0f, 60.0f, 10.0f };
+                        table4.SetWidths(ancho4);
+
+                        // se agregan las celdas a la tabla
+                        PdfPCell CellSubcAtegoria = new PdfPCell(new Phrase("SUBCATEGORIA : ", negrita));
+                        CellSubcAtegoria.HorizontalAlignment = Element.ALIGN_LEFT;
+                        //CellSubcAtegoria.Colspan = 3;
+                        CellSubcAtegoria.Border = Rectangle.NO_BORDER;
+                        table4.AddCell(CellSubcAtegoria);
+
+                        // celda nombre la subcategoria
+                        PdfPCell CellNombSubcAtegoria = new PdfPCell(new Phrase(itemSubCategoria.NombreSubCategoria, normal));
+                        CellNombSubcAtegoria.HorizontalAlignment = Element.ALIGN_LEFT;
+                        CellNombSubcAtegoria.Colspan = 2;
+                        CellNombSubcAtegoria.Border = Rectangle.NO_BORDER;
+                        table4.SpacingBefore = 10f;
+                        table4.SpacingAfter = 10f;
+                        table4.AddCell(CellNombSubcAtegoria);
+                        doc.Add(table4);
+
+
+                        #region criterios
+                        //CRITERIO
+                        int cont = 1;
+                        var listaCodCriterio = resultadoExamen.Criterios.Where(x => x.IdeSubCategoria == itemSubCategoria.IdeSubCategoria);
+                        foreach (var itemCriterio in listaCodCriterio)
+                        {
+                             
+                            PdfPTable table5 = new PdfPTable(3);
+                            float[] ancho5 = new float[] { 15.0f, 80.0f, 10.0f };
+                            table5.SetWidths(ancho5);
+                            PdfPCell CellPregunta = new PdfPCell(new Phrase("NRO. "+cont, negrita));
+                            //CellPregunta.Colspan = 3;
+                            CellPregunta.Border = Rectangle.NO_BORDER;
+                            
+                            CellPregunta.SpaceCharRatio = 10f; //espacio de celda
+                            
+                            table5.AddCell(CellPregunta);
+                            
+
+                            // si el codMod es 02 muestra imagen si no muestra texto
+
+                            PdfPCell CellPreguntaCriterio = null;
+                            if ("02".Equals(itemCriterio.TipoModo))
+                            {
+                                if (itemCriterio.ImagenCriterio!=null)
+                                {
+                                    Image PreguntaCriterio = Image.GetInstance(itemCriterio.ImagenCriterio);
+                                    PreguntaCriterio.ScaleToFit(160f, 160f);
+
+                                    CellPreguntaCriterio = new PdfPCell(PreguntaCriterio);
+                                    CellPreguntaCriterio.HorizontalAlignment = Element.ALIGN_LEFT;
+                                    
+                                }
+                                else
+                                {
+                                    CellPreguntaCriterio = new PdfPCell(new Phrase("", normal));
+                                }
+                            }
+                            else
+                            {
+                                CellPreguntaCriterio = new PdfPCell(new Phrase(itemCriterio.Pregunta, normal));
+                            }
+
+                            cont = cont + 1;
+                            CellPreguntaCriterio.Colspan = 2;
+                            CellPreguntaCriterio.Border = Rectangle.NO_BORDER;
+                            table5.AddCell(CellPreguntaCriterio);
+                            table5.SpacingBefore = 2f;
+                            table5.SpacingAfter = 2f;
+
+                            doc.Add(table5);
+
+                            #region Alternativas
+                            // ALTERNATIVAS
+                            int nContAltenativa = 1;
+                            string opcion = "";
+                            var listaCodAlternativa = resultadoExamen.Alternativas.Where(x => x.IdeReclutaPersonaCriterio == itemCriterio.IdeReclutaPersonaCriterio);
+                           
+                            foreach (var itemAlternativa in listaCodAlternativa)
+                            {
+
+                                
+                                //ToLetras
+                                opcion = ToLetras(nContAltenativa);
+
+                                PdfPTable table6 = new PdfPTable(3);
+                                float[] ancho6 = new float[] { 10.0f, 80.0f, 10.0f };
+                                table6.SetWidths(ancho5);
+                                
+                                PdfPCell CellAlternativa = new PdfPCell(new Phrase(opcion+")", negrita));
+                                CellAlternativa.HorizontalAlignment = Element.ALIGN_LEFT;
+                                CellAlternativa.Colspan = 1;
+                                CellAlternativa.Border = Rectangle.NO_BORDER;
+                                table6.AddCell(CellAlternativa);
+
+
+                                PdfPCell CellOpcionAlternativa = null;
+
+                                if ("02".Equals(itemCriterio.TipoModo))
+                                {
+                                    if (itemAlternativa.ImagenAlternativa != null)
+                                    {
+                                        Image OpcionImage = Image.GetInstance(itemAlternativa.ImagenAlternativa);
+                                        OpcionImage.ScaleToFit(160f, 160f);
+
+                                        CellOpcionAlternativa = new PdfPCell(OpcionImage);
+                                       
+
+                                    }
+                                    else
+                                    {
+                                        CellOpcionAlternativa = new PdfPCell(new Phrase("", normal));
+                                    }
+                                }
+                                else
+                                {
+                                    if (itemAlternativa.Respuesta == "S")
+                                    {
+                                        CellOpcionAlternativa = new PdfPCell(new Phrase(itemAlternativa.Alternativa, subRayado));
+                                    }
+                                    else
+                                    {
+                                        CellOpcionAlternativa = new PdfPCell(new Phrase(itemAlternativa.Alternativa, normal));
+                                    }
+                                    
+                                }
+
+                                CellOpcionAlternativa.Colspan = 2;
+                                CellOpcionAlternativa.Border = Rectangle.NO_BORDER;
+                                CellOpcionAlternativa.HorizontalAlignment = Element.ALIGN_LEFT;
+
+                                
+                                table6.AddCell(CellOpcionAlternativa);
+
+                                table6.SpacingBefore = 2f;
+                                table6.SpacingAfter = 2f;
+                                doc.Add(table6);
+
+                                nContAltenativa = nContAltenativa + 1;
+
+                            }
+
+                            #endregion
+
+                        }
+
+                        #endregion
+
+                    }
+
+                    #endregion
+
+                }
+
+                // Se cierra el archivo Pdf
+                doc.Close();
+
+
+                writer.Close();
+               
+                return File(ms.ToArray(), "application/pdf");   
+            }
+            }
+            catch (Exception)
+            {
+                
+                    return MensajeError();
+            }
+        
+        }
+
+
+
+        /// <summary>
+        /// convierte el numero a letras
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public String ToLetras(int n)
+        {
+            string res = "";
+
+            if (n == 0)
+            {
+
+                return res;
+            }
+            else
+            {
+
+                switch (n)
+                {
+                    case 1:
+                        res = " A";
+                        break;
+                    case 2:
+                        res = " B";
+                        break;
+                    case 3:
+                        res = " C";
+                        break;
+                    case 4:
+                        res = " D";
+                        break;
+                    case 5:
+                        res = " E";
+                        break;
+                    case 6:
+                        res = " F";
+                        break;
+                    case 7:
+                        res = " G";
+                        break;
+                    case 8:
+                        res = " H";
+                        break;
+                    case 9:
+                        res = " I";
+                        break;
+                    case 10:
+                        res = " J";
+                        break;
+                    case 11:
+                        res = " K";
+                        break;
+                    case 12:
+                        res = " L";
+                        break;
+                    case 13:
+                        res = " M";
+                        break;
+                    case 14:
+                        res = " N";
+                        break;
+                    case 15:
+                        res = " O";
+                        break;
+                    case 16:
+                        res = " P";
+                        break;
+                    case 17:
+                        res = " Q";
+                        break;
+                    case 18:
+                        res = " R";
+                        break;
+                    case 19:
+                        res = " S";
+                        break;
+                    case 20:
+                        res = " T";
+                        break;
+                    case 21:
+                        res = " U";
+                        break;
+                    case 22:
+                        res = " V";
+                        break;
+                    case 23:
+                        res = " W";
+                        break;
+                    case 24:
+                        res = " X";
+                        break;
+                    case 25:
+                        res = " Y";
+                        break;
+                    case 26:
+                        res = " Z";
+                        break;
+    
+
+                }
+                return res;
+            }
+        }
+
+
+    
         #endregion
     }
 }

@@ -273,7 +273,8 @@
                         codUsuario = objUsuario.CodUsuario;
                     }
 
-                    postulanteEdit.UsuarioModificacion = codUsuario.ToString().Substring(0, 15);
+
+                    postulanteEdit.UsuarioModificacion = codUsuario.ToString().Length <= 15 ? codUsuario.ToString() : codUsuario.ToString().Substring(0, 15);
 
                     postulanteEdit.FechaModificacion = FechaModificacion;
                     #endregion
@@ -486,7 +487,8 @@
         public ActionResult DatosComplementarios([Bind(Prefix = "Postulante")]Postulante postulante)
         {
             PostulanteValidator validator = new PostulanteValidator();
-            ValidationResult result = validator.Validate(postulante, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero");
+            ValidationResult result = validator.Validate(postulante, "TipoSalario", "TipoDisponibilidadTrabajo", "TipoDisponibilidadHorario", "TipoComoSeEntero",
+                                                        "TipoParienteSede", "ParienteNombre", "ParienteCargo");
             
             if (!result.IsValid)
             {

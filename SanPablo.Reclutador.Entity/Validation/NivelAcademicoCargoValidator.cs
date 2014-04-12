@@ -13,7 +13,7 @@
                 .WithMessage("Seleccionar un Tipo de Educación");
 
             RuleFor(x => x.TipoAreaEstudio)
-                .NotEqual("00")
+                .NotEqual("00").When(x=>x.TipoEducacion.Equals("02") ||x.TipoEducacion.Equals("03")||x.TipoEducacion.Equals("04"))
                 .WithMessage("Ingresar un área de Estudio");
 
             RuleFor(x => x.TipoNivelAlcanzado)

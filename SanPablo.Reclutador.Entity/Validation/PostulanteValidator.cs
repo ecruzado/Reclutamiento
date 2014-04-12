@@ -112,12 +112,25 @@
                 .NotEmpty()
                 .WithMessage("Ingresar una referencia");
             RuleFor(x => x.ReferenciaDireccion)
-                .Length(5,100)
+                .Length(1,100)
                 .WithMessage("Máx. 100 caracteres");
 
             RuleFor(x => x.NombreZona)
                 .Length(0, 100)
                 .WithMessage("Máx. 100 caracteres");
+
+
+            RuleFor(x => x.TipoParienteSede)
+                .NotEqual("0").When(x => x.IndicadorParientesCHSP==null?false:x.IndicadorParientesCHSP.Equals("S"))
+                .WithMessage("Ingresar la Sede en la que labora");
+
+            RuleFor(x => x.ParienteNombre)
+                .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
+                .WithMessage("Ingresar nombre del pariente");
+
+            RuleFor(x => x.ParienteCargo)
+                .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
+                .WithMessage("Ingresar cargo del pariente");
 
             //RuleFor(x => x.TelefonoFijo)
             //    .Must()

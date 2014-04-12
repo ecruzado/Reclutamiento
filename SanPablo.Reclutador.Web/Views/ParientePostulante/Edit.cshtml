@@ -4,7 +4,24 @@
 }
     <script type="text/javascript">
 
-        
+        //$(document).ready(function () {
+
+        //    //$('#fechaNacimiento').change(function () {
+        //    //    var date = $(this).val();
+        //    //    var arrDate = date.split("/");
+        //    //    var today = new Date();
+        //    //    var msj = document.getElementById('msjError');
+                
+        //    //    useDate = new Date(arrDate[2], arrDate[1] - 1, arrDate[0]);
+
+        //    //    if (useDate > today) {
+        //    //        msj.innerHTML = "Ingresar un fecha válida";
+        //    //        msj.style.display = "block";
+        //    //        $(this).val('');
+        //    //    }
+        //    //    else { msj.style.display = "none"; }
+        //    //});
+        //});
     </script>
 @using (Html.BeginForm("Edit", "ParientePostulante", FormMethod.Post, new { @id = "parientePostulanteForm" }))
     {
@@ -64,12 +81,12 @@
                 <label class="etiquetaFormulario"> Fecha de nacimiento </label>
             </td>
             <td class="colInput" >
-                @Html.EditorFor(model => model.Pariente.FechaNacimiento, new { @id="fechaNacimiento", onblur="validarFechaNac();"})
+                @Html.EditorFor(model => model.Pariente.FechaNacimiento, new { onblur="validarFechaNac();"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Pariente.FechaNacimiento)
                 </div>
                 <div id="msjError" class="tex-error" style="font-size:12px;color:red ; display:none" > 
-                    <span>Falta ingresar la fecha de nacimiento</span>
+                    <span>Ingresar la fecha de nacimiento</span>
                 </div>
             </td>
         </tr>

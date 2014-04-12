@@ -98,11 +98,20 @@
                 ValidationResult resultValidator = validator.Validate(experienciaCargo, "TipoExperiencia", "PuntajeExperiencia");
                 bool result = validarExperiencia(experienciaCargo);
 
-                if ((!resultValidator.IsValid)&&(result))
+                if ((!resultValidator.IsValid)||(!result))
                 {
-                    var experienciaViewModel = inicializarExperiencia();
-                    experienciaViewModel.Experiencia = experienciaCargo;
-                    return View(experienciaViewModel);
+                    if (!result)
+                    {
+                        objJsonMessage.Mensaje = "Verifique la cantidad de años, meses y puntaje sean correctos";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "Verifique que haya llenado los datos obligatorios";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
                 if (experienciaCargo.IdeExperienciaCargo == 0)
                 {
@@ -122,7 +131,7 @@
                         experienciaCargo.Cargo.IdeCargo = IdeCargo;
 
                         _experienciaCargoRepository.Add(experienciaCargo);
-                        _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, 0, IdeCargo);
+                        _experienciaCargoRepository.actualizarPuntaje(Convert.ToInt32(experienciaCargo.PuntajeExperiencia), 0, IdeCargo);
 
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -144,7 +153,7 @@
                     else
                     {
 
-                        int valorEditar = experienciaCargoActualizar.PuntajeExperiencia;
+                        int valorEditar = Convert.ToInt32(experienciaCargoActualizar.PuntajeExperiencia);
                         experienciaCargoActualizar.TipoExperiencia = experienciaCargo.TipoExperiencia;
                         experienciaCargoActualizar.CantidadAnhosExperiencia = experienciaCargo.CantidadAnhosExperiencia;
                         experienciaCargoActualizar.CantidadMesesExperiencia = experienciaCargo.CantidadMesesExperiencia;
@@ -152,7 +161,7 @@
                         experienciaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         experienciaCargoActualizar.FechaModificacion = FechaModificacion;
                         _experienciaCargoRepository.Update(experienciaCargoActualizar);
-                        _experienciaCargoRepository.actualizarPuntaje(experienciaCargo.PuntajeExperiencia, valorEditar, IdeCargo);
+                        _experienciaCargoRepository.actualizarPuntaje(Convert.ToInt32(experienciaCargo.PuntajeExperiencia), valorEditar, IdeCargo);
 
                         objJsonMessage.Mensaje = "Editado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -190,7 +199,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var experienciaEliminar = new ExperienciaCargo();
             experienciaEliminar = _experienciaCargoRepository.GetSingle(x => x.IdeExperienciaCargo == ideExperiencia);
-            int valorEliminar = experienciaEliminar.PuntajeExperiencia;
+            int valorEliminar = Convert.ToInt32(experienciaEliminar.PuntajeExperiencia);
             _experienciaCargoRepository.Remove(experienciaEliminar);
             _experienciaCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 

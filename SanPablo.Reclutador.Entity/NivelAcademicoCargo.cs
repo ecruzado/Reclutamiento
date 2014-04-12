@@ -14,8 +14,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoEducacion { get; set; }
         public virtual string TipoAreaEstudio { get; set; }
         public virtual string TipoNivelAlcanzado { get; set; }
-        public virtual int CicloSemestre { get; set; }     
-        public virtual int PuntajeNivelEstudio { get; set; }
+        public virtual int? CicloSemestre { get; set; }     
+        public virtual int? PuntajeNivelEstudio { get; set; }
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionTipoEducacion { get; set; }

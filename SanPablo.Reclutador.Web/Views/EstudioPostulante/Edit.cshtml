@@ -11,11 +11,11 @@
         $(document).ready(function () {
             var indActual = $('#chbIndEstudiando').is(":checked");
             if (indActual == true) {
-                $('#Estudio_FechaEstudioFin').val("");
-                $('#Estudio_FechaEstudioFin').attr("disabled", "disabled");
+                $('#Estudio_FechaFin').val("");
+                $('#Estudio_FechaFin').attr("disabled", "disabled");
             }
             else {
-                $('#Estudio_FechaEstudioFin').removeAttr("disabled");
+                $('#Estudio_FechaFin').removeAttr("disabled");
             }
 
             var tipoEducacion = $('#Estudio_TipoEducacion').val();
@@ -188,11 +188,25 @@
                 $("#Estudio_FechaInicio").val("");
             }
             else {
-                msjError.style.display = "none";
+                //validar que no sea superior a la fecha actual
+                fecActual = new Date();
+                var mes = (fecActual.getMonth() + 1);
+                if (mes < 10) { mes = "0" + mes; } 
+                fechaActual = "01/"+mes + '/' + fecActual.getFullYear();
+                fechaInicio = "01/" + fechaInicio;
+                if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
+                    msjError.innerHTML = "ingrese una fecha válida";
+                    msjError.style.display = "block";
+                    $("#Estudio_FechaInicio").val("");
+                }
+                else {
+                    msjError.style.display = "none";
+                }
             }
         }
 
         function validarFechaFin() {
+
             var msjError = document.getElementById('msjFechaFin');
             var fechaFin = $("#Estudio_FechaFin").val();
             if (parseInt(fechaFin.substring(0, 2)) > 12) {
@@ -201,7 +215,19 @@
                 $("#Estudio_FechaFin").val("");
             }
             else {
-                msjError.style.display = "none";
+                fecActual = new Date();
+                var mes = (fecActual.getMonth() + 1);
+                if (mes < 10) { mes = "0" + mes; }
+                fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
+                fechaFin = "01/" + fechaFin;
+                if (Date.parse(fechaFin) > Date.parse(fechaActual)) {
+                    msjError.innerHTML = "ingrese una fecha válida";
+                    msjError.style.display = "block";
+                    $("#Estudio_FechaFin").val("");
+                }
+                else {
+                    msjError.style.display = "none";
+                };
             }
         }
     </script>
