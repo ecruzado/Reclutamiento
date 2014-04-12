@@ -381,10 +381,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.DESCSUBCATEGORIA==null?"":item.DESCSUBCATEGORIA,
                                 item.ORDENIMPRESION==null?"":item.ORDENIMPRESION.ToString(),
                                 item.TIEMPO==null?"":item.TIEMPO.ToString(),
-                                item.FECCREACION==null?"":item.FECCREACION.ToString(),
+                                item.FECCREACION==null?"":String.Format("{0:dd/MM/yyyy}", item.FECCREACION),
                                 item.USRCREACION==null?"":item.USRCREACION.ToString(),
-                                item.FECMODIFICACION==null?"":item.FECMODIFICACION.ToString(),
-                                item.USRMODIFICACION==null?"":item.FECMODIFICACION.ToString()
+                                item.FECMODIFICACION==null?"":String.Format("{0:dd/MM/yyyy}", item.FECMODIFICACION),
+                                item.USRMODIFICACION==null?"":item.USRMODIFICACION
                                 
                             }
                 }).ToArray();
@@ -444,11 +444,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.Criterio.IdeCriterio==null?"":item.Criterio.IdeCriterio.ToString(),
                                 item.Criterio.Pregunta== null?"":item.Criterio.Pregunta,
                                 item.PUNTAJECAL== null? "":item.PUNTAJECAL.ToString(),
-                                item.PRIORIDAD==null?"":item.PRIORIDAD.ToString(),
-                                item.Criterio.TipoCalificacion==null?"":item.Criterio.TipoCalificacion.ToString()
-                                
+                                item.PRIORIDAD==null?"":item.PRIORIDAD.ToString()
                                
-                                
                             }
                 }).ToArray();
 
@@ -555,7 +552,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 
                                 
                                 item.IdeAlternativa.ToString(),
-                                item.NombreAlternativa.ToString(),
+                                item.NombreAlternativa==null?"":item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
                                 item.IdeAlternativa.ToString(),
                                 item.Criterio.TipoModo
@@ -640,9 +637,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.DESCCATEGORIA,
                                 item.TIPCATEGORIA,
                                 item.TIPCATEGORIADES,
-                                item.FECCREACION.ToString(),
+                                String.Format("{0:dd/MM/yyyy}", item.FECCREACION),
                                 item.USRCREACION,
-                                item.FECMODIFICA.ToString(),
+                                String.Format("{0:dd/MM/yyyy}", item.FECMODIFICA),
                                 item.USRMODIFICA
                                
                             }

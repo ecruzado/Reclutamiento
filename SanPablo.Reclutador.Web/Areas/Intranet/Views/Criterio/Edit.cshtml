@@ -171,7 +171,7 @@
         $('#updateDialog').dialog({
             autoOpen: false,
             width: 400,
-            height: 400,
+            height: 370,
             resizable: false,
             modal: true
           
@@ -278,9 +278,9 @@
             colModel: [
     
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 650, editable: false, sortable: false },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 700, editable: false, sortable: false },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 100, editable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 700, editable: false, formatter: ImagenFormatter },
                     { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden:true },
             ],
             rownumbers: true,
@@ -306,8 +306,11 @@
                 var cTipo = $("#Criterio_TipoModo").val();
                 if ("01" != cTipo) {
                     $("#grdList").showCol("RutaDeImagen")
+                    jQuery("#grdList").jqGrid('hideCol', ["NombreAlternativa"]);
                 } else {
                     $("#grdList").hideCol("RutaDeImagen")
+                    jQuery("#grdList").jqGrid('hideCol', ["RutaDeImagen"]);
+
                 }
             }
 
@@ -378,10 +381,11 @@
         if ("01"!=tipo) {
             test = "<img height ='50' width='50' src='@Url.Action("ObtenerSubImagen", "Criterio")/" + idAlter + "' />";
         }
-        
         return test;
-      
     }
+
+
+    
 
     function mostrarsubirarchivoimagen() {
         $("#dlgsubirarchivoimagen").dialog('open');
@@ -575,7 +579,7 @@
                        
                              </tr>
                    
-                     <tr class="formulario-fila">
+                    @* <tr class="formulario-fila">
                        <td class="span5">
                          <label class="control-label">Calificación</label>
                       <div class="controles">
@@ -593,7 +597,7 @@
                             </div>
                           </div>
                        </td>
-                      </tr>
+                      </tr>*@
                             
                             <tr id="nombreImagen" class="formulario-fila">
                                    
@@ -688,7 +692,7 @@
                   }
                   else
                   {
-                    <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Guardar</a>  
+                    <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>  
                   }    
             </div>
            
@@ -697,23 +701,7 @@
 }
 
 
-<div id="dlgsubirarchivoimagen" >
-    <table style="width: 100%">      
-        <tr>
-            <td style="height: 30px; vertical-align: central;">Sólo se permiten archivos con extensión JPG, GIF. Tamaño máximo del archivo 1MB. El archivo debe tener 32px de ancho y 32 px de Largo</td>
-        </tr>
-          <tr>
-            <td style="height: 10px;"></td>
-        </tr> 
-        <tr>
-            <td>
-             <input class="input-file" id="fileInput" type="file"></td>
-        </tr>
-        <tr>
-            <td style="height: 10px;"></td>
-        </tr>       
-    </table>
-</div>
+
 
 
 <div id="updateDialog" title="Agregar Alternativa"></div>

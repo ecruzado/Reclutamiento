@@ -373,7 +373,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , data_val = "false" })                      
+                                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , data_val = "false" ,onkeyup="aMays(event, this)"})                      
                             </div>
                         </div>
                     </td>
@@ -381,7 +381,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Apellido Paterno</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , data_val = "false" })                      
+                                @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -391,7 +391,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Codigo</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" , data_val = "false" })                      
+                                @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -399,7 +399,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Apellido Materno</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" , data_val = "false" })                      
+                                @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>

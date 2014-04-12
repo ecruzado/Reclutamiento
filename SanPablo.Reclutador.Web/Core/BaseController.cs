@@ -23,6 +23,8 @@ namespace SanPablo.Reclutador.Web.Core
         
         protected GenericDouble<JQgrid, T> Listar<T>(IRepository<T> logic, string sidx, string sord, int pageIndex, int pageSize, bool search, string searchField, string searchOper, string searchString, DetachedCriteria where) where T : class
         {
+            Boolean orden = false;
+            
             if (string.IsNullOrEmpty(sidx))
             {
                 sidx = string.Empty;
@@ -31,6 +33,16 @@ namespace SanPablo.Reclutador.Web.Core
             {
                 sord = "desc";
             }
+
+            if ("desc".Equals(sord))
+            {
+                orden = false;
+            }
+            else
+            {
+                orden = true;
+            }
+
             if (pageIndex == 0)
             {
                 pageIndex = 1;
@@ -81,7 +93,7 @@ namespace SanPablo.Reclutador.Web.Core
                 jqgrid.records = count;
                 jqgrid.start = start;
 
-                list = logic.GetPaging(sidx, true, pageIndex,pageSize,where).ToList();
+                list = logic.GetPaging(sidx, orden, pageIndex, pageSize, where).ToList();
             }
             catch (Exception ex)
             {

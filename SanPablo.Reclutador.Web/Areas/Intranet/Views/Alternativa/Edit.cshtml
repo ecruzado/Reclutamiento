@@ -12,19 +12,26 @@
        
 
     <table style="margin-left:30px;">
+        
+        @if ("01".Equals(Model.tipoModel))
+        {
         <tr >
             <td class="colEtiqueta" >
                 <label class="etiquetaFormulario" for="setipoInstitucion">Alternativa<span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
                
-               @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa, new { @maxlength = "150"})
-                <div class="tex-error" style="font-size:12px;color:red">    
+              
+
+                 @Html.TextAreaFor(model => model.Alternativa.NombreAlternativa,  new { rows = 2, cols = 5, style = "margin: 0px 0px 10px; width: 250px; height: 70px;", maxlength = "150" })  
+                 
+            @*    <div class="tex-error" style="font-size:12px;color:red">    
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
-                </div>
+                </div>*@
             </td>
             <td></td>
         </tr>
+        }
         <tr>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" for="setInstitucion">Peso<span class="text-error">*</span></label>
@@ -122,7 +129,7 @@
         }
 
         $("#btnGuardarAlternativa").click(function () {
-            if ($("#frmAlternativa").validate().form()) {
+            //if ($("#frmAlternativa").validate().form()) {
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Editar", "Alternativa")',
@@ -132,7 +139,7 @@
                         
                         if (data.Resultado) {
                            
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                             parent.CerrarPopupAlternativa();
                            
                         }
@@ -142,7 +149,7 @@
 
                     }
                 });
-            };
+           // };
         });
         
         $("#fileAlternativa").uploadify({

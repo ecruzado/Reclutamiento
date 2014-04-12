@@ -84,6 +84,8 @@
                     {
                         where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
                     }
+
+
                 }
                 
                 var generic = Listar(_criterioRepository,
@@ -239,7 +241,7 @@
             
             var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
-            model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
+           // model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
             model.Criterio.TipoCriterio = objCriterio.TipoCriterio;
             model.Criterio.TipoMedicion = objCriterio.TipoMedicion;
             model.Criterio.TipoModo = objCriterio.TipoModo;
@@ -336,7 +338,7 @@
 
             var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
-            model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
+            //model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
             model.Criterio.TipoCriterio = objCriterio.TipoCriterio;
             model.Criterio.TipoMedicion = objCriterio.TipoMedicion;
             model.Criterio.TipoModo = objCriterio.TipoModo;
@@ -427,7 +429,7 @@
                             {
                                 
                                 item.IdeAlternativa.ToString(),
-                                item.NombreAlternativa.ToString(),
+                                item.NombreAlternativa==null?"":item.NombreAlternativa.ToString(),
                                 item.Peso.ToString(),
                                 item.IdeAlternativa.ToString(),
                                 item.Criterio.TipoModo
@@ -520,7 +522,7 @@
                 objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
                 objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
                 objCriterio.TipoModo = model.Criterio.TipoModo;
-                objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+               // objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
                 objCriterio.Pregunta = model.Criterio.Pregunta;
                 objCriterio.FechaModificacion = DateTime.Now;
                 objCriterio.UsuarioModificacion = UsuarioActual.NombreUsuario;
@@ -557,7 +559,7 @@
                 criterioViewModel.Criterio.rutaImagen = model.Criterio.rutaImagen;
 	        }
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
-            criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+           // criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
             criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
             if (fullPath != null)
             {
@@ -582,7 +584,7 @@
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
-            criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+           // criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
 
             //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
 
@@ -640,9 +642,9 @@
             criterioViewModel.TipoModo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
 
-            criterioViewModel.TipoCalificacion =
-                new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCalificacion));
-            criterioViewModel.TipoCalificacion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            //criterioViewModel.TipoCalificacion =
+            //    new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCalificacion));
+            //criterioViewModel.TipoCalificacion.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
 
             return criterioViewModel;
@@ -765,8 +767,8 @@
                                 item.TipoMedicion,
                                 item.TipoCriterio,
                                 item.TipoCriterioDes,
-                                item.TipoCalificacion,
-                                item.TipoCalificacionDes,
+                                //item.TipoCalificacion,
+                                //item.TipoCalificacionDes,
                                 item.TipoModo,
                                 item.TipoModoDes
                                

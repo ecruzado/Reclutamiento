@@ -70,19 +70,23 @@
         [HttpPost]
         public ActionResult Editar(AlternativaViewModel model)
         {
-
-            DateTime Hoy = DateTime.Today;
-
-            AlternativaValidator validator = new AlternativaValidator();
-            ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
             JsonMessage objJsonMensage = new JsonMessage();
+            DateTime Hoy = DateTime.Today;
             string fullPath = null;
 
-
-            if (!result.IsValid)
+            if ("01".Equals(model.tipoModel))
             {
-                objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
-                return Json(objJsonMensage);
+
+                AlternativaValidator validator = new AlternativaValidator();
+                ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
+                
+                
+
+                if (!result.IsValid)
+                {
+                    objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
+                    return Json(objJsonMensage);
+                }
             }
 
 

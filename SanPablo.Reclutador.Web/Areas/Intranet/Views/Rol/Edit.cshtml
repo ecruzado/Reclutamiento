@@ -31,8 +31,8 @@
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
                 migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sortField;
-                migrilla.sord = postdata.sortOrder;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
@@ -74,19 +74,20 @@
                      { name: 'DescOpcion', index: 'DescOpcion', align: 'left', sortable: false, width: 600, editable: false }
             ],
 
-            pager: jQuery('#grdPager'),
+            pager: jQuery('#grdPagerOpciones'),
             rowNum: 10,
-            //rowList: [10, 30, 50],
+            rowList: [10, 30, 50],
             autowidth: true,
             rules: true,
             sortname: 'IDROLOPCION',
             sortorder: 'desc',
             viewrecords: true,
-            height: 250,
+            height: 300,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
             shrinkToFit: false,
+
 
             postData: {
             },
@@ -374,7 +375,7 @@
                 <div class="tabla-datos" >
                     <table id="grdListOpciones" >
                     </table>
-                    <div id="grdPager">
+                    <div id="grdPagerOpciones">
                     </div>
                 </div>
                 }

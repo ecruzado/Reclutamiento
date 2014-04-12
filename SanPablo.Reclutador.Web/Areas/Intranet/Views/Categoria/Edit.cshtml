@@ -292,17 +292,29 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    $('#ValSubCat').dialog('open');
-                    //$.post("/Intranet/Categoria/PopupSubCategoria",
-                    //$("#frmPopupSubCategoria").serialize(),
-                    //    function (data) {
-                    //        $("#updateDialog").dialog("close");
-                    //        $("#updateDialog").html(data);
-                    //        $("#Categoria_TIEMPO").val(data.IdDato);
-                    //        $('#grdList').trigger('reloadGrid');
+                    //$('#ValSubCat').dialog('open');
+                    ////$.post("/Intranet/Categoria/PopupSubCategoria",
+                    ////$("#frmPopupSubCategoria").serialize(),
+                    ////    function (data) {
+                    ////        $("#updateDialog").dialog("close");
+                    ////        $("#updateDialog").html(data);
+                    ////        $("#Categoria_TIEMPO").val(data.IdDato);
+                    ////        $('#grdList').trigger('reloadGrid');
                             
-                    //    }
-                    //);
+                    ////    }
+                    ////);
+                    $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
+                     $("#frmPopupSubCategoria").serialize(),
+                       function (data) {
+                          // $("#ValSubCat").dialog("close");
+                           $("#updateDialog").dialog("close");
+                           $("#updateDialog").html(data);
+                           $("#Categoria_TIEMPO").val(data.IdDato);
+                           $('#grdList').trigger('reloadGrid');
+
+                       }
+                   );
+
 
 
                 },
@@ -313,7 +325,7 @@
         });
 
 
-        $("#spanValSubCat").html("¿Desea agregar la subCategoría?")
+        @*$("#spanValSubCat").html("¿Desea agregar la subCategoría?")
         $('#ValSubCat').dialog({
             autoOpen: false,
             modal: true,
@@ -337,7 +349,7 @@
                     $(this).dialog("close");
                 }
             }
-        });
+        });*@
 
 
 
@@ -421,7 +433,7 @@
             sortname: 'ORDENIMPRESION',
             sortorder: 'desc',
             viewrecords: true,
-            height: 120,
+            height: 250,
             width: 736,
             cellsubmit: 'clientArray',
             hidegrid: false,
@@ -549,15 +561,15 @@
                     }
                 });
             },
-            colNames: ['','','', 'Pregunta', 'Ptje.Max', 'Orden de impresión', 'Calificaci&oacute;n'],
+            colNames: ['','','', 'Pregunta', 'Ptje.Max', 'Orden de impresión'],
             colModel: [
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoSub', index: 'CodigoSub', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoCrit', index: 'CodigoCrit', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false, width: 400 },
                     { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 100, sortable: false },
-                    { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 180, sortable: false },
-                    { name: 'Calificacion', index: 'Calificacion', align: 'center', width: 150, sortable: false },
+                    { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 180, sortable: false }
+                   
             ],
             pager: jQuery('#grdPagerCriterio'),
             rowNum: 10,
@@ -567,7 +579,7 @@
             sortname: 'PRIORIDAD',
             sortorder: 'desc',
             viewrecords: true,
-            height: 120,
+            height: 250,
             width: 736,
             cellsubmit: 'clientArray',
             hidegrid: false,
@@ -668,7 +680,7 @@
              sortname: 'IdeAlternativa',
              sortorder: 'desc',
              viewrecords: true,
-             height: 120,
+             height: 250,
              width: 736,
              cellsubmit: 'clientArray',
              hidegrid: false,
@@ -678,7 +690,15 @@
              postData: {
 
              }, loadComplete: function (data) {
+
+
+
              }
+
+
+
+
+
          });
 
         $("#fileCategoria").uploadify({
