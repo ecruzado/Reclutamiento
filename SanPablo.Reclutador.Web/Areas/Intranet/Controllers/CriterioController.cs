@@ -713,29 +713,7 @@
 
                     
                    
-                    
-                    //objCriterio.Pregunta = (grid.rules[2].data == null ? "" : grid.rules[2].data);
-                    
-                    //objCriterio.IndicadorActivo = (grid.rules[3].data == null ? "" : grid.rules[3].data);
-                    
-                    //where = DetachedCriteria.For<Criterio>();
-
-                    //if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
-                    //{
-                    //    where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
-                    //}
-                    //if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                    //{
-                    //    where.Add(Expression.Eq("TipoMedicion", grid.rules[1].data));
-                    //}
-                    //if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
-                    //{
-                    //    where.Add(Expression.Like("Pregunta", '%' + grid.rules[2].data + '%'));
-                    //}
-                    //if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    //{
-                    //    where.Add(Expression.Eq("IndicadorActivo", grid.rules[3].data));
-                    //}
+                  
                 }
 
 
@@ -744,13 +722,9 @@
                 listaCriterios = _criterioRepository.ObtenerCriterios(objCriterio);
 
 
-                //var generic = Lis(_criterioRepository,
-                //                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                
                 var generic = GetListar(listaCriterios,
                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
-
-                
-                //var i = grid.page * grid.rows;
 
               
                 generic.Value.rows = generic.List.Select(item => new Row
@@ -762,7 +736,7 @@
                                "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
-                                item.Pregunta,
+                                item.Pregunta==null?"":item.Pregunta,
                                 item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,

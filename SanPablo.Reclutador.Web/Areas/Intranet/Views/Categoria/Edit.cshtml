@@ -291,19 +291,19 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                  
-                    $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
-                     $("#frmPopupSubCategoria").serialize(),
-                       function (data) {
-                          // $("#ValSubCat").dialog("close");
-                           $("#updateDialog").dialog("close");
-                           $("#updateDialog").html(data);
-                           $("#Categoria_TIEMPO").val(data.IdDato);
-                           $('#grdList').trigger('reloadGrid');
+                    if ($("#frmPopupSubCategoria").validate().form()) {
+                        $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
+                         $("#frmPopupSubCategoria").serialize(),
+                           function (data) {
+                               // $("#ValSubCat").dialog("close");
+                               $("#updateDialog").dialog("close");
+                               $("#updateDialog").html(data);
+                               $("#Categoria_TIEMPO").val(data.IdDato);
+                               $('#grdList').trigger('reloadGrid');
 
-                       }
-                   );
-
+                           }
+                       );
+                    }
 
 
                 },
@@ -312,35 +312,6 @@
                 }
             }
         });
-
-
-        @*$("#spanValSubCat").html("¿Desea agregar la subCategoría?")
-        $('#ValSubCat').dialog({
-            autoOpen: false,
-            modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
-            buttons: {
-                "Si": function () {
-                   // $.post("/Intranet/Categoria/PopupSubCategoria",
-                    $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
-                      $("#frmPopupSubCategoria").serialize(),
-                        function (data) {
-                            $("#ValSubCat").dialog("close");
-                            $("#updateDialog").dialog("close");
-                            $("#updateDialog").html(data);
-                            $("#Categoria_TIEMPO").val(data.IdDato);
-                            $('#grdList').trigger('reloadGrid');
-
-                        }
-                    );
-                },
-                "No": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });*@
-
-
 
 
         $('#criterioDialog').dialog({
@@ -555,7 +526,7 @@
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoSub', index: 'CodigoSub', align: 'center', width: 50, sortable: false, hidden: true },
                     { name: 'CodigoCrit', index: 'CodigoCrit', align: 'center', width: 50, sortable: false, hidden: true },
-                    { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false, width: 400 },
+                    { name: 'Pregunta', index: 'Pregunta', align: 'left', sortable: false, width: 500 },
                     { name: 'PtjeMax', index: 'PtjeMax', align: 'left', width: 100, sortable: false },
                     { name: 'Prioridad', index: 'Prioridad', align: 'left', width: 180, sortable: false }
                    
@@ -574,6 +545,18 @@
             hidegrid: false,
             rownumbers: true,
             shrinkToFit: false,
+
+
+            afterInsertRow: function (rowid, aData) {
+
+                if (aData.Pregunta.length > 70) {
+                    var cPreguntaSub = aData.Pregunta.substring(0, 70) + " ...";
+                    jQuery("#grdListCriterio").jqGrid('setCell', rowid, 'Pregunta', cPreguntaSub);
+                }
+
+            },
+
+
             onSelectRow: function (rowid, status) {
                 if (rowid != null) {
                     $('#grdListCriterioxAlternativa').trigger('reloadGrid');
@@ -651,13 +634,13 @@
                     }
                 });
             },
-            colNames: ['', 'Alternativa', 'Peso', 'Imagen', ''],
+            colNames: ['', 'Alternativa', 'Imagen', 'Peso', ''],
             colModel: [
 
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 600, editable: false, sortable: false },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 750, editable: false, sortable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter, width: 750 },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter },
                     { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden: true },
 
             ],
@@ -676,11 +659,30 @@
              rownumbers: true,
              shrinkToFit: false,
             
+             afterInsertRow: function (rowid, aData) {
+                
+                if ("01" != aData.TipoModo) {
+                    $("#grdListCriterioxAlternativa").showCol("RutaDeImagen")
+                    jQuery("#grdListCriterioxAlternativa").jqGrid('hideCol', ["NombreAlternativa"]);
+                    jQuery("#grdListCriterioxAlternativa").jqGrid('showCol', ["RutaDeImagen"]);
+                    
+
+                } else {
+                    $("#grdListCriterioxAlternativa").hideCol("RutaDeImagen")
+                    jQuery("#grdListCriterioxAlternativa").jqGrid('hideCol', ["RutaDeImagen"]);
+                    jQuery("#grdListCriterioxAlternativa").jqGrid('showCol', ["NombreAlternativa"]);
+
+                }
+                
+             },
+
+
+
              postData: {
 
              }, loadComplete: function (data) {
 
-
+                
 
              }
 
@@ -975,11 +977,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10",onkeyup="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10", @readonly = "readonly" })    
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
                                 }
                                 
                                 <div class="tex-error" style="font-size:12px;color:red">    
@@ -996,11 +998,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255",onkeyup="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255", @readonly = "readonly" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255", @readonly = "readonly" ,onkeyup="aMays(event, this)"}) 
                                 }
                                 
                                  <div class="tex-error" style="font-size:12px;color:red"> 
@@ -1039,11 +1041,11 @@
                          
                             @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255",onkeyup="aMays(event, this)" }) 
                             }
                             else
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly" }) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly",onkeyup="aMays(event, this)" }) 
                             }
                              <div class="tex-error" style="font-size:12px;color:red">  
                              @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
@@ -1077,7 +1079,7 @@
                      <td class="span5">
                             <label class="control-label" for="inputSuccess">Duración(Min)</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" })  
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" ,onkeypress="return Funciones.isNumberKey(event)"    })  
                             </div>
                     </td>
                     
@@ -1090,9 +1092,11 @@
                                     
                                         @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                                 {
-                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" }) 
-                                        }else{
-                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly"}) 
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false",onkeyup="aMays(event, this)" }) 
+                                                }
+                                        else
+                                        {
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly",onkeyup="aMays(event, this)"}) 
                                         }
                                         @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>

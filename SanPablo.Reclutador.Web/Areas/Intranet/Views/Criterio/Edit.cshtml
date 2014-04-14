@@ -290,14 +290,14 @@
             cellEdit: true,
             /*caption: 'Lista Alternativas',*/
             rules: true ,
-            height: 160,
+            height: 350,
             autowidth: true,
             
             cellsubmit: 'clientArray',
             hidegrid: false,
             rowNum: 10,
             autowidth: true,
-            //rowList: [10, 30, 50],
+            rowList: [10, 30, 50],
             shrinkToFit: false,
 
             postData: {
@@ -307,9 +307,11 @@
                 if ("01" != cTipo) {
                     $("#grdList").showCol("RutaDeImagen")
                     jQuery("#grdList").jqGrid('hideCol', ["NombreAlternativa"]);
+                    jQuery("#grdList").jqGrid('showCol', ["RutaDeImagen"]);
                 } else {
                     $("#grdList").hideCol("RutaDeImagen")
                     jQuery("#grdList").jqGrid('hideCol', ["RutaDeImagen"]);
+                    jQuery("#grdList").jqGrid('showCol', ["NombreAlternativa"]);
 
                 }
             }
@@ -469,7 +471,7 @@
                           <div class="controles">
                             @Html.TextBoxFor(model => model.Criterio.IndPagina,  new { style = "display: none;" })
 
-                        @*@Html.TextBoxFor(model => model.Criterio.IdeCriterio, new { @class = "textoFormulario"})                       *@
+                        
                             <input class="textoFormulario" id="Criterio_IdeCriterio" name="Criterio.IdeCriterio" type="text" value="@Model.Criterio.IdeCriterio" readonly="readonly">
                           </div>
                         </td>
@@ -544,7 +546,7 @@
                            }
                            else
                            {
-                             @* @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario",@maxlength = "2000" }) *@
+                            
                              @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" ,onkeyup="aMays(event, this)"})  
                              
                         
@@ -556,60 +558,23 @@
                           </div>
                        </td>
                         
-                        @* <td style="width:40px;"></td>
-                         
-                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario">Calificación</label>
-                         </td>
-
-                          <td class="colInput">
-                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
-                            {
-                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion), new { @readonly = "readonly"})
-                            }
-                            else
-                            {
-                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))     
-                            }     
-                            
-		                    <div class="tex-error" style="font-size:12px;color:red">     
-                            @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
-                            </div>
-                          </td>*@
+                       
                        
                              </tr>
                    
-                    @* <tr class="formulario-fila">
-                       <td class="span5">
-                         <label class="control-label">Calificación</label>
-                      <div class="controles">
-                           @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
-                            {
-                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion), new { @readonly = "readonly"})
-                            }
-                            else
-                            {
-                              @Html.DropDownListFor(model => model.Criterio.TipoCalificacion, new SelectList(Model.TipoCalificacion, "Valor", "Descripcion", Model.Criterio.TipoCalificacion))     
-                            }     
-                            
-		                    <div class="tex-error" style="font-size:12px;color:red">     
-                            @Html.ValidationMessageFor(model => model.Criterio.TipoCalificacion)
-                            </div>
-                          </div>
-                       </td>
-                      </tr>*@
+                 
                             
                             <tr id="nombreImagen" class="formulario-fila">
                                    
                                    <td class="span5">
                                         <label class="control-label" for="setInstitucion">Nombre Imagen</label>
                                     
-                                    @*<td class="colInput;input-xxlarge">*@
+                                   
 
                                    <div class="controles">
                                         @Html.TextBoxFor(model => model.Criterio.rutaImagen, new { @class = "textoFormulario" , @readonly = "readonly"})
                                     </div>
-                                       @*</td>*@
+                                      
                                     
                                     <td>
                                  
@@ -700,14 +665,7 @@
            }
              <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Criterio", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                 @* @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
-                  {
-                    <span></span>
-                  }
-                  else
-                  {
-                    <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>  
-                  }    *@
+                
             </div>
            
         </div>

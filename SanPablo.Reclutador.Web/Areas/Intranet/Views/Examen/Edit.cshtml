@@ -128,13 +128,13 @@
          url: '@Url.Action("ListaCatxExamen", "Examen")' + '?id=' + $("#Examen_IdeExamen").val(),
          datatype: 'json',
          mtype: 'POST',
-         colNames: ['','', 'Nombre', 'Descripción', 'Detalle'],
+         colNames: ['','', 'Nombre', 'Descripción'],
          colModel: [
                  { name: 'IdeExamenxCategoria', index: 'IdeExamenxCategoria', align: 'center', editable: false, sortable: false, hidden: true },
                  { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'left', editable: false, hidden: true },
                  { name: 'Nombre', index: 'Nombre', align: 'left', editable: false, width: 350 },
-                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, width: 450 },
-                 { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 50, sortable: false, formatter: DetalleFormatter },
+                 { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, width: 450 }
+                // { name: 'Detalle', index: 'Detalle', align: 'center', editable: false, width: 50, sortable: false, formatter: DetalleFormatter },
                    
          ],
          pager: jQuery('#grdPager'),
@@ -266,11 +266,11 @@
                                 
                                 @if (Accion.Consultar.Equals(Session["Accion"]))
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled"}) 
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled",onkeyup="aMays(event, this)"}) 
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20" })     
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" })     
                                 }
 
                                 
@@ -285,11 +285,11 @@
                             <div class="controles">
                                  @if (Accion.Consultar.Equals(Session["Accion"]))
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled" }) 
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled",onkeyup="aMays(event, this)" }) 
                                  }
                                  else
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" })  
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onkeyup="aMays(event, this)" })  
                                  }
                             </div>
                         

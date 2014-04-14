@@ -93,6 +93,16 @@
         hidegrid: false,
         rownumbers: true,
         shrinkToFit: false,
+
+        afterInsertRow: function (rowid, aData) {
+
+            if (aData.Pregunta.length > 70) {
+                var cPreguntaSub = aData.Pregunta.substring(0, 70) + " ...";
+                jQuery("#grdListCriterios").jqGrid('setCell', rowid, 'Pregunta', cPreguntaSub);
+            }
+
+        },
+
         onSelectAll: function (aRowids, status) {
             //completeRow = jQuery("#list").jqgrid('getGridParam','selarrrow');
             completeRow = aRowids;
@@ -162,7 +172,7 @@
                 <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" })  
+                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" ,onkeyup="aMays(event, this)"})  
             </td>
             <td style="width:40px;"></td>
             <td class="colEtiqueta">

@@ -553,8 +553,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 
                                 item.IdeAlternativa.ToString(),
                                 item.NombreAlternativa==null?"":item.NombreAlternativa.ToString(),
-                                item.Peso.ToString(),
                                 item.IdeAlternativa.ToString(),
+                                item.Peso.ToString(),
                                 item.Criterio.TipoModo
                             }
                     }).ToArray();

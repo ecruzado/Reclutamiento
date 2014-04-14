@@ -40,7 +40,7 @@
             </td>
             <td class="colInput" >
                
-               @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa, new { @maxlength = "150"})
+               @Html.TextBoxFor(model => model.Alternativa.NombreAlternativa, new { @maxlength = "150",onkeyup="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red">    
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
                 </div>
