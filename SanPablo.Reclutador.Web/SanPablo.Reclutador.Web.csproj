@@ -457,6 +457,7 @@
     <Content Include="Scripts\html5shiv-printshiv.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="TemplateEmail\noborrar.txt" />
     <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\ListaCargos.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
@@ -593,7 +594,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Helper\" />
-    <Folder Include="TemplateEmail\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
