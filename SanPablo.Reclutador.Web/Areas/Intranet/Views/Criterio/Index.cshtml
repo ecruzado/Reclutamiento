@@ -164,6 +164,14 @@
              rownumbers: true,
              shrinkToFit: false,
 
+             afterInsertRow: function (rowid, aData) {
+
+                 if (aData.Pregunta.length>70) {
+                     var cPreguntaSub = aData.Pregunta.substring(0, 70) + " ...";
+                     jQuery("#grdList").jqGrid('setCell', rowid, 'Pregunta', cPreguntaSub);
+                 }
+
+             },
              postData: {
              }, loadComplete: function (data) {
              }

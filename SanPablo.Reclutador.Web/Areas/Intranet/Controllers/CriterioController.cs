@@ -100,7 +100,7 @@
                                 "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
-                                item.Pregunta,
+                                (item.Pregunta==null?"":item.Pregunta),
                                 item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,

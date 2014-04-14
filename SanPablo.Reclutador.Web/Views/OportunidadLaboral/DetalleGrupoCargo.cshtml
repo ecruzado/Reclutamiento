@@ -627,6 +627,18 @@
                         </td>
                     </tr>
 
+
+                   <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Tipo de horario</label>
+                            <div class="controles">
+                               @Html.TextBoxFor(model => model.oportunidadLaboral.TipoHorarioDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+
+                    </tr>
+
+
                     </table>
 
                    <table style="margin-left:50px;" >
@@ -642,24 +654,7 @@
                     </tr>
                         <tr><td>&nbsp;</td></tr>
 				   
-				   
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Conocimientos</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListConocimientos">
-                                    </table>
-                                   
-                                </div>                                         
-                            </div>
-                         </div>
-                        </td>
-                    </tr>
-                    <tr><td>&nbsp;</td></tr>
-
-				   <tr class="formulario-fila">
+                  <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01">Estudios</label>
                          <div class="controls">
@@ -674,6 +669,10 @@
                         </td>
                     </tr>
                     <tr><td>&nbsp;</td></tr>
+
+				   
+                    
+				   
 						
 					 <tr class="formulario-fila">
                         <td class="span5">
@@ -707,6 +706,38 @@
                     </tr>
                         <tr><td>&nbsp;</td></tr>
 
+                       <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Conocimientos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListConocimientos">
+                                    </table>
+                                   
+                                </div>                                         
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+
+                          <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01">Otros Conocimientos</label>
+                         <div class="controls">
+                            <div style="width: 100%">                                        
+                                <div>
+                                    <table id="grdListOtrosConocimientos">
+                                    </table>
+                                 
+                                </div>                                         
+                            </div>
+                         </div>
+                       </td>
+                    </tr>
+                        <tr><td>&nbsp;</td></tr>
+
                        
                         <tr class="formulario-fila">
                         <td class="span5">
@@ -725,21 +756,7 @@
                         <tr><td>&nbsp;</td></tr>
                        
                        
-                     <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Otros Conocimientos</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListOtrosConocimientos">
-                                    </table>
-                                 
-                                </div>                                         
-                            </div>
-                         </div>
-                       </td>
-                    </tr>
-                        <tr><td>&nbsp;</td></tr>
+                  
 
                        
 						

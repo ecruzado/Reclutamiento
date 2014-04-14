@@ -20,7 +20,7 @@
 
         List<OportunidadLaboral> GetObtieneOpurtunidad(OportunidadLaboral obj);
         SolReqPersonal GetDatosSolGrupo(OportunidadLaboral obj);
-        int ValidaPostulacion(OportunidadLaboral obj);
+        OportunidadLaboral ValidaPostulacion(OportunidadLaboral obj);
         void Postulacion(Postulante obj);
         List<OportunidadLaboral> GetMisPostulaciones(OportunidadLaboral obj);
         List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj);

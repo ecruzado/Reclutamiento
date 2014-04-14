@@ -654,6 +654,20 @@
                </table>          
             
             
+
+           
+            <div class="form-actions">
+                
+                  @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                  {
+                    <span></span>
+                  }
+                  else
+                  {
+                    <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>  
+                  }    
+            </div>
+
            @if (@Visualicion.SI.Equals(Model.IndVisual))
            {
             <div class="grilla-opciones">
@@ -686,14 +700,14 @@
            }
              <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Criterio", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                  @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                 @* @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                   {
                     <span></span>
                   }
                   else
                   {
                     <a  id="btnGuardarCriterio" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>  
-                  }    
+                  }    *@
             </div>
            
         </div>

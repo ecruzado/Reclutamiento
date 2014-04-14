@@ -296,6 +296,12 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.oportunidadLaboral.IdeSede = Convert.ToInt32(idSede);
             model.oportunidadLaboral.TipoHorario = tipo;
 
+            var objDetalle =    _detalleGeneralRepository.GetSingle(x => x.IdeGeneral==14 && x.Valor == tipo);
+            if (objDetalle != null)
+            {
+                model.oportunidadLaboral.TipoHorarioDes = Convert.ToString(objDetalle.Descripcion);
+            }
+
             model.solReqPersonal = _postulanteRepository.GetDatosSolGrupo(model.oportunidadLaboral);
 
             if (TipoSolicitud.Nuevo.Equals(tipo))
@@ -863,6 +869,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             JsonMessage ObjJson = new JsonMessage();
             Usuario usuario = new Usuario();
             OportunidadLaboral objOportunidad;
+            string Mensaje = "";
+
             int retorno=0;
 
 
@@ -884,38 +892,24 @@ namespace SanPablo.Reclutador.Web.Controllers
                 objOportunidad.IdeSede = idSede;
                 objOportunidad.TipoHorario = idTipPuesto;
 
-                retorno = _postulanteRepository.ValidaPostulacion(objOportunidad);
+                objOportunidad = _postulanteRepository.ValidaPostulacion(objOportunidad);
 
-                if (retorno>0)
+                if (objOportunidad.retorno > 0)
                 {
-                    if (retorno==1)
+                    if (objOportunidad.retorno== 1)
                     {
+                        Mensaje = "Para postular, es necesario que complete sus datos en la(s) pestaña(s): " + objOportunidad.mensaje;
+                        
                         ObjJson.Resultado = false;
-                        ObjJson.Mensaje = "Ingrese sus estudios";
+                        ObjJson.Mensaje = Mensaje;
                         return Json(ObjJson);
 
                     }
 
-                    if (retorno == 2)
+                    if (objOportunidad.retorno == 2)
                     {
                         ObjJson.Resultado = false;
-                        ObjJson.Mensaje = "Ingrese sus experiencias";
-                        return Json(ObjJson);
-
-                    }
-
-                    if (retorno == 3)
-                    {
-                        ObjJson.Resultado = false;
-                        ObjJson.Mensaje = "Ingrese sus conocimientos";
-                        return Json(ObjJson);
-
-                    }
-
-                    if (retorno == 4)
-                    {
-                        ObjJson.Resultado = false;
-                        ObjJson.Mensaje = "La postulación ya fue realizada para la oportunidad laboral seleccionada";
+                        ObjJson.Mensaje = objOportunidad.mensaje;
                         return Json(ObjJson);
 
                     }
@@ -930,7 +924,7 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             }
 
-            if (retorno==0)
+            if (objOportunidad.retorno == 0)
             {
                 Postulante objPostulante = new Postulante();
                 objPostulante.IdCargo=id;

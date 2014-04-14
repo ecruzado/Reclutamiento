@@ -99,5 +99,9 @@ namespace SanPablo.Reclutador.Entity
 
 
 
+        public virtual int retorno { get; set; }
+        public virtual string mensaje { get; set; }
+        
+
     }
 }

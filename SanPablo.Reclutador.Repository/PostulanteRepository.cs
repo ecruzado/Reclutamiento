@@ -198,13 +198,15 @@
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public int ValidaPostulacion(OportunidadLaboral obj)
+        public OportunidadLaboral ValidaPostulacion(OportunidadLaboral obj)
         {
 
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
 
-            int retorno = 0;
+            OportunidadLaboral objOportunidad = new OportunidadLaboral();
 
+            int retorno = 0;
+            string mensaje = "";
             try
             {
 
@@ -221,13 +223,18 @@
 
 
                 lspcmd.Parameters.Add("p_retorno", OracleType.Number).Direction = ParameterDirection.Output;
-
+                lspcmd.Parameters.Add("p_Mensaje", OracleType.VarChar,2000).Direction = ParameterDirection.Output;
 
                 lspcmd.ExecuteNonQuery();
 
                 retorno = (lspcmd.Parameters["p_retorno"].Value == null ? 0 : Convert.ToInt32(lspcmd.Parameters["p_retorno"].Value));
+                mensaje = (lspcmd.Parameters["p_Mensaje"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_Mensaje"].Value));
 
-                return retorno;
+
+                objOportunidad.retorno = retorno;
+                objOportunidad.mensaje = mensaje;
+
+                return objOportunidad;
             }
             catch (Exception ex)
             {
