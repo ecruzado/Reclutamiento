@@ -36,7 +36,7 @@
                     <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
                     </td>
                     <td class="colInput">
-                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" ,data_val = "false" })  
+                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" ,data_val = "false" ,onkeyup="aMays(event, this)"})  
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
@@ -131,7 +131,7 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Calificación', '', 'Modo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Modo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
             colModel: [
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
@@ -141,8 +141,8 @@
                     { name: 'Medicion', index: 'Medicion', align: 'left', hidden: true },
                     { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
                     { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150 },
-                    { name: 'Calificacion', index: 'Calificacion', align: 'left', hidden: true },
-                    { name: 'TipoCalificacionDes', index: 'TipoCalificacionDes', align: 'left', width: 200 },
+                    //{ name: 'Calificacion', index: 'Calificacion', align: 'left', hidden: true },
+                    //{ name: 'TipoCalificacionDes', index: 'TipoCalificacionDes', align: 'left', width: 200 },
                     { name: 'Modo', index: 'Modo', align: 'left', hidden: true },
                     { name: 'TipoModoDes', index: 'TipoModoDes', align: 'left', width: 150 },
                     { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150 },

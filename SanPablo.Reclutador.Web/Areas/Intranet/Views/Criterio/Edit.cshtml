@@ -539,13 +539,13 @@
                       <div class="controles">
                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                            {
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onkeyup="aMays(event, this)"})  
                              
                            }
                            else
                            {
                              @* @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario",@maxlength = "2000" }) *@
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" })  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" ,onkeyup="aMays(event, this)"})  
                              
                         
                                

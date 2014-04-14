@@ -165,6 +165,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
 
+
+                
+
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
                     id = item.IDROLOPCION.ToString(),

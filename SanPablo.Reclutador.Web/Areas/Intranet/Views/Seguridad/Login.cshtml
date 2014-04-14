@@ -81,7 +81,7 @@
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
         @Html.TextBoxFor(model => model.IndSede,  new { style = "display: none;" })  
-        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",onblur="getRol()" })  
+        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",onblur="getRol()" ,onkeyup="aMays(event, this)"})  
     
          <label style="font-weight:bold;font-size:13px;">Contraseña</label>
        
@@ -181,6 +181,31 @@
         });
 
 
+        $('#Usuario_CodUsuario').on('keypress', function (event) {
+            if (event.which == '13') {
+                $("#btnIniciaSesion").trigger("click");
+            }
+        });
+
+        $('#Usuario_CodContrasena').on('keypress', function (event) {
+            if (event.which == '13') {
+                $("#btnIniciaSesion").trigger("click");
+            }
+        });
+
+        $('#Rol_IdRol').on('keypress', function (event) {
+            if (event.which == '13') {
+                $("#btnIniciaSesion").trigger("click");
+            }
+        });
+
+        $('#Sede_CodigoSede').on('keypress', function (event) {
+            if (event.which == '13') {
+                $("#btnIniciaSesion").trigger("click");
+            }
+        });
+
+
         $("#Rol_IdRol").change(function () {
             var vvalor = $(this).val();
             var codUsuario = $("#Usuario_CodUsuario").val();
@@ -229,6 +254,11 @@
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+    function aMays(e, elemento) {
+        tecla = (document.all) ? e.keyCode : e.which;
+        elemento.value = elemento.value.toUpperCase();
     }
 
 </script>
