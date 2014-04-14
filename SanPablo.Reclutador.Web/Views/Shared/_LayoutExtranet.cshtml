@@ -78,7 +78,7 @@
         <div style="float:right;padding-right:5px;padding-top:8px;font-size:11px">
             <span style="color:black;font-weight:bold">Usuario: </span>
             <span style="color:black;font-weight:bold">@codUsuario</span>
-            <a style="margin-left:10px;margin-top:0px;" href="@Url.Action("Login", "Seguridad")" class="btn btn-small">Cerrar Sesion</a>
+            <a style="margin-left:10px;margin-top:0px;" id="brnCerrarSesion" class="btn btn-small">Cerrar Sesion</a>
         </div>
     </div>
     <div class="navbar navbar-inverse">
@@ -125,6 +125,8 @@
                     @RenderBody()   
                 </div>
         </div>
+        <div id="dialogSession"><span id="spanDialogSession"></span></div>
+
         <footer class="footer">
             © <a href="http://www.conastec.com.pe/" target="_blank">CONASTEC</a>  |  @System.DateTime.Now.ToString("yyyy")  |  Versión 1.0
         </footer> 
@@ -139,5 +141,39 @@
         <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
          @RenderSection("Scripts", required: false)
+        <script type="text/javascript">
+          $(document).ready(function () {
+
+              $('#brnCerrarSesion').click(function () {
+
+                  $('#dialogSession').dialog('open');
+                 
+              });
+
+
+              $("#spanDialogSession").html("¿Está seguro de cerrar la sesión?")
+              $('#dialogSession').dialog({
+                  autoOpen: false,
+                  modal: true,
+                  title: "Mensaje",
+                  buttons: {
+                      "Si": function () {
+                          window.location = '@Url.Action("Login", "Seguridad")';
+                         
+                          $(this).dialog("close");
+                      },
+                      "No": function () {
+                          $(this).dialog("close");
+                      }
+                  }
+              });
+
+          });
+
+
+         
+
+         </script>
+
     </body>
 </html>
