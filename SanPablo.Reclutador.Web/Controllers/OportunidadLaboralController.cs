@@ -190,8 +190,12 @@ namespace SanPablo.Reclutador.Web.Controllers
             var model = new OportunidadLaboralViewModel();
 
            
-            model.listaCargos = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
-            model.listaCargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            //model. = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
+           // model.listaCargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            model.oportunidadLaboral = new OportunidadLaboral();
+
+            model.listaOportunidadLaboral = new List<OportunidadLaboral>(_postulanteRepository.GetCargosPublicados(model.oportunidadLaboral));
+            model.listaOportunidadLaboral.Insert(0, new OportunidadLaboral { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             
             model.listaHorario =

@@ -19,6 +19,7 @@ namespace SanPablo.Reclutador.Web.Models
         public List<Sede> listaSede { get; set; }
         public List<DetalleGeneral> listaHorario { get; set; }
         public List<Cargo> listaCargos { get; set; }
+        public List<OportunidadLaboral> listaOportunidadLaboral { get; set; }
 
        
        

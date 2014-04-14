@@ -244,7 +244,7 @@
                 <td class="span5">
                     <label class="control-label" for="selectError">Cargo</label>
                     <div class="controles">
-                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeCargo, new SelectList(Model.listaCargos, "IdeCargo", "NombreCargo", Model.oportunidadLaboral.IdeCargo),new {  data_val = "false"})
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.IdeCargo, new SelectList(Model.listaOportunidadLaboral, "IdeCargo", "NombreCargo", Model.oportunidadLaboral.IdeCargo),new {  data_val = "false"})
                     </div> 
                 </td>
 

@@ -21,6 +21,9 @@
         List<OportunidadLaboral> GetObtieneOpurtunidad(OportunidadLaboral obj);
         SolReqPersonal GetDatosSolGrupo(OportunidadLaboral obj);
         OportunidadLaboral ValidaPostulacion(OportunidadLaboral obj);
+
+        List<OportunidadLaboral> GetCargosPublicados(OportunidadLaboral obj);
+
         void Postulacion(Postulante obj);
         List<OportunidadLaboral> GetMisPostulaciones(OportunidadLaboral obj);
         List<ReclutamientoPersona> GetPostulantesRanking(ReclutamientoPersona obj);

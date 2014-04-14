@@ -1030,7 +1030,53 @@
         }
 
 
+        /// <summary>
+        /// Obtiene los cargos publicados
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<OportunidadLaboral> GetCargosPublicados(OportunidadLaboral obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
 
+                IDataReader ldrOportunidadLaboral;
+                OportunidadLaboral lobOportunidadLaboral;
+                List<OportunidadLaboral> llstOportunidadLaboral;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_CARGOS_PUBLICADOS");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_crpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                ldrOportunidadLaboral = (OracleDataReader)lspcmd.ExecuteReader();
+                lobOportunidadLaboral = null;
+                llstOportunidadLaboral = new List<OportunidadLaboral>();
+
+
+                while (ldrOportunidadLaboral.Read())
+                {
+
+                    lobOportunidadLaboral = new OportunidadLaboral();
+                    lobOportunidadLaboral.IdeCargo = Convert.ToInt32(ldrOportunidadLaboral["IDECARGO"]);
+                    lobOportunidadLaboral.NombreCargo = Convert.ToString(ldrOportunidadLaboral["NOMCARGO"]);
+                    
+                    llstOportunidadLaboral.Add(lobOportunidadLaboral);
+                }
+                ldrOportunidadLaboral.Close();
+                return llstOportunidadLaboral;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
 
 
