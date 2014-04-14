@@ -798,39 +798,42 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     table3.AddCell(CellInstruccion);
 
                     //celda 4
-                    PdfPCell CellEjemploCat = null;
-
-                    if ("02".Equals(objPdfExamen.Tipoejemplo))
+                    if (objPdfExamen.Tipoejemplo!=null && objPdfExamen.Tipoejemplo!="")
                     {
-                        if (objPdfExamen.Imagenejemplo!=null)
-                        {
-                            Image EjemploCategoria = Image.GetInstance(objPdfExamen.Imagenejemplo);
-                            EjemploCategoria.ScaleToFit(180f, 180f);
+                         PdfPCell CellEjemploCat = null;
 
-                            CellEjemploCat = new PdfPCell(EjemploCategoria);
-                            CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
+                            if ("02".Equals(objPdfExamen.Tipoejemplo))
+                            {
+                                if (objPdfExamen.Imagenejemplo!=null)
+                                {
+                                    Image EjemploCategoria = Image.GetInstance(objPdfExamen.Imagenejemplo);
+                                    EjemploCategoria.ScaleToFit(180f, 180f);
+
+                                    CellEjemploCat = new PdfPCell(EjemploCategoria);
+                                    CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
+                                    CellEjemploCat.Border = Rectangle.NO_BORDER;
+                                    // se le indica que ocupe las 3 columnas
+                       
+                                }
+                                else
+                                {
+                                    CellEjemploCat = new PdfPCell(new Phrase("", normal));
+                       
+                                }
+                            }
+
+                            if ("01".Equals(objPdfExamen.Tipoejemplo))
+                            {
+                                CellEjemploCat = new PdfPCell(new Phrase(objPdfExamen.Textoejemplo, normal));
+                                CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
+                                CellEjemploCat.Border = Rectangle.NO_BORDER;
+                            }
+
+
                             CellEjemploCat.Border = Rectangle.NO_BORDER;
-                            // se le indica que ocupe las 3 columnas
-                       
-                        }
-                        else
-                        {
-                            CellEjemploCat = new PdfPCell(new Phrase("", normal));
-                       
-                        }
+                            CellEjemploCat.Colspan = 3;
+                            table3.AddCell(CellEjemploCat);
                     }
-
-                    if ("01".Equals(objPdfExamen.Tipoejemplo))
-                    {
-                        CellEjemploCat = new PdfPCell(new Phrase(objPdfExamen.Textoejemplo, normal));
-                        CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
-                        CellEjemploCat.Border = Rectangle.NO_BORDER;
-                    }
-
-
-                    CellEjemploCat.Border = Rectangle.NO_BORDER;
-                    CellEjemploCat.Colspan = 3;
-                    table3.AddCell(CellEjemploCat);
 
                     table3.SpacingBefore = 10f;
                     table3.SpacingAfter = 10f;
