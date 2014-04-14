@@ -35,7 +35,7 @@
               height: 240,
               buttons: {
                   "Subir": function () {
-                      //Guardar();
+                      
                       return true;
                   },
                   "Cancelar": function () {
@@ -73,8 +73,7 @@
         $('#divEliminarSubCrit').dialogo({
             buttons: {
                 "Si": function () {
-                    //var codCategoria = $("#Categoria_IDECATEGORIA").val();
-                    //EliminarCritxSub
+                    
                     var selsub = $('#grdList').jqGrid('getGridParam', 'selrow');
                     var selCritxSub = $('#grdListCriterio').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdListCriterio').jqGrid('getRowData', selCritxSub);
@@ -135,7 +134,7 @@
                     },
                     type: "POST",
                     url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
-                    //url: "/Intranet/Categoria/OrdenarSubCategorias",
+                    
                     traditional: true,
                     success: function () {
                         flag = selr;
@@ -166,7 +165,7 @@
                         accion: "Bajar",
                     },
                     type: "POST",
-                    //url: "/Intranet/Categoria/OrdenarSubCategorias",
+                   
                     url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
@@ -203,7 +202,7 @@
 
                     },
                     type: "POST",
-                    //url: "/Intranet/Categoria/OrdenarCriterios",
+                   
 
                     url: '@Url.Action("OrdenarCriterios", "Categoria", new { area="Intranet"})',
                     traditional: true,
@@ -292,17 +291,7 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
-                    //$('#ValSubCat').dialog('open');
-                    ////$.post("/Intranet/Categoria/PopupSubCategoria",
-                    ////$("#frmPopupSubCategoria").serialize(),
-                    ////    function (data) {
-                    ////        $("#updateDialog").dialog("close");
-                    ////        $("#updateDialog").html(data);
-                    ////        $("#Categoria_TIEMPO").val(data.IdDato);
-                    ////        $('#grdList').trigger('reloadGrid');
-                            
-                    ////    }
-                    ////);
+                  
                     $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
                      $("#frmPopupSubCategoria").serialize(),
                        function (data) {
