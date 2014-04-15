@@ -62,14 +62,14 @@
       
             colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Modo'],
             colModel: [
-                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter, hidden: true },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
                     { name: 'Codigo', index: 'Codigo', align: 'center', width: 10, hidden: true, sortable: false },
                     { name: 'Pregunta', index: 'Pregunta', align: 'left', width: 400 },
                     { name: 'TipoMedicionDes', index: 'TipoMedicionDes', align: 'left' },
                     { name: 'Medicion', index: 'Medicion', align: 'left', hidden: true },
                     { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
-                    { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150 },
+                    { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150, hidden: true },
                     //{ name: 'Calificacion', index: 'Calificacion', align: 'left', hidden: true },
                     //{ name: 'TipoCalificacionDes', index: 'TipoCalificacionDes', align: 'left', width: 200 },
                     { name: 'Modo', index: 'Modo', align: 'left', hidden: true },
@@ -175,12 +175,12 @@
                 @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" ,onkeyup="aMays(event, this)"})  
             </td>
             <td style="width:40px;"></td>
-            <td class="colEtiqueta">
+           @* <td class="colEtiqueta">
                 <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo),new { data_val = "false" })
-	        </td>
+	        </td>*@
         </tr>
 
          <tr >
