@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using NHibernate.Criterion;
 using SanPablo.Reclutador.Entity;
 
+
 namespace SanPablo.Reclutador.Web.Core
 {
     public class BaseController : Controller
@@ -64,7 +65,13 @@ namespace SanPablo.Reclutador.Web.Core
                 //    @where = @where + GetWhere(searchField, searchOper, searchString);
                 //}
 
-                var count = logic.CountBy();
+                //var count = logic.CountBy();
+                var count = 0;
+                if (where != null)
+                    count = logic.CountBy(where);
+                else
+                    count = logic.CountBy();
+
 
                 if (count > 0 && pageSize > 0)
                 {

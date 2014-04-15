@@ -83,6 +83,15 @@
                     .Value;
         }
 
+        public int CountBy(DetachedCriteria where)
+        {
+            DetachedCriteria whereCount = NHibernate.CriteriaTransformer.Clone(where);
+            return whereCount.GetExecutableCriteria(_session)
+                    .SetProjection(Projections.RowCount())
+                    .FutureValue<int>()
+                    .Value;
+        }
+
         public int CountByExpress(Expression<Func<TEntity, bool>> condition)
         {
             return _session.QueryOver<TEntity>()
