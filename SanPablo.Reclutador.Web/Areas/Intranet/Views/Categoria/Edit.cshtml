@@ -783,32 +783,40 @@
         var tipo = $('#Categoria_TIPOEJEMPLO').val();
         var texto = $('#Categoria_TEXTOEJEMPLO').val();
         var nombreImagen = $('#Categoria_NOMBREIMAGEN').val();
+
+
+        var tipoCategoria = $('#Categoria_TIPCATEGORIA').val();
         
+        if ("02"!=tipoCategoria) {
 
-        if ("02" == tipo) {
-            if (nombreImagen.length > 0) {
+            if ("02" == tipo) {
+                if (nombreImagen.length > 0) {
 
-                $('#btnGuardar').trigger('click');
-            } else {
-                MostrarMensaje("Ingrese una imagen de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
+                    $('#btnGuardar').trigger('click');
+                } else {
+                    MostrarMensaje("Ingrese una imagen de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
             
-        }
-        if ("01" == tipo) {
-            
-            if (texto.length > 0) {
-                $('#btnGuardar').trigger('click');
-            } else {
-                MostrarMensaje("Ingrese una texto de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
             }
+            if ("01" == tipo) {
+            
+                if (texto.length > 0) {
+                    $('#btnGuardar').trigger('click');
+                } else {
+                    MostrarMensaje("Ingrese una texto de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+                }
+            }
+        
+            if (tipo==0) {
+                MostrarMensaje("Ingrese una tipo de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        
+        
         }
-        
-        if (tipo==0) {
-            MostrarMensaje("Ingrese una tipo de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
-        }
-        
-        
 
+        if ("02" == tipoCategoria) {
+            $('#btnGuardar').trigger('click');
+        }
         
 
        
