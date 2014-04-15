@@ -28,6 +28,15 @@
                 $('#grdListOportunidadLaboral').trigger('reloadGrid');
             });
 
+            $('#btnLimpiarFiltros').click(function () {
+
+                $('#oportunidadLaboral_IdeSede').val("0");
+                $('#oportunidadLaboral_IdeCargo').val("0");
+                $('#oportunidadLaboral_TipoHorario').val("0");
+                $('#oportunidadLaboral_FecInicial').val("");
+                $('#oportunidadLaboral_FecFinal').val("");
+                
+            });
 
             jQuery("#grdListOportunidadLaboral").jqGrid({
                 datatype: function (postdata) {
@@ -270,7 +279,7 @@
 }
         <div class="formulario-accion">
             <div class="opciones">
-                @*<button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>  *@          
+                <a class="btn" id="btnLimpiarFiltros"><i class="icon-trash"></i> Limpiar</a>            
                 <a class="btn btn-info" id="btnBuscarOportunidadLab"><i class="icon-search icon-white"></i> Buscar</a> 
             </div>
             </div>

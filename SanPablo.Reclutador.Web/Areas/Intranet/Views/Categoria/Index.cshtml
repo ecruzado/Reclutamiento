@@ -19,12 +19,48 @@
 
         $('#btnEditar').click(function () {
             var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+
+            
+            var rowData = $('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
+            var indEstado = rowData.ESTACTIVO;
+
+
             if (selr != null) {
-                window.location = '@Url.Action("btnEditarDetalle", "Categoria",new { id = ""})' + '/' + selr;
+
+                if ("I"==indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    window.location = '@Url.Action("btnEditarDetalle", "Categoria",new { id = ""})' + '/' + selr;
+                }
+
             } else {
                 MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
+
+
+        $('#btnEliminarCategoria').click(function () {
+            var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
+
+
+            var rowData = $('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
+            var indEstado = rowData.ESTACTIVO;
+
+
+            if (selr != null) {
+
+                if ("I" == indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#divEliminar').dialog('open');
+                }
+
+            } else {
+                MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+        });
+
+        
 
 
         $('#btnNuevo').click(function () {
@@ -38,7 +74,7 @@
       
 
 
-        $("#spanConfirmacion").html("¿Desea Activar/Desactivar el registro?")
+        $("#spanConfirmacion").html("¿Desea Activar/Desactivar?")
         $('#confirmacion').dialogo({
             buttons: {
                 "Si": function () {
@@ -61,7 +97,7 @@
 
 
 
-        $("#spanEliminar").html("¿Desea Eliminar el registro?")
+        $("#spanEliminar").html("¿Desea eliminar?")
         $('#divEliminar').dialogo({
             buttons: {
                 "Si": function () {
@@ -96,8 +132,8 @@
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
                 migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sortField;
-                migrilla.sord = postdata.sortOrder;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
@@ -268,7 +304,9 @@
                 <a class="btn btn-info" id="btnConsultar"><i class="icon-zoom-in icon-white"></i> Consultar</a>
                 <a class="btn btn-info" id="btnEditar"><i class="icon-pencil  icon-white"></i> Editar</a>
                 <a  id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a  id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>
+                @*<a  id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>*@
+
+                 <a  id="btnEliminarCategoria" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
             </div>
         </div>
     </div>

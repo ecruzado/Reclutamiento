@@ -318,7 +318,7 @@
             {
                 var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
                 _criterioRepository.Remove(objCriterio);
-                objJsonMessage.Mensaje = "Se elemino el criterio correctamente";
+                objJsonMessage.Mensaje = "Se eliminó el criterio correctamente";
                 objJsonMessage.Resultado = true;
                 return Json(objJsonMessage);
                 

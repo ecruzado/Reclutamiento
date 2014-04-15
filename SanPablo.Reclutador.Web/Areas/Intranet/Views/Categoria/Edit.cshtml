@@ -118,7 +118,7 @@
 
 
 
-        $('#btnSubirSubCategoria').click(function () {
+        $('#btnBajarSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var gridArr = $('#grdList').getDataIDs();
@@ -147,10 +147,10 @@
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
+        
 
 
-
-        $('#btnBajarSubCategoria').click(function () {
+        $('#btnSubirSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var gridArr = $('#grdList').getDataIDs();
@@ -183,7 +183,7 @@
         });
 
 
-        $('#btnSubirCriterio').click(function () {
+        $('#btnBajarCriterio').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             
@@ -218,9 +218,9 @@
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
-
         
-        $('#btnBajarCriterio').click(function () {
+        
+        $('#btnSubirCriterio').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
 
@@ -376,15 +376,15 @@
             colModel: [
 
                     { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
-                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'center', sortable: false ,width: 100},
-                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 200 },
+                    { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'center', sortable: false, width: 100, hidden: true },
+                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 350 },
                     { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
                     { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
                     { name: 'TIEMPO', index: 'TIEMPO', align: 'left', sortable: false, width: 110 },
-                    { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false , width: 110},
-                    { name: 'USRCREACION', index: 'USRCREACION', align: 'left', sortable: false, width: 180 },
-                    { name: 'FECMODIFICACION', index: 'FECMODIFICACION', align: 'left', sortable: false, width: 130 },
-                    { name: 'USRMODIFICACION', index: 'USRMODIFICACION', align: 'left', sortable: false, width: 180 }
+                    { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false, width: 110, hidden: true },
+                    { name: 'USRCREACION', index: 'USRCREACION', align: 'left', sortable: false, width: 180, hidden: true },
+                    { name: 'FECMODIFICACION', index: 'FECMODIFICACION', align: 'left', sortable: false, width: 130, hidden: true },
+                    { name: 'USRMODIFICACION', index: 'USRMODIFICACION', align: 'left', sortable: false, width: 180, hidden: true }
             ],
             pager: jQuery('#grdPager'),
             rowNum: 10,

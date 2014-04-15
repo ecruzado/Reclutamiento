@@ -190,14 +190,23 @@
             if (selr != null) {
                 window.location = '@Url.Action("ConsultaCriterios", "Criterio")'+'/'+selr;
             } else {
-                MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
 
         $('#btnEditar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var rowData = $('#grdList').jqGrid('getRowData', selr);
+            var indEstado = rowData.CodigoEstado;
+
             if (selr != null) {
-                window.location = '@Url.Action("Edicion", "Criterio")'+'/'+ selr;
+
+                if ("I" == indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    window.location = '@Url.Action("Edicion", "Criterio")' + '/' + selr;
+                }
+                
             } else {
                 MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
@@ -207,7 +216,7 @@
             window.location = '@Url.Action("Nuevo", "Criterio")';
         });
 
-        $("#spanConfirmacion").html("¿Desea Activar/Desactivar el registro?")
+        $("#spanConfirmacion").html("¿Desea Activar/Desactivar?")
         $('#confirmacion').dialogo({
             buttons: {
                 "Si": function () {
@@ -229,12 +238,18 @@
 
         $('#btnEliminar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-            if (selr != null) {
+            var rowData = $('#grdList').jqGrid('getRowData', selr);
+            var indEstado = rowData.CodigoEstado;
 
-                $('#divEliminar').dialog('open');
+            if (selr != null) {
+                if ("I" == indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#divEliminar').dialog('open');
+                }
 
             } else {
-                MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
         });
@@ -247,14 +262,14 @@
                 $('#confirmacion').dialog('open');
 
             } else {
-                MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
         });
 
 
 
-        $("#spanEliminar").html("¿Desea Eliminar el registro?")
+        $("#spanEliminar").html("¿Desea eliminar?")
         $('#divEliminar').dialogo({
             buttons: {
                 "Si": function () {
@@ -263,7 +278,7 @@
                     if (selr != null) {
                         EliminarCriterio(selr,rowData);
                     } else {
-                        MostrarMensaje('Seleccione un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione un criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
                     $(this).dialog("close");
                 },
