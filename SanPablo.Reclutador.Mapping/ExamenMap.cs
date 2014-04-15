@@ -23,6 +23,9 @@
             Map(x => x.FechaModificacion, "FECMODIFICACION");
             Map(x => x.TipExamenDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCriterio + ",TIPEXAMEN) from dual)");
 
+            Map(x => x.TiempoTotal).Formula("(select PR_INTRANET_ED.FN_OBTIENE_TIEMPO_TOTAL(IDEEXAMEN) from dual)");
+
+
             Table("EXAMEN");
 
         }

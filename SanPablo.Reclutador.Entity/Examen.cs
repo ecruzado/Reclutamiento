@@ -34,5 +34,8 @@ namespace SanPablo.Reclutador.Entity
             categoria.ExamenesCategoria.Add(this);
             Categorias.Add(categoria);
         }
+
+
+        public virtual float TiempoTotal { get; set; }
     }
 }

@@ -301,7 +301,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.DescExamen,
                                 item.TipExamen,
                                 item.TipExamenDes,
-                                "1",
+                                item.TiempoTotal.ToString(),
                                 item.FecCreacion == DateTime.MinValue? "": item.FecCreacion.ToString("dd/MM/yyyy"),
                                 item.UsrCreacion,
                                 item.FecModificacion == DateTime.MinValue? "": item.FecModificacion.ToString("dd/MM/yyyy"),
