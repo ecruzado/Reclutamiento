@@ -1092,11 +1092,11 @@
                                     
                                         @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                                 {
-                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false",onkeyup="aMays(event, this)" }) 
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false",onkeyup="aMays(event, this)" }) 
                                                 }
                                         else
                                         {
-                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "150", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly",onkeyup="aMays(event, this)"}) 
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly",onkeyup="aMays(event, this)"}) 
                                         }
                                         @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>

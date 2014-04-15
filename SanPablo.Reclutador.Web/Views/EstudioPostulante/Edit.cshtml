@@ -189,15 +189,14 @@
             }
             else {
                 //validar que no sea superior a la fecha actual
-                fecActual = new Date();
-                var mes = (fecActual.getMonth() + 1);
-                if (mes < 10) { mes = "0" + mes; } 
-                fechaActual = "01/"+mes + '/' + fecActual.getFullYear();
-                fechaInicio = "01/" + fechaInicio;
-                if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
+                var dFechaActual = new Date();
+                var valores = fechaInicio.split('/'); 
+                var dFechaInicio = new Date(valores[1], parseInt(valores[0])-1, dFechaActual.getDate());
+                if (dFechaInicio >= dFechaActual) {
+                    
                     msjError.innerHTML = "ingrese una fecha válida";
                     msjError.style.display = "block";
-                    $("#Estudio_FechaInicio").val("");
+                   
                 }
                 else {
                     msjError.style.display = "none";

@@ -49,13 +49,19 @@
             }
             else { mjs.style.display = "none"; }
 
-            fecActual = new Date();
-            fechaInicio = "01/" + fechaInicio;
-            var mes = (fecActual.getMonth() + 1);
-            if (mes < 10) { mes = "0" + mes; }
-            fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
+            //fecActual = new Date();
+            //fechaInicio = "01/" + fechaInicio;
+            //var mes = (fecActual.getMonth() + 1);
+            //if (mes < 10) { mes = "0" + mes; }
+            //fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
             
-            if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
+            //if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
+            var dFechaActual = new Date();
+            var valores = fechaInicio.split('/');
+            var dFechaInicio = new Date(valores[1], parseInt(valores[0]) - 1, dFechaActual.getDate());
+            if (dFechaInicio >= dFechaActual) {
+
+
                 $('#Experiencia_FechaInicio').val("");
                 mjs.innerHTML = "Ingresar una fecha válida";
                 mjs.style.display = "block";
@@ -75,13 +81,19 @@
             }
             else { mjsFin.style.display = "none"; }
             
-            fecActual = new Date();
-            fechaFin = "01/" + fechaFin;
-            var mes = (fecActual.getMonth() + 1);
-            if (mes < 10) { mes = "0" + mes; }
-            fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
+            //fecActual = new Date();
+            //fechaFin = "01/" + fechaFin;
+            //var mes = (fecActual.getMonth() + 1);
+            //if (mes < 10) { mes = "0" + mes; }
+            //fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
 
-            if (Date.parse(fechaFin) > Date.parse(fechaActual)) {
+            //if (Date.parse(fechaFin) > Date.parse(fechaActual)) {
+            var dFechaActual = new Date();
+            var valores = fechaFin.split('/');
+            var dFechaInicio = new Date(valores[1], parseInt(valores[0]) - 1, dFechaActual.getDate());
+            if (dFechaInicio >= dFechaActual) {
+            
+
                 $('#Experiencia_FechaFin').val("");
                 mjsFin.innerHTML = "No puede ingresar fecha superior a la actual";
                 mjsFin.style.display = "block";
