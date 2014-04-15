@@ -983,7 +983,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
                     if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
                     {
-                        where.Add(Expression.Eq("ESTACTIVO", grid.rules[2].data));
+                        where.Add(Expression.Eq("ESTACTIVO", "A"));
                     }
                     if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                     {
@@ -1004,8 +1004,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 "1",
                                 item.ESTACTIVO,
                                 item.IDECATEGORIA.ToString(),
-                                item.NOMCATEGORIA,
-                                item.DESCCATEGORIA,
+                                item.NOMCATEGORIA==null?"":item.NOMCATEGORIA,
+                                item.DESCCATEGORIA==null?"":item.DESCCATEGORIA,
                                 item.TIPCATEGORIA,
                                 item.TIPCATEGORIADES
                                

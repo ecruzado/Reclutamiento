@@ -56,13 +56,13 @@
                 },
              colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', '','Tipo'],
              colModel: [
-                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter, hidden: true },
                      { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'left', hidden: true },
                      { name: 'IDECATEGORIA', index: 'IDECATEGORIA', align: 'center', sortable: false, hidden: true },
-                     { name: 'Nombre', index: 'Nombre', align: 'left', width: 200 },
-                     { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 300 },
+                     { name: 'Nombre', index: 'Nombre', align: 'left', width: 300 },
+                     { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 320 },
                      { name: 'Tipo', index: 'Tipo', align: 'left', width: 90, hidden:true },
-                     { name: 'TipoDes', index: 'TipoDes', align: 'left', width: 90 }
+                     { name: 'TipoDes', index: 'TipoDes', align: 'left', width: 90, hidden: true }
 
              ],
              pager: jQuery('#grdPagerCategoriaPopup'),
@@ -124,14 +124,14 @@
                 @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onkeyup="aMays(event, this)"}) 
             </td>
         </tr>
-        <tr >
+        @*<tr >
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Categoria.ESTACTIVO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Categoria.ESTACTIVO),new { data_val = "false" })
             </td>
-        </tr>
+        </tr>*@
 
         <tr >
             <td class="opciones" style="text-align:right" colspan="6">

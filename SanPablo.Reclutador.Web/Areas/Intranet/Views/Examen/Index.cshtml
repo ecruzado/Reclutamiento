@@ -102,15 +102,15 @@
                     { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', sortable: false, width: 50,hidden: true },
                     { name: 'IdeExamen', index: 'IdeExamen', align: 'center', sortable: false, hidden: true },
-                    { name: 'Nombre', index: 'Nombre', align: 'left' },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left' },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', width: 250 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 250 },
                     { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true },
-                    { name: 'TipExamenDes', index: 'TipExamenDes', align: 'left', width: 150 },
+                    { name: 'TipExamenDes', index: 'TipExamenDes', align: 'left', width: 120 },
                     { name: 'Duracion', index: 'Duracion', align: 'left' },
-                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100 },
-                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100 },
-                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100 },
-                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100 }
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100, hidden: true },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100, hidden: true },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100, hidden: true },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100, hidden: true }
             ],
              pager: jQuery('#grdPager'),
              rowNum: 10,
@@ -159,9 +159,20 @@
 
         $('#btnEliminar').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+
+
+            var rowData = $('#grdList').jqGrid('getRowData', selr);
+            var indEstado = rowData.CodigoEstado;
+
             if (selr != null) {
 
-                $('#divEliminar').dialog('open');
+                if ("I"==indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#divEliminar').dialog('open');
+                }
+
+               
 
             } else {
                 MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -173,8 +184,16 @@
         $('#btnEditarExamen').click(function () {
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
 
+            var rowData = $('#grdList').jqGrid('getRowData', selr);
+            var indEstado = rowData.CodigoEstado;
+
             if (selr != null) {
-                window.location = '@Url.Action("Edicion", "Examen", new { area="Intranet",id=""})' + '/' + selr;
+
+                if ("I" == indEstado) {
+                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    window.location = '@Url.Action("Edicion", "Examen", new { area="Intranet",id=""})' + '/' + selr;
+                }
 
             } else {
                 MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
