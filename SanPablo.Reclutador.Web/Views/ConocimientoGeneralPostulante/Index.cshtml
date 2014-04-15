@@ -15,6 +15,28 @@
             mostrarAlerta();
             actualizarBarra();
 
+
+            $('#btnConocimientoSig').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("validaConocimiento", "Postulante")',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado)
+                        {
+                            SanPablo.Redirecciona('@Url.Action("DatosComplementarios", "Postulante")');
+                        }
+                        else
+                        {
+                            MostrarMensaje(data.Mensaje, "Alerta");
+                        }
+                    }
+                });
+            });
+
+
+
+
             jQuery("#grdListOfimatica").jqGrid({
                 url: '@Url.Action("Listar", "ConocimientoGeneralPostulante")',
                 datatype: 'json',
@@ -435,6 +457,11 @@
             }
         }
 
+        function MostrarMensaje(mensaje, titulo) {
+            Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
+        }
+
+
     </script>
 
 }
@@ -502,7 +529,11 @@
             <div class="formulario-accion">
                 <div class="opciones">
                     <a class="btn" href="@Url.Action("Index", "ExperienciaPostulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>                    
-                    <a class="btn btn-info" href="@Url.Action("DatosComplementarios", "Postulante")">Siguiente <i class="icon-arrow-right icon-white"></i></a>
+                   @* <a class="btn btn-info" href="@Url.Action("DatosComplementarios", "Postulante")">Siguiente <i class="icon-arrow-right icon-white"></i></a>*@
+
+
+                     <a class="btn btn-info" id="btnConocimientoSig">Siguiente <i class="icon-arrow-right icon-white"></i></a>
+
                 </div>
             </div>
             <div style="clear:both"></div>

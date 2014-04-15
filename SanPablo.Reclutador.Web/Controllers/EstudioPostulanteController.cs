@@ -15,14 +15,18 @@
         private IEstudioPostulanteRepository _estudioPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IPostulanteRepository _postulanteRepository;
+        private IUsuarioRepository _usuarioRepository;
                
         public EstudioPostulanteController(IEstudioPostulanteRepository estudioPostulanteRepository, 
                                            IDetalleGeneralRepository detalleGeneralRepository,
-                                           IPostulanteRepository postulanteRepository )
+                                           IPostulanteRepository postulanteRepository,
+                                            IUsuarioRepository usuarioRepository
+                                            )
         {
             _estudioPostulanteRepository = estudioPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _postulanteRepository = postulanteRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         [ValidarSesion(TipoServicio = TipMenu.Extranet)]
@@ -247,6 +251,41 @@
             }
              return estudioPostulanteGeneralViewModel;
         }
+
+        //[ValidarSesion]
+        [HttpPost]
+        public ActionResult validaEstudios()
+        {
+            JsonMessage objMensaje= new JsonMessage();
+            int idUsuario=0;
+
+            idUsuario = (Session[ConstanteSesion.Usuario] == null ? 0 : (Convert.ToInt32(Session[ConstanteSesion.Usuario])));
+
+            var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuario 
+                                                          && x.TipUsuario == TipUsuario.Extranet 
+                                                          && x.FlgEstado == IndicadorActivo.Activo);
+
+            if (ObjUsuario!=null)
+            {
+               List<EstudioPostulante> listaPostulantes = (List<EstudioPostulante>)_estudioPostulanteRepository.GetBy(x => x.Postulante.IdePostulante==ObjUsuario.IdePostulante);
+
+               if (listaPostulantes!=null && listaPostulantes.Count>0)
+               {
+                   objMensaje.Resultado = true;
+               }
+               else
+               {
+                   objMensaje.Resultado = false;
+                   objMensaje.Mensaje = "Registre sus estudios";
+               }
+            }
+
+            return Json(objMensaje);
+        }
+
+
+
+
         #endregion
     }
 }

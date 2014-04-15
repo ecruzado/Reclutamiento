@@ -143,7 +143,24 @@
             });
 
 
-            
+           
+
+            $('#btnEstudioSiguiente').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("validaEstudios", "EstudioPostulante")',
+                    traditional: true,
+                    success: function (data) {
+                       if (data.Resultado) {
+                            SanPablo.Redirecciona('@Url.Action("Index", "ExperienciaPostulante")');
+                        }
+                        else {
+                            MostrarMensaje(data.Mensaje, "Alerta");
+                        }
+                    }
+                });
+            });
+
 
         });
 
@@ -176,6 +193,11 @@
             return false;
         }
 
+
+        function MostrarMensaje(mensaje, titulo) {
+            Funciones.Alert("divMensajeCon", "spnMensajeCon", mensaje, titulo);
+        }
+
     </script>
 }
 <div class="span12">
@@ -205,8 +227,11 @@
             </div>
             <div class="formulario-accion">
                 <div class="opciones">
-                    <a class="btn" href="@Url.Action("General", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
-                    <a class="btn btn-info" href="@Url.Action("Index", "ExperienciaPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                    <a class="btn" id="btnEstudioAtraz" href="@Url.Action("General", "Postulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
+                    
+                    @*<a class="btn btn-info"  id="btnEstudioSiguiente"  href="@Url.Action("Index", "ExperienciaPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
+                    <a class="btn btn-info"  id="btnEstudioSiguiente"  ><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+
                 </div>
             </div>
             <div style="clear:both"></div>
@@ -216,6 +241,10 @@
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>
+
+<div id="divMensajeCon">
+        <span id="spnMensajeCon"></span>
+</div>
 
 
 

@@ -13,6 +13,26 @@
             mostrarAlerta();
             actualizarBarra();
 
+
+            $('#btnExperienciaSig').click(function () {
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("validaExperiencia", "ExperienciaPostulante")',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                      SanPablo.Redirecciona('@Url.Action("Index", "ConocimientoGeneralPostulante")');
+                    }
+                    else
+                    {
+                      MostrarMensaje(data.Mensaje, "Alerta");
+                    }
+                  }
+                });
+            });
+
+
+
             jQuery("#grdList").jqGrid({
                 url: '@Url.Action("Listar", "ExperienciaPostulante")',
                 datatype: 'json',
@@ -165,6 +185,11 @@
             });
             return false;
         }
+
+
+        function MostrarMensaje(mensaje, titulo) {
+            Funciones.Alert("divMensajeExp", "spnMensajeExp", mensaje, titulo);
+        }
     </script>
 }
 <div class="span12">
@@ -197,7 +222,9 @@
             <div class="formulario-accion">
                 <div class="opciones">
                     <a class="btn" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-left icon-black"></i> Anterior</a>
-                    <a class="btn btn-info" href="@Url.Action("Index", "ConocimientoGeneralPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                   @* <a class="btn btn-info" href="@Url.Action("Index", "ConocimientoGeneralPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
+
+                    <a class="btn btn-info" id="btnExperienciaSig"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                 </div>
             </div>
             <div style="clear:both"></div>
@@ -207,6 +234,10 @@
 <div id="updateDialog" title="Experiencia"  ></div>
     <div id="divMensaje">
         <span id="spanMensaje" ></span>
+    </div>
+
+<div id="divMensajeExp">
+        <span id="spnMensajeExp" ></span>
     </div>
 
 

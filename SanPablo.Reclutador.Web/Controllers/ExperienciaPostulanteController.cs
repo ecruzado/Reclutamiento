@@ -17,13 +17,20 @@
         private IExperienciaPostulanteRepository _experienciaPostulanteRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IPostulanteRepository _postulanteRepository;
+        private IUsuarioRepository _usuarioRepository;
+      
         public ExperienciaPostulanteController(IExperienciaPostulanteRepository experienciaPostulanteRepository, 
                                                IDetalleGeneralRepository detalleGeneralRepository,
-                                               IPostulanteRepository postulanteRepository )
+                                               IPostulanteRepository postulanteRepository,
+                                               IUsuarioRepository usuarioRepository
+      
+                                                )
         {
             _experienciaPostulanteRepository = experienciaPostulanteRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _postulanteRepository = postulanteRepository;
+            _usuarioRepository = usuarioRepository;
+            
         }
 
         [ValidarSesion(TipoServicio = TipMenu.Extranet)]
@@ -201,6 +208,42 @@
             string tiempoServicio = anhos.ToString() + " AÑO(S) Y " + meses.ToString() + " MES(ES)";
             return result = Json(tiempoServicio);
         }
+
+
+        /// <summary>
+        /// valida experiencia del postulante
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult validaExperiencia()
+        {
+            JsonMessage objMensaje = new JsonMessage();
+            int idUsuario = 0;
+
+            idUsuario = (Session[ConstanteSesion.Usuario] == null ? 0 : (Convert.ToInt32(Session[ConstanteSesion.Usuario])));
+
+            var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuario
+                                                          && x.TipUsuario == TipUsuario.Extranet
+                                                          && x.FlgEstado == IndicadorActivo.Activo);
+
+            if (ObjUsuario != null)
+            {
+                List<ExperienciaPostulante> listaExperiencia = (List<ExperienciaPostulante>)_experienciaPostulanteRepository.GetBy(x => x.Postulante.IdePostulante == ObjUsuario.IdePostulante);
+
+                if (listaExperiencia != null && listaExperiencia.Count > 0)
+                {
+                    objMensaje.Resultado = true;
+                }
+                else
+                {
+                    objMensaje.Resultado = false;
+                    objMensaje.Mensaje = "Registre sus experiencias";
+                }
+            }
+
+            return Json(objMensaje);
+        }
+
 
     }
 }

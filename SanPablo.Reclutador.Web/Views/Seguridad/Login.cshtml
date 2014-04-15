@@ -202,17 +202,12 @@
                             success: function (data) {
                                 if (data.Resultado) {
                                     $.unblockUI();
-                                    //$('#LogeoExtranet').dialog("close");
-                                    //$('#PopupDialogLogeoExtranet').dialog("close");
-                                    //$('#UsuarioExtranet_Usuario').val(data.Iuser);
-                                    //$('#UsuarioExtranet_Password').val(data.Puser);
+                                   
                                     
                                     validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet",data.Mensaje,"Mensaje");
                                 } else {
                                     $.unblockUI();
-                                    // $('#LogeoExtranet').dialog("close");
-                                    // $('#PopupDialogLogeoExtranet').dialog("close");
-
+                                   
                                     MostrarMensaje(data.Mensaje, "Mensaje");
                                 }
                             }

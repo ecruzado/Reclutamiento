@@ -582,6 +582,41 @@
         }
 
 
+        /// <summary>
+        /// valida que tenga registrado conocimientos
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult validaConocimiento()
+        {
+            JsonMessage objMensaje = new JsonMessage();
+            int idUsuario = 0;
+
+            idUsuario = (Session[ConstanteSesion.Usuario] == null ? 0 : (Convert.ToInt32(Session[ConstanteSesion.Usuario])));
+
+            var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuario
+                                                          && x.TipUsuario == TipUsuario.Extranet
+                                                          && x.FlgEstado == IndicadorActivo.Activo);
+
+            if (ObjUsuario != null)
+            {
+                List<ConocimientoGeneralPostulante> listaConocimientos = (List<ConocimientoGeneralPostulante>)_conocimientoGeneralRepository.GetBy(x => x.Postulante.IdePostulante == ObjUsuario.IdePostulante);
+
+                if (listaConocimientos != null && listaConocimientos.Count > 0)
+                {
+                    objMensaje.Resultado = true;
+                }
+                else
+                {
+                    objMensaje.Resultado = false;
+                    objMensaje.Mensaje = "Registre sus conocimientos";
+                }
+            }
+
+            return Json(objMensaje);
+        }
+
+
 
 
         #region ListaOfertasLaborales

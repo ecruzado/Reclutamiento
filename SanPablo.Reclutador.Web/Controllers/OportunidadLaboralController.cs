@@ -319,7 +319,16 @@ namespace SanPablo.Reclutador.Web.Controllers
             {
                 var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeCargo == Convert.ToInt32(id) && 
                                                                     x.TipoSolicitud==tipo && x.EstadoActivo==IndicadorActivo.Activo);
-                model.solReqPersonal.IndVerSalario = objSolReq.IndVerSalario;
+
+                if (objSolReq!=null)
+                {
+                    model.solReqPersonal.IndVerSalario = (objSolReq.IndVerSalario == null ? "N" : objSolReq.IndVerSalario);
+                }
+                else
+                {
+                    model.solReqPersonal.IndVerSalario = "N";
+                }
+                
             }
 
 
