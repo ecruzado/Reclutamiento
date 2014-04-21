@@ -70,6 +70,11 @@ namespace SanPablo.Reclutador.Web.Core
         /// </summary>
         public const string IdeSolicitudReemplazo = "IdeSolicitudReemplazo";
 
+        /// <summary>
+        /// obtiene los filtros de un reporte de seleccion, clase REPORTE
+        /// </summary>
+        public const string ReporteSeleccion = "ReporteSeleccion";
+
     }
     public enum TipoDevolucionError 
     {

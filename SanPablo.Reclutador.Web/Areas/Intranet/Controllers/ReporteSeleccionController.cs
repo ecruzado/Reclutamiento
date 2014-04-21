@@ -20,6 +20,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Data;
+    using NPOI.SS.UserModel;
+    using CrystalDecisions.CrystalReports.Engine;
+
     
     public class ReporteSeleccionController : BaseController
     {
@@ -107,7 +111,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             // motivo de reemplazo
             objModel.ListaMotivo =
-            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoMotivoCese));
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVacante));
             objModel.ListaMotivo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             objModel.ListaSede = new List<Sede>(_sedeRepository.GetByTipSede());
@@ -133,8 +137,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.ListaDepartamento = new List<Departamento>();
             objModel.ListaDepartamento.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
 
-            objModel.ListaArea = new List<Area>();
-            objModel.ListaArea.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+            objModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>();
+            objModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
             objModel.ListaAnalistaResp = new List<Usuario>();
             objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
@@ -206,10 +210,350 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             ActionResult result = null;
 
-            var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+            var listaResultado = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
             result = Json(listaResultado);
             return result;
         }
+
+
+        /// <summary>
+        /// obtiene la lista de contratados
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult getListContratados(GridTable grid)
+        {
+
+            Reporte objReporte;
+            List<Reporte> listaReporte = new List<Reporte>();
+            try
+            {
+
+                objReporte = new Reporte();
+
+              
+                var FecDesde = grid.rules[0].data;
+
+                if (FecDesde!=null)
+                {
+                    objReporte.FechaInicio = FecDesde;
+                }
+                else
+                {
+                    objReporte.FechaInicio = "";
+                }
+
+                var FecHasta = grid.rules[1].data;
+
+                if (FecHasta!=null)
+                {
+                    objReporte.FechaFin = FecHasta;
+                }
+                else
+                {
+                    objReporte.FechaFin = "";
+                }
+
+                var TipSol = grid.rules[2].data;
+
+                if (TipSol!="0" && TipSol!=null)
+                {
+                    objReporte.Tipsol = TipSol;
+                }
+                else
+                {
+                    objReporte.Tipsol = "";
+                }
+
+                var EstadoReq = grid.rules[3].data;
+
+                if (EstadoReq!=null && EstadoReq!="0")
+                {
+                    objReporte.EstadoProceso = EstadoReq;
+                }
+                else
+                {
+                    objReporte.EstadoProceso = "";
+                }
+
+                var IdResp = grid.rules[4].data;
+                if (IdResp != null && IdResp!="0")
+                {
+                    objReporte.idAnalistaResp = Convert.ToInt32(IdResp);
+                }
+                else
+                {
+                    objReporte.idAnalistaResp = 0;
+                }
+
+                var IdDependencia = grid.rules[5].data;
+
+                if (IdDependencia!=null && IdDependencia!="0")
+                {
+                    objReporte.idDependencia = Convert.ToInt32(IdDependencia);
+                }
+                else
+                {
+                    objReporte.idDependencia = 0;     
+                }
+
+                var IdDepartamento = grid.rules[6].data;
+
+                if (IdDepartamento!=null && IdDepartamento!="0")
+                {
+                    objReporte.idDepartamento = Convert.ToInt32(IdDepartamento);
+                }
+                else
+                {
+                    objReporte.idDepartamento = 0;
+                }
+
+                var IdArea = grid.rules[7].data;
+
+                if (IdArea!=null && IdArea!="0")
+                {
+                    objReporte.idArea = Convert.ToInt32(IdArea);
+                }
+                else
+                {
+                    objReporte.idArea = 0;
+                }
+
+                var MotivoReemplazo = grid.rules[8].data;
+
+
+                if (MotivoReemplazo != null && MotivoReemplazo!="0")
+                {
+                    objReporte.MotivoReemplazo = MotivoReemplazo;
+                }
+                else
+                {
+                    objReporte.MotivoReemplazo = "";
+                }
+
+                var Sede = grid.rules[9].data;
+                if (Sede!=null && Sede!="0")
+                {
+                    objReporte.idSede = Convert.ToInt32(Sede);
+                }else
+	            {
+                    objReporte.idSede = 0;
+	            }
+
+                
+
+
+                  //{ field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
+                  //     { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
+                  //     { field: 'cTipSol', data: $("#ReporteSol_idTipSol").val() },
+                  //     { field: 'cEstadoReq', data: $("#ReporteSol_idEstadoReq").val() },
+                  //     { field: 'nIdResp', data: $("#ReporteSol_idAnalistaResp").val() },
+                  //     { field: 'nIdDependencia', data: $("#ReporteSol_idDependencia").val() },
+                  //     { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
+                  //     { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
+                  //     { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() }
+
+
+                //if ("0".Equals(reclutamientoPersona.EstPostulante))
+                //{
+                //    reclutamientoPersona.EstPostulante = "";
+                //}
+
+                
+
+                Session[ConstanteSesion.ReporteSeleccion] = objReporte;
+
+
+                listaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
+
+                var generic = GetListar(listaReporte,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.IdeSolReqpersonal),
+                    cell = new string[]
+                            {
+                                item.IdeSolReqpersonal==null?"":item.IdeSolReqpersonal,
+                                item.EstadoProceso==null?"":item.EstadoProceso,
+                                item.FechaRequerimiento==null?"":item.FechaRequerimiento,
+                                item.DesSede==null?"":item.DesSede,
+                                item.DesDependencia==null?"":item.DesDependencia,
+                                item.DesDepartamento==null?"":item.DesDepartamento,
+                                item.DesArea==null?"":item.DesArea,
+                                item.Cargo==null?"":item.Cargo,
+                                item.Jefe==null?"":item.Jefe,
+                                item.Tipsol==null?"":item.Tipsol,
+                                item.Reemplaza==null?"":item.Reemplaza,
+                                item.FecReemplazo==null?"":item.FecReemplazo,
+                                item.MotivoReemplazo ==null?"":item.MotivoReemplazo,
+                                item.AnalistaResp ==null?"":item.AnalistaResp,
+                                item.PersonaIngresa ==null?"":item.PersonaIngresa,
+                                item.FechaContratacion ==null?"":item.FechaContratacion,
+                                item.Dias ==null?"":item.Dias,
+                                item.Numdocumento ==null?"":item.Numdocumento,
+                                item.Fono ==null?"":item.Fono,
+                                item.ObsPsicologo ==null?"":item.ObsPsicologo,
+                                item.ObsEntrevista ==null?"":item.ObsEntrevista,
+                                item.FecSuceso ==null?"":item.FecSuceso,
+                                item.MotivoCirreSol==null?"":item.MotivoCirreSol
+
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+                //return null;
+
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
+
+        
+        /// <summary>
+        /// genera el reporte en formato excel
+        /// </summary>
+        public void ListaReporteSeleccion()
+        {
+
+            if (Session[ConstanteSesion.ReporteSeleccion] != null)
+            {
+                Reporte objReporte = null;
+
+                objReporte = (Reporte)Session[ConstanteSesion.ReporteSeleccion];
+
+                DataTable dtReporteSeleccion = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
+
+
+
+
+
+
+                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
+                string pathApliacion = Server.MapPath(".");
+                ReporteExcel objGeneraExcel = new ReporteExcel();
+                ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
+
+                objGeneraExcel.creaHoja("pagina 01");
+                styleTitulo = objGeneraExcel.addEstiloTitulo(true, 14, "CENTER");
+                styleCadena = objGeneraExcel.addEstiloCadena(false, 10, "LEFT");
+                styleNegrita = objGeneraExcel.addEstiloCadenaNegrita(10, "LEFT");
+                styleNumero = objGeneraExcel.addEstiloNumero(false, 10, "RIGHT");
+
+                DateTime fecha = DateTime.Now;
+
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = "\\Content\\images\\logo_san_pablo_png.png";
+                string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                string fullPath = applicationPath+directoryPath;
+                string dir = fullPath;
+
+                //numero de columnas excel
+                int cantCol = 21;
+
+                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Reporte de Selección", styleTitulo);
+
+                objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
+                objGeneraExcel.adicionaCamposCab(5, 1, "Sistema de Reclutamiento de Personal", styleNegrita);
+
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
+
+                objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
+
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 1, "ESTADO DEL PROCESO", 1);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 2, "FECHA DE REQUERIMIENTO", 2);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 3, "SEDE", 3);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 4, "DEPENDENCIA", 4);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 5, "DEPARTAMENTO", 5);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 6, "AREA", 6);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 7, "PUESTO", 7);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 8, "JEFE", 8);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 9, "TIPO DE REQUERIMIENTO", 9);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 10, "REEMPAZA A", 10);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 11, "F. CESE o REEMPLAZO", 11);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 12, "MOTIVO DE REEMPLAZO", 12);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 13, "ANALISTA RESPONSABLE", 13);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 14, "P. INGRESA (APELLIDOS Y NOMBRE)", 14);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 15, "FECHA DE CONTRATACION", 15);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 16, "TIEMPO ESPERA (DIAS)", 16);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 17, "DNI", 17);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 18, "CEL. / FIJO", 18);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 19, "OBSERVACIONES DEL PSICOLOGO", 19);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 20, "OBSERVACIONES DE LA ENTREVISTA", 20);
+                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 22, "MOTIVO DE FINALIZACION DEL REQ.", 21);
+
+
+                // Se coloca de manera obligatoria
+                objGeneraExcel.imprimirCabecera(8, styleNegrita);
+                objGeneraExcel.imprimiDetalle(9, styleCadena);
+
+
+                MemoryStream exportData = new MemoryStream();
+                using (exportData)
+                {
+                    exportData = objGeneraExcel.imprimeExcel(exportData);
+                    string saveAsFileName = string.Format("Reporte Seleccion-{0:d}.xls", DateTime.Now).Replace("/", "-");
+
+                    Response.ContentType = "application/vnd.ms-excel";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", saveAsFileName));
+                    Response.Clear();
+                    Response.BinaryWrite(exportData.GetBuffer());
+                    Response.End();
+
+                }
+            }
+        }    
+
+        /// <summary>
+        /// obtiene el reporte PDF
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetReportePDF()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
+            ReportDocument rep = new ReportDocument();
+            MemoryStream mem;
+
+            Reporte objReporte = new Reporte();
+
+            try
+            {
+                objReporte = (Reporte)Session[ConstanteSesion.ReporteSeleccion];
+
+                DataTable dtResultado = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ReporteSeleccion.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                rep.Load(fullPath);
+                rep.Database.Tables["DtReporteSeleccion"].SetDataSource(dtResultado);
+
+                mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            }
+            catch (Exception)
+            {
+                return MensajeError();
+            }
+            return File(mem, "application/pdf");
+
+        }
+
+
 
     }
 }
