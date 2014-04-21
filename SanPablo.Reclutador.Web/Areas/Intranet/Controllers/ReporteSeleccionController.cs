@@ -22,6 +22,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web.Mvc;
     using System.Data;
     using NPOI.SS.UserModel;
+    using CrystalDecisions.CrystalReports.Engine;
 
     
     public class ReporteSeleccionController : BaseController
@@ -136,8 +137,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.ListaDepartamento = new List<Departamento>();
             objModel.ListaDepartamento.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
 
-            objModel.ListaArea = new List<Area>();
-            objModel.ListaArea.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+            objModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>();
+            objModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
             objModel.ListaAnalistaResp = new List<Usuario>();
             objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
@@ -209,7 +210,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             ActionResult result = null;
 
-            var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+            var listaResultado = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
             result = Json(listaResultado);
             return result;
         }
@@ -428,7 +429,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 DataTable dtReporteSeleccion = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
 
 
-                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xls";
+
+
+
+
+                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
                 string pathApliacion = Server.MapPath(".");
                 ReporteExcel objGeneraExcel = new ReporteExcel();
                 ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
@@ -443,11 +448,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-               
+                string directoryPath = "\\Content\\images\\logo_san_pablo_png.png";
+                string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                string fullPath = applicationPath+directoryPath;
+                string dir = fullPath;
+
                 //numero de columnas excel
                 int cantCol = 21;
 
                 objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Reporte de Selección", styleTitulo);
+
+                objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
+                objGeneraExcel.adicionaCamposCab(5, 1, "Sistema de Reclutamiento de Personal", styleNegrita);
+
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
+
+                objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
 
                 objGeneraExcel.addDetalleLista(dtReporteSeleccion, 1, "ESTADO DEL PROCESO", 1);
                 objGeneraExcel.addDetalleLista(dtReporteSeleccion, 2, "FECHA DE REQUERIMIENTO", 2);
@@ -473,8 +495,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
                 // Se coloca de manera obligatoria
-                objGeneraExcel.imprimirCabecera(5, styleNegrita);
-                objGeneraExcel.imprimiDetalle(6, styleCadena);
+                objGeneraExcel.imprimirCabecera(8, styleNegrita);
+                objGeneraExcel.imprimiDetalle(9, styleCadena);
 
 
                 MemoryStream exportData = new MemoryStream();
@@ -482,6 +504,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     exportData = objGeneraExcel.imprimeExcel(exportData);
                     string saveAsFileName = string.Format("Reporte Seleccion-{0:d}.xls", DateTime.Now).Replace("/", "-");
+
                     Response.ContentType = "application/vnd.ms-excel";
                     Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", saveAsFileName));
                     Response.Clear();
@@ -491,6 +514,45 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
             }
         }    
+
+        /// <summary>
+        /// obtiene el reporte PDF
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetReportePDF()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
+            ReportDocument rep = new ReportDocument();
+            MemoryStream mem;
+
+            Reporte objReporte = new Reporte();
+
+            try
+            {
+                objReporte = (Reporte)Session[ConstanteSesion.ReporteSeleccion];
+
+                DataTable dtResultado = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ReporteSeleccion.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                rep.Load(fullPath);
+                rep.Database.Tables["DtReporteSeleccion"].SetDataSource(dtResultado);
+
+                mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            }
+            catch (Exception)
+            {
+                return MensajeError();
+            }
+            return File(mem, "application/pdf");
+
+        }
+
 
 
     }

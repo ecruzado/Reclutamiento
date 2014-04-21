@@ -21,6 +21,12 @@
             }
         });
 
+
+        $('#btnPDF').click(function () {
+            window.open('@Url.Action("GetReportePDF", "ReporteSeleccion")');
+        });
+
+
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
         $('#btnBuscar').click(function () {
@@ -413,7 +419,7 @@
             <div class="grilla-opciones">
                 <div class="opciones">
                    
-                    <a  id="btnPDF" class="btn" href="@Url.Action("Index", "SolicitudConsulta")">PDF</a>   
+                    <a  id="btnPDF" class="btn" >PDF</a>   
 
                     @*ListaReporteSeleccion*@
                     <a  id="btnExcel" class="btn" href="@Url.Action("ListaReporteSeleccion", "ReporteSeleccion")">EXCEL</a>  

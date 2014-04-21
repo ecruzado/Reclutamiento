@@ -270,6 +270,12 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\ReporteSeleccion.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReporteSeleccion.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reportes\Intranet\dsCvPostulante.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -284,6 +290,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\DtReporteSeleccion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
       <AutoGen>True</AutoGen>
@@ -527,6 +538,17 @@
     <Content Include="Reportes\Intranet\dsExamenPostulante.xss">
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
     </Content>
+    <Content Include="Reportes\Intranet\DtReporteSeleccion.xsc">
+      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\DtReporteSeleccion.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DtReporteSeleccion.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\DtReporteSeleccion.xss">
+      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\grid.locale-es.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -633,6 +655,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReporteSeleccion.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Intranet\ExamenPostulanteReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ExamenPostulanteReport.cs</LastGenOutput>
