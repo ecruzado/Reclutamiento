@@ -32,6 +32,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IPostulanteRepository _postulanteRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
+        private IReemplazoRepository _reemplazoRepository;
 
 
 
@@ -40,7 +41,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                          ICvPostulanteRepository cvPostulanteRepository,
                                         IReclutamientoPersonaRepository reclutamientoPersonaRepository,
             IPostulanteRepository postulanteRepository,
-            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
+            ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
+            IReemplazoRepository reemplazoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -49,6 +51,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _postulanteRepository = postulanteRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
+            _reemplazoRepository = reemplazoRepository;
         }
         
         /// <summary>
@@ -176,6 +179,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReclutaPer.FecModifica = FechaModificacion;
                     objReclutaPer.UsrModifica = UsuarioActual.NombreUsuario;
                     _reclutamientoPersonaRepository.Update(objReclutaPer);
+
+
+                    //actualiza a el reemplazo
+                    if (TipoSolicitud.Remplazo.Equals(objReclutaPer.TipSol))
+                    {
+                        List<Reemplazo> ListaReemplazo = (List<Reemplazo>)_reemplazoRepository.GetBy(x => x.IdPostulante == null && x.IdeSolReqPersonal == objReclutaPer.IdeSol);
+                        if (ListaReemplazo!=null && ListaReemplazo.Count>0)
+                        {
+                            Reemplazo objReemplazo = new Reemplazo();
+                            objReemplazo = (Reemplazo)ListaReemplazo[0];
+
+                            var obj = _reemplazoRepository.GetSingle(x => x.IdeSolReqPersonal == objReemplazo.IdeSolReqPersonal && x.IdPersona == objReemplazo.IdPersona);
+
+                            obj.IdPostulante = objReclutaPer.IdePostulante;
+                            _reemplazoRepository.Update(obj);
+                        }
+
+                    }
+
+
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se actualizo el registro";

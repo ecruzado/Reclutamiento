@@ -25,6 +25,9 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICACION");
             Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.IdPostulante, "IDPOSTULANTE");
+            Map(x => x.IdPersona, "IDPERSONA");
+
             Table("REEMPLAZOS");
 
         }

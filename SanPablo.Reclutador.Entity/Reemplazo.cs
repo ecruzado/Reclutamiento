@@ -31,6 +31,9 @@ namespace SanPablo.Reclutador.Entity
 
 
         public virtual int CodSolReqPersonal { get; set; }
+
+        public virtual int IdPostulante { get; set; }
+        
        
     }
 

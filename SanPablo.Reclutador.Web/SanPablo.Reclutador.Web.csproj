@@ -158,6 +158,7 @@
     <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ReporteSeleccionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
     <Compile Include="Areas\Intranet\Controllers\PerfilAmpliacionController.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Areas\Intranet\Models\EvaluacionesPreSeleccionadosViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\MantenimientoGeneralViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\MantenimientoCargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ReporteViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\SolicitudConsultaViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\LogSolicitudAmpliacionCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\PerfilAmpliacionViewModel.cs" />
@@ -325,6 +327,7 @@
     <Content Include="Content\images\action_search.gif" />
     <Content Include="Content\images\application.gif" />
     <Content Include="Content\images\Banner-Selección-03.png" />
+    <Content Include="Content\images\calendario.png" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\enabled.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
@@ -458,6 +461,7 @@
     <Content Include="Scripts\html5shiv-printshiv.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\ui.datepicker-es.js" />
     <Content Include="TemplateEmail\Bienvenido.htm" />
     <Content Include="TemplateEmail\EnviarSolicitud.htm" />
     <Content Include="TemplateEmail\noborrar.txt" />
@@ -485,6 +489,7 @@
     <Content Include="Areas\Intranet\Views\Evaluacion\ExamenCronometro.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\Examen.cshtml" />
     <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
+    <Content Include="Areas\Intranet\Views\ReporteSeleccion\Index.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
