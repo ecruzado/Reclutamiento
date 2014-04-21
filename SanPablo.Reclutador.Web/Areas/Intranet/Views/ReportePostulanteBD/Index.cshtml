@@ -1,0 +1,322 @@
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ReportePostulanteViewModel
+@using SanPablo.Reclutador.Entity
+
+@{
+    ViewBag.Title = "Reporte de Postulantes BD";
+}
+@section Head{
+}
+
+
+@section Scripts{
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        SanPablo.Numeros('EdadInicio');
+        SanPablo.Numeros('EdadFin');
+
+        $('#btnPDF').click(function () {
+
+
+        });
+
+
+        $('#btnBuscarPostulantes').click(function () {
+            $('#grdListPostulantesBD').trigger('reloadGrid');
+        });
+
+        $('#Registro_Desde,#Registro_Hasta').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+        });
+
+        $('#Registro_Desde,#Registro_Hasta').attr("readonly", "readonly");
+
+
+
+        $('select#Departamentos').change(function () {
+            var ideDepartamento = $(this).val();
+            $("select#Distritos").empty();
+            $("select#Distritos").append("<option value='0'> SELECCIONAR </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listarUbigeos","ReportePostulanteBD")',
+                data: { ideUbigeoPadre: ideDepartamento },
+                success: function (respuesta) {
+                    $("select#Provincias").empty();
+                    $("select#Provincias").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Provincias").append("<option value='"
+                        + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+        //Cargar Distritos
+        $('select#Provincias').change(function () {
+            var ideProvincia = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listarUbigeos","ReportePostulanteBD")',
+                data: { ideUbigeoPadre: ideProvincia },
+                success: function (respuesta) {
+                    $("select#Distritos").empty();
+                    $("select#Distritos").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#Distritos").append("<option value='"
+                        + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+
+        jQuery("#grdListPostulantesBD").jqGrid({
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
+                       { field: 'nombreCargo', data: $("#Solicitud_nombreCargo").val() },
+                       { field: 'areaEstudio', data: $("#AreasEstudio").val() },
+                       { field: 'rangoSalario', data: $("#RangosSalariales").val() },
+                       { field: 'departamento', data: $("#Departamentos").val() },
+                       { field: 'provincia', data: $("#Provincias").val() },
+                       { field: 'distrito', data: $("#Distritos").val() },
+                       { field: 'fecDesde', data: $("#Registro_Desde").val() },
+                       { field: 'fecHasta', data: $("#Registro_Hasta").val() },
+                       { field: 'EdadInicio', data: $("#EdadInicio").val() },
+                       { field: 'EdadFin', data: $("#EdadFin").val() }
+                ];
+
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
+                }
+
+                var params = { grid: migrilla };
+
+                $.ajax({
+                    url: '@Url.Action("listaPostulantesBD", "ReportePostulantes")',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdListPostulantesBD')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            },
+            colNames: ['IdePostulante','Fecha de Registro de CV','Departamento','Provincia','Distrito','Nombres y Apellidos','Telefono Móvil / Casa','Email','Cargo',
+                       'Edad','Tipo de Estudios','Área de Estudios','Rango Salarial', 'CV'],
+            colModel: [
+                    { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: true, sortable: false },
+                    { name: 'FechaRegistro', index: 'FechaRegistro', align: 'center', hidden: false, sortable: false },
+                    { name: 'Departamento', index: 'Departamento', align: 'center', hidden: false, sortable: false },
+                    { name: 'Provincia', index: 'Provincia', align: 'center', hidden: false, sortable: false },
+                    { name: 'Distrito', index: 'Distrito', align: 'center', hidden: false, sortable: false },
+                    { name: 'NombresApellidos', index: 'NombresApellidos', align: 'center', hidden: false, sortable: false },
+                    { name: 'MovilFijo', index: 'MovilFijo', align: 'center', hidden: false, sortable: false },
+                    { name: 'Email', index: 'Email', align: 'center', hidden: false, sortable: false },
+                    { name: 'Cargo', index: 'Cargo', align: 'center', hidden: false, sortable: false },
+                    { name: 'Edad', index: 'Edad', align: 'center', hidden: false, sortable: false },
+                    { name: 'TipoEstudios', index: 'TipoEstudios', align: 'center', hidden: false, sortable: false },
+                    { name: 'AreaEstudios', index: 'AreaEstudios', align: 'center', hidden: false, sortable: false },
+                    { name: 'RangoSalarial', index: 'RangoSalarial', align: 'center', hidden: false, sortable: false },
+                    { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: false, sortable: false }
+            ],
+            pager: jQuery('#grdPagerListPostulantesBD'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IdePostulante',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 350,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+
+            postData: {
+            }, loadComplete: function (data) {
+            }
+        });
+
+        
+    });
+
+
+</script>
+    }
+@using (Html.BeginForm("Index", "ReportePostulantesBD", FormMethod.Post))
+{
+   <div class="row">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>Reporte de Postulantes de BD</h5>
+            </div>
+           
+               <table class="formulario-busqueda">
+                <tr class="formulario-fila">
+                    
+                    <td class="span5" style="width:420px" >
+                        <div class="">
+                            <label class="control-label" for="selectError">Busqueda rápida </label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model=>model.Solicitud.nombreCargo)
+                            </div>
+                        </div>
+                    </td>
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos))
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+               <tr class="formulario-fila">
+                    <td class="span5" style="width:420px">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Area de Estudios</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.AreasEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.AreasEstudio))
+                            </div>
+                        </div>
+                    </td>
+
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Provincia</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias))
+                            </div>
+                        </div>
+                    </td>  
+
+                </tr>
+
+                   
+               <tr class="formulario-fila">
+                    <td class="span5" style="width:420px">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
+                            </div>
+                        </div>
+                    </td>
+
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Distrito</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.Distritos, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Distritos))
+                            </div>
+                        </div>
+                    </td>  
+
+                </tr>
+                </table>
+            <table class="formulario-busqueda">
+                    <tr class="formulario-fila">
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:180px;text-align:left">Fecha de registro de CV </label>
+                            <div class="controles">
+                                
+                            </div>
+                        </div>
+                    </td>
+                    </tr>
+                </table>
+            <table class="formulario-busqueda">
+                   <tr class="formulario-fila">
+                    <td class="span5">
+                        <div class="" >
+                            <label class="control-label" for="inputSuccess" >Desde </label>
+                            <div class="controles" style="width: 300px">
+                                <input type="text" class="input-small"  id="Registro_Desde" name="Registro.Desde" placeholder=" Desde" >
+
+                                <span> Hasta </span>
+                                <input type="text" class="input-small"  id="Registro_Hasta" name="Registro.Hasta" placeholder=" Hasta">
+                            </div>
+                        </div>
+                    </td>
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:90px">Rango Edad </label>
+                            <div class =" controles">
+                                @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
+                                <span style ="width:50px">a </span> 
+                                @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
+                            </div>
+                            
+                        </div>
+                    </td>  
+
+                </tr>
+
+                <tr class="formulario-accion offset9">
+                    <td>
+                    <a id="btnBuscarPostulantes"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                    <button id ="btnLimpiar" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+
+              </table>
+             <div class="widget-title">
+                <h5>Resultado</h5>
+             </div>
+
+            <div class="form-actions">
+                <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
+                <a class="btn btn-info" id="btnEXCEL"><i class="icon-tasks  icon-white"></i> EXCEL</a>
+
+            </div>
+            <div class="tabla-datos">
+                <table id="grdListPostulantesBD">
+                </table>
+                <div id="grdPagerListPostulantesBD">
+                </div>
+            </div>
+           
+
+        </div>
+
+    </div>
+</div>
+    
+}

@@ -1079,6 +1079,69 @@
         }
 
 
+        public List<PostulanteBDReporte> ListaPostulantesBDReporte(PostulanteBDReporte postulante)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader drListaPostulantesBD;
+                PostulanteBDReporte postulanteBD;
+                List<PostulanteBDReporte> listaPostulantes;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_REPORTE_POSTULANTESBD");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nombreCargo", OracleType.VarChar).Value = postulante.Cargo;
+                lspcmd.Parameters.Add("p_areaEstudio", OracleType.VarChar).Value = postulante.AreaEstudio;
+                lspcmd.Parameters.Add("p_rangoSalario", OracleType.VarChar).Value = postulante.RangoSalarial;
+                lspcmd.Parameters.Add("p_departamento", OracleType.Number).Value = postulante.Departamento;
+                lspcmd.Parameters.Add("p_provincia", OracleType.Number).Value = postulante.Provincia;
+                lspcmd.Parameters.Add("p_distrito", OracleType.Number).Value = postulante.Distrito;
+                lspcmd.Parameters.Add("p_fecDesde", OracleType.DateTime).Value = postulante.FechaDesde;
+                lspcmd.Parameters.Add("p_fecHasta", OracleType.DateTime).Value = postulante.FechaHasta;
+                lspcmd.Parameters.Add("p_edadInicio", OracleType.Number).Value = postulante.EdadInicio;
+                lspcmd.Parameters.Add("p_edadFin", OracleType.Number).Value = postulante.EdadFin;
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaPostulantesBD = (OracleDataReader)lspcmd.ExecuteReader();
+                postulanteBD = null;
+                listaPostulantes = new List<PostulanteBDReporte>();
+
+
+                while (drListaPostulantesBD.Read())
+                {
+
+                    postulanteBD = new PostulanteBDReporte();
+                    postulanteBD.IdePostulante = Convert.ToInt32(drListaPostulantesBD["IDEPOSTULANTE"]);
+                    postulanteBD.FechaRegistro = Convert.ToDateTime(drListaPostulantesBD["FECCREACION"]);
+                    postulanteBD.Departamento = Convert.ToString(drListaPostulantesBD["DEPARTAMENTO"]);
+                    postulanteBD.Provincia = Convert.ToString(drListaPostulantesBD["PROVINCIA"]);
+                    postulanteBD.Distrito = Convert.ToString(drListaPostulantesBD["DISTRITO"]);
+                    postulanteBD.NombreCompleto = Convert.ToString(drListaPostulantesBD["NOMBREAPELLIDO"]);
+                    postulanteBD.TelefonoContacto = Convert.ToString(drListaPostulantesBD["TELEFONO"]);
+                    postulanteBD.Email = Convert.ToString(drListaPostulantesBD["CORREO"]);
+                    postulanteBD.Cargo = Convert.ToString(drListaPostulantesBD["CARGO"]);
+                    postulanteBD.Edad = Convert.ToInt32(drListaPostulantesBD["EDAD"]);
+                    postulanteBD.TipoEstudio = Convert.ToString(drListaPostulantesBD["TIPOESTUDIO"]);
+                    postulanteBD.AreaEstudio = Convert.ToString(drListaPostulantesBD["TIPOAREA"]);
+                    postulanteBD.RangoSalarial = Convert.ToString(drListaPostulantesBD["RANGOSALARIO"]);
+                    listaPostulantes.Add(postulanteBD);
+                }
+                drListaPostulantesBD.Close();
+
+                return listaPostulantes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
     }
 }
