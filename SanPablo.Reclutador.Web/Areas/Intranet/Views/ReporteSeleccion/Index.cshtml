@@ -23,6 +23,9 @@
 
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
+        $('#btnBuscar').click(function () {
+            $('#grdListContratados').trigger('reloadGrid');
+        });
 
 
         $('select#ReporteSol_idSede').change(function () {
@@ -110,7 +113,7 @@
             });
           })
 
-        @*jQuery("#grdListContratados").jqGrid({
+        jQuery("#grdListContratados").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -128,8 +131,9 @@
                        { field: 'nIdDependencia', data: $("#ReporteSol_idDependencia").val() },
                        { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
                        { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
-                       { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() }
-                       
+                       { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() },
+                       { field: 'nIdSede', data: $("#ReporteSol_idSede").val() }
+
                 ];
 
                 if (migrilla._search == true) {
@@ -148,7 +152,7 @@
                     async: false,
                     success: function (data, st) {
                         if (st == 'success') {
-                            var jq = $('#grdListRol')[0];
+                            var jq = $('#grdListContratados')[0];
                             jq.addJSONData(data);
                         }
                     },
@@ -159,30 +163,31 @@
             },
             colNames: [
                   'IdeSolReqpersonal',
-                  'EstadoProceso',
-                  'FechaRequerimiento',
-                  'DesSede',
-                  'DesDependencia',
-                  'DesDepartamento',
-                  'DesArea',
-                  'Cargo',
-                  'Jefe',
-                  'Tipsol',
-                  'Reemplaza',
-                  'FecReemplazo',
-                  'MotivoReemplazo',
-                  'AnalistaResp',
-                  'PersonaIngresa',
-                  'FechaContratacion',
-                  'Dias',
-                  'Numdocumento',
-                  'Fono',
-                  'ObsPsicologo',
-                  'ObsEntrevista',
-                  'FecSuceso'
+                  'ESTADO DEL PROCESO',
+                  'FECHA DE REQUERIMIENTO',
+                  'SEDE',
+                  'DEPENDENCIA',
+                  'DEPARTAMENTO',
+                  'AREA',
+                  'PUESTO',
+                  'JEFE',
+                  'TIPO DE REQUERIMIENTO ',
+                  'REEMPAZA A',
+                  'F. CESE o REEMPLAZO',
+                  'MOTIVO DE REEMPLAZO',
+                  'ANALISTA RESPONSABLE',
+                  'P. INGRESA (APELLIDOS Y NOMBRE)',
+                  'FECHA DE CONTRATACIÓN',
+                  'TIEMPO ESPERA (DIAS)',
+                  'DNI',
+                  'CEL. / FIJO',
+                  'OBSERVACIONES DEL PSICOLOGO',
+                  'OBSERVACIONES DE LA ENTREVISTA',
+                  'FECSUCESO',
+                  'MOTIVO DE FINALIZACIÓN DEL REQ.'
             ],
             colModel: [
-                    { name: 'IdeSolReqpersonal', index: 'IdeSolReqpersonal', align: 'center', hidden: false, sortable: false },
+                    { name: 'IdeSolReqpersonal', index: 'IdeSolReqpersonal', align: 'center', hidden: true, sortable: false },
                     { name: 'EstadoProceso', index: 'EstadoProceso', align: 'center', hidden: false, sortable: false },
                     { name: 'FechaRequerimiento', index: 'FechaRequerimiento', align: 'center', hidden: false, sortable: false },
                     { name: 'DesSede', index: 'DesSede', align: 'center', hidden: false, sortable: false },
@@ -198,14 +203,13 @@
                     { name: 'AnalistaResp', index: 'AnalistaResp', align: 'center', hidden: false, sortable: false },
                     { name: 'PersonaIngresa', index: 'PersonaIngresa', align: 'center', hidden: false, sortable: false },
                     { name: 'FechaContratacion', index: 'FechaContratacion', align: 'center', hidden: false, sortable: false },
-                    { name: 'FechaContratacion', index: 'FechaContratacion', align: 'center', hidden: false, sortable: false },
                     { name: 'Dias', index: 'Dias', align: 'center', hidden: false, sortable: false },
                     { name: 'Numdocumento', index: 'Numdocumento', align: 'center', hidden: false, sortable: false },
                     { name: 'Fono', index: 'Fono', align: 'center', hidden: false, sortable: false },
-                    { name: 'Fono', index: 'Fono', align: 'center', hidden: false, sortable: false },
                     { name: 'ObsPsicologo', index: 'ObsPsicologo', align: 'center', hidden: false, sortable: false },
                     { name: 'ObsEntrevista', index: 'ObsEntrevista', align: 'center', hidden: false, sortable: false },
-                    { name: 'FecSuceso', index: 'FecSuceso', align: 'center', hidden: false, sortable: false }
+                    { name: 'FecSuceso', index: 'FecSuceso', align: 'center', hidden: true, sortable: false },
+                    { name: 'MotivoCirreSol', index: 'MotivoCirreSol', align: 'center', hidden: false, sortable: false }
 
             ],
                 pager: jQuery('#grdPagerListContratados'),
@@ -225,7 +229,7 @@
             postData: {
             }, loadComplete: function (data) {
             }
-        });*@
+        });
 
         
     });
@@ -393,8 +397,8 @@
 
                 <tr class="formulario-accion offset9">
                     <td>
-                    <a id="btnBuscarSolicitud"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    <a id="btnBuscar"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                    <button id ="btnLimpiar" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
                     </td>
                 </tr>
 
@@ -405,6 +409,19 @@
                 </tr>
 
               </table>
+
+            <div class="grilla-opciones">
+                <div class="opciones">
+                   
+                    <a  id="btnPDF" class="btn" href="@Url.Action("Index", "SolicitudConsulta")">PDF</a>   
+
+                    @*ListaReporteSeleccion*@
+                    <a  id="btnExcel" class="btn" href="@Url.Action("ListaReporteSeleccion", "ReporteSeleccion")">EXCEL</a>  
+                                                   
+                </div>
+                <div style="clear:both"></div>
+            </div>  
+
 
             <div class="tabla-datos">
                 <table id="grdListContratados">

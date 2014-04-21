@@ -13,7 +13,7 @@ using System.Collections;
 using NPOI.HSSF.UserModel;
 using NPOI.HPSF.Extractor;
 
-namespace HonorariosMedicos_BLL
+namespace SanPablo.Reclutador.Web.Core
 {
     public class ColumnaExcel
     {
@@ -134,6 +134,8 @@ namespace HonorariosMedicos_BLL
         public void creaHoja(string nombrePagina)
         {
             sheet = workbook.CreateSheet(nombrePagina);
+            
+            
             objCelda.Clear();
             //origenDatos.Reset();
             columnasMapeo.Clear();
@@ -318,7 +320,13 @@ namespace HonorariosMedicos_BLL
             }
         }
 
-
+        /// <summary>
+        /// agraga el detalle de la lista
+        /// </summary>
+        /// <param name="tabla">la tabla</param>
+        /// <param name="posColum">poscion de la columna</param>
+        /// <param name="desColum">descripcion de la columna</param>
+        /// <param name="orden">numero de orden de impresion</param>
         public void addDetalleLista(DataTable tabla, int posColum, string desColum, int orden)
         {
 
@@ -346,8 +354,12 @@ namespace HonorariosMedicos_BLL
             origenDatos = tabla;
 
         }
-        // imprime el detalle de los datatables
-
+        
+        /// <summary>
+        /// indica la fina inicial donde se imprime y el estilo de la letra
+        /// </summary>
+        /// <param name="fila">posicion de la fila de impresion</param>
+        /// <param name="estilo">estilo de la letra</param>
         public void imprimirCabecera(int fila, ICellStyle estilo)
         {
             int cont = 1;

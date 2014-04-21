@@ -26,6 +26,9 @@ namespace SanPablo.Reclutador.Repository.Interface
         Int32 EnviaSolicitud(SolReqPersonal obj);
         List<SolReqPersonal> GetDatosSol(SolReqPersonal obj);
         void verificaPotenciales(ReclutamientoPersona obj);
+        List<Reporte> GetListaReporteSeleccion(Reporte obj);
+
+        DataTable ListaReporteSeleccion(Reporte obj);
         
         
         /// <summary>

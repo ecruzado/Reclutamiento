@@ -159,6 +159,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual string FecSuceso { get; set; }
 
 
+        /// <summary>
+        /// Motivo de cierre de una solicitud
+        /// </summary>
+        public virtual string MotivoCirreSol { get; set; }
+
 
     }
 }
