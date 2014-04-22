@@ -30,7 +30,12 @@
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
         $('#btnBuscar').click(function () {
-            $('#grdListContratados').trigger('reloadGrid');
+
+            if (valida()) {
+
+                $('#grdListContratados').trigger('reloadGrid');
+            }
+
         });
 
 
@@ -253,8 +258,38 @@
         {
             $('#btnExcel,#btnPDF').attr("disabled", "disabled");
         }
+
+
         
     });
+
+
+    function valida() {
+
+        var fechaInicial = $('#ReporteSol_FechaInicio').val();
+        var fechaFinal = $('#ReporteSol_FechaFin').val();
+
+        if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+            alert('Las fechas son obligatorias');
+            return false;
+        }
+
+        if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+            alert("La fecha inicial no puede ser mayor que la fecha final");
+            return false;
+        }
+
+        dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
+        if (dif >= 180) {
+            alert("La diferencia entre fechas no puede ser mayor a 180 días");
+            return false;
+        }
+
+        return true;
+
+    }
+
+    
 
 
 </script>
