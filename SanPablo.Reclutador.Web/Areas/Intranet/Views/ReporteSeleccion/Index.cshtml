@@ -258,9 +258,7 @@
         {
             $('#btnExcel,#btnPDF').attr("disabled", "disabled");
         }
-
-
-        
+                
     });
 
 
@@ -270,18 +268,19 @@
         var fechaFinal = $('#ReporteSol_FechaFin').val();
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
-            alert('Las fechas son obligatorias');
+           
+            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            alert("La fecha inicial no puede ser mayor que la fecha final");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
             return false;
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 180) {
-            alert("La diferencia entre fechas no puede ser mayor a 180 días");
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 180 días', "Mensaje");
             return false;
         }
 
@@ -289,7 +288,9 @@
 
     }
 
-    
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
 
 
 </script>
@@ -449,3 +450,7 @@
 </div>
     
 }
+
+<div id="divMensaje">
+	<span id="spnMensaje"></span>
+</div>

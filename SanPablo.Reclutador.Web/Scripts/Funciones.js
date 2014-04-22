@@ -511,9 +511,7 @@ Funciones = {
             if (String.fromCharCode(e.keyCode).match(/[^0-9.]/g)) return false;
         });
     },
-
-
-    diasEntreFechas : function(fechaInicio, fechaFin) {
+    diasEntreFechas: function (fechaInicio, fechaFin) {
         var diasDiferencia = "";
         var UN_DIA = 1000 * 60 * 60 * 24;
 
