@@ -5,6 +5,13 @@
     ViewBag.Title = "Reporte Seleccion";
 }
 @section Head{
+    <style type="text/css">
+        th.ui-th-column div {
+            white-space: normal !important;
+            height: auto !important;
+            padding: 2px;
+        }
+    </style>
 }
 
 
@@ -258,6 +265,27 @@
         {
             $('#btnExcel,#btnPDF').attr("disabled", "disabled");
         }
+
+
+        var grid = $("#grdListContratados"), headerRow, rowHight, resizeSpanHeight;
+
+        // get the header row which contains
+        headerRow = grid.closest("div.ui-jqgrid-view")
+            .find("table.ui-jqgrid-htable>thead>tr.ui-jqgrid-labels");
+
+        // increase the height of the resizing span
+        resizeSpanHeight = 'height: ' + headerRow.height() +
+            'px !important; cursor: col-resize;';
+        headerRow.find("span.ui-jqgrid-resize").each(function () {
+            this.style.cssText = resizeSpanHeight;
+        });
+
+        // set position of the dive with the column header text to the middle
+        rowHight = headerRow.height();
+        headerRow.find("div.ui-jqgrid-sortable").each(function () {
+            var ts = $(this);
+            ts.css('top', (rowHight - ts.outerHeight()) / 2 + 'px');
+        });
                 
     });
 
