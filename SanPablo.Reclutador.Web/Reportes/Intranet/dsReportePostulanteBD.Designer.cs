@@ -301,7 +301,11 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             private global::System.Data.DataColumn columnTIPOESTUDIO;
             
+            private global::System.Data.DataColumn columnTIPAREA;
+            
             private global::System.Data.DataColumn columnTIPOAREA;
+            
+            private global::System.Data.DataColumn columnTIPSALARIO;
             
             private global::System.Data.DataColumn columnRANGOSALARIO;
             
@@ -428,9 +432,25 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TIPAREAColumn {
+                get {
+                    return this.columnTIPAREA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn TIPOAREAColumn {
                 get {
                     return this.columnTIPOAREA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TIPSALARIOColumn {
+                get {
+                    return this.columnTIPSALARIO;
                 }
             }
             
@@ -479,7 +499,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtPostulanteBDRow AdddtPostulanteBDRow(int IDEPOSTULANTE, System.DateTime FECCREACION, string DEPARTAMENTO, string PROVINCIA, string DISTRITO, string NOMBREAPELLIDO, string TELEFONO, string CORREO, string CARGO, int EDAD, string TIPOESTUDIO, string TIPOAREA, string RANGOSALARIO) {
+            public dtPostulanteBDRow AdddtPostulanteBDRow(int IDEPOSTULANTE, string FECCREACION, string DEPARTAMENTO, string PROVINCIA, string DISTRITO, string NOMBREAPELLIDO, string TELEFONO, string CORREO, string CARGO, int EDAD, string TIPOESTUDIO, string TIPAREA, string TIPOAREA, string TIPSALARIO, string RANGOSALARIO) {
                 dtPostulanteBDRow rowdtPostulanteBDRow = ((dtPostulanteBDRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         IDEPOSTULANTE,
@@ -493,7 +513,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         CARGO,
                         EDAD,
                         TIPOESTUDIO,
+                        TIPAREA,
                         TIPOAREA,
+                        TIPSALARIO,
                         RANGOSALARIO};
                 rowdtPostulanteBDRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtPostulanteBDRow);
@@ -528,7 +550,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 this.columnCARGO = base.Columns["CARGO"];
                 this.columnEDAD = base.Columns["EDAD"];
                 this.columnTIPOESTUDIO = base.Columns["TIPOESTUDIO"];
+                this.columnTIPAREA = base.Columns["TIPAREA"];
                 this.columnTIPOAREA = base.Columns["TIPOAREA"];
+                this.columnTIPSALARIO = base.Columns["TIPSALARIO"];
                 this.columnRANGOSALARIO = base.Columns["RANGOSALARIO"];
             }
             
@@ -537,7 +561,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             private void InitClass() {
                 this.columnIDEPOSTULANTE = new global::System.Data.DataColumn("IDEPOSTULANTE", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIDEPOSTULANTE);
-                this.columnFECCREACION = new global::System.Data.DataColumn("FECCREACION", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                this.columnFECCREACION = new global::System.Data.DataColumn("FECCREACION", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFECCREACION);
                 this.columnDEPARTAMENTO = new global::System.Data.DataColumn("DEPARTAMENTO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDEPARTAMENTO);
@@ -557,8 +581,12 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnEDAD);
                 this.columnTIPOESTUDIO = new global::System.Data.DataColumn("TIPOESTUDIO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTIPOESTUDIO);
+                this.columnTIPAREA = new global::System.Data.DataColumn("TIPAREA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIPAREA);
                 this.columnTIPOAREA = new global::System.Data.DataColumn("TIPOAREA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTIPOAREA);
+                this.columnTIPSALARIO = new global::System.Data.DataColumn("TIPSALARIO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTIPSALARIO);
                 this.columnRANGOSALARIO = new global::System.Data.DataColumn("RANGOSALARIO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnRANGOSALARIO);
             }
@@ -719,10 +747,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public System.DateTime FECCREACION {
+            public string FECCREACION {
                 get {
                     try {
-                        return ((global::System.DateTime)(this[this.tabledtPostulanteBD.FECCREACIONColumn]));
+                        return ((string)(this[this.tabledtPostulanteBD.FECCREACIONColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'FECCREACION\' in table \'dtPostulanteBD\' is DBNull.", e);
@@ -879,6 +907,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TIPAREA {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtPostulanteBD.TIPAREAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIPAREA\' in table \'dtPostulanteBD\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtPostulanteBD.TIPAREAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string TIPOAREA {
                 get {
                     try {
@@ -890,6 +934,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 }
                 set {
                     this[this.tabledtPostulanteBD.TIPOAREAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TIPSALARIO {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtPostulanteBD.TIPSALARIOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TIPSALARIO\' in table \'dtPostulanteBD\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtPostulanteBD.TIPSALARIOColumn] = value;
                 }
             }
             
@@ -1043,6 +1103,18 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTIPAREANull() {
+                return this.IsNull(this.tabledtPostulanteBD.TIPAREAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIPAREANull() {
+                this[this.tabledtPostulanteBD.TIPAREAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsTIPOAREANull() {
                 return this.IsNull(this.tabledtPostulanteBD.TIPOAREAColumn);
             }
@@ -1051,6 +1123,18 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetTIPOAREANull() {
                 this[this.tabledtPostulanteBD.TIPOAREAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTIPSALARIONull() {
+                return this.IsNull(this.tabledtPostulanteBD.TIPSALARIOColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTIPSALARIONull() {
+                this[this.tabledtPostulanteBD.TIPSALARIOColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

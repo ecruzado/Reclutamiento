@@ -1082,12 +1082,19 @@
         public List<PostulanteBDReporte> ListaPostulantesBDReporte(PostulanteBDReporte postulante)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            string cFechaDesde = String.Format("{0:dd/MM/yyyy}", postulante.FechaDesde);
+            string cFechaHasta = String.Format("{0:dd/MM/yyyy}", postulante.FechaHasta);
+
             try
             {
 
                 IDataReader drListaPostulantesBD;
                 PostulanteBDReporte postulanteBD;
                 List<PostulanteBDReporte> listaPostulantes;
+                postulanteBD = null;
+                listaPostulantes = new List<PostulanteBDReporte>();
+
                 lcon.Open();
                 OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_REPORTE_POSTULANTESBD");
                 lspcmd.CommandType = CommandType.StoredProcedure;
@@ -1096,26 +1103,23 @@
                 lspcmd.Parameters.Add("p_nombreCargo", OracleType.VarChar).Value = postulante.Cargo;
                 lspcmd.Parameters.Add("p_areaEstudio", OracleType.VarChar).Value = postulante.AreaEstudio;
                 lspcmd.Parameters.Add("p_rangoSalario", OracleType.VarChar).Value = postulante.RangoSalarial;
-                lspcmd.Parameters.Add("p_departamento", OracleType.Number).Value = postulante.Departamento;
-                lspcmd.Parameters.Add("p_provincia", OracleType.Number).Value = postulante.Provincia;
-                lspcmd.Parameters.Add("p_distrito", OracleType.Number).Value = postulante.Distrito;
-                lspcmd.Parameters.Add("p_fecDesde", OracleType.DateTime).Value = postulante.FechaDesde;
-                lspcmd.Parameters.Add("p_fecHasta", OracleType.DateTime).Value = postulante.FechaHasta;
+                lspcmd.Parameters.Add("p_departamento", OracleType.Number).Value = postulante.IdeDepartamento;
+                lspcmd.Parameters.Add("p_provincia", OracleType.Number).Value = postulante.IdeProvincia;
+                lspcmd.Parameters.Add("p_distrito", OracleType.Number).Value = postulante.IdeDistrito;
+                lspcmd.Parameters.Add("p_fecDesde", OracleType.VarChar).Value = cFechaDesde;
+                lspcmd.Parameters.Add("p_fecHasta", OracleType.VarChar).Value = cFechaHasta;
                 lspcmd.Parameters.Add("p_edadInicio", OracleType.Number).Value = postulante.EdadInicio;
                 lspcmd.Parameters.Add("p_edadFin", OracleType.Number).Value = postulante.EdadFin;
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 drListaPostulantesBD = (OracleDataReader)lspcmd.ExecuteReader();
-                postulanteBD = null;
-                listaPostulantes = new List<PostulanteBDReporte>();
-
-
+                
                 while (drListaPostulantesBD.Read())
                 {
 
                     postulanteBD = new PostulanteBDReporte();
                     postulanteBD.IdePostulante = Convert.ToInt32(drListaPostulantesBD["IDEPOSTULANTE"]);
-                    postulanteBD.FechaRegistro = Convert.ToDateTime(drListaPostulantesBD["FECCREACION"]);
+                    postulanteBD.FechaRegistro = Convert.ToString(drListaPostulantesBD["FECCREACION"]);
                     postulanteBD.Departamento = Convert.ToString(drListaPostulantesBD["DEPARTAMENTO"]);
                     postulanteBD.Provincia = Convert.ToString(drListaPostulantesBD["PROVINCIA"]);
                     postulanteBD.Distrito = Convert.ToString(drListaPostulantesBD["DISTRITO"]);
@@ -1132,6 +1136,53 @@
                 drListaPostulantesBD.Close();
 
                 return listaPostulantes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+        public DataTable DtPostulantesBDReporte(PostulanteBDReporte postulante)
+        {
+
+            string cFechaDesde = String.Format("{0:dd/MM/yyyy}", postulante.FechaDesde);
+            string cFechaHasta = String.Format("{0:dd/MM/yyyy}", postulante.FechaHasta);
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_REPORTE_POSTULANTESBD");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nombreCargo", OracleType.VarChar).Value = postulante.Cargo;
+                lspcmd.Parameters.Add("p_areaEstudio", OracleType.VarChar).Value = postulante.AreaEstudio;
+                lspcmd.Parameters.Add("p_rangoSalario", OracleType.VarChar).Value = postulante.RangoSalarial;
+                lspcmd.Parameters.Add("p_departamento", OracleType.Number).Value = postulante.IdeDepartamento;
+                lspcmd.Parameters.Add("p_provincia", OracleType.Number).Value = postulante.IdeProvincia;
+                lspcmd.Parameters.Add("p_distrito", OracleType.Number).Value = postulante.IdeDistrito;
+                lspcmd.Parameters.Add("p_fecDesde", OracleType.VarChar).Value = cFechaDesde;
+                lspcmd.Parameters.Add("p_fecHasta", OracleType.VarChar).Value = cFechaHasta;
+                lspcmd.Parameters.Add("p_edadInicio", OracleType.Number).Value = postulante.EdadInicio;
+                lspcmd.Parameters.Add("p_edadFin", OracleType.Number).Value = postulante.EdadFin;
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter daResultado = new OracleDataAdapter(lspcmd);
+                DataTable dtResultado = new DataTable();
+
+                daResultado.Fill(dtResultado);
+                daResultado.Dispose();
+                return dtResultado;
+
+
             }
             catch (Exception ex)
             {

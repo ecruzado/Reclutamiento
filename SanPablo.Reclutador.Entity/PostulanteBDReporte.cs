@@ -13,11 +13,11 @@ namespace SanPablo.Reclutador.Entity
     {
         public virtual int IdePostulante { get; set; }
 
-        public virtual DateTime FechaRegistro { get; set; }
+        public virtual string FechaRegistro { get; set; }
         
-        public virtual DateTime FechaDesde { get; set; }
+        public virtual DateTime? FechaDesde { get; set; }
         
-        public virtual DateTime FechaHasta { get; set; }
+        public virtual DateTime? FechaHasta { get; set; }
 
         public virtual string Departamento { get; set; }
         
@@ -25,11 +25,11 @@ namespace SanPablo.Reclutador.Entity
         
         public virtual string Distrito { get; set; }
 
-        public virtual int IdeDepartamento { get; set; }
+        public virtual int? IdeDepartamento { get; set; }
 
-        public virtual int IdeProvincia { get; set; }
+        public virtual int? IdeProvincia { get; set; }
 
-        public virtual int IdeDistrito { get; set; }
+        public virtual int? IdeDistrito { get; set; }
         
         public virtual string NombreCompleto { get; set; }
         
@@ -39,11 +39,11 @@ namespace SanPablo.Reclutador.Entity
         
         public virtual string Cargo { get; set; }
         
-        public virtual int Edad { get; set; }
+        public virtual int? Edad { get; set; }
 
-        public virtual int EdadInicio { get; set; }
+        public virtual int? EdadInicio { get; set; }
 
-        public virtual int EdadFin { get; set; }
+        public virtual int? EdadFin { get; set; }
         
         public virtual string TipoEstudio { get; set; }
         

@@ -18,8 +18,7 @@
         SanPablo.Numeros('EdadFin');
 
         $('#btnPDF').click(function () {
-
-
+           window.open('@Url.Action("ObtenerReportePDF", "ReportePostulanteBD")');
         });
 
 
@@ -111,7 +110,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("listaPostulantesBD", "ReportePostulantes")',
+                    url: '@Url.Action("listaPostulantesBD", "ReportePostulanteBD")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -303,7 +302,7 @@
 
             <div class="form-actions">
                 <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
-                <a class="btn btn-info" id="btnEXCEL"><i class="icon-tasks  icon-white"></i> EXCEL</a>
+                <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulanteBD")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
 
             </div>
             <div class="tabla-datos">

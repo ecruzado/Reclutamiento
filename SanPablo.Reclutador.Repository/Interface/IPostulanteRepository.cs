@@ -49,6 +49,13 @@
         /// <returns></returns>
         List<PostulanteBDReporte> ListaPostulantesBDReporte(PostulanteBDReporte postulante);
 
+        /// <summary>
+        /// data Table  de postulantes BD
+        /// </summary>
+        /// <param name="postulante"></param>
+        /// <returns></returns>
+        DataTable DtPostulantesBDReporte(PostulanteBDReporte postulante);
+
     }
 
 

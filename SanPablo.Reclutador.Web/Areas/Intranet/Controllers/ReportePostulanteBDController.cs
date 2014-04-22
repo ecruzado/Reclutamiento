@@ -1,10 +1,12 @@
 ﻿namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 {
-    
+
+    using CrystalDecisions.CrystalReports.Engine;
     using FluentValidation;
     using FluentValidation.Results;
     using Newtonsoft.Json;
     using NHibernate.Criterion;
+    using NPOI.SS.UserModel;
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Entity.Validation;
     using SanPablo.Reclutador.Repository.Interface;
@@ -14,6 +16,7 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -77,8 +80,8 @@
 
 
                 postulanteBD.Cargo = (grid.rules[0].data == null ? "" : grid.rules[0].data);
-                postulanteBD.AreaEstudio = (grid.rules[1].data == null ? "" : grid.rules[1].data);
-                postulanteBD.RangoSalarial = (grid.rules[2].data == null ? "" : grid.rules[2].data);
+                postulanteBD.AreaEstudio = (grid.rules[1].data == "0" ? "" : grid.rules[1].data);
+                postulanteBD.RangoSalarial = (grid.rules[2].data == "0" ? "" : grid.rules[2].data);
 
                 postulanteBD.IdeDepartamento = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
                 postulanteBD.IdeProvincia = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
@@ -91,7 +94,9 @@
                 }
 
                 postulanteBD.EdadInicio = (grid.rules[8].data == null ? 0 : Convert.ToInt32(grid.rules[8].data));
-                postulanteBD.EdadFin = (grid.rules[9].data == null ? 0 : Convert.ToInt32(grid.rules[9].data));
+                postulanteBD.EdadFin = (grid.rules[9].data == null ? 100 : Convert.ToInt32(grid.rules[9].data));
+
+                Session[ConstanteSesion.DatosReporte] = postulanteBD;
 
                 lista = _postulanteRepository.ListaPostulantesBDReporte(postulanteBD);
 
@@ -113,11 +118,11 @@
                                 item.TelefonoContacto==null?"":item.TelefonoContacto.ToString(),
                                 item.Email==null?"":item.Email,
                                 item.Cargo==null?"":item.Cargo,
-                                item.Edad==null?"":item.Edad.ToString(),
+                                item.Edad==0?"":item.Edad.ToString(),
                                 item.TipoEstudio==null?"":item.TipoEstudio,
                                 item.AreaEstudio==null?"":item.AreaEstudio,
                                 item.RangoSalarial==null?"":item.RangoSalarial,
-                                item.IdePostulante==null?"":item.IdePostulante.ToString()
+                                item.IdePostulante==0?"":item.IdePostulante.ToString()
                             }
                 }).ToArray();
 
@@ -181,5 +186,130 @@
 
         }
 
+        /// <summary>
+        /// Obtiene el reporte en formato PDF
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ObtenerReportePDF()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
+            ReportDocument reporte = new ReportDocument();
+            MemoryStream memory;
+
+            PostulanteBDReporte postulanteReporte = new PostulanteBDReporte();
+
+            try
+            {
+                postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
+
+                DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ReportePostulanteBD.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                reporte.Load(fullPath);
+                reporte.Database.Tables["dsReportePostulanteBD"].SetDataSource(dtResultado);
+
+                memory = (MemoryStream)reporte.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            }
+            catch (Exception)
+            {
+                return MensajeError();
+            }
+            return File(memory, "application/pdf");
+        }
+
+
+        /// <summary>
+        /// genera el reporte en formato excel
+        /// </summary>
+        public void ObtenerReporteExcel()
+        {
+
+            if (Session[ConstanteSesion.DatosReporte] != null)
+            {
+                PostulanteBDReporte postulanteReporte = null;
+                postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
+                DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
+
+
+                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
+                string pathApliacion = Server.MapPath(".");
+                ReporteExcel objGeneraExcel = new ReporteExcel();
+                ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
+
+                objGeneraExcel.creaHoja("pagina 01");
+                styleTitulo = objGeneraExcel.addEstiloTitulo(true, 14, "CENTER");
+                styleCadena = objGeneraExcel.addEstiloCadena(false, 10, "LEFT");
+                styleNegrita = objGeneraExcel.addEstiloCadenaNegrita(10, "LEFT");
+                styleNumero = objGeneraExcel.addEstiloNumero(false, 10, "RIGHT");
+
+                DateTime fecha = DateTime.Now;
+
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = "\\Content\\images\\logo_san_pablo_png.png";
+                string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                string fullPath = applicationPath + directoryPath;
+                string dir = fullPath;
+
+                //numero de columnas excel
+                int cantCol = 21;
+
+                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "REPORTE DE POSTULANTES BASE DE DATOS", styleTitulo);
+
+                objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
+                objGeneraExcel.adicionaCamposCab(5, 1, "Reclutamiento y Selección de Personal", styleNegrita);
+
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
+                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
+
+                objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
+                objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
+
+                objGeneraExcel.addDetalleLista(dtResultado, 1, "FECHA DE REGISTRO DE CV", 1);
+                objGeneraExcel.addDetalleLista(dtResultado, 2, "DEPARTAMENTO", 2);
+                objGeneraExcel.addDetalleLista(dtResultado, 3, "PROVINCIA", 3);
+                objGeneraExcel.addDetalleLista(dtResultado, 4, "DISTRITO", 4);
+                objGeneraExcel.addDetalleLista(dtResultado, 5, "NOMBRES Y APELLIDOS", 5);
+                objGeneraExcel.addDetalleLista(dtResultado, 6, "CEL. / FIJO", 6);
+                objGeneraExcel.addDetalleLista(dtResultado, 7, "EMAIL", 7);
+                objGeneraExcel.addDetalleLista(dtResultado, 8, "CARGO", 8);
+                objGeneraExcel.addDetalleLista(dtResultado, 9, "EDAD", 9);
+                objGeneraExcel.addDetalleLista(dtResultado, 10, "TIPO DE ESTUDIOS", 10);
+                objGeneraExcel.addDetalleLista(dtResultado, 11, "ÁREA DE ESTUDIOS", 11);
+                objGeneraExcel.addDetalleLista(dtResultado, 12, "RANGO SALARIAL", 12);
+
+
+                // Se coloca de manera obligatoria
+                objGeneraExcel.imprimirCabecera(8, styleNegrita);
+                objGeneraExcel.imprimiDetalle(9, styleCadena);
+
+
+                MemoryStream exportData = new MemoryStream();
+                using (exportData)
+                {
+                    exportData = objGeneraExcel.imprimeExcel(exportData);
+                    string saveAsFileName = string.Format("Reporte Postulantes BD-{0:d}.xls", DateTime.Now).Replace("/", "-");
+
+                    Response.ContentType = "application/vnd.ms-excel";
+                    Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", saveAsFileName));
+                    Response.Clear();
+                    Response.BinaryWrite(exportData.GetBuffer());
+                    Response.End();
+
+                }
+            }
+        }  
+
     }
+
 }
