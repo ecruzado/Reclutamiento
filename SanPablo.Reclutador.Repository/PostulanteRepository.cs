@@ -1119,7 +1119,7 @@
 
                     postulanteBD = new PostulanteBDReporte();
                     postulanteBD.IdePostulante = Convert.ToInt32(drListaPostulantesBD["IDEPOSTULANTE"]);
-                    postulanteBD.FechaRegistro = Convert.ToString(drListaPostulantesBD["FECCREACION"]);
+                    postulanteBD.FechaRegistro = String.Format("{0:dd/MM/yyyy}", drListaPostulantesBD["FECCREACION"]);
                     postulanteBD.Departamento = Convert.ToString(drListaPostulantesBD["DEPARTAMENTO"]);
                     postulanteBD.Provincia = Convert.ToString(drListaPostulantesBD["PROVINCIA"]);
                     postulanteBD.Distrito = Convert.ToString(drListaPostulantesBD["DISTRITO"]);

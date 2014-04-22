@@ -32,13 +32,15 @@
         private ISedeRepository _sedeRepository;
         private IUbigeoRepository _ubigeoRepository;
         private IPostulanteRepository _postulanteRepository;
+        private ICargoRepository _cargoRepository;
 
         public ReportePostulanteBDController(IDetalleGeneralRepository detalleGeneralRepository,
-                                           ISolReqPersonalRepository solReqPersonalRepository,
-                                           IUsuarioRepository usuarioRepository,
-                                           ISedeRepository sedeRepository,
-                                           IUbigeoRepository ubigeoRepository,
-                                           IPostulanteRepository postulanteRepository)
+                                             ISolReqPersonalRepository solReqPersonalRepository,
+                                             IUsuarioRepository usuarioRepository,
+                                             ISedeRepository sedeRepository,
+                                             IUbigeoRepository ubigeoRepository,
+                                             IPostulanteRepository postulanteRepository,
+                                             ICargoRepository cargoRepository)
         {
             _detalleGeneralRepository = detalleGeneralRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
@@ -46,6 +48,7 @@
             _sedeRepository = sedeRepository;
             _ubigeoRepository = ubigeoRepository;
             _postulanteRepository = postulanteRepository;
+            _cargoRepository = cargoRepository;
         }
 
         /// <summary>
@@ -100,6 +103,7 @@
 
                 lista = _postulanteRepository.ListaPostulantesBDReporte(postulanteBD);
 
+                
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
@@ -211,7 +215,7 @@
                 fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
 
                 reporte.Load(fullPath);
-                reporte.Database.Tables["dsReportePostulanteBD"].SetDataSource(dtResultado);
+                reporte.Database.Tables["dtPostulanteBD"].SetDataSource(dtResultado);
 
                 memory = (MemoryStream)reporte.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
@@ -308,7 +312,27 @@
 
                 }
             }
-        }  
+        }
+
+        public ActionResult autoCompletarCargo(string query)
+        {
+            var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+            query = query.Replace(" ", "");
+            if (query.Length > 1)
+            {
+                int op = query.LastIndexOf(",");
+                query = query.Substring(op + 1);
+            }
+            //List<Cargo> obj = new List<Cargo>();
+            var obj = _cargoRepository.GetBy(x => x.IdeSede == ideSede);
+
+            var users = (from u in obj
+                         where u.NombreCargo.Contains(query)
+                         select u.NombreCargo).Distinct().ToArray();
+            return Json(users, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 
