@@ -428,10 +428,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 DataTable dtReporteSeleccion = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
 
+                Double totalDias = dtReporteSeleccion.AsEnumerable().Where(a => a["DIAS"] != null).Count();
+
+                object sumObject;
+                sumObject = dtReporteSeleccion.Compute("Sum(DIAS)", "");
+                int SumDias = Convert.ToInt32(sumObject);
 
 
+                Double Promedio = 0;
 
-
+                if (totalDias > 0 && SumDias > 0)
+                {
+                    Promedio = (SumDias / totalDias);
+                }
+                
+                
 
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
                 string pathApliacion = Server.MapPath(".");
@@ -460,6 +471,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
                 objGeneraExcel.adicionaCamposCab(5, 1, "Sistema de Reclutamiento de Personal", styleNegrita);
+                objGeneraExcel.adicionaCamposCab(6, 1, "Promedio de Atencion : "+String.Format("{0:0.##}", Promedio), styleNegrita);
+
+
+
 
                 //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
                 //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);

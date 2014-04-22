@@ -3,6 +3,11 @@
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
+
+
+
+
+
 Funciones = {
    
     ShowElement: function (elemento) {
@@ -505,5 +510,67 @@ Funciones = {
         $this.keypress(function (e) {
             if (String.fromCharCode(e.keyCode).match(/[^0-9.]/g)) return false;
         });
+    },
+    diasEntreFechas: function (fechaInicio, fechaFin) {
+        var diasDiferencia = "";
+        var UN_DIA = 1000 * 60 * 60 * 24;
+
+        if (fechaInicio != "" && fechaFin != "") {
+            var anhoFechaInicio = parseInt(fechaInicio.substr(6, 4));
+            var mesFechaInicio = parseFloat(fechaInicio.substr(3, 2)) - 1;
+            var diaFechaInicio = parseInt(fechaInicio.substr(0, 2));
+            var anhoFechaFin = parseInt(fechaFin.substr(6, 4));
+            var mesFechaFin = parseFloat(fechaFin.substr(3, 2)) - 1;
+            var diaFechaFin = parseInt(fechaFin.substr(0, 2));
+
+            var dteInicio = new Date(anhoFechaInicio, mesFechaInicio, diaFechaInicio);
+            var dteFin = new Date(anhoFechaFin, mesFechaFin, diaFechaFin);
+
+            var millisInicio = dteInicio.getTime();
+            var millisFin = dteFin.getTime();
+
+            var millisDiferencia = Math.abs(millisFin - millisInicio);
+
+            var diasDiferencia = Math.round(millisDiferencia / UN_DIA);
+        }
+
+        return diasDiferencia;
+    },
+
+    compareDate: function (fechamenor, fechamayor) {
+        var dtCh = "/";
+        var minYear = 1900;
+        var maxYear = 2100;
+
+        var valor = 0
+
+        var pos1 = fechamenor.indexOf(dtCh)
+        var pos2 = fechamenor.indexOf(dtCh, pos1 + 1)
+        var strDayMe = fechamenor.substring(0, pos1)
+        var strMonthMe = fechamenor.substring(pos1 + 1, pos2)
+        var strYearMe = fechamenor.substring(pos2 + 1)
+
+        var pos3 = fechamayor.indexOf(dtCh)
+        var pos4 = fechamayor.indexOf(dtCh, pos3 + 1)
+        var strDayMa = fechamayor.substring(0, pos3)
+        var strMonthMa = fechamayor.substring(pos3 + 1, pos4)
+        var strYearMa = fechamayor.substring(pos4 + 1)
+
+        var fecMenor = strYearMe + strMonthMe + strDayMe
+        var fecMayor = strYearMa + strMonthMa + strDayMa
+
+        if (fecMenor == fecMayor) {
+            valor = 0
+        } else {
+            if (fecMenor < fecMayor) {
+                valor = 1
+            } else {
+                valor = -1
+            }
+        }
+        return valor
     }
+
+
+
 };

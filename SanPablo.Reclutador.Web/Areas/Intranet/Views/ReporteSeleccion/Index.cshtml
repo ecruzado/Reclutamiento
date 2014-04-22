@@ -5,6 +5,13 @@
     ViewBag.Title = "Reporte Seleccion";
 }
 @section Head{
+    <style type="text/css">
+        th.ui-th-column div {
+            white-space: normal !important;
+            height: auto !important;
+            padding: 2px;
+        }
+    </style>
 }
 
 
@@ -30,7 +37,12 @@
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
         $('#btnBuscar').click(function () {
-            $('#grdListContratados').trigger('reloadGrid');
+
+            if (valida()) {
+
+                $('#grdListContratados').trigger('reloadGrid');
+            }
+
         });
 
 
@@ -218,7 +230,7 @@
                     { name: 'MotivoCirreSol', index: 'MotivoCirreSol', align: 'center', hidden: false, sortable: false }
 
             ],
-                pager: jQuery('#grdPagerListContratados'),
+            pager: jQuery('#grdPagerListContratados'),
             rowNum: 10,
             rowList: [10, 30, 50],
             autowidth: true,
@@ -234,11 +246,79 @@
 
             postData: {
             }, loadComplete: function (data) {
+
+                
+
             }
         });
 
-        
+
+        var dato = $("#grdListContratados").getGridParam("reccount");
+
+        if (dato > 0)
+        {
+            $("#btnPDF").removeAttr('disabled');
+            $("#btnExcel").removeAttr('disabled');
+           
+        }
+        else
+        {
+            $('#btnExcel,#btnPDF').attr("disabled", "disabled");
+        }
+
+
+        var grid = $("#grdListContratados"), headerRow, rowHight, resizeSpanHeight;
+
+        // get the header row which contains
+        headerRow = grid.closest("div.ui-jqgrid-view")
+            .find("table.ui-jqgrid-htable>thead>tr.ui-jqgrid-labels");
+
+        // increase the height of the resizing span
+        resizeSpanHeight = 'height: ' + headerRow.height() +
+            'px !important; cursor: col-resize;';
+        headerRow.find("span.ui-jqgrid-resize").each(function () {
+            this.style.cssText = resizeSpanHeight;
+        });
+
+        // set position of the dive with the column header text to the middle
+        rowHight = headerRow.height();
+        headerRow.find("div.ui-jqgrid-sortable").each(function () {
+            var ts = $(this);
+            ts.css('top', (rowHight - ts.outerHeight()) / 2 + 'px');
+        });
+                
     });
+
+
+    function valida() {
+
+        var fechaInicial = $('#ReporteSol_FechaInicio').val();
+        var fechaFinal = $('#ReporteSol_FechaFin').val();
+
+        if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+           
+            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            return false;
+        }
+
+        if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+            return false;
+        }
+
+        dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
+        if (dif >= 180) {
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 180 días', "Mensaje");
+            return false;
+        }
+
+        return true;
+
+    }
+
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
 
 
 </script>
@@ -356,51 +436,6 @@
                     </td>
                 </tr>
 
-
-
-                    @*
-                <tr class="formulario-fila">
-                    
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
-                            <div class="controles">
-                                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Departamentos))
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Etapa</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr class="formulario-fila">
-                   
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Área</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.Estados, new SelectList(Model.Estados, "Valor", "Descripcion", Model.Estados))
-                            </div>
-                        </div>
-                    </td>
-                </tr>*@
-
                 <tr class="formulario-accion offset9">
                     <td>
                     <a id="btnBuscar"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
@@ -420,8 +455,6 @@
                 <div class="opciones">
                    
                     <a  id="btnPDF" class="btn" >PDF</a>   
-
-                    @*ListaReporteSeleccion*@
                     <a  id="btnExcel" class="btn" href="@Url.Action("ListaReporteSeleccion", "ReporteSeleccion")">EXCEL</a>  
                                                    
                 </div>
@@ -436,11 +469,7 @@
                 </div>
             </div>
             <div class="form-actions">
-                
-                @*<a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                
-                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
-
+             
             </div>
 
         </div>
@@ -449,3 +478,7 @@
 </div>
     
 }
+
+<div id="divMensaje">
+	<span id="spnMensaje"></span>
+</div>
