@@ -335,7 +335,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 string dir = fullPath;
 
                 //numero de columnas excel
-                int cantCol = 7;
+                int cantCol = 8;
 
                 //adiciona el titulo excel
                 objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Resumen de Requerimientos", styleTitulo);
@@ -369,6 +369,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 // se define la cabecera
                 List<string> lista = new List<string>();
 
+                lista.Add("PROFESIONAL");
                 lista.Add("SALDO A LA FECHA");
                 lista.Add("REQUERIMIENTOS DE NUEVO CARGO");
                 lista.Add("REQUERIMIENTOS DE REEMPLAZO");
@@ -394,6 +395,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     row = objGeneraExcel.addFila(Fila++);
                     colCab = 0;
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.AnalistaResp, styleCadena, "S");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Saldo.ToString(), styleCadena, "N");
                     colCab++;
