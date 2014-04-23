@@ -42,6 +42,20 @@
         DataTable getDataCvParientes(Postulante obj);
         DataTable getDataCvDiscapacidad(Postulante obj);
 
+        /// <summary>
+        /// lista Reporte de Postulantes BD
+        /// </summary>
+        /// <param name="postulante"></param>
+        /// <returns></returns>
+        List<PostulanteBDReporte> ListaPostulantesBDReporte(PostulanteBDReporte postulante);
+
+        /// <summary>
+        /// data Table  de postulantes BD
+        /// </summary>
+        /// <param name="postulante"></param>
+        /// <returns></returns>
+        DataTable DtPostulantesBDReporte(PostulanteBDReporte postulante);
+
     }
 
 

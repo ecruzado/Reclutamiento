@@ -7,7 +7,7 @@ using System.Web;
 
 namespace SanPablo.Reclutador.Entity
 {
-    public class ExperienciaPostulante
+    public class ExperienciaPostulante:BaseEntity
     {
         public virtual int IdeExperienciaPostulante { get; set; }
         public virtual Postulante Postulante { get; set; }

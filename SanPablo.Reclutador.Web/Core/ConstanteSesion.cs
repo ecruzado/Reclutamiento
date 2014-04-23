@@ -23,6 +23,8 @@ namespace SanPablo.Reclutador.Web.Core
         public const string IdeReclutamientoExamenCategoria = "IdeReclutamientoExamenCategoria";
         public const string PreguntaActual = "PreguntaActual";
 
+        public const string DatosReporte = "DatosReporte";
+
         /// <summary>
         /// Guarda el identificador de la tabla general
         /// </summary>

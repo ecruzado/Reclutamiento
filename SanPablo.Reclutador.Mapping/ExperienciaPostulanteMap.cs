@@ -28,6 +28,10 @@
             Map(x => x.NumeroAnexoInstitucionReferente, "NUMANEXOINST");
             Map(x => x.FuncionesDesempenadas, "FUNCIONESDESEMP");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+            Map(x => x.UsuarioCreacion, "USRCREACION");
+            Map(x => x.UsuarioModificacion, "USRMODIFICACION");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.FechaModificacion, "FECMODIFICACION");
 
             Map(x => x.DescripcionCargoTrabajo).Formula("(select CASE TIPCARGOTRABAJO WHEN 'XX'THEN NOMCARGOTRABAJO ELSE DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCargo + " AND DG.VALOR = TIPCARGOTRABAJO)");
             Map(x => x.DescripcionMotivoCese).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoMotivoCese + " AND DG.VALOR = TIPMOTIVOCESE)");
