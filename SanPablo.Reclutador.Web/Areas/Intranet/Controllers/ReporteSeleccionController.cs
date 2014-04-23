@@ -526,7 +526,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 Fila += 1;
                 foreach (Reporte ItemReporte in ListaReporte)
                 {
-
+                    colCab = 0;
                     row = objGeneraExcel.addFila(Fila++);
                     
                     colCab++;

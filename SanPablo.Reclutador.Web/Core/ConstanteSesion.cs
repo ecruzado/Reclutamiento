@@ -76,6 +76,13 @@ namespace SanPablo.Reclutador.Web.Core
         /// obtiene los filtros de un reporte de seleccion, clase REPORTE
         /// </summary>
         public const string ReporteSeleccion = "ReporteSeleccion";
+        /// <summary>
+        /// obtiene los filtros del reporte Resumen, clase REPORTE
+        /// </summary>
+        public const string ReporteResumen = "ReporteResumen";
+
+
+        
 
     }
     public enum TipoDevolucionError 

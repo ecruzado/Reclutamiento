@@ -159,6 +159,7 @@
     <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoCargoController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ReporteResumeRQController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ReporteSeleccionController.cs" />
     <Compile Include="Areas\Intranet\Controllers\SolicitudConsultaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\LogSolicitudAmpliacionCargoController.cs" />
@@ -516,6 +517,7 @@
     <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteSeleccion\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReportePostulanteBD\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\ReporteResumeRQ\Index.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
