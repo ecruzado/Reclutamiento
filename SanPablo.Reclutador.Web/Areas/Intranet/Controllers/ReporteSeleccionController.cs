@@ -341,26 +341,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReporte.idSede = 0;
 	            }
 
-                
-
-
-                  //{ field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
-                  //     { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
-                  //     { field: 'cTipSol', data: $("#ReporteSol_idTipSol").val() },
-                  //     { field: 'cEstadoReq', data: $("#ReporteSol_idEstadoReq").val() },
-                  //     { field: 'nIdResp', data: $("#ReporteSol_idAnalistaResp").val() },
-                  //     { field: 'nIdDependencia', data: $("#ReporteSol_idDependencia").val() },
-                  //     { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
-                  //     { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
-                  //     { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() }
-
-
-                //if ("0".Equals(reclutamientoPersona.EstPostulante))
-                //{
-                //    reclutamientoPersona.EstPostulante = "";
-                //}
-
-                
 
                 Session[ConstanteSesion.ReporteSeleccion] = objReporte;
 
@@ -417,6 +397,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <summary>
         /// genera el reporte en formato excel
         /// </summary>
+        [ValidarSesion]
         public void ListaReporteSeleccion()
         {
 
