@@ -245,6 +245,7 @@
     <Compile Include="Core\ImageFile.cs" />
     <Compile Include="Core\JsonResponse.cs" />
     <Compile Include="Core\ReporteExcel.cs" />
+    <Compile Include="Core\ReporteExcelv2.cs" />
     <Compile Include="Core\TerminoSesionException.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="Core\ValidarSesion.cs" />
@@ -294,17 +295,15 @@
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reportes\Intranet\dsReportePostulanteBD.Designer.cs">
-          <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
     </Compile>
-
     <Compile Include="Reportes\Intranet\DtReporteSeleccion.Designer.cs">
-       <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Compile>
-
     <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -556,25 +555,23 @@
     </Content>
     <Content Include="Reportes\Intranet\DtReporteSeleccion.xsc">
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
-   </Content>
-   <None Include="Reportes\Intranet\dsReportePostulanteBD.xsd">
-   <SubType>Designer</SubType>
+    </Content>
+    <None Include="Reportes\Intranet\dsReportePostulanteBD.xsd">
+      <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReportePostulanteBD.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xsc">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
     </Content>
-    
     <None Include="Reportes\Intranet\DtReporteSeleccion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReportePostulanteBD.Designer.cs</LastGenOutput>
-
     </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xss">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
-      </Content>
+    </Content>
     <Content Include="Reportes\Intranet\DtReporteSeleccion.xss">
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Content>

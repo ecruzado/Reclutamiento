@@ -22,7 +22,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Web.Mvc;
     using System.Data;
     using NPOI.SS.UserModel;
+    using System.Collections;
     using CrystalDecisions.CrystalReports.Engine;
+    using NPOI.SS.UserModel;
+   
 
     
     public class ReporteSeleccionController : BaseController
@@ -371,7 +374,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.AnalistaResp ==null?"":item.AnalistaResp,
                                 item.PersonaIngresa ==null?"":item.PersonaIngresa,
                                 item.FechaContratacion ==null?"":item.FechaContratacion,
-                                item.Dias ==null?"":item.Dias,
+                                item.Dias.ToString() ==null?"":item.Dias.ToString(),
                                 item.Numdocumento ==null?"":item.Numdocumento,
                                 item.Fono ==null?"":item.Fono,
                                 item.ObsPsicologo ==null?"":item.ObsPsicologo,
@@ -406,31 +409,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 Reporte objReporte = null;
 
                 objReporte = (Reporte)Session[ConstanteSesion.ReporteSeleccion];
+                int cont = 0;
+                // se obtiene los datos de la lista
+                List<Reporte> ListaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
+                string Promedio = "";
+                Int32 TotalDias = ListaReporte.Where(x => x.Dias != 0).ToList().Count();
 
-                DataTable dtReporteSeleccion = _solReqPersonalRepository.ListaReporteSeleccion(objReporte);
+                
+                Int32 SumDias = ListaReporte.Where(x => x.Dias != 0).ToList().Sum(x => x.Dias);
 
-                Double totalDias = dtReporteSeleccion.AsEnumerable().Where(a => a["DIAS"] != null).Count();
+                //Double totalDias = dtReporteSeleccion.AsEnumerable().Where(a => a["DIAS"] != null).Count();
 
-                object sumObject;
-                sumObject = dtReporteSeleccion.Compute("Sum(DIAS)", "");
-                int SumDias = Convert.ToInt32(sumObject);
+                //object sumObject;
+                //sumObject = dtReporteSeleccion.Compute("Sum(DIAS)", "");
+                //int SumDias = Convert.ToInt32(sumObject);
 
 
-                Double Promedio = 0;
+                //Double Promedio = 0;
 
-                if (totalDias > 0 && SumDias > 0)
+                if (TotalDias > 0 && SumDias > 0)
                 {
-                    Promedio = (SumDias / totalDias);
+                    Promedio = String.Format("{0:0.##}", (SumDias / TotalDias));
                 }
                 
                 
-
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xls";
                 string pathApliacion = Server.MapPath(".");
-                ReporteExcel objGeneraExcel = new ReporteExcel();
+                ReporteExcelv2 objGeneraExcel = new ReporteExcelv2();
                 ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
 
-                objGeneraExcel.creaHoja("pagina 01");
+                objGeneraExcel.creaHoja("pagina 01","S");
+
+                //agrega los estilos
                 styleTitulo = objGeneraExcel.addEstiloTitulo(true, 14, "CENTER");
                 styleCadena = objGeneraExcel.addEstiloCadena(false, 10, "LEFT");
                 styleNegrita = objGeneraExcel.addEstiloCadenaNegrita(10, "LEFT");
@@ -438,7 +448,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 DateTime fecha = DateTime.Now;
 
-
+                //obtiene la ruta de la imagen del logo
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = "\\Content\\images\\logo_san_pablo_png.png";
                 string nombreTemporalArchivo = Guid.NewGuid().ToString();
@@ -448,51 +458,122 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //numero de columnas excel
                 int cantCol = 21;
 
+                //adiciona el titulo excel
                 objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Reporte de Selección", styleTitulo);
 
+                //adiciona la imagen
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
-                objGeneraExcel.adicionaCamposCab(5, 1, "Sistema de Reclutamiento de Personal", styleNegrita);
-                objGeneraExcel.adicionaCamposCab(6, 1, "Promedio de Atencion : "+String.Format("{0:0.##}", Promedio), styleNegrita);
 
+                //Se crea un contador de filas que debe ir auto incrementandose si crean nuevas filas
+                
 
+                int Fila = 2;
+                IRow row;
 
+                row = objGeneraExcel.addFila(Fila++);
+                
+                objGeneraExcel.addCelda(row, cantCol - 1, "Fecha :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena, "S");
+                
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Hora :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena, "S");
+                
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Usuario :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
+                objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
 
-                objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
-                objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
-                objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
+                // se define la cabecera
+                List<string> lista = new List<string>();
 
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 1, "ESTADO DEL PROCESO", 1);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 2, "FECHA DE REQUERIMIENTO", 2);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 3, "SEDE", 3);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 4, "DEPENDENCIA", 4);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 5, "DEPARTAMENTO", 5);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 6, "AREA", 6);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 7, "PUESTO", 7);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 8, "JEFE", 8);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 9, "TIPO DE REQUERIMIENTO", 9);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 10, "REEMPAZA A", 10);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 11, "F. CESE o REEMPLAZO", 11);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 12, "MOTIVO DE REEMPLAZO", 12);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 13, "ANALISTA RESPONSABLE", 13);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 14, "P. INGRESA (APELLIDOS Y NOMBRE)", 14);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 15, "FECHA DE CONTRATACION", 15);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 16, "TIEMPO ESPERA (DIAS)", 16);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 17, "DNI", 17);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 18, "CEL. / FIJO", 18);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 19, "OBSERVACIONES DEL PSICOLOGO", 19);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 20, "OBSERVACIONES DE LA ENTREVISTA", 20);
-                objGeneraExcel.addDetalleLista(dtReporteSeleccion, 22, "MOTIVO DE FINALIZACION DEL REQ.", 21);
+                lista.Add("ESTADO DEL PROCESO");
+                lista.Add("FECHA DE REQUERIMIENTO");
+                lista.Add("SEDE");
+                lista.Add("DEPENDENCIA");
+                lista.Add("DEPARTAMENTO");
+                lista.Add("AREA");
+                lista.Add("PUESTO");
+                lista.Add("JEFE");
+                lista.Add("TIPO DE REQUERIMIENTO");
+                lista.Add("REEMPAZA A");
+                lista.Add("F. CESE o REEMPLAZO");
+                lista.Add("MOTIVO DE REEMPLAZO");
+                lista.Add("ANALISTA RESPONSABLE");
+                lista.Add("P. INGRESA (APELLIDOS Y NOMBRE)");
+                lista.Add("FECHA DE CONTRATACION");
+                lista.Add("TIEMPO ESPERA (DIAS)");
+                lista.Add("DNI");
+                lista.Add("CEL. / FIJO");
+                lista.Add("OBSERVACIONES DEL PSICOLOGO");
+                lista.Add("OBSERVACIONES DE LA ENTREVISTA");
+                lista.Add("MOTIVO DE FINALIZACION DEL REQ.");
 
+                int colCab = 0;
+                Fila += 2;
+                row = objGeneraExcel.addFila(Fila);
+                foreach (String item in lista)
+	            {
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, item, styleNegrita, "S");
+	            }
+                
+                //imprime detalle
+                colCab = 0;
+                Fila += 1;
+                foreach (Reporte ItemReporte in ListaReporte)
+                {
 
-                // Se coloca de manera obligatoria
-                objGeneraExcel.imprimirCabecera(8, styleNegrita);
-                objGeneraExcel.imprimiDetalle(9, styleCadena);
+                    row = objGeneraExcel.addFila(Fila++);
+                    
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.EstadoProceso, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaRequerimiento, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.DesSede, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.DesDependencia, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.DesDepartamento, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.DesArea, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Cargo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Jefe, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Tipsol, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Reemplaza, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FecReemplazo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.MotivoReemplazo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.AnalistaResp, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.PersonaIngresa, styleCadena, "S");
+
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaContratacion, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Dias.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Numdocumento, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Fono, styleCadena, "S");
+                    
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.ObsPsicologo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.ObsEntrevista, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.MotivoCirreSol, styleCadena, "S");
+                }
 
 
                 MemoryStream exportData = new MemoryStream();

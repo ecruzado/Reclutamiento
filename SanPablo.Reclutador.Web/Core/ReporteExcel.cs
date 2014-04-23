@@ -268,6 +268,9 @@ namespace SanPablo.Reclutador.Web.Core
             }
         }
 
+
+
+
         //agrega con estilo
         public void addCelda(IRow row, int col, String valor, ICellStyle style)
         {
@@ -293,8 +296,6 @@ namespace SanPablo.Reclutador.Web.Core
         // Agrega los titulos de la cabecera
         public void addEncabezadosColumnas(HSSFWorkbook workbook, ISheet sheet, int fila, int col, ArrayList cab, HSSFCellStyle style)
         {
-
-
             IRow row;
             //ICell cell;
             String error;

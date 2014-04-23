@@ -1187,7 +1187,7 @@ namespace SanPablo.Reclutador.Repository
                      lobReporte.AnalistaResp = Convert.ToString(ldrReporte["ANALISTA_RESP"]);
                      lobReporte.PersonaIngresa = Convert.ToString(ldrReporte["P_INGRESA"]);
                      lobReporte.FechaContratacion = Convert.ToString(ldrReporte["FECHA_CONTRATACION"]);
-                     lobReporte.Dias = Convert.ToString(ldrReporte["DIAS"]);
+                     lobReporte.Dias = Convert.ToInt32(ldrReporte["DIAS"]);
                      lobReporte.Numdocumento = Convert.ToString(ldrReporte["NUMDOCUMENTO"]);
                      lobReporte.Fono = Convert.ToString(ldrReporte["FONO"]);
                      lobReporte.ObsPsicologo = Convert.ToString(ldrReporte["OBSPSICOLOGO"]);

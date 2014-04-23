@@ -132,7 +132,7 @@ namespace SanPablo.Reclutador.Entity
         /// <summary>
         /// numero de dias trasncurridos
         /// </summary>
-        public virtual string Dias { get; set; }
+        public virtual int Dias { get; set; }
         /// <summary>
         /// numero de documento
         /// </summary>
