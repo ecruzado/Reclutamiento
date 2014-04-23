@@ -425,7 +425,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 
 
-                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
+                string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xls";
                 string pathApliacion = Server.MapPath(".");
                 ReporteExcel objGeneraExcel = new ReporteExcel();
                 ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
