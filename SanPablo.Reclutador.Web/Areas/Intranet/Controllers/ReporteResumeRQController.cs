@@ -288,28 +288,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 Reporte objReporte = null;
 
                 objReporte = (Reporte)Session[ConstanteSesion.ReporteResumen];
-                //int cont = 0;
-                // se obtiene los datos de la lista
+              
                 List<Reporte> ListaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
-                //string Promedio = "";
-                //Int32 TotalDias = ListaReporte.Where(x => x.Dias != 0).ToList().Count();
-
-
-                //Int32 SumDias = ListaReporte.Where(x => x.Dias != 0).ToList().Sum(x => x.Dias);
-
-                //Double totalDias = dtReporteSeleccion.AsEnumerable().Where(a => a["DIAS"] != null).Count();
-
-                //object sumObject;
-                //sumObject = dtReporteSeleccion.Compute("Sum(DIAS)", "");
-                //int SumDias = Convert.ToInt32(sumObject);
-
-
-                //Double Promedio = 0;
-
-                //if (TotalDias > 0 && SumDias > 0)
-                //{
-                //    Promedio = String.Format("{0:0.##}", (SumDias / TotalDias));
-                //}
+              
 
 
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xls";
@@ -364,7 +345,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
                 row = objGeneraExcel.addFila(Fila++);
-                //objGeneraExcel.addCelda(row, 1, "Promedio de atención: " + Promedio, styleNegrita, "S");
+               
 
                 // se define la cabecera
                 List<string> lista = new List<string>();
