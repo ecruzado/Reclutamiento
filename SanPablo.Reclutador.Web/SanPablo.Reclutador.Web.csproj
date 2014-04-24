@@ -274,6 +274,12 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\ReporteResumen.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReporteResumen.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reportes\Intranet\ReporteSeleccion.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -322,6 +328,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportePostulanteBD.rpt</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ResumenRQ.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResumenRQ.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +588,17 @@
     <Content Include="Reportes\Intranet\DtReporteSeleccion.xss">
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Content>
+    <Content Include="Reportes\Intranet\ResumenRQ.xsc">
+      <DependentUpon>ResumenRQ.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\ResumenRQ.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ResumenRQ.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\ResumenRQ.xss">
+      <DependentUpon>ResumenRQ.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\grid.locale-es.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -683,6 +705,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ReporteResumen.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReporteResumen.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteSeleccion.cs</LastGenOutput>

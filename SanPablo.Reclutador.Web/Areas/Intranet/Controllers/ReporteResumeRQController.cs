@@ -410,7 +410,48 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
             }
-        }    
+        }
+
+
+        /// <summary>
+        /// obtiene el reporte PDF
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetReportePDF()
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
+            ReportDocument rep = new ReportDocument();
+            MemoryStream mem;
+
+            Reporte objReporte = new Reporte();
+
+            try
+            {
+                objReporte = (Reporte)Session[ConstanteSesion.ReporteResumen];
+
+                DataTable dtResultado = _solReqPersonalRepository.ListaReporteResumen(objReporte);
+
+                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                string nomReporte = "ReporteResumen.rpt";
+                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                rep.Load(fullPath);
+                rep.Database.Tables["ResumenRQ"].SetDataSource(dtResultado);
+
+                mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            }
+            catch (Exception)
+            {
+                return MensajeError();
+            }
+            return File(mem, "application/pdf");
+
+        }
+
+
 
 
     }

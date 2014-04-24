@@ -1293,7 +1293,7 @@ namespace SanPablo.Reclutador.Repository
                  {
 
                      lobReporte = new Reporte();
-
+                     lobReporte.DesSede = Convert.ToString(ldrReporte["SEDE"]);
                      lobReporte.idAnalistaResp = Convert.ToInt32(ldrReporte["USRSUCESO"]);
                      lobReporte.AnalistaResp = Convert.ToString(ldrReporte["DESUSUARIO"]);
                      lobReporte.Saldo = Convert.ToInt32(ldrReporte["SALDO"]);
@@ -1308,6 +1308,48 @@ namespace SanPablo.Reclutador.Repository
                  }
                  ldrReporte.Close();
                  return llstReporte;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+        /// <summary>
+        /// lista de reporte en dataTable
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public DataTable ListaReporteResumen(Reporte obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_REPORTE_RESUMEN_RQ");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+
+
+                 lspcmd.Parameters.Add("p_cfecinicio", OracleType.VarChar).Value = obj.FechaInicio;
+                 lspcmd.Parameters.Add("p_cfecfin", OracleType.VarChar).Value = obj.FechaFin;
+                 lspcmd.Parameters.Add("p_nidencargado", OracleType.Number).Value = obj.idAnalistaResp;
+                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.idSede;
+
+                 lspcmd.Parameters.Add("p_currpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                 DataTable dt = new DataTable();
+
+                 da.Fill(dt);
+                 da.Dispose();
+                 return dt;
              }
              catch (Exception ex)
              {
