@@ -25,6 +25,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Collections;
     using CrystalDecisions.CrystalReports.Engine;
     using NPOI.SS.UserModel;
+    using CrystalDecisions.Shared;
 
     public class ReporteResumeRQController : BaseController
     {
@@ -439,6 +440,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 rep.Load(fullPath);
                 rep.Database.Tables["ResumenRQ"].SetDataSource(dtResultado);
+                
+                ParameterValues values1 = new ParameterValues();
+                ParameterDiscreteValue discretevalue = new ParameterDiscreteValue();
+                
+                string NombUsuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                discretevalue.Value = NombUsuario;
+                values1.Add(discretevalue);
+
+
+                rep.DataDefinition.ParameterFields["usuario_sesion"].ApplyCurrentValues(values1);
+
+
 
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
