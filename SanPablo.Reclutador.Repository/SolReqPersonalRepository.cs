@@ -1187,7 +1187,7 @@ namespace SanPablo.Reclutador.Repository
                      lobReporte.AnalistaResp = Convert.ToString(ldrReporte["ANALISTA_RESP"]);
                      lobReporte.PersonaIngresa = Convert.ToString(ldrReporte["P_INGRESA"]);
                      lobReporte.FechaContratacion = Convert.ToString(ldrReporte["FECHA_CONTRATACION"]);
-                     lobReporte.Dias = Convert.ToString(ldrReporte["DIAS"]);
+                     lobReporte.Dias = Convert.ToInt32(ldrReporte["DIAS"]);
                      lobReporte.Numdocumento = Convert.ToString(ldrReporte["NUMDOCUMENTO"]);
                      lobReporte.Fono = Convert.ToString(ldrReporte["FONO"]);
                      lobReporte.ObsPsicologo = Convert.ToString(ldrReporte["OBSPSICOLOGO"]);
@@ -1259,8 +1259,107 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+        /// <summary>
+        /// obtiene la lista de reporte de Resumen
+        /// </summary>
+        /// <param name="obj">objeto Reporte</param>
+        /// <returns></returns>
+         public List<Reporte> GetListaReporteResumen(Reporte obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+
+                 IDataReader ldrReporte;
+                 Reporte lobReporte;
+                 List<Reporte> llstReporte;
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_REPORTE_RESUMEN_RQ");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+
+                 lspcmd.Parameters.Add("p_cfecinicio", OracleType.VarChar).Value = obj.FechaInicio;
+                 lspcmd.Parameters.Add("p_cfecfin", OracleType.VarChar).Value = obj.FechaFin;
+                 lspcmd.Parameters.Add("p_nidencargado", OracleType.Number).Value = obj.idAnalistaResp;
+                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.idSede;
+
+                 lspcmd.Parameters.Add("p_currpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 ldrReporte = (OracleDataReader)lspcmd.ExecuteReader();
+                 lobReporte = null;
+                 llstReporte = new List<Reporte>();
+
+                 while (ldrReporte.Read())
+                 {
+
+                     lobReporte = new Reporte();
+                     lobReporte.DesSede = Convert.ToString(ldrReporte["SEDE"]);
+                     lobReporte.idAnalistaResp = Convert.ToInt32(ldrReporte["USRSUCESO"]);
+                     lobReporte.AnalistaResp = Convert.ToString(ldrReporte["DESUSUARIO"]);
+                     lobReporte.Saldo = Convert.ToInt32(ldrReporte["SALDO"]);
+                     lobReporte.CantVacPubReemplazo = Convert.ToInt32(ldrReporte["REEMPLAZO"]);
+                     lobReporte.CantVacPubAmpliacion = Convert.ToInt32(ldrReporte["AMPLIACION"]);
+                     lobReporte.CantVacPubNuevo = Convert.ToInt32(ldrReporte["NUEVO"]);
+                     lobReporte.CantVacFinalNo = Convert.ToInt32(ldrReporte["NO_CUBIERTO"]);
+                     lobReporte.CantVacFinalSi = Convert.ToInt32(ldrReporte["CUBIERTO"]);
+                     lobReporte.Total = Convert.ToInt32(ldrReporte["TOTAL"]);
+                    
+                     llstReporte.Add(lobReporte);
+                 }
+                 ldrReporte.Close();
+                 return llstReporte;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+        /// <summary>
+        /// lista de reporte en dataTable
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public DataTable ListaReporteResumen(Reporte obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+             try
+             {
+
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_REPORTE_RESUMEN_RQ");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
 
 
+                 lspcmd.Parameters.Add("p_cfecinicio", OracleType.VarChar).Value = obj.FechaInicio;
+                 lspcmd.Parameters.Add("p_cfecfin", OracleType.VarChar).Value = obj.FechaFin;
+                 lspcmd.Parameters.Add("p_nidencargado", OracleType.Number).Value = obj.idAnalistaResp;
+                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = obj.idSede;
+
+                 lspcmd.Parameters.Add("p_currpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 OracleDataAdapter da = new OracleDataAdapter(lspcmd);
+                 DataTable dt = new DataTable();
+
+                 da.Fill(dt);
+                 da.Dispose();
+                 return dt;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
 
     }
 }

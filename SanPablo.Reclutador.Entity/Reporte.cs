@@ -132,7 +132,7 @@ namespace SanPablo.Reclutador.Entity
         /// <summary>
         /// numero de dias trasncurridos
         /// </summary>
-        public virtual string Dias { get; set; }
+        public virtual int Dias { get; set; }
         /// <summary>
         /// numero de documento
         /// </summary>
@@ -164,6 +164,45 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual string MotivoCirreSol { get; set; }
 
+
+       // parametros para el reporte de resumen de RQ
+        /// <summary>
+        /// profesional a cargo
+        /// </summary>
+        public virtual int Profesional { get; set; }
+
+        /// <summary>
+        /// saldo a la fecha solicitudes publicadas
+        /// </summary>
+        public virtual int Saldo { get; set; }
+        /// <summary>
+        /// cantidad de vacantes de solicitudes que fueron publicadas
+        /// </summary>
+        public virtual int CantVacPubNuevo { get; set; }
+        /// <summary>
+        /// cantidad de vacantes para reemplazo
+        /// </summary>
+        public virtual int CantVacPubReemplazo { get; set; }
+        /// <summary>
+        /// cantidad de vacantes para Apliacion
+        /// </summary>
+        public virtual int CantVacPubAmpliacion { get; set; }
+        /// <summary>
+        /// vacantes de solicitudes finalizadas no cubiertas
+        /// </summary>
+        public virtual int CantVacFinalNo { get; set; }
+        /// <summary>
+        /// vacantes de solicitudes finalizadas cubiertas
+        /// </summary>
+        public virtual int CantVacFinalSi { get; set; }
+        /// <summary>
+        /// total de vacantes
+        /// </summary>
+        public virtual int Total { get; set; }
+
+        
+       
+        
 
     }
 }
