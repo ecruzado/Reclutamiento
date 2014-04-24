@@ -207,6 +207,15 @@
             {
                 postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
 
+                string usuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                string sede = Convert.ToString(Session[ConstanteSesion.SedeDes]);
+
+                DataTable dtInforme = new DataTable();
+                dtInforme.Columns.Add("USUARIO", typeof(string));
+                dtInforme.Columns.Add("SEDE", typeof(string));
+                dtInforme.Columns.Add("CARGOBUSCA",typeof(string));
+                dtInforme.Rows.Add(usuario, sede, postulanteReporte.Cargo);
+                  
                 DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
 
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
@@ -216,7 +225,7 @@
 
                 reporte.Load(fullPath);
                 reporte.Database.Tables["dtPostulanteBD"].SetDataSource(dtResultado);
-
+                reporte.Database.Tables["dtDatosInforme"].SetDataSource(dtInforme);
                 memory = (MemoryStream)reporte.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
             }
@@ -262,7 +271,7 @@
                 string dir = fullPath;
 
                 //numero de columnas excel
-                int cantCol = 21;
+                int cantCol = 13;
 
                 objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "REPORTE DE POSTULANTES BASE DE DATOS", styleTitulo);
 

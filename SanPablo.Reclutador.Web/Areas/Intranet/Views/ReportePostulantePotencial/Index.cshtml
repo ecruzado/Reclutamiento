@@ -1,11 +1,12 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ReportePostulanteViewModel
+﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.ReportePostulantesPotencialesViewModel
 @using SanPablo.Reclutador.Entity
 
 @{
     ViewBag.Title = "Reporte de Postulantes BD";
 }
 @section Head{
-         <style type="text/css">
+
+     <style type="text/css">
         th.ui-th-column div {
             white-space: normal !important;
             height: auto !important;
@@ -25,14 +26,14 @@
         SanPablo.Numeros('EdadFin');
 
         $('#btnPDF').click(function () {
-           window.open('@Url.Action("ObtenerReportePDF", "ReportePostulanteBD")');
+           window.open('@Url.Action("ObtenerReportePDF", "ReportePostulantePotencial")');
         });
 
 
         $('#btnBuscarPostulantes').click(function () {
-            var nombreCargo = $('#Solicitud_nombreCargo').val();
+            var nombreCargo = $('#PostulantePotencial_IdeCargo').val();
 
-            if (nombreCargo.length > 0)
+            if (nombreCargo != 0)
             {
                 if (validarFecha()) {
                $('#grdListPostulantesBD').trigger('reloadGrid');
@@ -58,39 +59,85 @@
 
 
 
-        $('select#Departamentos').change(function () {
+        $('select#PostulantePotencial_IdeSede').change(function () {
+            var ideSede = $(this).val();
+            $("select#PostulantePotencial_IdeDependencia").empty();
+            $("select#PostulantePotencial_IdeDependencia").append("<option value='0'> SELECCIONAR </option>");
+
+            $("select#PostulantePotencial_IdeDepartamento").empty();
+            $("select#PostulantePotencial_IdeDepartamento").append("<option value='0'> SELECCIONAR </option>");
+
+            $("select#PostulantePotencial_IdeArea").empty();
+            $("select#PostulantePotencial_IdeArea").append("<option value='0'> SELECCIONAR </option>");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDependencia", "ReportePostulantePotencial", new { area = "Intranet"})',
+                data: { ideSede: ideSede },
+                success: function (respuesta) {
+                    $("select#PostulantePotencial_IdeDependencia").empty();
+                    $("select#PostulantePotencial_IdeDependencia").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#PostulantePotencial_IdeDependencia").append("<option value='"
+                        + item.IdeDependencia + "'>" + item.NombreDependencia + "</option>");
+                    }
+                );
+                }
+            });
+
+            $("select#PostulantePotencial_IdeCargo").empty();
+            $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaCargos", "ReportePostulantePotencial", new { area = "Intranet"})',
+                data: { ideSede: ideSede },
+                success: function (respuesta) {
+                    $("select#PostulantePotencial_IdeCargo").empty();
+                    $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#PostulantePotencial_IdeCargo").append("<option value='"
+                        + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
+                    }
+                );
+                }
+            });
+
+        });
+
+
+        $('select#PostulantePotencial_IdeDependencia').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#PostulantePotencial_IdeArea").empty();
+            $("select#PostulantePotencial_IdeArea").append("<option value='0'> SELECCIONAR </option>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos", "ReportePostulantePotencial", new { area = "Intranet"})',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#PostulantePotencial_IdeDepartamento").empty();
+                    $("select#PostulantePotencial_IdeDepartamento").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#PostulantePotencial_IdeDepartamento").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+        $('select#PostulantePotencial_IdeDepartamento').change(function () {
             var ideDepartamento = $(this).val();
-            $("select#Distritos").empty();
-            $("select#Distritos").append("<option value='0'> SELECCIONAR </option>");
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("listarUbigeos","ReportePostulanteBD")',
-                data: { ideUbigeoPadre: ideDepartamento },
+                url: '@Url.Action("listaAreas","ReportePostulantePotencial",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
                 success: function (respuesta) {
-                    $("select#Provincias").empty();
-                    $("select#Provincias").append("<option value='0'> SELECCIONAR </option>");
+                    $("select#PostulantePotencial_IdeArea").empty();
+                    $("select#PostulantePotencial_IdeArea").append("<option value='0'> SELECCIONAR </option>");
                     $.each(respuesta, function (i, item) {
-                        $("select#Provincias").append("<option value='"
-                        + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
-                    }
-                );
-                }
-            });
-        })
-
-        //Cargar Distritos
-        $('select#Provincias').change(function () {
-            var ideProvincia = $(this).val();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listarUbigeos","ReportePostulanteBD")',
-                data: { ideUbigeoPadre: ideProvincia },
-                success: function (respuesta) {
-                    $("select#Distritos").empty();
-                    $("select#Distritos").append("<option value='0'> SELECCIONAR </option>");
-                    $.each(respuesta, function (i, item) {
-                        $("select#Distritos").append("<option value='"
-                        + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
+                        $("select#ReporteSol_idArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
                     }
                 );
                 }
@@ -98,7 +145,7 @@
         })
 
 
-        jQuery("#grdListPostulantesBD").jqGrid({
+        jQuery("#grdListPostulantesPotenciales").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -108,16 +155,18 @@
                 migrilla._search = postdata.isSearch;
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
-                       { field: 'nombreCargo', data: $("#Solicitud_nombreCargo").val() },
+                       { field: 'ideCargo', data: $("#PostulantePotencial_IdeCargo").val() },
                        { field: 'areaEstudio', data: $("#AreasEstudio").val() },
                        { field: 'rangoSalario', data: $("#RangosSalariales").val() },
-                       { field: 'departamento', data: $("#Departamentos").val() },
-                       { field: 'provincia', data: $("#Provincias").val() },
-                       { field: 'distrito', data: $("#Distritos").val() },
+                       { field: 'ideSede', data: $("#PostulantePotencial_IdeSede").val() },
+                       { field: 'ideDependencia', data: $("#PostulantePotencial_IdeDependencia").val() },
+                       { field: 'ideDepartamento', data: $("#PostulantePotencial_IdeDepartamento").val() },
+                       { field: 'ideArea', data: $("#PostulantePotencial_IdeArea").val() },
+                       { field: 'edadInicio', data: $("#PostulantePotencial_EdadInicio").val() },
+                       { field: 'edadFin', data: $("#PostulantePotencial_EdadFin").val() },
                        { field: 'fecDesde', data: $("#Registro_Desde").val() },
-                       { field: 'fecHasta', data: $("#Registro_Hasta").val() },
-                       { field: 'EdadInicio', data: $("#EdadInicio").val() },
-                       { field: 'EdadFin', data: $("#EdadFin").val() }
+                       { field: 'fecHasta', data: $("#Registro_Hasta").val() }
+                      
                 ];
 
                 if (migrilla._search == true) {
@@ -129,14 +178,14 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("listaPostulantesBD", "ReportePostulanteBD")',
+                    url: '@Url.Action("listaPostulantesPotenciales", "ReportePostulantePotencial")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
                     async: false,
                     success: function (data, st) {
                         if (st == 'success') {
-                            var jq = $('#grdListPostulantesBD')[0];
+                            var jq = $('#grdListPostulantesPotenciales')[0];
                             jq.addJSONData(data);
                         }
                     },
@@ -145,25 +194,27 @@
                     }
                 });
             },
-            colNames: ['IdePostulante','Fecha de registro de CV','Departamento','Provincia','Distrito','Nombres y Apellidos','Telefono Móvil / Casa','Email','Cargo',
-                       'Edad','Tipo de Estudios','Área de Estudios','Rango Salarial', 'CV'],
+            colNames: ['IdeReclutaPersona','Fecha de registro como Post. Potenc.','Sede','Dependencia','Departamento','Área','Nombres y Apellidos','Cargo','Telefono Móvil / Casa','Email','Edad',
+                       'Punt. de CV','Ptj. de Selección','Área de Estudios','Rango Salarial', 'CV'],
             colModel: [
-                    { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: true, sortable: false },
+                    { name: 'IdeReclutaPersona', index: 'IdePostulante', align: 'center', hidden: true, sortable: false },
                     { name: 'FechaRegistro', index: 'FechaRegistro', align: 'center', hidden: false, sortable: true },
-                    { name: 'Departamento', index: 'Departamento', align: 'center', hidden: false, sortable: false },
-                    { name: 'Provincia', index: 'Provincia', align: 'center', hidden: false, sortable: false },
-                    { name: 'Distrito', index: 'Distrito', align: 'center', hidden: false, sortable: false },
+                    { name: 'Sede', index: 'Sede', align: 'center', hidden: false, sortable: false },
+                    { name: 'Dependencia', index: 'Departamento', align: 'center', hidden: false, sortable: false },
+                    { name: 'Departamento', index: 'Provincia', align: 'center', hidden: false, sortable: false },
+                    { name: 'Area', index: 'Distrito', align: 'center', hidden: false, sortable: false },
                     { name: 'NombresApellidos', index: 'NombresApellidos', align: 'center', hidden: false, sortable: false },
+                    { name: 'NombreCargo', index: 'NombreCargo', align: 'center', hidden: false, sortable: false },
                     { name: 'MovilFijo', index: 'MovilFijo', align: 'center', hidden: false, sortable: false },
                     { name: 'Email', index: 'Email', align: 'center', hidden: false, sortable: false },
-                    { name: 'Cargo', index: 'Cargo', align: 'center', hidden: false, sortable: false },
                     { name: 'Edad', index: 'Edad', align: 'center', hidden: false, sortable: false },
-                    { name: 'TipoEstudios', index: 'TipoEstudios', align: 'center', hidden: false, sortable: false },
+                    { name: 'PuntajeCV', index: 'PuntajeCV', align: 'center', hidden: false, sortable: false },
+                    { name: 'PuntajeSeleccion', index: 'PuntajeSeleccion', align: 'center', hidden: false, sortable: false },
                     { name: 'AreaEstudios', index: 'AreaEstudios', align: 'center', hidden: false, sortable: false },
                     { name: 'RangoSalarial', index: 'RangoSalarial', align: 'center', hidden: false, sortable: false },
                     { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: false, sortable: false, formatter: ImprimirFormatter }
             ],
-            pager: jQuery('#grdPagerListPostulantesBD'),
+            pager: jQuery('#grdPagerListPostulantesPotenciales'),
             rowNum: 10,
             rowList: [10, 30, 50],
             autowidth: true,
@@ -245,70 +296,9 @@
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
     }
 
-
-    //AUTOCOMPLETAR
-
-    $(function () {
-        function split(val) {
-            return val.split(/,\s*/);
-        }
-        function extractLast(term) {
-            return split(term).pop();
-        }
-        $("#Solicitud_nombreCargo").bind("keydown", function (event) {
-            if (event.keyCode === $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active) {
-                event.preventDefault();
-            }
-        })
-        $("#Solicitud_nombreCargo").autocomplete({
-            source: function (request, response) {
-                //define a function to call your Action (assuming UserController)
-                $.ajax({
-                    url: '@Url.Action("autoCompletarCargo", "ReportePostulanteBD")',
-                    type: "GET",
-                    dataType: "json",
-                    //query will be the param used by your action method
-                    data: { query: request.term },
-                    term: extractLast(request.term),
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return { label: item, value: item };
-                        }))
-                    }
-                })
-            },
-            search: function () {
-                // custom minLength
-                var term = extractLast(this.value);
-                if (term.length < 1) {
-                    return false;
-                }
-            },
-            focus: function () {
-                // prevent value inserted on focus
-                return false;
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                return false;
-                //if u want to select items in comma separate then
-                //                var terms = split(this.value);
-                //                // remove the current input
-                //                terms.pop();
-                //                // add the selected item
-                //                terms.push(ui.item.value);
-                //                // add placeholder to get the comma-and-space at the end
-                //                terms.push("");
-                //                this.value = terms.join(", ");
-                //                return false;
-            }
-        });
-    });
-
-
 </script>
     }
-@using (Html.BeginForm("Index", "ReportePostulantesBD", FormMethod.Post))
+@using (Html.BeginForm("Index", "ReportePostulantesPotencial", FormMethod.Post))
 {
    <div class="row">
     <div class="span12">
@@ -322,17 +312,17 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError">Busqueda rápida </label>
+                            <label class="control-label" for="selectError">Cargo </label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onkeyup="aMays(event, this)"})
+                               @Html.DropDownListFor(model => model.PostulantePotencial.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.PostulantePotencial.IdeCargo))
                             </div>
                         </div>
                     </td>
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos))
+                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.PostulantePotencial.IdeDependencia))
                             </div>
                         </div>
                     </td>
@@ -351,51 +341,79 @@
 
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Provincia</label>
+                            <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias))
+                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.PostulantePotencial.IdeDepartamento))
                             </div>
                         </div>
                     </td>  
 
                 </tr>
 
-                   
-               <tr class="formulario-fila">
+                   <tr class="formulario-fila">
                     <td class="span5" style="width:420px">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
+                            <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
+                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeSede, new SelectList(Model.Sedes, "CodigoSede", "DescripcionSede", Model.PostulantePotencial.IdeSede))
                             </div>
                         </div>
                     </td>
 
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Distrito</label>
+                            <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Distritos, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Distritos))
+                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.PostulantePotencial.IdeArea))
                             </div>
                         </div>
                     </td>  
 
                 </tr>
-                </table>
-            <table class="formulario-busqueda">
-                    <tr class="formulario-fila">
+
+                 <tr class="formulario-fila">
+                   <td class="" style ="width:140px">
+                        <div class="" style="width:90px">
+                            <label class="control-label" for="inputSuccess" >Rango Edad </label>
+                            <div class ="controles" >
+                                @Html.TextBoxFor(model => model.PostulantePotencial.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
+                            </div>
+                        </div>
+                    </td>  
+                      <td class="" style="width:100px">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:90px">  a  </label>
+                            <div class =" controles" >
+                                @Html.TextBoxFor(model => model.PostulantePotencial.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
+                            </div>
+                        </div>
+                    </td>
+                     <td style="width:100px">
+                         &nbsp;
+                     </td> 
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
+                            </div>
+                        </div>
+                    </td> 
+
+                </tr> 
+
+
+                   <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:180px;text-align:left">Fecha de registro de CV </label>
+                            <label class="control-label" for="inputSuccess" style="width:300px;text-align:left">Fecha de registro como postulante potencial </label>
                             <div class="controles">
                                 
                             </div>
                         </div>
                     </td>
                     </tr>
-                </table>
-            <table class="formulario-busqueda">
-                   <tr class="formulario-fila">
+                <tr class="formulario-fila">
                     <td class="span5">
                         <div class="" >
                             <label class="control-label" for="inputSuccess" >Desde </label>
@@ -407,20 +425,7 @@
                             </div>
                         </div>
                     </td>
-                     <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:90px">Rango Edad </label>
-                            <div class =" controles">
-                                @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
-                                <span style ="width:50px">a </span> 
-                                @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
-                            </div>
-                            
-                        </div>
-                    </td>  
-
                 </tr>
-
                 <tr class="formulario-accion offset9">
                     <td>
                     <a id="btnBuscarPostulantes"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
@@ -434,7 +439,9 @@
                     </td>
                 </tr>
 
-              </table>
+            </table>
+           
+
              <div class="" >
                 <h5>Resultado</h5>
              
@@ -448,19 +455,14 @@
             </div>
 
             <div class="tabla-datos">
-                <table id="grdListPostulantesBD">
+                <table id="grdListPostulantesPotenciales">
                 </table>
-                <div id="grdPagerListPostulantesBD">
+                <div id="grdPagerListPostulantesPotenciales">
                 </div>
             </div>
             <div class="form-actions">
              
             </div>
-
-            
-
-                
-           
 
         </div>
 

@@ -155,6 +155,7 @@
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ContrataController.cs" />
     <Compile Include="Areas\Intranet\Controllers\BusquedaUsuarioController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ReportePostulantePotencialController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ReportePostulanteBDController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ReportePostulantesPotencialesViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ReportePostulanteViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluarPostulanteViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionViewModel.cs" />
@@ -272,6 +274,17 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\dsReportePostulantePotencial.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ReportePostulantePotencial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportePostulantePotencial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reportes\Intranet\ReporteSeleccion.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -294,17 +307,15 @@
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reportes\Intranet\dsReportePostulanteBD.Designer.cs">
-          <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
     </Compile>
-
     <Compile Include="Reportes\Intranet\DtReporteSeleccion.Designer.cs">
-       <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Compile>
-
     <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -517,6 +528,7 @@
     <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteSeleccion\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReportePostulanteBD\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\ReportePostulantePotencial\Index.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -556,25 +568,34 @@
     </Content>
     <Content Include="Reportes\Intranet\DtReporteSeleccion.xsc">
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
-   </Content>
-   <None Include="Reportes\Intranet\dsReportePostulanteBD.xsd">
-   <SubType>Designer</SubType>
+    </Content>
+    <None Include="Reportes\Intranet\dsReportePostulanteBD.xsd">
+      <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReportePostulanteBD.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xsc">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
     </Content>
-    
+    <Content Include="Reportes\Intranet\dsReportePostulantePotencial.xsc">
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsReportePostulantePotencial.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReportePostulantePotencial.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsReportePostulantePotencial.xss">
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+    </Content>
     <None Include="Reportes\Intranet\DtReporteSeleccion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReportePostulanteBD.Designer.cs</LastGenOutput>
-
     </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xss">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
-      </Content>
+    </Content>
     <Content Include="Reportes\Intranet\DtReporteSeleccion.xss">
       <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Content>
@@ -684,6 +705,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reportes\Intranet\ReportePostulantePotencial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReportePostulantePotencial.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteSeleccion.cs</LastGenOutput>

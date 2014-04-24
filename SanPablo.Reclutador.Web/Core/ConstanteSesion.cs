@@ -25,6 +25,8 @@ namespace SanPablo.Reclutador.Web.Core
 
         public const string DatosReporte = "DatosReporte";
 
+        public const string PostulantePotencial = "PostulantePotencial";
+
         /// <summary>
         /// Guarda el identificador de la tabla general
         /// </summary>
