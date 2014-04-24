@@ -46,6 +46,35 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public string Pagina { get; set; }
 
+       
+        #region Botonera de busqueda
+        /// <summary>
+        /// boton ranking
+        /// </summary>
+        public string btnRanking { get; set; }
+        /// <summary>
+        /// boton Preseleccion
+        /// </summary>
+        public string btnPreselec { get; set; }
+        /// <summary>
+        /// boton Nuevo
+        /// </summary>
+        public string btnNuevo { get; set; }
+        /// <summary>
+        /// boton Requerimiento
+        /// </summary>
+        public string btnRequerimiento { get; set; }
+        /// <summary>
+        /// boton Activar
+        /// </summary>
+        public string btnActivar { get; set; }
+        /// <summary>
+        /// boton Eliminar
+        /// </summary>
+        public string btnEliminar { get; set; }
+
+        #endregion
+
     }
 
 

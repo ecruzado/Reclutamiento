@@ -5,7 +5,19 @@
 
 @{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
-}
+
+    //var RolUsuario = Session[ConstanteSesion.Rol];
+
+    //if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(RolUsuario) || 
+    //    SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(RolUsuario)
+    //    )
+    //{
+        
+    //}
+    
+    
+    
+  }
 @section Head{
 }
 
@@ -14,6 +26,10 @@
 <script type="text/javascript">
     $("#txtfechainicio").datepicker();
     $("#txtfechafin").datepicker();
+
+   
+
+
 
     $('#btnBuscarReemplazo').click(function () {
 
@@ -130,7 +146,7 @@
             migrilla.Rules = [
 
                 { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                { field: 'idCargo', data: $("#SolReqPersonal_Idecargo").val() },
+                { field: 'idCargo', data: $("#SolReqPersonal_IdeCargo").val() },
                 { field: 'idDependencia', data: $("#SolReqPersonal_IdeDependencia").val() },
                 { field: 'idArea', data: $("#SolReqPersonal_IdeArea").val() },
                 { field: 'tipResp', data: $("#SolReqPersonal_TipResponsable").val() },
@@ -273,100 +289,6 @@
            return strImg;
        }
 
-
-@*    function verRanking(selr, Tipsol) {
-       
-        $.get("@Url.Action("Index", "Ranking")?id=" + selr + "&tipSol=" + Tipsol,  
-           function (data) {
-               
-           }
-       );
-
-     
-        return false;
-
-        
-     }*@
-
-    @*//-----------grilla anidada
-    jQuery("#sg2").jqGrid({
-        url: '@Url.Action("ListaSolicitudAmpliacion", "SolicitudCargo")',
-        datatype: "xml",
-        height: 190,
-        colNames: [ 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Etapa', 'Estado'],
-        colModel: [
-                { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'Cargo', index: 'Cargo', align: 'left' },
-                { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
-                { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
-                { name: 'Area', index: 'Area', align: 'left', width: 100 },
-                { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                { name: 'Inicio', index: 'Inicio', align: 'left', width: 50 },
-                { name: 'Cierre', index: 'Cierre', align: 'left', width: 50 },
-                { name: 'Responsable', index: 'Responsable', align: 'left', width: 50 },
-                { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                { name: 'Etapa', index: 'Etapa', align: 'center', width: 50 }
-        ],
-        rowNum: 8,
-        rowList: [8, 10, 20, 30],
-        pager: '#psg2',
-        sortname: 'id',
-        viewrecords: true,
-        sortorder: "desc",
-        multiselect: false,
-        subGrid: true,
-        caption: "Custom Icons in Subgrid",
-        // define the icons in subgrid
-        subGridOptions: {
-            "plusicon": "ui-icon-triangle-1-e",
-            "minusicon": "ui-icon-triangle-1-s",
-            "openicon": "ui-icon-arrowreturn-1-e",
-            //expand all rows on load
-            "expandOnLoad": true
-        },
-        subGridRowExpanded: function (subgrid_id, row_id) {
-            var subgrid_table_id, pager_id;
-            subgrid_table_id = subgrid_id + "_t";
-            pager_id = "p_" + subgrid_table_id;
-            $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table><div id='" + pager_id + "' class='scroll'></div>");
-            jQuery("#" + subgrid_table_id).jqGrid({
-                //url: "subgrid.php?q=2&id=" + row_id,
-                datatype: "xml",
-                colNames: ['Código', 'Cargo', 'Dependencia', 'Departamento', 'Área', 'Vacan.', 'Postu.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Inicio', 'Cierre', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', 'Estado'],
-                colModel: [
-                        { name: 'HabilitaDeshabilita', index: 'HabilitaDeshabilita', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                        { name: 'Codigo', index: 'Codigo', align: 'center', width: 50 },
-                        { name: 'Cargo', index: 'Cargo', align: 'left' },
-                        { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
-                        { name: 'Departamento', index: 'Departamento', align: 'left', width: 100 },
-                        { name: 'Area', index: 'Area', align: 'left', width: 100 },
-                        { name: 'Vacantes', index: 'Vacantes', align: 'right', width: 60 },
-                        { name: 'Postulantes', index: 'Postulantes', align: 'right', width: 60 },
-                        { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', width: 60 },
-                        { name: 'Evaluados', index: 'Evaluados', align: 'right', width: 60 },
-                        { name: 'Seleccionados', index: 'Seleccionados', align: 'right', width: 60 },
-                        { name: 'Inicio', index: 'Inicio', align: 'left', width: 50 },
-                        { name: 'Cierre', index: 'Cierre', align: 'left', width: 50 },
-                        { name: 'Responsable', index: 'Responsable', align: 'left', width: 50 },
-                        { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', width: 150 },
-                        { name: 'Publicado', index: 'Publicado', align: 'left', width: 50 },
-                        { name: 'Etapa', index: 'Etapa', align: 'center', width: 50 }
-                ],
-                rowNum: 20,
-                pager: pager_id,
-                sortname: 'num',
-                sortorder: "asc",
-                height: '100%'
-            });
-            jQuery("#" + subgrid_table_id).jqGrid('navGrid', "#" + pager_id, { edit: false, add: false, del: false })
-        }
-    });
-    jQuery("#sg2").jqGrid('navGrid', '#psg2', { add: false, edit: false, del: false });*@
-
     //------------fin de grilla anidada
 </script>
 }
@@ -474,21 +396,31 @@
                 <div id="grdPagerBusquedaReemplazo">
                 </div>
             </div>
-            @*<div>
-                <h5>GRILLA ANIDADA</h5>
-                <table id="sg1"></table>
-                <div id="psg1"></div>
-            </div>*@
+           
             <div class="form-actions">
                 
-                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                @*<a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>*@
-                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                @*<a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>*@
-                <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" id ="btnRequerimintoSol"><i class="icon-pencil icon-white"></i> Requerimiento</a>
-                <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>
+                @if (Visualicion.SI.Equals(Model.btnRanking))
+                {
+                  <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnPreselec))
+                {
+                  <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a class="btn btn-info" href="@Url.Action("CrearReemplazo", "SolicitudCargo")"><i class="icon-plus icon-white"></i> Nuevo</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnRequerimiento))
+                {
+                  <a class="btn btn-info" id ="btnRequerimintoSol"><i class="icon-pencil icon-white"></i> Requerimiento</a>    
+                }
+                
+               @* <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
+                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
             </div>
         }
         </div>

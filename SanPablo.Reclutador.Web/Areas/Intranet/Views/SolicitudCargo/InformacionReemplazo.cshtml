@@ -14,6 +14,7 @@
 @section Scripts{
 <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
     
     $(document).ready(function () {
@@ -1000,7 +1001,7 @@
                             <label class="control-label" for="inputSuccess">Vacantes</label>
                             <div class="controles">
                                 
-                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" }) 
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "4"}) 
                             </div>
                         
                         </td> 
@@ -1019,7 +1020,7 @@
                         <td class="span5">
                         <label class="control-label" for="inputSuccess">Observaciones</label>
                         <div class="controles">
-                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" }) 
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" ,onkeyup="aMays(event, this)"}) 
                         </div>
                         </td>                    
                     </tr>

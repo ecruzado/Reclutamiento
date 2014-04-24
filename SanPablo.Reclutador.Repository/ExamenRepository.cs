@@ -154,6 +154,8 @@
 
                     objPdfExamen.Desccategoria = Convert.ToString(drPdfExamens["DESCCATEGORIA"]);
                     objPdfExamen.Tipcategoria = Convert.ToString(drPdfExamens["TIPCATEGORIA"]);
+                    objPdfExamen.DesTipoCategoria = Convert.ToString(drPdfExamens["DESTIPCATEGORIA"]);
+
                     objPdfExamen.Instrucciones = Convert.ToString(drPdfExamens["INSTRUCCIONES"]);
                     objPdfExamen.Tipoejemplo = Convert.ToString(drPdfExamens["TIPOEJEMPLO"]);
                    

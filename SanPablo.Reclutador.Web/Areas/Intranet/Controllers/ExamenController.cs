@@ -317,7 +317,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             catch (Exception ex)
             {
-                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                
                 return MensajeError();
             }
         }
@@ -665,7 +665,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 NombreExamen = objPdfExamen.Nomexamen;
                 DesExamen = objPdfExamen.Descexamen;
-                Tipo = objPdfExamen.Tipcategoria;
+                Tipo = objPdfExamen.DesTipoCategoria;
                 Duracion = objPdfExamen.Timpoexamen;
             }
 
