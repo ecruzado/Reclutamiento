@@ -1247,6 +1247,8 @@
                     postulantePotencial.Email = Convert.ToString(drListaPostulantesPotenciales["CORREO"]);
                     postulantePotencial.Edad = Convert.ToInt32(drListaPostulantesPotenciales["EDAD"]);
                     postulantePotencial.TipoEstudio = Convert.ToString(drListaPostulantesPotenciales["TIPOEDUCACION"]);
+                    postulantePotencial.PuntajeCV = Convert.ToInt32(drListaPostulantesPotenciales["PTJECV"]);
+                    postulantePotencial.PuntajeSeleccion = Convert.ToInt32(drListaPostulantesPotenciales["PTJESELECCION"]);
                     postulantePotencial.AreaEstudio = Convert.ToString(drListaPostulantesPotenciales["TIPOAREA"]);
                     postulantePotencial.RangoSalarial = Convert.ToString(drListaPostulantesPotenciales["RANGOSALARIO"]);
                     listaPostulantes.Add(postulantePotencial);

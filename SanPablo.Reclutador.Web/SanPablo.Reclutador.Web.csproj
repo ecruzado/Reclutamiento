@@ -276,8 +276,7 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    
-        <Compile Include="Reportes\Intranet\dsReportePostulantePotencial.Designer.cs">
+    <Compile Include="Reportes\Intranet\dsReportePostulantePotencial.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
@@ -288,7 +287,6 @@
       <DependentUpon>ReportePostulantePotencial.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    
     <Compile Include="Reportes\Intranet\ReporteResumen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -381,13 +379,16 @@
     <Content Include="Content\images\Banner-Selección-03.png" />
     <Content Include="Content\images\calendario.png" />
     <Content Include="Content\images\delete.png" />
+    <Content Include="Content\images\ekiga.png" />
     <Content Include="Content\images\enabled.png" />
+    <Content Include="Content\images\enigma.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\logo_sanpablo -prueba.png" />
     <Content Include="Content\images\logo_sanpablo.png" />
     <Content Include="Content\images\logo_san_pablo_png.png" />
     <Content Include="Content\images\printer.png" />
+    <Content Include="Content\images\red.png" />
     <Content Include="Content\images\right_2.png" />
     <Content Include="Content\images\sanpablo_logo2.GIF" />
     <Content Include="Content\images\time.gif" />
@@ -733,15 +734,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reportes\Intranet\ReportePostulantePotencial.rpt">
-    <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReportePostulantePotencial.cs</LastGenOutput>
     </EmbeddedResource>
-
     <EmbeddedResource Include="Reportes\Intranet\ReporteResumen.rpt">
-    <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>      
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteResumen.cs</LastGenOutput>
     </EmbeddedResource>
-    
     <EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteSeleccion.cs</LastGenOutput>

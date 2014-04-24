@@ -57,10 +57,11 @@
 
         $('#Registro_Desde,#Registro_Hasta').attr("readonly", "readonly");
 
-
-
         $('select#PostulantePotencial_IdeSede').change(function () {
             var ideSede = $(this).val();
+
+            cargarCargo(ideSede);
+
             $("select#PostulantePotencial_IdeDependencia").empty();
             $("select#PostulantePotencial_IdeDependencia").append("<option value='0'> SELECCIONAR </option>");
 
@@ -84,25 +85,7 @@
                 );
                 }
             });
-
-            $("select#PostulantePotencial_IdeCargo").empty();
-            $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
-
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listaCargos", "ReportePostulantePotencial", new { area = "Intranet"})',
-                data: { ideSede: ideSede },
-                success: function (respuesta) {
-                    $("select#PostulantePotencial_IdeCargo").empty();
-                    $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
-                    $.each(respuesta, function (i, item) {
-                        $("select#PostulantePotencial_IdeCargo").append("<option value='"
-                        + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
-                    }
-                );
-                }
-            });
-
+            
         });
 
 
@@ -262,9 +245,34 @@
         var imgPath = '@Url.Content("~/Content/images/")';
                 var archivo = 'printer.png';
                 //var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
-                var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + rowObject[13] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
+                var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + rowObject[15] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
             return strImg;
   }
+
+
+    function cargarCargo(idSede)
+    {
+        $("select#PostulantePotencial_IdeCargo").empty();
+        $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("listaCargos","ReportePostulantePotencial",new { area = "Intranet"})',
+                data: { ideSede: idSede },
+                success: function (respuesta) {
+                    $("select#PostulantePotencial_IdeCargo").empty();
+                    $("select#PostulantePotencial_IdeCargo").append("<option value='0'> SELECCIONAR </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#PostulantePotencial_IdeCargo").append("<option value='"
+                        + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
+                    }
+                    );
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+         });
+    }
 
     function validarFecha() {
 
@@ -283,8 +291,8 @@
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
-        if (dif >= 90) {
-            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 3 meses', "Sistema de Reclutamiento y Seleccion de Persona");
+        if (dif >= 180) {
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 6 meses', "Sistema de Reclutamiento y Seleccion de Persona");
             return false;
         }
 
@@ -312,7 +320,7 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError">Cargo </label>
+                            <label class="control-label" for="selectError">Cargo <span class="text-error">*</span></label>
                             <div class="controles">
                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.PostulantePotencial.IdeCargo))
                             </div>
@@ -406,7 +414,7 @@
                    <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:300px;text-align:left">Fecha de registro como postulante potencial </label>
+                            <label class="control-label" for="inputSuccess" style="width:300px;text-align:left">Fecha de registro como postulante potencial <span class="text-error">*</span></label>
                             <div class="controles">
                                 
                             </div>
@@ -449,7 +457,7 @@
             <div class="grilla-opciones">
                 <div class="opciones">
                     <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
-                    <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulanteBD")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
+                    <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulantePotencial")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
                 </div>
                 <div style="clear:both"></div>
             </div>

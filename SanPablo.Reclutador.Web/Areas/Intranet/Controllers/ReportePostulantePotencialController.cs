@@ -155,8 +155,8 @@
 
 
             reporteModel.Sedes = new List<Sede>(_sedeRepository.GetBy(x=>x.EstadoRegistro == IndicadorActivo.Activo));
-            reporteModel.Sedes.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "SELECCIONAR" });
-            reporteModel.Sedes.Add(new Sede { CodigoSede = "999", DescripcionSede = "TODAS" });
+            reporteModel.Sedes.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "TODAS" });
+            //reporteModel.Sedes.Add(new Sede { CodigoSede = "999", DescripcionSede = "TODAS" });
 
             reporteModel.Dependencias = new List<Dependencia>();
             reporteModel.Dependencias.Add(new Dependencia { IdeDependencia = 0, NombreDependencia = "SELECCIONAR" });
@@ -181,14 +181,19 @@
         /// </summary>
         /// <param name="ideSede"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult listaCargos(int ideSede)
         {
             ActionResult result = null;
-            var listaResultado = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
-                                                  && x.IdeSede == ideSede));
+            var listaResultado = new List<Cargo>();
+
+                listaResultado = _cargoRepository.listarCargosSede(ideSede);
+            
             result = Json(listaResultado);
+            
             return result;
         }
+
 
         /// <summary>
         /// lista de dependencia
@@ -300,10 +305,10 @@
 
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
                 string pathApliacion = Server.MapPath(".");
-                ReporteExcel objGeneraExcel = new ReporteExcel();
+                ReporteExcelv2 objGeneraExcel = new ReporteExcelv2();
                 ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
 
-                objGeneraExcel.creaHoja("pagina 01");
+                objGeneraExcel.creaHoja("pagina 01","S");
                 styleTitulo = objGeneraExcel.addEstiloTitulo(true, 14, "CENTER");
                 styleCadena = objGeneraExcel.addEstiloCadena(false, 10, "LEFT");
                 styleNegrita = objGeneraExcel.addEstiloCadenaNegrita(10, "LEFT");
@@ -319,47 +324,104 @@
                 string dir = fullPath;
 
                 //numero de columnas excel
-                int cantCol = 13;
+                int cantCol = 14;
 
-                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "REPORTE DE POSTULANTES BASE DE DATOS", styleTitulo);
+                //adiciona el titulo excel
+                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Reporte de Postulantes Potenciales", styleTitulo);
 
+                //adiciona la imagen
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
-                objGeneraExcel.adicionaCamposCab(5, 1, "Reclutamiento y Selección de Personal", styleNegrita);
 
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
-
-                //objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
-                //objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
-                //objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
-                //objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
-                //objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
-                //objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
-
-                //objGeneraExcel.addDetalleLista(dtResultado, 1, "FECHA DE REGISTRO DE CV", 1);
-                //objGeneraExcel.addDetalleLista(dtResultado, 2, "DEPARTAMENTO", 2);
-                //objGeneraExcel.addDetalleLista(dtResultado, 3, "PROVINCIA", 3);
-                //objGeneraExcel.addDetalleLista(dtResultado, 4, "DISTRITO", 4);
-                //objGeneraExcel.addDetalleLista(dtResultado, 5, "NOMBRES Y APELLIDOS", 5);
-                //objGeneraExcel.addDetalleLista(dtResultado, 6, "CEL. / FIJO", 6);
-                //objGeneraExcel.addDetalleLista(dtResultado, 7, "EMAIL", 7);
-                //objGeneraExcel.addDetalleLista(dtResultado, 8, "CARGO", 8);
-                //objGeneraExcel.addDetalleLista(dtResultado, 9, "EDAD", 9);
-                //objGeneraExcel.addDetalleLista(dtResultado, 10, "TIPO DE ESTUDIOS", 10);
-                //objGeneraExcel.addDetalleLista(dtResultado, 11, "ÁREA DE ESTUDIOS", 11);
-                //objGeneraExcel.addDetalleLista(dtResultado, 12, "RANGO SALARIAL", 12);
+                //Se crea un contador de filas que debe ir auto incrementandose si crean nuevas filas
 
 
-                // Se coloca de manera obligatoria
-                objGeneraExcel.imprimirCabecera(8, styleNegrita);
-                objGeneraExcel.imprimiDetalle(9, styleCadena);
+                int Fila = 2;
+                IRow row;
+
+                row = objGeneraExcel.addFila(Fila++);
+
+                objGeneraExcel.addCelda(row, cantCol - 1, "Fecha :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena, "S");
+
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Hora :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena, "S");
+
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Usuario :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
+                objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
+
+                // se define la cabecera
+                List<string> lista = new List<string>();
+
+                lista.Add("FECHA DE REGISTRO DE PP");
+                lista.Add("SEDE");
+                lista.Add("DEPENDENCIA");
+                lista.Add("DEPARTAMENTO");
+                lista.Add("AREA");
+                lista.Add("NOMBRES Y APELLIDOS");
+                lista.Add("CARGO");
+                lista.Add("CEL. / FIJO");
+                lista.Add("EMAIL");
+                lista.Add("EDAD");
+                lista.Add("PJTE. DE EVALUACIÓN");
+                lista.Add("PJTE. DE SELECCIÓN");
+                lista.Add("ÁREA DE ESTUDIOS");
+                lista.Add("RANGO SALARIAL");
+
+                int colCab = 0;
+                Fila += 2;
+                row = objGeneraExcel.addFila(Fila);
+                foreach (String item in lista)
+                {
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, item, styleNegrita, "S");
+                }
+
+                //imprime detalle
+                colCab = 0;
+                Fila += 1;
+                foreach (ReportePostulantePotencial ItemReporte in listaResultado)
+                {
+                    colCab = 0;
+                    row = objGeneraExcel.addFila(Fila++);
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaPostulantePotencial, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Sede, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Dependencia, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Departamento, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Area, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.NombreCompleto, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Cargo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.TelefonoContacto, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Email, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Edad.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.PuntajeCV.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.PuntajeSeleccion.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.AreaEstudio, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.RangoSalarial, styleCadena, "S");
+                }
 
 
                 MemoryStream exportData = new MemoryStream();
                 using (exportData)
                 {
                     exportData = objGeneraExcel.imprimeExcel(exportData);
-                    string saveAsFileName = string.Format("Reporte Postulantes BD-{0:d}.xls", DateTime.Now).Replace("/", "-");
+                    string saveAsFileName = string.Format("Reporte Postulantes Potenciales-{0:d}.xls", DateTime.Now).Replace("/", "-");
 
                     Response.ContentType = "application/vnd.ms-excel";
                     Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", saveAsFileName));
@@ -370,25 +432,6 @@
                 }
             }
         }
-
-        public ActionResult autoCompletarCargo(string query)
-        {
-            var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-            query = query.Replace(" ", "");
-            if (query.Length > 1)
-            {
-                int op = query.LastIndexOf(",");
-                query = query.Substring(op + 1);
-            }
-            //List<Cargo> obj = new List<Cargo>();
-            var obj = _cargoRepository.GetBy(x => x.IdeSede == ideSede);
-
-            var users = (from u in obj
-                         where u.NombreCargo.Contains(query)
-                         select u.NombreCargo).Distinct().ToArray();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-
 
 
     }

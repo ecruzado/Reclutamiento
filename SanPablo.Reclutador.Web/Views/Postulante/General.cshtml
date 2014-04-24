@@ -154,7 +154,7 @@
                 success: function (respuesta) {
                     if (!respuesta) {
 
-                        MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe omunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
+                        MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe comunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
                         $('#Postulante_NumeroDocumento').val('');
                         //msjError.style.display = "block";
                     }
@@ -299,7 +299,7 @@
                             <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido paterno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario", onkeyup="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoPaterno)
                             </div>
@@ -310,7 +310,7 @@
                             <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido materno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" , @style="text-transform: uppercase"})
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" , onkeyup="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoMaterno)
                             </div>
@@ -321,7 +321,7 @@
                             <label class="etiquetaFormulario" for="txtprimernombre">Primer nombre <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario", onkeyup="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.PrimerNombre)
                             </div>
@@ -332,7 +332,7 @@
                             <label class="etiquetaFormulario" for="txtsegundonombre">Segundo nombre</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.SegundoNombre)
                             </div>
@@ -375,7 +375,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", onkeyup="aMays(event, this)" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -397,7 +397,7 @@
                             <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="text-transform: uppercase;width:570px" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px" , onkeyup="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Observacion)
                             </div>
@@ -451,7 +451,7 @@
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de vía</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" , @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NombreVia)
                             </div>
@@ -475,7 +475,7 @@
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", style="text-transform: uppercase"})                           
+                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", onkeyup="aMays(event, this)"})                           
                             
                         </td>
                     </tr>
@@ -495,10 +495,10 @@
                             <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase"})
+                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , onkeyup="aMays(event, this)"})
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , onkeyup="aMays(event, this)" })
                             
                         </td>
                     </tr>
@@ -517,9 +517,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", onkeyup="aMays(event, this)" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="3", @style="text-transform: uppercase" })
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="3", onkeyup="aMays(event, this)" })
                             
                         </td>
                     </tr>
@@ -561,7 +561,7 @@
                             <label class="etiquetaFormulario" for="setipozona">Nombre zona</label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.NombreZona, new { @style="text-transform: uppercase"})
+                             @Html.TextBoxFor(model => model.Postulante.NombreZona, new { onkeyup="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NombreZona)
                             </div>
@@ -575,7 +575,7 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Referencia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion, new { @style="text-transform: uppercase"} )
+                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion, new {onkeyup="aMays(event, this)"} )
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ReferenciaDireccion)
                             </div>
@@ -585,12 +585,7 @@
                 </table>
                 <div class="formulario-accion">
                     <div class="opciones">
-                        @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
-                                
-                       @* <button type="reset" class="btn">Cancelar</button>*@
-                        @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>*@
                         <a id="btnGrabar" onclick="guardarDatosGenerales();" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
-                        @*<a class="btn btn-info" href="@Url.Action("Index", "EstudioPostulante")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>*@
                     </div>
                 </div>
                 <div style="clear:both"></div>

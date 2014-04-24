@@ -31,5 +31,12 @@ using System.Data;
         /// <param name="ideCargo"></param>
         /// <returns></returns>
         string consultaEditarCargo(int ideCargo);
+
+        /// <summary>
+        /// Lista de cargos por determinada Sede
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        List<Cargo> listarCargosSede(int ideSede);
     }
 }

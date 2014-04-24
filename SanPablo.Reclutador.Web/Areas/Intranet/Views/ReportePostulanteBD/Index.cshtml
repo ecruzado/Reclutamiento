@@ -289,8 +289,8 @@
                 return false;
             },
             select: function (event, ui) {
-                this.value = ui.item.value;
-                return false;
+                    this.value = ui.item.value;
+                    return false;
                 //if u want to select items in comma separate then
                 //                var terms = split(this.value);
                 //                // remove the current input
@@ -322,7 +322,7 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError">Busqueda rápida </label>
+                            <label class="control-label" for="selectError">Busqueda rápida<span class="text-error">*</span></label>
                             <div class="controles">
                                 @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onkeyup="aMays(event, this)"})
                             </div>
@@ -381,21 +381,19 @@
                     </td>  
 
                 </tr>
-                </table>
-            <table class="formulario-busqueda">
-                    <tr class="formulario-fila">
+
+                   <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:180px;text-align:left">Fecha de registro de CV </label>
+                            <label class="control-label" for="inputSuccess" style="width:180px;text-align:left">Fecha de registro de CV <span class="text-error">*</span></label>
                             <div class="controles">
                                 
                             </div>
                         </div>
                     </td>
                     </tr>
-                </table>
-            <table class="formulario-busqueda">
-                   <tr class="formulario-fila">
+
+                    <tr class="formulario-fila">
                     <td class="span5">
                         <div class="" >
                             <label class="control-label" for="inputSuccess" >Desde </label>
@@ -407,17 +405,24 @@
                             </div>
                         </div>
                     </td>
-                     <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:90px">Rango Edad </label>
-                            <div class =" controles">
+                      <td class="" style ="width:140px">
+                        <div class="" style="width:90px">
+                            <label class="control-label" for="inputSuccess" >Rango Edad </label>
+                            <div class ="controles" >
                                 @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
-                                <span style ="width:50px">a </span> 
+                            </div>
+                            
+                        </div>
+                    </td> 
+                        <td class="" style="width:100px">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:90px">  a  </label>
+                            <div class =" controles" >
                                 @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
                             </div>
                             
                         </div>
-                    </td>  
+                    </td> 
 
                 </tr>
 
@@ -433,10 +438,17 @@
                         &nbsp;
                     </td>
                 </tr>
+                </table>
+        
 
-              </table>
-             <div class="" >
-                <h5>Resultado</h5>
+            @*<fieldset>
+            <legend>Resultado </legend>
+            <input type="text" />
+                 <asp:Textbox runat="Server" id="txt1" />
+   
+            </fieldset>*@
+             <div class="" style="margin-left:20px;">
+                <h5 >Resultado</h5>
              
              </div>
             <div class="grilla-opciones">

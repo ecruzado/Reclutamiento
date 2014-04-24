@@ -340,6 +340,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             private global::System.Data.DataColumn columnTIPOEDUCACION;
             
+            private global::System.Data.DataColumn columnPTJECV;
+            
+            private global::System.Data.DataColumn columnPTJESELECCION;
+            
             private global::System.Data.DataColumn columnTIPOAREA;
             
             private global::System.Data.DataColumn columnRANGOSALARIO;
@@ -483,6 +487,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PTJECVColumn {
+                get {
+                    return this.columnPTJECV;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PTJESELECCIONColumn {
+                get {
+                    return this.columnPTJESELECCION;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn TIPOAREAColumn {
                 get {
                     return this.columnTIPOAREA;
@@ -534,7 +554,24 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtPostulantePotencialRow AdddtPostulantePotencialRow(int IDERECLUTAPERSONA, int IDEPOSTULANTE, System.DateTime FECPOTENCIAL, string NOMBRESEDE, string NOMBREDEPENDENCIA, string NOMBREDEPARTAMENTO, string NOMBREAREA, string NOMBREPOSTULANTE, string NOMBRECARGO, string TELEFONO, string CORREO, int EDAD, string TIPOEDUCACION, string TIPOAREA, string RANGOSALARIO) {
+            public dtPostulantePotencialRow AdddtPostulantePotencialRow(
+                        int IDERECLUTAPERSONA, 
+                        int IDEPOSTULANTE, 
+                        System.DateTime FECPOTENCIAL, 
+                        string NOMBRESEDE, 
+                        string NOMBREDEPENDENCIA, 
+                        string NOMBREDEPARTAMENTO, 
+                        string NOMBREAREA, 
+                        string NOMBREPOSTULANTE, 
+                        string NOMBRECARGO, 
+                        string TELEFONO, 
+                        string CORREO, 
+                        int EDAD, 
+                        string TIPOEDUCACION, 
+                        int PTJECV, 
+                        int PTJESELECCION, 
+                        string TIPOAREA, 
+                        string RANGOSALARIO) {
                 dtPostulantePotencialRow rowdtPostulantePotencialRow = ((dtPostulantePotencialRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         IDERECLUTAPERSONA,
@@ -550,6 +587,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         CORREO,
                         EDAD,
                         TIPOEDUCACION,
+                        PTJECV,
+                        PTJESELECCION,
                         TIPOAREA,
                         RANGOSALARIO};
                 rowdtPostulantePotencialRow.ItemArray = columnValuesArray;
@@ -587,6 +626,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 this.columnCORREO = base.Columns["CORREO"];
                 this.columnEDAD = base.Columns["EDAD"];
                 this.columnTIPOEDUCACION = base.Columns["TIPOEDUCACION"];
+                this.columnPTJECV = base.Columns["PTJECV"];
+                this.columnPTJESELECCION = base.Columns["PTJESELECCION"];
                 this.columnTIPOAREA = base.Columns["TIPOAREA"];
                 this.columnRANGOSALARIO = base.Columns["RANGOSALARIO"];
             }
@@ -620,6 +661,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnEDAD);
                 this.columnTIPOEDUCACION = new global::System.Data.DataColumn("TIPOEDUCACION", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTIPOEDUCACION);
+                this.columnPTJECV = new global::System.Data.DataColumn("PTJECV", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPTJECV);
+                this.columnPTJESELECCION = new global::System.Data.DataColumn("PTJESELECCION", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPTJESELECCION);
                 this.columnTIPOAREA = new global::System.Data.DataColumn("TIPOAREA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTIPOAREA);
                 this.columnRANGOSALARIO = new global::System.Data.DataColumn("RANGOSALARIO", typeof(string), null, global::System.Data.MappingType.Element);
@@ -1253,6 +1298,38 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int PTJECV {
+                get {
+                    try {
+                        return ((int)(this[this.tabledtPostulantePotencial.PTJECVColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PTJECV\' in table \'dtPostulantePotencial\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtPostulantePotencial.PTJECVColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public int PTJESELECCION {
+                get {
+                    try {
+                        return ((int)(this[this.tabledtPostulantePotencial.PTJESELECCIONColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PTJESELECCION\' in table \'dtPostulantePotencial\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtPostulantePotencial.PTJESELECCIONColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string TIPOAREA {
                 get {
                     try {
@@ -1437,6 +1514,30 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetTIPOEDUCACIONNull() {
                 this[this.tabledtPostulantePotencial.TIPOEDUCACIONColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPTJECVNull() {
+                return this.IsNull(this.tabledtPostulantePotencial.PTJECVColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPTJECVNull() {
+                this[this.tabledtPostulantePotencial.PTJECVColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPTJESELECCIONNull() {
+                return this.IsNull(this.tabledtPostulantePotencial.PTJESELECCIONColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPTJESELECCIONNull() {
+                this[this.tabledtPostulantePotencial.PTJESELECCIONColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

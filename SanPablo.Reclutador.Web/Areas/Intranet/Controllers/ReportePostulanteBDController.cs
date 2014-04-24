@@ -218,6 +218,8 @@
                   
                 DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
 
+                
+
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
                 string nomReporte = "ReportePostulanteBD.rpt";
@@ -247,15 +249,15 @@
             {
                 PostulanteBDReporte postulanteReporte = null;
                 postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
-                DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
+                List<PostulanteBDReporte> listaResultado = _postulanteRepository.ListaPostulantesBDReporte(postulanteReporte);
 
 
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
                 string pathApliacion = Server.MapPath(".");
-                ReporteExcel objGeneraExcel = new ReporteExcel();
+                ReporteExcelv2 objGeneraExcel = new ReporteExcelv2();
                 ICellStyle styleTitulo, styleCadena, styleNegrita, styleNumero;
 
-                objGeneraExcel.creaHoja("pagina 01");
+                objGeneraExcel.creaHoja("pagina 01","S");
                 styleTitulo = objGeneraExcel.addEstiloTitulo(true, 14, "CENTER");
                 styleCadena = objGeneraExcel.addEstiloCadena(false, 10, "LEFT");
                 styleNegrita = objGeneraExcel.addEstiloCadenaNegrita(10, "LEFT");
@@ -276,42 +278,90 @@
                 objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "REPORTE DE POSTULANTES BASE DE DATOS", styleTitulo);
 
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
-                objGeneraExcel.adicionaCamposCab(5, 1, "Reclutamiento y Selección de Personal", styleNegrita);
-
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 2, "Sede :", styleCadena);
-                //    objGeneraExcel.adicionaCamposCab(2, (cantCol / 2) - 1, sede, styleCadena);
-
-                objGeneraExcel.adicionaCamposCab(2, cantCol - 1, "Fecha :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(2, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena);
-                objGeneraExcel.adicionaCamposCab(3, cantCol - 1, "Hora :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(3, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena);
-                objGeneraExcel.adicionaCamposCab(4, cantCol - 1, "Usuario :", styleCadena);
-                objGeneraExcel.adicionaCamposCab(4, cantCol, UsuarioActual.NombreUsuario, styleCadena);
-
-                objGeneraExcel.addDetalleLista(dtResultado, 1, "FECHA DE REGISTRO DE CV", 1);
-                objGeneraExcel.addDetalleLista(dtResultado, 2, "DEPARTAMENTO", 2);
-                objGeneraExcel.addDetalleLista(dtResultado, 3, "PROVINCIA", 3);
-                objGeneraExcel.addDetalleLista(dtResultado, 4, "DISTRITO", 4);
-                objGeneraExcel.addDetalleLista(dtResultado, 5, "NOMBRES Y APELLIDOS", 5);
-                objGeneraExcel.addDetalleLista(dtResultado, 6, "CEL. / FIJO", 6);
-                objGeneraExcel.addDetalleLista(dtResultado, 7, "EMAIL", 7);
-                objGeneraExcel.addDetalleLista(dtResultado, 8, "CARGO", 8);
-                objGeneraExcel.addDetalleLista(dtResultado, 9, "EDAD", 9);
-                objGeneraExcel.addDetalleLista(dtResultado, 10, "TIPO DE ESTUDIOS", 10);
-                objGeneraExcel.addDetalleLista(dtResultado, 11, "ÁREA DE ESTUDIOS", 11);
-                objGeneraExcel.addDetalleLista(dtResultado, 12, "RANGO SALARIAL", 12);
 
 
-                // Se coloca de manera obligatoria
-                objGeneraExcel.imprimirCabecera(8, styleNegrita);
-                objGeneraExcel.imprimiDetalle(9, styleCadena);
+                int Fila = 2;
+                IRow row;
+
+                row = objGeneraExcel.addFila(Fila++);
+
+                objGeneraExcel.addCelda(row, cantCol - 1, "Fecha :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("dd/MM/yyyy"), styleCadena, "S");
+
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Hora :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, fecha.ToString("HH:mm:ss tt"), styleCadena, "S");
+
+                row = objGeneraExcel.addFila(Fila++);
+                objGeneraExcel.addCelda(row, cantCol - 1, "Usuario :", styleCadena, "S");
+                objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
+                objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
+
+
+                // se define la cabecera
+                List<string> lista = new List<string>();
+
+                lista.Add("FECHA DE REGISTRO DE CV");
+                lista.Add("DEPARTAMENTO");
+                lista.Add("PROVINCIA");
+                lista.Add("DISTRITO");
+                lista.Add("NOMBRES Y APELLIDOS");
+                lista.Add("CEL. / FIJO");
+                lista.Add("EMAIL");
+                lista.Add("CARGO");
+                lista.Add("EDAD");
+                lista.Add("TIPO DE ESTUDIOS");
+                lista.Add("ÁREA DE ESTUDIOS");
+                lista.Add("RANGO SALARIAL");
+
+                int colCab = 0;
+                Fila += 2;
+                row = objGeneraExcel.addFila(Fila);
+                foreach (String item in lista)
+                {
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, item, styleNegrita, "S");
+                }
+
+                //imprime detalle
+                colCab = 0;
+                Fila += 1;
+                foreach (PostulanteBDReporte ItemReporte in listaResultado)
+                {
+                    colCab = 0;
+                    row = objGeneraExcel.addFila(Fila++);
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaRegistro, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Departamento, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Provincia, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Distrito, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.NombreCompleto, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.TelefonoContacto, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Email, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Cargo, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Edad.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.TipoEstudio, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.AreaEstudio, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.RangoSalarial, styleCadena, "S");
+                }
 
 
                 MemoryStream exportData = new MemoryStream();
                 using (exportData)
                 {
                     exportData = objGeneraExcel.imprimeExcel(exportData);
-                    string saveAsFileName = string.Format("Reporte Postulantes BD-{0:d}.xls", DateTime.Now).Replace("/", "-");
+                    string saveAsFileName = string.Format("Reporte Postulantes Potenciales-{0:d}.xls", DateTime.Now).Replace("/", "-");
 
                     Response.ContentType = "application/vnd.ms-excel";
                     Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", saveAsFileName));
