@@ -484,6 +484,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
+                Fila++;
                 row = objGeneraExcel.addFila(Fila++);
                 objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
 

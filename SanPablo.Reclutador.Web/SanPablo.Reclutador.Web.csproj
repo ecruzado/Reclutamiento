@@ -278,6 +278,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CvPostulanteReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reportes\Intranet\ReporteResumen.cs">
       <AutoGen>True</AutoGen>
