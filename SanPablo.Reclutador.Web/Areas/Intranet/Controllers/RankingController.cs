@@ -86,6 +86,59 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             // consulta que obtiene los datos de la solicitud por id y Tipo de Puesto
 
+
+
+            //Permisos de los botones por roll
+            Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+            if (Roles.Analista_Seleccion.Equals(idRol))
+            {
+                model.btnAgregar ="S";
+                model.btnEditar = "S";
+                model.btnEliminar = "S";
+                model.btnCitado = "S";
+                model.btnAsistio = "S";
+                model.btnBuscar = "S";
+                model.btnAprobado = "S";
+                model.btnCvPreseleccion = "S";
+
+            }
+            else if (Roles.Encargado_Seleccion.Equals(idRol))
+            {
+                model.btnAgregar = "S";
+                model.btnEditar = "S";
+                model.btnEliminar = "S";
+                model.btnCitado = "S";
+                model.btnAsistio = "S";
+                model.btnBuscar = "S";
+                model.btnAprobado = "S";
+                model.btnCvPreseleccion = "S";
+
+            }
+            else if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                model.btnAgregar = "S";
+                model.btnEditar = "S";
+                model.btnEliminar = "S";
+                model.btnCitado = "S";
+                model.btnAsistio = "S";
+                model.btnBuscar = "S";
+                model.btnAprobado = "S";
+                model.btnCvPreseleccion = "S";
+
+            }
+            else 
+            { 
+                model.btnAgregar = "N";
+                model.btnEditar = "N";
+                model.btnEliminar = "N";
+                model.btnCitado = "N";
+                model.btnAsistio = "N";
+                model.btnBuscar = "N";
+                model.btnAprobado = "N";
+                model.btnCvPreseleccion = "N";
+            }
+
             return View("Index",model);
         }
 

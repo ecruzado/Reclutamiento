@@ -59,7 +59,6 @@
       });
 
 
-
     $('#btnRankingSol').click(function () {
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
@@ -84,15 +83,12 @@
 
             var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + selr +"&pagina=" + pagina;
             window.location = url;
-            @*window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = ""})' + '/' + selr;*@
+           
         } else {
             MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
         }
 
      });
-
-
-   
 
 
     $('select#SolReqPersonal_IdeDependencia').change(function () {
@@ -231,25 +227,6 @@
         loadComplete: function (data) {
         }
     });
-
-
-    //inicio
-
-    //function validacionBuscar() {
-        
-    //    var fechaInicial = $("#SolReqPersonal_FechaInicioBus").val()
-    //    var fechaFinal = $("#SolReqPersonal_FechaFinBus").val()
-
-    //    if (fechaInicial.length > 0 && fechaFinal.length) {
-
-
-
-    //    }
-
-
-    //}
-
-    //Fin
 
 
     function RadioFormatter(cellvalue, options, rowObject) {

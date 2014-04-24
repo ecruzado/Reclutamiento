@@ -278,12 +278,12 @@ namespace SanPablo.Reclutador.Repository
                  lspcmd.Parameters.Add("p_cTipVacante", OracleType.VarChar).Value = solReqPersonal.TipVacante;
                  lspcmd.Parameters.Add("p_nNumVacantes", OracleType.Number).Value = solReqPersonal.NumVacantes;
                  lspcmd.Parameters.Add("p_cTipPuesto", OracleType.VarChar).Value = solReqPersonal.TipPuesto;
-                 lspcmd.Parameters.Add("p_cObservacion", OracleType.VarChar).Value = solReqPersonal.Observacion;
+                 lspcmd.Parameters.Add("p_cObservacion", OracleType.VarChar).Value = (solReqPersonal.Observacion == null ? "" : solReqPersonal.Observacion);
                  lspcmd.Parameters.Add("p_idUsuarioSuceso", OracleType.Number).Value = solReqPersonal.idUsuarioSuceso;
                  lspcmd.Parameters.Add("p_cDesUsuarioSuceso", OracleType.VarChar).Value = solReqPersonal.UsuarioCreacion;
                  lspcmd.Parameters.Add("p_cFechaSuceso", OracleType.VarChar).Value = cFechaInicio;
                  lspcmd.Parameters.Add("p_cIdRolSuceso", OracleType.Number).Value = solReqPersonal.idRolSuceso;
-                 lspcmd.Parameters.Add("p_cCodReemplazo", OracleType.VarChar).Value = objReemplazo.CodGenerado;
+                 lspcmd.Parameters.Add("p_cCodReemplazo", OracleType.VarChar).Value = "";
                  lspcmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = solReqPersonal.TipEtapa;
                  lspcmd.Parameters.Add("p_idUsuarioResp", OracleType.VarChar).Value = solReqPersonal.idUsuarioResp;
                  lspcmd.Parameters.Add("p_idRolResp", OracleType.Number).Value = solReqPersonal.IdRolResp;
@@ -490,8 +490,29 @@ namespace SanPablo.Reclutador.Repository
                      lobReemplazo.IdReemplazo = Convert.ToInt32(ldrReemplazo["IDREEMPLAZO"]);
                      lobReemplazo.ApePaterno = Convert.ToString(ldrReemplazo["APEPATERNO"]);
                      lobReemplazo.Nombres = Convert.ToString(ldrReemplazo["NOMBRES"]);
-                     lobReemplazo.FecInicioReemplazo = Convert.ToDateTime(ldrReemplazo["FECINICIOREEMPLAZO"]);
-                     lobReemplazo.FecFinalReemplazo = Convert.ToDateTime(ldrReemplazo["FECFINREEMPLAZO"]);
+
+                     if (ldrReemplazo["FECINICIOREEMPLAZO"]!=System.DBNull.Value)
+                     {
+                          lobReemplazo.FecInicioReemplazo = Convert.ToDateTime(ldrReemplazo["FECINICIOREEMPLAZO"]);
+
+                     }
+                     else
+                     {
+                         lobReemplazo.FecInicioReemplazo = null;
+                     }
+                     
+                     if (ldrReemplazo["FECFINREEMPLAZO"] != System.DBNull.Value)
+                     {
+                         lobReemplazo.FecFinalReemplazo = Convert.ToDateTime(ldrReemplazo["FECFINREEMPLAZO"]);
+
+                     }
+                     else
+                     {
+                         lobReemplazo.FecFinalReemplazo = null;
+                     }
+                     
+                     //lobReemplazo.FecFinalReemplazo = Convert.ToDateTime(ldrReemplazo["FECFINREEMPLAZO"]);
+                     
                      lobReemplazo.IdeSolReqPersonal = Convert.ToInt32(ldrReemplazo["IDESOLREQPERSONAL"]);
                      lobReemplazo.IdPersona = Convert.ToInt32(ldrReemplazo["IDPERSONA"]);
                      

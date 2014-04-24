@@ -1,4 +1,7 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudRempCargoViewModel
+@using SanPablo.Reclutador.Entity
+@using System.Collections.Generic
+
 @{
     Layout = "";
 }
@@ -9,9 +12,49 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $('#Reemplazo_FecInicioReemplazo,#Reemplazo_FecFinalReemplazo').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+        });
+
+        $('#Reemplazo_FecInicioReemplazo,#Reemplazo_FecFinalReemplazo').attr("readonly", "readonly");
+
+
     });
 
-    
+    //function valida() {
+
+    //    var fechaInicial = $('#ReporteSol_FechaInicio').val();
+    //    var fechaFinal = $('#ReporteSol_FechaFin').val();
+
+    //    if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+
+    //        MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+    //        return false;
+    //    }
+
+    //    if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+    //        MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+    //        return false;
+    //    }
+
+    //    dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
+    //    if (dif >= 180) {
+    //        MostrarMensaje('La diferencia entre fechas no puede ser mayor a 180 días', "Mensaje");
+    //        return false;
+    //    }
+
+    //    return true;
+
+    //}
+
+    //function MostrarMensaje(mensaje, titulo) {
+    //    Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    //}
 
 
 </script>
@@ -25,6 +68,8 @@
         <tr >
 
              @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { style = "display: none;" })
+             @Html.TextBoxFor(model => model.TipoReemplazo, new { style = "display: none;" })
+            
 
 
             <td class="colEtiqueta" >
@@ -33,9 +78,9 @@
             <td class="colInput" >
                
                 @Html.TextBoxFor(model => model.Reemplazo.Nombres, new { @class = "textoFormulario" , maxlength="100" ,onkeyup="aMays(event, this)"})                      
-                <div class="tex-error" style="font-size:12px;color:red">    
+               @* <div class="tex-error" style="font-size:12px;color:red">    
                 @Html.ValidationMessageFor(model => model.Reemplazo.Nombres )
-                </div>
+                </div>*@
             </td>
         </tr>
         
@@ -47,44 +92,43 @@
             <td class="colInput;input-xxlarge">
 
                  @Html.TextBoxFor(model => model.Reemplazo.ApePaterno, new { @class = "textoFormulario" ,  maxlength="100",onkeyup="aMays(event, this)"})      
-                <div class="tex-error" style="font-size:12px;color:red">   
+                @*<div class="tex-error" style="font-size:12px;color:red">   
                     @Html.ValidationMessageFor(model => model.Reemplazo.ApePaterno )
-                </div>
+                </div>*@
             </td>
         </tr>    
         
-       @*  <tr >
-            <td class="colEtiqueta">
-                <label class="etiquetaFormulario" >Apellido Materno<span class="text-error">*</span></label>
-            </td>
-            <td class="colInput;input-xxlarge">
-                 @Html.TextBoxFor(model => model.Reemplazo.ApeMaterno, new { @class = "textoFormulario" ,type = "password" ,  maxlength="100"})      
-                <div class="tex-error" style="font-size:12px;color:red">   
-                    @Html.ValidationMessageFor(model => model.Reemplazo.ApeMaterno )
-                </div>
-            </td>
-        </tr>   *@ 
+        @if (Visualicion.SI.Equals(Model.TipoReemplazo))
+        {
+            
+        
          <tr >
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" >Fecha Inicio<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                 @Html.EditorFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
-                <div class="tex-error" style="font-size:12px;color:red">   
+                
+                 <input type="text" class="input-small"  id="Reemplazo_FecInicioReemplazo" name="Reemplazo.FecInicioReemplazo" placeholder=" Inicial" >
+                              
+                              
+                @* @Html.EditorFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
+              @*  <div class="tex-error" style="font-size:12px;color:red">   
                     @Html.ValidationMessageFor(model => model.Reemplazo.FecInicioReemplazo )
-                </div>
+                </div>*@
             </td>
         </tr>    
+        }
          <tr >
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" >Fecha Fin<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
+                 <input type="text" class="input-small"  id="Reemplazo_FecFinalReemplazo" name="Reemplazo.FecFinalReemplazo" placeholder=" Final">
 
-                 @Html.EditorFor(model => model.Reemplazo.FecFinalReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
-                <div class="tex-error" style="font-size:12px;color:red">   
+                @* @Html.EditorFor(model => model.Reemplazo.FecFinalReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      *@
+                @*<div class="tex-error" style="font-size:12px;color:red">   
                  @Html.ValidationMessageFor(model => model.Reemplazo.FecFinalReemplazo )
-                </div>
+                </div>*@
             </td>
         </tr>    
 
@@ -98,4 +142,4 @@
         </tr>
        
     </table>
-}
+    }

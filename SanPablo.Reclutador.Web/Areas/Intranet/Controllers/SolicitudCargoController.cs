@@ -164,6 +164,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                       }
 
+                      if (Roles.Administrador_Sistema.Equals(idRol))
+                      {
+
+                          model.btnRanking = "S";
+                          model.btnPreselec = "S";
+                          model.btnNuevo = "S";
+                          model.btnRequerimiento = "S";
+
+                      }
+
                   }
 
 
@@ -484,7 +494,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
        /// Incializa el popup de reemplazo
        /// </summary>
        /// <returns></returns>
-        public ActionResult InicioPopupReemplazo(string id) 
+        public ActionResult InicioPopupReemplazo(string id, string tipReemplazo) 
         {
 
             SolicitudRempCargoViewModel model;
@@ -500,7 +510,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 model.SolReqPersonal.CodSolReqPersonal = id;
             }
-            
+
+            int codReemplazo = Convert.ToInt32(tipReemplazo);
+
+            if (codReemplazo!=null)
+            {
+                if (codReemplazo == 6 || codReemplazo == 7 || codReemplazo == 8 || codReemplazo == 9 || codReemplazo == 10)
+                {
+                    // es un tipo de reemplazo
+                    model.TipoReemplazo = "N";
+                }
+                else
+                {
+                    // es un tipo de suplencia
+                    model.TipoReemplazo = "S";
+                }
+            }
+
             
             
             return View("PopupListaReemplazo",model);
@@ -683,8 +709,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.IdReemplazo==null?"":item.IdReemplazo.ToString(),
                                 item.IdPersona==null?"":item.IdPersona.ToString(),
                                 item.IdeSolReqPersonal==null?"":item.IdeSolReqPersonal.ToString(),
-                                item.FecInicioReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecInicioReemplazo), 
-                                item.FecFinalReemplazo==null?"":String.Format("{0:MM/dd/yyyy}", item.FecFinalReemplazo),
+                                item.FecInicioReemplazo==null?"":String.Format("{0:dd/MM/yyyy}", item.FecInicioReemplazo), 
+                                item.FecFinalReemplazo==null?"":String.Format("{0:dd/MM/yyyy}", item.FecFinalReemplazo),
                                 item.Nombres==null?"":item.Nombres,
                                 item.ApePaterno==null?"":item.ApePaterno,
                                

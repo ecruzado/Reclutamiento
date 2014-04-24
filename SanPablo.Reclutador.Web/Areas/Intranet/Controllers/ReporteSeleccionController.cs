@@ -622,9 +622,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return MensajeError();
+                return MensajeError(ex.Message + fullPath);
             }
             return File(mem, "application/pdf");
 

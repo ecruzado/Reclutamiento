@@ -639,9 +639,18 @@
                     }
                     else
                     {
-                    <a class="btn btn-small btn-info" id="btnAgregarRanking" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a class="btn btn-small btn-info" id="btnEditarRanking" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a class="btn btn-small btn-info" id="btnEliminarPos" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                        if (Visualicion.SI.Equals(Model.btnAgregar))
+                        {
+                        <a class="btn btn-small btn-info" id="btnAgregarRanking" title="Agregar"><i class="icon-plus icon-white"></i></a>      
+                        }
+                        if (Visualicion.SI.Equals(Model.btnEditar))
+                        {
+                        <a class="btn btn-small btn-info" id="btnEditarRanking" title="Editar"><i class="icon-edit icon-white"></i></a>    
+                        }
+                        if (Visualicion.SI.Equals(Model.btnEliminar))
+                        {
+                        <a class="btn btn-small btn-info" id="btnEliminarPos" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                      
+                        }
                     }
                 </div>
                 <div style="clear:both"></div>
@@ -662,8 +671,16 @@
                     }
                     else
                     {
-                    <a class="btn btn-info"  id="btnCitaPos" title="Citado" onclick=""><i class="icon-edit icon-white" ></i> Citado</a> 
-                    <a class="btn btn-info" id="btnAsistioPos" title="Asistio" onclick=""><i class="icon-edit icon-white" ></i> Asistió</a> 
+
+                        if (Visualicion.SI.Equals(Model.btnCitado))
+                        {
+                          <a class="btn btn-info"  id="btnCitaPos" title="Citado" onclick=""><i class="icon-edit icon-white" ></i> Citado</a>     
+                        }
+                        if (Visualicion.SI.Equals(Model.btnAsistio))
+                        {
+                          <a class="btn btn-info" id="btnAsistioPos" title="Asistio" onclick=""><i class="icon-edit icon-white" ></i> Asistió</a>     
+                        }
+
                     }
                 </div> 
             </div>
@@ -681,7 +698,7 @@
 			            <label class="control-label" for="inputSuccess">Apellido Paterno</label>
 			            <div class="controles">
 				           
-                            @Html.TextBoxFor(model => model.ReclutaPersonal.ApePaterno, new { @class = "textoFormulario"}) 
+                            @Html.TextBoxFor(model => model.ReclutaPersonal.ApePaterno, new { @class = "textoFormulario" }) 
 			            </div>
 		   
 		            </td>
@@ -690,7 +707,7 @@
 			            <label class="control-label" for="inputSuccess">Nombre</label>
 			            <div class="controles">
 				           
-                            @Html.TextBoxFor(model => model.ReclutaPersonal.Nombre, new { @class = "textoFormulario"}) 
+                            @Html.TextBoxFor(model => model.ReclutaPersonal.Nombre, new { @class = "textoFormulario" }) 
 			            </div>
 		   
 		            </td>
@@ -701,7 +718,7 @@
 			            <label class="control-label" for="inputSuccess">Apellido Materno</label>
 			            <div class="controles">
 				           
-                            @Html.TextBoxFor(model => model.ReclutaPersonal.ApeMaterno, new { @class = "textoFormulario"}) 
+                            @Html.TextBoxFor(model => model.ReclutaPersonal.ApeMaterno, new { @class = "textoFormulario" }) 
 			            </div>
 		   
 		            </td>
@@ -711,7 +728,7 @@
 			            <label class="control-label" for="inputSuccess">Estado</label>
 			            <div class="controles">
 				           
-                           @Html.DropDownListFor(model => model.ReclutaPersonal.EstPostulante, new SelectList(Model.listaEstaPost, "Valor", "Descripcion", Model.ReclutaPersonal.EstPostulante),new {  data_val = "false"})
+                           @Html.DropDownListFor(model => model.ReclutaPersonal.EstPostulante, new SelectList(Model.listaEstaPost, "Valor", "Descripcion", Model.ReclutaPersonal.EstPostulante), new { data_val = "false" })
 			            </div>
 		   
 		            </td>
@@ -721,7 +738,10 @@
     
                 <div class="formulario-accion">
                     <div class="opciones">
-                        <a class="btn btn-info" href="#" id="btnBuscarPostulantes"><i class="icon-search icon-white"></i> Buscar</a>
+                        @if (Visualicion.SI.Equals(Model.btnBuscar))
+                        {
+                          <a class="btn btn-info" href="#" id="btnBuscarPostulantes"><i class="icon-search icon-white"></i> Buscar</a>    
+                        }
                     </div>
                 </div>
                 <div style="clear:both"></div>
@@ -746,9 +766,9 @@
                      }
 
                       @if (TipoSolicitud.Nuevo.Equals(Model.pagina))
-                     {
+                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                     }
+                      }
                      @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                      {
                        <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>   
@@ -759,10 +779,19 @@
                     <span></span> 
                 }
                 else
-                {    
-                    <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a> 
+                {
+                    if (Visualicion.SI.Equals(Model.btnAprobado))
+                    {
+                      <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a>     
+                    }
+                    
                 }
-                <a class="btn btn-info" id="btnAprobarPre"><i class="icon-edit icon-white"></i> CV-Preselección</a>                             
+                
+                @if (Visualicion.SI.Equals(Model.btnCvPreseleccion))
+                {
+                  <a class="btn btn-info" id="btnAprobarPre"><i class="icon-edit icon-white"></i> CV-Preselección</a>                                 
+                }
+                     
             </div>
         </div>
     </div>

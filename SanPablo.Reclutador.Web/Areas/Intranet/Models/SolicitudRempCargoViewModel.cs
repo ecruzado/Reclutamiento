@@ -45,7 +45,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> Estados { get; set; }
 
         public string Pagina { get; set; }
-
+        public string TipoReemplazo { get; set; }
        
         #region Botonera de busqueda
         /// <summary>
