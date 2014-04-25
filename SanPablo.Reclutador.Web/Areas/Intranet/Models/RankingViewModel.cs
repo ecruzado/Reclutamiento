@@ -24,7 +24,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         #region
 
-        //acceso de botones
+        //acceso de botones de ranking
 
         public string btnAgregar { get; set; }
         public string btnEditar { get; set; }
@@ -35,6 +35,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string btnAprobado { get; set; }
         public string btnCvPreseleccion { get; set; }
         
+
+        //acceso botones Preseleccion
+
+        public string btnEvaluaciones { get; set; }
+        public string btnSeleccionar { get; set; }
+        public string btnExcluir { get; set; }
+        public string btnContactado { get; set; }
+        public string btnContratar { get; set; }
 
         #endregion
 

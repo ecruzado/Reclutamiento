@@ -56,7 +56,7 @@
                 var idReclu = rowData.IdeReclutaPersona;
 
                 if ((idPost != null && idPost > 0) || (idReclu != null && idReclu > 0)) {
-                    var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "",area="Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu + '&idSol=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                    var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu + '&idSol=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
                 } else {
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -489,24 +489,27 @@
                     {
                        <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>         
                     }
-                
-                     if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
-                     {
+
+                    if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
+                    {
                        <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                     }
-                   
-                      if (TipoSolicitud.Nuevo.Equals(Model.pagina))
-                     {
+                    }
+
+                    if (TipoSolicitud.Nuevo.Equals(Model.pagina))
+                    {
                        <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-                     }
+                    }
                     if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                     {
                        <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                     }
-                     
+
                 }
                 
-                <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                @if (Visualicion.SI.Equals(Model.btnEvaluaciones))
+                {
+                  <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
+                }
                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                 {
                     <span></span>
@@ -514,13 +517,27 @@
                 else
                 {
                 
+                    if (Visualicion.SI.Equals(Model.btnSeleccionar))
+                    {
                     <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
-                
-                    <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
-                
-                    <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
-                
-                    <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>
+                    }
+
+                    if (Visualicion.SI.Equals(Model.btnExcluir))
+                    {
+                       <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
+                    
+                    }
+                    
+                    if (Visualicion.SI.Equals(Model.btnContactado))
+                    {
+                       <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
+                    }
+
+                    if (Visualicion.SI.Equals(Model.btnContratar))
+                    {
+                      <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>    
+                    }
+                    
                 }
             </div>
         </div>
