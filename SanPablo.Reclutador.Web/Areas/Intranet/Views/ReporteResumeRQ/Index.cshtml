@@ -41,6 +41,12 @@
             if (valida()) {
 
                 $('#grdListResumen').trigger('reloadGrid');
+
+                var count = $("#grdListResumen").getGridParam("reccount");
+                if (count==0) {
+                    MostrarMensaje('No se encontraron registros', "Mensaje");
+                }
+
             }
 
         });
@@ -197,6 +203,7 @@
 
         var fechaInicial = $('#ReporteSol_FechaInicio').val();
         var fechaFinal = $('#ReporteSol_FechaFin').val();
+        var sede = $('#ReporteSol_idSede').val();
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
            
@@ -212,6 +219,12 @@
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 30) {
             MostrarMensaje('La diferencia entre fechas no puede ser mayor a 30 días', "Mensaje");
+            return false;
+        }
+
+
+        if (sede=="0") {
+            MostrarMensaje('Seleccione una sede', "Mensaje");
             return false;
         }
 
@@ -240,7 +253,7 @@
                     
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Periodo:</label>
+                            <label class="control-label" for="selectError">Periodo:<span class="text-error">*</span></label>
                             <div class="controles">
                                 <input type="text" class="input-small"  id="ReporteSol_FechaInicio" name="ReporteSol.FechaInicio" placeholder=" Inicial" >
                                 <input type="text" class="input-small"  id="ReporteSol_FechaFin" name="ReporteSol.FechaFin" placeholder=" Final">
@@ -249,7 +262,7 @@
                     </td>
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Sede</label>
+                            <label class="control-label" for="inputSuccess">Sede<span class="text-error">*</span></label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede))
                             </div>

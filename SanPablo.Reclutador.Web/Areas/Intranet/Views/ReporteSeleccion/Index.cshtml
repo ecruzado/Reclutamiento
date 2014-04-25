@@ -41,6 +41,12 @@
             if (valida()) {
 
                 $('#grdListContratados').trigger('reloadGrid');
+
+                var count = $("#grdListContratados").getGridParam("reccount");
+                if (count == 0) {
+                    MostrarMensaje('No se encontraron registros', "Mensaje");
+                }
+
             }
 
         });
@@ -336,7 +342,7 @@
                     
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Fecha:</label>
+                            <label class="control-label" for="selectError">Fecha:<span class="text-error">*</span></label>
                             <div class="controles">
                                
                               
