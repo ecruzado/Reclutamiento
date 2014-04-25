@@ -27,7 +27,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         //
         // GET: /Intranet/Seguridad/
 
-         private IRolRepository _rolRepository;
+        private IRolRepository _rolRepository;
         private IDetalleGeneralRepository _detalleGeneralRepository;
         private IRolOpcionRepository _rolOpcionRepository;
         private IUsuarioRepository _usuarioRepository;

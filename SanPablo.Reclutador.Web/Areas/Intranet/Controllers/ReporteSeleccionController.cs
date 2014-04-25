@@ -25,7 +25,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Collections;
     using CrystalDecisions.CrystalReports.Engine;
     using NPOI.SS.UserModel;
-   
+    using CrystalDecisions.Shared;
 
     
     public class ReporteSeleccionController : BaseController
@@ -484,6 +484,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
+                Fila++;
                 row = objGeneraExcel.addFila(Fila++);
                 objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
 
@@ -619,12 +620,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 rep.Load(fullPath);
                 rep.Database.Tables["DtReporteSeleccion"].SetDataSource(dtResultado);
 
+                ParameterValues values1 = new ParameterValues();
+                ParameterDiscreteValue discretevalue = new ParameterDiscreteValue();
+
+                string NombUsuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                discretevalue.Value = NombUsuario;
+                values1.Add(discretevalue);
+
+
+                rep.DataDefinition.ParameterFields["usuario_sesion"].ApplyCurrentValues(values1);
+
+
+
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return MensajeError();
+                return MensajeError(ex.Message + fullPath);
             }
             return File(mem, "application/pdf");
 

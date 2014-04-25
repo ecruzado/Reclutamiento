@@ -38,6 +38,8 @@ public virtual int Ordensub { get; set; }
 public virtual int Ordencrit { get; set; }
 public virtual string Tiempocat { get; set; }
 public virtual string Timpoexamen { get; set; }
+public virtual string DesTipoCategoria { get; set; }
+        
 
 
 
