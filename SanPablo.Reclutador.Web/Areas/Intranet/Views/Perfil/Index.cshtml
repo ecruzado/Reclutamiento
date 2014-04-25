@@ -14,7 +14,14 @@
             <h6>Objetivos</h6>
             <div style="clear:both"></div>
         </div>
+        @if(Accion.Consultar.Equals(Model.Accion))
+        {
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" });
+        }
+        else
+        {
             @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+        }
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
             <h6>Funciones</h6>
@@ -22,7 +29,14 @@
             </div>
             <div style="clear:both"></div>
         </div>
+        @if (Accion.Consultar.Equals(Model.Accion))
+        {
+               @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" }) 
+        }
+        else
+        {
             @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+        }
         <div class="grilla-opciones">
             <h6>Competencias</h6>
             <div class="opciones">
@@ -61,8 +75,11 @@
                         
         <div class="formulario-accion">                                          
             <div class="opciones">
+            @if(Accion.Enviar == Model.Accion)
+            {    
                 <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+            }
+               <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
             </div>
                             
         </div>

@@ -41,6 +41,8 @@
         [ValidarSesion]
         public ActionResult Index(string id, string pagina)
         {
+            Session[ConstanteSesion.pagina] = pagina;
+
             var ideSolicitud = id;
             try
             {
@@ -67,6 +69,8 @@
                     actualizarDatosCargo(perfilViewModel, cargo);
                     
                 }
+               
+
                 return View(perfilViewModel);
             }
             catch (Exception)
@@ -82,6 +86,7 @@
             var cargoViewModel = new PerfilViewModel();
             cargoViewModel.Cargo = new Cargo();
             cargoViewModel.Pagina = pagina;
+           
             return cargoViewModel;
         }
 
@@ -128,7 +133,7 @@
                 actualizarDatosCargo(perfilViewModel, cargo);
                 actualizarAccion(perfilViewModel);
             }
-            
+
             return View(perfilViewModel);
         }
 
@@ -137,7 +142,7 @@
         public ActionResult General([Bind(Prefix = "Cargo")]Cargo cargo)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
-             
+
             var cargoViewModel = inicializarGeneral();
             try
             {
@@ -152,6 +157,7 @@
                     cargoViewModel.Cargo = cargo;
                     actualizarDatosCargo(cargoViewModel, cargo);
                     actualizarAccion(cargoViewModel);
+                    
                     return View(cargoViewModel);
                 }
                 else
@@ -174,6 +180,8 @@
                     _cargoRepository.Update(cargoEditar);
                     return RedirectToAction("../Perfil/Estudio");
                 }
+
+                
             }
             catch (Exception ex)
             {
@@ -205,6 +213,7 @@
         [ValidarSesion]
         public ActionResult Estudio()
         {
+
             var estudioCargoViewModel = inicializarDatosCargo();
             if (CargoPerfil != null)
             {
@@ -212,13 +221,13 @@
                 actualizarDatosCargo(estudioCargoViewModel, cargo);
                 actualizarAccion(estudioCargoViewModel);
             }
+            
             return View(estudioCargoViewModel);
         }
 
         [ValidarSesion]
         public ActionResult Experiencia()
         {
-
             var experienciaCargoViewModel = inicializarDatosCargo();
             if (CargoPerfil != null)
             {
@@ -555,6 +564,8 @@
         }
         public void actualizarAccion(PerfilViewModel perfilViewModel)
         {
+            string pagina = Session[ConstanteSesion.pagina].ToString();
+
             var tipoEtapa = CargoPerfil.TipoEtapa;
             switch (tipoEtapa)
             {
@@ -573,6 +584,11 @@
                 case Etapa.Observado:
                     perfilViewModel.Accion = Accion.Enviar;
                     break;
+            }
+
+            if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            {
+                perfilViewModel.Accion = Accion.Consultar;
             }
         }
 

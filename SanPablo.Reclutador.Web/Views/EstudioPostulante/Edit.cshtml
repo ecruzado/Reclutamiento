@@ -6,6 +6,9 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -228,6 +231,31 @@
                     msjError.style.display = "none";
                 };
             }
+            if (!validarFecha()) {
+                $("#Estudio_FechaFin").val("");
+                msjError.innerHTML = "ingresar fecha válida";
+                msjError.style.display = "block";
+            }
+            else {
+                msjError.style.display = "none";
+            }
+        }
+
+
+        function validarFecha() {
+
+            var fechaInicial = $('#Estudio_FechaInicio').val();
+            var fechaFinal = $('#Estudio_FechaFin').val();
+
+            fechaInicial = "01/" + fechaInicial;
+            fechaFinal = "01/" + fechaFinal;
+
+            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                return false;
+            }
+
+            return true;
+
         }
     </script>
 @using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))

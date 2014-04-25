@@ -22,6 +22,10 @@
             Map(x => x.FechaEstudioFin, "FECESTUDIOFIN");
             Map(x => x.IndicadorActualmenteEstudiando, "INDESTACTUALMENTE");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.UsuarioCreacion, "USRCREACION");
+            Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.UsuarioModificacion, "USRMODIFICACION");
 
             Map(x => x.DescripcionTipoInstitucion).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoInstitucion + " AND DG.VALOR = TIPTIPOINSTITUCION)");
             Map(x => x.DescripcionNombreInstitucion).Formula("(select CASE WHEN TIPNOMINSTITUCION = 'XX' THEN NOMINSTITUCION  ELSE DG.DESCRIPCION END FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoInstitucion + " AND DG.VALOR = TIPNOMINSTITUCION)");

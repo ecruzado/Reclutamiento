@@ -401,11 +401,17 @@
             
             <div class="form-actions">
                 
-               
-                <a class="btn" id="btnAnteriorPre"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                <a class="btn btn-info" id="btnContratar"><i class="icon-edit icon-white"></i> Contratar</a>
-                <a class="btn btn-info" id="btnFinalizar"><i class="icon-edit icon-white"></i> Finalizar</a>
+                <a class="btn" id="btnAnteriorPre"><i class="icon-arrow-left icon-cog"></i> Anterior</a> 
                 
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                {
+                    <span></span>
+                }
+                else
+                {
+                    <a class="btn btn-info" id="btnContratar"><i class="icon-edit icon-white"></i> Contratar</a>
+                    <a class="btn btn-info" id="btnFinalizar"><i class="icon-edit icon-white"></i> Finalizar</a>
+                }
             </div>
         </div>
     </div>

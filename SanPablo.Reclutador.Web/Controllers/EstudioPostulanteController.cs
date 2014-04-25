@@ -108,14 +108,14 @@
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
+            var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
+
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    //var estudioGeneralViewModel = InicializarEstudio();
-                    //estudioGeneralViewModel.Estudio = estudioPostulante;
-                    //return View(estudioGeneralViewModel);
                     objJsonMessage.Mensaje = "Verifique que todos los datos obligatorios esten registrados";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
@@ -125,6 +125,8 @@
                     if (IdePostulante != 0)
                     {
                         estudioPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        estudioPostulante.FechaCreacion = FechaCreacion;
+                        estudioPostulante.UsuarioCreacion = usuarioActual;
                         var postulante = new Postulante();
                         postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                         postulante.agregarEstudio(estudioPostulante);
@@ -151,8 +153,8 @@
                     estudioEdit.IndicadorActualmenteEstudiando = estudioPostulante.IndicadorActualmenteEstudiando;
                     estudioEdit.FechaInicio = estudioPostulante.FechaInicio;
                     estudioEdit.FechaFin = estudioPostulante.FechaFin;
-                   // estudioEdit.FechaEstudioInicio = estudioPostulante.FechaEstudioInicio;
-                    //estudioEdit.FechaEstudioFin = estudioPostulante.FechaEstudioFin;
+                    estudioEdit.FechaModificacion = FechaModificacion;
+                    estudioEdit.UsuarioModificacion = usuarioActual;
 
                     _estudioPostulanteRepository.Update(estudioEdit);
                     objJsonMessage.Resultado = true;

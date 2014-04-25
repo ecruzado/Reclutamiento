@@ -272,10 +272,15 @@
                                         </td>
                                         <td></td>
                                         <td>
-
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoGeneral, new {@class="input-xxmini text-right"})
-                                            @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>*@
-
+                                            @if (Model.Accion.Equals(Accion.Consultar))
+                                            {
+                                               @Html.TextBoxFor(model => model.Cargo.PuntajeMinimoGeneral, new { @class = "input-xxmini text-right", disabled = "disabled" })
+                                            }
+                                            else
+                                            {
+                                               @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoGeneral, new {@class="input-xxmini text-right"})
+                                               @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>*@
+                                            }
                                     </tr>
                                 </table>
 
@@ -299,10 +304,17 @@
                                         </td>
                                         <td></td>
                                         <td>
-                                            @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoExamen)
-                                            </div>
+                                            @if (Model.Accion.Equals(Accion.Consultar))
+                                            {
+                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right", disabled = "disabled"})
+                                            }
+                                            else
+                                            { 
+                                                @Html.TextBoxFor(model=>model.Cargo.PuntajeMinimoExamen, new {@Class ="input-xxmini text-right"})
+                                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeMinimoExamen)
+                                                </div>
+                                            }
                                             </td>
                                     </tr>                                                       
                                         <tr>
@@ -315,7 +327,16 @@
                                         <td class="td-label" style="width:130px;">
                                             Postulantes Pre-Selec.
                                         </td>
-                                        <td>  @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"}) @*<input type="text" class="input-xxmini text-right" value="9">*@</td>
+                                        <td>
+                                            @if (Model.Accion.Equals(Accion.Consultar))
+                                            {
+                                                 @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right", disabled="disabled"})  
+                                            }
+                                            else
+                                            {
+                                              @Html.TextBoxFor(model=>model.Cargo.CantidadPreseleccionados, new {@Class ="input-xxmini text-right"}) 
+                                            }
+                                        </td>
                                     </tr>
                                         <tr>
                                         <td colspan="2" style="height:40px;">                                                            

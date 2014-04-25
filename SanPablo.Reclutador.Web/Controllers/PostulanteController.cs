@@ -17,6 +17,8 @@
     using System.Drawing;
     using System.Web.Routing;
     using SanPablo.Reclutador.Web.Models.JQGrid;
+    using System.Configuration;
+    using Newtonsoft.Json;
 
    
     public class PostulanteController :  BaseController
@@ -169,9 +171,10 @@
 
         [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         [HttpPost]
-        public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase fotoPostulante)
+        public ActionResult General(PostulanteGeneralViewModel model, HttpPostedFileBase FotoPostulante)
         {
             JsonMessage objJsonMessage = new JsonMessage();
+            string fullPath = null;
             var usuarioExtranet = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
             var usuarioSession = usuarioExtranet.CodUsuario.Length <= 15 ? usuarioExtranet.CodUsuario : usuarioExtranet.CodUsuario.Substring(0, 15);
             try
@@ -193,22 +196,38 @@
                 }
 
                 //Guardar la foto del postulante
-                if (model.FotoPostulante != null)
-                {
-                    using (Stream inputStream = model.FotoPostulante.InputStream)
-                    {
-                        MemoryStream memoryStream = inputStream as MemoryStream;
-                        if (memoryStream == null)
-                        {
-                            memoryStream = new MemoryStream();
-                            inputStream.CopyTo(memoryStream);
-                        }
-                        data = memoryStream.ToArray();
-                        memoryStream.Dispose();
-                    }
-                    model.Postulante.FotoPostulante = data;
+                //if (model.FotoPostulante != null)
+                //{
+                //    using (Stream inputStream = model.FotoPostulante.InputStream)
+                //    {
+                //        MemoryStream memoryStream = inputStream as MemoryStream;
+                //        if (memoryStream == null)
+                //        {
+                //            memoryStream = new MemoryStream();
+                //            inputStream.CopyTo(memoryStream);
+                //        }
+                //        data = memoryStream.ToArray();
+                //        memoryStream.Dispose();
+                //    }
+                //    model.Postulante.FotoPostulante = data;
                     
-                }
+                //}
+                 if (!string.IsNullOrEmpty(model.nombreTemporalArchivo))
+                    {
+
+                        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                        string directoryPath = "Archivos\\Imagenes\\";
+                        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.nombreTemporalArchivo));
+
+                        using (Stream s = System.IO.File.OpenRead(fullPath))
+                        {
+                            byte[] buffer = new byte[s.Length];
+                            s.Read(buffer, 0, (int)s.Length);
+                            int len = (int)s.Length;
+                            s.Close();
+                            model.Postulante.FotoPostulante = buffer;
+                        }
+                    }
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
@@ -252,7 +271,7 @@
                     postulanteEdit.InteriorDireccion = postulante.InteriorDireccion;
                     postulanteEdit.IndicadorSexo = postulante.IndicadorSexo;
                     postulanteEdit.IdeUbigeo = postulante.IdeUbigeo;
-                    if (fotoPostulante != null)
+                    if (postulante.FotoPostulante != null)
                     {
                         postulanteEdit.FotoPostulante = postulante.FotoPostulante;
                     }
@@ -295,25 +314,25 @@
             } 
         }
         
-        public String Bytes_A_Imagen(Byte[] ImgBytes)
-        {
-            var rutaImagen = Server.MapPath(@"~/Content/images");
-            Guid clave = Guid.NewGuid();
-            String DirTemp = rutaImagen + "\\" + clave.ToString()+".jpg";
+        //public String Bytes_A_Imagen(Byte[] ImgBytes)
+        //{
+        //    var rutaImagen = Server.MapPath(@"~/Content/images");
+        //    Guid clave = Guid.NewGuid();
+        //    String DirTemp = rutaImagen + "\\" + clave.ToString()+".jpg";
 
-            if (ImgBytes != null)
-            {
-                //String DirTemp = Path.
-                Bitmap imagen = null;
-                Byte[] bytes = (Byte[])(ImgBytes);
-                MemoryStream ms = new MemoryStream(bytes);
-                imagen = new Bitmap(ms);
-                imagen.Save(DirTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
-                ms.Dispose();
+        //    if (ImgBytes != null)
+        //    {
+        //        //String DirTemp = Path.
+        //        Bitmap imagen = null;
+        //        Byte[] bytes = (Byte[])(ImgBytes);
+        //        MemoryStream ms = new MemoryStream(bytes);
+        //        imagen = new Bitmap(ms);
+        //        imagen.Save(DirTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
+        //        ms.Dispose();
 
-            }
-            return clave.ToString() + ".jpg";
-        }
+        //    }
+        //    return clave.ToString() + ".jpg";
+        //}
         
         public ActionResult GetImage(int id)
         {
@@ -579,6 +598,65 @@
         public ActionResult Lista()
         {
             return View();
+        }
+
+        /// <summary>
+        /// Subida de imagen a la carpeta temporal
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="forms"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string Upload(HttpPostedFileBase file, FormCollection forms)
+        {
+            var jsonResponse = new JsonResponse { Success = false };
+
+            try
+            {
+                string[] extensiones = forms.Get("ext").Split(';');
+
+                string extensionArchivo = Path.GetExtension(file.FileName);
+
+                if (extensiones.Contains(extensionArchivo.ToLower()))
+                {
+                    var content = new byte[file.ContentLength];
+                    file.InputStream.Read(content, 0, file.ContentLength);
+
+                    var indexOfLastDot = file.FileName.LastIndexOf('.');
+                    var extension = file.FileName.Substring(indexOfLastDot + 1, file.FileName.Length - indexOfLastDot - 1);
+                    var name = file.FileName.Substring(0, indexOfLastDot);
+
+                    string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                    string directoryPath = ConfigurationManager.AppSettings["ImageFilePath"];
+                    string nombreTemporalArchivo = Guid.NewGuid().ToString();
+                    string fullPath = Path.Combine(applicationPath, string.Format("{0}{1}{2}", directoryPath, nombreTemporalArchivo, extensionArchivo));
+
+                    System.IO.File.WriteAllBytes(fullPath, content);
+
+
+
+                    jsonResponse.Data = new
+                    {
+                        NombreArchivo = file.FileName,
+                        NombreTemporalArchivo = string.Format("{0}{1}", nombreTemporalArchivo, extensionArchivo)
+                    };
+                    jsonResponse.Success = true;
+
+                }
+                else
+                {
+                    jsonResponse.Success = false;
+                    jsonResponse.Message = "0";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //logger.Error(string.Format("Mensaje: {0} Trace: {1}", ex.Message, ex.StackTrace));
+                jsonResponse.Message = "Ocurrio un error, por favor intente de nuevo o más tarde.";
+            }
+
+            return JsonConvert.SerializeObject(jsonResponse);
         }
 
 
