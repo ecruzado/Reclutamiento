@@ -22,7 +22,7 @@
     using System.Web;
     using System.Web.Mvc;
     
-    public class ReportePostulanteBDController : BaseController
+    public class ReportePostulantePotencialController : BaseController
     {
         
 
@@ -30,100 +30,102 @@
         private ISolReqPersonalRepository _solReqPersonalRepository;
         private IUsuarioRepository _usuarioRepository;
         private ISedeRepository _sedeRepository;
-        private IUbigeoRepository _ubigeoRepository;
         private IPostulanteRepository _postulanteRepository;
         private ICargoRepository _cargoRepository;
+        private IDependenciaRepository _dependenciaRepository;
+        private IDepartamentoRepository _departamentoRepository;
+        private IAreaRepository _areaRepository;
 
-        public ReportePostulanteBDController(IDetalleGeneralRepository detalleGeneralRepository,
-                                             ISolReqPersonalRepository solReqPersonalRepository,
-                                             IUsuarioRepository usuarioRepository,
-                                             ISedeRepository sedeRepository,
-                                             IUbigeoRepository ubigeoRepository,
-                                             IPostulanteRepository postulanteRepository,
-                                             ICargoRepository cargoRepository)
+        public ReportePostulantePotencialController(IDetalleGeneralRepository detalleGeneralRepository,
+                                                    ISolReqPersonalRepository solReqPersonalRepository,
+                                                    IUsuarioRepository usuarioRepository,
+                                                    ISedeRepository sedeRepository,
+                                                    IPostulanteRepository postulanteRepository,
+                                                    ICargoRepository cargoRepository,
+                                                    IDependenciaRepository dependenciaRepository,
+                                                    IDepartamentoRepository departamentoRepository,
+                                                    IAreaRepository areaRepository)
         {
             _detalleGeneralRepository = detalleGeneralRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
             _usuarioRepository = usuarioRepository;
             _sedeRepository = sedeRepository;
-            _ubigeoRepository = ubigeoRepository;
             _postulanteRepository = postulanteRepository;
             _cargoRepository = cargoRepository;
+            _dependenciaRepository = dependenciaRepository;
+            _departamentoRepository = departamentoRepository;
+            _areaRepository = areaRepository;
         }
 
-        /// <summary>
-        /// inicializa la ventana de reporte de seleccion
-        /// </summary>
-        /// <returns></returns>
+       
         [Authorize]
         [ValidarSesion]
         public ActionResult Index()
         {
 
-            ReportePostulanteViewModel reporteModel = new ReportePostulanteViewModel();
+            ReportePostulantesPotencialesViewModel reporteModel = new ReportePostulantesPotencialesViewModel();
 
             reporteModel = Inicializar();
 
             return View("Index", reporteModel);
         }
 
-        /// <summary>
-        /// lista los postulantes BD
-        /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
+        
         [HttpPost]
-        public ActionResult listaPostulantesBD(GridTable grid)
+        public ActionResult listaPostulantesPotenciales(GridTable grid)
         {
-            
-            PostulanteBDReporte postulanteBD = new PostulanteBDReporte();
-            List<PostulanteBDReporte> lista = new List<PostulanteBDReporte>();
+
+            ReportePostulantePotencial postulantePotencial = new ReportePostulantePotencial();
+            List<ReportePostulantePotencial> lista = new List<ReportePostulantePotencial>();
             try
             {
 
 
-                postulanteBD.Cargo = (grid.rules[0].data == null ? "" : grid.rules[0].data);
-                postulanteBD.AreaEstudio = (grid.rules[1].data == "0" ? "" : grid.rules[1].data);
-                postulanteBD.RangoSalarial = (grid.rules[2].data == "0" ? "" : grid.rules[2].data);
+                postulantePotencial.IdeCargo = (grid.rules[0].data == null? 0 : Convert.ToInt32(grid.rules[0].data));
+                postulantePotencial.AreaEstudio = (grid.rules[1].data == "0" ? "" : grid.rules[1].data);
+                postulantePotencial.RangoSalarial = (grid.rules[2].data == "0" ? "" : grid.rules[2].data);
 
-                postulanteBD.IdeDepartamento = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
-                postulanteBD.IdeProvincia = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
-                postulanteBD.IdeDistrito = (grid.rules[5].data == null ? 0 : Convert.ToInt32(grid.rules[5].data));
+                postulantePotencial.IdeSede = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+                postulantePotencial.IdeDependencia = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
+                postulantePotencial.IdeDepartamento = (grid.rules[5].data == null ? 0 : Convert.ToInt32(grid.rules[5].data));
+                postulantePotencial.IdeArea = (grid.rules[6].data == null ? 0 : Convert.ToInt32(grid.rules[6].data));
+                
+                postulantePotencial.EdadInicio = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[8].data));
+                postulantePotencial.EdadFin = (grid.rules[8].data == null ? 100 : Convert.ToInt32(grid.rules[9].data));
 
-                if (grid.rules[6].data != null && grid.rules[7].data != null)
+                if (grid.rules[9].data != null && grid.rules[10].data != null)
                 {
-                    postulanteBD.FechaDesde = Convert.ToDateTime(grid.rules[6].data);
-                    postulanteBD.FechaHasta = Convert.ToDateTime(grid.rules[7].data);
+                    postulantePotencial.FechaDesde = Convert.ToDateTime(grid.rules[9].data);
+                    postulantePotencial.FechaHasta = Convert.ToDateTime(grid.rules[10].data);
                 }
 
-                postulanteBD.EdadInicio = (grid.rules[8].data == null ? 0 : Convert.ToInt32(grid.rules[8].data));
-                postulanteBD.EdadFin = (grid.rules[9].data == null ? 100 : Convert.ToInt32(grid.rules[9].data));
+               
+                Session[ConstanteSesion.PostulantePotencial] = postulantePotencial;
 
-                Session[ConstanteSesion.DatosReporte] = postulanteBD;
+                lista = _postulanteRepository.ListaPostulantesPotenciales(postulantePotencial);
 
-                lista = _postulanteRepository.ListaPostulantesBDReporte(postulanteBD);
-
-                
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdePostulante.ToString(),
+                    id = item.IdeReclutaPersona.ToString(),
                     cell = new string[]
                             {
                                
                                 "1",
-                                item.FechaRegistro==null?"":item.FechaRegistro.ToString(),
+                                item.FechaPostulantePotencial==null?"":item.FechaPostulantePotencial.ToString(),
+                                item.Sede==null?"":item.Sede,
+                                item.Dependencia==null?"":item.Dependencia,
                                 item.Departamento==null?"":item.Departamento,
-                                item.Provincia==null?"":item.Provincia,
-                                item.Distrito==null?"":item.Distrito,
+                                item.Area==null?"":item.Area,
                                 item.NombreCompleto==null?"":item.NombreCompleto,
+                                item.Cargo==null?"":item.Cargo,
                                 item.TelefonoContacto==null?"":item.TelefonoContacto.ToString(),
                                 item.Email==null?"":item.Email,
-                                item.Cargo==null?"":item.Cargo,
                                 item.Edad==0?"":item.Edad.ToString(),
-                                item.TipoEstudio==null?"":item.TipoEstudio,
+                                item.PuntajeCV==0?"":item.PuntajeCV.ToString(),
+                                item.PuntajeSeleccion==0?"":item.PuntajeSeleccion.ToString(),
                                 item.AreaEstudio==null?"":item.AreaEstudio,
                                 item.RangoSalarial==null?"":item.RangoSalarial,
                                 item.IdePostulante==0?"":item.IdePostulante.ToString()
@@ -139,33 +141,34 @@
             }
         }
 
-        private ReportePostulanteViewModel Inicializar()
+        private ReportePostulantesPotencialesViewModel Inicializar()
         {
-            var reporteModel = new ReportePostulanteViewModel();
-            reporteModel.Solicitud = new SolReqPersonal();
+            var reporteModel = new ReportePostulantesPotencialesViewModel();
+            reporteModel.PostulantePotencial = new ReportePostulantePotencial();
 
-            //reporteModel.Departamento = new Ubigeo();
-            reporteModel.Departamentos = new List<Ubigeo>();
-            reporteModel.Departamentos = cargarDepartamentos();
-            reporteModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONAR" });
-
-
-            //reporteModel.Provincia = new Ubigeo();
-            reporteModel.Provincias = new List<Ubigeo>();
-            reporteModel.Provincias.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONAR" });
-
-            reporteModel.Distrito = new Ubigeo();
-            reporteModel.Distritos = new List<Ubigeo>();
-            reporteModel.Distritos.Add(new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONAR" });
+            reporteModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            reporteModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "SELECCIONAR" });
 
             //CARGAR AREAS DE ESTUDIO
-            //reporteModel.AreaEstudio = new DetalleGeneral();
             reporteModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
             reporteModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONAR" });
 
+
+            reporteModel.Sedes = new List<Sede>(_sedeRepository.GetBy(x=>x.EstadoRegistro == IndicadorActivo.Activo));
+            reporteModel.Sedes.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "TODAS" });
+            //reporteModel.Sedes.Add(new Sede { CodigoSede = "999", DescripcionSede = "TODAS" });
+
+            reporteModel.Dependencias = new List<Dependencia>();
+            reporteModel.Dependencias.Add(new Dependencia { IdeDependencia = 0, NombreDependencia = "SELECCIONAR" });
+
+            reporteModel.Departamentos = new List<Departamento>();
+            reporteModel.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "SELECCIONAR" });
+
+            reporteModel.Areas = new List<SanPablo.Reclutador.Entity.Area>();
+            reporteModel.Areas.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "SELECCIONAR" });
+           
             //CARGAR LOS RANGOS SALARIALES
 
-            //reporteModel.RangoSalarial = new DetalleGeneral();
             reporteModel.RangosSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             reporteModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONAR" });
 
@@ -173,22 +176,74 @@
             return reporteModel;
         }
 
+        /// <summary>
+        /// lista de cargos respecto a los cargos
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult listarUbigeos(int ideUbigeoPadre)
+        public ActionResult listaCargos(int ideSede)
         {
             ActionResult result = null;
+            var listaResultado = new List<Cargo>();
 
-            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
+                listaResultado = _cargoRepository.listarCargosSede(ideSede);
+            
+            result = Json(listaResultado);
+            
+            return result;
+        }
+
+
+        /// <summary>
+        /// lista de dependencia
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaDependencia(int ideSede)
+        {
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
+
+            var listaResultado = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                         && x.IdeSede == ideSede));
             result = Json(listaResultado);
             return result;
         }
 
-        public List<Ubigeo> cargarDepartamentos()
+        /// <summary>
+        /// lista de departamentos
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaDepartamentos(int ideDependencia)
         {
-            var departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
-            return departamentos;
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
 
+            var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+            result = Json(listaResultado);
+            return result;
         }
+
+        /// <summary>
+        /// lista de areas
+        /// </summary>
+        /// <param name="ideDepartamento"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaAreas(int ideDepartamento)
+        {
+            ActionResult result = null;
+
+            var listaResultado = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+            result = Json(listaResultado);
+            return result;
+        }
+
+
 
         /// <summary>
         /// Obtiene el reporte en formato PDF
@@ -201,11 +256,11 @@
             ReportDocument reporte = new ReportDocument();
             MemoryStream memory;
 
-            PostulanteBDReporte postulanteReporte = new PostulanteBDReporte();
+            ReportePostulantePotencial postulanteReporte = new ReportePostulantePotencial();
 
             try
             {
-                postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
+                postulanteReporte = (ReportePostulantePotencial)Session[ConstanteSesion.PostulantePotencial];
 
                 string usuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 string sede = Convert.ToString(Session[ConstanteSesion.SedeDes]);
@@ -213,21 +268,19 @@
                 DataTable dtInforme = new DataTable();
                 dtInforme.Columns.Add("USUARIO", typeof(string));
                 dtInforme.Columns.Add("SEDE", typeof(string));
-                dtInforme.Columns.Add("CARGOBUSCA",typeof(string));
+                dtInforme.Columns.Add("CARGOBUSCA", typeof(string));
                 dtInforme.Rows.Add(usuario, sede, postulanteReporte.Cargo);
                   
-                DataTable dtResultado = _postulanteRepository.DtPostulantesBDReporte(postulanteReporte);
-
-                
+                DataTable dtResultado = _postulanteRepository.DtReportePostulantesPotencial(postulanteReporte);
 
                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
                 string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
-                string nomReporte = "ReportePostulanteBD.rpt";
+                string nomReporte = "ReportePostulantePotencial.rpt";
                 fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
 
                 reporte.Load(fullPath);
-                reporte.Database.Tables["dtPostulanteBD"].SetDataSource(dtResultado);
-                reporte.Database.Tables["dtDatosInforme"].SetDataSource(dtInforme);
+                reporte.Database.Tables["dtPostulantePotencial"].SetDataSource(dtResultado);
+                reporte.Database.Tables["dtDatosReporte"].SetDataSource(dtInforme);
                 memory = (MemoryStream)reporte.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
             }
@@ -245,12 +298,10 @@
         public void ObtenerReporteExcel()
         {
 
-            if (Session[ConstanteSesion.DatosReporte] != null)
+            if (Session[ConstanteSesion.PostulantePotencial] != null)
             {
-                PostulanteBDReporte postulanteReporte = null;
-                postulanteReporte = (PostulanteBDReporte)Session[ConstanteSesion.DatosReporte];
-                List<PostulanteBDReporte> listaResultado = _postulanteRepository.ListaPostulantesBDReporte(postulanteReporte);
-
+                ReportePostulantePotencial postulanteReporte = (ReportePostulantePotencial)Session[ConstanteSesion.PostulantePotencial];
+                List<ReportePostulantePotencial> listaResultado = _postulanteRepository.ListaPostulantesPotenciales(postulanteReporte);
 
                 string fileName = System.Guid.NewGuid().ToString().Replace("-", "") + ".xlsx";
                 string pathApliacion = Server.MapPath(".");
@@ -273,11 +324,15 @@
                 string dir = fullPath;
 
                 //numero de columnas excel
-                int cantCol = 13;
+                int cantCol = 14;
 
-                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "REPORTE DE POSTULANTES BASE DE DATOS", styleTitulo);
+                //adiciona el titulo excel
+                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Reporte de Postulantes Potenciales", styleTitulo);
 
+                //adiciona la imagen
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
+
+                //Se crea un contador de filas que debe ir auto incrementandose si crean nuevas filas
 
 
                 int Fila = 2;
@@ -297,20 +352,21 @@
                 objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
-
                 // se define la cabecera
                 List<string> lista = new List<string>();
 
-                lista.Add("FECHA DE REGISTRO DE CV");
+                lista.Add("FECHA DE REGISTRO DE PP");
+                lista.Add("SEDE");
+                lista.Add("DEPENDENCIA");
                 lista.Add("DEPARTAMENTO");
-                lista.Add("PROVINCIA");
-                lista.Add("DISTRITO");
+                lista.Add("AREA");
                 lista.Add("NOMBRES Y APELLIDOS");
+                lista.Add("CARGO");
                 lista.Add("CEL. / FIJO");
                 lista.Add("EMAIL");
-                lista.Add("CARGO");
                 lista.Add("EDAD");
-                lista.Add("TIPO DE ESTUDIOS");
+                lista.Add("PJTE. DE EVALUACIÓN");
+                lista.Add("PJTE. DE SELECCIÓN");
                 lista.Add("ÁREA DE ESTUDIOS");
                 lista.Add("RANGO SALARIAL");
 
@@ -326,30 +382,34 @@
                 //imprime detalle
                 colCab = 0;
                 Fila += 1;
-                foreach (PostulanteBDReporte ItemReporte in listaResultado)
+                foreach (ReportePostulantePotencial ItemReporte in listaResultado)
                 {
                     colCab = 0;
                     row = objGeneraExcel.addFila(Fila++);
                     colCab++;
-                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaRegistro, styleCadena, "S");
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaPostulantePotencial, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Sede, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Dependencia, styleCadena, "S");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Departamento, styleCadena, "S");
                     colCab++;
-                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Provincia, styleCadena, "S");
-                    colCab++;
-                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Distrito, styleCadena, "S");
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Area, styleCadena, "S");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.NombreCompleto, styleCadena, "S");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Cargo, styleCadena, "S");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.TelefonoContacto, styleCadena, "S");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Email, styleCadena, "S");
                     colCab++;
-                    objGeneraExcel.addCelda(row, colCab, ItemReporte.Cargo, styleCadena, "S");
-                    colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Edad.ToString(), styleCadena, "N");
                     colCab++;
-                    objGeneraExcel.addCelda(row, colCab, ItemReporte.TipoEstudio, styleCadena, "S");
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.PuntajeCV.ToString(), styleCadena, "N");
+                    colCab++;
+                    objGeneraExcel.addCelda(row, colCab, ItemReporte.PuntajeSeleccion.ToString(), styleCadena, "N");
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.AreaEstudio, styleCadena, "S");
                     colCab++;
@@ -372,25 +432,6 @@
                 }
             }
         }
-
-        public ActionResult autoCompletarCargo(string query)
-        {
-            var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-            query = query.Replace(" ", "");
-            if (query.Length > 1)
-            {
-                int op = query.LastIndexOf(",");
-                query = query.Substring(op + 1);
-            }
-            //List<Cargo> obj = new List<Cargo>();
-            var obj = _cargoRepository.GetBy(x => x.IdeSede == ideSede);
-
-            var users = (from u in obj
-                         where u.NombreCargo.Contains(query)
-                         select u.NombreCargo).Distinct().ToArray();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-
 
 
     }

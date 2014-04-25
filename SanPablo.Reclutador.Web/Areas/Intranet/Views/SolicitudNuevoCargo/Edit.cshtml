@@ -313,7 +313,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Código de Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small",@style="text-transform: uppercase", maxlength="10", @onblur ="verificarCodigo()" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small", maxlength="10", @onblur ="verificarCodigo()" , onkeyup="aMays(event, this)" })
                                     </div>
                                 </div>
                             </td>
@@ -325,7 +325,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { @style="text-transform: uppercase" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { onkeyup="aMays(event, this)" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NombreCargo)
                                         </div>
@@ -351,7 +351,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Descripción</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { @style="text-transform: uppercase" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { onkeyup="aMays(event, this)" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
                                         </div>
@@ -422,7 +422,7 @@
                 <div class="grilla-opciones">
                 <h6>Estudios</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" ,onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
                 </div>
@@ -432,7 +432,7 @@
                 <div class="grilla-opciones">
                 <h6>Competencias</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;"  ,onkeyup="aMays(event, this)"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
                 </div>
@@ -442,7 +442,7 @@
                 <div class="grilla-opciones">
                 <h6>Funciones</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase"  })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; " ,onkeyup="aMays(event, this)"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
                 </div>
@@ -452,7 +452,7 @@
                 <div class="grilla-opciones">
                 <h6>Observaciones adicionales</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; text-transform: uppercase" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" ,onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
                 </div>

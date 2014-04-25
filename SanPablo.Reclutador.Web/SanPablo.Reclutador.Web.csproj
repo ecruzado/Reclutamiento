@@ -155,6 +155,7 @@
     <Compile Include="Areas\Intranet\Controllers\AlternativaController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ContrataController.cs" />
     <Compile Include="Areas\Intranet\Controllers\BusquedaUsuarioController.cs" />
+    <Compile Include="Areas\Intranet\Controllers\ReportePostulantePotencialController.cs" />
     <Compile Include="Areas\Intranet\Controllers\ReportePostulanteBDController.cs" />
     <Compile Include="Areas\Intranet\Controllers\EvaluacionesPreSeleccionadosController.cs" />
     <Compile Include="Areas\Intranet\Controllers\MantenimientoGeneralesController.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Areas\Intranet\Models\CentroEstudioViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ConocimientosCargoViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\CargoViewModel.cs" />
+    <Compile Include="Areas\Intranet\Models\ReportePostulantesPotencialesViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\ReportePostulanteViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluarPostulanteViewModel.cs" />
     <Compile Include="Areas\Intranet\Models\EvaluacionViewModel.cs" />
@@ -274,6 +276,18 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Intranet\dsReportePostulantePotencial.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Intranet\ReportePostulantePotencial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportePostulantePotencial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Reportes\Intranet\CvPostulanteReport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -377,13 +391,16 @@
     <Content Include="Content\images\Banner-Selección-03.png" />
     <Content Include="Content\images\calendario.png" />
     <Content Include="Content\images\delete.png" />
+    <Content Include="Content\images\ekiga.png" />
     <Content Include="Content\images\enabled.png" />
+    <Content Include="Content\images\enigma.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\logo_sanpablo -prueba.png" />
     <Content Include="Content\images\logo_sanpablo.png" />
     <Content Include="Content\images\logo_san_pablo_png.png" />
     <Content Include="Content\images\printer.png" />
+    <Content Include="Content\images\red.png" />
     <Content Include="Content\images\right_2.png" />
     <Content Include="Content\images\sanpablo_logo2.GIF" />
     <Content Include="Content\images\time.gif" />
@@ -539,6 +556,7 @@
     <Content Include="Areas\Intranet\Views\Evaluacion\PartialExamenCronometro.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteSeleccion\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReportePostulanteBD\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\ReportePostulantePotencial\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteResumeRQ\Index.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
@@ -587,6 +605,17 @@
     </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xsc">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reportes\Intranet\dsReportePostulantePotencial.xsc">
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsReportePostulantePotencial.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReportePostulantePotencial.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsReportePostulantePotencial.xss">
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
     </Content>
     <None Include="Reportes\Intranet\DtReporteSeleccion.xsd">
       <SubType>Designer</SubType>
@@ -716,6 +745,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Reportes\Intranet\ReportePostulantePotencial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReportePostulantePotencial.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <!--<EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">-->
     <Content Include="Reportes\Intranet\ReporteResumen.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteResumen.cs</LastGenOutput>

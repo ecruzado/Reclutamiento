@@ -188,5 +188,48 @@
                 lcon.Close();
             }
         }
+
+        public List<Cargo> listarCargosSede(int ideSede)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                IDataReader drCargos;
+                Cargo objetoCargo;
+                List<Cargo> listaCargos = new List<Cargo>();
+                
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_CARGOS_SEDE");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
+
+                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = ideSede;
+                cmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drCargos = (OracleDataReader)cmd.ExecuteReader();
+                objetoCargo = null;
+
+
+                while (drCargos.Read())
+                {
+                    objetoCargo = new Cargo();
+
+                    objetoCargo.IdeCargo = Convert.ToInt32(drCargos["IDECARGO"]);
+                    objetoCargo.NombreCargo = Convert.ToString(drCargos["NOMCARGO"]);
+
+                    listaCargos.Add(objetoCargo);
+                }
+                drCargos.Close();
+                return listaCargos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
     }
 }

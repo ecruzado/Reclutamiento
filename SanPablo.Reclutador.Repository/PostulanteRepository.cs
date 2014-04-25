@@ -1119,7 +1119,7 @@
 
                     postulanteBD = new PostulanteBDReporte();
                     postulanteBD.IdePostulante = Convert.ToInt32(drListaPostulantesBD["IDEPOSTULANTE"]);
-                    postulanteBD.FechaRegistro = Convert.ToString(drListaPostulantesBD["FECCREACION"]);
+                    postulanteBD.FechaRegistro = String.Format("{0:dd/MM/yyyy}", drListaPostulantesBD["FECCREACION"]);
                     postulanteBD.Departamento = Convert.ToString(drListaPostulantesBD["DEPARTAMENTO"]);
                     postulanteBD.Provincia = Convert.ToString(drListaPostulantesBD["PROVINCIA"]);
                     postulanteBD.Distrito = Convert.ToString(drListaPostulantesBD["DISTRITO"]);
@@ -1182,6 +1182,125 @@
                 daResultado.Dispose();
                 return dtResultado;
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+        public List<ReportePostulantePotencial> ListaPostulantesPotenciales(ReportePostulantePotencial postulante)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            string cFechaDesde = String.Format("{0:dd/MM/yyyy}", postulante.FechaDesde);
+            string cFechaHasta = String.Format("{0:dd/MM/yyyy}", postulante.FechaHasta);
+
+            try
+            {
+
+                IDataReader drListaPostulantesPotenciales;
+                ReportePostulantePotencial postulantePotencial;
+                List<ReportePostulantePotencial> listaPostulantes;
+                postulantePotencial = null;
+                listaPostulantes = new List<ReportePostulantePotencial>();
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_REPORTE_POST_POTENCIAL");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_ideCargo", OracleType.Number).Value = postulante.IdeCargo;
+                lspcmd.Parameters.Add("p_areaEstudio", OracleType.VarChar).Value = postulante.AreaEstudio;
+                lspcmd.Parameters.Add("p_rangoSalario", OracleType.VarChar).Value = postulante.RangoSalarial;
+                lspcmd.Parameters.Add("p_ideSede", OracleType.Number).Value = postulante.IdeSede;
+                lspcmd.Parameters.Add("p_ideDependencia", OracleType.Number).Value = postulante.IdeDependencia;
+                lspcmd.Parameters.Add("p_ideDepartamento", OracleType.Number).Value = postulante.IdeDepartamento;
+                lspcmd.Parameters.Add("p_ideArea", OracleType.Number).Value = postulante.IdeArea;
+                lspcmd.Parameters.Add("p_fecDesde", OracleType.VarChar).Value = cFechaDesde;
+                lspcmd.Parameters.Add("p_fecHasta", OracleType.VarChar).Value = cFechaHasta;
+                lspcmd.Parameters.Add("p_edadInicio", OracleType.Number).Value = postulante.EdadInicio;
+                lspcmd.Parameters.Add("p_edadFin", OracleType.Number).Value = postulante.EdadFin;
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaPostulantesPotenciales = (OracleDataReader)lspcmd.ExecuteReader();
+
+                while (drListaPostulantesPotenciales.Read())
+                {
+
+                    postulantePotencial = new ReportePostulantePotencial();
+                    postulantePotencial.IdeReclutaPersona = Convert.ToInt32(drListaPostulantesPotenciales["IDERECLUTAPERSONA"]);
+                    postulantePotencial.IdePostulante = Convert.ToInt32(drListaPostulantesPotenciales["IDEPOSTULANTE"]);
+                    postulantePotencial.FechaPostulantePotencial = String.Format("{0:dd/MM/yyyy}", drListaPostulantesPotenciales["FECPOTENCIAL"]);
+                    postulantePotencial.Sede = Convert.ToString(drListaPostulantesPotenciales["NOMBRESEDE"]);
+                    postulantePotencial.Dependencia = Convert.ToString(drListaPostulantesPotenciales["NOMBREDEPENDENCIA"]);
+                    postulantePotencial.Departamento = Convert.ToString(drListaPostulantesPotenciales["NOMBREDEPARTAMENTO"]);
+                    postulantePotencial.Area = Convert.ToString(drListaPostulantesPotenciales["NOMBREAREA"]);
+                    postulantePotencial.NombreCompleto = Convert.ToString(drListaPostulantesPotenciales["NOMBREPOSTULANTE"]);
+                    postulantePotencial.Cargo = Convert.ToString(drListaPostulantesPotenciales["NOMBRECARGO"]);
+                    postulantePotencial.TelefonoContacto = Convert.ToString(drListaPostulantesPotenciales["TELEFONO"]);
+                    postulantePotencial.Email = Convert.ToString(drListaPostulantesPotenciales["CORREO"]);
+                    postulantePotencial.Edad = Convert.ToInt32(drListaPostulantesPotenciales["EDAD"]);
+                    postulantePotencial.TipoEstudio = Convert.ToString(drListaPostulantesPotenciales["TIPOEDUCACION"]);
+                    postulantePotencial.PuntajeCV = Convert.ToInt32(drListaPostulantesPotenciales["PTJECV"]);
+                    postulantePotencial.PuntajeSeleccion = Convert.ToInt32(drListaPostulantesPotenciales["PTJESELECCION"]);
+                    postulantePotencial.AreaEstudio = Convert.ToString(drListaPostulantesPotenciales["TIPOAREA"]);
+                    postulantePotencial.RangoSalarial = Convert.ToString(drListaPostulantesPotenciales["RANGOSALARIO"]);
+                    listaPostulantes.Add(postulantePotencial);
+                }
+                drListaPostulantesPotenciales.Close();
+
+                return listaPostulantes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        public DataTable DtReportePostulantesPotencial(ReportePostulantePotencial postulante)
+        {
+
+            string cFechaDesde = String.Format("{0:dd/MM/yyyy}", postulante.FechaDesde);
+            string cFechaHasta = String.Format("{0:dd/MM/yyyy}", postulante.FechaHasta);
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_REPORTE_POST_POTENCIAL");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_ideCargo", OracleType.Number).Value = postulante.IdeCargo;
+                lspcmd.Parameters.Add("p_areaEstudio", OracleType.VarChar).Value = postulante.AreaEstudio;
+                lspcmd.Parameters.Add("p_rangoSalario", OracleType.VarChar).Value = postulante.RangoSalarial;
+                lspcmd.Parameters.Add("p_ideSede", OracleType.Number).Value = postulante.IdeSede;
+                lspcmd.Parameters.Add("p_ideDependencia", OracleType.Number).Value = postulante.IdeDependencia;
+                lspcmd.Parameters.Add("p_ideDepartamento", OracleType.Number).Value = postulante.IdeDepartamento;
+                lspcmd.Parameters.Add("p_ideArea", OracleType.Number).Value = postulante.IdeArea;
+                lspcmd.Parameters.Add("p_fecDesde", OracleType.VarChar).Value = cFechaDesde;
+                lspcmd.Parameters.Add("p_fecHasta", OracleType.VarChar).Value = cFechaHasta;
+                lspcmd.Parameters.Add("p_edadInicio", OracleType.Number).Value = postulante.EdadInicio;
+                lspcmd.Parameters.Add("p_edadFin", OracleType.Number).Value = postulante.EdadFin;
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                OracleDataAdapter daResultado = new OracleDataAdapter(lspcmd);
+                DataTable dtResultado = new DataTable();
+
+                daResultado.Fill(dtResultado);
+                daResultado.Dispose();
+                return dtResultado;
 
             }
             catch (Exception ex)
@@ -1193,6 +1312,8 @@
                 lcon.Close();
             }
         }
+
+
 
     }
 }
