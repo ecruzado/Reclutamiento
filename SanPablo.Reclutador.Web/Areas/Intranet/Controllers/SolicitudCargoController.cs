@@ -880,7 +880,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
 
 
-                            MensajeInformativo = "Se el envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista o encargado de selección : " + objUsuario.CodUsuario;
+                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista o encargado de selección : " + objUsuario.CodUsuario;
 
                             
                         }
