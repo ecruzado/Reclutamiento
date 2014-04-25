@@ -655,7 +655,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
          /// <summary>
-         /// muestra la pantalla de preseleccion de postulantes
+         /// Inicializa la pantalla de preseleccion de postulantes
          /// </summary>
          /// <param name="id"></param>
          /// <param name="tipSol"></param>
@@ -689,6 +689,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              model.pagina = pagina;
              model.indPagina = ind;
              // consulta que obtiene los datos de la solicitud por id y Tipo de Puesto
+
+            //accesos por botones
+
+
 
              return View("PostulantesPreSeleccionados", model);
          }

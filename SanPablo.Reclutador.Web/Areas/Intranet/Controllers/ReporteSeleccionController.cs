@@ -484,9 +484,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
-                Fila++;
-                row = objGeneraExcel.addFila(Fila++);
-                objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
+                //Fila++;
+                //row = objGeneraExcel.addFila(Fila++);
+                //objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
 
                 // se define la cabecera
                 List<string> lista = new List<string>();
@@ -525,6 +525,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //imprime detalle
                 colCab = 0;
                 Fila += 1;
+
+                int posColumDias = 0;
                 foreach (Reporte ItemReporte in ListaReporte)
                 {
                     colCab = 0;
@@ -561,8 +563,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaContratacion, styleCadena, "S");
+                    
                     colCab++;
+                    posColumDias = colCab;
+                    
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Dias.ToString(), styleCadena, "N");
+                    
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Numdocumento, styleCadena, "S");
                     colCab++;
@@ -576,6 +582,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.MotivoCirreSol, styleCadena, "S");
                 }
 
+                if (ListaReporte!=null)
+                {
+                    row = objGeneraExcel.addFila(Fila++);
+                    objGeneraExcel.addCelda(row, posColumDias, Promedio, styleCadena, "S");
+                }
+
+               
 
                 MemoryStream exportData = new MemoryStream();
                 using (exportData)
