@@ -36,6 +36,9 @@
 
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
+        $('#btnPDF').hide();
+        $('#btnExcel').hide();
+
         $('#btnBuscar').click(function () {
 
             if (valida()) {
@@ -46,8 +49,15 @@
                
                 var count = $("#grdListContratados").getGridParam("reccount");
                 if (count == 0) {
+                    $('#btnPDF').hide();
+                    $('#btnExcel').hide();
+
                     MostrarMensaje('No se encontraron registros', "Mensaje");
                 }
+
+                $('#btnPDF').show();
+                $('#btnExcel').show();
+
                 $("#indBusqueda").val("N");
                
             }
@@ -263,18 +273,7 @@
         });
 
 
-        var dato = $("#grdListContratados").getGridParam("reccount");
-
-        if (dato > 0)
-        {
-            $("#btnPDF").removeAttr('disabled');
-            $("#btnExcel").removeAttr('disabled');
-           
-        }
-        else
-        {
-            $('#btnExcel,#btnPDF').attr("disabled", "disabled");
-        }
+      
 
         var grid = $("#grdListContratados"), headerRow, rowHight, resizeSpanHeight;
 

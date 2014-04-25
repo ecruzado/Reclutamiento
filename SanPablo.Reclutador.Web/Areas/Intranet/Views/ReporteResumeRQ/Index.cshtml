@@ -36,6 +36,9 @@
 
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
+        $('#btnPDF').hide();
+        $('#btnExcel').hide();
+
         $('#btnBuscar').click(function () {
 
             if (valida()) {
@@ -46,7 +49,12 @@
                 var count = $("#grdListResumen").getGridParam("reccount");
                 if (count==0) {
                     MostrarMensaje('No se encontraron registros', "Mensaje");
+                    $('#btnPDF').hide();
+                    $('#btnExcel').hide();
                 }
+
+                $('#btnPDF').show();
+                $('#btnExcel').show();
 
                 $("#indBusqueda").val("N");
 

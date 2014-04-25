@@ -272,7 +272,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = (item.IdeSolReqpersonal),
+                    id = (item.idAnalistaResp.ToString()),
                     cell = new string[]
                             {
                                 item.idAnalistaResp==null?"":item.idAnalistaResp.ToString(),
