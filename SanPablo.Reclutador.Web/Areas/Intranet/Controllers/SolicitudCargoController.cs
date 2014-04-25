@@ -515,7 +515,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (codReemplazo!=null)
             {
-                if (codReemplazo == 6 || codReemplazo == 7 || codReemplazo == 8 || codReemplazo == 9 || codReemplazo == 10)
+                if (codReemplazo == 5 ||codReemplazo == 6 || codReemplazo == 7 || codReemplazo == 8 || codReemplazo == 9 || codReemplazo == 10)
                 {
                     // es un tipo de reemplazo
                     model.TipoReemplazo = "N";
