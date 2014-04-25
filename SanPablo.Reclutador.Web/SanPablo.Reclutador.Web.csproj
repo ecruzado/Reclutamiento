@@ -276,26 +276,24 @@
     <Compile Include="Models\SeguridadViewModel.cs" />
     <Compile Include="Models\UbigeoGeneralViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    
     <Compile Include="Reportes\Intranet\dsReportePostulantePotencial.Designer.cs">
-     <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
- 	 <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
+      <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
     </Compile>
-   <Compile Include="Reportes\Intranet\ReportePostulantePotencial.cs">
-    <AutoGen>True</AutoGen>
+    <Compile Include="Reportes\Intranet\ReportePostulantePotencial.cs">
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportePostulantePotencial.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    
     <Compile Include="Reportes\Intranet\CvPostulanteReport.cs">
-     <AutoGen>True</AutoGen>
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CvPostulanteReport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-     
     <Compile Include="Reportes\Intranet\ReporteResumen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -747,23 +745,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reportes\Intranet\ReportePostulantePotencial.rpt">
-         <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+    <Content Include="Reportes\Intranet\ReportePostulantePotencial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReportePostulantePotencial.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reportes\Intranet\ReporteResumen.rpt">
-     <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>ReporteResumen.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">
-
-     <Content Include="Reportes\Intranet\ReporteResumen.rpt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <!--<EmbeddedResource Include="Reportes\Intranet\ReporteSeleccion.rpt">-->
+    <Content Include="Reportes\Intranet\ReporteResumen.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteResumen.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reportes\Intranet\ReporteSeleccion.rpt">
-   
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ReporteSeleccion.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

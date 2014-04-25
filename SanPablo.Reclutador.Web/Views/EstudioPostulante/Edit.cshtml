@@ -271,7 +271,7 @@
                 <label class="etiquetaFormulario" id="labelOtro" style="display:none;"> Otro <span class="text-error">*</span></label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Estudio.NombreInstitucion, new {style = "text-transform: uppercase;display:none;" })
+                @Html.TextBoxFor(model => model.Estudio.NombreInstitucion, new {style = "display:none;" , onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Estudio.NombreInstitucion )
                 </div>

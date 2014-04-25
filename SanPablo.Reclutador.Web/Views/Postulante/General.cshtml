@@ -52,9 +52,9 @@
             });
         })
 
-        $('#btnSubirFoto').click(function () {
-            mostrarAgregarFoto();
-        });
+        //$('#btnSubirFoto').click(function () {
+        //    mostrarAgregarFoto();
+        //});
 
         //Cargar Distritos
         $('select#Provincias').change(function () {
@@ -106,14 +106,14 @@
         });
 
     });
-    function mostrarAgregarFoto() {
+    @*function mostrarAgregarFoto() {
         var dialogDiv = $('#updateDialog');
         $.get('@Url.Action("subirFoto", "Postulante")', function (data) {
              dialogDiv.html(data);
              dialogDiv.dialog('open');
          });
          return false;
-    }
+    }*@
 
 
 
@@ -473,7 +473,7 @@
                             <label class="etiquetaFormulario" for="txtnumero">Número </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini",maxlength="4" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
                             @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", onkeyup="aMays(event, this)"})                           
                             
