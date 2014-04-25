@@ -30,14 +30,10 @@
                                 
                 if (idSol != null) {
 
-                   // if ("S" == IndAprobacion) {
+                   
                         var url = '@Url.Action("Index", "Contrata", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&indPagina=" + indPagina;
                         window.location = url;
-                    //} else {
-                    //    MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
-                    //}
                     
-
              } else {
                  MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
              }
@@ -66,8 +62,7 @@
                     MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
 
-                //var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
-                //window.location = url;
+               
             });
 
 
@@ -196,7 +191,7 @@
                       { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 150 },
                       { name: 'IndicadorContactado', index: 'IndicadorContactado', align: 'center', sortable: false, width: 100, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
 
-                      //{ name: 'IdePostulante', index: 'IdePostulante', align: 'center', editable: false, sortable: false, width: 150 },
+                      
                       { name: 'formatoCv', index: 'formatoCv', align: 'center', editable: false, width: 50, sortable: false, formatter: ImprimirFormatter },
 
 
@@ -293,11 +288,7 @@
             
          
         });
-        //jQuery("#cm1").click( function() {
-        //    var s;
-        //    s = jQuery("#grdList").jqGrid('getGridParam', 'selrow');
-        //    alert(s);
-        //});
+       
         function RadioFormatter(cellvalue, options, rowObject) {
             var strRdo = '<input type ="radio" name = "codigo">';
             return strRdo;
@@ -356,7 +347,6 @@
         function ImprimirFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'printer.png';
-            //var strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV">';
             var strImg = '<a target="_blank" href=' + '@Url.Action("GetCvPDF", "Ranking")' + '/' + rowObject[1] + '><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver CV" alt="Ver CV"></a>';
             return strImg;
         }
@@ -408,19 +398,12 @@
     
            <table class="formulario-busqueda">
                 <tr class="formulario-fila">
-                    @*<td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Solicitud</label>
-                            <div class="controles">
-                                <input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">
-                            </div>
-                        </div>
-                    </td>*@
+                   
                      <td class="span5">
 			
 			            <label class="control-label" for="inputSuccess">Solicitud</label>
 			            <div class="controles">
-				            @*<input type="text" class="input-medium" id="txtcodigo" disabled="disabled" value="REQ0001">*@
+				           
                             @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
@@ -430,7 +413,7 @@
 		   
 			            <label class="control-label" for="selectError">Cargo</label>
 			            <div class="controles">
-				            @*<input type="text" class="input-medium" id="txtcargo" disabled="disabled" value="Técnico Enfermería.">*@
+				           
                             @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </div>
 		   
@@ -442,7 +425,7 @@
 		   
 			            <label class="control-label" for="selectError">Dependencia</label>
 			            <div class="controles">
-				            @*<input type="text" class="input-medium" id="txtdependencia" disabled="disabled" value="Gerencia Médica">*@
+				           
                             @Html.TextBoxFor(model => model.Solicitud.Dependencia_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
@@ -452,7 +435,7 @@
 		   
 			            <label class="control-label" for="inputSuccess">Departamento</label>
 			            <div class="controles">
-				            @*<input type="text" class="input-medium" id="txtdepartamento" disabled="disabled" value="Enfermería">*@
+				           
                             @Html.TextBoxFor(model => model.Solicitud.Departamento_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 			            </div>
 		   
@@ -464,7 +447,7 @@
 		   
 			            <label class="control-label" for="selectError">Area</label>
 			            <div class="controles">
-				            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
+				           
                             @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 			            </div>
 			
@@ -473,7 +456,7 @@
 		  
 			            <label class="control-label" for="inputSuccess">Sede</label>
 			            <div class="controles">
-				           @* <input type="text" class="input-medium" id="txtsede" disabled="disabled" value="CHSP - Cusco">*@
+				           
                            @Html.TextBoxFor(model => model.Solicitud.Sede_des, new { @class = "textoFormulario", disabled = "disabled" }) 
 
 			            </div>
@@ -491,14 +474,7 @@
                             <div id="grdPagerEvaluacion">
                             </div>
                 </div>
-                @*<div style="width: 100%;">
-                    <div>
-                        <table id="grdListEvaluacion">
-                        </table>
-                        <div id="grdPagerEvaluacion">
-                        </div>
-                    </div>
-                </div>*@
+              
             
             <div class="form-actions">
                 
@@ -530,8 +506,6 @@
                      
                 }
                 
-                
-                
                 <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                 {
@@ -539,10 +513,14 @@
                 }
                 else
                 {
-                <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
-                <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
-                <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
-                <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>
+                
+                    <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
+                
+                    <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
+                
+                    <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
+                
+                    <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>
                 }
             </div>
         </div>

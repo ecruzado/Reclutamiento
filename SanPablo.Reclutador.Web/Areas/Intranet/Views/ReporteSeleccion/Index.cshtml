@@ -342,14 +342,14 @@
                     
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Fecha:<span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError">Fecha<span class="text-error">*</span></label>
                             <div class="controles">
                                
                               
                                 <input type="text" class="input-small"  id="ReporteSol_FechaInicio" name="ReporteSol.FechaInicio" placeholder=" Inicial" >
                                 <input type="text" class="input-small"  id="ReporteSol_FechaFin" name="ReporteSol.FechaFin" placeholder=" Final">
 
-                              
+                      
 
                             </div>
                         </div>
@@ -358,8 +358,9 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Dependecia</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.ReporteSol.idDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.ReporteSol.idDependencia))
-                            </div>
+                                  @Html.DropDownListFor(model => model.ReporteSol.idDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.ReporteSol.idDependencia))    
+                             </div>
+
                         </div>
                     </td>
 
@@ -370,7 +371,18 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede))
+                              @*objReporteModel.CampoSede = Visualicion.SI;
+                    objReporteModel.AnalistaSeleccion = Visualicion.SI;*@
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoSede))
+                                {
+                                   @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede)) 
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede), new { disabled="disabled"}) 
+                                }
+                                   
                             </div>
                         </div>
                     </td>
@@ -435,7 +447,17 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Analista Responsable</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp))
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoAnalistaSeleccion))
+                                {
+                                  @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp))    
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp), new { disabled="disabled"})    
+                                }
+
+                                
                             </div>
                         </div>
                     </td>

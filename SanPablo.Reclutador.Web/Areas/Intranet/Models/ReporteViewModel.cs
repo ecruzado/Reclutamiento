@@ -68,5 +68,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> ListaMotivo { get; set; }
        
 
+
+        //campos de la pantalla reporte de seleccion
+
+        public string CampoSede { get; set; }
+        public string CampoDependencia { get; set; }
+        public string CampoDepartamento { get; set; }
+        public string CampoArea { get; set; }
+        public string CampoAnalistaSeleccion { get; set; }
+                    
+                    
     }
 }
