@@ -39,14 +39,17 @@
         $('#btnBuscar').click(function () {
 
             if (valida()) {
+                $("#indBusqueda").val("S");
 
                 $('#grdListContratados').trigger('reloadGrid');
 
+               
                 var count = $("#grdListContratados").getGridParam("reccount");
                 if (count == 0) {
                     MostrarMensaje('No se encontraron registros', "Mensaje");
                 }
-
+                $("#indBusqueda").val("N");
+               
             }
 
         });
@@ -156,7 +159,8 @@
                        { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
                        { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
                        { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() },
-                       { field: 'nIdSede', data: $("#ReporteSol_idSede").val() }
+                       { field: 'nIdSede', data: $("#ReporteSol_idSede").val() },
+                       { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
 
                 ];
 
@@ -336,7 +340,7 @@
             <div class="widget-title">
                 <h5>Reporte de Selección</h5>
             </div>
-           
+            @Html.TextBoxFor(model => model.indBusqueda, new { style = "display: none;" })
                <table class="formulario-busqueda">
                 <tr class="formulario-fila">
                     
@@ -371,8 +375,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                              @*objReporteModel.CampoSede = Visualicion.SI;
-                    objReporteModel.AnalistaSeleccion = Visualicion.SI;*@
+                            
                                 
                                 @if (Visualicion.SI.Equals(Model.CampoSede))
                                 {

@@ -422,11 +422,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReporte.idSede = 0;
 	            }
 
+                string indBusqueda = (grid.rules[10].data == null ? "N" : grid.rules[10].data);
+
+                if (Indicador.Si.Equals(indBusqueda))
+                {
+                    listaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
+                }
 
                 Session[ConstanteSesion.ReporteSeleccion] = objReporte;
 
-
-                listaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
 
                 var generic = GetListar(listaReporte,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);

@@ -258,14 +258,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     objReporte.idAnalistaResp = 0;
                 }
+                string indBusqueda = (grid.rules[4].data == null ? "N" : grid.rules[4].data);
 
-                
-
+                if (Indicador.Si.Equals(indBusqueda))
+                {
+                    listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
+                }
 
                 Session[ConstanteSesion.ReporteResumen] = objReporte;
-
-
-                listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
 
                 var generic = GetListar(listaReporte,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);

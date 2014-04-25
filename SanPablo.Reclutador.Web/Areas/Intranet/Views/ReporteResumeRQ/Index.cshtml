@@ -39,6 +39,7 @@
         $('#btnBuscar').click(function () {
 
             if (valida()) {
+                $("#indBusqueda").val("S");
 
                 $('#grdListResumen').trigger('reloadGrid');
 
@@ -46,6 +47,8 @@
                 if (count==0) {
                     MostrarMensaje('No se encontraron registros', "Mensaje");
                 }
+
+                $("#indBusqueda").val("N");
 
             }
 
@@ -89,7 +92,8 @@
                        { field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
                        { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
                        { field: 'cSede', data: $("#ReporteSol_idSede").val() },
-                       { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() }
+                       { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() },
+                       { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
                        
                 ];
 
@@ -234,7 +238,8 @@
             <div class="widget-title">
                 <h5>Resume de requerimientos</h5>
             </div>
-           
+            @Html.TextBoxFor(model => model.indBusqueda, new { style = "display: none;" })
+
                <table class="formulario-busqueda">
                 <tr class="formulario-fila">
                     

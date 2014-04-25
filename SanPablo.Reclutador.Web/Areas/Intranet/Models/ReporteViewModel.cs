@@ -76,7 +76,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string CampoDepartamento { get; set; }
         public string CampoArea { get; set; }
         public string CampoAnalistaSeleccion { get; set; }
-                    
+
+        //inidicador de busqueda
+
+        public string indBusqueda { get; set; }
+            
                     
     }
 }
