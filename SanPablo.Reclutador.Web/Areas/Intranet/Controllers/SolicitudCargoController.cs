@@ -245,7 +245,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.listaRol.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
             model.listaEtapas =
-             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
+             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
             model.listaEtapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.listaEstados =
@@ -343,7 +343,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.FlagPublicado==null?"":item.FlagPublicado,
                                 item.TipEtapa==null?"":item.TipEtapa,
                                 item.idUsuarioResp ==null?"":item.idUsuarioResp.ToString(),
-                                item.Tipsol==null?"":item.Tipsol
+                                item.Tipsol==null?"":item.Tipsol,
+                                item.Des_etapa == null?"":item.Des_etapa
+
                                
                             }
                 }).ToArray();
@@ -515,7 +517,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (codReemplazo!=null)
             {
-                if (codReemplazo == 5 ||codReemplazo == 6 || codReemplazo == 7 || codReemplazo == 8 || codReemplazo == 9 || codReemplazo == 10)
+                if (codReemplazo == 5||codReemplazo == 6 || codReemplazo == 7 || codReemplazo == 8 || codReemplazo == 9 || codReemplazo == 10)
                 {
                     // es un tipo de reemplazo
                     model.TipoReemplazo = "N";
@@ -836,6 +838,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             int idUsuario = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            string MensajeInformativo = "";
+
 
             if (model!=null)
             {
@@ -871,6 +875,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
                             retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
+
+                            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
+                                x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
+
+
+                            MensajeInformativo = "Se el envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista o encargado de selección : " + objUsuario.CodUsuario;
 
                             
                         }
@@ -911,7 +921,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 
                 objJson.Resultado = true;
-                objJson.Mensaje = "Se envio la solicitud correctamente";
+                objJson.Mensaje = MensajeInformativo;
             }
 
 

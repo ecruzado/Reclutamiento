@@ -19,7 +19,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Security;
+   // using System.Web.Security;
+    using SanPablo.Reclutador.Entity;
   
     
     
@@ -55,7 +56,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
         
         /// <summary>
-        /// obtiene los postulantes seleccionados
+        /// Inicializa la pantalla de contratacion, obtiene los postulantes seleccionados
         /// </summary>
         /// <param name="id"></param>
         /// <param name="tipSol"></param>
@@ -85,6 +86,41 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
            model.Solicitud.Tipsol = tipSol;
            model.indPagina = indPagina;
            model.pagina = pagina;
+
+
+           //accesos a los botones
+           Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+           if (Roles.Analista_Seleccion.Equals(idRol))
+           {
+               model.btnContratarPost = Visualicion.SI;
+               model.btnFinalizarSol = Visualicion.SI;
+               
+
+           }
+           else if (Roles.Encargado_Seleccion.Equals(idRol))
+           {
+               model.btnContratarPost = Visualicion.SI;
+               model.btnFinalizarSol = Visualicion.SI;
+           
+
+           }
+           else if (Roles.Administrador_Sistema.Equals(idRol))
+           {
+               model.btnContratarPost = Visualicion.SI;
+               model.btnFinalizarSol = Visualicion.SI;
+
+           }
+           else
+           {
+               model.btnContratarPost = Visualicion.NO;
+               model.btnFinalizarSol = Visualicion.NO;
+             
+           }
+
+
+
+
 
            return View("Index", model);
         }

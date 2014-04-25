@@ -56,9 +56,6 @@
 
                 if (idSol != null) {
 
-                    @* var url = '@Url.Action("Index", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina;
-                    window.location = url;*@
-
                     var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
 
@@ -403,8 +400,16 @@
                 
                
                 <a class="btn" id="btnAnteriorPre"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                <a class="btn btn-info" id="btnContratar"><i class="icon-edit icon-white"></i> Contratar</a>
-                <a class="btn btn-info" id="btnFinalizar"><i class="icon-edit icon-white"></i> Finalizar</a>
+                
+                @if (Visualicion.SI.Equals(Model.btnContratarPost))
+                {
+                  <a class="btn btn-info" id="btnContratar"><i class="icon-edit icon-white"></i> Contratar</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnFinalizarSol))
+                {
+                  <a class="btn btn-info" id="btnFinalizar"><i class="icon-edit icon-white"></i> Finalizar</a>    
+                }                
                 
             </div>
         </div>

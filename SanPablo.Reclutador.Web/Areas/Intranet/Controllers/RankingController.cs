@@ -707,7 +707,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              else if (Roles.Analista_Seleccion.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "N";
+                 model.btnSeleccionar = "S";
                  model.btnExcluir = "S";
                  model.btnContactado = "S";
                  model.btnContratar = "S";
@@ -716,7 +716,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              else if (Roles.Encargado_Seleccion.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "N";
+                 model.btnSeleccionar = "S";
                  model.btnExcluir = "S";
                  model.btnContactado = "S";
                  model.btnContratar = "S";

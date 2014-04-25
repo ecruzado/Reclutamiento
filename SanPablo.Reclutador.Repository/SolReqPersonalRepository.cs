@@ -444,6 +444,8 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal.idUsuarioResp = Convert.ToInt32(ldrSolReqPersonal["ID_USUARIO_RESP"]);
                      lobSolReqPersonal.Tipsol = Convert.ToString(ldrSolReqPersonal["TIPSOL"]);
 
+                     lobSolReqPersonal.Des_etapa = Convert.ToString(ldrSolReqPersonal["DES_ETAPA"]);
+
                      llstSolReqPersonal.Add(lobSolReqPersonal);
                  }
                  ldrSolReqPersonal.Close();

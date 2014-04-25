@@ -890,12 +890,14 @@
 
             var nVacante = parseInt(numVacante);
             if (nVacante==0) {
-                notificacionExito("Ingrese el numero de vacantes");
+                //notificacionExito("Ingrese el numero de vacantes");
+                MostrarMensaje("Ingrese el número de vacantes", "Mensaje");
                 return;
             }
 
             if (nVacante != countList) {
-                notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
+                MostrarMensaje("El número de vacantes no puede ser diferente al número de reemplazos", "Mensaje")
+                //notificacionExito("El número de vacantes no puede ser diferente al número de reemplazos");
                 return;
             }
 
@@ -907,6 +909,21 @@
 
 
     function enviaSolicitud() {
+
+        $.blockUI({
+            message: '<h1>Enviando Solicitud...</h1>',
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }
+        });
+
+
         $.ajax({
             data: $("#frmSolReemplazoCargo").serialize(),
             type: "POST",
@@ -914,11 +931,14 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
-                    //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                    MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $.unblockUI();
+                    RedireccionaSol("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Información");
                 }
             }
-         });
+        });
+
+
+
 
     }
 
@@ -969,6 +989,26 @@
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensajeInfo", "spnMensajeInfo", mensaje, titulo);
     }
+
+
+
+    function RedireccionaSol(selectorDiv, selectorSpan, msg, title) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("ListaReemplazo", "SolicitudCargo")');
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+
 
     //fin
 
