@@ -47,6 +47,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
         private IUsuarioRepository _usuarioRepository;
         private ISedeRepository _sedeRepository;
+       
 
         public ReporteSeleccionController(IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -96,10 +97,62 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objReporteModel = Inicializar();
 
             objReporteModel.Solicitud = new SolReqPersonal();
+            objReporteModel.ReporteSol = new Reporte();
+
+            //accesos por roles
+
+            int rolUsuario = (Session[ConstanteSesion.Rol]==null?0:Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            int SedeUSuario = (Session[ConstanteSesion.Sede]==null?0:Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
+            int IdUsuario =(Session[ConstanteSesion.Usuario]==null?0:Convert.ToInt32(Session[ConstanteSesion.Usuario]));
+
+
+           // se obtiene los datos del usuario
+
+            SedeNivel objSedeNivel = (SedeNivel)Session[Core.ConstanteSesion.UsuarioSede];
 
            
 
-            objReporteModel.ReporteSol = new Reporte();
+            if (rolUsuario>0)
+            {
+                if (Roles.Encargado_Seleccion.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                  
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+                }
+                else if (Roles.Analista_Seleccion.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    objReporteModel.ReporteSol.idAnalistaResp = IdUsuario;
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.NO;
+                    
+                }
+                else if (Roles.Consultor.Equals(rolUsuario))
+                {
+                    objReporteModel.CampoSede = Visualicion.SI;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                    
+                }
+                else if (Roles.Administrador_Sistema.Equals(rolUsuario))
+                {
+                    objReporteModel.CampoSede = Visualicion.SI;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+                else {
+                    objReporteModel.CampoSede = Visualicion.SI;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+                }
+            }
+            
+
+
 
 
             return View("Index",objReporteModel);
@@ -129,11 +182,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             List<DetalleGeneral> listaSolicitud = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
             objModel.ListaEstadoReq = listaSolicitud.Where(x => x.Valor == "04" || x.Valor == "08").ToList();
             objModel.ListaEstadoReq.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-            //new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
-            //objModel.ListaEstadoReq.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-            
-            //objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
-            //                                                             && x.IdeSede == UsuarioSede.IDESEDE));
+           
             objModel.listaDependencia = new List<Dependencia>();
             objModel.listaDependencia.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
@@ -143,9 +192,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>();
             objModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            objModel.ListaAnalistaResp = new List<Usuario>();
-            objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            int rolUsuario = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+            int SedeUSuario = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
+
+            if (Roles.Encargado_Seleccion.Equals(rolUsuario))
+            {
+
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+                
+            }
+            else if (Roles.Analista_Seleccion.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+            else
+            {
+                objModel.ListaAnalistaResp = new List<Usuario>();
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+
+
+
+
+         
             return objModel;
         }
 
@@ -344,11 +422,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReporte.idSede = 0;
 	            }
 
+                string indBusqueda = (grid.rules[10].data == null ? "N" : grid.rules[10].data);
+
+                if (Indicador.Si.Equals(indBusqueda))
+                {
+                    listaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
+                }
 
                 Session[ConstanteSesion.ReporteSeleccion] = objReporte;
 
-
-                listaReporte = _solReqPersonalRepository.GetListaReporteSeleccion(objReporte);
 
                 var generic = GetListar(listaReporte,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
@@ -484,9 +566,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objGeneraExcel.addCelda(row, cantCol, UsuarioActual.NombreUsuario, styleCadena, "S");
                 objGeneraExcel.addCelda(row, 1, "Sistema de Reclutamiento de Personal", styleNegrita, "S");
 
-                Fila++;
-                row = objGeneraExcel.addFila(Fila++);
-                objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
+                //Fila++;
+                //row = objGeneraExcel.addFila(Fila++);
+                //objGeneraExcel.addCelda(row, 1, "Promedio de atención: "+Promedio, styleNegrita, "S");
 
                 // se define la cabecera
                 List<string> lista = new List<string>();
@@ -525,6 +607,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //imprime detalle
                 colCab = 0;
                 Fila += 1;
+
+                int posColumDias = 0;
                 foreach (Reporte ItemReporte in ListaReporte)
                 {
                     colCab = 0;
@@ -561,8 +645,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.FechaContratacion, styleCadena, "S");
+                    
                     colCab++;
+                    posColumDias = colCab;
+                    
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Dias.ToString(), styleCadena, "N");
+                    
                     colCab++;
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.Numdocumento, styleCadena, "S");
                     colCab++;
@@ -576,6 +664,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objGeneraExcel.addCelda(row, colCab, ItemReporte.MotivoCirreSol, styleCadena, "S");
                 }
 
+                if (ListaReporte!=null)
+                {
+                    row = objGeneraExcel.addFila(Fila++);
+                    objGeneraExcel.addCelda(row, posColumDias, Promedio, styleCadena, "S");
+                }
+
+               
 
                 MemoryStream exportData = new MemoryStream();
                 using (exportData)

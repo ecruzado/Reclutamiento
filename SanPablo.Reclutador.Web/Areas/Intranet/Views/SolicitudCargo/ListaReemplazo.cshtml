@@ -177,7 +177,7 @@
                     }
                 });
             },
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo','', 'Dependencia','', 'Departamento','','Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio','Cierre', '','Responsable', 'Nom.Responsable', 'Publicado','Etapa','',''],
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', '', 'Etapa'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
@@ -203,9 +203,11 @@
                 { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
                 { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300},
                 { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
-                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 },
+                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 ,hidden:true},
                 { name: 'idUsuarioResp', index: 'idUsuarioResp', align: 'center', hidden: true },
-                { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true }
+                { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true },
+                { name: 'Des_etapa', index: 'Des_etapa', align: 'center', hidden: false }
+                
                 
         ],
         pager: jQuery('#grdPagerBusquedaReemplazo'),

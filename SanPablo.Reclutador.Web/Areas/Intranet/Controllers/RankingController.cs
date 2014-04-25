@@ -655,7 +655,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
          /// <summary>
-         /// muestra la pantalla de preseleccion de postulantes
+         /// Inicializa la pantalla de preseleccion de postulantes
          /// </summary>
          /// <param name="id"></param>
          /// <param name="tipSol"></param>
@@ -688,7 +688,69 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              
              model.pagina = pagina;
              model.indPagina = ind;
-             // consulta que obtiene los datos de la solicitud por id y Tipo de Puesto
+             
+            // consulta que obtiene los datos de la solicitud por id y Tipo de Puesto
+
+            //accesos por botones
+       
+             Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+             if (Roles.Administrador_Sistema.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnExcluir = "S";
+                 model.btnContactado = "S";
+                 model.btnContratar = "S";
+               
+             }
+             else if (Roles.Analista_Seleccion.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnExcluir = "S";
+                 model.btnContactado = "S";
+                 model.btnContratar = "S";
+
+             }
+             else if (Roles.Encargado_Seleccion.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnExcluir = "S";
+                 model.btnContactado = "S";
+                 model.btnContratar = "S";
+
+             }else if(Roles.Gerente_General_Adjunto.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnContratar = "S";
+                
+             }
+             else if (Roles.Gerente.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnContratar = "S";
+
+             }
+             else if (Roles.Jefe.Equals(idRol))
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "S";
+                 model.btnContratar = "S";
+
+             }
+             else
+             {
+                 model.btnEvaluaciones = "N";
+                 model.btnSeleccionar = "N";
+                 model.btnExcluir = "N";
+                 model.btnContactado = "N";
+                 model.btnContratar = "N";
+             }
+
 
              return View("PostulantesPreSeleccionados", model);
          }

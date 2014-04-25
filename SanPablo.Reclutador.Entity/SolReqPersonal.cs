@@ -272,6 +272,8 @@ namespace SanPablo.Reclutador.Entity
         /// Motivo de Cierre de una solicitud si no se opcuparon todas las vacantes
         /// </summary>
         public virtual string MotivoCierre { get; set; }
+
+        public virtual string Des_etapa { get; set; }
         
 
     }

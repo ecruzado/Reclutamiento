@@ -98,6 +98,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objReporteModel.Solicitud = new SolReqPersonal();
             objReporteModel.ReporteSol = new Reporte();
 
+            int rolUsuario = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+            int SedeUSuario = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+            int IdUsuario = (Session[ConstanteSesion.Usuario] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Usuario]));
+
+
+            if (rolUsuario > 0)
+            {
+                if (Roles.Encargado_Seleccion.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                   
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+                }
+                else if (Roles.Analista_Seleccion.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    objReporteModel.ReporteSol.idAnalistaResp = IdUsuario;
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.NO;
+
+                }
+                else
+                {
+                    objReporteModel.CampoSede = Visualicion.SI;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+                }
+            }
+
+
 
             return View("Index", objReporteModel);
             
@@ -113,38 +144,35 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             var idSede = Session[ConstanteSesion.Sede];
 
-            //// motivo de reemplazo
-            //objModel.ListaMotivo =
-            //new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVacante));
-            //objModel.ListaMotivo.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-            
             objModel.ListaSede = new List<Sede>(_sedeRepository.GetByTipSede());
             objModel.ListaSede.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "Seleccionar" });
 
-            //objModel.ListaTipoSol =
-            //new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSolicitud));
-            //objModel.ListaTipoSol.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            int rolUsuario = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+            int SedeUSuario = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
-            //List<DetalleGeneral> listaSolicitud = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
-            //objModel.ListaEstadoReq = listaSolicitud.Where(x => x.Valor == "04" || x.Valor == "08").ToList();
-            //objModel.ListaEstadoReq.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-            ////new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
-            ////objModel.ListaEstadoReq.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            if (Roles.Encargado_Seleccion.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+            else if (Roles.Analista_Seleccion.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+            else
+            {
+                objModel.ListaAnalistaResp = new List<Usuario>();
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
 
-            ////objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
-            ////                                                             && x.IdeSede == UsuarioSede.IDESEDE));
-            //objModel.listaDependencia = new List<Dependencia>();
-            //objModel.listaDependencia.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+            }
 
-            //objModel.ListaDepartamento = new List<Departamento>();
-            //objModel.ListaDepartamento.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
 
-            //objModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>();
-            //objModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
-
-            objModel.ListaAnalistaResp = new List<Usuario>();
-            objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
-
+           
             return objModel;
         }
 
@@ -186,11 +214,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objReporte = new Reporte();
 
-
-                  //{ field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
-                  //     { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
-                  //     { field: 'cSede', data: $("#ReporteSol_idSede").val() },
-                  //     { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() }
 
                 var FecDesde = grid.rules[0].data;
 
@@ -235,21 +258,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     objReporte.idAnalistaResp = 0;
                 }
+                string indBusqueda = (grid.rules[4].data == null ? "N" : grid.rules[4].data);
 
-                
-
+                if (Indicador.Si.Equals(indBusqueda))
+                {
+                    listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
+                }
 
                 Session[ConstanteSesion.ReporteResumen] = objReporte;
-
-
-                listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
 
                 var generic = GetListar(listaReporte,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = (item.IdeSolReqpersonal),
+                    id = (item.idAnalistaResp.ToString()),
                     cell = new string[]
                             {
                                 item.idAnalistaResp==null?"":item.idAnalistaResp.ToString(),

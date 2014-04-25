@@ -36,11 +36,28 @@
 
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
+        $('#btnPDF').hide();
+        $('#btnExcel').hide();
+
         $('#btnBuscar').click(function () {
 
             if (valida()) {
+                $("#indBusqueda").val("S");
 
                 $('#grdListResumen').trigger('reloadGrid');
+
+                var count = $("#grdListResumen").getGridParam("reccount");
+                if (count==0) {
+                    MostrarMensaje('No se encontraron registros', "Mensaje");
+                    $('#btnPDF').hide();
+                    $('#btnExcel').hide();
+                }
+
+                $('#btnPDF').show();
+                $('#btnExcel').show();
+
+                $("#indBusqueda").val("N");
+
             }
 
         });
@@ -83,7 +100,8 @@
                        { field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
                        { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
                        { field: 'cSede', data: $("#ReporteSol_idSede").val() },
-                       { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() }
+                       { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() },
+                       { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
                        
                 ];
 
@@ -157,19 +175,6 @@
         });
 
 
-        //var dato = $("#grdListResumen").getGridParam("reccount");
-
-        //if (dato > 0)
-        //{
-        //    $("#btnPDF").removeAttr('disabled');
-        //    $("#btnExcel").removeAttr('disabled');
-           
-        //}
-        //else
-        //{
-        //    $('#btnExcel,#btnPDF').attr("disabled", "disabled");
-        //}
-
         var grid = $("#grdListResumen"), headerRow, rowHight, resizeSpanHeight;
 
         // get the header row which contains
@@ -197,6 +202,7 @@
 
         var fechaInicial = $('#ReporteSol_FechaInicio').val();
         var fechaFinal = $('#ReporteSol_FechaFin').val();
+        var sede = $('#ReporteSol_idSede').val();
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
            
@@ -212,6 +218,12 @@
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 30) {
             MostrarMensaje('La diferencia entre fechas no puede ser mayor a 30 días', "Mensaje");
+            return false;
+        }
+
+
+        if (sede=="0") {
+            MostrarMensaje('Seleccione una sede', "Mensaje");
             return false;
         }
 
@@ -234,13 +246,14 @@
             <div class="widget-title">
                 <h5>Resume de requerimientos</h5>
             </div>
-           
+            @Html.TextBoxFor(model => model.indBusqueda, new { style = "display: none;" })
+
                <table class="formulario-busqueda">
                 <tr class="formulario-fila">
                     
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Periodo:</label>
+                            <label class="control-label" for="selectError">Periodo<span class="text-error">*</span></label>
                             <div class="controles">
                                 <input type="text" class="input-small"  id="ReporteSol_FechaInicio" name="ReporteSol.FechaInicio" placeholder=" Inicial" >
                                 <input type="text" class="input-small"  id="ReporteSol_FechaFin" name="ReporteSol.FechaFin" placeholder=" Final">
@@ -249,9 +262,18 @@
                     </td>
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Sede</label>
+                            <label class="control-label" for="inputSuccess">Sede<span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede))
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoSede))
+                                {
+                                  @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede))   
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idSede, new SelectList(Model.ListaSede, "CodigoSede", "DescripcionSede", Model.ReporteSol.idSede), new {disabled = "disabled" })
+                                }
+                                
                             </div>
                         </div>
                     </td>
@@ -263,7 +285,16 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Analista Responsable</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp))
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoAnalistaSeleccion))
+                                {
+                                  @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp))    
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idAnalistaResp, new SelectList(Model.ListaAnalistaResp, "IdUsuario", "NombreUsuario", Model.ReporteSol.idAnalistaResp), new { disabled="disabled"})
+                                }
+                                
                             </div>
                         </div>
                     </td>
