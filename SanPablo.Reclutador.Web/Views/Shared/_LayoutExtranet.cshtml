@@ -72,7 +72,9 @@
                 </td>
             </tr>
         </table>
-        <img src="~/Content/images/logo_sanpablo.png" alt="San Pablo" height="23" width="155" style="margin-top:5px;margin-bottom:5px"/>
+
+        <img id="imgLogoExtranet" src="~/Content/images/logo_sanpablo.png" alt="San Pablo" height="23" width="155" style="margin-top:5px;margin-bottom:5px"/>
+        
         <a href="#" style="color:#53016B;font-size:18px;font-weight:normal;padding-top:10px;padding-left:20px;text-decoration:none">
         </a>
         <div style="float:right;padding-right:5px;padding-top:8px;font-size:11px">
@@ -144,6 +146,16 @@
          @RenderSection("Scripts", required: false)
         <script type="text/javascript">
           $(document).ready(function () {
+
+
+              // reconstruye la imagen para IE
+              $("#imgLogoExtranet").attr("src", '@Url.Content("~/Content/images/logo_sanpablo.png")')
+                  .css({
+                      height: "28px",
+                      width: "155px"
+
+                  });
+
 
               $('#brnCerrarSesion').click(function () {
 

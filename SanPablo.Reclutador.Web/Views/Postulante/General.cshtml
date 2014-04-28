@@ -20,6 +20,23 @@
 
     $(document).ready(function () {
 
+
+        // reconstruye la imagen para IE
+        
+        $("#imgSalida1")
+        .css({
+            height: "150px",
+            width: "150px"
+
+        });
+        
+        $("#imgSalida2")
+        .css({
+            height: "150px",
+            width: "150px"
+
+        });
+
         mostrarMensajeBienvenida();
 
         SanPablo.Numeros('Postulante_NumeroDireccion');
@@ -347,17 +364,17 @@
                              @if (Model.Postulante.FotoPostulante!=null)
                                  {
                                      <table>
-                                         <tr>
+                                         <tr style="text-align:center">
                                              <td style="width:100px;"></td>
                                               <td class ="colInput" colspan="3">
-                                                 <img id="imgSalida"  height ="150" width="150" src="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
+                                                 <img id="imgSalida2"  height ="150" width="150" src ="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
                                               </td>
                                         </tr>
                                      </table>    
                                  }
                             else
                             {
-                                 <img src="~/Content/images/user4.png"  alt="" id ="imgSalida"  width="40%" height="40%"/>
+                                 <img src="~/Content/images/user4.png"  alt="" id ="imgSalida1"  width="40%" height="40%"/>
                              }
 
                              <br />

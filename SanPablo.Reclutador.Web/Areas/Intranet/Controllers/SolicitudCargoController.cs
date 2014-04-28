@@ -306,7 +306,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
                
 
-
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
                
