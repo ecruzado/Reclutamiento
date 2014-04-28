@@ -282,9 +282,19 @@
              <table>
                 <tr>
                   <td  class="formulario-accion offset9">
-                     <button type="submit" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
-                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
-                   </td>
+                      @if (Visualicion.SI.Equals(Model.btnBuscar))
+                      {
+                        <button type="submit" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>    
+                      }    
+                      
+                      @if (Visualicion.SI.Equals(Model.btnLimpiar))
+                      {
+                        <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>    
+                      }
+                     
+                      
+                   
+                  </td>
                 </tr>
                 <tr>
                     <td>
@@ -300,13 +310,30 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" id="btnNuevo"><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a class="btn btn-info" id="btnConsultar"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a class="btn btn-info" id="btnEditar"><i class="icon-pencil  icon-white"></i> Editar</a>
-                <a  id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                @*<a  id="btnEliminar" class="btn btn-danger" onclick="$('#divEliminar').dialog('open'); return false;"><i class="icon-remove icon-white"></i> Eliminar</a>*@
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a class="btn btn-info" id="btnNuevo"><i class="icon-plus icon-white"></i> Nuevo</a>
+                }
 
-                 <a  id="btnEliminarCategoria" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                @if (Visualicion.SI.Equals(Model.btnConsultar))
+                {
+                  <a class="btn btn-info" id="btnConsultar"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEditar))
+                {
+                  <a class="btn btn-info" id="btnEditar"><i class="icon-pencil  icon-white"></i> Editar</a>
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnActivarDesactivar))
+                {
+                  <a  id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEliminar))
+                {
+                  <a  id="btnEliminarCategoria" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                }
             </div>
         </div>
     </div>

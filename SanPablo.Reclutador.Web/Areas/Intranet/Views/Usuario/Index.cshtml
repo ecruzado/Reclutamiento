@@ -26,7 +26,7 @@
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
           
             if (selr != null) {
-                window.location = '@Url.Action("Edit", "Usuario", new { id = ""})' + '/' + selr;
+                window.location = '@Url.Action("Edit", "Usuario", new { id = "" })' + '/' + selr;
              } else {
                  MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
              }
@@ -39,7 +39,7 @@
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
             
             if (selr != null) {
-                window.location = '@Url.Action("Consulta", "Usuario", new { id = ""})' + '/' + selr;
+                window.location = '@Url.Action("Consulta", "Usuario", new { id = "" })' + '/' + selr;
             } else {
                 MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
@@ -353,7 +353,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Rol</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new {  data_val = "false" }) 
+                                @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new { data_val = "false" }) 
                             </div>
                         </div>
                     </td>
@@ -363,7 +363,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                               @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new {  data_val = "false" }) 
+                               @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new { data_val = "false" }) 
                             </div>
                         </div>
                     </td>
@@ -373,7 +373,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Nombre</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , data_val = "false" ,onkeyup="aMays(event, this)"})                      
+                                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -381,7 +381,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Apellido Paterno</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
+                                @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -391,7 +391,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Codigo</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
+                                @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -399,7 +399,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Apellido Materno</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" , data_val = "false",onkeyup="aMays(event, this)" })                      
+                                @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)" })                      
                             </div>
                         </div>
                     </td>
@@ -407,8 +407,16 @@
 
                 <tr class="formulario-accion offset9">
                     <td>
-                    <a id="btnBuscarUsuario"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    
+                        @if (Visualicion.SI.Equals(Model.btnBuscar))
+                        {
+                          <a id="btnBuscarUsuario"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
+                        }
+
+                        @if (Visualicion.SI.Equals(Model.btnLimpiar))
+                        {
+                          <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                        }
                     </td>
                 </tr>
                  <tr>
@@ -423,12 +431,30 @@
                 <div id="grdPagerUsuario"></div>
             </div>
             <div class="form-actions">
-                <a  id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a  id ="btnConsultar" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a  id ="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
                 
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a  id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnConsultar))
+                {
+                <a  id ="btnConsultar" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEditar))
+                {
+                  <a  id ="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnActivarDesactivar))
+                {
+                  <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEliminar))
+                {
+                  <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                }
             </div>
         </div>
     </div>

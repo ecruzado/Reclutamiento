@@ -192,7 +192,7 @@
                 if ("I" == indEstado) {
                     MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
                 } else {
-                    window.location = '@Url.Action("Edicion", "Examen", new { area="Intranet",id=""})' + '/' + selr;
+                    window.location = '@Url.Action("Edicion", "Examen", new { area = "Intranet", id = "" })' + '/' + selr;
                 }
 
             } else {
@@ -326,7 +326,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen),new { data_val = "false" }) 
+                                @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen), new { data_val = "false" }) 
                             </div>
                         </div>
                     </td>
@@ -334,7 +334,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Descripcion</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onkeyup="aMays(event, this)"  }) 
+                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150", data_val = "false", onkeyup = "aMays(event, this)" }) 
                             </div>
                         </div>
                     </td>
@@ -344,15 +344,21 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                               @Html.DropDownListFor(model => model.Examen.EstActivo, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Examen.EstActivo),new { data_val = "false" }) 
+                               @Html.DropDownListFor(model => model.Examen.EstActivo, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Examen.EstActivo), new { data_val = "false" }) 
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr class="formulario-accion offset9">
                     <td>
-                    <button id="btnBuscarExamen" type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
-                    <button id ="btnLimpiarExamen" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    @if (Visualicion.SI.Equals(Model.btnBuscar))
+                    {
+                      <button id="btnBuscarExamen" type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                    }
+                    @if (Visualicion.SI.Equals(Model.btnLimpiar))
+                    {
+                      <button id ="btnLimpiarExamen" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    }
                     </td>
                 </tr>
                  <tr>
@@ -367,16 +373,32 @@
                 <div id="grdPager"></div>
             </div>
             <div class="form-actions">
-                <a  id="btnNuevoExamen"    class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a  id ="btnConsultarExamen" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a  id ="btnEditarExamen" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
-                <a id="btnGetPDF" class="btn btn-danger"><i class="icon-remove icon-white"></i> GetPDF</a>
-               
-                 @* <iframe height ='150' width='150' src='@Url.Action("GetExamenPDF", "Examen")/22' />*@
-
-
+                
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a  id="btnNuevoExamen"    class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnConsultar))
+                {
+                  <a  id ="btnConsultarExamen" class="btn btn-info" ><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnEditar))
+                {
+                  <a  id ="btnEditarExamen" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnActivarDesactivar))
+                {
+                  <a  id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnEliminar))
+                {
+                  <a id="btnEliminar" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</a>
+                }
+                @if (Visualicion.SI.Equals(Model.btnGetExamen))
+                {
+                  <a id="btnGetPDF" class="btn btn-danger"><i class="icon-remove icon-white"></i> GetPDF</a>
+                }
+                
             </div>
         </div>
     </div>

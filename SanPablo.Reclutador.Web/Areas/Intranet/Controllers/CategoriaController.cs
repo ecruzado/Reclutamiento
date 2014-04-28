@@ -56,6 +56,45 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             CategoriaViewModel objCategoriaView = new CategoriaViewModel();
             objCategoriaView = InicializarCategoriaIndex();
 
+
+            //botonera
+
+            int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                objCategoriaView.btnActivarDesactivar = Visualicion.SI;
+                objCategoriaView.btnBuscar = Visualicion.SI;
+                objCategoriaView.btnConsultar = Visualicion.SI;
+                objCategoriaView.btnEditar = Visualicion.SI;
+                objCategoriaView.btnEliminar = Visualicion.SI;
+                objCategoriaView.btnLimpiar = Visualicion.SI;
+                objCategoriaView.btnNuevo = Visualicion.SI;
+
+            }
+            else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
+            {
+                objCategoriaView.btnActivarDesactivar = Visualicion.SI;
+                objCategoriaView.btnBuscar = Visualicion.SI;
+                objCategoriaView.btnConsultar = Visualicion.SI;
+                objCategoriaView.btnEditar = Visualicion.SI;
+                objCategoriaView.btnEliminar = Visualicion.SI;
+                objCategoriaView.btnLimpiar = Visualicion.SI;
+                objCategoriaView.btnNuevo = Visualicion.SI;
+
+            }
+            else
+            {
+                objCategoriaView.btnActivarDesactivar = Visualicion.NO;
+                objCategoriaView.btnBuscar = Visualicion.NO;
+                objCategoriaView.btnConsultar = Visualicion.NO;
+                objCategoriaView.btnEditar = Visualicion.NO;
+                objCategoriaView.btnEliminar = Visualicion.NO;
+                objCategoriaView.btnLimpiar = Visualicion.NO;
+                objCategoriaView.btnNuevo = Visualicion.NO;
+            }
+
+
             return View(objCategoriaView);
         }
 

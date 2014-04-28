@@ -510,35 +510,37 @@
                 {
                   <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
                 }
+                @*
                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                 {
                     <span></span>
                 }
                 else
                 {
-                
-                    if (Visualicion.SI.Equals(Model.btnSeleccionar))
+                *@
+                    
+                    @if (Visualicion.SI.Equals(Model.btnSeleccionar))
                     {
                     <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
                     }
 
-                    if (Visualicion.SI.Equals(Model.btnExcluir))
+                    @if (Visualicion.SI.Equals(Model.btnExcluir))
                     {
                        <a class="btn btn-info"  id="btnExcluido"><i class="icon-ban-circle icon-white"></i> Excluir</a>
                     
                     }
                     
-                    if (Visualicion.SI.Equals(Model.btnContactado))
+                    @if (Visualicion.SI.Equals(Model.btnContactado))
                     {
                        <a class="btn btn-info" id="btnContactado"><i class="icon-edit icon-white"></i> Contactado</a>
                     }
 
-                    if (Visualicion.SI.Equals(Model.btnContratar))
+                    @if (Visualicion.SI.Equals(Model.btnContratar))
                     {
                       <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>    
                     }
                     
-                }
+               @* }*@
             </div>
         </div>
     </div>
