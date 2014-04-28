@@ -21,11 +21,25 @@
 
         $(document).ready(function () {
 
-            btnBuscarOportunidadLab
+            $('#oportunidadLaboral_FecInicial,#oportunidadLaboral_FecFinal').attr("readonly", "readonly");
+
+            $('#oportunidadLaboral_FecInicial,#oportunidadLaboral_FecFinal').datepicker({
+                showOn: "button",
+                buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+            });
+
+
 
             $('#btnBuscarOportunidadLab').click(function () {
 
-                $('#grdListOportunidadLaboral').trigger('reloadGrid');
+                if (valida()) {
+                    $('#grdListOportunidadLaboral').trigger('reloadGrid');
+                }
+                
             });
 
             $('#btnLimpiarFiltros').click(function () {
@@ -213,7 +227,36 @@
             Funciones.Alert("divMensajePos", "spnMensajePos", mensaje, titulo);
         }
 
-    
+        function valida() {
+
+            var fechaInicial = $('#oportunidadLaboral_FecInicial').val();
+            var fechaFinal = $('#oportunidadLaboral_FecFinal').val();
+           
+            //if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+
+            //    MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            //    return false;
+            //}
+
+            if (fechaInicial.length > 0) {
+                if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    return false;
+                }
+            }
+
+            if (fechaFinal.length > 0) {
+                if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    return false;
+                }
+            }
+
+            return true;
+
+        }
+
+            
     </script>
 }
 
@@ -242,8 +285,10 @@
                  <td class="span5">
                     <label class="control-label" for="selectError">Desde</label>
                     <div class="controles">
-                        @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new {   maxlength="15", placeholder=" Inicial"})      
-                           
+                       @* @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new {   maxlength="15", placeholder=" Inicial"})      
+                       *@    
+
+                        <input type="text" class="input-small"  id="oportunidadLaboral_FecInicial" name="oportunidadLaboral.FecInicial" placeholder=" Inicial" >
                     </div>
                 </td>
 
@@ -261,7 +306,9 @@
                 <td class="span5">
                     <label class="control-label" for="selectError">Hasta</label>
                     <div class="controles">
-                        @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new {  maxlength="15", placeholder=" Final"})      
+                       @* @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new {  maxlength="15", placeholder=" Final"})      *@
+                         <input type="text" class="input-small" id="oportunidadLaboral_FecFinal" name="oportunidadLaboral.FecFinal" placeholder=" Final">
+
                     </div>
                 </td>
             </tr>     
