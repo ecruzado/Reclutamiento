@@ -6,17 +6,6 @@
 @{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
 
-    //var RolUsuario = Session[ConstanteSesion.Rol];
-
-    //if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(RolUsuario) || 
-    //    SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(RolUsuario)
-    //    )
-    //{
-        
-    //}
-    
-    
-    
   }
 @section Head{
 }
@@ -28,12 +17,22 @@
     $("#txtfechafin").datepicker();
 
    
+    $('#SolReqPersonal_FechaInicioBus,#SolReqPersonal_FechaFinBus').datepicker({
+        showOn: "button",
+        buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+    });
 
+    $('#SolReqPersonal_FechaInicioBus,#SolReqPersonal_FechaFinBus').attr("readonly", "readonly");
 
 
     $('#btnBuscarReemplazo').click(function () {
-
-        $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+        if (valida()) {
+            $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+        }
     });
 
 
@@ -236,6 +235,32 @@
         return strRdo;
     }
 
+
+    function valida() {
+
+        var fechaInicial = $('#SolReqPersonal_FechaInicioBus').val();
+        var fechaFinal = $('#SolReqPersonal_FechaFinBus').val();
+       
+        if (fechaInicial.length>0) {
+            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                return false;
+            }
+        }
+
+        if (fechaFinal.length > 0) {
+            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                return false;
+            }
+        }
+      
+        return true;
+
+    }
+
+
+
     function HabilitarFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
            var archivo = 'enabled.png';
@@ -296,8 +321,11 @@
                             <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
                                
-                                @Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
-                                @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
+                                <input type="text" class="input-small"  id="SolReqPersonal_FechaInicioBus" name="SolReqPersonal.FechaInicioBus" placeholder=" Inicial" >
+                                <input type="text" class="input-small"  id="SolReqPersonal_FechaFinBus" name="SolReqPersonal.FechaFinBus" placeholder=" Final">
+
+                                @*@Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                                @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      *@
 
                             </div>
                      </td>
