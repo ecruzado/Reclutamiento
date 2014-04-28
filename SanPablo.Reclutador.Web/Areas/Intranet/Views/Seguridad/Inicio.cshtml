@@ -13,6 +13,18 @@
 
 <script type="text/javascript">
     
+
+    $(document).ready(function () {
+
+        $("#logoInicial")
+	    .css({
+	        height: "600px",
+	        width: "600px"
+            });
+
+    });
+
+
 </script>
 }
 <div class="row">
@@ -26,7 +38,7 @@
 {
     @Html.ValidationSummary(true)
           <div style="margin:0 auto; text-align:center;">
-                        <img  height="600" width="600" src="~/Content/images/Banner-Selección-03.png" />
+                        <img  id="logoInicial" height="600" width="600" src="~/Content/images/Banner-Selección-03.png" />
           </div>
         }
         </div>

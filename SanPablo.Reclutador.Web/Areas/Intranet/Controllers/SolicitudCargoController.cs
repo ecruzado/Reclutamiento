@@ -859,7 +859,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
                         
-                       // objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                       
 
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -982,11 +982,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.LogSolReqPersonal.TipEtapa = Etapa.Aprobado;
                         model.LogSolReqPersonal.Observacion = "";
 
-                        //se obtiene el tipo de requerimiento
-
-                        //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-                        //if (objCargo != null) 
-                        //{
+                        
                             tipoReq = objSol.TipoRequerimiento;
 
                             objSolReqPersonal = new SolReqPersonal();
@@ -1010,7 +1006,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
                             retorno = 1;
 
-                        //}
+                       
                         
                         if (retorno>0)
                         {
@@ -1375,8 +1371,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
                 if (objSol!=null)
                 {
-
-                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
 
                     objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
                     objSol.FechaModificacion = FechaSistema;
@@ -1887,31 +1881,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         #endregion
 
 
-        ///// <summary>
-        ///// ELimina una solicitud(cambia el estado a Inactivo)
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpPost]
-        ////[ValidarSesion]
-        //public ActionResult EliminaSolicitud(string idSol) 
-        //{
-        //    JsonMessage objJson = new JsonMessage();
-        //    SolReqPersonal objSol = new SolReqPersonal();
-
-        //    objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(idSol));
-        //    if (objSol!=null)
-        //    {
-        //        objSol.EstadoActivo = IndicadorActivo.Inactivo;
-
-        //        _solReqPersonalRepository.Update(objSol);
-
-        //        objJson.Mensaje = "Se elimino el ";
-        //    }
-
-
-        //    return Json(objJson);
-        //}
-
 
         /**************************************************************************************************************/
         #region ranking
@@ -2406,40 +2375,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
         #endregion
 
-        //#region ListaHorarios2
-        ///// <summary>
-        ///// Lista de Evaluaciones Detalle
-        ///// </summary>       
-        //[HttpPost]
-        //public ActionResult ListaHorarios2(string sidx, string sord, int page, int rows)
-        //{
-        //    ActionResult result = null;
-        //    List<object> lstFilas = new List<object>();
-
-        //    var fila1 = new
-        //    {
-        //        id = 1,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila       
-                  
-        //            "Turno noche de 12 horas",                    
-        //        }
-        //    };
-        //    lstFilas.Add(fila1);
-
-        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-        //    var data = new
-        //    {
-        //        //total = totalPag,       // Total de páginas
-        //        //page = page,            // Página actual
-        //        //records = totalReg,     // Total de registros (obtenido del modelo)
-        //        rows = lstFilas
-        //    };
-        //    result = Json(data);
-
-        //    return result;
-
-        //}
-        //#endregion
+        
 
         #region ListaEstudiosPublicacion
         /// <summary>
