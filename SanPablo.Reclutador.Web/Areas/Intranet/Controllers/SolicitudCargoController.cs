@@ -332,8 +332,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
                                 item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
                                 item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
-                                item.Feccreacion==null?"":item.Feccreacion.ToString(),
-                                item.FecExpiracacion==null?"":item.FecExpiracacion.ToString(),
+                                
+                                item.Feccreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.Feccreacion),
+                                item.FecExpiracacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FecExpiracacion),
                                
                                 item.idRolSuceso==null?"":item.idRolSuceso.ToString(),
                                 item.DesRolSuceso==null?"":item.DesRolSuceso,
@@ -1884,7 +1885,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         #endregion
-        
+
+
+        ///// <summary>
+        ///// ELimina una solicitud(cambia el estado a Inactivo)
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpPost]
+        ////[ValidarSesion]
+        //public ActionResult EliminaSolicitud(string idSol) 
+        //{
+        //    JsonMessage objJson = new JsonMessage();
+        //    SolReqPersonal objSol = new SolReqPersonal();
+
+        //    objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(idSol));
+        //    if (objSol!=null)
+        //    {
+        //        objSol.EstadoActivo = IndicadorActivo.Inactivo;
+
+        //        _solReqPersonalRepository.Update(objSol);
+
+        //        objJson.Mensaje = "Se elimino el ";
+        //    }
+
+
+        //    return Json(objJson);
+        //}
 
 
         /**************************************************************************************************************/
