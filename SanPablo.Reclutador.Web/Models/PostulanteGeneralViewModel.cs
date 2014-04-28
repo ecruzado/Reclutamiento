@@ -33,6 +33,8 @@
         public HttpPostedFileBase FotoPostulante { get; set; }
 
 
+        public string nombreTemporalArchivo { get; set; }
+
 
     }
 }

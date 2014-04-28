@@ -22,6 +22,10 @@
             Map(x => x.TipoNivelConocimiento, "TIPNIVELCONOCIMIENTO");
             Map(x => x.IndicadorCertificacion, "INDCERTIFICACION");
             Map(x => x.EstadoActivo, "ESTACTIVO");
+            Map(x => x.FechaCreacion, "FECCREACION");
+            Map(x => x.UsuarioCreacion, "USRCREACION");
+            Map(x => x.FechaModificacion, "FECMODIFICACION");
+            Map(x => x.UsuarioModificacion, "USRMODIFICACION");
 
             Map(x => x.DescripcionConocimientoIdioma).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoIdioma + " AND DG.VALOR = TIPCONOCIDIOMA)");
             Map(x => x.DescripcionConocimientoOfimatica).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoConocimientoOfimatica+ " AND DG.VALOR = TIPCONOFIMATICA)");

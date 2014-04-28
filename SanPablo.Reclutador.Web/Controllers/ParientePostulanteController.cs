@@ -95,6 +95,8 @@
         public JsonResult Edit([Bind(Prefix = "Pariente")]ParientePostulante parientePostulante)
         {
             //var result = new JsonResult();
+            var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
 
             if (!ModelState.IsValid)
@@ -106,6 +108,8 @@
                 if (IdePostulante != 0)
                 {
                     parientePostulante.EstadoActivo = IndicadorActivo.Activo;
+                    parientePostulante.FechaCreacion = FechaCreacion;
+                    parientePostulante.UsuarioCreacion = usuarioActual;
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarPariente(parientePostulante);
                     _parientePostulanteRepository.Add(parientePostulante);
@@ -124,7 +128,8 @@
                 parienteEdit.FechaNacimiento = parientePostulante.FechaNacimiento;
                 parienteEdit.ApellidoPaterno = parientePostulante.ApellidoPaterno;
                 parienteEdit.ApellidoMaterno = parientePostulante.ApellidoMaterno;
-
+                parienteEdit.FechaModificacion = FechaModificacion;
+                parienteEdit.UsuarioModificacion = usuarioActual;
                 _parientePostulanteRepository.Update(parienteEdit);
             }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);

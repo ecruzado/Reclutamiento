@@ -195,7 +195,7 @@
                 <label class="etiquetaFormulario" style="width:160px">Empresa <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { onkeyup="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
                 </div>
@@ -219,7 +219,7 @@
                 <label class="etiquetaFormulario" style="width:160px;display:none" id="labelOtro"> Otro </label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "text-transform: uppercase ; display:none;" })
+                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "display:none;", onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreCargoTrabajo )
                 </div>
@@ -260,7 +260,7 @@
                 <label class="etiquetaFormulario" > Tiempo de servicio </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @style = "text-transform: uppercase", @readonly = true })
+                @Html.TextBoxFor(model => model.Experiencia.TiempoDeServicio, new { @readonly = true })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
                 </div>
@@ -282,7 +282,7 @@
                 <label class="etiquetaFormulario" style="width:160px" >Funciones </label>
             </td>
             <td class="colInput">
-                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px; text-transform: uppercase" })
+                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;" , onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FuncionesDesempenadas)
                 </div>
@@ -300,7 +300,7 @@
                 <label class="etiquetaFormulario" style="width:160px" > Nombre de referencia <span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
-                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", onkeyup="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
                 </div>
@@ -330,7 +330,7 @@
                 <label class="etiquetaFormulario" > Correo de referencia  </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.CorreoReferente, new { @style="text-transform: uppercase"})
+                @Html.TextBoxFor(model => model.Experiencia.CorreoReferente, new {onkeyup="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.CorreoReferente)
                 </div>

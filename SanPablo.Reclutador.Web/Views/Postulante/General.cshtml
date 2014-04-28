@@ -31,6 +31,90 @@
         actualizarBarra();
        
 
+        $("#image").uploadify({
+            'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
+             'script': '@Url.Action("Upload", "Postulante")',
+             'scriptData': { ext: '.jpeg;.jpg' },
+             'fileDataName': 'file',
+             'buttonText': 'Subir Foto',
+             'fileDesc': 'Image Files',
+             'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+             'multi': false,
+             'auto': true,
+             'queueSizeLimit': '90',
+             'sizeLimit': 2147483647,
+             'removeCompleted': true,
+             'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
+
+            'onError': function (a, b, c, d) {
+                if (d.status == 404)
+                    alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                else if (d.type === "HTTP")
+                    alert("error " + d.type + ": " + d.status);
+                else if (d.type === "File Size")
+                    alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                else
+                    alert("error " + d.type + ": " + d.text);
+            },
+            'onSelect': function (e, q, f) {
+                var estado = true;
+                var fileName = f.name;
+                var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+                switch (fileNameExt) {
+                    case 'jpeg':
+                        break;
+                    case 'jpg':
+                        break;
+                    default:
+                        MotoTravel.ShowAlert('', "extensión no válida");
+                        $("#fileInput").uploadifyCancel(q);
+                        $("#fileInput").uploadifyClearQueue();
+                        estado = false;
+                        break;
+                }
+
+                return estado;
+
+            },
+            'onComplete': function (event, queueId, fileObj, response, data) {
+
+                var rsp = jQuery.parseJSON(response);
+
+                if (rsp.Success == true) {
+                    $("#ReclutaPersonaExamen_nombreArchivo").val(rsp.Data.NombreArchivo);
+                    $("#nombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
+
+                    var path = location.pathname;
+                    var fullpath = "../Archivos/Imagenes/" + rsp.Data.NombreTemporalArchivo;
+                    $('#imgSalida').attr("src", fullpath);
+
+                }
+                else {
+
+                }
+            }
+         });
+
+        //var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
+        //  {
+        //      autoOpen: false,
+        //      modal: true,
+        //      title: "Cargar Imagen",
+        //      width: 500,
+        //      height: 240,
+        //      buttons: {
+        //          "Subir": function () {
+        //              //Guardar();
+        //              return true;
+        //          },
+        //          "Cancelar": function () {
+        //              $(this).dialog("close");
+        //              return false;
+        //          }
+        //      }
+        //  });
+
+
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
@@ -81,32 +165,32 @@
             });
         });
 
-        //MOSTRAR IMAGEN
-        $(function () {
-            $('#FotoPostulante').change(function (e) {
-                addImage(e);
-            });
+        ////MOSTRAR IMAGEN
+        //$(function () {
+        //    $('#FotoPostulante').change(function (e) {
+        //        addImage(e);
+        //    });
 
-            function addImage(e) {
-                var file = e.target.files[0],
-                imageType = /image.*/;
+        //    function addImage(e) {
+        //        var file = e.target.files[0],
+        //        imageType = /image.*/;
 
-                if (!file.type.match(imageType))
-                    return;
+        //        if (!file.type.match(imageType))
+        //            return;
 
-                var reader = new FileReader();
-                reader.onload = fileOnload;
-                reader.readAsDataURL(file);
-            }
+        //        var reader = new FileReader();
+        //        reader.onload = fileOnload;
+        //        reader.readAsDataURL(file);
+        //    }
 
-            function fileOnload(e) {
-                var result = e.target.result;
-                $('#imgSalida').attr("src", result);
-            }
-        });
+        //    function fileOnload(e) {
+        //        var result = e.target.result;
+        //        $('#imgSalida').attr("src", result);
+        //    }
+        //});
 
     });
-    @*function mostrarAgregarFoto() {
+   @* function mostrarAgregarFoto() {
         var dialogDiv = $('#updateDialog');
         $.get('@Url.Action("subirFoto", "Postulante")', function (data) {
              dialogDiv.html(data);
@@ -257,13 +341,14 @@
                             @*<img id="imgSalida"  width="40%" height="40%" src="~/Content/images/user4.png" alt="user" title="user"/>*@
                             @*<img src="@Url.Content("~/Content/images/"+Model.directorioImagen)"  alt="" id ="imgSalida"  width="40%" height="40%"/>
                            *@
+                             
+
+
                              @if (Model.Postulante.FotoPostulante!=null)
                                  {
                                      <table>
                                          <tr>
-                                             <td style="width:80px;"></td>
-                                                
-                                            
+                                             <td style="width:100px;"></td>
                                               <td class ="colInput" colspan="3">
                                                  <img id="imgSalida"  height ="150" width="150" src="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
                                               </td>
@@ -276,7 +361,12 @@
                              }
 
                              <br />
-                             @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})
+                            <div id="divImagen">
+                              <input type="file" name="image" id="image" />
+                                 @Html.TextBoxFor(model => model.nombreTemporalArchivo, new { style = "display:none" })
+                              </div>
+
+                           @*  @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})*@
                                   
                         </td>
                     </tr>
@@ -285,7 +375,7 @@
                             <label class="etiquetaFormulario" for="optionsCheckbox">Número de documento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario",maxlength="8", @style="text-transform: uppercase", onblur="verificarDocumento();" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroDocumento, new { @class = "textoFormulario",maxlength="8", onblur="verificarDocumento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NumeroDocumento)
                             </div>

@@ -173,13 +173,13 @@
             conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
             conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoOfimatica));
-            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica));
-            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             return conocimientoCargoViewModel;
         }
@@ -336,13 +336,13 @@
             conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
             conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
-            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma));
-            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             return conocimientoCargoViewModel;
         }
@@ -502,13 +502,13 @@
             conocimientoCargoViewModel.Conocimiento = new ConocimientoGeneralCargo();
 
             conocimientoCargoViewModel.TipoConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));
-            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.TipoConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.DescripcionConocimiento = new List<DetalleGeneral>();
-            conocimientoCargoViewModel.DescripcionConocimiento.Add(new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.DescripcionConocimiento.Add(new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             conocimientoCargoViewModel.NivelesConocimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
-            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            conocimientoCargoViewModel.NivelesConocimientos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONAR" });
 
             return conocimientoCargoViewModel;
         }

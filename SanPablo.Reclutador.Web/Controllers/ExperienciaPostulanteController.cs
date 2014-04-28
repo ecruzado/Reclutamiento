@@ -109,8 +109,8 @@
         [HttpPost]
         public JsonResult Edit([Bind(Prefix = "Experiencia")]ExperienciaPostulante experienciaPostulante)
         {
-            string usuarioActual = Session[ConstanteSesion.ObjUsuarioExtranet].ToString();
-            usuarioActual = usuarioActual.Length <= 15 ? usuarioActual : usuarioActual.Substring(0, 15);
+            var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
             if (!ModelState.IsValid)
             {
@@ -123,7 +123,7 @@
                     
                     experienciaPostulante.EstadoActivo = IndicadorActivo.Activo;
                     experienciaPostulante.FechaCreacion = FechaCreacion;
-                    experienciaPostulante.UsuarioModificacion = usuarioActual;
+                    experienciaPostulante.UsuarioCreacion = usuarioActual;
                     var postulante = new Postulante();
                     postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarExperiencia(experienciaPostulante);

@@ -181,6 +181,8 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
+                var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+                string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
                 ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
                 ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoConocimientoOfimatica", "TipoNombreOfimatica", "TipoNivelConocimiento");
@@ -194,6 +196,8 @@
                 if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
                 {
                     conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                    conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarConocimiento(conocimientoGeneralPostulante);
                     _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
@@ -207,6 +211,8 @@
                     conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
                     conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
                     conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                    conocimientoEdit.FechaModificacion = FechaModificacion;
+                    conocimientoEdit.UsuarioModificacion = usuarioActual;
                     _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
@@ -283,6 +289,8 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
+                var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+                string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
                 ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
                 ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoIdioma", "TipoConocimientoIdioma", "TipoNivelConocimiento");
@@ -298,6 +306,8 @@
                     if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
                     {
                         conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                        conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
                         var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                         postulante.agregarConocimiento(conocimientoGeneralPostulante);
                         _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
@@ -312,7 +322,8 @@
                         conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
                         conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
                         conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-
+                        conocimientoEdit.FechaModificacion = FechaModificacion;
+                        conocimientoEdit.UsuarioModificacion = usuarioActual;
                         _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -379,6 +390,9 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
+                var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+                string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
+
                 ConocimientoGeneralPostulanteValidator validator = new ConocimientoGeneralPostulanteValidator();
                 ValidationResult result = validator.Validate(conocimientoGeneralPostulante, "TipoConocimientoGeneral", "TipoNombreConocimientoGeneral", "NombreConocimientoGeneral", "TipoNivelConocimiento");
 
@@ -391,6 +405,8 @@
                 if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
                 {
                     conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                    conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarConocimiento(conocimientoGeneralPostulante);
                     _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
@@ -406,7 +422,8 @@
                     conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
                     conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
                     conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-
+                    conocimientoEdit.FechaModificacion = FechaModificacion;
+                    conocimientoEdit.UsuarioModificacion = usuarioActual;
                     _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);

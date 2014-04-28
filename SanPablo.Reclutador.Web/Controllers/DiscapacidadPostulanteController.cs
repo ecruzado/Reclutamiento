@@ -95,6 +95,8 @@
         {
             //var result = new JsonResult();
 
+            var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+            string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
             if (!ModelState.IsValid)
             {
@@ -105,6 +107,8 @@
                 if (IdePostulante != 0)
                 {
                     discapacidadPostulante.EstadoActivo = IndicadorActivo.Activo;
+                    discapacidadPostulante.FechaCreacion = FechaCreacion;
+                    discapacidadPostulante.UsuarioCreacion = usuarioActual;
                     var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
                     postulante.agregarDiscapacidad(discapacidadPostulante);
                     _discapacidadPostulanteRepository.Add(discapacidadPostulante);
@@ -119,6 +123,8 @@
                 var discapacidadEdit = _discapacidadPostulanteRepository.GetSingle(x => x.IdeDiscapacidadPostulante == discapacidadPostulante.IdeDiscapacidadPostulante);
                 discapacidadEdit.TipoDiscapacidad = discapacidadPostulante.TipoDiscapacidad;
                 discapacidadEdit.DescripcionDiscapacidad = discapacidadPostulante.DescripcionDiscapacidad;
+                discapacidadEdit.FechaModificacion = FechaModificacion;
+                discapacidadEdit.UsuarioModificacion = usuarioActual;
                 _discapacidadPostulanteRepository.Update(discapacidadEdit);
             }
             return Json(new { msj = true }, JsonRequestBehavior.DenyGet);

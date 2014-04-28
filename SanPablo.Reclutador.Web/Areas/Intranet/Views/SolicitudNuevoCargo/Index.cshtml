@@ -15,8 +15,18 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#fechaInicio').datepicker({ dateFormat: 'dd/mm/yy' });
-        $('#fechaFin').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+        $('#fechaInicio,#fechaFin').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+        });
+
+        $('#fechaInicio,#fechaFin').attr("readonly", "readonly");
 
         $('#btnBuscarSolicitud').click(function () {
             $('#grdList').trigger('reloadGrid');
@@ -302,7 +312,7 @@
         }
         else {
             if (rowObject[1] == "M") {
-                archivo = 'ekiga.png';
+                archivo = 'yellow.png';
                 var title = "Habilitar";
             }
             else {
@@ -312,7 +322,7 @@
                 }
                 else {
                     if (rowObject[1] == "I") {
-                        archivo = 'enigma.png';
+                        archivo = 'black.png';
                         var title = "Habilitar";
                     }
                 }
