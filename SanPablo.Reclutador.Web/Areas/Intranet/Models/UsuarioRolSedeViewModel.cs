@@ -27,5 +27,39 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public int IdRolUsuario { get; set; }
         public string IndSede { get; set; }
 
+
+        //accesos de los botones
+        /// <summary>
+        /// boton que realiza la busqueda
+        /// </summary>
+        public string btnBuscar { get; set; }
+        /// <summary>
+        /// boton que realiza la limpieza de los campos
+        /// </summary>
+        public string btnLimpiar { get; set; }
+        /// <summary>
+        /// boton que realiza la activacion del usuario
+        /// </summary>
+        public string btnActivarDesactivar { get; set; }
+        /// <summary>
+        /// boton que crea un nuevo usuario
+        /// </summary>
+        public string btnNuevo { get; set; }
+        /// <summary>
+        /// boton que realiza la edicion
+        /// </summary>
+        public string btnEditar { get; set; }
+
+        /// <summary>
+        /// boton que realiza la consulta
+        /// </summary>
+        public string btnConsultar { get; set; }
+
+        /// <summary>
+        /// boton que realiza la eliminacion
+        /// </summary>
+        public string btnEliminar { get; set; }
+        
+
     }
 }

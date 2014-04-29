@@ -1,4 +1,5 @@
 ﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.CriterioViewModel
+@using SanPablo.Reclutador.Entity
 @{
     ViewBag.Title = "Listado Criterio";
 }
@@ -21,14 +22,14 @@
                       <label class="etiquetaFormulario" for="inputSuccess">Tipo</label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { data_val = "false" })
+                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio), new { data_val = "false" })
                     </td>
                      <td style="width:40px;"></td>
                      <td class="colEtiqueta">
                         <label class="etiquetaFormulario" for="selectError">Medición</label>
                      </td>   
                      <td class="colInput">
-                         @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { data_val = "false" })
+                         @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion), new { data_val = "false" })
                      </td>
                 <tr/>
                  <tr>
@@ -36,22 +37,29 @@
                     <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
                     </td>
                     <td class="colInput">
-                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario" ,data_val = "false" ,onkeyup="aMays(event, this)"})  
+                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)" })  
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
                         <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
                     </td>
                     <td class="colInput">
-                        @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo),new { data_val = "false" })
+                        @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo), new { data_val = "false" })
                     </td>
                   </tr>
            </table>
             <table>
                 <tr>
                   <td  class="formulario-accion offset9">
-                     <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
-                     <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                     @if (Visualicion.SI.Equals(Model.btnBuscar))
+                     {
+                       <button type="button" class="btn btn-info" id="btnBuscar"><i class="icon-search icon-white"></i> Buscar</button>
+                     } 
+
+                     @if (Visualicion.SI.Equals(Model.btnLimpiar))
+                     {
+                       <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                     }
                    </td>
                 </tr>
                 <tr>
@@ -67,12 +75,30 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-               @* <a id="btnActivaDesactiva" class="btn btn-info" onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-check icon-white"></i> Activar / Desactivar</a>*@
-                <a id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnConsultar))
+                {
+                  <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEditar))
+                {
+                  <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnActivarDesactivar))
+                {
+                  <a id="btnActivaDesactiva" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnEliminar))
+                {
+                  <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                }
             </div>
         </div>
     </div>

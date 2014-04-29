@@ -622,14 +622,14 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
                             <div class="controles">
-                               @Html.TextBoxFor(model => model.solReqPersonal.FechaInicioBus, "{0:MM/dd/yyyy}",new { @class = "textoFormulario" ,disabled ="disabled"})  
+                               @Html.TextBoxFor(model => model.solReqPersonal.FechaInicioBus, "{0:dd/MM/yyyy}",new { @class = "textoFormulario" ,disabled ="disabled"})  
                             </div>
                         </td>
 
                          <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
-                               @Html.TextBoxFor(model => model.solReqPersonal.FechaFinBus, "{0:MM/dd/yyyy}",new { @class = "textoFormulario" ,disabled ="disabled" })  
+                               @Html.TextBoxFor(model => model.solReqPersonal.FechaFinBus, "{0:dd/MM/yyyy}",new { @class = "textoFormulario" ,disabled ="disabled" })  
                             </div>
                         </td>
                     </tr>

@@ -27,16 +27,16 @@ namespace SanPablo.Reclutador.Entity
         /// <summary>
         /// rango de inicial de la fecha de publicacion
         /// </summary>
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecInicial { get; set; }
 
 
         /// <summary>
         /// rango final de la fecha de publicacion
         /// </summary>
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FecFinal { get; set; }
 
         /// <summary>

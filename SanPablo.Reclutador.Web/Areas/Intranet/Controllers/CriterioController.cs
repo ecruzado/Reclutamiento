@@ -41,11 +41,56 @@
             _categoriaRepository = categoriaRepository;
         }
 
+
+        /// <summary>
+        /// Inicializa la pantalla inicial
+        /// </summary>
+        /// <returns></returns>
         [AuthorizeUser]
         public ActionResult Index()
         {
             var criterioViewModel = InicializarCriteriosIndex();
+           
+
+            //accesos a los botones
+
+            int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                criterioViewModel.btnActivarDesactivar = Visualicion.SI;
+                criterioViewModel.btnBuscar = Visualicion.SI;
+                criterioViewModel.btnConsultar = Visualicion.SI;
+                criterioViewModel.btnEditar = Visualicion.SI;
+                criterioViewModel.btnEliminar = Visualicion.SI;
+                criterioViewModel.btnLimpiar = Visualicion.SI;
+                criterioViewModel.btnNuevo = Visualicion.SI;
+                
+            }
+            else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
+            {
+                criterioViewModel.btnActivarDesactivar = Visualicion.SI;
+                criterioViewModel.btnBuscar = Visualicion.SI;
+                criterioViewModel.btnConsultar = Visualicion.SI;
+                criterioViewModel.btnEditar = Visualicion.SI;
+                criterioViewModel.btnEliminar = Visualicion.SI;
+                criterioViewModel.btnLimpiar = Visualicion.SI;
+                criterioViewModel.btnNuevo = Visualicion.SI;
+                
+            }
+            else
+            {
+                criterioViewModel.btnActivarDesactivar = Visualicion.NO;
+                criterioViewModel.btnBuscar = Visualicion.NO;
+                criterioViewModel.btnConsultar = Visualicion.NO;
+                criterioViewModel.btnEditar = Visualicion.NO;
+                criterioViewModel.btnEliminar = Visualicion.NO;
+                criterioViewModel.btnLimpiar = Visualicion.NO;
+                criterioViewModel.btnNuevo = Visualicion.NO;
+            }
+
             return View(criterioViewModel);
+
         }
 
         /// <summary>

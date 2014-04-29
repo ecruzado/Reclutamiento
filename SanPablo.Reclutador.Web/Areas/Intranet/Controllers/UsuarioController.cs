@@ -80,6 +80,57 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.Usuario = new Usuario();
             objModel.UsuarioRolSede = new UsuarioRolSede();
             
+            //Accesos a los botones
+
+            int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                objModel.btnActivarDesactivar = Visualicion.SI;
+                objModel.btnBuscar = Visualicion.SI;
+                objModel.btnLimpiar = Visualicion.SI;
+
+                objModel.btnNuevo = Visualicion.SI;
+                objModel.btnConsultar = Visualicion.SI;
+                objModel.btnEditar = Visualicion.SI;
+                objModel.btnEliminar = Visualicion.SI;
+
+            }
+            else if (Roles.Encargado_Seleccion.Equals(idRol))
+            {
+                objModel.btnActivarDesactivar = Visualicion.SI;
+                objModel.btnBuscar = Visualicion.SI;
+                objModel.btnLimpiar = Visualicion.SI;
+
+                objModel.btnNuevo = Visualicion.NO;
+                objModel.btnConsultar = Visualicion.NO;
+                objModel.btnEditar = Visualicion.NO;
+                objModel.btnEliminar = Visualicion.NO;
+
+            }
+            else if (Roles.Analista_Seleccion.Equals(idRol))
+            {
+                objModel.btnActivarDesactivar = Visualicion.SI;
+                objModel.btnBuscar = Visualicion.SI;
+                objModel.btnLimpiar = Visualicion.SI;
+
+                objModel.btnNuevo = Visualicion.NO;
+                objModel.btnConsultar = Visualicion.NO;
+                objModel.btnEditar = Visualicion.NO;
+                objModel.btnEliminar = Visualicion.NO;
+            }
+            else
+            {
+                objModel.btnActivarDesactivar = Visualicion.NO;
+                objModel.btnBuscar = Visualicion.NO;
+                objModel.btnLimpiar = Visualicion.NO;
+
+                objModel.btnNuevo = Visualicion.NO;
+                objModel.btnConsultar = Visualicion.NO;
+                objModel.btnEditar = Visualicion.NO;
+                objModel.btnEliminar = Visualicion.NO;
+            }
+
             return View("Index",objModel);
         }
 

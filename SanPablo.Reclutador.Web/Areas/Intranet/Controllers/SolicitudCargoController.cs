@@ -306,7 +306,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     lista = _solReqPersonalRepository.GetListaSolReqPersonal(solReqPersonal);
                
 
-
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
                
@@ -333,8 +332,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
                                 item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
                                 item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
-                                item.Feccreacion==null?"":item.Feccreacion.ToString(),
-                                item.FecExpiracacion==null?"":item.FecExpiracacion.ToString(),
+                                
+                                item.Feccreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.Feccreacion),
+                                item.FecExpiracacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FecExpiracacion),
                                
                                 item.idRolSuceso==null?"":item.idRolSuceso.ToString(),
                                 item.DesRolSuceso==null?"":item.DesRolSuceso,
@@ -859,7 +859,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
                         
-                       // objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+                       
 
                         var Sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -982,11 +982,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.LogSolReqPersonal.TipEtapa = Etapa.Aprobado;
                         model.LogSolReqPersonal.Observacion = "";
 
-                        //se obtiene el tipo de requerimiento
-
-                        //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-                        //if (objCargo != null) 
-                        //{
+                        
                             tipoReq = objSol.TipoRequerimiento;
 
                             objSolReqPersonal = new SolReqPersonal();
@@ -1010,7 +1006,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
                             retorno = 1;
 
-                        //}
+                       
                         
                         if (retorno>0)
                         {
@@ -1375,8 +1371,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
                 if (objSol!=null)
                 {
-
-                    //var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
 
                     objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
                     objSol.FechaModificacion = FechaSistema;
@@ -1885,7 +1879,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         #endregion
-        
+
 
 
         /**************************************************************************************************************/
@@ -2381,40 +2375,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
         #endregion
 
-        //#region ListaHorarios2
-        ///// <summary>
-        ///// Lista de Evaluaciones Detalle
-        ///// </summary>       
-        //[HttpPost]
-        //public ActionResult ListaHorarios2(string sidx, string sord, int page, int rows)
-        //{
-        //    ActionResult result = null;
-        //    List<object> lstFilas = new List<object>();
-
-        //    var fila1 = new
-        //    {
-        //        id = 1,                 // ID único de la fila
-        //        cell = new string[] {   // Array de celdas de la fila       
-                  
-        //            "Turno noche de 12 horas",                    
-        //        }
-        //    };
-        //    lstFilas.Add(fila1);
-
-        //    //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-        //    var data = new
-        //    {
-        //        //total = totalPag,       // Total de páginas
-        //        //page = page,            // Página actual
-        //        //records = totalReg,     // Total de registros (obtenido del modelo)
-        //        rows = lstFilas
-        //    };
-        //    result = Json(data);
-
-        //    return result;
-
-        //}
-        //#endregion
+        
 
         #region ListaEstudiosPublicacion
         /// <summary>

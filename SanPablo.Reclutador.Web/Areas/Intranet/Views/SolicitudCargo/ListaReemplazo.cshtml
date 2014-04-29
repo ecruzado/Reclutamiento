@@ -6,17 +6,6 @@
 @{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
 
-    //var RolUsuario = Session[ConstanteSesion.Rol];
-
-    //if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(RolUsuario) || 
-    //    SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(RolUsuario)
-    //    )
-    //{
-        
-    //}
-    
-    
-    
   }
 @section Head{
 }
@@ -28,13 +17,53 @@
     $("#txtfechafin").datepicker();
 
    
+    $('#SolReqPersonal_FechaInicioBus,#SolReqPersonal_FechaFinBus').datepicker({
+        showOn: "button",
+        buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+    });
 
+    $('#SolReqPersonal_FechaInicioBus,#SolReqPersonal_FechaFinBus').attr("readonly", "readonly");
 
 
     $('#btnBuscarReemplazo').click(function () {
-
-        $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+        if (valida()) {
+            $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+        }
     });
+
+
+
+   @* $('#btnEliminar').click(function () {
+       
+        var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
+        var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
+        var idSol = rowData.IdeSolReqPersonal;
+
+        $.ajax({
+            data: {
+                id: idSol
+            },
+            type: "POST",
+            url: '@Url.Action("EliminaSolicitud", "SolicitudCargo")',
+                traditional: true,
+                success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }
+                if (data.Resultado == false) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                } else {
+                    $('#grdListBusquedaReemplazo').trigger('reloadGrid');
+                }
+            }
+        });
+
+    });*@
+    
 
 
     $('#btnPreseleccion').click(function () {
@@ -180,33 +209,33 @@
         colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', '', 'Etapa'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
-                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true },
-                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left',hidden:true },
-                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200 },
-                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true },
-                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250 },
-                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true },
-                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300 },
-                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true },
-                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300 },
-                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true },
-                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300 },
+                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
+                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
+                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
+                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
+                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
+                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
+                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300, sortable: false },
+                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true, sortable: false },
+                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300, sortable: false },
+                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true, sortable: false },
+                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300, sortable: false },
 
-                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 150 },
-                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 150 },
-                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 150 },
-                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 150 },
-                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 150 },
-                { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200 },
-                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200 },
-                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true },
-                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200 },
-                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300},
-                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 200 },
-                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50 ,hidden:true},
-                { name: 'idUsuarioResp', index: 'idUsuarioResp', align: 'center', hidden: true },
-                { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true },
-                { name: 'Des_etapa', index: 'Des_etapa', align: 'center', hidden: false }
+                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 100, sortable: false },
+                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 100, sortable: false },
+                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 120, sortable: false },
+                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 100, sortable: false },
+                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 100, sortable: false },
+                { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 90, sortable: false },
+                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 90, sortable: false },
+                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true, sortable: false },
+                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200, sortable: false },
+                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300, sortable: false },
+                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 90, sortable: false },
+                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50, hidden: true, sortable: false },
+                { name: 'idUsuarioResp', index: 'idUsuarioResp', align: 'center', hidden: true, sortable: false },
+                { name: 'Tipsol', index: 'Tipsol', align: 'center', hidden: true, sortable: false },
+                { name: 'Des_etapa', index: 'Des_etapa', align: 'center', hidden: false, sortable: false }
                 
                 
         ],
@@ -235,6 +264,32 @@
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
     }
+
+
+    function valida() {
+
+        var fechaInicial = $('#SolReqPersonal_FechaInicioBus').val();
+        var fechaFinal = $('#SolReqPersonal_FechaFinBus').val();
+       
+        if (fechaInicial.length>0) {
+            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                return false;
+            }
+        }
+
+        if (fechaFinal.length > 0) {
+            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                return false;
+            }
+        }
+      
+        return true;
+
+    }
+
+
 
     function HabilitarFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';
@@ -296,8 +351,11 @@
                             <label class="control-label" for="selectError">Fecha Solicitud</label>
                             <div class="controles">
                                
-                                @Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
-                                @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      
+                                <input type="text" class="input-small"  id="SolReqPersonal_FechaInicioBus" name="SolReqPersonal.FechaInicioBus" placeholder=" Inicial" >
+                                <input type="text" class="input-small"  id="SolReqPersonal_FechaFinBus" name="SolReqPersonal.FechaFinBus" placeholder=" Final">
+
+                                @*@Html.EditorFor(model => model.SolReqPersonal.FechaInicioBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                                @Html.EditorFor(model => model.SolReqPersonal.FechaFinBus, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      *@
 
                             </div>
                      </td>
@@ -398,8 +456,8 @@
                   <a class="btn btn-info" id ="btnRequerimintoSol"><i class="icon-pencil icon-white"></i> Requerimiento</a>    
                 }
                 
-               @* <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
+               @* <button type="reset" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</button>*@
+                @*<a class="btn btn-info" id ="btnEliminar"><i class="icon-remove icon-white"></i> Eliminar</a>*@
             </div>
         }
         </div>

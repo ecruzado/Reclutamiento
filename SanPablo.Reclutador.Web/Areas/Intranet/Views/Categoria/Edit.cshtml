@@ -21,6 +21,14 @@
 
     $(document).ready(function () {
 
+        
+
+        $("#imgCategoria")
+	        .css({
+	            height: "150px",
+	            width: "150px"
+
+	        });
 
 
         var flag = 0;
@@ -1141,7 +1149,7 @@
                                             {
                                             <td class="colEtiqueta"></td>
                                             <td class ="colInput" >
-                                                <img id="ImgCategoria"  height ="150" width="150" onmouseover="this.width=500;this.height=400;" onmouseout="this.width=150;this.height=150;" src="@Url.Action("GetImage", "Categoria", new { id = Model.Categoria.IDECATEGORIA })" /> 
+                                                <img id="imgCategoria"  height ="150" width="150" onmouseover="this.width=500;this.height=400;" onmouseout="this.width=150;this.height=150;" src="@Url.Action("GetImage", "Categoria", new { id = Model.Categoria.IDECATEGORIA })" /> 
                                             </td>
                                             
                                             }

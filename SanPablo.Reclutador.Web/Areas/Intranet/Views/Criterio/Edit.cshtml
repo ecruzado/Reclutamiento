@@ -22,7 +22,14 @@
    
     $(document).ready(function () {
         
-       
+        $("#imgCriterio")
+         .css({
+             height: "150px",
+             width: "150px"
+
+         });
+        
+
         
         $("#btnGuardarCriterio").click(function () {
             if ($("#frmCriterio").validate().form()) {
@@ -603,7 +610,7 @@
                                    {
                                         <td class="span5">
                                             <div class="controles">
-                                                     <img id="ImgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
+                                                     <img id="imgCriterio"  height ="150" width="150" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
                                                 </div>  
                                                 </td>
                                             

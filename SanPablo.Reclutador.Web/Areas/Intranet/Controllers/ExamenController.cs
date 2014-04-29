@@ -154,7 +154,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-
+        /// <summary>
+        /// Inicializa la pantalla del examen
+        /// </summary>
+        /// <returns></returns>
         [AuthorizeUser]
         [ValidarSesion]
         public ActionResult Index()
@@ -162,11 +165,53 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             ExamenViewModel model = new ExamenViewModel();
 
-            //model.Examen = new Examen();
             model = InicializarExamenIndex();
             model.Examen = new Examen();
 
-            return View(model);
+            //Accesos de botones
+
+            //botonera
+
+            int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                model.btnActivarDesactivar = Visualicion.SI;
+                model.btnBuscar = Visualicion.SI;
+                model.btnConsultar = Visualicion.SI;
+                model.btnEditar = Visualicion.SI;
+                model.btnEliminar = Visualicion.SI;
+                model.btnLimpiar = Visualicion.SI;
+                model.btnNuevo = Visualicion.SI;
+                model.btnGetExamen = Visualicion.SI;
+
+            }
+            else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
+            {
+                model.btnActivarDesactivar = Visualicion.SI;
+                model.btnBuscar = Visualicion.SI;
+                model.btnConsultar = Visualicion.SI;
+                model.btnEditar = Visualicion.SI;
+                model.btnEliminar = Visualicion.SI;
+                model.btnLimpiar = Visualicion.SI;
+                model.btnNuevo = Visualicion.SI;
+                model.btnGetExamen = Visualicion.SI;
+
+            }
+            else
+            {
+                model.btnActivarDesactivar = Visualicion.NO;
+                model.btnBuscar = Visualicion.NO;
+                model.btnConsultar = Visualicion.NO;
+                model.btnEditar = Visualicion.NO;
+                model.btnEliminar = Visualicion.NO;
+                model.btnLimpiar = Visualicion.NO;
+                model.btnNuevo = Visualicion.NO;
+                model.btnGetExamen = Visualicion.NO;
+
+            }
+
+            return View("Index",model);
         }
 
 
