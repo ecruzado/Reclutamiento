@@ -91,7 +91,7 @@
              if (ideNivelAcademico != null) {
                  $("#spanMensaje5").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje5").dialog({
-                     title: 'SAN PABLO',
+                     title: 'Sistema de reclutamiento y selección de personal',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarNivelAcademico(ideNivelAcademico); $(this).dialog("close"); $('#grdListNivelAcademico').trigger('reloadGrid'); },
@@ -102,14 +102,7 @@
                  return false;
              }
              else {
-                 $("#spanMensaje5").html('Seleccionar un item a eliminar');
-                 $("#divMensaje5").dialog({
-                     title: 'SAN PABLO',
-                     modal: true,
-                     buttons: {
-                         "Ok": function () { $(this).dialog("close"); }
-                     }
-                 });
+                 mostrarMensaje('Seleccionar un item a eliminar');
              }
          });
 
@@ -118,7 +111,7 @@
              if (ideCentroEstudio != null) {
                  $("#spanMensaje6").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje6").dialog({
-                     title: 'SAN PABLO',
+                     title: 'Sistema de reclutamiento y selección de personal',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarCentroEstudio(ideCentroEstudio); $(this).dialog("close"); $('#grdListCentroEstudio').trigger('reloadGrid'); },
@@ -129,14 +122,7 @@
                  return false;
              }
              else {
-                 $("#spanMensaje6").html('Seleccionar un item a eliminar');
-                 $("#divMensaje6").dialog({
-                     title: 'SAN PABLO',
-                     modal: true,
-                     buttons: {
-                         "Ok": function () { $(this).dialog("close"); }
-                     }
-                 });
+                 mostrarMensaje('Seleccionar un item a eliminar');
              }
          });
 
@@ -146,14 +132,7 @@
                  mostrarEditarNivelAcademico(ideNivelAcademico);
              }
              else {
-                 $("#spanMensaje5").html('Seleccionar un item a editar');
-                 $("#divMensaje5").dialog({
-                     title: 'SAN PABLO',
-                     modal: true,
-                     buttons: {
-                         "Ok": function () { $(this).dialog("close"); }
-                     }
-                 });
+                 mostrarMensaje('Seleccionar un item a editar');
              }
          });
 
@@ -163,14 +142,7 @@
                  mostrarEditarCentroEstudio(ideCentroEstudio);
              }
              else {
-                 $("#spanMensaje6").html('Seleccionar un item a editar');
-                 $("#divMensaje6").dialog({
-                     title: 'SAN PABLO',
-                     modal: true,
-                     buttons: {
-                         "Ok": function () { $(this).dialog("close"); }
-                     }
-                 });
+                 mostrarMensaje('Seleccionar un item a editar');
              }
          });
 
@@ -346,7 +318,7 @@
                                             
         <div class="formulario-accion">       
             <div class="opciones">
-            <a class="btn" href="#" onclick="irATab('B');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             <a class="btn btn-info"  href="@Url.Action("Experiencia", "Perfil")" ><i class="icon-arrow-right icon-white"></i> Siguiente</a>
 
             </div>

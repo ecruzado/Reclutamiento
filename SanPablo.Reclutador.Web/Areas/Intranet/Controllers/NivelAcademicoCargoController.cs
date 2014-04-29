@@ -79,6 +79,10 @@
             if (id != "0")
             {
                 var nivelAcademico = _nivelAcademicoCargoRepository.GetSingle(x => x.IdeNivelAcademicoCargo == Convert.ToInt32(id));
+
+                // actualizar datos
+                nivelAcademicoViewModel.NivelesAlcanzados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, nivelAcademico.TipoEducacion));
+                
                 nivelAcademicoViewModel.NivelAcademico = nivelAcademico;
             }
             return View(nivelAcademicoViewModel);
@@ -229,7 +233,7 @@
             var listaResultado = new List<DetalleGeneral>();
 
             listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, tipoEducacion));
-            listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
+            //listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
 
             result = Json(listaResultado);
             return result;

@@ -132,9 +132,7 @@
                 .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
                 .WithMessage("Ingresar cargo del pariente");
 
-            //RuleFor(x => x.TelefonoFijo)
-            //    .Must()
-            //    .withMessage("Ingresar un número telefonico válido");
+            
         }
     }
 }

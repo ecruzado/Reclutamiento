@@ -53,7 +53,7 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Conocimiento <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                  @Html.DropDownListFor(model => model.Conocimiento.TipoNombreConocimientoGeneral, new SelectList(Model.DescripcionConocimiento, "Valor", "Descripcion", Model.Conocimiento.TipoNombreConocimientoGeneral))

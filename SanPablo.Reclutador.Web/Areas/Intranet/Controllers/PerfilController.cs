@@ -41,14 +41,16 @@
         [ValidarSesion]
         public ActionResult Index(string id, string pagina)
         {
-            Session[ConstanteSesion.pagina] = pagina;
-
+            if (pagina != null)
+            {
+                Session[ConstanteSesion.pagina] = pagina;
+            }
             var ideSolicitud = id;
             try
             {
                 var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
 
-                var perfilViewModel = inicializarPerfil(pagina);
+                var perfilViewModel = inicializarPerfil();
                 var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
                 if (ideSolicitud != null)
@@ -67,6 +69,7 @@
                     var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                     perfilViewModel.Cargo = cargo;
                     actualizarDatosCargo(perfilViewModel, cargo);
+                    actualizarAccion(perfilViewModel);
                     
                 }
                
@@ -81,8 +84,10 @@
             
         }
 
-        public PerfilViewModel inicializarPerfil(string pagina)
+        public PerfilViewModel inicializarPerfil()
         {
+            var pagina = Session[ConstanteSesion.pagina].ToString();
+            
             var cargoViewModel = new PerfilViewModel();
             cargoViewModel.Cargo = new Cargo();
             cargoViewModel.Pagina = pagina;

@@ -67,8 +67,6 @@
                                 item.DescripcionExamen,
                                 item.DescripcionTipoExamen,
                                 item.NotaMinimaExamen.ToString(),
-                                item.TipoAreaResponsable.ToString(),
-                                item.PuntajeExamen.ToString(),
                             }
                     }).ToArray();
 
@@ -112,34 +110,63 @@
                 }
                 if (evaluacionCargo.IdeEvaluacionCargo == 0)
                 {
-                    evaluacionCargo.EstadoActivo = IndicadorActivo.Activo;
-                    evaluacionCargo.FechaCreacion = FechaCreacion;
-                    evaluacionCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                    evaluacionCargo.FechaModificacion = FechaCreacion;
-                    evaluacionCargo.Cargo = new Cargo();
-                    evaluacionCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _evaluacionCargoRepository.Add(evaluacionCargo);
-                    _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen,0,IdeCargo);
+                    if (existeEvaluacion(evaluacionCargo.Examen.IdeExamen))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar evaluación duplicada";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+
+                        evaluacionCargo.EstadoActivo = IndicadorActivo.Activo;
+                        evaluacionCargo.FechaCreacion = FechaCreacion;
+                        evaluacionCargo.UsuarioCreacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                        evaluacionCargo.FechaModificacion = FechaCreacion;
+                        evaluacionCargo.Cargo = new Cargo();
+                        evaluacionCargo.Cargo.IdeCargo = IdeCargo;
+
+                        _evaluacionCargoRepository.Add(evaluacionCargo);
+                        _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, 0, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
                     var evaluacionCargoActualizar = _evaluacionCargoRepository.GetSingle(x => x.IdeEvaluacionCargo == evaluacionCargo.IdeEvaluacionCargo);
-                    int valorEditar = evaluacionCargoActualizar.PuntajeExamen;
-                    evaluacionCargoActualizar.Examen = evaluacionCargo.Examen;
-                    evaluacionCargoActualizar.TipoExamen = evaluacionCargo.TipoExamen;
-                    evaluacionCargoActualizar.TipoAreaResponsable = evaluacionCargo.TipoAreaResponsable;
-                    evaluacionCargoActualizar.PuntajeExamen = evaluacionCargo.PuntajeExamen;
-                    evaluacionCargoActualizar.NotaMinimaExamen = evaluacionCargo.NotaMinimaExamen;
-                    evaluacionCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    evaluacionCargoActualizar.FechaModificacion = FechaModificacion;
-                    _evaluacionCargoRepository.Update(evaluacionCargoActualizar);
-                    _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, valorEditar, IdeCargo);
+
+                    int contador = _evaluacionCargoRepository.CountByExpress(x => x.Examen.IdeExamen == evaluacionCargo.Examen.IdeExamen
+                                                                               && x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.IdeEvaluacionCargo !=  evaluacionCargo.IdeEvaluacionCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede insertar el mismo exámen más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        int valorEditar = evaluacionCargoActualizar.PuntajeExamen;
+                        evaluacionCargoActualizar.Examen = evaluacionCargo.Examen;
+                        evaluacionCargoActualizar.TipoExamen = evaluacionCargo.TipoExamen;
+                        evaluacionCargoActualizar.TipoAreaResponsable = evaluacionCargo.TipoAreaResponsable;
+                        evaluacionCargoActualizar.PuntajeExamen = evaluacionCargo.PuntajeExamen;
+                        evaluacionCargoActualizar.NotaMinimaExamen = evaluacionCargo.NotaMinimaExamen;
+                        evaluacionCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        evaluacionCargoActualizar.FechaModificacion = FechaModificacion;
+                        _evaluacionCargoRepository.Update(evaluacionCargoActualizar);
+                        _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, valorEditar, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
             }
             catch (Exception ex)
             {
@@ -200,6 +227,22 @@
 
             
         }
+
+
+        public bool existeEvaluacion(int ideExamen)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _evaluacionCargoRepository.CountByExpress(x => x.Examen.IdeExamen == ideExamen && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

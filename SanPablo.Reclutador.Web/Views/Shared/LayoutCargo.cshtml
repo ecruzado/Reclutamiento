@@ -133,8 +133,8 @@
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de nuevo cargo?</p></div>
 
-<div id="divMensaje">
-    <span id="spanMensaje"></span>
+<div id="divMensajeAlert">
+    <span id="spanMensajeAlert"></span>
 </div>  
 
  
@@ -240,7 +240,19 @@
         
         $("#spanMensaje").html(msj);
         $("#divMensaje").dialog({
-            title: 'SAN PABLO',
+            title: 'Sistema de reclutamiento y selección de personal',
+            modal: true,
+            buttons: {
+                "Ok": function () { $(this).dialog("close"); }
+            }
+        });
+    }
+
+    function alertMensaje(msj) {
+
+        $("#spanMensajeAlert").html(msj);
+        $("#divMensajeAlert").dialog({
+            title: 'Sistema de reclutamiento y selección de personal',
             modal: true,
             buttons: {
                 "Ok": function () { $(this).dialog("close"); }

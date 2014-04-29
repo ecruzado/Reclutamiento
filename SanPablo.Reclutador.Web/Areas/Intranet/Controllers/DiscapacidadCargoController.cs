@@ -98,31 +98,60 @@
                 }
                 if (discapacidadCargo.IdeDiscapacidadCargo == 0)
                 {
-                    discapacidadCargo.EstadoActivo = "A";
-                    discapacidadCargo.FechaCreacion = FechaCreacion;
-                    discapacidadCargo.UsuarioCreacion = "YO";
-                    discapacidadCargo.FechaModificacion = FechaCreacion;
-                    discapacidadCargo.Cargo = new Cargo();
-                    discapacidadCargo.Cargo.IdeCargo = IdeCargo;
+                    if (existeDiscapacidad(discapacidadCargo.TipoDiscapacidad))
+                    {
+                        objJsonMessage.Mensaje = "No puede agregar, discapacidad duplicada";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        discapacidadCargo.EstadoActivo = "A";
+                        discapacidadCargo.FechaCreacion = FechaCreacion;
+                        discapacidadCargo.UsuarioCreacion = "YO";
+                        discapacidadCargo.FechaModificacion = FechaCreacion;
+                        discapacidadCargo.Cargo = new Cargo();
+                        discapacidadCargo.Cargo.IdeCargo = IdeCargo;
 
-                    _discapacidadCargoRepository.Add(discapacidadCargo);
-                    _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad,0, IdeCargo);
+                        _discapacidadCargoRepository.Add(discapacidadCargo);
+                        _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, 0, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                   
                 }
                 else
                 {
                     var discapacidadCargoActualizar = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == discapacidadCargo.IdeDiscapacidadCargo);
-                    int valorEditar = discapacidadCargoActualizar.PuntajeDiscapacidad;
-                    discapacidadCargoActualizar.TipoDiscapacidad = discapacidadCargo.TipoDiscapacidad;
-                    discapacidadCargoActualizar.PuntajeDiscapacidad = discapacidadCargo.PuntajeDiscapacidad;
-                    discapacidadCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    discapacidadCargoActualizar.FechaModificacion = FechaModificacion;
-                    _discapacidadCargoRepository.Update(discapacidadCargoActualizar);
-                    _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, valorEditar, IdeCargo);
-                }
 
-                objJsonMessage.Mensaje = "Agregado Correctamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    int contador = _discapacidadCargoRepository.CountByExpress(x => x.TipoDiscapacidad == discapacidadCargo.TipoDiscapacidad
+                                                                               && x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.IdeDiscapacidadCargo !=  discapacidadCargo.IdeDiscapacidadCargo);
+
+                    if (contador > 0)
+                    {
+                        objJsonMessage.Mensaje = "No puede insertar la misma descripción más de una vez";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        
+                        int valorEditar = discapacidadCargoActualizar.PuntajeDiscapacidad;
+                        discapacidadCargoActualizar.TipoDiscapacidad = discapacidadCargo.TipoDiscapacidad;
+                        discapacidadCargoActualizar.PuntajeDiscapacidad = discapacidadCargo.PuntajeDiscapacidad;
+                        discapacidadCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        discapacidadCargoActualizar.FechaModificacion = FechaModificacion;
+                        _discapacidadCargoRepository.Update(discapacidadCargoActualizar);
+                        _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, valorEditar, IdeCargo);
+
+                        objJsonMessage.Mensaje = "Agregado Correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -155,6 +184,21 @@
             int valorEliminar = discapacidadCargo.PuntajeDiscapacidad;
             _discapacidadCargoRepository.Remove(discapacidadCargo);
             _discapacidadCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
+
+            return result;
+        }
+
+
+        public bool existeDiscapacidad(string descripcion)
+        {
+            int IdeCargo = CargoPerfil.IdeCargo;
+            bool result = false;
+            int contador = _discapacidadCargoRepository.CountByExpress(x => x.TipoDiscapacidad == descripcion && x.Cargo.IdeCargo == IdeCargo);
+
+            if (contador > 0)
+            {
+                result = true;
+            }
 
             return result;
         }

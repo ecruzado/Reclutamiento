@@ -136,7 +136,7 @@
             CargoPerfil.CodigoCargo = cargo.CodigoCargo;
             CargoPerfil.NombreCargo = cargo.NombreCargo;
             CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
-            CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
+            CargoPerfil.NumeroPosiciones = Convert.ToInt32(cargo.NumeroPosiciones);
 
             var datosArea = _areaRepository.obtenerDatosArea(cargo.IdeArea);
             CargoPerfil.IdeArea = Convert.ToInt32(datosArea[0]);
@@ -759,7 +759,7 @@
                 //Actualizar los datos de session
                 CargoPerfil.NombreCargo = cargo.NombreCargo;
                 CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
-                CargoPerfil.NumeroPosiciones = cargo.NumeroPosiciones;
+                CargoPerfil.NumeroPosiciones = Convert.ToInt32(cargo.NumeroPosiciones);
                 CargoPerfil.IdeArea = cargo.IdeArea;
                 CargoPerfil.IdeDepartamento = cargo.IdeDepartamento;
                 CargoPerfil.IdeDependencia = cargo.IdeDependencia;

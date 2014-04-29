@@ -4,7 +4,9 @@
     ViewBag.Title = "Perfil";
     Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
-@section ScriptsCargo{  
+@section ScriptsCargo{ 
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script> 
 <script type="text/javascript">
         $(document).ready(function () {
  
@@ -62,14 +64,7 @@
                     return false;
                 }
                 else {
-                    $("#spanMensaje7").html('Seleccionar un item a eliminar');
-                    $("#divMensaje7").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    alertMensaje('Seleccionar un item a eliminar');
                 }
             });
 
@@ -79,14 +74,7 @@
                     mostrarEditarOfimatica(ideOfimatica);
                 }
                 else {
-                    $("#spanMensaje7").html('Seleccionar un item a editar');
-                    $("#divMensaje7").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a editar');
                 }
             });
 
@@ -144,14 +132,7 @@
                     return false;
                 }
                 else {
-                    $("#spanMensaje8").html('Seleccionar un item a eliminar');
-                    $("#divMensaje8").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a eliminar');
                 }
             });
 
@@ -161,14 +142,7 @@
                     mostrarEditarIdioma(ideIdioma);
                 }
                 else {
-                    $("#spanMensaje8").html('Seleccionar un item a editar');
-                    $("#divMensaje8").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a editar');
                 }
             });
 
@@ -226,14 +200,7 @@
                     return false;
                 }
                 else {
-                    $("#spanMensaje9").html('Seleccionar un item a eliminar');
-                    $("#divMensaje9").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a eliminar');
                 }
             });
 
@@ -243,14 +210,7 @@
                     mostrarEditarOtrosConocimientos(ideOtrosConocimientos);
                 }
                 else {
-                    $("#spanMensaje9").html('Seleccionar un item a editar');
-                    $("#divMensaje9").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a editar');
                 }
             });
         });

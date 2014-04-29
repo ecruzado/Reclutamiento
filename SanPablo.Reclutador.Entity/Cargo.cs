@@ -18,16 +18,16 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeDependencia { get; set; }
         public virtual int IdeDepartamento { get; set; }
         public virtual int IdeArea { get; set; }
-        public virtual int NumeroPosiciones { get; set; }
+        public virtual int? NumeroPosiciones { get; set; }
         public virtual string IndicadorSexo { get; set; }
         public virtual string Sexo { get; set; }
-        public virtual int EdadInicio { get; set; }
-        public virtual int EdadFin { get; set; }
+        public virtual int? EdadInicio { get; set; }
+        public virtual int? EdadFin { get; set; }
         public virtual string IndicadorEdad { get; set; } 
-        public virtual int PuntajeEdad { get; set; }
-        public virtual int PuntajeSexo { get; set; }
+        public virtual int? PuntajeEdad { get; set; }
+        public virtual int? PuntajeSexo { get; set; }
         public virtual string TipoRangoSalarial { get; set; }
-        public virtual int PuntajeSalario { get; set; }
+        public virtual int? PuntajeSalario { get; set; }
         public virtual string IndicadorSalario { get; set; }
         public virtual string TipoRequerimiento { get; set; }
 
@@ -45,10 +45,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual string FuncionCargo { get; set; }
         public virtual string ObservacionCargo { get; set; }
 
-        public virtual int PuntajeTotalPostulanteInterno { get; set; }
-        public virtual int PuntajeTotalEdad { get; set; }
-        public virtual int PuntajeTotalSexo { get; set; }
-        public virtual int PuntajeTotalSalario { get; set; }
+        public virtual int? PuntajeTotalPostulanteInterno { get; set; }
+        public virtual int? PuntajeTotalEdad { get; set; }
+        public virtual int? PuntajeTotalSexo { get; set; }
+        public virtual int? PuntajeTotalSalario { get; set; }
        
         public virtual int PuntajeTotalNivelEstudio { get; set; }
         public virtual int PuntajeTotalCentroEstudio { get; set; }

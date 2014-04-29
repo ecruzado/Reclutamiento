@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{ 
+
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
   $(document).ready(function () {
 
@@ -98,13 +102,11 @@
             url: '@Url.Action("ListaEvaluaciones", "EvaluacionCargo")',
                  datatype: 'json',
                  mtype: 'POST',
-                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
+                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima'],
                  colModel: [
                          { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                          { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
                          { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false },
-                         { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
-                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
                  ],
                  pager: jQuery('#grdPagerEvaluacion'),
                  sortname: 'TipoExamen',

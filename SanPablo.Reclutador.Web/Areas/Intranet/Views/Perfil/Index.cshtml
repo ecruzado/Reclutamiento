@@ -20,7 +20,7 @@
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , onkeyup="aMays(event, this)" })
         }
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
@@ -35,7 +35,7 @@
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" })
+            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", onkeyup="aMays(event, this)" })
         }
         <div class="grilla-opciones">
             <h6>Competencias</h6>
@@ -99,7 +99,9 @@
 
 
 @section ScriptsCargo{ 
-  
+  <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
   <script type="text/javascript">
     $(function () {
 
@@ -159,14 +161,7 @@
                 return false;
             }
             else {
-                $("#spanMensaje").html('Seleccionar un item a eliminar');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+                mostrarMensaje('Seleccionar un item a eliminar');
             }
         });
 
@@ -229,14 +224,7 @@
                 return false;
             }
             else {
-                $("#spanMensaje").html('Seleccionar un item a eliminar');
-                $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+                mostrarMensaje('Seleccionar un item a eliminar');
             }
         });
 

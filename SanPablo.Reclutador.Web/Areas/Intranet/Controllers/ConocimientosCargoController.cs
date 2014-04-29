@@ -132,7 +132,7 @@
 
                     if (contador > 0)
                     {
-                        objJsonMessage.Mensaje = "No puede insertar la misma descirpción más de una vez";
+                        objJsonMessage.Mensaje = "No puede insertar la misma descripción más de una vez";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
@@ -410,8 +410,9 @@
             if (id != "0")
             {
                 var otrosConocimientos = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == Convert.ToInt32(id));
+                //actualizar la descripcion de conocimiento
+                otrosConocimientosViewModel.DescripcionConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, otrosConocimientos.TipoConocimientoGeneral.ToString()));
                 otrosConocimientosViewModel.Conocimiento = otrosConocimientos;
-                actualizarOtrosConocimientos(otrosConocimientosViewModel);
             }
             return View(otrosConocimientosViewModel);
         }
@@ -536,10 +537,10 @@
             return result;
         }
 
-        public void actualizarOtrosConocimientos(ConocimientoCargoViewModel conocimientoModel)
+        public void actualizarOtrosConocimientos(ConocimientoCargoViewModel conocimientoModel, ConocimientoGeneralCargo conocimiento)
         {
             var listaResultado = new List<DetalleGeneral>();
-            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimientoModel.Conocimiento.TipoConocimientoGeneral.ToString()));
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, conocimiento.TipoConocimientoGeneral.ToString()));
             conocimientoModel.TipoNombresConocimientosGrales = listaResultado;
 
         }
