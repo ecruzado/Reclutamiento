@@ -96,7 +96,7 @@
         public ActionResult Edit([Bind(Prefix = "Evaluacion")]EvaluacionCargo evaluacionCargo)
         {
             EvaluacionCargoValidator validator = new EvaluacionCargoValidator();
-            ValidationResult result = validator.Validate(evaluacionCargo, "TipoExamen", "TipoAreaResponsable", "PuntajeExamen", "NotaMinimaExamen");
+            ValidationResult result = validator.Validate(evaluacionCargo, "TipoExamen", "NotaMinimaExamen");
 
             int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
@@ -104,9 +104,12 @@
             {
                 if (!result.IsValid)
                 {
-                    var evaluacionViewModel = inicializarEvaluacion();
-                    evaluacionViewModel.Evaluacion = evaluacionCargo;
-                    return View(evaluacionViewModel);
+                    if (!validarPtjeCero(evaluacionCargo))
+                    {
+                        var evaluacionViewModel = inicializarEvaluacion();
+                        evaluacionViewModel.Evaluacion = evaluacionCargo;
+                        return View(evaluacionViewModel);
+                    }
                 }
                 if (evaluacionCargo.IdeEvaluacionCargo == 0)
                 {
@@ -182,9 +185,6 @@
             evaluacionCargoViewModel.Cargo = new Cargo();
             evaluacionCargoViewModel.Evaluacion = new EvaluacionCargo();
 
-            evaluacionCargoViewModel.TiposAreasResponsables = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
-            evaluacionCargoViewModel.TiposAreasResponsables.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar"});
-
             evaluacionCargoViewModel.Examenes = new List<Examen>(_examenRepository.GetBy(x=>x.EstActivo == IndicadorActivo.Activo));
             evaluacionCargoViewModel.Examenes.Insert(0, new Examen { IdeExamen = 0, DescExamen = "Seleccionar" });
 
@@ -240,6 +240,19 @@
                 result = true;
             }
 
+            return result;
+        }
+
+        public bool validarPtjeCero(EvaluacionCargo evaluacionCargo)
+        {
+            bool result = false;
+            if (evaluacionCargo.NotaMinimaExamen == 0)
+            {
+                if (evaluacionCargo.Examen.IdeExamen != 0)
+                {
+                    result = true;
+                }
+            }
             return result;
         }
 

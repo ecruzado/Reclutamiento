@@ -2,10 +2,14 @@
 @{
     Layout = "";
 }
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
         //ACTUALIZAR EL TIPO DE EXAMEN
+
+        SanPablo.Numeros('Evaluacion_NotaMinimaExamen');
 
         $('select#Evaluacion_Examen_IdeExamen').change(function () {
             var ideExamen = $(this).val();
@@ -63,34 +67,12 @@
                  </div>
             </td>
         </tr>
-       @* <tr>
-            <td class="colEtiqueta">
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Area Responsable <span class="text-error">*</span></label>
-            </td>
-            <td class="colInput">
-                 @Html.DropDownListFor(model => model.Evaluacion.TipoAreaResponsable, new SelectList(Model.TiposAreasResponsables, "IdeArea", "NombreArea", Model.Evaluacion.TipoAreaResponsable))
-                <div class="tex-error" style="font-size:12px;color:red"> 
-                 @Html.ValidationMessageFor(model => model.Evaluacion.TipoAreaResponsable)
-                </div>
-            </td>
-        </tr>*@
-       @*<tr>
-           <td class="colEtiqueta">
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
-           </td>
-           <td>
-                @Html.TextBoxFor(model => model.Evaluacion.PuntajeExamen, new {@class="input-xxmini" })
-               <div class="tex-error" style="font-size:12px;color:red"> 
-                 @Html.ValidationMessageFor(model => model.Evaluacion.PuntajeExamen)
-                </div>
-           </td>
-       </tr>  *@
        <tr>
            <td class="colEtiqueta">
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Nota Mínima <span class="text-error">*</span></label>
            </td>
            <td>
-                @Html.TextBoxFor(model => model.Evaluacion.NotaMinimaExamen, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.Evaluacion.NotaMinimaExamen, new { @class = "input-xxmini", maxlength = "2" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Evaluacion.NotaMinimaExamen)
                 </div>

@@ -4,6 +4,7 @@
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Repository.Interface;
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.OracleClient;
 
@@ -37,6 +38,47 @@
                 cmd.Parameters.Add("p_valor", OracleType.Int32).Value = valor;
                 cmd.Parameters.Add("p_valorEliminar", OracleType.Int32).Value = valorEliminado;
                 cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        public List<ConocimientoGeneralCargo> listarConocimientosPublicacion(int IdeCargo)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            List<ConocimientoGeneralCargo> lista = new List<ConocimientoGeneralCargo>();
+
+            try
+            {
+                lcon.Open();
+                OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_CONOCIMIENTOS_PUBLICA");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
+
+                cmd.Parameters.Add("p_ideCargo", OracleType.Int32).Value = IdeCargo;
+                cmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                ConocimientoGeneralCargo conocimientoCargo;
+                using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        conocimientoCargo = new ConocimientoGeneralCargo();
+                        conocimientoCargo.IdeConocimientoGeneralCargo = Convert.ToInt32(lector["IDECONOGENCARGO"]);
+                        conocimientoCargo.DescripcionConocimientoGeneral = Convert.ToString(lector["TIPOCONO"]);
+                        conocimientoCargo.NombreConocimientoGeneral = Convert.ToString(lector["NOMBRE"]);
+                        lista.Add(conocimientoCargo);
+                    }
+                }
+
+                return lista;
             }
             catch (Exception ex)
             {

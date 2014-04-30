@@ -237,8 +237,8 @@
                     model.Postulante.Correo = usuarioExtranet.CodUsuario;
                     _postulanteRepository.Add(model.Postulante);
                     IdePostulante = model.Postulante.IdePostulante;
-
-                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(usuarioExtranet.IdUsuario));
+                    
+                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(usuarioExtranet.IdUsuario) && x.IndicadorPostulante == TipUsuario.Instranet);
                     usuario.IdePostulante = IdePostulante;
                     usuario.IndicadorPostulante = Indicador.Si;
                     _usuarioRepository.Update(usuario);

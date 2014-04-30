@@ -378,6 +378,17 @@
             { perfilViewModel.EstadoRegistro = "Activo"; }
             else
             { perfilViewModel.EstadoRegistro = "Inactivo"; }
+
+            if (CargoPerfil.TipoEtapa == Etapa.Generacion_Perfil)
+            {
+                perfilViewModel.aproObser = "Aprob/Obser";
+            }
+            else
+            {
+                perfilViewModel.aproObser = "Aprob/Rech";
+            }
+
+           
         }
 
         [HttpPost]
@@ -508,7 +519,8 @@
             try
             {
                 
-                if ((solicitud.TipoEtapa == Etapa.Aprobado) && (Roles.Jefe_Corporativo_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))
+                if(((solicitud.TipoEtapa == Etapa.Aprobado) && (Roles.Jefe_Corporativo_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))||
+                    ((solicitud.TipoEtapa == Etapa.Observado)&&(Roles.Jefe_Corporativo_Seleccion ==Convert.ToInt32(Session[ConstanteSesion.Rol]))))
                 {
 
                     string IndArea = "NO";
@@ -525,7 +537,7 @@
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
-                    if (logSolicitud.RolResponsable == Roles.Jefe)
+                    if ((logSolicitud.RolResponsable == Roles.Jefe)||(logSolicitud.RolResponsable == Roles.Gerente))
                     {
                         IndArea = "SI";
                     }

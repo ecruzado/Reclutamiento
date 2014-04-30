@@ -55,7 +55,7 @@
           if (ideEvaluacion != null) {
               $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
               $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
+                  title: 'Sistema de reclutamiento y selección de personal',
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },
@@ -66,14 +66,7 @@
               return false;
           }
           else {
-              $("#spanMensaje").html('Seleccionar un item a eliminar');
-              $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
-                  modal: true,
-                  buttons: {
-                      "Ok": function () { $(this).dialog("close"); }
-                  }
-              });
+              mostrarMensaje('Seleccionar un item a eliminar')
           }
       });
 
@@ -83,14 +76,7 @@
               mostrarEditarEvaluacion(ideEvaluacion);
           }
           else {
-              $("#spanMensaje").html('Seleccionar un item a editar');
-              $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
-                  modal: true,
-                  buttons: {
-                      "Ok": function () { $(this).dialog("close"); }
-                  }
-              });
+              mostrarMensaje('Seleccionar un item a editar')
           }
       });
 

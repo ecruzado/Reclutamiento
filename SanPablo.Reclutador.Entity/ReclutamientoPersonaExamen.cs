@@ -47,7 +47,8 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual string TipoExamen { get; set; }
 
-        
+        public virtual string DescripcionTipoExamen { get; set; }
+
         public virtual string EstadoEvaluacion { get; set; }
 
         public virtual bool EsEntrevistaFinal

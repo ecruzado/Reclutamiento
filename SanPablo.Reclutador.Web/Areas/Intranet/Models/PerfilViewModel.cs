@@ -26,6 +26,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string Accion { get; set; }
 
         public string Pagina { get; set; }
+
+        public string aproObser { get; set; }
+
+
         
     }
 }

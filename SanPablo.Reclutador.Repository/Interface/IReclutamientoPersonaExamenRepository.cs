@@ -40,6 +40,13 @@ namespace SanPablo.Reclutador.Repository.Interface
         /// <param name="ideReclutaPersonaExamen"></param>
         /// <returns></returns>
         ResultadoExamen ObtenerEvaluacionReportePdf(int idereclutaPersona, int ideReclutaPersonaExamen);
+
+        /// <summary>
+        /// verifica si existe resultado de examen
+        /// </summary>
+        /// <param name="ideReclutaPersonaExamen"></param>
+        /// <returns></returns>
+        string existeResultado(int ideReclutaPersonaExamen);
     }
 
     
