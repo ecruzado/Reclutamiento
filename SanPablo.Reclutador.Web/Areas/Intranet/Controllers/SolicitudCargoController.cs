@@ -204,6 +204,56 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return result;
         }
 
+
+
+        /// <summary>
+        /// Elimina una Solicitud que ha sido creada y no trabajada
+        /// </summary>
+        /// <param name="idSol">id de la solicitud</param>
+        /// <param name="cTipSol">tipo de solicitud</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EliminaSolicitud(int idSol,string cTipSol)
+        {
+            JsonMessage objJson = new JsonMessage();
+            int indSol;
+            string mensaje;
+
+            SolReqPersonal objSol = new SolReqPersonal();
+
+            objSol.IdeSolReqPersonal = idSol;
+            objSol.Tipsol = cTipSol;
+
+            try
+            {
+                indSol = _solReqPersonalRepository.EliminaSol(objSol);
+
+                if (indSol == 0)
+                {
+                    mensaje = "No se puede eliminar la solicitud";
+                    objJson.Resultado = false;
+                }
+                else
+                {
+                    mensaje = "Se elemino la solicitud";
+                    objJson.Resultado = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se puede eliminar la solicitud";
+                objJson.Resultado = false;
+            }
+
+            objJson.Mensaje = mensaje;
+
+
+            return Json(objJson);
+        }
+
+
+
         /// <summary>
         /// lista de areas
         /// </summary>
@@ -456,10 +506,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
             objModel.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
-
-          
-
-
             objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                          && x.IdeSede == UsuarioSede.IDESEDE));
 
@@ -470,10 +516,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             objModel.listaArea = new List<Area>();
             objModel.listaArea.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
-
-
-            //objModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
-            //objModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             objModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
             objModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
@@ -486,11 +528,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return objModel;
         }
-
-
-        
-
-
 
        /// <summary>
        /// Incializa el popup de reemplazo
@@ -627,10 +664,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.Accion = Accion.Publicar;
                 }
             }
-
-            
-
-            
 
             return View("InformacionReemplazo", model);
         }
@@ -1160,7 +1193,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
                 where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
-               // where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
+               
 
                 var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
 
@@ -1223,7 +1256,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         /// <summary>
-        /// Compeetencias de la solictud del requerimiento
+        /// Competencias de la solictud del requerimiento
         /// </summary>
         /// <param name="grid"></param>
         /// <returns></returns>

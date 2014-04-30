@@ -32,7 +32,7 @@ namespace SanPablo.Reclutador.Repository.Interface
 
         DataTable ListaReporteSeleccion(Reporte obj);
         
-        
+        int EliminaSol(SolReqPersonal objSol);
         /// <summary>
         /// obtiene el responsable de relizar una accion determinada
         /// </summary>

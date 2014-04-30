@@ -165,6 +165,40 @@ namespace SanPablo.Reclutador.Repository
          }
 
 
+        /// <summary>
+        /// Elimina Solicitud de todos los tipos, con la condicion que este recien creada
+        /// </summary>
+        /// <param name="objSol"></param>
+        /// <returns></returns>
+         public int EliminaSol(SolReqPersonal objSol)
+         {
+
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ELIMINA_SOLICITUD");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_nIdSol", OracleType.Int32).Value = objSol.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_cTipSol", OracleType.Int32).Value = objSol.Tipsol;
+                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.ExecuteNonQuery();
+                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+       
+
+
          /// <summary>
          /// obtiene el responsable de realizar una determinada accion
          /// </summary>
@@ -1192,31 +1226,212 @@ namespace SanPablo.Reclutador.Repository
                  while (ldrReporte.Read())
                  {
 
+
+
                      lobReporte = new Reporte();
 
-                     lobReporte.IdeSolReqpersonal = Convert.ToString(ldrReporte["IDESOLREQPERSONAL"]);
-                     lobReporte.EstadoProceso = Convert.ToString(ldrReporte["ESTADO_PROCESO"]);
-                     lobReporte.FechaRequerimiento = Convert.ToString(ldrReporte["FECHA_REQUERIMIENTO"]);
-                     lobReporte.DesSede = Convert.ToString(ldrReporte["SEDE"]);
-                     lobReporte.DesDependencia = Convert.ToString(ldrReporte["DESDEPENDENCIA"]);
-                     lobReporte.DesDepartamento = Convert.ToString(ldrReporte["DESDEPARTAMENTO"]);
-                     lobReporte.DesArea = Convert.ToString(ldrReporte["DESAREA"]);
-                     lobReporte.Cargo = Convert.ToString(ldrReporte["CARGO"]);
-                     lobReporte.Jefe = Convert.ToString(ldrReporte["JEFE"]);
-                     lobReporte.Tipsol = Convert.ToString(ldrReporte["TIPSOL"]);
-                     lobReporte.Reemplaza = Convert.ToString(ldrReporte["REEMPLAZA_A"]);
-                     lobReporte.FecReemplazo = Convert.ToString(ldrReporte["FECREEMPLAZO"]);
-                     lobReporte.MotivoReemplazo = Convert.ToString(ldrReporte["MOTIVOREEMPLAZO"]);
-                     lobReporte.AnalistaResp = Convert.ToString(ldrReporte["ANALISTA_RESP"]);
-                     lobReporte.PersonaIngresa = Convert.ToString(ldrReporte["P_INGRESA"]);
-                     lobReporte.FechaContratacion = Convert.ToString(ldrReporte["FECHA_CONTRATACION"]);
-                     lobReporte.Dias = Convert.ToInt32(ldrReporte["DIAS"]);
-                     lobReporte.Numdocumento = Convert.ToString(ldrReporte["NUMDOCUMENTO"]);
-                     lobReporte.Fono = Convert.ToString(ldrReporte["FONO"]);
-                     lobReporte.ObsPsicologo = Convert.ToString(ldrReporte["OBSPSICOLOGO"]);
+                     if (ldrReporte["IDSOL"] != System.DBNull.Value)
+                     {
+                         lobReporte.IdeSolReqpersonal = Convert.ToString(ldrReporte["IDSOL"]);
+                     }
+                     else
+                     {
+                         lobReporte.IdeSolReqpersonal = "";
+                     }
+
+                     if (ldrReporte["ESTADO_PROCESO"] != System.DBNull.Value)
+                     {
+                         lobReporte.EstadoProceso = Convert.ToString(ldrReporte["ESTADO_PROCESO"]);
+                     }
+                     else
+                     {
+                         lobReporte.EstadoProceso = "";
+                     }
+
+                     if (ldrReporte["FECHA_REQUERIMIENTO"] != System.DBNull.Value)
+                     {
+                         lobReporte.FechaRequerimiento = Convert.ToString(ldrReporte["FECHA_REQUERIMIENTO"]);
+                     }
+                     else
+                     {
+                         lobReporte.FechaRequerimiento = "";
+                     }
+
+                     if (ldrReporte["SEDE"] != System.DBNull.Value)
+                     {
+                         lobReporte.DesSede = Convert.ToString(ldrReporte["SEDE"]);
+                     }
+                     else
+                     {
+                         lobReporte.DesSede = "";
+                     }
+
+                     if (ldrReporte["DESDEPENDENCIA"] != System.DBNull.Value)
+                     {
+                         lobReporte.DesDependencia = Convert.ToString(ldrReporte["DESDEPENDENCIA"]);
+                     }
+                     else
+                     {
+                         lobReporte.DesDependencia = "";
+                     }
+
+                     if (ldrReporte["DESDEPARTAMENTO"] != System.DBNull.Value)
+                     {
+                         lobReporte.DesDepartamento = Convert.ToString(ldrReporte["DESDEPARTAMENTO"]);
+                     }
+                     else
+                     {
+                         lobReporte.DesDepartamento = "";
+                     }
+
+                     if (ldrReporte["DESAREA"] != System.DBNull.Value)
+                     {
+                         lobReporte.DesArea = Convert.ToString(ldrReporte["DESAREA"]);
+                     }
+                     else
+                     {
+                         lobReporte.DesArea = "";
+                     }
+
+                     if (ldrReporte["CARGO"] != System.DBNull.Value)
+                     {
+                         lobReporte.Cargo = Convert.ToString(ldrReporte["CARGO"]);
+                     }
+                     else
+                     {
+                         lobReporte.Cargo = "";
+                     }
+
+
+                     if (ldrReporte["JEFE"] != System.DBNull.Value)
+                     {
+                         lobReporte.Jefe = Convert.ToString(ldrReporte["JEFE"]);
+                     }
+                     else
+                     {
+                         lobReporte.Jefe = "";
+                     }
+
+
+                     if (ldrReporte["DESTIPSOL"] != System.DBNull.Value)
+                     {
+                         lobReporte.Tipsol = Convert.ToString(ldrReporte["DESTIPSOL"]);
+                     }
+                     else
+                     {
+                         lobReporte.Tipsol = "";
+                     }
+
+                     if (ldrReporte["REEMPLAZA_A"] != System.DBNull.Value)
+                     {
+                         lobReporte.Reemplaza = Convert.ToString(ldrReporte["REEMPLAZA_A"]);
+                     }
+                     else
+                     {
+                         lobReporte.Reemplaza = "";
+                     }
+
+
+                     if (ldrReporte["FECREEMPLAZO"] != System.DBNull.Value)
+                     {
+                         lobReporte.FecReemplazo = Convert.ToString(ldrReporte["FECREEMPLAZO"]);
+                     }
+                     else
+                     {
+                         lobReporte.FecReemplazo = "";
+                     }
+
+                     if (ldrReporte["MOTIVOREEMPLAZO"] != System.DBNull.Value)
+                     {
+                         lobReporte.MotivoReemplazo = Convert.ToString(ldrReporte["MOTIVOREEMPLAZO"]);
+                     }
+                     else
+                     {
+                         lobReporte.MotivoReemplazo = "";
+                     }
+
+                     if (ldrReporte["ANALISTA_RESP"] != System.DBNull.Value)
+                     {
+                         lobReporte.AnalistaResp = Convert.ToString(ldrReporte["ANALISTA_RESP"]);
+                     }
+                     else
+                     {
+                         lobReporte.AnalistaResp = "";
+                     }
+
+
+                     if (ldrReporte["P_INGRESA"] != System.DBNull.Value)
+                     {
+                         lobReporte.PersonaIngresa = Convert.ToString(ldrReporte["P_INGRESA"]);
+                     }
+                     else
+                     {
+                         lobReporte.PersonaIngresa = "";
+                     }
+
+                     if (ldrReporte["FECHA_CONTRATACION"] != System.DBNull.Value)
+                     {
+                         lobReporte.FechaContratacion = Convert.ToString(ldrReporte["FECHA_CONTRATACION"]);
+                     }
+                     else
+                     {
+                         lobReporte.FechaContratacion = "";
+                     }
+
+
+
+                     if (ldrReporte["DIAS"] != System.DBNull.Value)
+                     {
+                         lobReporte.Dias = Convert.ToInt32(ldrReporte["DIAS"]);
+                     }
+                     else
+                     {
+                         lobReporte.Dias = 0;
+                     }
+
+
+                     if (ldrReporte["NUMDOCUMENTO"] != System.DBNull.Value)
+                     {
+                         lobReporte.Numdocumento = Convert.ToString(ldrReporte["NUMDOCUMENTO"]);
+                     }
+                     else
+                     {
+                         lobReporte.Numdocumento = "";
+                     }
+
+
+                     if (ldrReporte["FONO"] != System.DBNull.Value)
+                     {
+                         lobReporte.Fono = Convert.ToString(ldrReporte["FONO"]);
+                     }
+                     else
+                     {
+                         lobReporte.Fono = "";
+                     }
+
+                     if (ldrReporte["OBSPSICOLOGO"] != System.DBNull.Value)
+                     {
+                         lobReporte.ObsPsicologo = Convert.ToString(ldrReporte["OBSPSICOLOGO"]);
+                     }
+                     else
+                     {
+                         lobReporte.ObsPsicologo = "";
+                     }
+
+                    
                      lobReporte.ObsEntrevista = Convert.ToString(ldrReporte["OBSENTREVISTA"]);
                      lobReporte.FecSuceso = Convert.ToString(ldrReporte["FECSUCESO"]);
-                     lobReporte.MotivoCirreSol = Convert.ToString(ldrReporte["MOTIVOCIERRE"]);
+
+                     if (ldrReporte["MOTIVOCIERRE"] != System.DBNull.Value)
+                     {
+                         lobReporte.MotivoCirreSol = Convert.ToString(ldrReporte["MOTIVOCIERRE"]);
+                     }
+                     else
+                     {
+                         lobReporte.MotivoCirreSol = "";
+                     }
+
+                    
                      
                    
                      llstReporte.Add(lobReporte);

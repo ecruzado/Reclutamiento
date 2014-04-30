@@ -73,7 +73,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         
         }
 
-
+        /// <summary>
+        /// Reliza el logeo de Intranet
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Login()
         {
 
@@ -126,6 +129,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             
         }
 
+        /// <summary>
+        /// inicializa los roles
+        /// </summary>
+        /// <param name="objUsuario"></param>
+        /// <returns></returns>
         private SeguridadViewModel InicializarRol(Usuario objUsuario)
         {
             var objModel = new SeguridadViewModel();
@@ -203,7 +211,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (id != null)
             {
 
-                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id);
+                objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id && x.FlgEstado == IndicadorActivo.Activo && x.TipUsuario == TipUsuario.Instranet);
                 if (objUsuario != null)
                 {
 
@@ -426,8 +434,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Inicio() 
         { 
             SeguridadViewModel model = new SeguridadViewModel();
-
-
 
             return View("Inicio", model);
         
