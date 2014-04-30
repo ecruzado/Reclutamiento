@@ -151,54 +151,6 @@
           })
 
         jQuery("#grdListContratados").jqGrid({
-            datatype: function (postdata) {
-                var migrilla = new Object();
-                migrilla.page = postdata.page;
-                migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sidx;
-                migrilla.sord = postdata.sord;
-                migrilla._search = postdata.isSearch;
-                migrilla.filters = postdata.filters;
-                migrilla.Rules = [
-                       { field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
-                       { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
-                       { field: 'cTipSol', data: $("#ReporteSol_idTipSol").val() },
-                       { field: 'cEstadoReq', data: $("#ReporteSol_idEstadoReq").val() },
-                       { field: 'nIdResp', data: $("#ReporteSol_idAnalistaResp").val() },
-                       { field: 'nIdDependencia', data: $("#ReporteSol_idDependencia").val() },
-                       { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
-                       { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
-                       { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() },
-                       { field: 'nIdSede', data: $("#ReporteSol_idSede").val() },
-                       { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
-
-                ];
-
-                if (migrilla._search == true) {
-                    migrilla.searchField = postdata.searchField;
-                    migrilla.searchOper = postdata.searchOper;
-                    migrilla.searchString = postdata.searchString;
-                }
-
-                var params = { grid: migrilla };
-
-                $.ajax({
-                    url: '@Url.Action("getListContratados", "ReporteSeleccion")',
-                    type: 'post',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(params),
-                    async: false,
-                    success: function (data, st) {
-                        if (st == 'success') {
-                            var jq = $('#grdListContratados')[0];
-                            jq.addJSONData(data);
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
-            },
             colNames: [
                   'IdeSolReqpersonal',
                   'ESTADO DEL PROCESO',
@@ -263,11 +215,61 @@
             hidegrid: false,
             rownumbers: true,
             shrinkToFit: false,
-
+            datatype:'local',
             postData: {
             }, loadComplete: function (data) {
 
-                
+                jQuery("#grdListContratados").jqGrid('setGridParam', {
+                    datatype: function (postdata) {
+                        var migrilla = new Object();
+                        migrilla.page = postdata.page;
+                        migrilla.rows = postdata.rows;
+                        migrilla.sidx = postdata.sidx;
+                        migrilla.sord = postdata.sord;
+                        migrilla._search = postdata.isSearch;
+                        migrilla.filters = postdata.filters;
+                        migrilla.Rules = [
+                               { field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
+                               { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
+                               { field: 'cTipSol', data: $("#ReporteSol_idTipSol").val() },
+                               { field: 'cEstadoReq', data: $("#ReporteSol_idEstadoReq").val() },
+                               { field: 'nIdResp', data: $("#ReporteSol_idAnalistaResp").val() },
+                               { field: 'nIdDependencia', data: $("#ReporteSol_idDependencia").val() },
+                               { field: 'nIdDepartamento', data: $("#ReporteSol_idDepartamento").val() },
+                               { field: 'nIdArea', data: $("#ReporteSol_idArea").val() },
+                               { field: 'cMotivoreemp', data: $("#ReporteSol_idMotivoReemplazo").val() },
+                               { field: 'nIdSede', data: $("#ReporteSol_idSede").val() },
+                               { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
+
+                        ];
+
+                        if (migrilla._search == true) {
+                            migrilla.searchField = postdata.searchField;
+                            migrilla.searchOper = postdata.searchOper;
+                            migrilla.searchString = postdata.searchString;
+                        }
+
+                        var params = { grid: migrilla };
+
+                        $.ajax({
+                            url: '@Url.Action("getListContratados", "ReporteSeleccion")',
+                            type: 'post',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(params),
+                            async: false,
+                            success: function (data, st) {
+                                if (st == 'success') {
+                                    var jq = $('#grdListContratados')[0];
+                                    jq.addJSONData(data);
+                                }
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
+
 
             }
         });
