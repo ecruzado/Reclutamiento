@@ -170,21 +170,63 @@ namespace SanPablo.Reclutador.Repository
         /// </summary>
         /// <param name="objSol"></param>
         /// <returns></returns>
-         public int EliminaSol(SolReqPersonal objSol)
+         //public int EliminaSol(SolReqPersonal objSol)
+         //{
+
+         //    OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+         //    try
+         //    {
+         //        lcon.Open();
+         //        OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ELIMINA_SOLICITUD");
+         //        lspcmd.CommandType = CommandType.StoredProcedure;
+         //        lspcmd.Connection = lcon;
+         //        lspcmd.Parameters.Add("p_nIdSol", OracleType.Int32).Value = objSol.IdeSolReqPersonal;
+         //        lspcmd.Parameters.Add("p_cTipSol", OracleType.Int32).Value = objSol.Tipsol;
+         //        lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+         //        lspcmd.ExecuteNonQuery();
+         //        return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
+         //    }
+         //    catch (Exception ex)
+         //    {
+         //        throw new Exception(ex.Message);
+         //    }
+         //    finally
+         //    {
+         //        lcon.Close();
+         //    }
+         //}
+         public SolReqPersonal EliminaSol(SolReqPersonal objSolq)
          {
 
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             int idRespuesta = 0;
+             string cMensaje="";
+             SolReqPersonal SolReqPersonal = null;
              try
              {
                  lcon.Open();
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_ELIMINA_SOLICITUD");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("p_nIdSol", OracleType.Int32).Value = objSol.IdeSolReqPersonal;
-                 lspcmd.Parameters.Add("p_cTipSol", OracleType.Int32).Value = objSol.Tipsol;
-                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 lspcmd.Parameters.Add("p_nidsol", OracleType.Number).Value = objSolq.IdeSolReqPersonal;
+                 lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = objSolq.Tipsol;
+                 lspcmd.Parameters.Add("p_nidusuario", OracleType.Number).Value = objSolq.idUsuarioSuceso;
+                 lspcmd.Parameters.Add("p_nrolusario", OracleType.Number).Value = objSolq.idRolSuceso;
+
+
+
+                 lspcmd.Parameters.Add("p_cretval", OracleType.Number).Direction = ParameterDirection.Output;
+                 lspcmd.Parameters.Add("p_cmensaje", OracleType.VarChar,1000).Direction = ParameterDirection.Output;
                  lspcmd.ExecuteNonQuery();
-                 return Convert.ToInt32(lspcmd.Parameters["p_cRetVal"].Value);
+
+                 idRespuesta = Convert.ToInt32(lspcmd.Parameters["p_cretval"].Value);
+                 cMensaje = Convert.ToString(lspcmd.Parameters["p_cmensaje"].Value).Trim();
+                 SolReqPersonal = new SolReqPersonal();
+
+                 SolReqPersonal.IdRespuesta = idRespuesta;
+                 SolReqPersonal.Mensaje = cMensaje;
+
+                 return SolReqPersonal;
              }
              catch (Exception ex)
              {
@@ -195,7 +237,6 @@ namespace SanPablo.Reclutador.Repository
                  lcon.Close();
              }
          }
-
        
 
 

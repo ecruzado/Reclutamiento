@@ -932,8 +932,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
                                 item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
                                 item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
-                                item.Feccreacion==null?"":item.Feccreacion.ToString(),
-                                item.FecExpiracacion==null?"":item.FecExpiracacion.ToString(),
+                                item.Feccreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.Feccreacion),
+                                item.FecExpiracacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FecExpiracacion),
                                
                                 item.idRolSuceso==null?"":item.idRolSuceso.ToString(),
                                 item.DesRolSuceso==null?"":item.DesRolSuceso,
@@ -941,7 +941,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 
                                 item.FlagPublicado==null?"":item.FlagPublicado,
                                 item.TipEtapa==null?"":item.TipEtapa,
-                                item.Tipsol==null?"":item.Tipsol
+                                item.Tipsol==null?"":item.Tipsol,
+                                item.Des_etapa==null?"":item.Des_etapa
                                
                             }
                 }).ToArray();

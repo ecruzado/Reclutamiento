@@ -260,10 +260,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 string indBusqueda = (grid.rules[4].data == null ? "N" : grid.rules[4].data);
 
-                if (Indicador.Si.Equals(indBusqueda))
-                {
-                    listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
-                }
+                //if (Indicador.Si.Equals(indBusqueda))
+                //{
+                //    listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
+                //}
+                listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
 
                 Session[ConstanteSesion.ReporteResumen] = objReporte;
 

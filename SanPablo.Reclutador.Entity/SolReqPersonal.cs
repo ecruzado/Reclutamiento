@@ -177,13 +177,13 @@ namespace SanPablo.Reclutador.Entity
         /// Fecha inical de busqueda
         /// </summary>
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaInicioBus { get; set; }
         /// <summary>
         /// fecha Final de busqueda
         /// </summary>
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaFinBus { get; set; }
         /// <summary>
         /// Cantidad de postulantes
@@ -274,7 +274,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string MotivoCierre { get; set; }
 
         public virtual string Des_etapa { get; set; }
-        
+
+        public virtual int IdRespuesta { get; set; }
+        public virtual string Mensaje { get; set; }
 
     }
 }
