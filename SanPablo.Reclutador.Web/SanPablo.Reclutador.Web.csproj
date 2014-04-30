@@ -553,6 +553,7 @@
     <Content Include="Areas\Intranet\Views\ReportePostulanteBD\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReportePostulantePotencial\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteResumeRQ\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Seguridad\View1.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
