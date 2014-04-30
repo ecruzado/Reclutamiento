@@ -147,6 +147,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.UsuarioResponsable==null?"":item.UsuarioResponsable,
                                 item.TipoEstadoEvaluacion==null?"":item.TipoEstadoEvaluacion,
                                 item.EstadoEvaluacion==null?"":item.EstadoEvaluacion,
+                                item.IndicadorResultado==null?"N":item.IndicadorResultado,
                                 item.NotaFinal==0?"":item.NotaFinal.ToString(),
                                 item.ComentarioResultado==null?"":item.ComentarioResultado
                             }
