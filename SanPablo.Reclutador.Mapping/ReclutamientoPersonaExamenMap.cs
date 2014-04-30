@@ -25,6 +25,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.nombreArchivo, "NOMARCHIVO");
             Map(x => x.ComentarioResultado, "COMENTARIORESUL");
             Map(x => x.TipoEstadoEvaluacion, "TIPESTEVALUACION");
+            Map(x => x.TipoExamen, "TIPEXAMEN");
             Map(x => x.UsuarioCreacion, "USRCREACION");
             Map(x => x.FechaCreacion, "FECCREACION");
             Map(x => x.UsuarioModificacion, "USRMODIFICA");

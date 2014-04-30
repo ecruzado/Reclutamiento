@@ -11,6 +11,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        setInterval(function () { $('#grdList').trigger('reloadGrid');}, 3600000);
+
         $('#btnProgramarEvaluacion').click(function () {
 
             var id = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -246,7 +248,7 @@
                 });
             }
             else {
-                MostrarMensaje("Debe programar la evaluacion para ingresar los resultados","Reclutamiento y Selección de personal");
+                MostrarMensaje(data.Mensaje,"Reclutamiento y Selección de personal");
             }
          }
         });
@@ -254,7 +256,7 @@
 
             
         //}
-   }
+    }
 
 </script>
 }
