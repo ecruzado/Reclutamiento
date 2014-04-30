@@ -110,7 +110,7 @@
                 
                 @if (Accion.Aprobar.Equals(Model.Accion))
                 {
-                    <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
+                    <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> @Html.DisplayFor(model=>model.aproObser)</a>
                 }
                 @if (Accion.Enviar.Equals(Model.Accion))
                 {
@@ -133,8 +133,8 @@
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de nuevo cargo?</p></div>
 
-<div id="divMensaje">
-    <span id="spanMensaje"></span>
+<div id="divMensajeAlert">
+    <span id="spanMensajeAlert"></span>
 </div>  
 
  
@@ -161,13 +161,30 @@
                             title: 'SAN PABLO',
                             modal: true,
                             buttons: {
-                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+                                "Si": function () {
+                                    $(this).dialog("close");
+                                    $("#updateDialogAprobacion").dialog("close");
+                                    $.blockUI({
+                                        message: '<h1>Enviando...</h1>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
+                                    enviarAprobacionRechazo();
+                                },
                                 "No": function () { $(this).dialog("close"); }
                             }
                         });
 
                     }
                     else {
+
                         notificacionError("ERROR: Verifique que los datos ingresados son correctos");
                     }
                 },
@@ -186,16 +203,28 @@
             modal: true,
             buttons: {
                 "Aceptar": function (e) {
+                    $('#updateDialogAceptar').dialog("close");
+                    $.blockUI({
+                        message: '<h1>Enviando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
                     $.post('@Url.Action("aceptarPerfil", "Perfil")',
                         //$("#solicitudNuevoCargoForm").serialize(),
                         function (respuesta) {
                             if (respuesta.Resultado) {
-                                $('#updateDialogAceptar').dialog("close");
+                                $.unblockUI();
                                 mostrarMensaje("Solicitud aceptada exitosamente");
-
                             }
                             else {
-                                $('#updateDialogAceptar').dialog("close");
+                                $.unblockUI();
                                 mostrarMensaje(respuesta.Mensaje);
                             }
                         });
@@ -214,16 +243,28 @@
             modal: true,
             buttons: {
                 "Aceptar": function (e) {
+                    $('#updateDialogConfirmacion').dialog("close");
+                    $.blockUI({
+                        message: '<h1>Enviando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
                     $.post('@Url.Action("enviarPerfil", "Perfil")',
                         //$("#solicitudNuevoCargoForm").serialize(),
                         function (respuesta) {
                             if (respuesta.Resultado) {
-                                $('#updateDialogConfirmacion').dialog("close");
+                                $.unblockUI();
                                 mostrarMensaje("Solicitud enviada exitosamente");
-
                             }
                             else {
-                                $('#updateDialogConfirmacion').dialog("close");
+                                $.unblockUI();
                                 mostrarMensaje(respuesta.Mensaje);
                             }
                         });
@@ -240,7 +281,7 @@
         
         $("#spanMensaje").html(msj);
         $("#divMensaje").dialog({
-            title: 'SAN PABLO',
+            title: 'Sistema de reclutamiento y selección de personal',
             modal: true,
             buttons: {
                 "Ok": function () { $(this).dialog("close"); }
@@ -299,21 +340,27 @@
     }
 
     function enviarAprobacionRechazo() {
+
+
+
         $.post('@Url.Action("AprobacionRechazoPerfil", "LogSolicitudNuevoCargo")',
              $("#LogSolicitudNuevoCargoForm").serialize(),
              function (respuesta) {
                  if (respuesta.Resultado) {
-                     $("#updateDialogAprobacion").dialog("close");
-                     $("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
-                     $("#divMensaje").dialog({
-                         title: 'SAN PABLO',
-                         modal: true,
-                         buttons: {
-                             "Ok": function () { $(this).dialog("close"); }
-                         }
-                     });
+                     
+                     $.unblockUI();
+                     mostrarMensaje("Aprobacion/Rechazo enviado exitosamente");
+                     //$("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
+                     //$("#divMensaje").dialog({
+                     //    title: 'SAN PABLO',
+                     //    modal: true,
+                     //    buttons: {
+                     //        "Ok": function () { $(this).dialog("close"); }
+                     //    }
+                     //});
                  }
                  else {
+                     $.unblockUI();
                      notificacionError(respuesta.Mensaje);
                  }
              }

@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{ 
+
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
   $(document).ready(function () {
 
@@ -51,7 +55,7 @@
           if (ideEvaluacion != null) {
               $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
               $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
+                  title: 'Sistema de reclutamiento y selección de personal',
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },
@@ -62,14 +66,7 @@
               return false;
           }
           else {
-              $("#spanMensaje").html('Seleccionar un item a eliminar');
-              $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
-                  modal: true,
-                  buttons: {
-                      "Ok": function () { $(this).dialog("close"); }
-                  }
-              });
+              mostrarMensaje('Seleccionar un item a eliminar')
           }
       });
 
@@ -79,14 +76,7 @@
               mostrarEditarEvaluacion(ideEvaluacion);
           }
           else {
-              $("#spanMensaje").html('Seleccionar un item a editar');
-              $("#divMensaje").dialog({
-                  title: 'SAN PABLO',
-                  modal: true,
-                  buttons: {
-                      "Ok": function () { $(this).dialog("close"); }
-                  }
-              });
+              mostrarMensaje('Seleccionar un item a editar')
           }
       });
 
@@ -98,13 +88,11 @@
             url: '@Url.Action("ListaEvaluaciones", "EvaluacionCargo")',
                  datatype: 'json',
                  mtype: 'POST',
-                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
+                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima'],
                  colModel: [
                          { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                          { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
                          { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false },
-                         { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
-                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
                  ],
                  pager: jQuery('#grdPagerEvaluacion'),
                  sortname: 'TipoExamen',

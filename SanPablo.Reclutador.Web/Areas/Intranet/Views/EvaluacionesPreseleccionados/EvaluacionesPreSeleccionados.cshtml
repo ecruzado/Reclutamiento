@@ -18,9 +18,13 @@
 
             var idReclutaExamen = rowData.IdeRecluPersoExam;
             var nombreResponsable = rowData.Responsable;
-            if (idReclutaExamen != null && idReclutaExamen > 0)  {
-                var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable;
-                window.location = url;
+            if (idReclutaExamen != null && idReclutaExamen > 0) {
+
+                if ((rowData.TipoExamen != '01') && (rowData.TipoExamen != '04')) {
+                    var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable;
+                    window.location = url;
+                }
+                else { MostrarMensaje('No es necesaria la programación de la evaluacion', "Sistema de reclutamiento y selección de personal");}
             } else {
                 MostrarMensaje('Seleccione un exámen a programar', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
@@ -85,12 +89,13 @@
                     }
                 });
             },
-            colNames: ['','','','Descripci&oacuten', 'Tipo', 'Fecha', 'Hora','', 'Responsable','', 'Estado', 'Ptje.Total', 'Resultado',''],
+            colNames: ['','','','Descripci&oacuten','', 'Tipo', 'Fecha', 'Hora','', 'Responsable','', 'Estado', 'Ptje.Total', 'Resultado',''],
             colModel: [
                      { name: 'IdeRecluPersoExam', index: 'IdeRecluPersoExam', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'IdeEvaluacion', index: 'IdeEvaluacion', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', formatter: DescripcionFormatter },
+                     { name: 'TipoExamen', index: 'TipoExamen', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
                      { name: 'Fecha', index: 'Fecha', align: 'center', editable: false, sortable: false, width: 100 },
                      { name: 'Hora', index: 'Hora', align: 'center', editable: false, sortable: false, width: 90 },
@@ -164,8 +169,9 @@
     function DescripcionFormatter(cellvalue, options, rowObject) {
         var strAref = cellvalue;
         //validar si existe la evaluacion
-        @*strAref = '<a style="text-decoration: underline" href= ' + '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados")' + '?idRP=' + rowObject[1] + '&idRE=' + rowObject[0] + '>' + cellvalue + '</a>';*@
-        strAref = '<a style="text-decoration: underline" href= "#" onclick= "MostrarExamen(' + rowObject[1] + ',' + rowObject[0] + ')"; >' + cellvalue + '</a>';
+        if (existeResultado(rowObject[0])) {
+            strAref = '<a style="text-decoration: underline" href= "#" onclick= "MostrarExamen(' + rowObject[1] + ',' + rowObject[0] + ')"; >' + cellvalue + '</a>';
+        }
         
         return strAref;
       }
@@ -196,12 +202,29 @@
         return strRdo;
         }
     
-        function ResultadoFormatter(cellvalue, options, rowObject) {
-            var imgPath = '@Url.Content("~/Content/images/")';
-            var archivo = 'application.gif';
-            var strImg = '<a href="@Url.Action("ResultadoExamen1", "Operaciones")"><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver Resultado" alt="Ver Resultado"></a>';
-            return strImg;
-        }
+    function ResultadoFormatter(cellvalue, options, rowObject) {
+        var imgPath = '@Url.Content("~/Content/images/")';
+        var archivo = 'application.gif';
+        var strImg = '<a href="@Url.Action("ResultadoExamen1", "Operaciones")"><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver Resultado" alt="Ver Resultado"></a>';
+        return strImg;
+    }
+
+    function existeResultado(ideExamen)
+    {
+        $.ajax({
+            type: "POST",
+            async: "false",
+            url: '@Url.Action("existeResultado","EvaluacionesPreSeleccionados")',
+            data: {idRE: ideExamen },
+            success: function (respuesta) {
+                if (respuesta.respuesta)
+                { return true; }
+                else
+                { return false;}
+                
+            }
+        });
+    }
 
     function mostraringresoocomentario(idReclutaPersoExam) {
         //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');

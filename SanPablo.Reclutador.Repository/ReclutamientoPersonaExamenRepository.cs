@@ -56,7 +56,8 @@ namespace SanPablo.Reclutador.Repository
                     objEvaluacion.IdeReclutamientoPersona = Convert.ToInt32(drEvaluaciones["IDERECLUTAPERSONA"]);
                     objEvaluacion.IdeEvaluacion = Convert.ToInt32(drEvaluaciones["IDEEVALUACION"]);
                     objEvaluacion.DescripcionExamen = Convert.ToString(drEvaluaciones["NOMEXAMEN"]);
-                    objEvaluacion.TipoExamen = Convert.ToString(drEvaluaciones["TIPOEXAMEN"]);
+                    objEvaluacion.TipoExamen = Convert.ToString(drEvaluaciones["TIPEXAMEN"]);
+                    objEvaluacion.DescripcionTipoExamen = Convert.ToString(drEvaluaciones["TIPOEXAMEN"]);
                     objEvaluacion.IdeUsuarioResponsable = Convert.ToInt32(drEvaluaciones["IDUSUARESPONS"]);
                     objEvaluacion.UsuarioResponsable = Convert.ToString(drEvaluaciones["USUARIORESP"]);
 
@@ -161,6 +162,9 @@ namespace SanPablo.Reclutador.Repository
                 lcon.Close();
             }
         }
+
+
+
 
 
         public ResultadoExamen ObtenerEvaluacionReportePdf(int idereclutaPersona, int ideReclutaPersonaExamen)
@@ -290,6 +294,35 @@ namespace SanPablo.Reclutador.Repository
                 }
                     
                 return resulExamen;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+        public string existeResultado(int ideReclutaPersonaExamen)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.FN_EXISTE_RESULTADO_EXAMEN");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_ideReclutaExamen", OracleType.Number).Value = ideReclutaPersonaExamen;
+                lspcmd.Parameters.Add("p_rRetVal", OracleType.VarChar,1).Direction = ParameterDirection.ReturnValue;
+                lspcmd.ExecuteNonQuery();
+
+                return Convert.ToString(lspcmd.Parameters[lspcmd.Parameters.IndexOf("p_rRetVal")].Value);
+                
             }
             catch (Exception ex)
             {

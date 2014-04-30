@@ -41,14 +41,16 @@
         [ValidarSesion]
         public ActionResult Index(string id, string pagina)
         {
-            Session[ConstanteSesion.pagina] = pagina;
-
+            if (pagina != null)
+            {
+                Session[ConstanteSesion.pagina] = pagina;
+            }
             var ideSolicitud = id;
             try
             {
                 var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
 
-                var perfilViewModel = inicializarPerfil(pagina);
+                var perfilViewModel = inicializarPerfil();
                 var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
                 if (ideSolicitud != null)
@@ -67,6 +69,7 @@
                     var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                     perfilViewModel.Cargo = cargo;
                     actualizarDatosCargo(perfilViewModel, cargo);
+                    actualizarAccion(perfilViewModel);
                     
                 }
                
@@ -81,8 +84,10 @@
             
         }
 
-        public PerfilViewModel inicializarPerfil(string pagina)
+        public PerfilViewModel inicializarPerfil()
         {
+            var pagina = Session[ConstanteSesion.pagina].ToString();
+            
             var cargoViewModel = new PerfilViewModel();
             cargoViewModel.Cargo = new Cargo();
             cargoViewModel.Pagina = pagina;
@@ -373,6 +378,17 @@
             { perfilViewModel.EstadoRegistro = "Activo"; }
             else
             { perfilViewModel.EstadoRegistro = "Inactivo"; }
+
+            if (CargoPerfil.TipoEtapa == Etapa.Generacion_Perfil)
+            {
+                perfilViewModel.aproObser = "Aprob/Obser";
+            }
+            else
+            {
+                perfilViewModel.aproObser = "Aprob/Rech";
+            }
+
+           
         }
 
         [HttpPost]
@@ -503,7 +519,8 @@
             try
             {
                 
-                if ((solicitud.TipoEtapa == Etapa.Aprobado) && (Roles.Jefe_Corporativo_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))
+                if(((solicitud.TipoEtapa == Etapa.Aprobado) && (Roles.Jefe_Corporativo_Seleccion == Convert.ToInt32(Session[ConstanteSesion.Rol])))||
+                    ((solicitud.TipoEtapa == Etapa.Observado)&&(Roles.Jefe_Corporativo_Seleccion ==Convert.ToInt32(Session[ConstanteSesion.Rol]))))
                 {
 
                     string IndArea = "NO";
@@ -520,7 +537,7 @@
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
 
-                    if (logSolicitud.RolResponsable == Roles.Jefe)
+                    if ((logSolicitud.RolResponsable == Roles.Jefe)||(logSolicitud.RolResponsable == Roles.Gerente))
                     {
                         IndArea = "SI";
                     }

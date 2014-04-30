@@ -12,6 +12,7 @@
     using FluentValidation;
     using FluentValidation.Results;
     using NHibernate.Criterion;
+    using SanPablo.Reclutador.Entity.Validation;
 
     [Authorize]
     public class CompetenciaCargoController : BaseController
@@ -92,13 +93,19 @@
         {
             int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
+            CompetenciaCargoValidator validator = new CompetenciaCargoValidator();
+            ValidationResult resultValidator = validator.Validate(competenciaCargo, "TipoCompetencia", "Puntaje");
+            bool result = validarPuntajeCero(competenciaCargo);
             try
             {
-                if (!ModelState.IsValid)
+                if (!resultValidator.IsValid)
                 {
-                    var competenciaViewModel = InicializarCompetencias();
-                    competenciaViewModel.Competencia = competenciaCargo;
-                    return View("Competencia", competenciaViewModel);
+                    if (!result)
+                    {
+                        objJsonMessage.Mensaje = "Verifique los datos ingresados";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
                 if (existe(competenciaCargo.TipoCompetencia))
                 {
@@ -174,6 +181,16 @@
                 result = true;
             }
 
+            return result;
+        }
+
+        public bool validarPuntajeCero(CompetenciaCargo competencia)
+        {
+            bool result = false;
+            if ((Convert.ToInt32(competencia.Puntaje) == 0) && (competencia.TipoCompetencia !="00"))
+            {
+                result = true;
+            }
             return result;
         }
 

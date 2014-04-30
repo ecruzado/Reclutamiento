@@ -10,7 +10,8 @@
 }
 
 @section Scripts{
-    <script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 
@@ -20,6 +21,8 @@
     $(document).ready(function () {
 
         $("#tabs").tabs();
+
+        SanPablo.Numeros('SolicitudRequerimiento_NumVacantes');
 
         var ideSolicitudAmpliacion = $("#SolicitudRequerimiento_IdeSolReqPersonal").val();
         if (ideSolicitudAmpliacion == "") {
@@ -694,7 +697,7 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small" })
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small" , maxlength="2" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.NumVacantes)
                                 </div>
@@ -709,7 +712,7 @@
                          <div class="">
                             <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" })
+                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", onkeyup="aMays(event, this)" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Observacion)
                              </div>
@@ -722,7 +725,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Motivos <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" })
+                                @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" , onkeyup="aMays(event, this)" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Motivo)
                                 </div>

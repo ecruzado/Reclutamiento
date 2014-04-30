@@ -65,13 +65,17 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripcion con un mínimo de 5 y un máximo de 255 caracteres");
 
-            RuleFor(X=>X.FechaPublicacion)
-                .GreaterThan(new DateTime(1980, 01, 01))
-                .WithMessage("Ingresar fecha de Publicación válida");
+            //RuleFor(X => X.FechaPublicacion)
+            //    .NotEmpty()
+            //    .WithMessage("Ingresar fecha de publicación");
+            //    //.GreaterThan(new DateTime(DateTime.Now()))
+            //    //.WithMessage("Ingresar fecha de Publicación válida");
 
-            RuleFor(X => X.FechaExpiracion)
-               .GreaterThan(new DateTime(1980, 01, 01))
-               .WithMessage("Ingresar fecha de Expiración válida");
+            //RuleFor(X => X.FechaExpiracion)
+            //    .NotEmpty()
+            //    .WithMessage("Ingresar fecha de Expiración");
+               //.GreaterThan(new DateTime(DateTime.Now()))
+               //.WithMessage("Ingresar fecha de Expiración válida");
 
         }
     }

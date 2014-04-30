@@ -66,6 +66,7 @@
         public virtual JsonResult Estudios(GridTable grid)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
+            
             try
             {
 
@@ -100,6 +101,9 @@
         public virtual JsonResult Conocimientos(GridTable grid)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
+            
+            List<ConocimientoGeneralCargo> lista = new List<ConocimientoGeneralCargo>();
+
             try
             {
 
@@ -107,20 +111,20 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralCargo>();
-                where.Add(Expression.Eq("Cargo.IdeCargo", IdeCargo));
+                lista = _conocimientoCargoRepository.listarConocimientosPublicacion(IdeCargo);
 
-                var generic = Listar(_conocimientoCargoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
-                    {
-                        id = item.IdeConocimientoGeneralCargo.ToString(),
-                        cell = new string[]
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeConocimientoGeneralCargo.ToString(),
+                    cell = new string[]
                             {
-                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionConocimientoGeneral==null?"":item.DescripcionConocimientoGeneral.ToString(),
+                                item.NombreConocimientoGeneral==null?"":item.NombreConocimientoGeneral.ToString(),
                             }
-                    }).ToArray();
+                }).ToArray();
 
                 return Json(generic.Value);
             }

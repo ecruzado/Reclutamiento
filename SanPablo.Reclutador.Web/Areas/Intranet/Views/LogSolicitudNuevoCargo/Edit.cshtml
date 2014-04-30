@@ -45,7 +45,7 @@
             </td>
             <td class="colImput" style="width:50px"></td>
             <td>
-                @Html.RadioButtonFor(model => model.Aprobado, "false", new { @id="Rechazado"}) Rechazar 
+                @Html.RadioButtonFor(model => model.Aprobado, "false", new { @id="Rechazado"}) @Html.DisplayFor(model =>model.rechazadoObservado)
             </td>
         </tr>
     </table>

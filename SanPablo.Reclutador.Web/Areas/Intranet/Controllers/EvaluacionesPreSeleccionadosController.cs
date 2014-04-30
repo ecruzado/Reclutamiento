@@ -140,6 +140,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.IdeEvaluacion==0?"":item.IdeEvaluacion.ToString(),
                                 item.DescripcionExamen==null?"":item.DescripcionExamen,
                                 item.TipoExamen==null?"":item.TipoExamen,
+                                item.DescripcionTipoExamen == null?"":item.DescripcionTipoExamen,
                                 item.FechaEvaluacion==null?"":String.Format("{0:dd/MM/yyyy}",item.FechaEvaluacion),
                                 item.HoraEvaluacion==null?"":String.Format("{0:hh:mm tt}",item.HoraEvaluacion),
                                 item.IdeUsuarioResponsable==0?"":item.IdeReclutamientoPersona.ToString(),
@@ -506,6 +507,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult existeResultado(int idRE)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+
+            var indicador = _reclutamientoPersonaExamenRepository.existeResultado(idRE);
+
+            if (indicador == Indicador.No)
+            {
+                objJsonMessage.Resultado = false;
+            }
+            else
+            {
+                objJsonMessage.Resultado = true;
+            }
+           
+            return Json(objJsonMessage);
+ 
+        }
 
         public ActionResult ResultadoEvaluacion(int idRP, int idRE)
         {

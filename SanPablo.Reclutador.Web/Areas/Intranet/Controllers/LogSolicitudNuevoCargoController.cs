@@ -91,6 +91,15 @@
 
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.Observacion = "";
 
+            if ((solicitud.TipoEtapa == Etapa.Generacion_Perfil) || (solicitud.TipoEtapa == Etapa.Observado))
+            {
+                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Observado";
+            }
+            else
+            {
+                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Rechazado";
+            }
+
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
@@ -128,21 +137,28 @@
                         break;
 
                     case Etapa.Generacion_Perfil:
-                        logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
-                        logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
-                        break;
-
+                        if (model.Aprobado == true)
+                        {
+                            logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
+                            logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
+                            break;
+                        }
+                        else
+                        {
+                            logSolicitud.TipoEtapa = Etapa.Observado;
+                            logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            break;
+                        }
                     case Etapa.Aprobacion_Perfil:
                         logSolicitud.TipoEtapa = Etapa.Aceptado;
                         var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
                         logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
                         break;
 
-                    case Etapa.Observado:
-                        logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
-                        logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
-                        break;
-
+                    //case Etapa.Observado:
+                    //    logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
+                    //    logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
+                    //    break;
                 }
                 if (model.Aprobado)
                 {
@@ -150,9 +166,20 @@
                 }
                 else
                 {
-                    logSolicitud.TipoEtapa = Etapa.Rechazado;
-                    logSolicitud.RolResponsable = Roles.Jefe;
-                    indArea = "SI";
+                    if (logSolicitud.TipoEtapa != Etapa.Observado)
+                    {
+                        logSolicitud.TipoEtapa = Etapa.Rechazado;
+
+                        var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
+
+                        logSolicitud.RolResponsable = logSolicitudInicial.RolSuceso;
+                        logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioResponsable;
+
+                        if ((logSolicitud.RolResponsable == Roles.Jefe) || (logSolicitud.RolResponsable == Roles.Gerente))
+                        {
+                            indArea = "SI";
+                        }
+                    }
                 }
 
 

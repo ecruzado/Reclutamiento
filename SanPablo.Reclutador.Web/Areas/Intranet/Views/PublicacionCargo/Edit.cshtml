@@ -12,8 +12,24 @@
         
     $(document).ready(function () {
 
-        $("#txtfechapublicacion").datepicker();
-        $("#txtfechaexpiracion").datepicker();
+        var dateToday = new Date();
+        var dates = $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            //defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: dateToday,
+            onSelect: function(selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker");
+                //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                //dates.not(this).datepicker("option", option, date);
+            }
+        });
+
+        $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').attr("readonly", "readonly");
 
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
@@ -23,22 +39,38 @@
             buttons: {
                 "Aceptar": function (e) {
                     e.preventDefault();
-                    var result = $('#publicacionCargoForm').valid();
-                    if (result) {
+                    //var result = $('#publicacionCargoForm').valid();
+                    //if (result) {
+                        $("#updateDialogConfirmacion").dialog("close");
+                        $.blockUI({
+                            message: '<h1>Publicando...</h1>',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }
+                        });
                         $.post('@Url.Action("Edit", "PublicacionCargo")',
                         $("#publicacionCargoForm").serialize(),
                         function (respuesta) {
                             if (respuesta.Resultado) {
-                                $("#updateDialogConfirmacion").dialog("close");
-                                  notificacionExito("Requerimiento Publicado exitosamente");
+                                $.unblockUI();
+                                MostrarMensaje("Requerimiento Publicado exitosamente", "Sistema de reclutamiento y selección de personal");
                             }
                             else {
-                                $("#updateDialogConfirmacion").dialog("close");
-                                notificacionExito(respuesta.Mensaje);
+                                $.unblockUI();
+                                MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
                             }
                         });
-                    }
-                    else { $("#updateDialogConfirmacion").dialog("close"); notificacionExito("Verificar los datos registrados"); }
+                    //}
+                    //else {
+                    //    $("#updateDialogConfirmacion").dialog("close");
+                    //    MostrarMensaje("Verificar los datos registrados","Mensaje");
+                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
@@ -127,8 +159,9 @@
             url: '@Url.Action("Conocimientos", "PublicacionCargo")',
               datatype: 'json',
               mtype: 'POST',
-              colNames: ['Descripci&oacuten'],
+              colNames: ['TipoConocimiento', 'Descripci&oacuten'],
               colModel: [
+                      { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
                       { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
               ],
               sortname: 'IdeConocimientoGeneralCargo',
@@ -183,8 +216,10 @@
 
     function publicarSolicitud()
     {
-        var dialogDiv = $('#updateDialogConfirmacion');
-        dialogDiv.dialog('open');
+        if (valida()) {
+            var dialogDiv = $('#updateDialogConfirmacion');
+            dialogDiv.dialog('open');
+        }
     }
     function mensajeResultado(mensaje) {
         $("#spanMensaje").html(mensaje);
@@ -196,6 +231,37 @@
             }
         });
     }
+
+    function valida() {
+
+        var fechaInicial = $('#SolicitudCargo_FechaPublicacion').val();
+        var fechaFinal = $('#SolicitudCargo_FechaExpiracion').val();
+
+        var observacion = $('#SolicitudCargo_ObservacionPublicacion').val();
+
+        if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+
+            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            return false;
+        }
+
+        if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+            return false;
+        }
+
+        if ((observacion.length == 0) || (observacion.length > 255))
+        {
+            MostrarMensaje('Ingresar una observación, máx. 255 caracteres', "Mensaje");
+            return false;
+        }
+
+        
+
+        return true;
+
+    }
+
 </script>
 
 }  
@@ -227,7 +293,7 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Tipo</td>
                         <td class="controls">
-                            @Html.TextBoxFor(Model=>Model.TipoHorario, new {@class="input-small", @disabled="disabled"})
+                            @Html.TextBoxFor(Model=>Model.TipoHorario, new {@disabled="disabled"})
                             @*<input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">*@
                         </td>
                     </tr>
@@ -250,20 +316,20 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
-                            @Html.EditorFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"  })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
+                            @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
+                           @* <div class="tex-error" style="font-size:12px;color:red"> 
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
-                            </div>
+                            </div>*@
                         </td>
                     </tr>
 
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
-                            @Html.EditorFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Final" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
+                            @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            @*<div class="tex-error" style="font-size:12px;color:red"> 
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
-                            </div>
+                            </div>*@
                         </td>
                     </tr>
                     
@@ -365,7 +431,10 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px"})
+                            @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)"})
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
+                            </div>
                          </div>
                         </td>
                     </tr>   

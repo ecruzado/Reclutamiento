@@ -126,7 +126,7 @@
                 case Etapa.Generacion_Perfil:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
-                                  + tipoRequerimiento + " en la Sede " + Sede + " y se requiere de su Aprobación/Rechazo como Encargado de Seleccion para continuar con el procedimiento.";
+                                  + tipoRequerimiento + " en la Sede " + Sede + " y se requiere de su Aprobación/Rechazo como Solicitante para continuar con el procedimiento.";
                         asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
                         break;
                     }

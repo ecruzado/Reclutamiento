@@ -11,6 +11,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+       
+
         SanPablo.Numeros('SolicitudNuevoCargo_NumeroPosiciones');
         var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
         if (estado == "I")
@@ -34,6 +36,7 @@
                     e.preventDefault();
                     var result = $('#LogSolicitudNuevoCargoForm').valid();
                     if (result) {
+                        
                         $("#spnMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
                         $("#divMensaje").dialog({
                             title: 'Sistema de reclutamiento y Selección de personal',
@@ -42,6 +45,19 @@
                                 text: "Si",
                                 click: function () {
                                     $(this).dialog("close");
+                                    $('#updateDialogAprobacion').dialog("close");
+                                    $.blockUI({
+                                        message: '<h1>Enviando...</h1>',
+                                        css: {
+                                            border: 'none',
+                                            padding: '15px',
+                                            backgroundColor: '#000',
+                                            '-webkit-border-radius': '10px',
+                                            '-moz-border-radius': '10px',
+                                            opacity: .5,
+                                            color: '#fff'
+                                        }
+                                    });
                                         enviarAprobacionRechazo();
                                 }},{
                                 text:"No",
@@ -51,6 +67,7 @@
                        
                     }
                     else {
+                        $.unblockUI();
                         notificacionError("ERROR: Verifique que los datos ingresados son correctos");
                     }
                 },
@@ -71,10 +88,23 @@
                     var result = $('#solicitudNuevoCargoForm').valid();
                     var codigo = $('#SolicitudNuevoCargo_CodigoCargo').val();
                     if (result) {
+                        $.blockUI({
+                            message: '<h1>Enviando...</h1>',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }
+                        });
                         $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
                         $("#solicitudNuevoCargoForm").serialize(),
                         function (respuesta) {
-                             if (respuesta.Resultado) {
+                            if (respuesta.Resultado) {
+                                $.unblockUI();
                                 $("#updateDialogConfirmacion").dialog("close");
                                 $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
                                 deshabilitarControles();
@@ -83,6 +113,7 @@
                                 
                             }
                             else {
+                                $.unblockUI();
                                 $("#updateDialogConfirmacion").dialog("close");
                                 MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
                             }
@@ -123,6 +154,7 @@
         $('select#SolicitudNuevoCargo_IdeDepartamento').change(function () {
             var ideDepartamento = $(this).val();        
             $.ajax({
+                async: "false",
                 type: "POST",
                 url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
                 data: { ideDepartamento: ideDepartamento },
@@ -169,11 +201,15 @@
              $('#LogSolicitudNuevoCargoForm').serialize(),
              function (respuesta) {
                  if (respuesta.Resultado) {
-                     $('#updateDialogAprobacion').dialog("close");
-                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
+                    
+                     $.unblockUI();
+                     MostrarMensaje("Aprobación/Rechazo enviado exitosamente", "Sistema de reclutamiento y selección de personal");
+                     //notificacionExito();
                  }
                  else {
-                     notificacionError(respuesta.Mensaje);
+                     $.unblockUI();
+                     MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                     // notificacionError(respuesta.Mensaje);
                  }
               }
         );
@@ -202,6 +238,7 @@
     {
         var codCodigo = $("#SolicitudNuevoCargo_CodigoCargo").val();
         $.ajax({
+            async: "false",
             data: { codCodigo: codCodigo },
             type: "POST",
             url: '@Url.Action("verificarCodigo", "SolicitudNuevoCargo")',
@@ -227,6 +264,7 @@
     }
     function actualizarCodigo(codigo) {
         $.ajax({
+            async: "false",
             data: { codigo: codigo },
             type: "POST",
             url: '@Url.Action("recuperarCodigoSolicitud", "SolicitudNuevoCargo")',
@@ -277,6 +315,11 @@
         $('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
         $('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
         $('#btnEnviar').removeAttr("disabled");
+    }
+
+    function bloquearPantalla()
+    {
+        
     }
 
 </script>
@@ -379,7 +422,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Nro. Posiciones</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class ="input-mini"})
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class = "input-mini", maxlength = "2" })
                                     </div>
                                 </div>
                             </td> 
@@ -500,5 +543,5 @@
 </div>    
   
 <div id="divMensajeOtro">
-    <span id="spnMensajeOtro"></span>
+    <spn id="spnMensajeOtro"></spn>
 </div>    

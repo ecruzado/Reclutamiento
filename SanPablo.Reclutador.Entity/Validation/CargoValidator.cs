@@ -23,10 +23,12 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .Length(1, 255)
                 .WithMessage("El campo no debe sobrepasar los 255 caracteres");
 
+            //pestaña General
+
             RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el puntaje para el postulante interno")
-                .ExclusiveBetween(0,10)
+                .ExclusiveBetween(0, 10)
                 .WithMessage("el rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.EdadInicio)
@@ -34,14 +36,14 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .WithMessage("Debe ingresar el inicio de rango de edad");
             RuleFor(x => x.EdadInicio)
                 .ExclusiveBetween(18, 99)
-                .WithMessage("Verifíque el dato ingresado");
+                .WithMessage("El postulante debe ser mayor de edad");
 
             RuleFor(x => x.EdadFin)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el fin de rango de edad");
             RuleFor(x => x.EdadFin)
                 .ExclusiveBetween(18, 99)
-                .WithMessage("Verifíque el dato ingresado");
+                .WithMessage("Postulante mayor de edad");
 
             RuleFor(x => x.PuntajeEdad)
                 .NotEmpty()

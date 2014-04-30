@@ -17,8 +17,8 @@
                .NotEmpty()
                .WithMessage("Ingresar Puntaje");
             RuleFor(x => x.Puntaje)
-                .InclusiveBetween(0, 10)
-                .WithMessage("Ingresar un puntaje entre 0 y 10");
+                .InclusiveBetween(0,10)
+                .WithMessage("Ingresar un puntaje de 0 a 10");
 
          }
 

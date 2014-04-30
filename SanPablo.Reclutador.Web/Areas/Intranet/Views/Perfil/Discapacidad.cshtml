@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/LayoutCargo.cshtml";
 }
 @section ScriptsCargo{ 
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnAgregarDiscapacidad').click(function () {
@@ -49,7 +52,7 @@
             if (ideDiscapacidad != null) {
                 $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje11").dialog({
-                    title: 'SAN PABLO',
+                    title: 'Sistema de reclutamiento y selección de personal',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },
@@ -60,14 +63,7 @@
                 return false;
             }
             else {
-                $("#spanMensaje11").html('Seleccionar un item a eliminar');
-                $("#divMensaje11").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+                mostrarMensaje('Seleccionar un item a eliminar');
             }
         });
 
@@ -77,14 +73,7 @@
                 mostrarEditarDiscapacidad(ideDiscapacidad);
             }
             else {
-                $("#spanMensaje11").html('Seleccionar un item a editar');
-                $("#divMensaje11").dialog({
-                    title: 'SAN PABLO',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+                mostrarMensaje('Seleccionar un item a editar');
             }
         });
 
