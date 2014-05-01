@@ -213,41 +213,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="cTipSol">tipo de solicitud</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult EliminaSolicitud(int idSol,string cTipSol)
+        public ActionResult EliminaSolicitud(int id, string Tipsol)
         {
             JsonMessage objJson = new JsonMessage();
-            int indSol;
-            string mensaje;
+           
 
             SolReqPersonal objSol = new SolReqPersonal();
 
-            objSol.IdeSolReqPersonal = idSol;
-            objSol.Tipsol = cTipSol;
+            objSol.IdeSolReqPersonal = id;
+            objSol.Tipsol = Tipsol;
+            objSol.idRolSuceso = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+            objSol.idUsuarioSuceso = (Session[ConstanteSesion.Usuario] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Usuario]));
 
             try
             {
-                indSol = _solReqPersonalRepository.EliminaSol(objSol);
-
-                if (indSol == 0)
-                {
-                    mensaje = "No se puede eliminar la solicitud";
-                    objJson.Resultado = false;
-                }
-                else
-                {
-                    mensaje = "Se elemino la solicitud";
-                    objJson.Resultado = true;
-                }
-
+                objSol = _solReqPersonalRepository.EliminaSol(objSol);
+            
             }
             catch (Exception ex)
             {
-                mensaje = "No se puede eliminar la solicitud";
-                objJson.Resultado = false;
+               MensajeError(ex.Message);
             }
 
-            objJson.Mensaje = mensaje;
+            objJson.Mensaje = objSol.Mensaje;
 
+            if (objSol.IdRespuesta == 0)
+            {
+                objJson.Resultado = false;
+            }
+            if (objSol.IdRespuesta == 1)
+            {
+                objJson.Resultado = true;
+            }
 
             return Json(objJson);
         }

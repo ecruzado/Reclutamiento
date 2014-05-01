@@ -20,9 +20,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("DtReporteSeleccion")]
+    [global::System.Xml.Serialization.XmlRootAttribute("dsReporteSeleccion")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class DtReporteSeleccion : global::System.Data.DataSet {
+    public partial class dsReporteSeleccion : global::System.Data.DataSet {
         
         private DtReporteSeleccionDataTable tableDtReporteSeleccion;
         
@@ -30,7 +30,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public DtReporteSeleccion() {
+        public dsReporteSeleccion() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -41,7 +41,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected DtReporteSeleccion(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected dsReporteSeleccion(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -79,7 +79,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public DtReporteSeleccionDataTable _DtReporteSeleccion {
+        public DtReporteSeleccionDataTable DtReporteSeleccion {
             get {
                 return this.tableDtReporteSeleccion;
             }
@@ -127,7 +127,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            DtReporteSeleccion cln = ((DtReporteSeleccion)(base.Clone()));
+            dsReporteSeleccion cln = ((dsReporteSeleccion)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -199,9 +199,9 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "DtReporteSeleccion";
+            this.DataSetName = "dsReporteSeleccion";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/DtReporteSeleccion.xsd";
+            this.Namespace = "http://tempuri.org/dsReporteSeleccion.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableDtReporteSeleccion = new DtReporteSeleccionDataTable();
@@ -210,7 +210,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private bool ShouldSerialize_DtReporteSeleccion() {
+        private bool ShouldSerializeDtReporteSeleccion() {
             return false;
         }
         
@@ -225,7 +225,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            DtReporteSeleccion ds = new DtReporteSeleccion();
+            dsReporteSeleccion ds = new dsReporteSeleccion();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -330,6 +330,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             private global::System.Data.DataColumn columnUSRSUCESO;
             
             private global::System.Data.DataColumn columnTIPETAPA;
+            
+            private global::System.Data.DataColumn columnDESTIPSOL;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -574,6 +576,14 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DESTIPSOLColumn {
+                get {
+                    return this.columnDESTIPSOL;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -635,7 +645,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         string MOTIVOCIERRE, 
                         string IDESEDE, 
                         string USRSUCESO, 
-                        string TIPETAPA) {
+                        string TIPETAPA, 
+                        string DESTIPSOL) {
                 DtReporteSeleccionRow rowDtReporteSeleccionRow = ((DtReporteSeleccionRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         IDESOLREQPERSONAL,
@@ -663,7 +674,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         MOTIVOCIERRE,
                         IDESEDE,
                         USRSUCESO,
-                        TIPETAPA};
+                        TIPETAPA,
+                        DESTIPSOL};
                 rowDtReporteSeleccionRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDtReporteSeleccionRow);
                 return rowDtReporteSeleccionRow;
@@ -712,6 +724,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 this.columnIDESEDE = base.Columns["IDESEDE"];
                 this.columnUSRSUCESO = base.Columns["USRSUCESO"];
                 this.columnTIPETAPA = base.Columns["TIPETAPA"];
+                this.columnDESTIPSOL = base.Columns["DESTIPSOL"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -769,8 +782,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnUSRSUCESO);
                 this.columnTIPETAPA = new global::System.Data.DataColumn("TIPETAPA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTIPETAPA);
-                this.ExtendedProperties.Add("Generator_TablePropName", "_DtReporteSeleccion");
-                this.ExtendedProperties.Add("Generator_UserTableName", "DtReporteSeleccion");
+                this.columnDESTIPSOL = new global::System.Data.DataColumn("DESTIPSOL", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDESTIPSOL);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -838,7 +851,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DtReporteSeleccion ds = new DtReporteSeleccion();
+                dsReporteSeleccion ds = new dsReporteSeleccion();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1332,6 +1345,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DESTIPSOL {
+                get {
+                    try {
+                        return ((string)(this[this.tableDtReporteSeleccion.DESTIPSOLColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DESTIPSOL\' in table \'DtReporteSeleccion\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDtReporteSeleccion.DESTIPSOLColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIDESOLREQPERSONALNull() {
                 return this.IsNull(this.tableDtReporteSeleccion.IDESOLREQPERSONALColumn);
             }
@@ -1640,6 +1669,18 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetTIPETAPANull() {
                 this[this.tableDtReporteSeleccion.TIPETAPAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDESTIPSOLNull() {
+                return this.IsNull(this.tableDtReporteSeleccion.DESTIPSOLColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDESTIPSOLNull() {
+                this[this.tableDtReporteSeleccion.DESTIPSOLColumn] = global::System.Convert.DBNull;
             }
         }
         

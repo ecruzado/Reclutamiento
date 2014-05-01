@@ -281,6 +281,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reportes\Intranet\dsReporteSeleccion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReporteSeleccion.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reportes\Intranet\ReportePostulantePotencial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -322,16 +327,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\Intranet\dsReportePostulanteBD.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\Intranet\DtReporteSeleccion.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reportes\Intranet\ExamenPostulanteReport.cs">
       <AutoGen>True</AutoGen>
@@ -558,6 +553,7 @@
     <Content Include="Areas\Intranet\Views\ReportePostulanteBD\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReportePostulantePotencial\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\ReporteResumeRQ\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Seguridad\View1.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
@@ -595,9 +591,6 @@
     <Content Include="Reportes\Intranet\dsExamenPostulante.xss">
       <DependentUpon>dsExamenPostulante.xsd</DependentUpon>
     </Content>
-    <Content Include="Reportes\Intranet\DtReporteSeleccion.xsc">
-      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
-    </Content>
     <None Include="Reportes\Intranet\dsReportePostulanteBD.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -617,19 +610,22 @@
     <Content Include="Reportes\Intranet\dsReportePostulantePotencial.xss">
       <DependentUpon>dsReportePostulantePotencial.xsd</DependentUpon>
     </Content>
-    <None Include="Reportes\Intranet\DtReporteSeleccion.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsReportePostulanteBD.Designer.cs</LastGenOutput>
-    </None>
     <Content Include="Reportes\Intranet\dsReportePostulanteBD.xss">
       <DependentUpon>dsReportePostulanteBD.xsd</DependentUpon>
     </Content>
-    <Content Include="Reportes\Intranet\DtReporteSeleccion.xss">
-      <DependentUpon>DtReporteSeleccion.xsd</DependentUpon>
-    </Content>
     <Content Include="Reportes\Intranet\ResumenRQ.xsc">
       <DependentUpon>ResumenRQ.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reportes\Intranet\dsReporteSeleccion.xsc">
+      <DependentUpon>dsReporteSeleccion.xsd</DependentUpon>
+    </Content>
+    <None Include="Reportes\Intranet\dsReporteSeleccion.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReporteSeleccion.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reportes\Intranet\dsReporteSeleccion.xss">
+      <DependentUpon>dsReporteSeleccion.xsd</DependentUpon>
     </Content>
     <None Include="Reportes\Intranet\ResumenRQ.xsd">
       <SubType>Designer</SubType>

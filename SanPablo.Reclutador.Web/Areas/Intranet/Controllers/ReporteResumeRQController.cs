@@ -260,10 +260,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 string indBusqueda = (grid.rules[4].data == null ? "N" : grid.rules[4].data);
 
-                if (Indicador.Si.Equals(indBusqueda))
-                {
-                    listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
-                }
+               
+                listaReporte = _solReqPersonalRepository.GetListaReporteResumen(objReporte);
 
                 Session[ConstanteSesion.ReporteResumen] = objReporte;
 
@@ -343,7 +341,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 int cantCol = 8;
 
                 //adiciona el titulo excel
-                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "Resumen de Requerimientos", styleTitulo);
+                objGeneraExcel.addTituloExcel(1, 1, 1, cantCol, "RESUMEN DE REQUERIMIENTOS", styleTitulo);
 
                 //adiciona la imagen
                 objGeneraExcel.AdicionaLogoSanPablo(dir, 1, 2, 0, 4);
@@ -465,16 +463,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 rep.Database.Tables["ResumenRQ"].SetDataSource(dtResultado);
                 
                 ParameterValues values1 = new ParameterValues();
+
+                ParameterValues valFechaDesde = new ParameterValues();
+                ParameterValues valFechaHasta = new ParameterValues();
+
                 ParameterDiscreteValue discretevalue = new ParameterDiscreteValue();
-                
+
+                ParameterDiscreteValue discretevalueFechaDesde = new ParameterDiscreteValue();
+                ParameterDiscreteValue discretevalueFechaHasta = new ParameterDiscreteValue();
+
+
                 string NombUsuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 discretevalue.Value = NombUsuario;
                 values1.Add(discretevalue);
 
+                discretevalueFechaDesde.Value = objReporte.FechaInicio;
+                discretevalueFechaHasta.Value = objReporte.FechaFin;
+
+                valFechaDesde.Add(discretevalueFechaDesde);
+                valFechaHasta.Add(discretevalueFechaHasta);
 
                 rep.DataDefinition.ParameterFields["usuario_sesion"].ApplyCurrentValues(values1);
 
-
+                rep.DataDefinition.ParameterFields["FechaDesde_sesion"].ApplyCurrentValues(valFechaDesde);
+                rep.DataDefinition.ParameterFields["FechaHasta_sesion"].ApplyCurrentValues(valFechaHasta);
 
                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
