@@ -25,6 +25,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public string btnActivarDesactivar { get; set; }
 
+        public string btnRanking { get; set; }
+        public string btnPreSeleccion { get; set; }
+
     }
 
 }

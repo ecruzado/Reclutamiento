@@ -401,6 +401,7 @@
     <Content Include="Content\images\user4.png" />
     <Content Include="Content\images\yellow.png" />
     <Content Include="Content\jqGrid.overrides.css" />
+    <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\ui.jqgrid.css" />
     <Content Include="Global.asax" />
@@ -520,6 +521,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
     <Content Include="Scripts\html5shiv-printshiv.js" />
     <Content Include="Scripts\html5shiv.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
     <Content Include="Scripts\ui.datepicker-es.js" />
     <Content Include="TemplateEmail\Bienvenido.htm" />

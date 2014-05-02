@@ -38,6 +38,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IExperienciaRequerimientoRepository _experienciaRequerimientoRepository;
         private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
         private IUsuarioRepository _usuarioRepository;
+        private IRolRepository _rolRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -52,7 +53,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ICompetenciaRequerimientoRepository CompetenciaRequerimientoRepository,
             IExperienciaRequerimientoRepository experienciaRequerimientoRepository,
             IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository,
-            IUsuarioRepository usuarioRepository
+            IUsuarioRepository usuarioRepository,
+            IRolRepository rolRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -69,6 +71,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _experienciaRequerimientoRepository = experienciaRequerimientoRepository;
             _ofrecemosRequerimientoRepository = ofrecemosRequerimientoRepository;
             _usuarioRepository = usuarioRepository;
+            _rolRepository = rolRepository;
         }
 
         
@@ -902,15 +905,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         {
                             List<UsuarioRolSede> listaUsuarios = (List<UsuarioRolSede>)ObjUsuarioResp;
                             UsuarioRolSede usuarioRolSede = (UsuarioRolSede)listaUsuarios[0];
+                            
                             model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
+                            
                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
+
+                            var objRol = _rolRepository.GetSingle(x => x.IdRol == usuarioRolSede.IdRol && x.FlgEstado==IndicadorActivo.Activo);
+                            
                             retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
 
                             var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
 
 
-                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista o encargado de selección : " + objUsuario.CodUsuario;
+                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
 
                             
                         }
@@ -991,6 +999,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             int sede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             string tipoReq=null;
             SolReqPersonal objSolReqPersonal = null;
+            string mensaje = "";
 
 
             if (model.SolReqPersonal.CodSolReqPersonal!=null)
@@ -1005,6 +1014,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+
+
+                    
 
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     if (aprobacion)
@@ -1021,6 +1033,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.LogSolReqPersonal.UsResponsable = objSolReqPersonal.idUsuarioResp;
                             model.LogSolReqPersonal.RolResponsable = objSolReqPersonal.IdRolResp;
                            
+                            var objRol = _rolRepository.GetSingle(x => x.IdRol == objSolReqPersonal.IdRolResp && x.FlgEstado == IndicadorActivo.Activo);
 
                             _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
 
@@ -1041,7 +1054,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         if (retorno>0)
                         {
                             objJson.Resultado = true;
-                            objJson.Mensaje = "Se Realizo la aprobación de la solicitud";
+                            mensaje = "Se Realizo la aprobación de la solicitud de reemplazo: " + model.SolReqPersonal.CodSolReqPersonal + " , se envio la solicitud al usuario:" + objUsuario.CodUsuario + " con rol:" + objRol.DscRol;
                         }
                     }
                     else
@@ -1061,7 +1074,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         if (retorno > 0)
                         {
                             objJson.Resultado = true;
-                            objJson.Mensaje = "Se rechazo la solicitud";
+                            mensaje = "Se rechazo la solicitud";
                         }
                     }
                     
@@ -1074,11 +1087,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objJson.Resultado = true;
                 if (aprobacion)
                 {
-                    objJson.Mensaje = "Se aprobo la solicitud";
+                    objJson.Mensaje = mensaje;
                 }
                 else
                 {
-                    objJson.Mensaje = "Se rechazo la solicitud";
+                    objJson.Mensaje = mensaje;
                 }
             }
           
