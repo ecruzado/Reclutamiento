@@ -617,6 +617,25 @@
             buttons: {
                 "Si": function () {
 
+
+                    $('#DialogAprobReem').dialog('close');
+                    $('#popupDialogAprobReem').dialog('close');
+                    //bloqueo
+                    $.blockUI({
+                        message: '<h1>Procesando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
+
+
+
                     $.ajax({
                         data: $("#frmPopupAprobReem").serialize(),
                         type: "POST",
@@ -624,16 +643,16 @@
                         url: '@Url.Action("SetPopupAprobReem", "SolicitudCargo")',
                             traditional: true,
                             success: function (data) {
+
+                                //desbloqueo
+                                $.unblockUI();
+
+
                                 if (data.Resultado) {
-                                    //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                    $('#DialogAprobReem').dialog('close');
-                                    $('#popupDialogAprobReem').dialog('close');
+                                    //$('#DialogAprobReem').dialog('close');
+                                    //$('#popupDialogAprobReem').dialog('close');
 
                                     MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-
-                                    
-                                   
-
                                 }
                             }
                         });
@@ -779,6 +798,7 @@
 
 
     function mostrarPopuprAprobacion(id) {
+
         var dialogDiv = $('#popupDialogAprobReem');
 
         $.get('@Url.Action("InicioPopupAprobReem", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id, function (data) {

@@ -72,6 +72,46 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model = InicializarListaReemplazo(Convert.ToInt32(sede));
                     model.SolicitudRequerimiento = new SolReqPersonal();
                 }
+
+
+                //accesos de botones
+                int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+                if (Roles.Administrador_Sistema.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
+                else if (Roles.Gerente_General_Adjunto.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
+                else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
+                else if(Roles.Jefe.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
+                else if(Roles.Gerente.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
+                else
+                {
+                    model.btnRanking = Visualicion.NO;
+                    model.btnPreSeleccion = Visualicion.NO;
+                }
+                
+
+
+
+
             }
             catch (Exception)
             {
