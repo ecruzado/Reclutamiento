@@ -37,16 +37,16 @@ namespace SanPablo.Reclutador.Entity
         /// <summary>
         /// Fecha de cita del postulante
         /// </summary>
-         [DataType(DataType.Date)]
+        // [DataType(DataType.Date)]
         //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? Fechacita { get; set; }
 
         /// <summary>
         /// hora de cita
         /// </summary>
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
+        //[DataType(DataType.Time)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
         public virtual DateTime? HoraCita { get; set; }
 
         /// <summary>

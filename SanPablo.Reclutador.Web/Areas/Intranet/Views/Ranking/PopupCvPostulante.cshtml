@@ -2,12 +2,39 @@
 @{
     Layout = "";
 }
+@section Head{
+
+     <link href="@Url.Content("~/Content/jquery-ui-timepicker-addon.css")" rel="stylesheet" type="text/css" />
+
+}
 
 
+
+<link href="@Url.Content("~/Content/jquery-ui-timepicker-addon.css")" rel="stylesheet" type="text/css" />
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-timepicker-addon.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('#CvPostulanteEx_HoraCita').attr("readonly", "readonly");
+        $('#CvPostulanteEx_Fechacita').attr("readonly", "readonly");
+
+        $('#CvPostulanteEx_Fechacita').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+        }
+        });
+
+
+        $('#CvPostulanteEx_HoraCita').timepicker({
+            hourGrid: 4,
+            minuteGrid: 10,
+            timeFormat: 'hh:mm tt'
+        });
 
     });
 
@@ -94,7 +121,10 @@
                 <label class="etiquetaFormulario" >Fecha de cita<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.EditorFor(model => model.CvPostulanteEx.Fechacita, new { @class = "textoFormulario" ,  maxlength="15", placeholder="Fecha cita"})                            
+                 @* @Html.EditorFor(model => model.CvPostulanteEx.Fechacita, new { @class = "textoFormulario" ,  maxlength="15", placeholder="Fecha cita"})                            *@
+
+                <input class="input-small" data-val="true"  data-val-required="Ingresar fecha de cita" id="CvPostulanteEx_Fechacita" name="CvPostulanteEx.Fechacita" value="@String.Format("{0:dd/MM/yyyy}", @Model.CvPostulanteEx.Fechacita)" /> 
+                
                 <div class="tex-error" style="font-size:12px;color:red">    
                     @Html.ValidationMessageFor(model => model.CvPostulanteEx.Fechacita)
                 </div>
@@ -106,7 +136,9 @@
                 <label class="etiquetaFormulario" >Hora cita<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita,new { @class = "textoFormulario"})
+                @*  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita,new { @class = "textoFormulario"})*@
+                
+                <input class="input-small" data-val="true" data-val-required="Ingresar hora de cita" id="CvPostulanteEx_HoraCita" name="CvPostulanteEx.HoraCita" value="@String.Format("{0:hh:mm tt}", @Model.CvPostulanteEx.HoraCita)"  >
 
               
                 <div class="tex-error" style="font-size:12px;color:red">    
