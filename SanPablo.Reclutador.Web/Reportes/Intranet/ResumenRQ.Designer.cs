@@ -449,7 +449,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ResumenRQRow AddResumenRQRow(string USRSUCESO, string DESUSUARIO, string SALDO, string REEMPLAZO, string AMPLIACION, string NUEVO, string NO_CUBIERTO, string CUBIERTO, string TOTAL, string SEDE) {
+            public ResumenRQRow AddResumenRQRow(string USRSUCESO, string DESUSUARIO, int SALDO, int REEMPLAZO, int AMPLIACION, int NUEVO, int NO_CUBIERTO, int CUBIERTO, int TOTAL, string SEDE) {
                 ResumenRQRow rowResumenRQRow = ((ResumenRQRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         USRSUCESO,
@@ -503,19 +503,19 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnUSRSUCESO);
                 this.columnDESUSUARIO = new global::System.Data.DataColumn("DESUSUARIO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDESUSUARIO);
-                this.columnSALDO = new global::System.Data.DataColumn("SALDO", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnSALDO = new global::System.Data.DataColumn("SALDO", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSALDO);
-                this.columnREEMPLAZO = new global::System.Data.DataColumn("REEMPLAZO", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnREEMPLAZO = new global::System.Data.DataColumn("REEMPLAZO", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnREEMPLAZO);
-                this.columnAMPLIACION = new global::System.Data.DataColumn("AMPLIACION", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnAMPLIACION = new global::System.Data.DataColumn("AMPLIACION", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAMPLIACION);
-                this.columnNUEVO = new global::System.Data.DataColumn("NUEVO", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnNUEVO = new global::System.Data.DataColumn("NUEVO", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNUEVO);
-                this.columnNO_CUBIERTO = new global::System.Data.DataColumn("NO_CUBIERTO", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnNO_CUBIERTO = new global::System.Data.DataColumn("NO_CUBIERTO", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNO_CUBIERTO);
-                this.columnCUBIERTO = new global::System.Data.DataColumn("CUBIERTO", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnCUBIERTO = new global::System.Data.DataColumn("CUBIERTO", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCUBIERTO);
-                this.columnTOTAL = new global::System.Data.DataColumn("TOTAL", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnTOTAL = new global::System.Data.DataColumn("TOTAL", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTOTAL);
                 this.columnSEDE = new global::System.Data.DataColumn("SEDE", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSEDE);
@@ -695,10 +695,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string SALDO {
+            public int SALDO {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.SALDOColumn]));
+                        return ((int)(this[this.tableResumenRQ.SALDOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'SALDO\' in table \'ResumenRQ\' is DBNull.", e);
@@ -711,10 +711,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string REEMPLAZO {
+            public int REEMPLAZO {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.REEMPLAZOColumn]));
+                        return ((int)(this[this.tableResumenRQ.REEMPLAZOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'REEMPLAZO\' in table \'ResumenRQ\' is DBNull.", e);
@@ -727,10 +727,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string AMPLIACION {
+            public int AMPLIACION {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.AMPLIACIONColumn]));
+                        return ((int)(this[this.tableResumenRQ.AMPLIACIONColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'AMPLIACION\' in table \'ResumenRQ\' is DBNull.", e);
@@ -743,10 +743,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NUEVO {
+            public int NUEVO {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.NUEVOColumn]));
+                        return ((int)(this[this.tableResumenRQ.NUEVOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'NUEVO\' in table \'ResumenRQ\' is DBNull.", e);
@@ -759,10 +759,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NO_CUBIERTO {
+            public int NO_CUBIERTO {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.NO_CUBIERTOColumn]));
+                        return ((int)(this[this.tableResumenRQ.NO_CUBIERTOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'NO_CUBIERTO\' in table \'ResumenRQ\' is DBNull.", e);
@@ -775,10 +775,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string CUBIERTO {
+            public int CUBIERTO {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.CUBIERTOColumn]));
+                        return ((int)(this[this.tableResumenRQ.CUBIERTOColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'CUBIERTO\' in table \'ResumenRQ\' is DBNull.", e);
@@ -791,10 +791,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string TOTAL {
+            public int TOTAL {
                 get {
                     try {
-                        return ((string)(this[this.tableResumenRQ.TOTALColumn]));
+                        return ((int)(this[this.tableResumenRQ.TOTALColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'TOTAL\' in table \'ResumenRQ\' is DBNull.", e);

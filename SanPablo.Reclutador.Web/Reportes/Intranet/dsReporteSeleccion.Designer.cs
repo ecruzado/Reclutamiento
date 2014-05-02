@@ -636,7 +636,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                         string ANALISTA_RESP, 
                         string P_INGRESA, 
                         string FECHA_CONTRATACION, 
-                        string DIAS, 
+                        int DIAS, 
                         string NUMDOCUMENTO, 
                         string FONO, 
                         string OBSPSICOLOGO, 
@@ -762,7 +762,7 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnP_INGRESA);
                 this.columnFECHA_CONTRATACION = new global::System.Data.DataColumn("FECHA_CONTRATACION", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFECHA_CONTRATACION);
-                this.columnDIAS = new global::System.Data.DataColumn("DIAS", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnDIAS = new global::System.Data.DataColumn("DIAS", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDIAS);
                 this.columnNUMDOCUMENTO = new global::System.Data.DataColumn("NUMDOCUMENTO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNUMDOCUMENTO);
@@ -1185,10 +1185,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string DIAS {
+            public int DIAS {
                 get {
                     try {
-                        return ((string)(this[this.tableDtReporteSeleccion.DIASColumn]));
+                        return ((int)(this[this.tableDtReporteSeleccion.DIASColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'DIAS\' in table \'DtReporteSeleccion\' is DBNull.", e);

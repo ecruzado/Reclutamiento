@@ -567,7 +567,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 List<string> lista = new List<string>();
 
                 lista.Add("ESTADO DEL PROCESO");
-                lista.Add("FECHA DE REQUERIMIENTO");
+                lista.Add("FECHA DE PUBLICACION");
                 lista.Add("SEDE");
                 lista.Add("DEPENDENCIA");
                 lista.Add("DEPARTAMENTO");
