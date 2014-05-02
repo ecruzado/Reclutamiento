@@ -122,7 +122,7 @@
                 }
                 @if (Accion.Publicar.Equals(Model.Accion))
                 {
-                    <a class="btn btn-info" href="@Url.Action("Edit", "PublicacionCargo")"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    <a class="btn btn-info" onclick="publicar();" ><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                 }
             </div>
         </div>
@@ -341,31 +341,27 @@
 
     function enviarAprobacionRechazo() {
 
-
-
         $.post('@Url.Action("AprobacionRechazoPerfil", "LogSolicitudNuevoCargo")',
              $("#LogSolicitudNuevoCargoForm").serialize(),
              function (respuesta) {
+                 $.unblockUI();
                  if (respuesta.Resultado) {
-                     
-                     $.unblockUI();
                      mostrarMensaje("Aprobacion/Rechazo enviado exitosamente");
-                     //$("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
-                     //$("#divMensaje").dialog({
-                     //    title: 'SAN PABLO',
-                     //    modal: true,
-                     //    buttons: {
-                     //        "Ok": function () { $(this).dialog("close"); }
-                     //    }
-                     //});
                  }
                  else {
-                     $.unblockUI();
                      notificacionError(respuesta.Mensaje);
                  }
              }
         );
     }
+
+    function publicar()
+    {
+        var pagina = '@TipoSolicitud.Nuevo';
+        var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + "0" + "&pagina=" + pagina;
+        window.location = url;
+    }
+
 
 </script>
 }

@@ -306,33 +306,11 @@
             }
             catch (InvalidCastException e)
             {
-               // throw new Exception("ERROR.", e);
-               // return View("General", postulanteModel);
                 objJsonMessage.Mensaje = "ERROR" + e;
                 objJsonMessage.Resultado = false;
                 return Json(objJsonMessage);
             } 
         }
-        
-        //public String Bytes_A_Imagen(Byte[] ImgBytes)
-        //{
-        //    var rutaImagen = Server.MapPath(@"~/Content/images");
-        //    Guid clave = Guid.NewGuid();
-        //    String DirTemp = rutaImagen + "\\" + clave.ToString()+".jpg";
-
-        //    if (ImgBytes != null)
-        //    {
-        //        //String DirTemp = Path.
-        //        Bitmap imagen = null;
-        //        Byte[] bytes = (Byte[])(ImgBytes);
-        //        MemoryStream ms = new MemoryStream(bytes);
-        //        imagen = new Bitmap(ms);
-        //        imagen.Save(DirTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
-        //        ms.Dispose();
-
-        //    }
-        //    return clave.ToString() + ".jpg";
-        //}
         
         public ActionResult GetImage(int id)
         {
@@ -438,7 +416,6 @@
         public ActionResult validarFechaNacimiento(DateTime date)
         {
             ActionResult result = null;
-            //JsonMessage ObjJson = new JsonMessage();
 
             bool valido = false;
             DateTime fechaValida = DateTime.Now.AddYears(-18);
@@ -447,17 +424,8 @@
             {
                 valido = true;
                 
-                //ObjJson.Resultado = false;
-                //ObjJson.Mensaje = "Ingrese sus estudios";
-                //return Json(ObjJson);
             }
             return result = Json(valido);
-            //else
-            //{
-            //    Postulante postulante = new Postulante();
-
-            //    return View(new Postulante );
-            //}
             
         }
 
@@ -640,7 +608,6 @@
                     System.IO.File.WriteAllBytes(fullPath, content);
 
 
-
                     jsonResponse.Data = new
                     {
                         NombreArchivo = file.FileName,
@@ -700,71 +667,5 @@
             return Json(objMensaje);
         }
 
-
-
-
-        #region ListaOfertasLaborales
-        /// <summary>
-        /// Lista de Ofertas Laborales
-        /// </summary>       
-        [HttpPost]
-        public ActionResult ListaOfertasLaborales(string sidx, string sord, int page, int rows)
-        {
-            ActionResult result = null;
-            List<object> lstFilas = new List<object>();
-
-            var fila1 = new
-            {
-                id = 1,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "13/05/2013",
-                          "Santiago de Surco, Lima",
-                          "Secretaria de Hospitalización",                          
-                          "Tiempo Parcial",    
-                          "15/07/2013",
-                     
-                }
-            };
-            lstFilas.Add(fila1);
-
-            var fila2 = new
-            {
-                id = 2,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "23/05/2013",
-                          "San Juan de Miraflores, Lima",
-                          "Técnico en Enfermería",                          
-                          "Tiempo Completo",            
-                          "15/07/2013",
-                }
-            };
-            lstFilas.Add(fila2);
-
-            var fila3 = new
-            {
-                id = 3,                 // ID único de la fila
-                cell = new string[] {   // Array de celdas de la fila
-                          "23/05/2013",
-                          "Rimac, Lima",
-                          "Ayudante de cocina",                          
-                          "Tiempo Completo",         
-                          "31/07/2013",
-                }
-            };
-            lstFilas.Add(fila3);
-
-            //int totalPag = (int)Math.Ceiling((decimal)totalReg / (decimal)rows);
-            var data = new
-            {
-                //total = totalPag,       // Total de páginas
-                //page = page,            // Página actual
-                //records = totalReg,     // Total de registros (obtenido del modelo)
-                rows = lstFilas
-            };
-            result = Json(data);
-
-            return result;
-        }
-        #endregion
     }
 }

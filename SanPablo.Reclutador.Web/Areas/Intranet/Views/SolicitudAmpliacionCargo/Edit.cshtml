@@ -1,4 +1,5 @@
-﻿@using SanPablo.Reclutador.Web.Models
+﻿
+@using SanPablo.Reclutador.Web.Models
 @model SanPablo.Reclutador.Web.Areas.Intranet.Models.SolicitudAmpliacionCargoViewModel
 @using SanPablo.Reclutador.Entity
 
@@ -484,13 +485,18 @@
         });
 
         $('#btnPublicar').click(function () {
+                
+            var pagina = '@TipoSolicitud.Ampliacion';
 
             if (validaEnvio()) {
 
                 id = $("#SolicitudRequerimiento_IdeSolReqPersonal").val();
 
                 if (id != null && id > 0) {
-                    window.location = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + id;
+
+                    var url = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + id + "&pagina=" + pagina;
+                    window.location = url;
+                   
                 } else {
                     MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }
@@ -809,8 +815,6 @@
                       <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                     }
                
-                
-                
                     if (Accion.Enviar.Equals(Model.Accion))
                     {
                       <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
@@ -820,6 +824,7 @@
                     {
                     <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                     }
+                    
                 }
             </div>
        

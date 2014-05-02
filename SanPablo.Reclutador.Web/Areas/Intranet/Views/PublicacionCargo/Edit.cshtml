@@ -1,4 +1,5 @@
-﻿@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PublicacionViewModel
+﻿@using SanPablo.Reclutador.Entity
+@model SanPablo.Reclutador.Web.Areas.Intranet.Models.PublicacionViewModel
 @{
     ViewBag.Title = "Publicacion";
    
@@ -13,6 +14,7 @@
     $(document).ready(function () {
 
         var dateToday = new Date();
+
         var dates = $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
@@ -28,6 +30,7 @@
                 //dates.not(this).datepicker("option", option, date);
             }
         });
+
 
         $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').attr("readonly", "readonly");
 
@@ -66,11 +69,6 @@
                                 MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
                             }
                         });
-                    //}
-                    //else {
-                    //    $("#updateDialogConfirmacion").dialog("close");
-                    //    MostrarMensaje("Verificar los datos registrados","Mensaje");
-                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
@@ -209,7 +207,45 @@
               }
           });
 
-
+        $('#updateDialogActualizar').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    e.preventDefault();
+                    $("#updateDialogActualizar").dialog("close");
+                    $.blockUI({
+                        message: '<h1>Actualizando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
+                    var fecha = $('#SolicitudCargo_FechaExpiracion').val();
+                    $.post('@Url.Action("ActualizarFechaExpiracion", "PublicacionCargo")',
+                            {fechaExpiracion : fecha},
+                        function (respuesta) {
+                            $.unblockUI();
+                            if (respuesta.Resultado) {
+                                MostrarMensaje("Requerimiento Actualizado exitosamente", "Sistema de reclutamiento y selección de personal");
+                            }
+                            else {
+                                MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                            }
+                        });
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+         });
 
 
     });
@@ -230,6 +266,14 @@
                 "Ok": function () { $(this).dialog("close"); }
             }
         });
+    }
+
+    function actualizarSolitud()
+    {
+        if (valida()) {
+            var dialogDiv = $('#updateDialogActualizar');
+            dialogDiv.dialog('open');
+        }
     }
 
     function valida() {
@@ -256,10 +300,18 @@
             return false;
         }
 
-        
-
         return true;
 
+    }
+
+    function RedireccionaBus() {
+        var pagina = $('#pagina').val();
+
+        if (pagina == "04") {
+            window.location = '@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet"})';
+        } else {
+            window.location = '@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet"})';
+        }
     }
 
 </script>
@@ -274,8 +326,9 @@
         <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
+                @Html.TextBoxFor(model => model.pagina, new { style = "display:none;"})
                 @Html.HiddenFor(model => model.SolicitudCargo.IdeSolicitudNuevoCargo)
-               <h5> @Html.DisplayFor(model=>model.SolicitudCargo.NombreCargo) - SEDE SAN MIGUEL </h5>
+               <h5> @Html.DisplayFor(model=>model.SolicitudCargo.NombreCargo) - SEDE @Html.DisplayFor(model=>model.Sede) </h5>
             </div>
             <form class="form-horizontal well">
                 <fieldset>
@@ -293,7 +346,7 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Tipo</td>
                         <td class="controls">
-                            @Html.TextBoxFor(Model=>Model.TipoHorario, new {@disabled="disabled"})
+                            @Html.TextBoxFor(model=>model.TipoHorario, new {@disabled="disabled"})
                             @*<input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">*@
                         </td>
                     </tr>
@@ -309,7 +362,14 @@
                         <td class="control-label">Rango Salarial</td>
                         <td class="controls">
                             @Html.TextBoxFor(model => model.RangoSalario, new {@disabled = "disabled"})
-                            @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
+                            @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                            {
+                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block" , disabled="disabled"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label> 
+                            }
+                            else
+                            { 
+                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
+                            }
                         </td>
                     </tr>
 
@@ -317,9 +377,7 @@
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
                             @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
-                           @* <div class="tex-error" style="font-size:12px;color:red"> 
-                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
-                            </div>*@
+                          
                         </td>
                     </tr>
 
@@ -327,9 +385,7 @@
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
                             @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
-                            </div>*@
+                           
                         </td>
                     </tr>
                     
@@ -431,10 +487,17 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)"})
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
-                            </div>
+                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                             { 
+                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)", disabled="disabled"})
+                             }
+                             else
+                             {
+                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)"})
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                     @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
+                                </div>
+                             }
                          </div>
                         </td>
                     </tr>   
@@ -445,10 +508,23 @@
                 </fieldset>
             </form>
                   <div class="form-actions"> 
-                     <a class="btn" href="@Url.Action("SolicitudNuevoCargo", "Edit")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                     
-                    <a class="btn btn-info" onclick="publicarSolicitud()"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
-                         
+                      @if(TipoSolicitud.Nuevo.Equals(Model.pagina))
+                      {
+                          <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                      }
+                      else
+                      {
+                          <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                          
+                      }
+                      @if(Visualicion.SI.Equals(Model.btnPublicar))
+                      {
+                          <a class="btn btn-info" onclick="publicarSolicitud()"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                      }
+                      @if(Visualicion.SI.Equals(Model.btnActualizar))
+                      {
+                          <a class="btn btn-info" onclick="actualizarSolitud()"><i class="icon-circle-arrow-up icon-white"></i> Actualizar</a>    
+                      }
                 </div>
 
             </div>
@@ -458,4 +534,5 @@
 }
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de publicar el requerimiento de nuevo cargo?</p></div>
+<div id="updateDialogActualizar" title="CONFIRMACIÓN" ><p>¿Está seguro de actualizar la publicacion de nuevo cargo?</p></div>
 

@@ -1129,7 +1129,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ValidarSesion]
-        public ActionResult Publica(string id) 
+        public ActionResult Publica(string id, string pagina) 
         {
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
@@ -1165,12 +1165,55 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
             }
 
+            if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            {
+                model.btnActualizar = Visualicion.SI;
+                model.btnPublicar = Visualicion.NO;
+            }
+            else
+            {
+                model.btnPublicar = Visualicion.SI;
+                model.btnActualizar = Visualicion.NO;
+            }
 
+            model.Pagina = pagina;
 
             return View("Publicacion",model);
         }
 
+        public ActionResult actualizarFechaExpiracion(string idSolicitud,string fechaExpiracion)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            fechaExpiracion = String.Format("{0:dd/MM/yyyy}", fechaExpiracion);
+            DateTime fecha = Convert.ToDateTime(fechaExpiracion);
+            try
+            {
+                if ((idSolicitud != null)&&(idSolicitud != "0"))
+                {
+                    var solicitud = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(idSolicitud));
+                    solicitud.FecExpiracacion = fecha;
+                    _solReqPersonalRepository.Update(solicitud);
 
+                    objJsonMessage.Mensaje = "Fecha de expiración , actualizada correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "ERROR: no se pudo actualizar la fecha de expiración";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR: " + ex;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
         /// <summary>
         /// lista de conocimientos de la solicitud del requerimiento
         /// </summary>

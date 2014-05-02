@@ -361,16 +361,6 @@
         return strRdo;
     }
 
-    //function MostrarMensaje(mensaje) {
-    //    $("#spanMensaje").html(mensaje);
-    //    $("#divMensaje").dialog({
-    //        title: 'SAN PABLO',
-    //        modal: true,
-    //        buttons: {
-    //            "Ok": function () { $(this).dialog("close"); }
-    //        }
-    //    });
-    //}
 
     $(function () {
 
@@ -517,17 +507,15 @@
                 </div>
             </div>
             <div class="form-actions">
-                @*<a class="btn btn-info" href="@Url.Action("PostulantesPorRequerimiento", "SolicitudCargo")"><i class="icon-eye-open icon-white"></i> Ranking</a>*@
                 <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                @*<a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
                 <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
 
 
                 <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
-                <a id="btnNuevo" class="btn btn-info" @*href="@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "0"})"*@><i class="icon-plus icon-white"></i> Nuevo</a>
+                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
                 <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
-                @*<a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
-                <button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
+                <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                @*<button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
             </div>
 
         </div>

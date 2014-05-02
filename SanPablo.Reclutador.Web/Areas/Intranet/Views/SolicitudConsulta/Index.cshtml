@@ -22,12 +22,50 @@
             }
     });
 
+    
+
     $('#SolicitudRequerimiento_FechaInicioBus,#SolicitudRequerimiento_FechaFinBus').attr("readonly", "readonly");
 
     $('#btnBuscarReemplazo').click(function () {
 
         $('#grdList').trigger('reloadGrid');
     });
+
+    $('#btnActivarDesactivar').click(function () {
+        var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+        if (selr != null) {
+            $('#updateDialog').dialog('open');
+        } else {
+            MostrarMensaje('Seleccione una solicitud para Activar/Desactivar', "Sistema de reclutamiento y selección de personal");
+        }
+
+    });
+
+    $("#message").html("¿Esta seguro de Activar/Desactivar la solicitud?")
+    $('#updateDialog').dialogo({
+        buttons: {
+            "Si": function () {
+                var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
+                var estado = rowData.TipEstado;
+                var tSol = rowData.TipoSol;
+                var idSR = rowData.IdeSolReqPersonal;
+                var codS = rowData.CodSolReqPersonal;
+                $(this).dialog("close");
+                if (selr != null) {
+                    ActivarDesactivarSolicitud(tSol, estado, idSR,codS);
+                } else {
+                    MostrarMensaje('Seleccione una solicitud', "Sistema de reclutamiento y selección de personal");
+                }
+                
+            },
+            "No": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
 
     $('#btnConsultarSolicitud').click(function () {
 
@@ -221,6 +259,73 @@
      loadComplete: function (data) {
      }
  });
+
+
+
+    function ActivarDesactivarSolicitud(tSol, estado, idSR, codS) {
+        
+        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+        var idSol = idSR;
+        var codigo = codS;
+        $.blockUI({
+            message: '<h1>Enviando...</h1>',
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }
+        });
+        $.ajax({
+            data: {
+                tipSol:tSol,
+                codEstado: estado,
+                id: idSol
+            },
+            type: "POST",
+            url: "@Url.Action("ActivarDesactivar", "SolicitudConsulta")",
+            traditional: true,
+            success: function (data) {
+                $.unblockUI();
+                if (data.Resultado) {
+                    if(data.Accion == "A")
+                    {
+                        if (data.Objeto == 'S') {
+                            if (tSol == "01") {
+                                var url = '@Url.Action("Edit", "PublicacionCargo", new { id = "",area="Intranet" })?id=' + idSol + "&pagina=" + pagina;
+                                window.location = url;
+                            }
+                            if (tSol =="03") {
+                                var url = '@Url.Action("Publica", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + codigo + "&pagina=" + pagina;
+                                window.location = url;
+                            }
+                            if (tSol == "02") {
+                                var url = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + idSol + "&pagina=" + pagina;
+                                window.location = url;
+                            }
+                    
+                        }
+                        else
+                        {
+                            MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal")
+                            $('#grdList').trigger('reloadGrid');
+                        }
+                    }
+                    else {
+                        MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal")
+                        $('#grdList').trigger('reloadGrid');
+                    }
+                } else {
+                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y seleccion de personal");
+                }
+            }
+        });
+
+    }
+
 
 
     function consultarSolicitud(ideSol, tipoSolicitud, idCargo) {
@@ -418,10 +523,15 @@
                 <a class="btn btn-info" href="@Url.Action("PostulantesPreSeleccionados", "SolicitudAmpliacionCargo")"><i class="icon-tasks  icon-white"></i> Pre-select</a>*@
                 <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
                 <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-
                 <a class="btn btn-info" id="btnConsultarSolicitud"><i class="icon-zoom-in icon-white"></i> Consultar</a>
+               @if(Visualicion.SI.Equals(Model.btnActivarDesactivar))
+               {
+                  <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+               }
             </div>
         }
         </div>
      </div>
 </div>
+
+<div id="updateDialog" ><span id="message"></span></div>

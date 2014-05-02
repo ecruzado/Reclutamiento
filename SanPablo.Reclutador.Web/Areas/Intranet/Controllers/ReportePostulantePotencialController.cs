@@ -264,12 +264,23 @@
 
                 string usuario = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 string sede = Convert.ToString(Session[ConstanteSesion.SedeDes]);
+                string fechaInicio="";
+                string fechaFin = "";
+
+                if ((postulanteReporte.FechaDesde != null) && (postulanteReporte.FechaHasta != null))
+                {
+                    fechaInicio = String.Format("{0:dd/MM/yyyy}", postulanteReporte.FechaDesde);
+                    fechaFin = String.Format("{0:dd/MM/yyyy}", postulanteReporte.FechaHasta);
+                }
 
                 DataTable dtInforme = new DataTable();
                 dtInforme.Columns.Add("USUARIO", typeof(string));
                 dtInforme.Columns.Add("SEDE", typeof(string));
                 dtInforme.Columns.Add("CARGOBUSCA", typeof(string));
-                dtInforme.Rows.Add(usuario, sede, postulanteReporte.Cargo);
+                dtInforme.Columns.Add("FECHAINICIO", typeof(string));
+                dtInforme.Columns.Add("FECHAFIN", typeof(string));
+
+                dtInforme.Rows.Add(usuario, sede, postulanteReporte.Cargo, fechaInicio, fechaFin);
                   
                 DataTable dtResultado = _postulanteRepository.DtReportePostulantesPotencial(postulanteReporte);
 

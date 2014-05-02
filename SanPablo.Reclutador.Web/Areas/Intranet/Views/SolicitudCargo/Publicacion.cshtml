@@ -17,7 +17,25 @@
         
     $(document).ready(function () {
 
+        $('#btnActualizar').click(function () {
+            var fecha = $('#').val();
+            var id = $('#SolReqPersonal_IdeSolReqPersonal').val();
+            if (validaPublicacion) {
+                $.ajax({
+                    data: {fechaExpiracion:fecha,idSolicitud:id},
+                    type: "POST",
+                    url: '@Url.Action("actualizarFechaExpiracion", "SolicitudCargo", new { area="Intranet"})',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
 
+                    }
+                }
+                });
+            }
+        });
         
         $('#btnPublicarSolReq').click(function () {
             if (validaPublicacion)
@@ -449,7 +467,13 @@
     }
 
     function RedireccionaBus() {
-        window.location = '@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})';
+        var pagina = $('#Pagina').val();
+
+        if (pagina == "04") {
+            window.location = '@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet"})';
+        } else {
+            window.location = '@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})';
+        }
     }
 
 
@@ -465,7 +489,7 @@
 {
     @Html.ValidationSummary(true)
 
-    
+     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
     
                 <fieldset>
@@ -515,8 +539,14 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Publicar</label>
                             <div class="controles">
-                                
-                                @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                }
                             </div>
                         </td>
                         
@@ -526,7 +556,14 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
                             <div class="controles">
-                               @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                                @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial", disabled = "disabled"})      
+                                }
                             </div>
                         </td>
                     </tr>
@@ -638,7 +675,14 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})
+                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                             {
+                                 @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254", disabled = "disabled"})
+                             }
+                             else
+                             {
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})
+                             }
                          </div>
                         </td>
                     </tr>   
@@ -649,8 +693,22 @@
 
                 </fieldset>
                 <div class="form-actions"> 
-                     <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                     <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    @if(TipoSolicitud.Remplazo.Equals(Model.Pagina))
+                    {
+                        <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                    }
+                    else
+                    {
+                        <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                    }
+                    @if(Visualicion.SI.Equals(Model.btnPublicar))
+                    {
+                       <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    }
+                    @if (Visualicion.SI.Equals(Model.btnActualizar))
+                    {
+                         <a class="btn btn-info" id="btnActualizar"><i class="icon-circle-arrow-up icon-white"></i> Actualizar</a>
+                    }
                          
                 </div>
 }

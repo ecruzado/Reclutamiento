@@ -17,6 +17,26 @@
         
     $(document).ready(function () {
 
+        var dateToday = new Date();
+
+        var dates = $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            //defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: dateToday,
+            onSelect: function (selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker");
+                //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                //dates.not(this).datepicker("option", option, date);
+            }
+        });
+
+
+        $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').attr("readonly", "readonly");
 
         
         $('#btnPublicarSolReq').click(function () {
@@ -406,7 +426,7 @@
         }
         if (secondValue == 0 && secondValue=="") {
             
-            MostrarMensaje('Ingrese fecha de experización', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Ingrese fecha de expiración', "Sistema de Reclutamiento Y Seleccion de Personal");
             return false;
         }
 
@@ -515,8 +535,14 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Publicar</label>
                             <div class="controles">
-                                
-                                @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" }) 
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                }
                             </div>
                         </td>
                         
@@ -638,7 +664,14 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})
+                             @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                             {
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "254", disabled = "disabled" })
+                             }
+                             else
+                             {
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})     
+                             }
                          </div>
                         </td>
                     </tr>   
@@ -649,8 +682,22 @@
 
                 </fieldset>
                 <div class="form-actions"> 
-                     <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
-                     <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                    {
+                        <a class="btn"  href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>     
+                    }
+                    else
+                    {
+                        <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                    }
+                    @if (Visualicion.SI.Equals(Model.btnPublicar))
+                    {
+                        <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                    }
+                    @if (Visualicion.SI.Equals(Model.btnActualizar))
+                    {
+                        <a class="btn btn-info" id="btnActualizar"><i class="icon-circle-arrow-up icon-white"></i> Actualizar</a>    
+                    }
                          
                 </div>
 }

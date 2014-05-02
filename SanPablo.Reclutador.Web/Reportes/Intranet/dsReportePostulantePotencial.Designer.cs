@@ -808,6 +808,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             private global::System.Data.DataColumn columnCARGOBUSCA;
             
+            private global::System.Data.DataColumn columnFECHAINICIO;
+            
+            private global::System.Data.DataColumn columnFECHAFIN;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public dtDatosReporteDataTable() {
@@ -867,6 +871,22 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FECHAINICIOColumn {
+                get {
+                    return this.columnFECHAINICIO;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FECHAFINColumn {
+                get {
+                    return this.columnFECHAFIN;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -902,12 +922,14 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtDatosReporteRow AdddtDatosReporteRow(string USUARIO, string SEDE, string CARGOBUSCA) {
+            public dtDatosReporteRow AdddtDatosReporteRow(string USUARIO, string SEDE, string CARGOBUSCA, string FECHAINICIO, string FECHAFIN) {
                 dtDatosReporteRow rowdtDatosReporteRow = ((dtDatosReporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         USUARIO,
                         SEDE,
-                        CARGOBUSCA};
+                        CARGOBUSCA,
+                        FECHAINICIO,
+                        FECHAFIN};
                 rowdtDatosReporteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtDatosReporteRow);
                 return rowdtDatosReporteRow;
@@ -933,6 +955,8 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 this.columnUSUARIO = base.Columns["USUARIO"];
                 this.columnSEDE = base.Columns["SEDE"];
                 this.columnCARGOBUSCA = base.Columns["CARGOBUSCA"];
+                this.columnFECHAINICIO = base.Columns["FECHAINICIO"];
+                this.columnFECHAFIN = base.Columns["FECHAFIN"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -944,6 +968,10 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
                 base.Columns.Add(this.columnSEDE);
                 this.columnCARGOBUSCA = new global::System.Data.DataColumn("CARGOBUSCA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCARGOBUSCA);
+                this.columnFECHAINICIO = new global::System.Data.DataColumn("FECHAINICIO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFECHAINICIO);
+                this.columnFECHAFIN = new global::System.Data.DataColumn("FECHAFIN", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFECHAFIN);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1629,6 +1657,38 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string FECHAINICIO {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtDatosReporte.FECHAINICIOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'FECHAINICIO\' in table \'dtDatosReporte\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtDatosReporte.FECHAINICIOColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string FECHAFIN {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtDatosReporte.FECHAFINColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'FECHAFIN\' in table \'dtDatosReporte\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtDatosReporte.FECHAFINColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsUSUARIONull() {
                 return this.IsNull(this.tabledtDatosReporte.USUARIOColumn);
             }
@@ -1661,6 +1721,30 @@ namespace SanPablo.Reclutador.Web.Reportes.Intranet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCARGOBUSCANull() {
                 this[this.tabledtDatosReporte.CARGOBUSCAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsFECHAINICIONull() {
+                return this.IsNull(this.tabledtDatosReporte.FECHAINICIOColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetFECHAINICIONull() {
+                this[this.tabledtDatosReporte.FECHAINICIOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsFECHAFINNull() {
+                return this.IsNull(this.tabledtDatosReporte.FECHAFINColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetFECHAFINNull() {
+                this[this.tabledtDatosReporte.FECHAFINColumn] = global::System.Convert.DBNull;
             }
         }
         

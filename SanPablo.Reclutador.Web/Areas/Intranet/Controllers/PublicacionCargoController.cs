@@ -251,17 +251,37 @@
 
         [ValidarSesion]
         [AuthorizeUser]
-        public ActionResult Edit()
+        public ActionResult Edit(string id, string pagina)
         {
+            if ((id != "0") && (id != null))
+            {
+                var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
+                CargoPerfil = new DatosCargo();
+                CargoPerfil.IdeCargo = solicitud.IdeCargo;
+            }
+            
             int IdeCargo = CargoPerfil.IdeCargo;
             var Cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var publicacionViewModel = inicializarPublicacion(Cargo);
+            publicacionViewModel.pagina = pagina;
+
             if (Cargo != null)
             {
                 publicacionViewModel.Cargo = Cargo;
-                publicacionViewModel.SolicitudCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == Cargo.CodigoCargo);
-                
+                publicacionViewModel.SolicitudCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo == Cargo.IdeCargo);
             }
+
+            if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            {
+                publicacionViewModel.btnActualizar = Visualicion.SI;
+                publicacionViewModel.btnPublicar = Visualicion.NO;
+            }
+            else
+            {
+                publicacionViewModel.btnActualizar = Visualicion.NO;
+                publicacionViewModel.btnPublicar = Visualicion.SI;
+            }
+
             return View(publicacionViewModel);
         }
 
@@ -348,6 +368,40 @@
             }
         }
 
+        [HttpPost]
+        public ActionResult ActualizarFechaExpiracion(string fechaExpiracion)
+        { 
+            JsonMessage objJsonMessage = new JsonMessage();
+            fechaExpiracion = String.Format("{0:dd/MM/yyyy}", fechaExpiracion);
+            DateTime fecha = Convert.ToDateTime(fechaExpiracion);
+            try
+            {
+                if (CargoPerfil != null)
+                {
+                    var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                    solicitud.FechaExpiracion = fecha;
+                    _solicitudNuevoCargoRepository.Update(solicitud);
+
+                    objJsonMessage.Mensaje = "Fecha de expiración , actualizada correctamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "ERROR: no se pudo actualizar la fecha de expiración";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+ 
+                }
+                    
+             }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR: "+ex;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
         public PublicacionViewModel inicializarPublicacion(Cargo cargo)
         {
             
@@ -359,6 +413,8 @@
             var area = _areaRepository.GetSingle(x => x.IdeArea == cargo.IdeArea);
 
             publicacionNuevoViewModel.Area = area.NombreArea;
+
+            publicacionNuevoViewModel.Sede = Session[ConstanteSesion.SedeDes].ToString();
 
             var horario = _horarioCargoRepository.getMaxPuntValue(x => x.Cargo.IdeCargo == cargo.IdeCargo);
             publicacionNuevoViewModel.TipoHorario = horario.DescripcionHorario;

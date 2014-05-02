@@ -23,6 +23,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> Etapas { get; set; }
         public List<DetalleGeneral> TiposSolicitudes { get; set; }
 
+        public string btnActivarDesactivar { get; set; }
+
     }
 
 }

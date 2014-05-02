@@ -38,6 +38,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> TipoPuestos { get; set; }
 
         public string Pagina { get; set; }
+
     }
 
 

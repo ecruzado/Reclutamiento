@@ -509,13 +509,16 @@
 
 
         $('#btnPublicarSolReemplazo').click(function () {
+            var pagina = '@TipoSolicitud.Remplazo';
 
             if (validaEnvio()) {
 
                 id = $("#SolReqPersonal_CodSolReqPersonal").val();
 
                 if (id != null && id > 0) {
-                    window.location = '@Url.Action("Publica", "SolicitudCargo", new { id = ""})' + '/' + id;
+                    var url = '@Url.Action("Publica", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + id + "&pagina=" + pagina;
+                    window.location = url;
+                    //window.location = '@Url.Action("Publica", "SolicitudCargo", new { id = ""})' + '/' + id;
                 } else {
                     MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
                 }

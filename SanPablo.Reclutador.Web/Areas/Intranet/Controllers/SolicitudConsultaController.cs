@@ -27,6 +27,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
         private IUsuarioRepository _usuarioRepository;
         private IListaSolicitudNuevoCargoVistaRepository _listaSolicitudes;
+        private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
 
 
         public SolicitudConsultaController(IDetalleGeneralRepository detalleGeneralRepository,
@@ -37,7 +38,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                            IDepartamentoRepository departamentoRepository,
                                            IUsuarioRolSedeRepository usuarioRolSedeRepository,
                                            IUsuarioRepository usuarioRepository,
-                                           IListaSolicitudNuevoCargoVistaRepository listaSolicitudes)
+                                           IListaSolicitudNuevoCargoVistaRepository listaSolicitudes,
+                                           ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository)
         {
             _detalleGeneralRepository = detalleGeneralRepository;
             _solicitudAmpliacionPersonal = solicitudAmpliacionPersonal;
@@ -48,6 +50,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _usuarioRolSedeRepository = usuarioRolSedeRepository;
             _usuarioRepository = usuarioRepository;
             _listaSolicitudes = listaSolicitudes;
+            _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
         }
 
 
@@ -71,6 +74,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     model = InicializarListaReemplazo(Convert.ToInt32(sede));
                     model.SolicitudRequerimiento = new SolReqPersonal();
+                }
+
+                int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                if (idRol != 0)
+                {
+                    if ((idRol == Roles.Encargado_Seleccion) || (idRol == Roles.Analista_Seleccion))
+                    {
+                        model.btnActivarDesactivar = Visualicion.SI;
+                    }
+                    else
+                    {
+                        model.btnActivarDesactivar = Visualicion.NO;
+                    }
                 }
             }
             catch (Exception)
@@ -240,6 +256,95 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 return MensajeError();
             }
+        }
+
+        [HttpPost]
+        public ActionResult ActivarDesactivar(string tipSol, string codEstado, string id)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            SolicitudNuevoCargo solicitudNuevoCargo = new SolicitudNuevoCargo();
+            SolReqPersonal solicitudRemAmpCargo = new SolReqPersonal();
+            try
+            {
+
+                if (tipSol == TipoSolicitud.Nuevo)
+                {
+                    solicitudNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
+
+                    if (IndicadorActivo.Inactivo.Equals(codEstado))
+                    {
+                        solicitudNuevoCargo.EstadoActivo = IndicadorActivo.Activo;
+                        objJsonMessage.Mensaje = "La solicitud fue activada";
+                        objJsonMessage.Accion = IndicadorActivo.Activo;
+                    }
+                    else
+                    {
+                        solicitudNuevoCargo.EstadoActivo = IndicadorActivo.Inactivo;
+                        objJsonMessage.Mensaje = "La solicitud fue desactivada";
+                        objJsonMessage.Accion = IndicadorActivo.Inactivo;
+                    }
+                    _solicitudNuevoCargoRepository.Update(solicitudNuevoCargo);
+
+                    if (solicitudNuevoCargo.FechaPublicacion != null)
+                    {
+                        objJsonMessage.Objeto = Indicador.Si;
+                    }
+                    else
+                    {
+                        objJsonMessage.Objeto = Indicador.No;
+                    }
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    if ((tipSol == TipoSolicitud.Ampliacion) || (tipSol == TipoSolicitud.Remplazo))
+                    {
+                        solicitudRemAmpCargo = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
+
+                        if (IndicadorActivo.Inactivo.Equals(codEstado))
+                        {
+                            solicitudRemAmpCargo.EstadoActivo = IndicadorActivo.Activo;
+                            objJsonMessage.Mensaje = "La solicitud fue activada";
+                            objJsonMessage.Accion = IndicadorActivo.Activo;
+                            
+                        }
+                        else
+                        {
+                            solicitudRemAmpCargo.EstadoActivo = IndicadorActivo.Inactivo;
+                            objJsonMessage.Mensaje = "La solicitud fue desactivada";
+                            objJsonMessage.Accion = IndicadorActivo.Inactivo;
+                        }
+                        _solicitudAmpliacionPersonal.Update(solicitudRemAmpCargo);
+                        //verficar la publicacion
+                        if (solicitudRemAmpCargo.FecPublicacion != null)
+                        {
+                            objJsonMessage.Objeto = Indicador.Si;
+                        }
+                        else
+                        {
+                            objJsonMessage.Objeto = Indicador.No;
+                        }
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "ERROR: Ocurrio un error al cambiar el estado de la solicitud";
+                        objJsonMessage.Objeto = Indicador.No;
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                objJsonMessage.Resultado = false;
+                objJsonMessage.Mensaje = "ERROR: Ocurrio un error al cambiar el estado";
+                return Json(objJsonMessage);
+            }
+
         }
 
     }

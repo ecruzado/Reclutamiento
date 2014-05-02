@@ -72,7 +72,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         /// boton Eliminar
         /// </summary>
         public string btnEliminar { get; set; }
-
+        /// <summary>
+        /// boton publicar -  Publicación
+        /// </summary>
+        public string btnPublicar { get; set; }
+        /// <summary>
+        /// boton Actualizar - Publicación
+        /// </summary>
+        public string btnActualizar { get; set; }
         #endregion
 
     }

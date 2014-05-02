@@ -964,7 +964,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ValidarSesion]
-        public ActionResult Publica(string id)
+        public ActionResult Publica(string id , string pagina)
         {
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
@@ -1001,7 +1001,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             }
 
+            if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            {
+                model.btnActualizar = Visualicion.SI;
+                model.btnPublicar = Visualicion.NO;
+            }
+            else
+            {
+                model.btnPublicar = Visualicion.SI;
+                model.btnActualizar = Visualicion.NO;
+            }
 
+            model.Pagina = pagina;
 
             return View("Publicacion", model);
         }
