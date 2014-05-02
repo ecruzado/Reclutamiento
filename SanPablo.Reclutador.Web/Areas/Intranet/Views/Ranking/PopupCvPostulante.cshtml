@@ -98,7 +98,7 @@
                 <label class="etiquetaFormulario" >DNI<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.TextBoxFor(model => model.CvPostulanteEx.Dni, new { @class = "textoFormulario" , maxlength="100" ,onkeypress="return Funciones.isNumberKey(event)"})                      
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.Dni, new { @class = "textoFormulario" , maxlength="8" ,onkeypress="return Funciones.isNumberKey(event)"})                      
                  <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.Dni)
                    </div>
@@ -109,7 +109,7 @@
                 <label class="etiquetaFormulario" >Telefono<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="100",onkeypress="return Funciones.isNumberKey(event)" })                      
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="10",onkeypress="return Funciones.isNumberKey(event)" })                      
                <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.Telefono)
                    </div>
