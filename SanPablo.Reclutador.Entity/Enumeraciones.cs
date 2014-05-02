@@ -277,6 +277,11 @@
         public const string POSTULANTE = "POSTULANTE";
     }
 
+    public sealed class TipoExamen
+    {
+        public const string Examen = "01";
+        public const string Evaluacion = "04";
+    }
 
     public sealed class PostulanteEstado
     {

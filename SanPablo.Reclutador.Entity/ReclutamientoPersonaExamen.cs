@@ -51,6 +51,11 @@ namespace SanPablo.Reclutador.Entity
 
         public virtual string EstadoEvaluacion { get; set; }
 
+        /// <summary>
+        /// Indicador de resultado de examen S = si, N = no
+        /// </summary>
+        public virtual string IndicadorResultado { get; set; }
+
         public virtual bool EsEntrevistaFinal
         {
             get

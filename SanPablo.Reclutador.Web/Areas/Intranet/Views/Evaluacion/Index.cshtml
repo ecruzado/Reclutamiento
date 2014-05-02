@@ -10,7 +10,9 @@
 
     $(document).ready(function () {
 
-        
+        setInterval(function () {
+            $('#grdList').trigger('reloadGrid');
+        }, 3600000);
 
         $('#fechaInicio').datepicker({ dateFormat: 'mm/dd/yy' });
         $('#fechaFin').datepicker({ dateFormat: 'mm/dd/yy' });

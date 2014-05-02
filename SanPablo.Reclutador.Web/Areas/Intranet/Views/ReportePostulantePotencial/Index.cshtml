@@ -326,18 +326,6 @@
                             </div>
                         </div>
                     </td>
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Dependencia</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.PostulantePotencial.IdeDependencia))
-                            </div>
-                        </div>
-                    </td>
-
-                </tr>
-
-               <tr class="formulario-fila">
                     <td class="span5" style="width:420px">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Area de Estudios</label>
@@ -346,16 +334,10 @@
                             </div>
                         </div>
                     </td>
+                </tr>
 
-                     <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.PostulantePotencial.IdeDepartamento))
-                            </div>
-                        </div>
-                    </td>  
-
+               <tr class="formulario-fila">
+                    
                 </tr>
 
                    <tr class="formulario-fila">
@@ -368,14 +350,14 @@
                         </div>
                     </td>
 
-                     <td class="span5">
+                    <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Área</label>
+                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.PostulantePotencial.IdeArea))
+                                @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
                             </div>
                         </div>
-                    </td>  
+                    </td> 
 
                 </tr>
 
@@ -399,14 +381,7 @@
                      <td style="width:100px">
                          &nbsp;
                      </td> 
-                     <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
-                            </div>
-                        </div>
-                    </td> 
+                     
 
                 </tr> 
 

@@ -147,7 +147,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.UsuarioResponsable==null?"":item.UsuarioResponsable,
                                 item.TipoEstadoEvaluacion==null?"":item.TipoEstadoEvaluacion,
                                 item.EstadoEvaluacion==null?"":item.EstadoEvaluacion,
-                                item.NotaFinal==0?"":item.NotaFinal.ToString(),
+                                item.IndicadorResultado==null?"N":item.IndicadorResultado,
+                                (item.NotaFinal==0)||(item.NotaFinal ==-1)?"":item.NotaFinal.ToString(),
                                 item.ComentarioResultado==null?"":item.ComentarioResultado
                             }
                 }).ToArray();
@@ -448,23 +449,47 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-
+        [HttpPost]
         public ActionResult verificarProgramacion(string id)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             int idReclutaPersonaExamen = Convert.ToInt32(id);
 
             var reclutaPersExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idReclutaPersonaExamen);
-            if (reclutaPersExamen.IdeUsuarioResponsable != 0)
+
+            //EstadoEvaluacion
+            if (reclutaPersExamen.TipoExamen == TipoExamen.Examen)
             {
-                objJsonMessage.Resultado = true;
+                objJsonMessage.Mensaje = "No requiere registro de resultado";
+                objJsonMessage.Resultado = false;
                 return Json(objJsonMessage);
             }
             else
             {
-                objJsonMessage.Resultado = false;
-                return Json(objJsonMessage);
+                if ((reclutaPersExamen.TipoExamen == TipoExamen.Evaluacion) &&
+                    ((reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Evaluado)||
+                     (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Aprobado)||
+                     (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Desaprobado)))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    if (reclutaPersExamen.IdeUsuarioResponsable != 0)
+                    {
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "Requiere el registro de programación previa";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                }
             }
+            
         }
 
         #region MOSTRAR EVALUACIONES RENDIDAS
@@ -555,6 +580,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 NombreExamen = resultadoExamen.NombreExamen;
                 DesExamen = resultadoExamen.DescripcionExamen;
                 Nota =  resultadoExamen.NotaFinal.ToString();
+                if (Nota == "-1")
+                {
+                    Nota = "PENDIENTE";
+                }
                 NombrePostulante = resultadoExamen.nombrePostulante;
             }
 

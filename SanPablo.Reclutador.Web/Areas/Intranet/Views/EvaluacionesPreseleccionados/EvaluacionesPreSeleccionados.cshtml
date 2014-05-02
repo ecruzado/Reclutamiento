@@ -11,6 +11,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        setInterval(function () { $('#grdList').trigger('reloadGrid');}, 3600000);
+
         $('#btnProgramarEvaluacion').click(function () {
 
             var id = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -89,7 +91,7 @@
                     }
                 });
             },
-            colNames: ['','','','Descripci&oacuten','', 'Tipo', 'Fecha', 'Hora','', 'Responsable','', 'Estado', 'Ptje.Total', 'Resultado',''],
+            colNames: ['','','','Descripci&oacuten','', 'Tipo', 'Fecha', 'Hora','', 'Responsable','', 'Estado','','Ptje.Total', 'Resultado',''],
             colModel: [
                      { name: 'IdeRecluPersoExam', index: 'IdeRecluPersoExam', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
@@ -103,6 +105,7 @@
                      { name: 'Responsable', index: 'Responsable', align: 'center', editable: false, sortable: false, width: 300 },
                      { name: 'TipoEstado', index: 'TipoEstado', align: 'center', editable: false, sortable: false, hidden:true },
                      { name: 'Estado', index: 'Estado', align: 'center', editable: false, sortable: false, width: 130 },
+                     { name: 'IndicadorExamen', index: 'IndicadorExamen', align: 'center', editable: false, sortable: false, hidden: true },
                      { name: 'PuntajeTotal', index: 'PuntajeTotal', align: 'center', editable: false, sortable: false, width: 150 },
                      { name: 'Notas', index: 'Notas', align: 'center', sortable: false, width: 60, formatter: NotaFormatter },
                      { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, hidden: true }
@@ -169,10 +172,9 @@
     function DescripcionFormatter(cellvalue, options, rowObject) {
         var strAref = cellvalue;
         //validar si existe la evaluacion
-        if (existeResultado(rowObject[0])) {
+        if (rowObject[12] == 'S') {
             strAref = '<a style="text-decoration: underline" href= "#" onclick= "MostrarExamen(' + rowObject[1] + ',' + rowObject[0] + ')"; >' + cellvalue + '</a>';
         }
-        
         return strAref;
       }
 
@@ -209,7 +211,7 @@
         return strImg;
     }
 
-    function existeResultado(ideExamen)
+   @* function existeResultado(ideExamen)
     {
         $.ajax({
             type: "POST",
@@ -217,14 +219,14 @@
             url: '@Url.Action("existeResultado","EvaluacionesPreSeleccionados")',
             data: {idRE: ideExamen },
             success: function (respuesta) {
-                if (respuesta.respuesta)
+                if (respuesta.Resultado)
                 { return true; }
                 else
                 { return false;}
                 
             }
         });
-    }
+    }*@
 
     function mostraringresoocomentario(idReclutaPersoExam) {
         //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -246,7 +248,7 @@
                 });
             }
             else {
-                MostrarMensaje("Debe programar la evaluacion para ingresar los resultados","Reclutamiento y Selección de personal");
+                MostrarMensaje(data.Mensaje,"Reclutamiento y Selección de personal");
             }
          }
         });
@@ -254,7 +256,7 @@
 
             
         //}
-   }
+    }
 
 </script>
 }

@@ -60,7 +60,7 @@ namespace SanPablo.Reclutador.Repository
                     objEvaluacion.DescripcionTipoExamen = Convert.ToString(drEvaluaciones["TIPOEXAMEN"]);
                     objEvaluacion.IdeUsuarioResponsable = Convert.ToInt32(drEvaluaciones["IDUSUARESPONS"]);
                     objEvaluacion.UsuarioResponsable = Convert.ToString(drEvaluaciones["USUARIORESP"]);
-
+                    objEvaluacion.IndicadorResultado = Convert.ToString(drEvaluaciones["INDRESUL"]);
                     objEvaluacion.TipoEstadoEvaluacion = Convert.ToString(drEvaluaciones["TIPESTEVALUACION"]);
                     objEvaluacion.EstadoEvaluacion = Convert.ToString(drEvaluaciones["ESTADOEVALUACION"]);
 
