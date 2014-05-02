@@ -90,7 +90,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
 
                 //accesos de botones
-                int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+                idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
 
                 if (Roles.Administrador_Sistema.Equals(idRol))
                 {
