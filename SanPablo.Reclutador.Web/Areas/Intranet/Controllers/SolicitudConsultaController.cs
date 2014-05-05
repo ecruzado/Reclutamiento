@@ -90,7 +90,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
 
                 //accesos de botones
-               
+                idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
 
                 if (Roles.Administrador_Sistema.Equals(idRol))
                 {
@@ -99,22 +99,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 else if (Roles.Gerente_General_Adjunto.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if(Roles.Jefe.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if(Roles.Gerente.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else
@@ -149,6 +149,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             Dependencia objDepencia = new Dependencia();
 
             var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+
+
+            foreach (Departamento item in listaResultado)
+            {
+                item.Dependencia = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
@@ -164,6 +171,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ActionResult result = null;
 
             var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+
+            foreach (Area item in listaResultado)
+            {
+                item.Departamento = null;
+            }
+            
+            
             result = Json(listaResultado);
             return result;
         }

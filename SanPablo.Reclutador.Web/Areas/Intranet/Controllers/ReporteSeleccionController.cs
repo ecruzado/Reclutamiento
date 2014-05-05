@@ -152,9 +152,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             
 
-
-
-
             return View("Index",objReporteModel);
         }
 
@@ -205,11 +202,26 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
                 objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
                 
+            //     objModel.listaDependencia = new List<Dependencia>();
+            //objModel.listaDependencia.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+                objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                     && x.IdeSede == SedeUSuario));
+
+                objModel.listaDependencia.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+
+
             }
             else if (Roles.Analista_Seleccion.Equals(rolUsuario))
             {
                 SolReqPersonal objSol = new SolReqPersonal();
                 objSol.IdeSede = SedeUSuario;
+
+                objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                    && x.IdeSede == SedeUSuario));
+                objModel.listaDependencia.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
 
                 objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
                 objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
@@ -241,6 +253,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             var listaResultado = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                          && x.IdeSede == ideSede));
+
+            
             result = Json(listaResultado);
             return result;
         }
@@ -277,6 +291,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             Dependencia objDepencia = new Dependencia();
 
             var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+
+            foreach (Departamento item in listaResultado)
+            {
+                item.Dependencia = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
@@ -292,6 +312,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ActionResult result = null;
 
             var listaResultado = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+
+            foreach (SanPablo.Reclutador.Entity.Area item in listaResultado)
+            {
+                item.Departamento = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
