@@ -46,6 +46,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             RolViewModel rolModel = new RolViewModel();
             rolModel.rol = new Rol();
             rolModel = InicializarRolEdit();
+
+            // boton de accesos
+
+            int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            if (Roles.Administrador_Sistema.Equals(idRol))
+            {
+                rolModel.btnConsultar = Visualicion.SI;
+                rolModel.btnNuevo = Visualicion.SI;
+                rolModel.btnEliminar = Visualicion.SI;
+                rolModel.btnEditar = Visualicion.SI;
+            }
+            else if (Roles.Encargado_Seleccion.Equals(idRol))
+            {
+                rolModel.btnConsultar = Visualicion.SI;
+            }
+            else if (Roles.Analista_Seleccion.Equals(idRol))
+            {
+                rolModel.btnConsultar = Visualicion.SI;
+            }
+            else
+            {
+                rolModel.btnConsultar = Visualicion.NO;
+                rolModel.btnNuevo = Visualicion.NO;
+                rolModel.btnEliminar = Visualicion.NO;
+                rolModel.btnEditar = Visualicion.NO;
+            }
+
             return View("Index", rolModel);
 
         }

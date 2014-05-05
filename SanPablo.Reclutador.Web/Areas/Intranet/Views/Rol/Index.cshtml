@@ -245,10 +245,27 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>
-                <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>
-                <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>
+                
+                @if (Visualicion.SI.Equals(Model.btnNuevo))
+                {
+                  <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>    
+                }
+
+                @if (Visualicion.SI.Equals(Model.btnConsultar))
+                {
+                  <a id="btnConsultar"  class="btn btn-info"><i class="icon-zoom-in icon-white"></i> Consultar</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnEditar))
+                {
+                  <a id="btnEditar" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Editar</a>    
+                }
+                
+                @if (Visualicion.SI.Equals(Model.btnEliminar))
+                {
+                  <a id="btnEliminar" class="btn btn-danger" ><i class="icon-remove icon-white"></i> Eliminar</a>    
+                }
+                
             </div>
         </div>
     </div>
