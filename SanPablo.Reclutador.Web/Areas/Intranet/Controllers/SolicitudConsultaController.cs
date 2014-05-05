@@ -99,22 +99,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 else if (Roles.Gerente_General_Adjunto.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if(Roles.Jefe.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else if(Roles.Gerente.Equals(idRol))
                 {
-                    model.btnRanking = Visualicion.SI;
+                    model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
                 else
