@@ -149,6 +149,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             Dependencia objDepencia = new Dependencia();
 
             var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+
+
+            foreach (Departamento item in listaResultado)
+            {
+                item.Dependencia = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
@@ -164,6 +171,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ActionResult result = null;
 
             var listaResultado = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+
+            foreach (Area item in listaResultado)
+            {
+                item.Departamento = null;
+            }
+            
+            
             result = Json(listaResultado);
             return result;
         }

@@ -9,9 +9,16 @@
         {
             Id(m => m.IdeDepartamento, "IDEDEPARTAMENTO");
             References(x => x.Dependencia).Column("IDEDEPENDENCIA");
+           
             Map(x => x.NombreDepartamento, "NOMDEPARTAMENTO");
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Table("DEPARTAMENTO");
+            //x.ManyToOne(x => x.SomeProperty, x =>
+            //    {
+            //        x.Lazy(LazyRelation.NoProxy);
+            //   });
+
+            
         }
     }
 }
