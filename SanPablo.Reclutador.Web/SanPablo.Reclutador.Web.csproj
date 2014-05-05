@@ -390,6 +390,7 @@
     <Content Include="Content\images\enabled.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\LogoSanPabloPeque.png" />
     <Content Include="Content\images\logo_sanpablo -prueba.png" />
     <Content Include="Content\images\logo_sanpablo.png" />
     <Content Include="Content\images\logo_san_pablo_png.png" />
