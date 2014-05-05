@@ -182,18 +182,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                 if (model != null)
                 {
                     JsonMessage objJsonMensage = new JsonMessage();
-                    //UsuarioExtranetValidator validator = new UsuarioExtranetValidator();
-                    //ValidationResult result = new ValidationResult();
-
-                    //result = validator.Validate(model.UsuarioExtranet, "Usuario", "Password");
-
-                    //if (!result.IsValid)
-                    //{
-                    //    objJson.Resultado = false;
-                    //    objJson.Mensaje = "los campos (*) son obligatorios";
-
-                    //    return Json(objJsonMensage);
-                    //}
+                   
 
 
                     usuario = model.UsuarioExtranet.Usuario;
