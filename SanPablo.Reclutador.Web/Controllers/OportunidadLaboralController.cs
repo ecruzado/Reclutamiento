@@ -193,11 +193,11 @@ namespace SanPablo.Reclutador.Web.Controllers
             //model. = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
            // model.listaCargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
             model.oportunidadLaboral = new OportunidadLaboral();
-
+            model.oportunidadLaboral.IdeSede = 0;
             model.listaOportunidadLaboral = new List<OportunidadLaboral>(_postulanteRepository.GetCargosPublicados(model.oportunidadLaboral));
+            //model.listaOportunidadLaboral = new List<OportunidadLaboral>();
             model.listaOportunidadLaboral.Insert(0, new OportunidadLaboral { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
-            
             model.listaHorario =
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
             model.listaHorario.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
@@ -206,6 +206,30 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.listaSede.Insert(0, new Sede { CodigoSede = "0", DescripcionSede = "Seleccionar" });
 
             return model;
+        }
+
+        /// <summary>
+        /// lista de oportunidades laborales por sede
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaOportunidades(int ideSede)
+        {
+            ActionResult result = null;
+
+            OportunidadLaboral objOportinudadLab = new OportunidadLaboral();
+            objOportinudadLab.IdeSede = ideSede;
+
+            var listaResultado = new List<OportunidadLaboral>(_postulanteRepository.GetCargosPublicados(objOportinudadLab));
+
+            //foreach (Area item in listaResultado)
+            //{
+            //    item.Departamento = null;
+            //}
+
+            result = Json(listaResultado);
+            return result;
         }
 
 
