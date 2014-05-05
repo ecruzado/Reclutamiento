@@ -80,11 +80,12 @@
                 cmd.Parameters.Add("p_usuarioSuceso", OracleType.Int32).Value = logSolicitud.UsrSuceso;
                 cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = logSolicitud.RolSuceso;
                 cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = logSolicitud.Observacion;
-                cmd.Parameters.Add("c_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("c_ideUsuarioResp", OracleType.Number).Value = logSolicitud.UsResponsable;
+                //cmd.Parameters.Add("c_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
 
                 int ideResponsable = Convert.ToInt32(cmd.Parameters[cmd.Parameters.IndexOf("c_ideUsuarioResp")].Value);
-                if (ideResponsable == null)
+                if (ideResponsable == 0)
                 { return 0; }
                 else
                     return ideResponsable;

@@ -64,6 +64,8 @@
 
             reporteModel = Inicializar();
 
+            reporteModel.btnVerReporte = Indicador.No;
+
             return View("Index", reporteModel);
         }
 
@@ -104,6 +106,7 @@
                 lista = _postulanteRepository.ListaPostulantesBDReporte(postulanteBD);
 
                 
+
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 

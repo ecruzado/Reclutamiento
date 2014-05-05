@@ -19,7 +19,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string PrimerNombre { get; set; }
         public virtual string SegundoNombre { get; set; }
 
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaNacimiento { get; set; }
 

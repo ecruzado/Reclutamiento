@@ -43,5 +43,7 @@
 
         public int? EdadFin { get; set; }
 
+        public string btnVerReporte { get; set; }
+
     }
 }

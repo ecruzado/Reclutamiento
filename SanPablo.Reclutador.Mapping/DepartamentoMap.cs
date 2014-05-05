@@ -8,7 +8,9 @@
         public DepartamentoMap()
         {
             Id(m => m.IdeDepartamento, "IDEDEPARTAMENTO");
+
             References(x => x.Dependencia).Column("IDEDEPENDENCIA");
+            
             Map(x => x.NombreDepartamento, "NOMDEPARTAMENTO");
             Map(x => x.EstadoActivo, "ESTACTIVO");
             Table("DEPARTAMENTO");

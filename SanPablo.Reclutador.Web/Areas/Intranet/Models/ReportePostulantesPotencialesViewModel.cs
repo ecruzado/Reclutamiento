@@ -31,5 +31,7 @@
 
         public List<Area> Areas { get; set; }
 
+        public string btnVerReporte { get; set; }
+
     }
 }

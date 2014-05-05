@@ -47,7 +47,8 @@
                             if (respuesta.Resultado) {
                                 $("#updateDialogConfirmacion").dialog("close");
                                 $("#SolReqPersonal_IdeSolReqPersonal").val(respuesta.IdDato);
-                                MostrarMensaje("Solicitud evniada exitosamente", "SAN PABLO");
+                                MostrarMensaje("Solicitud enviada exitosamente", "SAN PABLO");
+                                SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
                             }
                             else {
                                 $("#updateDialogConfirmacion").dialog("close");
@@ -453,6 +454,49 @@
              }
         });
 
+        $('#updateDialogAceptar').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function (e) {
+                    $('#updateDialogAceptar').dialog("close");
+                    $.blockUI({
+                        message: '<h1>Enviando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
+                    var idSol = $('#SolicitudRequerimiento_IdeSolReqPersonal').val();
+                    
+                    $.post('@Url.Action("aceptarSolicitud", "SolicitudAmpliacionCargo")',
+                         { id: idSol },
+                         function (respuesta) {
+                            $.unblockUI();
+                            if (respuesta.Resultado) {
+                                MostrarMensaje("Solicitud aceptada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
+                                SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
+                            }
+                            else {
+                                MostrarMensaje(respuesta.Mensaje, "Sistema de Reclutamiento y Selección de Personal");
+                            }
+                        }
+                    );
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+         });
+
+        
         $('#updateDialogAprobacion').dialog({
             autoOpen: false,
             width: 400,
@@ -484,6 +528,13 @@
             }
         });
 
+
+
+        
+        $('#btnAceptar').click(function () {
+            mostrarConfirmaAceptar();
+        });
+
         $('#btnPublicar').click(function () {
                 
             var pagina = '@TipoSolicitud.Ampliacion';
@@ -505,6 +556,11 @@
         });
 
     });
+
+  function mostrarConfirmaAceptar() {
+      var dialogDiv = $('#updateDialogAceptar');
+      dialogDiv.dialog('open');
+  }
 
   function confirmarEnvio()
   {
@@ -564,19 +620,38 @@
     }
 
     function enviarAprobacionRechazo() {
+
+        $('#updateDialogAprobacion').dialog('close');
+        $.blockUI({
+            message: '<h1>Enviando...</h1>',
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }
+        });
+
         $.post('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")',
              $('#aprobRechazForm').serialize(),
              function (respuesta) {
+                 $.unblockUI();
                  if (respuesta.Resultado) {
                      $('#updateDialogAprobacion').dialog("close");
-                     notificacionExito("Aprobación/Rechazo enviado exitosamente");
+                     MostrarMensaje("Aprobación/Rechazo enviado exitosamente");
+                     SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
                  }
                  else {
-                     notificacionError(respuesta.Mensaje);
+                     MostrarMensaje(respuesta.Mensaje);
                  }
              }
         );
     }
+
+
 
     function validaEnvio() {
 
@@ -585,8 +660,6 @@
 
         var observ = $('#SolicitudRequerimiento_Observacion').val();
         var motivo = $('#SolicitudRequerimiento_Motivo').val();
-
-
 
         //if (tipVacante == "0") {
         //    notificacionExito("Seleccione un tipo de vacante");
@@ -624,9 +697,9 @@
                 <h5>Solicitud de Ampliación de Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    @Html.HiddenFor(model=>model.SolicitudRequerimiento.IdeSede)
+                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSede, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
-                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {@type = "hidden"})
+                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {style = "display:none;" })
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
                 </div>            
             </div>
@@ -812,19 +885,23 @@
 
                     if (Accion.Aprobar.Equals(Model.Accion))
                     {
-                      <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
+                        <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                     }
                
                     if (Accion.Enviar.Equals(Model.Accion))
                     {
-                      <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
+                        <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
                     }
                 
                     if (Accion.Publicar.Equals(Model.Accion))
                     {
-                    <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                        <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                     }
-                    
+                    if (Accion.Aceptar.Equals(Model.Accion))
+                    {
+                         <a class="btn btn-info" id ="btnAceptar"><i class="icon-circle-arrow-up icon-white"></i> Aceptar</a>
+                    }
+
                 }
             </div>
        
@@ -836,4 +913,6 @@
 
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
+<div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de ampliación de cargo?</p></div>
 <div id="divMensaje"><span id="spanMensaje"></span></div>
+

@@ -1118,10 +1118,13 @@ namespace SanPablo.Reclutador.Repository
          /// <summary>
          /// determinar responsable de publicacion de acuerdo a requerimiento
          /// </summary>
-         public int responsablePublicacion(int ideCargo, int ideSede)
+         public LogSolReqPersonal responsablePublicacion(int ideSolicitud, int ideSede)
          {
+            
+             //    OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_DETERMINAR_RESPONSABLE");
+            
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
-
+             LogSolReqPersonal logSolicitud = new LogSolReqPersonal();
              try
              {
                  lcon.Open();
@@ -1129,11 +1132,16 @@ namespace SanPablo.Reclutador.Repository
                  cmd.CommandType = CommandType.StoredProcedure;
                  cmd.Connection = lcon;
 
-                 cmd.Parameters.Add("p_idCargo", OracleType.Int32).Value = ideCargo;
+                 cmd.Parameters.Add("p_idSolicitud", OracleType.Int32).Value = ideSolicitud;
                  cmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
                  cmd.Parameters.Add("p_idUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                 cmd.Parameters.Add("p_idRolResp", OracleType.Int32).Direction = ParameterDirection.Output;
                  cmd.ExecuteNonQuery();
-                 return Convert.ToInt32(cmd.Parameters["p_idUsuarioResp"].Value);
+
+                 logSolicitud.UsResponsable = Convert.ToInt32(cmd.Parameters["p_idUsuarioResp"].Value);
+                 logSolicitud.RolResponsable = Convert.ToInt32(cmd.Parameters["p_idRolResp"].Value);
+
+                 return logSolicitud;
 
              }
              catch (Exception ex)

@@ -190,11 +190,17 @@
         var imgPath = '@Url.Content("~/Content/images/")';
         var archivo = 'application.gif';
         var pagina = $('#pagina').val();
-        if (pagina != "04") {
-            strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+        var usuario = $('#usuarioSession').val();
+        if (pagina == "04") {
+            if (usuario == rowObject[8]) {
+                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            }
+            else {
+                strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            }
         }
         else {
-            strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
         }
         return strImg;
     }
@@ -285,9 +291,8 @@
                         @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.IdeSolReqPersonal, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.Tipsol, new { style = "display: none;" })  
+                        @Html.TextBoxFor(model => model.usuarioSession, new { style = "display:none;" })
                        
-
-
                         @Html.TextBoxFor(model => model.ReclutaPersona.IdeReclutaPersona, new { style = "display: none" })
                         @Html.TextBoxFor(model => model.PostulantePreSel.IdePostulante, new { style = "display: none" })
                         @Html.TextBoxFor(model => model.Solicitud.CodSolReqPersonal, new { disabled = "disabled" })

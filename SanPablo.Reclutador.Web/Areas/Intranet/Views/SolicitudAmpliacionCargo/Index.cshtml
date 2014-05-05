@@ -90,7 +90,7 @@
 
     $('#btnAproRechaSol').click(function () {
         var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        var pagina = '@TipoSolicitud.ConsultaRequerimientos';
+        var pagina = '@TipoSolicitud.Ampliacion';
         if (ideSolAmpliacion != null) {
             @*window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = ""})' + '/' + ideSolAmpliacion;*@
             var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + ideSolAmpliacion +"&pagina=" + pagina;
