@@ -50,8 +50,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
            
         }
 
-
-
         /// <summary>
         /// inicializa el ranking
         /// </summary>
