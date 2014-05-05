@@ -224,6 +224,12 @@
             Dependencia objDepencia = new Dependencia();
 
             var listaResultado = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == ideDependencia));
+
+            foreach (Departamento item in listaResultado)
+            {
+                item.Dependencia = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
@@ -239,6 +245,12 @@
             ActionResult result = null;
 
             var listaResultado = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+
+            foreach (SanPablo.Reclutador.Entity.Area item in listaResultado)
+            {
+                item.Departamento = null;
+            }
+            
             result = Json(listaResultado);
             return result;
         }
