@@ -40,6 +40,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IOfrecemosRequerimientoRepository _ofrecemosRequerimientoRepository;
         private IUsuarioRepository _usuarioRepository;
         private IRolRepository _rolRepository;
+        private IReemplazoRepository _reemplazoRepository;
       
         public SolicitudCargoController( IDetalleGeneralRepository detalleGeneralRepository,
                                          ISolReqPersonalRepository solReqPersonalRepository,
@@ -55,7 +56,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             IExperienciaRequerimientoRepository experienciaRequerimientoRepository,
             IOfrecemosRequerimientoRepository ofrecemosRequerimientoRepository,
             IUsuarioRepository usuarioRepository,
-            IRolRepository rolRepository
+            IRolRepository rolRepository,
+            IReemplazoRepository reemplazoRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -73,6 +75,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _ofrecemosRequerimientoRepository = ofrecemosRequerimientoRepository;
             _usuarioRepository = usuarioRepository;
             _rolRepository = rolRepository;
+            _reemplazoRepository = reemplazoRepository;
         }
 
         
@@ -548,7 +551,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
        /// Incializa el popup de reemplazo
        /// </summary>
        /// <returns></returns>
-        public ActionResult InicioPopupReemplazo(string id, string tipReemplazo) 
+        public ActionResult InicioPopupReemplazo(string id, string tipReemplazo, int idReemplazo) 
         {
 
             SolicitudRempCargoViewModel model;
@@ -559,7 +562,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Reemplazo = new Reemplazo();
 
             DateTime Hoy = DateTime.Today;
+            
+            //Edicion de reemplazo
+            if (idReemplazo>0)
+            {
+                var objReemplazo = _reemplazoRepository.GetSingle(x => x.IdReemplazo == idReemplazo);
+                if (objReemplazo != null)
+                {
+                    model.Reemplazo = (Reemplazo)objReemplazo;
+                    model.Reemplazo.IdReemplazo = idReemplazo;
+                }    
+            }
+            
 
+           
             if (id != null && id.Length > 0)
             {
                 model.SolReqPersonal.CodSolReqPersonal = id;
@@ -597,21 +613,44 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objJson = new JsonMessage();
             Reemplazo objReemplazo;
+            string mensaje ="";
             objReemplazo = new Reemplazo();
             objReemplazo = model.Reemplazo;
 
+            if (model.Reemplazo.IdReemplazo != null && model.Reemplazo.IdReemplazo > 0)
+            {
+                var obj = _reemplazoRepository.GetSingle(x => x.IdReemplazo == model.Reemplazo.IdReemplazo);
 
-            var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud==TipoSolicitud.Remplazo);
+                if (model.Reemplazo.FecFinalReemplazo!=null)
+                {
+                    obj.FecFinalReemplazo = model.Reemplazo.FecFinalReemplazo;    
+                }
+                if (model.Reemplazo.FecInicioReemplazo!=null)
+                {
+                    obj.FecInicioReemplazo = model.Reemplazo.FecInicioReemplazo;    
+                }
+                
+                obj.ApePaterno = model.Reemplazo.ApePaterno;
+                
+                obj.Nombres = model.Reemplazo.Nombres;
 
+                _reemplazoRepository.Update(obj);
+               mensaje = "Se actualizo el registro";
+                
+            }
+            else
+            {
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud == TipoSolicitud.Remplazo);
+                objReemplazo.IdeSolReqPersonal = Convert.ToInt32(objSol.IdeSolReqPersonal);
+                objReemplazo.FechaCreacion = FechaSistema;
+                objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
 
-            objReemplazo.IdeSolReqPersonal = Convert.ToInt32(objSol.IdeSolReqPersonal);
-            objReemplazo.FechaCreacion = FechaSistema;
-            objReemplazo.UsuarioCreacion = UsuarioActual.NombreUsuario;
-
-            int dato = 0;
-            dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
-
-            objJson.Mensaje = "Se grabo el registro correctamente";
+                int dato = 0;
+                dato = _solReqPersonalRepository.InsertTempReemplazo(objReemplazo);
+            }
+            mensaje = "Se grabo correctamente";
+            
+            objJson.Mensaje = mensaje;
             objJson.Resultado = true;
 
             return Json(objJson);
