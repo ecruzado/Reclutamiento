@@ -51,11 +51,11 @@
         $("#image").uploadify({
             'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
              'script': '@Url.Action("Upload", "Postulante")',
-             'scriptData': { ext: '.jpeg;.jpg' },
+             'scriptData': { ext: '.jpeg;.jpg;.png;' },
              'fileDataName': 'file',
              'buttonText': 'Subir Foto',
              'fileDesc': 'Image Files',
-             'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+             'fileExt': '*.jpeg;*.jpg;*.png;', //
              'multi': false,
              'auto': true,
              'queueSizeLimit': '90',
@@ -82,14 +82,11 @@
                         break;
                     case 'jpg':
                         break;
-                    case 'gif':
-                        break;
-                    case 'bmp':
-                        break;
                     case 'png':
                         break;
                     default:
-                        MotoTravel.ShowAlert('', "extensión no válida");
+                        //MotoTravel.ShowAlert('', "extensión no válida");
+                        MostrarMensaje("Extención no válida, subir imagen en los siguientes formatos .jpg, .jpeg, .png", "Sistema de reclutamiento y seleccion de personal");
                         $("#fileInput").uploadifyCancel(q);
                         $("#fileInput").uploadifyClearQueue();
                         estado = false;
