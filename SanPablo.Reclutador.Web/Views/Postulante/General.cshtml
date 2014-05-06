@@ -121,28 +121,29 @@
          });
 
        
-        $('#Postulante_FechaNacimiento').datepicker({
+      @*  $('#Postulante_FechaNacimiento').datepicker({
             showOn: "button",
+            //showOn: "both",
             dateFormat: 'dd/mm/yy',
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
-             buttonImageOnly: true,
+            buttonImageOnly: true,
             //defaultDate: "+1w",
-             changeMonth: true,
-             changeYear: true,
-             numberOfMonths: 1,
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 1,
             onSelect: function (date) {
-                if ($(this).valid())
-                {
-                    validarFechaNacimiento();
-                }
+              if ($(this).valid())
+              {
+                 validarFechaNacimiento();
+              }
             }
          });
 
-        $('#Postulante_FechaNacimiento').attr("readonly", "readonly");
+        $('#Postulante_FechaNacimiento').attr("readonly", "readonly");*@
 
-        $('#Postulante_FechaNacimiento').change(function () {
-            validarFechaNacimiento();
-        });
+        //$('#Postulante_FechaNacimiento').change(function () {
+        //    validarFechaNacimiento();
+        //});
 
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
@@ -188,11 +189,11 @@
             });
         })
 
-        //$(function () {
-        //    $('#Postulante_FechaNacimiento').blur(function () {
-        //        validarFechaNacimiento();
-        //    });
-        //});
+        $(function () {
+            $('#Postulante_FechaNacimiento').blur(function () {
+                validarFechaNacimiento();
+            });
+        });
 
         ////MOSTRAR IMAGEN
         //$(function () {
@@ -268,7 +269,8 @@
                     if (!respuesta) {
 
                         MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe comunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
-                        $('#Postulante_NumeroDocumento').val('');
+                        //$('#Postulante_NumeroDocumento').val('');
+                        $('#Postulante_NumeroDocumento').val('dd/mm/yyyy');
                         //msjError.style.display = "block";
                     }
                     else { msjError.style.display = "none"; }
@@ -469,7 +471,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento)
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>

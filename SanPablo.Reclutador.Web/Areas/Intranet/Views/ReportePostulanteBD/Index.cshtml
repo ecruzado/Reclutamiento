@@ -454,11 +454,12 @@
             <div class="grilla-opciones">
                 <div class="opciones">
 
-                @if(Visualicion.SI.Equals(Model.btnVerReporte))
+               @* @if(Visualicion.SI.Equals(Model.btnVerReporte))
                 {
+                    *@
                     <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
                     <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulanteBD")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
-                }
+                @*}*@
                 </div>
                 <div style="clear:both"></div>
             </div>

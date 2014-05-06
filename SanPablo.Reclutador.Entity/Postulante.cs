@@ -19,7 +19,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string PrimerNombre { get; set; }
         public virtual string SegundoNombre { get; set; }
 
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaNacimiento { get; set; }
 
@@ -41,9 +41,6 @@ namespace SanPablo.Reclutador.Entity
         [DataType(DataType.PhoneNumber)]
         public virtual int? TelefonoMovil { get; set; }
 
-        //[DataType(DataType.PhoneNumber)]
-        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
-        //
 
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\(?([0-9]{2,3})\)?([-]{1})([0-9]{3})([-]{1})([0-9]{3,4})$", ErrorMessage = "Formato de telefono no válido : (054)-124-1245")]
