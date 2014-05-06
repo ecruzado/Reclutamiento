@@ -84,6 +84,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 modelEvaluaciones.Solicitud.Tipsol = reclutaPersona.TipSol;
                 modelEvaluaciones.PostulantePreSel = postulante;
 
+                var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+
+                modelEvaluaciones.usuarioSession = usuarioSession.IDUSUARIO;
 
                 List<SolReqPersonal> listaSolicitud = _solReqPersonalRepository.GetDatosSol(modelEvaluaciones.Solicitud);
 
@@ -143,7 +146,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.DescripcionTipoExamen == null?"":item.DescripcionTipoExamen,
                                 item.FechaEvaluacion==null?"":String.Format("{0:dd/MM/yyyy}",item.FechaEvaluacion),
                                 item.HoraEvaluacion==null?"":String.Format("{0:hh:mm tt}",item.HoraEvaluacion),
-                                item.IdeUsuarioResponsable==0?"":item.IdeReclutamientoPersona.ToString(),
+                                item.IdeUsuarioResponsable==0?"":item.IdeUsuarioResponsable.ToString(),
                                 item.UsuarioResponsable==null?"":item.UsuarioResponsable,
                                 item.TipoEstadoEvaluacion==null?"":item.TipoEstadoEvaluacion,
                                 item.EstadoEvaluacion==null?"":item.EstadoEvaluacion,

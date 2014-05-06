@@ -30,6 +30,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         
         public List<DetalleGeneral> ListaAprobadoDesaprobado { get; set; }
         public string tipoArchivo { get; set; }
+        public int usuarioSession { get; set; }
+
 
     }
 }

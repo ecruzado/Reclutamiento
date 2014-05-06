@@ -76,7 +76,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.SolicitudRequerimiento = new SolReqPersonal();
                 }
 
-                int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
                 if (idRol != 0)
                 {
                     if ((idRol == Roles.Encargado_Seleccion) || (idRol == Roles.Analista_Seleccion))

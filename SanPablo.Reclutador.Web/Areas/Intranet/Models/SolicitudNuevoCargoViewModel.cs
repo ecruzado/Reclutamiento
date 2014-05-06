@@ -27,6 +27,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string Accion { get; set; }
 
         public string Pagina { get; set; }
+
+        public string btnVerRanking { get; set; }
+
+        public string btnVerPreSeleccion { get; set; }
+
+        public string btnVerPerfil { get; set; }
+
+        public string btnVerNuevo { get; set; }
+
+        public string btnVerRequerimiento { get; set; }
+
         
     }
 }

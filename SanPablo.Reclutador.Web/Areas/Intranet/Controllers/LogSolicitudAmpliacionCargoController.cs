@@ -135,7 +135,9 @@
                     {
                         logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.RolResponsable = Roles.Analista_Seleccion;
                     }
-                    logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.UsResponsable = _solicitudAmpliacionCargoRepository.responsablePublicacion(solicitudAmpliacion.IdeCargo, solicitudAmpliacion.IdeSede);
+
+                    var solicitudResp =  _solicitudAmpliacionCargoRepository.responsablePublicacion(ideSolicitud, solicitudAmpliacion.IdeSede);
+                    logSolicitudAmpCargoViewModel.LogSolicitudAmpliacion.UsResponsable = solicitudResp.UsResponsable;
                     break;
 
                 default:

@@ -72,7 +72,13 @@ namespace SanPablo.Reclutador.Repository.Interface
 
         int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolRespSgte, string indArea);
 
-        int responsablePublicacion(int ideCargo, int ideSede);
+        /// <summary>
+        /// DETERMINA EL USUARIO Y ROL RESPONSABLE DE LA PUBLICACION
+        /// </summary>
+        /// <param name="ideSolicitud"></param>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        LogSolReqPersonal responsablePublicacion(int ideSolicitud, int ideSede);
 
     }
 }

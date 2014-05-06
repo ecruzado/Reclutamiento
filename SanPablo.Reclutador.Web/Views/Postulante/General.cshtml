@@ -23,19 +23,19 @@
 
         // reconstruye la imagen para IE
         
-        $("#imgSalida1")
+        $("#imgSalida")
         .css({
             height: "150px",
             width: "150px"
 
         });
         
-        $("#imgSalida2")
-        .css({
-            height: "150px",
-            width: "150px"
+        //$("#imgSalida2")
+        //.css({
+        //    height: "150px",
+        //    width: "150px"
 
-        });
+        //});
 
         mostrarMensajeBienvenida();
 
@@ -82,6 +82,12 @@
                         break;
                     case 'jpg':
                         break;
+                    case 'gif':
+                        break;
+                    case 'bmp':
+                        break;
+                    case 'png':
+                        break;
                     default:
                         MotoTravel.ShowAlert('', "extensión no válida");
                         $("#fileInput").uploadifyCancel(q);
@@ -101,36 +107,43 @@
                     $("#ReclutaPersonaExamen_nombreArchivo").val(rsp.Data.NombreArchivo);
                     $("#nombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
 
-                    var path = location.pathname;
+                    // var path = location.pathname;
+                    //var path = '@Url.Content("~/Content/images/")';
+                    //var fullpath = path + rsp.Data.NombreTemporalArchivo;
                     var fullpath = "../Archivos/Imagenes/" + rsp.Data.NombreTemporalArchivo;
                     $('#imgSalida').attr("src", fullpath);
 
                 }
-                else {
+                //else {
 
-                }
+                //}
             }
          });
 
-        //var dlgsubirarchivoimagen = $("#dlgsubirarchivoimagen").dialog(
-        //  {
-        //      autoOpen: false,
-        //      modal: true,
-        //      title: "Cargar Imagen",
-        //      width: 500,
-        //      height: 240,
-        //      buttons: {
-        //          "Subir": function () {
-        //              //Guardar();
-        //              return true;
-        //          },
-        //          "Cancelar": function () {
-        //              $(this).dialog("close");
-        //              return false;
-        //          }
-        //      }
-        //  });
+       
+      @*  $('#Postulante_FechaNacimiento').datepicker({
+            showOn: "button",
+            //showOn: "both",
+            dateFormat: 'dd/mm/yy',
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            //defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 1,
+            onSelect: function (date) {
+              if ($(this).valid())
+              {
+                 validarFechaNacimiento();
+              }
+            }
+         });
 
+        $('#Postulante_FechaNacimiento').attr("readonly", "readonly");*@
+
+        //$('#Postulante_FechaNacimiento').change(function () {
+        //    validarFechaNacimiento();
+        //});
 
         //Cargar las Provincias del Departamento elegido
         $('select#Departamentos').change(function () {
@@ -230,7 +243,7 @@
                     if (!respuesta) {
                         var msjError = document.getElementById('errorFechaNacimiento');
                         msjError.style.display = "block";
-                        $('#Postulante_FechaNacimiento').val('dd/mm/aaaa');
+                        $('#Postulante_FechaNacimiento').val('');
 
                     }
                     else {
@@ -256,7 +269,8 @@
                     if (!respuesta) {
 
                         MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe comunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
-                        $('#Postulante_NumeroDocumento').val('');
+                        //$('#Postulante_NumeroDocumento').val('');
+                        $('#Postulante_NumeroDocumento').val('dd/mm/yyyy');
                         //msjError.style.display = "block";
                     }
                     else { msjError.style.display = "none"; }
@@ -270,6 +284,7 @@
     {
         $.ajax({
             type: "POST",
+            async: false,
             url: '@Url.Action("IndicadorSession","Postulante")',
             success: function (respuesta) {
                 if (!respuesta.Resultado) {
@@ -279,8 +294,6 @@
             }
         });
     }
-
-  
 
     function guardarDatosGenerales() {
 
@@ -367,14 +380,14 @@
                                          <tr style="text-align:center">
                                              <td style="width:100px;"></td>
                                               <td class ="colInput" colspan="3">
-                                                 <img id="imgSalida2"  height ="150" width="150" src ="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
+                                                 <img id="imgSalida"  height ="150" width="150" src ="@Url.Action("GetImage", "Postulante",new { id = Model.Postulante.IdePostulante })" /> 
                                               </td>
                                         </tr>
                                      </table>    
                                  }
                             else
                             {
-                                 <img src="~/Content/images/user4.png"  alt="" id ="imgSalida1"  width="40%" height="40%"/>
+                                 <img src="~/Content/images/user4.png"  alt="" id ="imgSalida"  width="40%" height="40%"/>
                              }
 
                              <br />

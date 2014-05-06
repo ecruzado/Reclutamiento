@@ -36,7 +36,12 @@
             if (nombreCargo != 0)
             {
                 if (validarFecha()) {
-               $('#grdListPostulantesBD').trigger('reloadGrid');
+                    $('#grdListPostulantesBD').trigger('reloadGrid');
+
+                    //if ($('#grdListPostulantesBD').rowObject != null) {
+                    //    alert('aqui');
+                    //}
+                    //else { alert('nothing');}
                 }
             }
             else
@@ -431,8 +436,12 @@
              </div>
             <div class="grilla-opciones">
                 <div class="opciones">
-                    <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
-                    <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulantePotencial")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
+                    @*@if(Visualicion.SI.Equals(Model.btnVerReporte))
+                    {
+                        *@
+                        <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
+                        <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulantePotencial")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
+                    @*}*@
                 </div>
                 <div style="clear:both"></div>
             </div>
