@@ -568,11 +568,32 @@
 
         var idUsu = $("#Usuario_IdUsuario").val();
 
-        if (idUsu != null && idUsu > 0) {
-            mostrarPopupTipoReq(idUsu);
-        } else {
-            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
-        }
+        // valida si es de recursos humanos
+        $.ajax({
+          data: {
+              id: idUsu
+          },
+          type: "POST",
+          url: '@Url.Action("ValidaTipoRol", "Usuario")',
+          traditional: true,
+          success: function (data) {
+              if (data.Resultado) {
+                  mostrarPopupTipoReq(idUsu);
+              }
+              else
+              {
+                  MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+              }
+          }
+        });
+
+
+
+        //if (idUsu != null && idUsu > 0) {
+        //    mostrarPopupTipoReq(idUsu);
+        //} else {
+        //    MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+        //}
 
 
     });
