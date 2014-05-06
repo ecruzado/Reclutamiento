@@ -38,7 +38,8 @@
             <div class="widget-title">
                 <h5>Examen</h5>
                 <div class="opciones">
-                    <a class="btn btn-small btn-info" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    <a class="btn btn-info" id="btnTerminarPrueba" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    @*<a class="btn btn-small btn-info" id="btnTerminarCabezera" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>*@
                 </div>
             </div>
             <table>
@@ -129,11 +130,11 @@
                 } 
                 @if(Accion.Siguiente == Model.Accion)
                 {    
-                    <button type="submit" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
+                    <button type="submit" id="btnSiguiente" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
                 }
                 else
                 {
-                    <a class="btn btn-info" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    <a class="btn btn-info" id="btnTerminar" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
                 }
 
                 
@@ -173,16 +174,26 @@
         });
         
 
-        //window.onbeforeunload = function (e) {
-        //    var e = e || window.event,
-        //        message = '¿Esta seguro de terminar el exámen?';
-        //    //
-        //    if (e) {
-        //        e.returnValue = message;
-        //    }
-        //    return message;
-        //}
-    });
+        $('#btnSiguiente').on('mousedown', stopNavigate);
+
+        //$('#btnSiguiente').on('mouseleave', function () {
+        //    $(window).on('beforeunload', function () {
+        //        return 'Are you sure you want to leave?';
+        //    });
+
+        //$(window).on('beforeunload', function(){
+        //      return 'Are you sure you want to leave?';
+        //});
+
+        window.onbeforeunload = function(e) {
+            return '¿Estas seguro de terminar la prueba?';
+        };
+
+        $(window).on('unload', function(){
+            cerrarPrueba();
+        });
+    
+        });
 
     function mueveReloj() {
         momentoActual = new Date()
@@ -278,6 +289,10 @@
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
+    }
+
+    function stopNavigate() {
+        $(window).off('beforeunload');
     }
     
 </script>

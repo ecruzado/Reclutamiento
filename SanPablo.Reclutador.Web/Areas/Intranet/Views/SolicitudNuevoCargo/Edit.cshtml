@@ -45,7 +45,7 @@
                                 text: "Si",
                                 click: function () {
                                     $(this).dialog("close");
-                                    $('#updateDialogAprobacion').dialog("close");
+                                    
                                     $.blockUI({
                                         message: '<h1>Enviando...</h1>',
                                         css: {
@@ -88,6 +88,7 @@
                     var result = $('#solicitudNuevoCargoForm').valid();
                     var codigo = $('#SolicitudNuevoCargo_CodigoCargo').val();
                     if (result) {
+                        $("#updateDialogConfirmacion").dialog("close");
                         $.blockUI({
                             message: '<h1>Enviando...</h1>',
                             css: {
@@ -103,18 +104,14 @@
                         $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
                         $("#solicitudNuevoCargoForm").serialize(),
                         function (respuesta) {
+                            $.unblockUI();
                             if (respuesta.Resultado) {
-                                $.unblockUI();
-                                $("#updateDialogConfirmacion").dialog("close");
                                 $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
-                                deshabilitarControles();
-                                actualizarCodigo(codigo);
-                                MostrarMensaje("Solicitud enviada exitosamente", "Sistema de reclutamiento y selección de personal");
+                                //actualizarCodigo(codigo);
+                                mensajeRedirecciona("Solicitud enviada exitosamente", "Sistema de reclutamiento y selección de personal");
                                 
                             }
                             else {
-                                $.unblockUI();
-                                $("#updateDialogConfirmacion").dialog("close");
                                 MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
                             }
                         });
@@ -197,13 +194,14 @@
 
     function enviarAprobacionRechazo()
     {
+        $('#updateDialogAprobacion').dialog("close");
         $.post('@Url.Action("Edit", "LogSolicitudNuevoCargo")',
              $('#LogSolicitudNuevoCargoForm').serialize(),
              function (respuesta) {
                  if (respuesta.Resultado) {
                     
                      $.unblockUI();
-                     MostrarMensaje("Aprobación/Rechazo enviado exitosamente", "Sistema de reclutamiento y selección de personal");
+                     mensajeRedirecciona("Aprobación/Rechazo enviado exitosamente", "Sistema de reclutamiento y selección de personal");
                      //notificacionExito();
                  }
                  else {
@@ -317,9 +315,19 @@
         $('#btnEnviar').removeAttr("disabled");
     }
 
-    function bloquearPantalla()
+    function mensajeRedirecciona(mensaje, titulo)
     {
-        
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            modal: true,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                }
+            }
+        });
     }
 
 </script>
@@ -368,7 +376,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Cargo</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { onkeyup="aMays(event, this)" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { maxlength="50", onkeyup="aMays(event, this)" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NombreCargo)
                                         </div>
@@ -394,7 +402,7 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Descripción</label>
                                     <div class="controles">
-                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { onkeyup="aMays(event, this)" })
+                                        @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { maxlength="100", onkeyup="aMays(event, this)" })
                                         <div class="tex-error" style="font-size:12px;color:red"> 
                                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
                                         </div>
@@ -465,7 +473,7 @@
                 <div class="grilla-opciones">
                 <h6>Estudios</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" ,onkeyup="aMays(event, this)" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , maxlength="255", onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
                 </div>
@@ -475,7 +483,7 @@
                 <div class="grilla-opciones">
                 <h6>Competencias</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;"  ,onkeyup="aMays(event, this)"  })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", maxlength= "255", onkeyup="aMays(event, this)"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
                 </div>
@@ -485,7 +493,7 @@
                 <div class="grilla-opciones">
                 <h6>Funciones</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; " ,onkeyup="aMays(event, this)"  })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new  { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; " , maxlength= "255", onkeyup="aMays(event, this)"  })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
                 </div>
@@ -495,7 +503,7 @@
                 <div class="grilla-opciones">
                 <h6>Observaciones adicionales</h6>
                 <div style="clear:both"></div>
-                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" ,onkeyup="aMays(event, this)" })
+                @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" ,maxlength="255", onkeyup="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                      @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
                 </div>
@@ -538,10 +546,10 @@
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
 
-<div id="divMensaje">
+@*<div id="divMensaje">
     <span id="spnMensaje"></span>
-</div>    
+</div>  *@  
   
-<div id="divMensajeOtro">
-    <spn id="spnMensajeOtro"></spn>
-</div>    
+@*<div id="divMensajeOtro">
+    <span id="spnMensajeOtro"></span>
+</div> *@   

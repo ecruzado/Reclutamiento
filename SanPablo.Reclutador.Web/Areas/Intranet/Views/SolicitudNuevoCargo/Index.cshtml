@@ -276,7 +276,7 @@
 
     });
 
-    function ActivarDesactivarSolicitud(selr, estado) {
+    @*function ActivarDesactivarSolicitud(selr, estado) {
 
         $.ajax({
             data: {
@@ -297,7 +297,7 @@
             }
         });
 
-    }
+    }*@
 
    
     function HabilitarFormatter(cellvalue, options, rowObject) {
@@ -507,14 +507,28 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
-                <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
 
-
-                <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
-                <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
-                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
-                <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                @if(Visualicion.SI.Equals(Model.btnVerRanking))
+                {
+                    <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+                }
+                @if(Visualicion.SI.Equals(Model.btnVerPreSeleccion))
+                {
+                    <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
+                }
+                @if(Visualicion.SI.Equals(Model.btnVerPerfil))
+                {
+                    <a id="btnPerfil" class="btn btn-info"><i class="icon-user icon-white"></i> Perfil</a>
+                }
+                @if(Visualicion.SI.Equals(Model.btnVerNuevo))
+                {
+                    <a id="btnNuevo" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a>
+                }
+                @if(Visualicion.SI.Equals(Model.btnVerRequerimiento))
+                {
+                    <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Requerimiento</a>
+                }
+                @*<a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>*@
                 @*<button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
             </div>
 
