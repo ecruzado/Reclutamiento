@@ -37,7 +37,7 @@
                     var result = $('#LogSolicitudNuevoCargoForm').valid();
                     if (result) {
                         
-                        $("#spnMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
                         $("#divMensaje").dialog({
                             title: 'Sistema de reclutamiento y Selección de personal',
                             modal: true,
@@ -519,21 +519,23 @@
                 {    
                     <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 }
-                @if (Accion.Aprobar.Equals(Model.Accion))
-                {
-                 <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
-                }
-               
-                
-                
-                @if (Accion.Enviar.Equals(Model.Accion))
-                {
-                  <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
-                }
-                
-                
 
-                
+                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                {
+                    <span></span>
+                }
+                else
+                {
+                    if (Accion.Aprobar.Equals(Model.Accion))
+                    {
+                        <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> Aprob/Rech</a>
+                    }
+
+                    if (Accion.Enviar.Equals(Model.Accion))
+                    {
+                       <a id="btnEnviar" class="btn btn-info" onclick="validarFormulario();"> <i class="icon-screenshot icon-white"></i> Enviar</a>
+                    }
+                }
                   
             </div>
 

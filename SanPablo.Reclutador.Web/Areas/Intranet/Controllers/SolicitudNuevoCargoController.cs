@@ -168,7 +168,14 @@
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.No;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
             }
-
+            if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+            {
+                solicitudnuevoViewModel.btnVerRanking = Indicador.No;
+                solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
+                solicitudnuevoViewModel.btnVerNuevo = Indicador.No;
+                solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
+            }
             return View(solicitudnuevoViewModel);
         }
 
@@ -217,10 +224,13 @@
                 if (solNuevoCargo.EstadoActivo == IndicadorActivo.Activo)
                 {
                     solicitudNuevoCargoViewModel.Estado = "Activo";
+                    solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
                 }
                 else
-                { solicitudNuevoCargoViewModel.Estado = "Inactivo"; }
-                solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
+                {
+                    solicitudNuevoCargoViewModel.Estado = "Inactivo"; 
+                }
+                
             }
             else
             {
@@ -429,8 +439,6 @@
             {
                 item.Dependencia = null;
             }
-
-            
             result = Json(listaResultado);
             return result;
         }

@@ -170,18 +170,20 @@
                     {
                         logSolicitud.TipoEtapa = Etapa.Rechazado;
 
-                        var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
+                        //Regresa la solicitud al solicitante en caso de rechazo
+                        //var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
 
-                        logSolicitud.RolResponsable = logSolicitudInicial.RolSuceso;
-                        logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioResponsable;
+                        //logSolicitud.RolResponsable = logSolicitudInicial.RolSuceso;
+                        //logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioResponsable;
 
-                        if ((logSolicitud.RolResponsable == Roles.Jefe) || (logSolicitud.RolResponsable == Roles.Gerente))
-                        {
-                            indArea = "SI";
-                        }
+                        //if ((logSolicitud.RolResponsable == Roles.Jefe) || (logSolicitud.RolResponsable == Roles.Gerente))
+                        //{
+                        //    indArea = "SI";
+                        //}
+                        indArea = "NO";
+                       
                     }
                 }
-
 
                 var solicitudNuevo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
 
@@ -189,8 +191,14 @@
 
                 if (ideUsuarioResp != -1)
                 {
+                    if (!model.Aprobado)
+                    {
+                        var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
+                        ideUsuarioResp = logSolicitudInicial.UsuarioResponsable;
+                    }
+                    
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
-
+                    
                     if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, model.SolicitudNuevoCargo))
                     {
                         return "Se envio la Aprobación correctamente";

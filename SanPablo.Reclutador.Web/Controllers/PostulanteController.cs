@@ -238,11 +238,15 @@
                     _postulanteRepository.Add(model.Postulante);
                     IdePostulante = model.Postulante.IdePostulante;
                     
-                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(usuarioExtranet.IdUsuario) && x.IndicadorPostulante == TipUsuario.Instranet);
-                    usuario.IdePostulante = IdePostulante;
-                    usuario.IndicadorPostulante = Indicador.Si;
-                    _usuarioRepository.Update(usuario);
-                    
+                    var usuario = _usuarioRepository.GetBy(x => x.CodUsuario == usuarioExtranet.CodUsuario);
+
+                    foreach (Usuario item in usuario)
+                    {
+                        item.IdePostulante = IdePostulante;
+                        item.IndicadorPostulante = Indicador.Si;
+                        _usuarioRepository.Update(item);
+                    } 
+
                 }
                 else
                 {
