@@ -33,6 +33,31 @@
             });
 
 
+            $('select#oportunidadLaboral_IdeSede').change(function () {
+                var ideSede = $('#oportunidadLaboral_IdeSede').val();
+                        $("select#oportunidadLaboral_IdeCargo").empty();
+                        $("select#oportunidadLaboral_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("listaOportunidades", "OportunidadLaboral")',
+                            data: { ideSede: ideSede },
+                    success: function (respuesta) {
+                        $("select#oportunidadLaboral_IdeCargo").empty();
+                        $("select#oportunidadLaboral_IdeCargo").append("<option value='0'> Seleccionar </option>");
+                        $.each(respuesta, function (i, item) {
+                            $("select#oportunidadLaboral_IdeCargo").append("<option value='"
+                            + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
+                        }
+                        );
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                    });
+                })
+
 
             $('#btnBuscarOportunidadLab').click(function () {
 

@@ -69,7 +69,7 @@
 
              @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { style = "display: none;" })
              @Html.TextBoxFor(model => model.TipoReemplazo, new { style = "display: none;" })
-            
+             @Html.TextBoxFor(model => model.Reemplazo.IdReemplazo, new { style = "display: none;" })
 
 
             <td class="colEtiqueta" >
@@ -108,7 +108,7 @@
             </td>
             <td class="colInput;input-xxlarge">
                 
-                 <input type="text" class="input-small"  id="Reemplazo_FecInicioReemplazo" name="Reemplazo.FecInicioReemplazo" placeholder=" Inicial" >
+                 <input type="text" class="input-small"  id="Reemplazo_FecInicioReemplazo" name="Reemplazo.FecInicioReemplazo" placeholder=" Inicial" value="@String.Format("{0:dd/MM/yyyy}",Model.Reemplazo.FecInicioReemplazo)">
                               
                               
                 @* @Html.EditorFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
@@ -123,7 +123,7 @@
                 <label class="etiquetaFormulario" >Fecha Fin<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                 <input type="text" class="input-small"  id="Reemplazo_FecFinalReemplazo" name="Reemplazo.FecFinalReemplazo" placeholder=" Final">
+                 <input type="text" class="input-small"  id="Reemplazo_FecFinalReemplazo" name="Reemplazo.FecFinalReemplazo" placeholder=" Final" value="@String.Format("{0:dd/MM/yyyy}", Model.Reemplazo.FecFinalReemplazo)">
 
                 @* @Html.EditorFor(model => model.Reemplazo.FecFinalReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Final"})      *@
                 @*<div class="tex-error" style="font-size:12px;color:red">   

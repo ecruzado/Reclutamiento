@@ -157,9 +157,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
                 {
                     var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-                    objCategoria.USRCREACION = "Prueba 02";
+                    objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
                     objCategoria.FECCREACION = Hoy;
-                    objCategoria.USRMODIFICA = "Prueba 01";
+                    objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
                     objCategoria.FECMODIFICA = Hoy;
                     objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
                     objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
@@ -184,12 +184,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
                 else
                 {
-                    model.Categoria.USRCREACION = "Prueba 01";
+                    model.Categoria.USRCREACION = UsuarioActual.NombreUsuario;
                     model.Categoria.FECCREACION = Hoy;
-                    model.Categoria.USRMODIFICA = "Prueba 01";
+                    model.Categoria.USRMODIFICA = UsuarioActual.NombreUsuario;
                     model.Categoria.FECMODIFICA = Hoy;
                     //model.Categoria.ORDENIMPRESION = "1";
-                    model.Categoria.ESTACTIVO = "A";
+                    model.Categoria.ESTACTIVO = IndicadorActivo.Activo;
 
 
                     var listaCategoria = _categoriaRepository.All();
@@ -215,9 +215,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
                 {
                     var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-                    objCategoria.USRCREACION = "Prueba 02";
+                    objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
                     objCategoria.FECCREACION = Hoy;
-                    objCategoria.USRMODIFICA = "Prueba 01";
+                    objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
                     objCategoria.FECMODIFICA = Hoy;
                     objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
                     objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
@@ -322,7 +322,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.USRCREACION = UsuarioActual.NombreUsuario;
                 objCategoriaModel.SubCategoria.USRMODIFICACION = UsuarioActual.NombreUsuario;
                 objCategoriaModel.SubCategoria.ORDENIMPRESION = 1;
-                objCategoriaModel.SubCategoria.ESTACTIVO = "A";
+                objCategoriaModel.SubCategoria.ESTACTIVO = IndicadorActivo.Activo;
                 objCategoriaModel.SubCategoria.NOMSUBCATEGORIA = model.SubCategoria.NOMSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.DESCSUBCATEGORIA = model.SubCategoria.DESCSUBCATEGORIA;
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;

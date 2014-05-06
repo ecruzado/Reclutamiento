@@ -531,15 +531,37 @@
 
             id = $("#SolReqPersonal_CodSolReqPersonal").val();
             tipReemplazo = $("#SolReqPersonal_TipVacante").val();
-
+            idReemplazo = 0;
             if (id != null && id > 0) {
-                mostrarPopuprReemplazo(id, tipReemplazo);
+                mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo);
             } else {
                 MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
 
 
         });
+
+
+        $('#btnEditar').click(function () {
+
+            var id = $("#SolReqPersonal_CodSolReqPersonal").val();
+            var tipReemplazo = $("#SolReqPersonal_TipVacante").val();
+
+            var selRow = $('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdListReemplazosReq').jqGrid('getRowData', selRow);
+            var idReemplazo = rowData.IdReemplazo;
+
+            var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
+            
+            if (selr != null) {
+                mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo);
+            } else {
+                MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+
+        });
+        
 
        
         $('#btnEliminaReemplazo').click(function () {
@@ -787,10 +809,10 @@
    
 
     //inicio
-    function mostrarPopuprReemplazo(id, tipReemplazo) {
+    function mostrarPopuprReemplazo(id, tipReemplazo,idReemplazo) {
         var dialogDiv = $('#popupDialogReemplazo');
 
-        $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id + "&tipReemplazo=" + tipReemplazo, function (data) {
+        $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id + "&tipReemplazo=" + tipReemplazo + "&idReemplazo=" + idReemplazo, function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#popupDialogReemplazo"));
@@ -1168,7 +1190,8 @@
                                 }
                                 else
                                 {
-                                    <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>  
+                                    <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>
+                                    <a id="btnEditar"  class ="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>  
                                     <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
                                 }
                             </div>
@@ -1261,12 +1284,12 @@
                     {
                       <a  class="btn btn-info" id ="btnAprobarRechazarReemplazo"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                     }
-                
+
                     if (Accion.Enviar.Equals(Model.Accion))
                     {
                       <a  class="btn btn-info" onclick="EnvioSolicitud()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
                     }
-                
+
                     if (Accion.Publicar.Equals(Model.Accion))
                     {
                     <a class="btn btn-info" id ="btnPublicarSolReemplazo"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>

@@ -1049,6 +1049,7 @@
                 lspcmd.CommandType = CommandType.StoredProcedure;
                 lspcmd.Connection = lcon;
 
+                lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdeSede;
                 lspcmd.Parameters.Add("p_crpta", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 ldrOportunidadLaboral = (OracleDataReader)lspcmd.ExecuteReader();
