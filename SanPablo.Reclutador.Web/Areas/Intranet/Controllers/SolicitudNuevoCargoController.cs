@@ -373,9 +373,36 @@
                 }
                 else
                 {
-                    objJsonMessage.Mensaje = "No puede enviar la solicitud nuevamente";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    //objJsonMessage.Mensaje = "No puede enviar la solicitud nuevamente";
+                    //objJsonMessage.Resultado = false;
+                    //return Json(objJsonMessage);
+
+                    // Editar datos 
+                    if (model.SolicitudNuevoCargo != null)
+                    {
+                        var solicitudEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo);
+
+                        solicitudEditar.CodigoCargo = model.SolicitudNuevoCargo.CodigoCargo;
+                        solicitudEditar.NombreCargo = model.SolicitudNuevoCargo.NombreCargo;
+                        solicitudEditar.DescripcionCargo = model.SolicitudNuevoCargo.DescripcionCargo;
+                        solicitudEditar.NumeroPosiciones = model.SolicitudNuevoCargo.NumeroPosiciones;
+                        solicitudEditar.TipoRangoSalarial = model.SolicitudNuevoCargo.TipoRangoSalarial;
+                        solicitudEditar.DescripcionEstudios = model.SolicitudNuevoCargo.DescripcionEstudios;
+                        solicitudEditar.DescripcionCompetencias = model.SolicitudNuevoCargo.DescripcionCompetencias;
+                        solicitudEditar.DescripcionFunciones = model.SolicitudNuevoCargo.DescripcionFunciones;
+                        solicitudEditar.DescripcionObservaciones = model.SolicitudNuevoCargo.DescripcionObservaciones;
+
+                        _solicitudNuevoCargoRepository.Update(solicitudEditar);
+
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -529,14 +556,32 @@
 
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
-        public ActionResult verificarCodigo(string codCodigo)
+        public ActionResult verificarCodigo(string codCodigo , int id)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
                 int ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-                objJsonMessage.Resultado =  _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo, ideSede);
-                objJsonMessage.Mensaje = "Codigo de cargo ya existe";
+                //var resul = _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo, ideSede);
+                if (id != 0)
+                {
+                    var result = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == id);
+                    if (result.CodigoCargo == codCodigo)
+                    {
+                        objJsonMessage.Resultado = false;
+                    }
+                    else
+                    {
+                        objJsonMessage.Resultado = _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo, ideSede);
+                        objJsonMessage.Mensaje = "Codigo de cargo ya existe";
+                    }
+                }
+                else
+                {
+                    objJsonMessage.Resultado = _solicitudNuevoCargoRepository.verificarCodCodigo(codCodigo, ideSede);
+                    objJsonMessage.Mensaje = "Codigo de cargo ya existe";
+                }
+                
                 return Json(objJsonMessage);
             }
             catch(Exception ex)

@@ -42,7 +42,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string EstadoActivo { get; set; }
         public virtual string TipoEtapa { get; set; }
         public virtual string ObservacionPublicacion { get; set; }
-        public virtual int IdeCargo { get; set; }
+        public virtual int? IdeCargo { get; set; }
 
 
         /// <summary>

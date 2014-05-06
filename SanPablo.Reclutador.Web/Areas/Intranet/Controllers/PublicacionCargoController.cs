@@ -257,7 +257,7 @@
             {
                 var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 CargoPerfil = new DatosCargo();
-                CargoPerfil.IdeCargo = solicitud.IdeCargo;
+                CargoPerfil.IdeCargo = Convert.ToInt32(solicitud.IdeCargo);
             }
             
             int IdeCargo = CargoPerfil.IdeCargo;
@@ -342,7 +342,7 @@
                     var horario = _horarioCargoRepository.getMaxPuntValue(x => x.Cargo.IdeCargo == solicitudNuevoCargoEditar.IdeCargo);
                     objRecluta.TipPuesto = horario.TipoHorario;
                     objRecluta.IdSede = solicitudNuevoCargoEditar.IdeSede;
-                    objRecluta.IdeCargo = solicitudNuevoCargoEditar.IdeCargo;
+                    objRecluta.IdeCargo = Convert.ToInt32(solicitudNuevoCargoEditar.IdeCargo);
                     //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
                     _solReqPersonalRepository.verificaPotenciales(objRecluta);
 					
