@@ -445,8 +445,67 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.UsuarioRolSede = new UsuarioRolSede();
 
             model.IdUsuario = id;
+            //String IndGrilla = Visualicion.NO;
+
+            //visualiza los tipo de requerimiento
+
+            //var ListaRoles =  _usuarioRolSedeRepository.GetListaRol(id);
+
+            //if (ListaRoles!=null)
+            //{
+            //    foreach (Rol item in ListaRoles)
+            //    {
+            //        if (Roles.Encargado_Seleccion.Equals(item) || Roles.Analista_Seleccion.Equals(item))
+            //        {
+            //            IndGrilla = Visualicion.SI;
+            //        }
+            //    }
+            //}
+
+            //model.IndGrilla = IndGrilla;
+
 
             return View("PopupTipoReq",model);
+
+        }
+
+
+        /// <summary>
+        /// Valida si el tipo de rol es uno de recursos humanos
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ValidaTipoRol(int id)
+        {
+            JsonMessage objJson = new JsonMessage();
+
+
+            string IndGrilla = Visualicion.NO;
+
+            var ListaRoles =  _usuarioRolSedeRepository.GetListaRol(id);
+
+            if (ListaRoles!=null)
+            {
+                foreach (Rol item in ListaRoles)
+                {
+                    if (Roles.Encargado_Seleccion.Equals(item.IdRol) || Roles.Analista_Seleccion.Equals(item.IdRol))
+                    {
+                        IndGrilla = Visualicion.SI;
+                    }
+                }
+            }
+
+            if (Visualicion.SI.Equals(IndGrilla))
+	        {
+		       objJson.Resultado = true;
+	        }else
+	        {
+               objJson.Resultado = false;
+               objJson.Mensaje = "Debe tener un rol encargado de selección o analista de selección para poder asignar un tipo de requerimiento";
+	        }
+
+            return Json(objJson);
 
         }
 

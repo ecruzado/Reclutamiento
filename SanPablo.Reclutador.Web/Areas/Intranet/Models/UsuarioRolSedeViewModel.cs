@@ -59,7 +59,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         /// boton que realiza la eliminacion
         /// </summary>
         public string btnEliminar { get; set; }
-        
 
+
+        /// <summary>
+        /// indicador de visualizacion de la grilla
+        /// </summary>
+        public string IndGrilla { get; set; }
     }
 }
