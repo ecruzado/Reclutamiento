@@ -126,7 +126,7 @@
                 alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
                 alter.Peso = model.Alternativa.Peso;
                 model.Alternativa.FechaModificacion = Hoy;
-                model.Alternativa.UsuarioModificacion = "Prueba 02";
+                model.Alternativa.UsuarioModificacion = UsuarioActual.NombreUsuario;
                 if (model.Alternativa.Image != null)
                 {
                     alter.Image = model.Alternativa.Image;
@@ -139,8 +139,8 @@
             else
             {
                 model.Alternativa.FechaCreacion = Hoy;
-                model.Alternativa.UsuarioCreacion = "Prueba 01";
-                model.Alternativa.ESTACTIVO = "A";
+                model.Alternativa.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                model.Alternativa.ESTACTIVO = IndicadorActivo.Activo;
                 _alternativaRepository.Add(model.Alternativa);
                 objJsonMensage.Resultado = true;
                 objJsonMensage.Mensaje = "Se registro el registro correctamente";

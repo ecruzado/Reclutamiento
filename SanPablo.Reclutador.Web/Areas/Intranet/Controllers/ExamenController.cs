@@ -305,7 +305,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
+                
                 DetachedCriteria where = null;
 
                 if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
