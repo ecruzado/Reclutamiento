@@ -13,7 +13,12 @@
     //Table initialisation 
     $(document).ready(function () {
 
+        $('#btnBuscarExamen').click(function () {
+            $('#grdList').trigger('reloadGrid');
+        });
+
         
+
         $("#spanActivarDesactivar").html("¿Desea Activar/Desactivar el registro?")
         $('#divActivarDesactivar').dialogo({
             buttons: {
@@ -353,7 +358,7 @@
                     <td>
                     @if (Visualicion.SI.Equals(Model.btnBuscar))
                     {
-                      <button id="btnBuscarExamen" type="submit" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</button>
+                      <a id="btnBuscarExamen" class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
                     }
                     @if (Visualicion.SI.Equals(Model.btnLimpiar))
                     {
