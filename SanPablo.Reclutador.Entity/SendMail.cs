@@ -73,6 +73,8 @@
         /// <returns></returns>
         public string ObtenerCuerpoCorreo(string path, List<string> parametros, List<string> valores)
         {
+            
+
             StreamReader sr = new StreamReader(path);
             string cuerpo = sr.ReadToEnd();
             for (int i = 0; i < parametros.Count; i++)
@@ -179,6 +181,14 @@
         public void EnviarCorreo(string dir, string etapa,string responsable, string tipoRequerimiento, string observacion,
                                 string cargo, string codCargo, string destinatario, string suceso)
         {
+            
+
+                //Dar formato a textos
+                Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
+                Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
+                Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
+                Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
+            
 
             List<string> mail = cuerpoMail(etapa, tipoRequerimiento, responsable, observacion, suceso, cargo, codCargo);
 

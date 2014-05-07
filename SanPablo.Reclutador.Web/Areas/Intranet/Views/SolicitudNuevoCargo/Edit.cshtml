@@ -335,21 +335,21 @@
     }
 
     function habilitarControles() {
-        $('#SolicitudNuevoCargo_CodigoCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_NombreCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionCargo').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_TipoRangoSalarial').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_CodigoCargo').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_NombreCargo').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_DescripcionCargo').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_TipoRangoSalarial').removeAttr("disabled");
         $('#Dependencias').removeAttr("disabled");
         $('#Departamentos').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeDependencia').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeDepartamento').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionEstudios').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionCompetencias').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
-        $('#btnEnviar').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_DescripcionEstudios').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_DescripcionCompetencias').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
+        //$('#btnEnviar').removeAttr("disabled");
     }
 
     function mensajeRedirecciona(mensaje, titulo)
@@ -509,7 +509,7 @@
                                          }
                                         else
                                         {
-                                            @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { disabled = "disabled" })
+                                            @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class = "input-mini", disabled = "disabled" })
                                         }
                                     </div>
                                 </div>
@@ -610,7 +610,7 @@
                 }
                 else
                 {
-                     @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; ", maxlength = "255", onkeyup = "aMays(event, this)" })
+                     @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; ", disabled = "disabled" })
                 }
                 </div>
             </div>
