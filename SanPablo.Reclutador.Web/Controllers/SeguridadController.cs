@@ -131,7 +131,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             else
             {
                 ObjJsonMessage.Resultado = false;
-                ObjJsonMessage.Mensaje = "Usuario o contraseña incorrecta";
+                ObjJsonMessage.Mensaje = "Usuario o contraseña incorrecta.";
             }
 
             return Json(ObjJsonMessage);
@@ -197,7 +197,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                     if (lista != null && lista.Count > 0)
                     {
                         objJson.Resultado = false;
-                        objJson.Mensaje = "El usuario ya se encuentra registrado, Ingrese un nuevo usuario";
+                        objJson.Mensaje = "El usuario ya se encuentra registrado, Ingrese un nuevo usuario.";
 
                     }
                     else
@@ -297,13 +297,13 @@ namespace SanPablo.Reclutador.Web.Controllers
                 else
                 {
                     objJson.Resultado = false;
-                    objJson.Mensaje = "Error en registrar el usuario";
+                    objJson.Mensaje = "Error en registrar el usuario.";
                 }
             }
             catch (Exception)
             {
                 objJson.Resultado = false;
-                objJson.Mensaje = "Error en envio de correo";
+                objJson.Mensaje = "Error en envio de correo.";
                
             }
 
@@ -372,25 +372,25 @@ namespace SanPablo.Reclutador.Web.Controllers
                        //envioEmail.ObtenerCuerpoCorreo
 
                        objJsonMensaje.Resultado = true;
-                       objJsonMensaje.Mensaje = "Se envio la contraseña a su correo electrónico";
+                       objJsonMensaje.Mensaje = "Se envio la contraseña a su correo electrónico.";
 
                    }
                    else
                    {
                        objJsonMensaje.Resultado = false;
-                       objJsonMensaje.Mensaje = "El correo electrónico no se encuentra registrado";
+                       objJsonMensaje.Mensaje = "El correo ingresado no es válido.";
                    }
                 }
                 else
                 {
                     objJsonMensaje.Resultado = false;
-                    objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas";
+                    objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas.";
                 }
             }
             catch (Exception)
             {
                 objJsonMensaje.Resultado = false;
-                objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas";
+                objJsonMensaje.Mensaje = "Error : comuniquese con el area de sistemas.";
             }
           
 
