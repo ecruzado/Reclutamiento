@@ -104,21 +104,21 @@
 {
     @Html.ValidationSummary(true)
     
-  <table style="margin-left:120px;">
+  <table style="margin-left:30px;">
         <tr>
             <td colspan="8">&nbsp;</td>
         </tr>
       @Html.HiddenFor(model =>model.Examen.IdeExamen)
         <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="inputSuccess">Tipo</label>
+                <label class="etiquetaFormulario" >Tipo</label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Categoria.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Categoria.TipoCriterio),new { data_val = "false" ,@disabled = "disabled"})
             </td>
             <td style="width:40px;"></td> 
         <td class="colEtiqueta">
-            <label class="etiquetaFormulario" for="inputSuccess">Descripción</label>
+             <label class="etiquetaFormulario" >Descripción</label>
             </td>   
             <td class="colInput">
                 @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onkeyup="aMays(event, this)"}) 
