@@ -85,7 +85,7 @@
         </div>
         <label style="font-weight:bold;font-size:13px;">Contraseña</label>
        
-        @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "input-block-level" , type="password",placeholder="Contraseña" }) 
+        @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "input-block-level" , type="password",placeholder="Contraseña"  ,@maxlength = "20"}) 
         <div class="tex-error" style="font-size:12px;color:red">         
           @Html.ValidationMessageFor(model => model.UsuarioExtranet.Password)
         </div>
@@ -97,14 +97,17 @@
         </div>
         <br />
         <br />
-        <a id="lnkRestablecePass"  style="font-weight:bold;font-size:12px;color:#99356b">¿No puedes acceder a tu cuenta?</a>
+        @*<a id="lnkRestablecePass"  style="font-weight:bold;font-size:12px;color:#99356b">¿No puedes acceder a tu cuenta?</a>*@
+    
+        <a href="#" id="lnkRestablecePass"  style="font-weight:bold;font-size:12px;color:#99356b">¿No puedes acceder a tu cuenta?</a>
+    
         <br />
-        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a id="lnkRegistrarUsuario"  style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>
+        <span style="font-weight:normal;font-size:11px;color:#000">¿No dispones de una cuenta?  </span><a href="#" id="lnkRegistrarUsuario"  style="font-weight:bold;font-size:12px;color:#99356b">Registrate Ahora</a>
     
 }
     </div> <!-- /container -->
     <div id="PopupDialogLogeoExtranet" title="Registro de Nuevo Usuario"></div>
-    <div id="PopupDialogRestablePass" title="Olvide mi contraseña."></div>
+    <div id="PopupDialogRestablePass" title="Olvide mi contraseña"></div>
     
     <div id="LogeoExtranet"><span id="spanLogeoExtranet"></span></div>
     <div id="DialogRestablePass"><span id="spanDialogRestablePass"></span></div>
