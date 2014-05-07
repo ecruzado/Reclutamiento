@@ -44,11 +44,11 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .WithMessage("Ingresar nombre con menos de 25 caracteres");
 
           
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Ingrese email valido");
+            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Ingrese email válido");
 
             RuleFor(x => x.Telefono)
                  .NotEmpty()
-                 .WithMessage("Ingresar numero de telefono");
+                 .WithMessage("Ingresar número de telefono");
 
            
         }

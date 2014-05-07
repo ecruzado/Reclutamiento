@@ -43,7 +43,7 @@
             </td>
             <td class="colInput;input-xxlarge">
 
-                 @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "textoFormulario" ,type = "password" ,  maxlength="15",placeholder="Ingresar como minimo 7 Caracteres"})      
+                 @Html.TextBoxFor(model => model.UsuarioExtranet.Password, new { @class = "textoFormulario" ,type = "password" ,  @maxlength = "20" ,placeholder="Ingresar como minimo 7 Caracteres"})      
                 <div class="tex-error" style="font-size:12px;color:red">   
                     @Html.ValidationMessageFor(model => model.UsuarioExtranet.Password )
                 </div>
@@ -56,7 +56,7 @@
             </td>
             <td class="colInput;input-xxlarge">
 
-                 @Html.TextBoxFor(model => model.UsuarioExtranet.PasswordConfirma, new { @class = "textoFormulario" ,type = "password" ,  maxlength="15",placeholder="Confirmar Contraseña"})      
+                 @Html.TextBoxFor(model => model.UsuarioExtranet.PasswordConfirma, new { @class = "textoFormulario" ,type = "password" ,  @maxlength = "20" ,placeholder="Confirmar Contraseña"})      
                 <div class="tex-error" style="font-size:12px;color:red">   
                     @Html.ValidationMessageFor(model => model.UsuarioExtranet.PasswordConfirma )
                 </div>
