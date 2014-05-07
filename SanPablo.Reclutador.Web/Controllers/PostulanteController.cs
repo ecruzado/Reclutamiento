@@ -562,7 +562,8 @@
                 model.Distritos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == provincia.IdeUbigeo));
                 model.Provincias = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == departamento.IdeUbigeo));
                 model.Departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
-                model.Departamentos.Insert(departamento.IdeUbigeo, departamento);
+                model.Departamentos.Insert(0, departamento);
+                // model.Departamentos.Insert(departamento.IdeUbigeo, departamento);
 
             }
             

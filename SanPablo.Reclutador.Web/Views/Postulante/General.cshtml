@@ -146,14 +146,14 @@
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
             $("select#Distritos").empty();
-            $("select#Distritos").append("<option value='00'> Seleccionar </option>");
+            $("select#Distritos").append("<option value='0'> Seleccionar </option>");
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listarUbigeos","Postulante")',
                 data: { ideUbigeoPadre: ideDepartamento },
                 success: function (respuesta) {
                     $("select#Provincias").empty();
-                    $("select#Provincias").append("<option value='00'> Seleccionar </option>");
+                    $("select#Provincias").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#Provincias").append("<option value='" 
                         + item.IdeUbigeo +"'>" + item.Nombre + "</option>");
@@ -176,7 +176,7 @@
                 data: { ideUbigeoPadre: ideProvincia },
                 success: function (respuesta) {
                     $("select#Distritos").empty();
-                    $("select#Distritos").append("<option value='00'> Seleccionar </option>");
+                    $("select#Distritos").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#Distritos").append("<option value='"
                         + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
