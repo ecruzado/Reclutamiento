@@ -144,7 +144,16 @@
             //determinar los permisos de botones
             var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-            if ((rolSession == Roles.Jefe)||(rolSession == Roles.Gerente)||(rolSession == Roles.Gerente_General_Adjunto))
+
+            if (rolSession == Roles.Jefe) 
+            {
+                solicitudnuevoViewModel.btnVerRanking = Indicador.No;
+                solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerNuevo = Indicador.Si;
+                solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
+            }
+            if ((rolSession == Roles.Gerente)||(rolSession == Roles.Gerente_General_Adjunto))
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.No;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;

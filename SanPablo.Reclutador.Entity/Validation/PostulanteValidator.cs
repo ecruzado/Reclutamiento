@@ -63,19 +63,32 @@
                 .WithMessage("Ingresar sexo");
             
             RuleFor(x => x.TipoEstadoCivil)
-                .NotEqual("00")
+                .NotEqual("0")
                 .WithMessage("Ingresar Estado Civil");
+
+
+            RuleFor(x => x.Pais)
+                .NotEqual(9000)
+                .WithMessage("Ingresar país de residencia");
+
+            RuleFor(x => x.Departamento)
+                .NotEqual(0)
+                .WithMessage("Ingresar departamento de residencia");
+
+            RuleFor(x => x.Provincia)
+                .NotEqual(0)
+                .WithMessage("Ingresar provincia de residencia");
 
             RuleFor(x => x.IdeUbigeo)
                 .NotEqual(0)
-                .WithMessage("Ingresar Distrito de residencia");
+                .WithMessage("Ingresar distrito de residencia");
 
             RuleFor(x => x.Correo)
                 .EmailAddress()
-                .WithMessage("Ingresar Correo Valido");
+                .WithMessage("Ingresar correo válido");
 
             RuleFor(x => x.TipoVia)
-                .NotEqual("00")
+                .NotEqual("0")
                 .WithMessage("Ingresar Tipo Via");
 
             RuleFor(x => x.NumeroDireccion)
@@ -102,6 +115,11 @@
                .InclusiveBetween(900000000, 999999999)
                .WithMessage("Ingresar teléfono movil válido");
 
+
+            RuleFor(x => x.TelefonoFijo)
+                .NotEmpty().When(x => x.TelefonoMovil == null)
+                .WithMessage("Ingresar un numero de contacto movil y/o fijo");
+                
 
             RuleFor(x => x.Observacion)
                 .Length(0, 255)

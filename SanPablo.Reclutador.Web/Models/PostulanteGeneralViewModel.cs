@@ -19,6 +19,7 @@
         public virtual IList<Ubigeo> Departamentos { get; set; }
         public virtual IList<Ubigeo> Provincias { get; set; }
         public virtual IList<Ubigeo> Distritos { get; set; }
+        public virtual IList<Ubigeo> Paises { get; set; }
         public virtual IList<DetalleGeneral> TipoVias { get; set; }
         public virtual IList<DetalleGeneral> TipoZonas { get; set; }
 

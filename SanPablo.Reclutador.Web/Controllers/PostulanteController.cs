@@ -83,6 +83,9 @@
             postulanteGeneralViewModel.TipoZonas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoZona));
             postulanteGeneralViewModel.TipoZonas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
+            postulanteGeneralViewModel.Paises = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeo == 2000));
+            postulanteGeneralViewModel.Paises.Add(new Ubigeo { IdeUbigeo = 9000, Nombre = "SELECCIONE" });
+
             postulanteGeneralViewModel.Departamentos = new List<Ubigeo>();
             postulanteGeneralViewModel.Departamentos = cargarDepartamentos();
             postulanteGeneralViewModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "SELECCIONE" });
@@ -330,6 +333,8 @@
             }
         }
 
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
+        [HttpPost]
         public ActionResult pestañasActivas()
         {
             ActionResult result = null;
@@ -528,6 +533,16 @@
              ActionResult result = null;
 
              var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
+            result = Json(listaResultado);
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult listarDepartamentos()
+        {
+            ActionResult result = null;
+
+            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
             result = Json(listaResultado);
             return result;
         }

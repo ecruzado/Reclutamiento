@@ -15,6 +15,7 @@
             RuleFor(x => x.PuntajeHorario)
                 .NotEmpty()
                 .WithMessage("Ingresar Puntaje");
+
             RuleFor(x => x.PuntajeHorario)
                 .InclusiveBetween(0, 10)
                 .WithMessage("Ingresar un puntaje entre 0 y 10");

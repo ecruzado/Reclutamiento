@@ -42,7 +42,7 @@
         SanPablo.Numeros('Postulante_NumeroDireccion');
         SanPablo.Numeros('Postulante_NumeroDocumento');
         SanPablo.Numeros('Postulante_TelefonoMovil');
-
+        SanPablo.NumeroTelefono('Postulante_TelefonoFijo');
 
         mostrarAlerta();
         actualizarBarra();
@@ -142,18 +142,50 @@
         //    validarFechaNacimiento();
         //});
 
+        //Cargar departamentos 
+        $('select#Postulante_Pais').change(function () {
+            var valor = $(this).val();
+            $("select#Provincias").empty();
+            $("select#Provincias").append("<option value='0'> SELECCIONE </option>");
+            $("select#Distritos").empty();
+            $("select#Distritos").append("<option value='0'> SELECCIONE </option>");
+            if (valor != "9000") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("listarDepartamentos","Postulante")',
+                    //data: { ideUbigeoPadre: null },
+                    success: function (respuesta) {
+                        $("select#Departamentos").empty();
+                        $("select#Departamentos").append("<option value='0'> SELECCIONE </option>");
+                        $.each(respuesta, function (i, item) {
+                            $("select#Departamentos").append("<option value='"
+                            + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
+                        }
+                    );
+                    }
+                });
+            }
+            else {
+                $("select#Departamentos").empty();
+                $("select#Departamentos").append("<option value='0'> SELECCIONE </option>");
+            }
+          })
+
+
+
         //Cargar las Provincias del Departamento elegido
+
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
             $("select#Distritos").empty();
-            $("select#Distritos").append("<option value='0'> Seleccionar </option>");
+            $("select#Distritos").append("<option value='0'> SELECCIONE </option>");
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listarUbigeos","Postulante")',
                 data: { ideUbigeoPadre: ideDepartamento },
                 success: function (respuesta) {
                     $("select#Provincias").empty();
-                    $("select#Provincias").append("<option value='0'> Seleccionar </option>");
+                    $("select#Provincias").append("<option value='0'> SELECCIONE </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#Provincias").append("<option value='" 
                         + item.IdeUbigeo +"'>" + item.Nombre + "</option>");
@@ -176,7 +208,7 @@
                 data: { ideUbigeoPadre: ideProvincia },
                 success: function (respuesta) {
                     $("select#Distritos").empty();
-                    $("select#Distritos").append("<option value='0'> Seleccionar </option>");
+                    $("select#Distritos").append("<option value='0'> SELECCIONE </option>");
                     $.each(respuesta, function (i, item) {
                         $("select#Distritos").append("<option value='"
                         + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
@@ -192,39 +224,8 @@
             });
         });
 
-        ////MOSTRAR IMAGEN
-        //$(function () {
-        //    $('#FotoPostulante').change(function (e) {
-        //        addImage(e);
-        //    });
-
-        //    function addImage(e) {
-        //        var file = e.target.files[0],
-        //        imageType = /image.*/;
-
-        //        if (!file.type.match(imageType))
-        //            return;
-
-        //        var reader = new FileReader();
-        //        reader.onload = fileOnload;
-        //        reader.readAsDataURL(file);
-        //    }
-
-        //    function fileOnload(e) {
-        //        var result = e.target.result;
-        //        $('#imgSalida').attr("src", result);
-        //    }
-        //});
 
     });
-   @* function mostrarAgregarFoto() {
-        var dialogDiv = $('#updateDialog');
-        $.get('@Url.Action("subirFoto", "Postulante")', function (data) {
-             dialogDiv.html(data);
-             dialogDiv.dialog('open');
-         });
-         return false;
-    }*@
 
 
 
@@ -239,6 +240,7 @@
                 success: function (respuesta) {
                     if (!respuesta) {
                         var msjError = document.getElementById('errorFechaNacimiento');
+                        msjError.innerHTML = "  Debes ser mayor de edad";
                         msjError.style.display = "block";
                         $('#Postulante_FechaNacimiento').val('');
 
@@ -292,12 +294,24 @@
         });
     }
 
+    function verificarNrosTelefonicos() {
+        var nroMovil = $("#Postulante_TelefonoMovil").val();
+        var nroFijo = $("#Postulante_TelefonoFijo").val();
+        var msjError = document.getElementById('msjValidador');
+        if ((nroMovil == "") && (nroFijo == "")) {
+            msjError.innerHTML = "Debe ingresar un nro de contancto: movil y/o fijo";
+            msjError.style.display = "block";
+
+        }
+        else { msjError.style.display = "none"; }
+    }
+
     function guardarDatosGenerales() {
 
         var nroMovil = $("#Postulante_TelefonoMovil").val();
         var nroFijo = $("#Postulante_TelefonoFijo").val();
         var msjError = document.getElementById('msjValidador');
-
+        var result1 = $('#generalForm').valid();
         if ((nroMovil == "") && (nroFijo == "")) {
             msjError.innerHTML ="Debe ingresar un nro de contancto: movil y/o fijo";
             msjError.style.display= "block";
@@ -325,7 +339,9 @@
       }
     }
     
-
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
     
 </script>
 }
@@ -338,6 +354,8 @@
        
      @using (Html.BeginForm("General", "Postulante", FormMethod.Post, new {@id="generalForm", enctype = "multipart/form-data" }))
      { 
+         
+         @Html.ValidationSummary(true)
          <div class="alert alert-info" id="mensajeError" style="display:none" >
         <a class="close" onclick="hide('alerta')" >×</a>
         </div>
@@ -473,7 +491,6 @@
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>
                             <div  id="errorFechaNacimiento" class="tex-error" style="font-size:12px;color:red; display:none;" > 
-                             <span>  Debes ser mayor de edad.</span> 
                             </div>
                         </td>
                         <td style="width:40px;"></td>
@@ -533,10 +550,14 @@
                             <label class="etiquetaFormulario" for="sedepartamento">País <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            <select id="pais" class="textoFormulario">
-                                <option>Seleccionar</option>
+                            @Html.DropDownListFor(model => model.Postulante.Pais, new SelectList(Model.Paises, "IdeUbigeo", "Nombre", Model.Postulante.Pais))
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Postulante.Pais)
+                            </div>
+                            @*<select id="pais" class="textoFormulario">
+                                <option>SELECCIONE</option>
                                 <option selected="selected">PERÚ</option>
-                            </select>
+                            </select>*@
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
@@ -556,9 +577,9 @@
                         </td>
                         
                         <td id="Departamentos" class="colInput">
-                            @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos), new { @id = "Departamentos" })
+                            @Html.DropDownListFor(model => model.Postulante.Departamento, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Postulante.Departamento), new { @id = "Departamentos" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.IdeUbigeo)
+                                @Html.ValidationMessageFor(model => model.Postulante.Departamento)
                             </div>
 
                         </td>
@@ -579,9 +600,9 @@
                             <label class="etiquetaFormulario" for="seprovincia">Provincia <span class="text-error">*</span></label>
                         </td>
                         <td id="Provincias" class="colInput">
-                              @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias), new { @id = "Provincias" }) 
+                              @Html.DropDownListFor(model => model.Postulante.Provincia, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Postulante.Provincia), new { @id = "Provincias" }) 
                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Postulante.IdeUbigeo)
+                                @Html.ValidationMessageFor(model => model.Postulante.Provincia)
                             </div>
                            
                         </td>
@@ -645,7 +666,7 @@
                             <label class="etiquetaFormulario" for="txttelefonomovil">Teléfono movil </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.TelefonoMovil)
+                            @Html.TextBoxFor(model => model.Postulante.TelefonoMovil, new { maxlength = "9", onblur="verificarNrosTelefonicos();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.TelefonoMovil)
                             </div>
@@ -666,7 +687,7 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Teléfono fijo</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.TelefonoFijo, new {placeholder="(054)-000-0000" })
+                            @Html.TextBoxFor(model => model.Postulante.TelefonoFijo, new { placeholder = "(054)-000-0000", maxlength = "14", onblur= "verificarNrosTelefonicos();" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.TelefonoFijo)
                             </div>
