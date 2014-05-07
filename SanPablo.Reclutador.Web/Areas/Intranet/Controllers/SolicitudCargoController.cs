@@ -972,7 +972,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
 
 
-                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al analista: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
+                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
 
                             
                         }
@@ -1005,11 +1005,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (retorno > 0)
             {
 
+               //SolReqPersonal objSolicitud = new SolReqPersonal();
+                SolReqPersonal objSolicitud = null;
+               
+                objSolicitud = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == model.SolReqPersonal.IdeSolReqPersonal && x.EstadoActivo == IndicadorActivo.Activo);
 
                var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp);
                string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
 
-               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "", "Reemplazo de cargo", model.SolReqPersonal.CodSolReqPersonal);
+               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", objSolicitud.nombreCargo, objSolicitud.CodCargo);
 
                 
                 objJson.Resultado = true;
@@ -1100,7 +1104,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsResponsable);
 
 
-                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Aprobado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
+
+                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo);
+
+
                             retorno = 1;
 
                        
@@ -1165,7 +1172,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="cargoDescripcion"></param>
         /// <param name="codCargo"></param>
         /// <returns></returns>
-        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string observacion, string cargoDescripcion, string codCargo)
+        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
@@ -1178,7 +1185,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                 enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                enviarMail.EnviarCorreo(dir, etapa, rolResponsable, "Reemplazo de cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+                enviarMail.EnviarCorreo(dir, etapa, rolResponsable, tipoRq,"",cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
 
                 return true;
             }
@@ -1553,7 +1560,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", "Reemplazo de cargo", objSol.CodSolReqPersonal);
+                    //bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", "Reemplazo de cargo", objSol.CodSolReqPersonal);
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo);
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";

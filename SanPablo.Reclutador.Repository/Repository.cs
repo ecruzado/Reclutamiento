@@ -42,6 +42,7 @@
 
         public TEntity GetSingle(Expression<Func<TEntity, bool>> condition)
         {
+            _session.Clear();
             return _session.QueryOver<TEntity>()
                     .Where(condition)
                     .SingleOrDefault();
