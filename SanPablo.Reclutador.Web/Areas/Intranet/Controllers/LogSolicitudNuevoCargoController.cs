@@ -199,7 +199,7 @@
                     
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
                     
-                    if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, model.SolicitudNuevoCargo))
+                    if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, solicitud))
                     {
                         return "Se envio la Aprobación correctamente";
                     }
@@ -272,7 +272,7 @@
             enviar.Area = usuarioSession.AREADES;
             try
             {
-                enviar.EnviarCorreo(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "NUEVO CARGO", logSolicitud.Observacion, solicitudNuevo.NombreCargo, solicitudNuevo.CodigoCargo, usuario.Email, "Suceso");
+                enviar.EnviarCorreo(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres,"Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, solicitudNuevo.CodigoCargo, usuario.Email, "Suceso");
                 return true;
             }
             catch (Exception)

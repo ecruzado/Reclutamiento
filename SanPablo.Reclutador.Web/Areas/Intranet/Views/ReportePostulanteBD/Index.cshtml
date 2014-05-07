@@ -29,18 +29,34 @@
         });
 
 
+        $('#btnPDF').hide();
+        $('#btnEXCEL').hide();
+
+
         $('#btnBuscarPostulantes').click(function () {
             var nombreCargo = $('#Solicitud_nombreCargo').val();
 
             if (nombreCargo.length > 0)
             {
                 if (validarFecha()) {
-               $('#grdListPostulantesBD').trigger('reloadGrid');
+                    $('#grdListPostulantesBD').trigger('reloadGrid');
+
+                    var count = $("#grdListPostulantesBD").getGridParam("reccount");
+                    if (count == 0) {
+                        $('#btnPDF').hide();
+                        $('#btnEXCEL').hide();
+
+                        MostrarMensaje('No hay resultados de busqueda', "Sistema de Reclutamiento y Selección de Personal");
+                    }
+                    else {
+                        $('#btnPDF').show();
+                        $('#btnEXCEL').show();
+                    }
                 }
             }
             else
             {
-                MostrarMensaje('Ingresar un Cargo a buscar', "Sistema de Reclutamiento y Seleccion de Persona");
+                MostrarMensaje('Ingresar un Cargo a buscar', "Sistema de Reclutamiento y Seleccion de Personal");
             }
            
         });
@@ -56,8 +72,7 @@
 
         $('#Registro_Desde,#Registro_Hasta').attr("readonly", "readonly");
 
-
-
+       
         $('select#Departamentos').change(function () {
             var ideDepartamento = $(this).val();
             $("select#Distritos").empty();
@@ -454,12 +469,8 @@
             <div class="grilla-opciones">
                 <div class="opciones">
 
-               @* @if(Visualicion.SI.Equals(Model.btnVerReporte))
-                {
-                    *@
                     <a class="btn btn-info" id="btnPDF"><i class="icon-eye-open icon-white"></i> PDF</a>
                     <a class="btn btn-info" id="btnEXCEL" href="@Url.Action("ObtenerReporteExcel", "ReportePostulanteBD")"><i class="icon-tasks  icon-white"></i> EXCEL</a>
-                @*}*@
                 </div>
                 <div style="clear:both"></div>
             </div>

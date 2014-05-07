@@ -30,18 +30,30 @@
         });
 
 
+        $('#btnPDF').hide();
+        $('#btnEXCEL').hide();
+
+
         $('#btnBuscarPostulantes').click(function () {
             var nombreCargo = $('#PostulantePotencial_IdeCargo').val();
 
             if (nombreCargo != 0)
             {
                 if (validarFecha()) {
-                    $('#grdListPostulantesBD').trigger('reloadGrid');
+                    $('#grdListPostulantesPotenciales').trigger('reloadGrid');
 
-                    //if ($('#grdListPostulantesBD').rowObject != null) {
-                    //    alert('aqui');
-                    //}
-                    //else { alert('nothing');}
+                    var count = $("#grdListPostulantesPotenciales").getGridParam("reccount");
+                    if (count == 0) {
+                        $('#btnPDF').hide();
+                        $('#btnEXCEL').hide();
+
+                        MostrarMensaje('No hay resultados de busqueda', "Sistema de Reclutamiento y Selección de Personal");
+                    }
+                    else {
+                        $('#btnPDF').show();
+                        $('#btnEXCEL').show();
+                    }
+                    
                 }
             }
             else
