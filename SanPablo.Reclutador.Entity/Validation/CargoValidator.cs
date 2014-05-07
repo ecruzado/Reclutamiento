@@ -28,34 +28,34 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el puntaje para el postulante interno")
-                .ExclusiveBetween(0, 10)
+                .InclusiveBetween(0, 10)
                 .WithMessage("el rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.EdadInicio)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el inicio de rango de edad");
             RuleFor(x => x.EdadInicio)
-                .ExclusiveBetween(18, 99)
+                .InclusiveBetween(18, 99)
                 .WithMessage("El postulante debe ser mayor de edad");
 
             RuleFor(x => x.EdadFin)
                 .NotEmpty()
                 .WithMessage("Debe ingresar el fin de rango de edad");
             RuleFor(x => x.EdadFin)
-                .ExclusiveBetween(18, 99)
+                .InclusiveBetween(18, 99)
                 .WithMessage("Postulante mayor de edad");
 
             RuleFor(x => x.PuntajeEdad)
                 .NotEmpty()
                 .WithMessage("Debe ingresar puntaje de edad")
-                .ExclusiveBetween(0,10)
+                .InclusiveBetween(0,10)
                 .WithMessage("El rango de puntaje es de 0 a 10");
 
 
             RuleFor(x => x.PuntajeSalario)
                 .NotEmpty()
                 .WithMessage("Debe ingresar puntaje de edad")
-                .ExclusiveBetween(0, 10)
+                .InclusiveBetween(0, 10)
                 .WithMessage("El rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.Sexo)
@@ -65,7 +65,7 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.PuntajeSexo)
                  .NotEmpty()
                  .WithMessage("Debe ingresar puntaje de sexo")
-                .ExclusiveBetween(0, 10)
+                .InclusiveBetween(0, 10)
                 .WithMessage("El rango de puntaje es de 0 a 10");
 
             RuleFor(x => x.TipoRequerimiento)

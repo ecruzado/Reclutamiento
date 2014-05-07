@@ -192,7 +192,6 @@
                         $.post('@Url.Action("Edit", "OfrecimientoCargo")',
                                 $("#ofrecemosForm").serialize(),
                                 function (respuesta) {
-                                    alert(respuesta.Resultado);
                                     if (respuesta.Resultado) {
                                         $("#updateDialog2").dialog("close");
                                         $('#grdListOfrecemos').trigger('reloadGrid');

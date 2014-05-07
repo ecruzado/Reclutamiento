@@ -545,6 +545,10 @@
          }
          else { msjError.style.display = "none"; }
      }
+
+     $('input[data-val=true]').on('blur', function () {
+         $(this).valid();
+     });
 </script>
 
 }
