@@ -14,14 +14,14 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .WithMessage("Ingresar el Objetivos");
             RuleFor(x => x.ObjetivoCargo)
                 .Length(1,255)
-                .WithMessage("El campo no debe sobrepasar los 255 caracteres");
+                .WithMessage("Máx. 255 caracteres");
 
             RuleFor(x => x.FuncionCargo)
                 .NotEmpty()
                 .WithMessage("Ingresar las Funciones");
             RuleFor(x => x.FuncionCargo)
                 .Length(1, 255)
-                .WithMessage("El campo no debe sobrepasar los 255 caracteres");
+                .WithMessage("Máx. 255 caracteres");
 
             //pestaña General
 

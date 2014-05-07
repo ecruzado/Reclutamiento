@@ -68,6 +68,7 @@
             }
         }
 
+        [ValidarSesion]
         public ViewResult Edit()
         {
             var cargoViewModel = InicializarOfrecimientos();

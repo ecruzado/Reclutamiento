@@ -69,6 +69,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionOtroMedio { get; set; }
         public virtual string TipoComoSeEntero { get; set; }
 
+
+
+        public virtual int Pais { get; set; }
+        public virtual int Departamento { get; set; }
+        public virtual int Provincia { get; set; }
+
+
         /// <summary>
         /// tipo de puesto
         /// </summary>

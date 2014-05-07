@@ -21,6 +21,9 @@
         else
         {
             @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , onkeyup="aMays(event, this)" })
+            <div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Cargo.ObjetivoCargo)
+            </div>
         }
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
@@ -36,6 +39,9 @@
         else
         {
             @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", onkeyup="aMays(event, this)" })
+            <div class="tex-error" style="font-size:12px;color:red"> 
+                @Html.ValidationMessageFor(model => model.Cargo.FuncionCargo)
+            </div>
         }
         <div class="grilla-opciones">
             <h6>Competencias</h6>
@@ -186,6 +192,7 @@
                         $.post('@Url.Action("Edit", "OfrecimientoCargo")',
                                 $("#ofrecemosForm").serialize(),
                                 function (respuesta) {
+                                    alert(respuesta.Resultado);
                                     if (respuesta.Resultado) {
                                         $("#updateDialog2").dialog("close");
                                         $('#grdListOfrecemos').trigger('reloadGrid');
