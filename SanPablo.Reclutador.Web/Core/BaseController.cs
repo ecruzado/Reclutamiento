@@ -285,7 +285,7 @@ namespace SanPablo.Reclutador.Web.Core
             get
             {
                 //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
-                return new Usuario { NombreUsuario = (String)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes] };
+                return new Usuario { NombreUsuario = (String)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes].ToString().Substring(0,15) };
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
         }

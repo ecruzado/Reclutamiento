@@ -57,9 +57,9 @@
                         SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                 }*@
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Selección de Personal");
                 } else {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Selección de Personal");
                     $('#grdListBusquedaReemplazo').trigger('reloadGrid');
                 }
             }
@@ -81,11 +81,34 @@
 
              if (idSol != null) {
 
-                 var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
-                 window.location = url;
+                 @* var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                 window.location = url;*@
+
+                 $.ajax({
+                     type: "POST",
+                     url: '@Url.Action("ValidaSol", "SolicitudCargo", new { area = "Intranet"})',
+                    data: { idSol: selr },
+                    success: function (data) {
+
+                    if (data.Resultado) {
+
+                        var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                        window.location = url;
+
+                    } else {
+                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "Sistema de Reclutamiento Y Selección de Personal");
+                    }
+
+                   },
+                      error: function (e) {
+                          console.log(e);
+                      }
+                  });
+
+
 
              } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
              }
 
       });
@@ -98,12 +121,34 @@
         if (selr != null) {
            
            
-            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
-            window.location = url;
+            @* var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
+            window.location = url;*@
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ValidaSol", "SolicitudCargo", new { area = "Intranet"})',
+                     data: { idSol: selr },
+                     success: function (data) {
+
+                         if (data.Resultado) {
+
+                             var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
+                             window.location = url;
+
+                    } else {
+                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "Sistema de Reclutamiento Y Selección de Personal");
+                    }
+
+                    },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
            
 
         } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
         }
 
     }); 
@@ -113,11 +158,38 @@
         var pagina = '@TipoSolicitud.Remplazo';
         if (selr != null) {
 
-            var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + selr +"&pagina=" + pagina;
-            window.location = url;
-           
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ValidaEstadoSol", "SolicitudCargo", new { area = "Intranet"})',
+                data: { idSol: selr },
+                success: function (data) {
+               
+                    if (data.Resultado) {
+
+                        var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + selr + "&pagina=" + pagina;
+                        window.location = url;
+
+                    } else {
+                        MostrarMensaje('La solicitud debe encontrarse activa', "Sistema de Reclutamiento Y Selección de Personal");
+                    }
+
+                },
+            error: function (e) {
+                console.log(e);
+            }
+            });
+
+
+
+            
+            
+
+
+
+            
         } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
         }
 
      });
@@ -409,17 +481,6 @@
                     </td>
                 </tr>
                 <tr class="formulario-fila">
-                    @*<td class="span5">
-                        
-                            <label class="control-label" for="inputSuccess">Responsable</label>
-                            <div class="controles">
-                                
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipResponsable, new SelectList(Model.listaRol, "IdRol", "CodRol", Model.SolReqPersonal.TipResponsable), new {  data_val = "false"})     
-                            </div>
-                       
-                    </td>  *@    
-                    
-                    
                                   
                     <td class="span5">
                        
