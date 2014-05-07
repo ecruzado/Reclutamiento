@@ -513,7 +513,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
 
                 jsonMessage.Resultado = false;
-                jsonMessage.Mensaje = "Error : No se permite eliminar la categoría";
+                jsonMessage.Mensaje = "No se puede eliminar la categoría";
             }
            
 
@@ -540,12 +540,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (IndicadorActivo.Activo.Equals(codEstado))
                 {
                     objExamen.EstActivo = IndicadorActivo.Inactivo;
-                    objJsonMessage.Mensaje = "Se desactivado el examen";
+                    objJsonMessage.Mensaje = "El examen se desactivo correctamente";
                 }
                 else
                 {
                     objExamen.EstActivo = IndicadorActivo.Activo;
-                    objJsonMessage.Mensaje = "Se activo el examen";
+                    objJsonMessage.Mensaje = "El examen se activó satisfactoriamente";
                 }
 
                 objJsonMessage.Resultado = true;
@@ -610,7 +610,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objExamen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
                 _examenRepository.Remove(objExamen);
                 objJsonMessage.Resultado = true;
-                objJsonMessage.Mensaje = "Se elimino el registro";
+                objJsonMessage.Mensaje = "Se elimino el registro correctamente";
 
                
              }
@@ -618,7 +618,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
 
                 objJsonMessage.Resultado = false;
-                objJsonMessage.Mensaje = "Error al eliminar el registro";
+                objJsonMessage.Mensaje = "No se puede eliminar el examen debido a que tiene asociado una Categoría(s)";
             }
             
            

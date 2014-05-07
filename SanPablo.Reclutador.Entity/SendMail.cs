@@ -177,7 +177,18 @@
             return mail;
  
         }
-
+        /// <summary>
+        /// Envia Correo
+        /// </summary>
+        /// <param name="dir">ruta</param>
+        /// <param name="etapa">etapa</param>
+        /// <param name="responsable">responsable</param>
+        /// <param name="tipoRequerimiento">tipo de requerimiento: reemplazo, ampliacion  y Nuevo</param>
+        /// <param name="observacion">Observacion</param>
+        /// <param name="cargo">Nombre del cargo</param>
+        /// <param name="codCargo">Codigo del cargo</param>
+        /// <param name="destinatario">destino</param>
+        /// <param name="suceso">suceso</param>
         public void EnviarCorreo(string dir, string etapa,string responsable, string tipoRequerimiento, string observacion,
                                 string cargo, string codCargo, string destinatario, string suceso)
         {

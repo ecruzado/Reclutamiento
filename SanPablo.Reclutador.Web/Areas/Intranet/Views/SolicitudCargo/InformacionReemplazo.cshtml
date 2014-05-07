@@ -898,27 +898,43 @@
         var observ = $('#SolReqPersonal_Observacion').val();
         var tipoPuesto = $('#SolReqPersonal_TipPuesto').val();
         
-        
+        var idDependencia = $('#SolReqPersonal_IdeDependencia').val();
+        var idDepartamento = $('#SolReqPersonal_IdeDepartamento').val();
+        var idArea = $('#SolReqPersonal_IdeArea').val();
 
         if (tipVacante=="0") {
-            notificacionExito("Seleccione un tipo de vacante");
+            MostrarMensaje("Seleccione un tipo de vacante", "Mensaje");
             return false;
         }
 
         if (solReqIdeCargo == 0) {
-            notificacionExito("Seleccione cargo");
+            MostrarMensaje("Seleccione cargo", "Mensaje");
             return false;
         }
 
         if (tipVacante == 0) {
-            notificacionExito("Seleccione un tipo de vacante");
+            MostrarMensaje("Seleccione un tipo de vacante", "Mensaje");
             return false;
         }
 
         if (tipoPuesto=="0") {
-            notificacionExito("Seleccione un tipo de puesto");
+            MostrarMensaje("Seleccione un tipo de puesto", "Mensaje");
             return false;
         }
+
+        if (idDependencia == "0") {
+            MostrarMensaje("Seleccione una dependencia", "Mensaje");
+            return false;
+        }
+        if (idDepartamento == "0") {
+            MostrarMensaje("Seleccione un departamento", "Mensaje");
+            return false;
+        }
+        if (idArea == "0") {
+            MostrarMensaje("Seleccione una area", "Mensaje");
+            return false;
+        }
+
         return true;
 
     }

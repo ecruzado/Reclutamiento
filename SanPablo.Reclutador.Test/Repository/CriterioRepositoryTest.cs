@@ -35,6 +35,15 @@ namespace SanPablo.Reclutador.Test.Repository
 
           }
 
+         [TestMethod]
+         public void TestMethod4()
+         {
+
+             var repository = new SolReqPersonalRepository(NHibernateHelper.OpenSession());
+             var test = repository.GetSingle(x => x.IdeSolReqPersonal == 10 && x.EstadoActivo == "A");
+
+         }
+
         /*
           [TestMethod]
           public void TestMethod2()

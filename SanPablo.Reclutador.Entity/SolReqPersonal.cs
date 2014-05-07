@@ -72,7 +72,10 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntMinExamen { get; set; }
         public virtual int CantPreSelec { get; set; }
 
-
+        /// <summary>
+        /// Codigo del cargo
+        /// </summary>
+        public virtual string CodCargo { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
