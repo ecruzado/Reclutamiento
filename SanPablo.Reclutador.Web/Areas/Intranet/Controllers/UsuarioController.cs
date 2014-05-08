@@ -678,9 +678,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 objSedeNivel.IDUSUARIO = idUsu;
                                 objSedeNivel.IDESEDE = idSede;
                                 objSedeNivel.FechaCreacion = FechaCreacion;
-                                objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario.Substring(0, 15);
+                                objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario;
                                 objSedeNivel.FechaModificacion = FechaModificacion;
-                                objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario.Substring(0, 15);
+                                objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario;
                                 objSedeNivel.FLGESTADO = IndicadorActivo.Activo;
 
                                 _sedeNivelRepository.Add(objSedeNivel);
