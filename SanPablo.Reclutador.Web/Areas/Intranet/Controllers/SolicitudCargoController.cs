@@ -911,6 +911,83 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
         }
 
+
+        /// <summary>
+        /// valida si la solitud se ecuentra activa
+        /// </summary>
+        /// <param name="idSol">id de la solicitud reemplazo</param>
+        /// <returns></returns>
+        public ActionResult ValidaEstadoSol(int idSol)
+        {
+            JsonMessage jSonMensaje = new JsonMessage();
+            Boolean respuesta = false;
+            string mensaje="";
+
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol);
+
+            if (ObjSol!=null)
+            {
+                if (IndicadorActivo.Activo.Equals(ObjSol.EstadoActivo))
+                {
+                    respuesta = true;
+                }
+                else
+                {
+                    respuesta = false;
+                }
+            }
+            else
+            {
+                respuesta = false;
+            }
+
+            jSonMensaje.Resultado = respuesta;
+            jSonMensaje.Mensaje = mensaje;
+
+            return Json(jSonMensaje);
+
+        }
+
+
+        
+        /// <summary>
+        /// valida si la solcitud esta activa, publicada o finalizada
+        /// </summary>
+        /// <param name="idSol"></param>
+        /// <returns></returns>
+        public ActionResult ValidaSol(int idSol)
+        {
+            JsonMessage jSonMensaje = new JsonMessage();
+            Boolean respuesta = false;
+            string mensaje = "";
+
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol);
+
+            if (ObjSol != null)
+            {
+                if ((Etapa.Publicado.Equals(ObjSol.TipEtapa) || Etapa.Finalizado.Equals(ObjSol.TipEtapa)) && IndicadorActivo.Activo.Equals(ObjSol.EstadoActivo))
+                {
+                    respuesta = true;
+                }
+                else
+                {
+                    respuesta = false;
+                }
+
+            }
+            else
+            {
+                respuesta = false;
+            }
+
+            jSonMensaje.Resultado = respuesta;
+            jSonMensaje.Mensaje = mensaje;
+
+            return Json(jSonMensaje);
+
+        }
+
+
         /// <summary>
         /// Envia la solicitud de Reemplazo de requeremiento personal
         /// </summary>

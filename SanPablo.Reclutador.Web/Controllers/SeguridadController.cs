@@ -189,11 +189,13 @@ namespace SanPablo.Reclutador.Web.Controllers
                     pass = model.UsuarioExtranet.Password;
                     confPass = model.UsuarioExtranet.PasswordConfirma;
 
-                    var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario
-                                                        && x.CodContrasena == pass
-                                                        && x.TipUsuario == TipUsuario.Extranet
-                                                        );
+                    //var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario
+                    //                                    && x.CodContrasena == pass
+                    //                                    && x.TipUsuario == TipUsuario.Extranet
+                    //                                    );
 
+                    var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario && x.TipUsuario == TipUsuario.Extranet);
+                   
                     if (lista != null && lista.Count > 0)
                     {
                         objJson.Resultado = false;

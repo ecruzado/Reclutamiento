@@ -230,6 +230,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario = model.Usuario;
                 objUsuario.FecCreacion = FechaCreacion;
                 objUsuario.UsrCreacion = UsuarioActual.NombreUsuario;
+
+                objUsuario.UsrModificacion = UsuarioActual.NombreUsuario;
+                objUsuario.FecModifcacion = FechaCreacion;
+
+                objUsuario.UsrCreacion = UsuarioActual.NombreUsuario;
+
                 objUsuario.FlgEstado = IndicadorActivo.Activo;
                 objUsuario.TipUsuario = TipUsuario.Instranet;
 
@@ -672,9 +678,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 objSedeNivel.IDUSUARIO = idUsu;
                                 objSedeNivel.IDESEDE = idSede;
                                 objSedeNivel.FechaCreacion = FechaCreacion;
-                                objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                                objSedeNivel.UsuarioCreacion = UsuarioActual.NombreUsuario.Substring(0, 15);
                                 objSedeNivel.FechaModificacion = FechaModificacion;
-                                objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                                objSedeNivel.UsuarioModificacion = UsuarioActual.NombreUsuario.Substring(0, 15);
                                 objSedeNivel.FLGESTADO = IndicadorActivo.Activo;
 
                                 _sedeNivelRepository.Add(objSedeNivel);
