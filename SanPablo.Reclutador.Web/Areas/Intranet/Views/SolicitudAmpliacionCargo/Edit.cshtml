@@ -700,7 +700,8 @@
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSede, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {style = "display:none;" })
-                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    @*@Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })*@
                 </div>            
             </div>
             <h5>Motivo requerimiento</h5>

@@ -400,6 +400,8 @@
                         solicitudEditar.DescripcionCompetencias = model.SolicitudNuevoCargo.DescripcionCompetencias;
                         solicitudEditar.DescripcionFunciones = model.SolicitudNuevoCargo.DescripcionFunciones;
                         solicitudEditar.DescripcionObservaciones = model.SolicitudNuevoCargo.DescripcionObservaciones;
+                        solicitudEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
+                        solicitudEditar.FechaModificacion = FechaModificacion;
 
                         _solicitudNuevoCargoRepository.Update(solicitudEditar);
 

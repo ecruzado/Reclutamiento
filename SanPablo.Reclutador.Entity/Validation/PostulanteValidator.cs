@@ -54,6 +54,9 @@
             //    .Must(BeAValidDate)
             //    .WithMessage("El Postulante debe ser mayor de edad");
 
+            RuleFor(x => x.NombreVia)
+                .Length(0, 100)
+                .WithMessage("Máx. 100 caracteres");
 
             RuleFor(x => x.IndicadorSexo)
                 .NotEmpty()

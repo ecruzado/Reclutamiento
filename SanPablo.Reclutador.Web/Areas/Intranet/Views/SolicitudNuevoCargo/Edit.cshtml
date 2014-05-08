@@ -380,7 +380,8 @@
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.SolicitudNuevoCargo.EstadoActivo)
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none" })
-                    @Html.TextBoxFor(model =>model.Estado, new {@class="btn btn-primary btn-small disabled", @disabled = "disabled", @style ="width:60px"})
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    @*@Html.TextBoxFor(model =>model.Estado, new {@class="btn btn-primary btn-small disabled", @disabled = "disabled", @style ="width:60px"})*@
                 </div>
             </div>
             
@@ -390,7 +391,7 @@
                             <td></td>
                             <td class="span5">
                                 <div class="">
-                                    <label class="control-label" for="inputSuccess">Solicitud</label>
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Código de Solicitud</label>
                                     @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
                                     <div class="controles">
                                         @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled" })
@@ -399,7 +400,7 @@
                             </td>
                             <td class="span5">
                                 <div class="">
-                                    <label class="control-label" for="inputSuccess">Código de Cargo</label>
+                                    <label  class="control-label" for="inputSuccess">Código de Cargo</label>
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {

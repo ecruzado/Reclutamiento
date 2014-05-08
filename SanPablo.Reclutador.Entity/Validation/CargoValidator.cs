@@ -43,7 +43,7 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .WithMessage("Debe ingresar el fin de rango de edad");
             RuleFor(x => x.EdadFin)
                 .InclusiveBetween(18, 99)
-                .WithMessage("Postulante mayor de edad");
+                .WithMessage("El potulante debe ser mayor de edad");
 
             RuleFor(x => x.PuntajeEdad)
                 .NotEmpty()
