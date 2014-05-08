@@ -308,12 +308,14 @@
                
 
                  <td class="span5">
-                    <label class="control-label" for="selectError">Desde</label>
+                    <label class="control-label" for="selectError">Fecha</label>
                     <div class="controles">
                        @* @Html.EditorFor(model => model.oportunidadLaboral.FecInicial, new {   maxlength="15", placeholder=" Inicial"})      
                        *@    
 
                         <input type="text" class="input-small"  id="oportunidadLaboral_FecInicial" name="oportunidadLaboral.FecInicial" placeholder=" Inicial" >
+                         <input type="text" class="input-small" id="oportunidadLaboral_FecFinal" name="oportunidadLaboral.FecFinal" placeholder=" Final">
+
                     </div>
                 </td>
 
@@ -327,18 +329,21 @@
                         @Html.DropDownListFor(model => model.oportunidadLaboral.IdeCargo, new SelectList(Model.listaOportunidadLaboral, "IdeCargo", "NombreCargo", Model.oportunidadLaboral.IdeCargo),new {  data_val = "false"})
                     </div> 
                 </td>
-
-                <td class="span5">
-                    <label class="control-label" for="selectError">Hasta</label>
-                    <div class="controles">
-                       @* @Html.EditorFor(model => model.oportunidadLaboral.FecFinal, new {  maxlength="15", placeholder=" Final"})      *@
-                         <input type="text" class="input-small" id="oportunidadLaboral_FecFinal" name="oportunidadLaboral.FecFinal" placeholder=" Final">
-
+                 <td class="span5">
+                    <label class="control-label" for="inputSuccess">Tipo de horario</label>
+                   <div class="controles">
+                        @Html.DropDownListFor(model => model.oportunidadLaboral.TipoHorario, new SelectList(Model.listaHorario, "Valor", "Descripcion", Model.oportunidadLaboral.TipoHorario),new {  data_val = "false"})
                     </div>
                 </td>
+               @* <td class="span5">
+                    <label class="control-label" for="selectError">Hasta</label>
+                    <div class="controles">
+                       
+                    </div>
+                </td>*@
             </tr>     
 
-             <tr class="formulario-fila">
+            @* <tr class="formulario-fila">
                
              <td class="span5">
                     <label class="control-label" for="inputSuccess">Tipo de horario</label>
@@ -346,7 +351,7 @@
                         @Html.DropDownListFor(model => model.oportunidadLaboral.TipoHorario, new SelectList(Model.listaHorario, "Valor", "Descripcion", Model.oportunidadLaboral.TipoHorario),new {  data_val = "false"})
                     </div>
                 </td>
-                 </tr>  
+                 </tr>  *@
         </table>
 }
         <div class="formulario-accion">
