@@ -20,7 +20,7 @@
 
             RuleFor(x => x.NombreCargoTrabajo)
                 .Length(10,50)
-                .WithMessage("Ingresar un cargo con longitud entre 10 y 50c caracteres");
+                .WithMessage("Ingresar un cargo con longitud entre 10 y 50 caracteres");
 
             RuleFor(x => x.FechaTrabajoInicio)
                 .NotEmpty()
@@ -50,7 +50,7 @@
 
             RuleFor(x => x.NumeroMovilReferencia)
                 .InclusiveBetween(900000000, 999999999)
-                .WithMessage("Ingresar telefono movil válido");
+                .WithMessage("Ingresar teléfono movil válido");
 
             RuleFor(x => x.NumeroAnexoInstitucionReferente)
                .InclusiveBetween(1, 999999)
@@ -59,6 +59,9 @@
             RuleFor(x => x.CorreoReferente)
                 .EmailAddress()
                 .WithMessage("Ingresar un correo válido");
+            RuleFor(x => x.CorreoReferente)
+                .Length(1,50)
+                .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.FechaTrabajoFin)
                 .GreaterThan(x => x.FechaTrabajoInicio.Value).When(x => x.FechaTrabajoInicio != null)

@@ -149,7 +149,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.No;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.Si;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
             }
@@ -157,7 +157,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.No;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.Si;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.Si;
             }
@@ -173,7 +173,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.Si;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.Si;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.No;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
             }
@@ -260,7 +260,7 @@
                                              Convert.ToInt32(Session[ConstanteSesion.Sede]),Convert.ToInt32(Session[ConstanteSesion.Rol]),Convert.ToInt32(Session[ConstanteSesion.Usuario])));
             solicitudNuevoViewModel.Cargos.Insert(0, new SolicitudNuevoCargo { IdeSolicitudNuevoCargo = 0,NombreCargo="Seleccionar"});
 
-            solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoRegistro));
+            solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
             solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
@@ -443,7 +443,8 @@
                 if ((rolUsuario == Roles.Jefe) || (rolUsuario == Roles.Gerente))
                 {
                     solicitudCargoViewModel.Dependencias = new List<Dependencia>();
-                    solicitudCargoViewModel.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA && x.IdeSede == ideSede));
+                    solicitudCargoViewModel.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA 
+                                                                                                && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo));
                     
                     solicitudCargoViewModel.Departamentos = new List<Departamento>();
                     solicitudCargoViewModel.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO));
@@ -453,7 +454,7 @@
                 }
                 else
                 {
-                    solicitudCargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+                    solicitudCargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == ideSede));
                     solicitudCargoViewModel.Dependencias.Insert(0,new Dependencia{IdeDependencia = 0,NombreDependencia = "Seleccionar"});
                     
                     solicitudCargoViewModel.Departamentos = new List<Departamento>();

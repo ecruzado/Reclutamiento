@@ -22,7 +22,7 @@
             Map(x => x.FechaModificacion, "FECMODIFICA");
 
             Map(x => x.DescripcionExperiencia).Formula("(select DG.DESCRIPCION FROM DETALLE_GENERAL DG where DG.IDEGENERAL = " + (int)TipoTabla.TipoCargo + " AND DG.VALOR = TIPEXPLABORAL AND DG.ESTACTIVO = 'A' )");
-
+            
 
             Table("EXPERIENCIA_CARGO");
         }

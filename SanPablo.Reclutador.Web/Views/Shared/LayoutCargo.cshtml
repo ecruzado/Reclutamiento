@@ -358,7 +358,7 @@
     function publicar()
     {
         var pagina = '@TipoSolicitud.Nuevo';
-        var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + "0" + "&pagina=" + pagina;
+        var url = '@Url.Action("Edit", "PublicacionCargo", new { id = "",area="Intranet" })?id=' + "0" + "&pagina=" + pagina;
         window.location = url;
     }
 
