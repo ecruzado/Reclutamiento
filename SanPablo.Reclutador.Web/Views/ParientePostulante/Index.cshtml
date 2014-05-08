@@ -89,7 +89,7 @@
                 else {
                     $("#spanMensaje").html('Seleccione un item a editar.');
                     $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "OK": function () { $(this).dialog("close"); }
@@ -105,11 +105,11 @@
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
                     $("#divMensaje").dialog({
-                        title: 'CONVOCATORIAS SAN PABLO',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
                     return false;
@@ -117,7 +117,7 @@
                 else {
                     $("#spanMensaje").html('Seleccione un item a eliminar.');
                     $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "OK": function () { $(this).dialog("close"); }

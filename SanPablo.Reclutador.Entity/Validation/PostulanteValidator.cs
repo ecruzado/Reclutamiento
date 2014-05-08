@@ -100,7 +100,7 @@
 
             RuleFor(x => x.TipoSalario)
                 .NotEqual("0")
-                .WithMessage("Seleccionar una opción");
+                .WithMessage("Seleccionar su sueldo bruto");
 
             RuleFor(x => x.TipoDisponibilidadTrabajo)
                 .NotEqual("0")
@@ -149,11 +149,26 @@
                 .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
                 .WithMessage("Ingresar nombre del pariente");
 
+            //RuleFor(x => x.ParienteNombre)
+            //    .Length(0,100)
+            //    .WithMessage("Máx. 100 caracteres");
+
             RuleFor(x => x.ParienteCargo)
                 .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
                 .WithMessage("Ingresar cargo del pariente");
 
-            
+            //RuleFor(x => x.ParienteCargo)
+            //    .Length(0,50)
+            //    .WithMessage("Máx. 50 caracteres");
+
+            RuleFor(x => x.DescripcionOtroMedio)
+                .NotEmpty().When(x => x.TipoComoSeEntero == null ? false : x.TipoComoSeEntero.Equals("04"))
+                .WithMessage("Ingresar descripción");
+
+            //RuleFor(x => x.ParienteCargo)
+            //    .Length(1, 50)
+            //    .WithMessage("Máx. 50 caracteres");
+
         }
     }
 }
