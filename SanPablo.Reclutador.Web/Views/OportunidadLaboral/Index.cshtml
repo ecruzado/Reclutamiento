@@ -264,6 +264,12 @@
             //}
 
             if (fechaInicial.length > 0) {
+
+                if (fechaFinal.length==0) {
+                    MostrarMensaje('La fecha final es obligatoria', "Mensaje");
+                    return false;
+                }
+
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
                     MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
                     return false;
@@ -271,6 +277,12 @@
             }
 
             if (fechaFinal.length > 0) {
+
+                if (fechaInicial.length == 0) {
+                    MostrarMensaje('La fecha inicial es obligatoria', "Mensaje");
+                    return false;
+                }
+
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
                     MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
                     return false;
