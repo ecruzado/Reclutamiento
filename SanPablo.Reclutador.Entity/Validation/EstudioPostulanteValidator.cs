@@ -16,13 +16,13 @@
                 .NotEqual("00")
                 .WithMessage("Seleccionar nombre de la institución");
 
-            RuleFor(x => x.NombreInstitucion)
-                .Length(3, 100)
-                .WithMessage("Debe ingresar la institución");
+            //RuleFor(x => x.NombreInstitucion)
+            //    .Length(3, 100)
+            //    .WithMessage("Debe ingresar la institución");
 
-            //RuleFor(x => x.TipoArea)
-            //    .NotEqual("00")
-            //    .WithMessage("Seleccionar área de estudio");
+            RuleFor(x => x.TipoArea)
+                .NotEqual("00").When(x => x.TipoEducacion != "01")
+                .WithMessage("Seleccionar área de estudio");
 
             RuleFor(x => x.TipoEducacion)
                 .NotEqual("00")
@@ -41,15 +41,23 @@
             RuleFor(x => x.FechaEstudioInicio)
                 .NotEmpty()
                 .WithMessage("Ingresar Fecha de Inicio");
-            
+
             RuleFor(x => x.NombreInstitucion)
-                .NotEmpty()
-                .When(x => x.TipoNombreInstitucion.Equals("XX"))
-                .WithMessage("Ingresar el nombre de la institución");
+                   .Length(1, 50)
+                   .WithMessage("Máx. 50 caracteres");
+
+            When(x => x.TipoNombreInstitucion.Equals("XX"), () =>
+            {
+                RuleFor(x => x.NombreInstitucion)
+                   .NotEmpty()
+                   .WithMessage("Ingresar el nombre de la institución");
+                
+           });
+
 
             RuleFor(x => x.FechaInicio)
                 .NotEmpty()
-                .WithMessage("Ingresar una fecha");
+                .WithMessage("Ingresar una fecha de inicio");
 
             When(x => x.ActualmenteEstudiando.Equals(false), () =>
             {

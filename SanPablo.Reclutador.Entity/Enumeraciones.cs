@@ -3,6 +3,7 @@
     public enum TipoTabla:int
     {
         //GENERAL
+        EstadosSolicitud = 56,
         TipoVia = 9,
         TipoZona = 10,
         EstadoCivil = 8,

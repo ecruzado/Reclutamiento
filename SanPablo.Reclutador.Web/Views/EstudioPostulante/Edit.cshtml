@@ -164,19 +164,20 @@
             else {
                 labelOtro.style.display = "none";
                 campoOtro.style.display = "none";
+                $('#Estudio_NombreInstitucion').val("");
             }
         }
 
         function habilitarAreaEstudio() {
             var labelArea = document.getElementById('labelAreaEstudios');
-            var campoArea = document.getElementById('tipoArea');
+            var campoArea = document.getElementById('Estudio_TipoArea');
             labelArea.style.display = "block";
             campoArea.style.display = "block";
         }
 
         function deshabilitarAreaEstudio() {
             var labelArea = document.getElementById('labelAreaEstudios');
-            var campoArea = document.getElementById('tipoArea');
+            var campoArea = document.getElementById('Estudio_TipoArea');
             labelArea.style.display = "none";
             campoArea.style.display = "none";
         }
@@ -257,6 +258,9 @@
             return true;
 
         }
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
     </script>
 @using (Html.BeginForm("Edit", "EstudioPostulante", FormMethod.Post, new { @id = "estudioPostulanteForm" }))
     {
@@ -279,7 +283,10 @@
                 @Html.TextBoxFor(model => model.Estudio.TipTipoInstitucion, new { style = "display:none;" })
                 @Html.DropDownListFor(model => model.Estudio.TipoEducacion, new SelectList(Model.TiposEducacion, "Valor", "Descripcion", Model.Estudio.TipoEducacion))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
+                 @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
+                </div>
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Estudio.TipoEducacion)
                 </div>
             </td>
         </tr>
@@ -310,9 +317,9 @@
                 <label id="labelAreaEstudios" class="etiquetaFormulario" for="setAreaEstudio" style="display:block"> Área de estudio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.Estudio.TipoArea), new { @id="tipoArea", style="display:block;"})
+                @Html.DropDownListFor(model => model.Estudio.TipoArea, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.Estudio.TipoArea), new {style="display:block;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
+                    @Html.ValidationMessageFor(model => model.Estudio.TipoArea)
                 </div>
             </td>
         </tr>

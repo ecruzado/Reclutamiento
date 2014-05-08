@@ -15,11 +15,11 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.TipoNombreOfimatica)
                 .NotEqual("00")
-                .WithMessage("Seleccione una descripcion");
+                .WithMessage("Seleccione una descripción");
 
             RuleFor(x => x.TipoNivelConocimiento)
                 .NotEqual("00")
-                .WithMessage("Seleccione el nivel de conocimiento");
+                .WithMessage("Seleccione un nivel");
 
             RuleFor(x => x.TipoIdioma)
                 .NotEqual("00")
@@ -35,7 +35,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.TipoNombreConocimientoGeneral)
                 .NotEqual("00")
-                .WithMessage("Seleccione el nombre de conocimiento");
+                .WithMessage("Seleccione una descripción");
 
             //RuleFor(x => x.NombreConocimientoGeneral)
             //    .NotEmpty().When(x => x.TipoNombreConocimientoGeneral.Equals("XX"))

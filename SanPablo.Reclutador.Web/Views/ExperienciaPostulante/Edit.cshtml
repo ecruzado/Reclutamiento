@@ -11,6 +11,7 @@
 
             SanPablo.Numeros('Experiencia_NumeroMovilReferencia');
             SanPablo.Numeros('Experiencia_NumeroAnexoInstitucionReferente');
+            SanPablo.NumeroTelefono('Experiencia_NumeroFijoInstitucionReferente');
 
             var indActual = $('#indActuaTrabajando').is(":checked");
             habilitarFecha(indActual);
@@ -179,6 +180,9 @@
             }
         }
 
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
         
         </script>
 @using (Html.BeginForm("Edit", "ExperienciaPostulante", FormMethod.Post, new { @id = "experienciaPostulanteForm" }))
@@ -216,7 +220,7 @@
                 </div>
             </td>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="width:160px;display:none" id="labelOtro"> Otro </label>
+                <label class="etiquetaFormulario" style="width:160px;display:none" id="labelOtro"> Otros </label>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "display:none;", onkeyup="aMays(event, this)" })
@@ -297,7 +301,7 @@
        
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="width:160px" > Nombre de referencia <span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" style="width:160px" > Nombre del Referente <span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
                 @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", onkeyup="aMays(event, this)"})
@@ -321,7 +325,7 @@
                 <label class="etiquetaFormulario" > Celular de referencia  </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia, new { maxlength="10"})
+                @Html.TextBoxFor(model => model.Experiencia.NumeroMovilReferencia, new { maxlength="9"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NumeroMovilReferencia)
                 </div>

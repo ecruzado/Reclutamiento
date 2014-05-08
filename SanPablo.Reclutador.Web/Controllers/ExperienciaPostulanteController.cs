@@ -64,7 +64,8 @@
                         cell = new string[]
                             {
                                 item.NombreEmpresa==null?"": item.NombreEmpresa.ToUpper(),
-                                item.DescripcionCargoTrabajo==null?"": item.DescripcionCargoTrabajo.ToUpper(),
+                                item.TipoCargoTrabajo =="XX"?item.NombreCargoTrabajo:item.DescripcionCargoTrabajo==null?"":item.DescripcionCargoTrabajo,
+                                //item.DescripcionCargoTrabajo==null?"": item.DescripcionCargoTrabajo.ToUpper(),
                                 //String.Format("{0:dd/MM/yyyy}", item.FechaTrabajoInicio),
                                 item.FechaInicio==null?"": item.FechaInicio,
                                 item.IndicadorActualmenteTrabajo== "S"?"Actualmente": item.FechaFin,

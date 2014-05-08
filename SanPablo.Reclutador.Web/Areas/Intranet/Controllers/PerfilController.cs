@@ -45,18 +45,24 @@
             {
                 Session[ConstanteSesion.pagina] = pagina;
             }
-            var ideSolicitud = id;
+            //var ideSolicitud = null;
+
+            //if ((id != "0") && (id != null))
+            //{
+            //    ideSolicitud = id;
+            //}
+            
             try
             {
-                var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(ideSolicitud));
+                var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
 
                 var perfilViewModel = inicializarPerfil();
                 var usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                if (ideSolicitud != null && ideSolicitud!="0")
+                if (solicitud != null)
                 {
-                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(ideSolicitud),usuario,Convert.ToInt32(Session[ConstanteSesion.Sede]));
-                   datosCargo.IdeSolicitud = Convert.ToInt32(ideSolicitud);
+                   DatosCargo datosCargo = _cargoRepository.obtenerDatosCargo(Convert.ToInt32(id),usuario,Convert.ToInt32(Session[ConstanteSesion.Sede]));
+                   datosCargo.IdeSolicitud = Convert.ToInt32(id);
                    CargoPerfil = datosCargo;
                    CargoPerfil.Pagina = pagina;
                    CargoPerfil.TipoEtapa = solicitud.TipoEtapa;
