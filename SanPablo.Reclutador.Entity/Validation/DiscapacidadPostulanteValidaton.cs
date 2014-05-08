@@ -17,8 +17,8 @@
                 .NotEmpty()
                 .WithMessage("Ingresar la descripcion");
             RuleFor(x => x.DescripcionDiscapacidad)
-                .Length(5, 50)
-                .WithMessage("Maximo de caracteres permitidos es de 50");
+                .Length(1, 50)
+                .WithMessage("Máx. 50 caracteres");
 
         }
 

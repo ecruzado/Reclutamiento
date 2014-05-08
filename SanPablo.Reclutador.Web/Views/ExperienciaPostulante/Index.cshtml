@@ -126,7 +126,7 @@
                 else {
                     $("#spanMensaje").html('Seleccionar un item a editar');
                     $("#divMensaje").dialog({
-                        title: 'Seleccion y Reclutamiento de Personal',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "Ok": function () { $(this).dialog("close"); }
@@ -141,11 +141,11 @@
 
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?');
                 $("#divMensaje").dialog({
-                    title: 'Seleccion y Reclutamiento de Personal',
+                    title: 'Sistema de Reclutamiento y Selección de Personal',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); location.reload(true) },
-                        "Cancel": function () { $(this).dialog("close"); }
+                        "Cancelar": function () { $(this).dialog("close"); }
                     }
                 });
 

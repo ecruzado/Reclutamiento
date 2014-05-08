@@ -13,21 +13,21 @@
                 .WithMessage("Ingresar el Apellido Paterno del pariente");
             RuleFor(x => x.ApellidoPaterno)
                 .Length(1, 50)
-                .WithMessage("Maximo de caracteres permitidos es de 50");
+                .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.ApellidoMaterno)
                 .NotEmpty()
                 .WithMessage("Ingresar el Apellido Materno del pariente");
             RuleFor(x => x.ApellidoMaterno)
                 .Length(1, 50)
-                .WithMessage("Maximo de caracteres permitidos es de 50");
+                .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.Nombres)
                .NotEmpty()
                .WithMessage("Ingresar el nombre  del pariente");
             RuleFor(x => x.Nombres)
                 .Length(1, 50)
-                .WithMessage("Maximo de caracteres permitidos es de 50");
+                .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.TipoDeVinculo)
                 .NotEqual("00")
