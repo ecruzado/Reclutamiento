@@ -908,10 +908,47 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             JsonMessage objJsonMessage = new JsonMessage();
             Usuario objUsuario = new Usuario();
+            UsuarioRolSede objUsuarioRolSede = new UsuarioRolSede();
+            TipoRequerimiento objTipoReq = new TipoRequerimiento();
+
+            int idUsuario = Convert.ToInt32(id);
+
+
+            SedeNivel objUsuNivel = new SedeNivel();
             try
             {
-                objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(id));
-                _usuarioRepository.Remove(objUsuario);
+                //elimina de la tabla usuario 
+                objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuario);
+                if (objUsuario!=null)
+                {
+                    _usuarioRepository.Remove(objUsuario);    
+                }
+                
+
+                // elimina la relaicon con las sedes
+                objUsuNivel = _sedeNivelRepository.GetSingle(x => x.IDUSUARIO == idUsuario);
+                if (objUsuNivel!=null)
+                {
+                    _sedeNivelRepository.Remove(objUsuNivel);
+                }
+                
+
+                //elimina la relacion con la sede y el rol
+                objUsuarioRolSede = _usuarioRolSedeRepository.GetSingle(x => x.IdUsuario == idUsuario);
+                if (objUsuarioRolSede!=null)
+                {
+                    _usuarioRolSedeRepository.Remove(objUsuarioRolSede);
+                }
+               
+
+                //elimina la relacion con el tipo de requerimiento
+                objTipoReq = _tipoRequerimiento.GetSingle(x => x.IDUSUARIO == idUsuario);
+                if (objTipoReq!=null)
+                {
+                    _tipoRequerimiento.Remove(objTipoReq);
+                }
+                
+
                 objJsonMessage.Resultado = true;
                 objJsonMessage.Mensaje = "Se elimino el registro";
 

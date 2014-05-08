@@ -149,7 +149,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.No;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.Si;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
             }
@@ -157,7 +157,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.No;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.No;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.Si;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.Si;
             }
@@ -173,7 +173,7 @@
             {
                 solicitudnuevoViewModel.btnVerRanking = Indicador.Si;
                 solicitudnuevoViewModel.btnVerPreSeleccion = Indicador.Si;
-                solicitudnuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudnuevoViewModel.btnVerPerfil = Indicador.Si;
                 solicitudnuevoViewModel.btnVerNuevo = Indicador.No;
                 solicitudnuevoViewModel.btnVerRequerimiento = Indicador.No;
             }
