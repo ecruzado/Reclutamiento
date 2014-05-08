@@ -285,7 +285,21 @@ namespace SanPablo.Reclutador.Web.Core
             get
             {
                 //return (Usuario)System.Web.HttpContext.Current.Session[ConstanteSesion.Usuario]; 
-                return new Usuario { NombreUsuario = (String)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes].ToString().Substring(0,15) };
+                Usuario usuario = new Usuario();
+
+                string NombreUsuario = "";
+                NombreUsuario = (String)System.Web.HttpContext.Current.Session[ConstanteSesion.UsuarioDes];
+
+                if (NombreUsuario.Length>15)
+                {
+                    usuario.NombreUsuario = NombreUsuario.Substring(0,15);
+                }
+                else
+                {
+                    usuario.NombreUsuario = NombreUsuario;
+                }
+
+                return usuario;
             }
             set { System.Web.HttpContext.Current.Session.Add(ConstanteSesion.Usuario, value); }
         }
