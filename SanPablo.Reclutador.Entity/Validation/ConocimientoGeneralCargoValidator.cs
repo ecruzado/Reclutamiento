@@ -10,27 +10,27 @@
         {
             RuleFor(x => x.TipoConocimientoOfimatica)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar un tipo de conocimiento");
 
             RuleFor(x => x.TipoConocimientoIdioma)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar un tipo de idioma ");
 
             RuleFor(x => x.TipoConocimientoGeneral)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar un tipo de conocimiento");
 
             RuleFor(x => x.TipoIdioma)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar una descripción");
 
             RuleFor(x => x.TipoNombreOfimatica)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar una descripción");
 
             RuleFor(x => x.TipoNombreConocimientoGeneral)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un item");
+                .WithMessage("Seleccionar una descripción");
 
             RuleFor(x => x.TipoNivelConocimiento)
                 .NotEqual("00")

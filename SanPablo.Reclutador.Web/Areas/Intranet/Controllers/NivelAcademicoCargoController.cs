@@ -98,9 +98,12 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    //objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
+                    //objJsonMessage.Resultado = false;
+                    //return Json(objJsonMessage);
+                    var nivelAcademicoViewModel = inicializarNivelAcademico();
+                    nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
+                    return View(nivelAcademicoViewModel);
                 }
                
                 else

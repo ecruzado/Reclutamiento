@@ -2,6 +2,10 @@
 @{
     Layout = "";
 }
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
@@ -11,7 +15,7 @@
 
         SanPablo.Numeros('Evaluacion_NotaMinimaExamen');
 
-        $('select#Evaluacion_Examen_IdeExamen').change(function () {
+        $('select#Evaluacion_IdeExamen').change(function () {
             var ideExamen = $(this).val();
             $.ajax({
                 type: "POST",
@@ -31,6 +35,10 @@
         })
         
     });
+
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 
 
@@ -49,9 +57,9 @@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Evaluación <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Evaluacion.Examen.IdeExamen, new SelectList(Model.Examenes, "IdeExamen", "DescExamen", Model.Evaluacion.IdeEvaluacionCargo))
+                @Html.DropDownListFor(model => model.Evaluacion.IdeExamen, new SelectList(Model.Examenes, "IdeExamen", "DescExamen", Model.Evaluacion.IdeEvaluacionCargo))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Evaluacion.Examen.IdeExamen)
+                @Html.ValidationMessageFor(model => model.Evaluacion.IdeExamen)
                 </div>
             </td> 
         </tr>

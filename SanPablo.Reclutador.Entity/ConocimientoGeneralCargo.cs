@@ -19,7 +19,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string NombreConocimientoGeneral { get; set; }
         public virtual string TipoNivelConocimiento { get; set; }
         public virtual string IndicadorCertificacion { get; set; }
-        public virtual int PuntajeConocimiento { get; set; }
+        public virtual int? PuntajeConocimiento { get; set; }
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionConocimientoIdioma { get; set; }

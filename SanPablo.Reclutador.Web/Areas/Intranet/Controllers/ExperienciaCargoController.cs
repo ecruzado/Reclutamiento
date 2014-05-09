@@ -96,22 +96,13 @@
             {
                 ExperienciaCargoValidator validator = new ExperienciaCargoValidator();
                 ValidationResult resultValidator = validator.Validate(experienciaCargo, "TipoExperiencia", "PuntajeExperiencia");
-                bool result = validarExperiencia(experienciaCargo);
+                //bool result = validarExperiencia(experienciaCargo);
 
-                if ((!resultValidator.IsValid)||(!result))
+                if (!resultValidator.IsValid)
                 {
-                    if (!result)
-                    {
-                        objJsonMessage.Mensaje = "Verifique la cantidad de años, meses y puntaje sean correctos";
-                        objJsonMessage.Resultado = false;
-                        return Json(objJsonMessage);
-                    }
-                    else
-                    {
-                        objJsonMessage.Mensaje = "Verifique que haya llenado los datos obligatorios";
-                        objJsonMessage.Resultado = false;
-                        return Json(objJsonMessage);
-                    }
+                    var experienciaViewModel = inicializarExperiencia();
+                    experienciaViewModel.Experiencia = experienciaCargo;
+                    return View(experienciaViewModel);
                 }
                 if (experienciaCargo.IdeExperienciaCargo == 0)
                 {
@@ -210,7 +201,7 @@
         {
             if ((experienciaCargo.CantidadAnhosExperiencia >= 0) && (experienciaCargo.CantidadAnhosExperiencia <= 70) &&
                 (experienciaCargo.CantidadMesesExperiencia >= 0) && (experienciaCargo.CantidadMesesExperiencia <= 12) &&
-                (experienciaCargo.PuntajeExperiencia >= 0) && (experienciaCargo.CantidadMesesExperiencia <= 20))
+                (experienciaCargo.PuntajeExperiencia >= 0) && (experienciaCargo.PuntajeExperiencia <= 10))
             {
                 return true;
             }

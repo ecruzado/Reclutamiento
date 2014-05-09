@@ -12,7 +12,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual Cargo Cargo { get; set; }
         public virtual string TipoDiscapacidad { get; set; }
         public virtual string DescripcionDiscapacidad { get; set; }
-        public virtual int PuntajeDiscapacidad { get; set; }
+        public virtual int? PuntajeDiscapacidad { get; set; }
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionTipoDiscapacidad { get; set; }

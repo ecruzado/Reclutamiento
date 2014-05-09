@@ -95,9 +95,12 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    //objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
+                    //objJsonMessage.Resultado = false;
+                    //return Json(objJsonMessage);
+                    var centroEstudioViewModel = inicializarCentroEstudio();
+                    centroEstudioViewModel.CentroEstudio = centroEstudioCargo;
+                    return View(centroEstudioViewModel);
                 }
                 if (!existe(centroEstudioCargo.TipoCentroEstudio, centroEstudioCargo.TipoNombreCentroEstudio, centroEstudioCargo.IdeCentroEstudioCargo))
                 {
@@ -110,19 +113,19 @@
                         centroEstudioCargo.Cargo = new Cargo();
                         centroEstudioCargo.Cargo.IdeCargo = IdeCargo;
                         _centroEstudioCargoRepository.Add(centroEstudioCargo);
-                        _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, 0, IdeCargo);
+                        _centroEstudioCargoRepository.actualizarPuntaje(Convert.ToInt32(centroEstudioCargo.PuntajeCentroEstudios), 0, IdeCargo);
                     }
                     else
                     {
                         var centroEstudioCargoActualizar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == centroEstudioCargo.IdeCentroEstudioCargo);
-                        int valorEditar = centroEstudioCargoActualizar.PuntajeCentroEstudios;
+                        int valorEditar = Convert.ToInt32(centroEstudioCargoActualizar.PuntajeCentroEstudios);
                         centroEstudioCargoActualizar.TipoCentroEstudio = centroEstudioCargo.TipoCentroEstudio;
                         centroEstudioCargoActualizar.TipoNombreCentroEstudio = centroEstudioCargo.TipoNombreCentroEstudio;
                         centroEstudioCargoActualizar.PuntajeCentroEstudios = centroEstudioCargo.PuntajeCentroEstudios;
                         centroEstudioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         centroEstudioCargoActualizar.FechaModificacion = FechaModificacion;
                         _centroEstudioCargoRepository.Update(centroEstudioCargoActualizar);
-                        _centroEstudioCargoRepository.actualizarPuntaje(centroEstudioCargo.PuntajeCentroEstudios, valorEditar, IdeCargo);
+                        _centroEstudioCargoRepository.actualizarPuntaje(Convert.ToInt32(centroEstudioCargo.PuntajeCentroEstudios), valorEditar, IdeCargo);
 
                     }
 
@@ -166,7 +169,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var centroEstudioEliminar = new CentroEstudioCargo();
             centroEstudioEliminar = _centroEstudioCargoRepository.GetSingle(x => x.IdeCentroEstudioCargo == ideCentroEstudio);
-            int valorEliminar = centroEstudioEliminar.PuntajeCentroEstudios;
+            int valorEliminar = Convert.ToInt32(centroEstudioEliminar.PuntajeCentroEstudios);
             _centroEstudioCargoRepository.Remove(centroEstudioEliminar);
             _centroEstudioCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 

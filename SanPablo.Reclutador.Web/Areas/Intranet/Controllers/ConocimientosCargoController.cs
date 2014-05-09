@@ -115,7 +115,7 @@
                         conocimientoGeneralCargo.Cargo.IdeCargo = IdeCargo;
 
                         _conocimientoCargoRepository.Add(conocimientoGeneralCargo);
-                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, 0, IdeCargo, "Ofimatica");
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(conocimientoGeneralCargo.PuntajeConocimiento), 0, IdeCargo, "Ofimatica");
 
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -138,7 +138,7 @@
                     }
                     else
                     {
-                        int valorEliminar = ofimaticaCargoActualizar.PuntajeConocimiento;
+                        int valorEliminar = Convert.ToInt32(ofimaticaCargoActualizar.PuntajeConocimiento);
                         ofimaticaCargoActualizar.TipoConocimientoOfimatica = conocimientoGeneralCargo.TipoConocimientoOfimatica;
                         ofimaticaCargoActualizar.TipoNombreOfimatica = conocimientoGeneralCargo.TipoNombreOfimatica;
                         ofimaticaCargoActualizar.TipoNivelConocimiento = conocimientoGeneralCargo.TipoNivelConocimiento;
@@ -146,7 +146,7 @@
                         ofimaticaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         ofimaticaCargoActualizar.FechaModificacion = FechaModificacion;
                         _conocimientoCargoRepository.Update(ofimaticaCargoActualizar);
-                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoGeneralCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Ofimatica");
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(conocimientoGeneralCargo.PuntajeConocimiento), valorEliminar, IdeCargo, "Ofimatica");
 
                         objJsonMessage.Mensaje = "Editado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -191,7 +191,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var ofimaticaEliminar = new ConocimientoGeneralCargo();
             ofimaticaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOfimatica);
-            int valorEliminar = ofimaticaEliminar.PuntajeConocimiento;
+            int valorEliminar = Convert.ToInt32(ofimaticaEliminar.PuntajeConocimiento);
             _conocimientoCargoRepository.Remove(ofimaticaEliminar);
             _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Ofimatica");
 
@@ -282,7 +282,7 @@
                         idiomaCargo.Cargo.IdeCargo = IdeCargo;
 
                         _conocimientoCargoRepository.Add(idiomaCargo);
-                        _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, 0, IdeCargo, "Idioma");
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(idiomaCargo.PuntajeConocimiento), 0, IdeCargo, "Idioma");
 
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -303,15 +303,15 @@
                     }
                     else
                     {
-                        int valorEliminar = idiomaCargoActualizar.PuntajeConocimiento;
+                        int valorEliminar = Convert.ToInt32(idiomaCargoActualizar.PuntajeConocimiento);
                         idiomaCargoActualizar.TipoConocimientoIdioma = idiomaCargo.TipoConocimientoIdioma;
                         idiomaCargoActualizar.TipoIdioma = idiomaCargo.TipoIdioma;
                         idiomaCargoActualizar.TipoNivelConocimiento = idiomaCargo.TipoNivelConocimiento;
                         idiomaCargoActualizar.PuntajeConocimiento = idiomaCargo.PuntajeConocimiento;
                         idiomaCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         idiomaCargoActualizar.FechaModificacion = FechaModificacion;
-                        _conocimientoCargoRepository.Update(idiomaCargo);
-                        _conocimientoCargoRepository.actualizarPuntaje(idiomaCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Idioma");
+                        _conocimientoCargoRepository.Update(idiomaCargoActualizar);
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(idiomaCargo.PuntajeConocimiento), valorEliminar, IdeCargo, "Idioma");
 
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -354,7 +354,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var idiomaEliminar = new ConocimientoGeneralCargo();
             idiomaEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideIdioma);
-            int valorEliminar = idiomaEliminar.PuntajeConocimiento;
+            int valorEliminar = Convert.ToInt32(idiomaEliminar.PuntajeConocimiento);
             _conocimientoCargoRepository.Remove(idiomaEliminar);
             _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Idioma");
 
@@ -448,7 +448,7 @@
                         conocimientoCargo.Cargo.IdeCargo = IdeCargo;
 
                         _conocimientoCargoRepository.Add(conocimientoCargo);
-                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, 0, IdeCargo, "Otros");
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(conocimientoCargo.PuntajeConocimiento), 0, IdeCargo, "Otros");
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
 
@@ -469,7 +469,7 @@
                     }
                     else
                     {
-                        int valorEliminar = otrosConocimientosActualizar.PuntajeConocimiento;
+                        int valorEliminar = Convert.ToInt32(otrosConocimientosActualizar.PuntajeConocimiento);
                         otrosConocimientosActualizar.TipoConocimientoGeneral = conocimientoCargo.TipoConocimientoGeneral;
                         otrosConocimientosActualizar.TipoNombreConocimientoGeneral = conocimientoCargo.TipoNombreConocimientoGeneral;
                         otrosConocimientosActualizar.TipoNivelConocimiento = conocimientoCargo.TipoNivelConocimiento;
@@ -477,7 +477,7 @@
                         otrosConocimientosActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         otrosConocimientosActualizar.FechaModificacion = FechaModificacion;
                         _conocimientoCargoRepository.Update(otrosConocimientosActualizar);
-                        _conocimientoCargoRepository.actualizarPuntaje(conocimientoCargo.PuntajeConocimiento, valorEliminar, IdeCargo, "Otros");
+                        _conocimientoCargoRepository.actualizarPuntaje(Convert.ToInt32(conocimientoCargo.PuntajeConocimiento), valorEliminar, IdeCargo, "Otros");
 
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -521,7 +521,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var otrosConocimientosEliminar = new ConocimientoGeneralCargo();
             otrosConocimientosEliminar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == ideOtrosConocimientos);
-            int valorEliminar = otrosConocimientosEliminar.PuntajeConocimiento;
+            int valorEliminar = Convert.ToInt32(otrosConocimientosEliminar.PuntajeConocimiento);
             _conocimientoCargoRepository.Remove(otrosConocimientosEliminar);
             _conocimientoCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo, "Otros");
 

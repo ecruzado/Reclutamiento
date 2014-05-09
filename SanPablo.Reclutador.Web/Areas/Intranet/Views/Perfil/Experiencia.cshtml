@@ -41,13 +41,17 @@
                                 }
                             );
                     }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
-                    }
+                    //else {
+                    //    notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
+            },
+            open: function () {
+                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                $("#Experiencia_TipoExperiencia+div span").html('');
             }
         });
 

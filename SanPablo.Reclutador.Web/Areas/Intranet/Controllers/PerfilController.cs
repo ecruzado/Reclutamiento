@@ -479,8 +479,9 @@
             try 
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                if ((cargo.PuntajeMinimoExamen != 0) && (cargo.PuntajeMinimoGeneral != 0) && (cargo.NumeroPosiciones != 0) &&
-                    (cargo.PuntajeTotalCentroEstudio != 0) && (cargo.PuntajeTotalConocimientoGeneral != 0) && (cargo.PuntajeTotalEdad != 0) &&
+                if ((cargo.PuntajeMinimoExamen != null) && (cargo.PuntajeMinimoGeneral != null) && (cargo.NumeroPosiciones != null) && (cargo.PuntajeTotalPostulanteInterno != null) &&
+                    (cargo.PuntajeEdad != null)&&
+                    (cargo.PuntajeTotalCentroEstudio != 0) && (cargo.PuntajeTotalConocimientoGeneral != 0) && 
                     (cargo.PuntajeTotalExamen != 0) && (cargo.PuntajeTotalExperiencia != 0) && (cargo.PuntajeTotalNivelEstudio != 0) &&
                     (cargo.PuntajeTotalOfimatica != 0))
                 {

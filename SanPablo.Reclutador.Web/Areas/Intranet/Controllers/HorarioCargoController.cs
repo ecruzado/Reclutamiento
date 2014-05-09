@@ -94,9 +94,13 @@
 
                 if (!ModelState.IsValid)
                 {
-                    objJsonMessage.Mensaje = "Ingrese un puntaje mayor a cero";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    var horariosViewModel = inicializarHorarios();
+                    horariosViewModel.Horario = horarioCargo;
+                    return View(horariosViewModel);
+                    //objJsonMessage.Mensaje = "Ingrese un puntaje mayor a cero";
+                    //objJsonMessage.Resultado = false;
+                    //return Json(objJsonMessage);
+
                 }
                 if (horarioCargo.IdeHorarioCargo == 0)
                 {

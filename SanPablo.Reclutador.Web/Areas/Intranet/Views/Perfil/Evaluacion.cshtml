@@ -39,14 +39,19 @@
                             }
                         );
                     }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    }
+                    //else {
+                    //    notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-            }
+          },
+          open: function () {
+              $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+              $("#Evaluacion_IdeExamen+div span").html('');
+          }
+
       });
 
 

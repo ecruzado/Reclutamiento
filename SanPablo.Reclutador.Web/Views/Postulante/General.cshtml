@@ -44,6 +44,26 @@
         SanPablo.Numeros('Postulante_TelefonoMovil');
         SanPablo.NumeroTelefono('Postulante_TelefonoFijo');
 
+
+        SanPablo.AlfanumericoSpace('Postulante_NombreVia');
+
+        SanPablo.LetrasSpace('Postulante_ApellidoPaterno');
+        SanPablo.LetrasSpace('Postulante_ApellidoMaterno');
+        SanPablo.LetrasSpace('Postulante_PrimerNombre');
+        SanPablo.LetrasSpace('Postulante_SegundoNombre');
+        SanPablo.AlfanumericoSpace('Postulante_Observacion');
+
+        SanPablo.Alfanumerico('Postulante_InteriorDireccion');
+        SanPablo.Alfanumerico('Postulante_Manzana');
+        SanPablo.Alfanumerico('Postulante_Lote');
+        SanPablo.Alfanumerico('Postulante_Bloque');
+        SanPablo.Alfanumerico('Postulante_Etapa');
+
+        SanPablo.AlfanumericoSpace('Postulante_NombreZona');
+        SanPablo.AlfanumericoSpace('Postulante_ReferenciaDireccion');
+        
+        SanPablo.Alfanumerico('Postulante_NumeroLicencia');
+
         mostrarAlerta();
         actualizarBarra();
        
@@ -330,7 +350,8 @@
                                 }
                             else {
                                 var mensj = document.getElementById("mensajeError");
-                                mensj.innerHTML = respuesta.Mensaje;
+                                if (respuesta.Mensaje != null)
+                                { mensj.innerHTML = respuesta.Mensaje; }
                                 mensj.style.display = "block";
                                 }
                         });
@@ -358,7 +379,9 @@
          @Html.ValidationSummary(true)
          <div class="alert alert-info" id="mensajeError" style="display:none" >
         <a class="close" onclick="hide('alerta')" >×</a>
+         <strong>ERROR :  </strong> Verificar los datos ingresados
         </div>
+         
             <div class="widget-box">
                 <div class="widget-title">
                     <h5>Datos</h5>
@@ -486,7 +509,7 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" })
+                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" , maxlength="10" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
                             </div>

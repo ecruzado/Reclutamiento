@@ -2,11 +2,14 @@
 @{
     Layout = "";
 }
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
                
-        $('select#Departamentos').change(function () {
+        $('select#Ubigeo_IdeDepartamento').change(function () {
             var ideDepartamento = $(this).val();
             $("select#Ubigeo_IdeUbigeo").empty();
             $("select#Ubigeo_IdeUbigeo").append("<option value='00'> Seleccionar </option>");
@@ -15,10 +18,10 @@
                 url: '@Url.Action("listarUbigeos","UbigeoCargo")',
                 data: { ideUbigeoPadre: ideDepartamento },
                 success: function (respuesta) {
-                    $("select#Provincias").empty();
-                    $("select#Provincias").append("<option value='00'> Seleccionar </option>");
+                    $("select#Ubigeo_IdeProvincia").empty();
+                    $("select#Ubigeo_IdeProvincia").append("<option value='00'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
-                        $("select#Provincias").append("<option value='"
+                        $("select#Ubigeo_IdeProvincia").append("<option value='"
                         + item.IdeUbigeo + "'>" + item.Nombre + "</option>");
                     }
                 );
@@ -27,7 +30,7 @@
         })
 
         //Cargar Distritos
-        $('select#Provincias').change(function () {
+        $('select#Ubigeo_IdeProvincia').change(function () {
             var ideProvincia = $(this).val();
             $.ajax({
                 type: "POST",
@@ -44,6 +47,10 @@
                 }
             });
         })
+    });
+
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
     });
 </script>
 

@@ -3,6 +3,11 @@
     Layout = "";
 }
 
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -62,6 +67,10 @@
             listArea.style.display = "block";
         }
     }
+
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 
 

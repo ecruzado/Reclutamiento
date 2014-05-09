@@ -10,7 +10,7 @@
         {
             RuleFor(x => x.TipoDiscapacidad)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un Horario");
+                .WithMessage("Seleccionar un tipo de discapacidad");
 
             RuleFor(x => x.PuntajeDiscapacidad)
                 .NotEmpty()
