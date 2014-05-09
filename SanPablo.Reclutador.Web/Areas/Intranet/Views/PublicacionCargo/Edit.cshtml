@@ -9,6 +9,11 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+@*<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>*@
+@*<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>*@
+
 <script type="text/javascript">
         
     $(document).ready(function () {
@@ -42,8 +47,7 @@
             buttons: {
                 "Aceptar": function (e) {
                     e.preventDefault();
-                    //var result = $('#publicacionCargoForm').valid();
-                    //if (result) {
+                    
                         $("#updateDialogConfirmacion").dialog("close");
                         $.blockUI({
                             message: '<h1>Publicando...</h1>',
@@ -62,14 +66,15 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                MostrarMensaje("Requerimiento Publicado exitosamente", "Sistema de reclutamiento y selección de personal");
-                                
+                                mensajeRedirecciona("Requerimiento Publicado exitosamente", "Sistema de reclutamiento y selección de personal");
+
                             }
                             else {
                                 $.unblockUI();
                                 MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
                             }
                         });
+                    
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
@@ -253,15 +258,19 @@
 
     function publicarSolicitud()
     {
-        if (valida()) {
-            var dialogDiv = $('#updateDialogConfirmacion');
-            dialogDiv.dialog('open');
-        }
+        //var result = $('#publicacionCargoForm').valid();
+        //if (result) {
+            if (valida()) {
+                var dialogDiv = $('#updateDialogConfirmacion');
+                dialogDiv.dialog('open');
+            }
+        //}
+        
     }
     function mensajeResultado(mensaje) {
         $("#spanMensaje").html(mensaje);
         $("#divMensaje").dialog({
-            title: 'SAN PABLO',
+            title: 'Sistema de Reclutamiento y Selección de Personal',
             modal: true,
             buttons: {
                 "Ok": function () { $(this).dialog("close"); }
@@ -315,6 +324,23 @@
         }
     }
 
+    function mensajeRedirecciona(mensaje, titulo) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            modal: true,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                }
+            }
+        });
+    }
+
+    $('textarea[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 
 }  
@@ -378,7 +404,9 @@
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
                             @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
-                          
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
+                            </div>
                         </td>
                     </tr>
 
@@ -386,6 +414,9 @@
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
                             @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                     @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
+                            </div>
                            
                         </td>
                     </tr>

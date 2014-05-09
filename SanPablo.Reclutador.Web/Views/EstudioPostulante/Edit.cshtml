@@ -287,11 +287,12 @@
                 @Html.TextBoxFor(model => model.Estudio.TipTipoInstitucion, new { style = "display:none;" })
                 @Html.DropDownListFor(model => model.Estudio.TipoEducacion, new SelectList(Model.TiposEducacion, "Valor", "Descripcion", Model.Estudio.TipoEducacion))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                 @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
-                </div>
-                <div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Estudio.TipoEducacion)
                 </div>
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                 @Html.ValidationMessageFor(model => model.Estudio.TipTipoInstitucion)
+                </div>
+                
             </td>
         </tr>
         <tr>

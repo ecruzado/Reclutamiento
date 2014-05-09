@@ -27,15 +27,13 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionFunciones { get; set; }
         public virtual string DescripcionCompetencias { get; set; }
         public virtual string DescripcionObservaciones { get; set; }
-        
-        //[DataType(DataType.Date)]
-        ////[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaPublicacion { get; set; }
-        
-        //[DataType(DataType.Date)]
-        ////[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public virtual DateTime? FechaExpiracion { get; set; }
         
         public virtual string  Motivo { get; set; }

@@ -295,7 +295,7 @@
             try
             {
                 SolicitudNuevoCargoValidator validation = new SolicitudNuevoCargoValidator();
-                ValidationResult result = validation.Validate(solicitudNuevoCargo, "DescripcionObservaciones", "FechaPublicacion", "FechaExpiracion");
+                ValidationResult result = validation.Validate(solicitudNuevoCargo, "ObservacionPublicacion", "FechaPublicacion", "FechaExpiracion");
             
                 if (!result.IsValid)
                 {
