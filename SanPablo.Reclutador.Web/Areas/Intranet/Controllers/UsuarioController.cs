@@ -567,7 +567,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             else
             {
-                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Mensaje = "Error, Consulte con el área de sistemas";
                 objJson.Resultado = false;
             }
 
@@ -682,7 +682,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             else
             {
-                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Mensaje = "Error, Consulte con el área de sistemas";
                 objJson.Resultado = false;
             }
 
@@ -1436,7 +1436,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             else
             {
-                objJson.Mensaje = "Error, Consulte con el area de sistemas";
+                objJson.Mensaje = "Error, Consulte con el área de sistemas";
                 objJson.Resultado = false;
             }
 
