@@ -367,10 +367,18 @@
         });
     }
 
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
+
+    $('textarea[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 }
 @using (Html.BeginForm("Edit", "SolicitudNuevoCargo", FormMethod.Post, new { @id = "solicitudNuevoCargoForm" }))
 {
+    @Html.ValidationSummary(true)
 <div class="row">
     <div class="span12">
         <div class="widget-box">
@@ -389,22 +397,25 @@
                     <tbody>
                         <tr class="formulario-fila">
                             <td></td>
-                            <td class="span5">
-                                <div class="">
+                            <td style="width:140px">
                                     <label style="width:130px" class="control-label" for="inputSuccess">Código de Solicitud</label>
+                            </td>
+                            <td style="width:260px">
                                     @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo)
-                                    <div class="controles">
+                                    <div class="">
                                         @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeSolicitudNuevoCargo, new { @class ="input-small", @disabled="disabled" })
                                     </div>
-                                </div>
                             </td>
                             <td class="span5">
                                 <div class="">
-                                    <label  class="control-label" for="inputSuccess">Código de Cargo</label>
+                                    <label   class="control-label" for="inputSuccess">Código de Cargo</label>
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.CodigoCargo, new { @class = "input-small", maxlength = "10", @onblur = "verificarCodigo()", onkeyup = "aMays(event, this)" })
+                                             <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.CodigoCargo)
+                                             </div>
                                         }
                                         else
                                         {
@@ -418,10 +429,11 @@
                         </tr>
                         <tr class="formulario-fila">
                             <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Cargo</label>
-                                    <div class="controles">
+                            <td style="width:140px">
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Cargo</label>
+                            </td>
+                            <td style="width:260px">
+                                    <div class="">
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                              @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { maxlength = "50", onkeyup = "aMays(event, this)" })
@@ -434,7 +446,6 @@
                                               @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NombreCargo, new { disabled = "disabled" })
                                         }
                                     </div>
-                                </div>
                             </td>
                             <td class="span5">
                                 <div class="">
@@ -458,10 +469,11 @@
                         </tr>
                         <tr class="formulario-fila">
                             <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Descripción</label>
-                                    <div class="controles">
+                            <td style="width:140px">
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Descripción</label>
+                            </td>
+                            <td style="width:260px">
+                                    <div class="">
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { maxlength = "100", onkeyup = "aMays(event, this)" })
@@ -474,7 +486,6 @@
                                              @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { disabled = "disabled" })
                                          }
                                     </div>
-                                </div>
                             </td>
                              <td class="span5">
                                 <div class="">
@@ -500,20 +511,23 @@
                         </tr>
                         <tr class="formulario-fila">
                             <td></td>
-                            <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Nro. Posiciones</label>
-                                    <div class="controles">
+                            <td style="width:140px">
+                               <label style="width:130px" class="control-label" for="inputSuccess">Nro. Posiciones</label>
+                            </td>
+                             <td style="width:260px">
+                                    <div class="">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class = "input-mini", maxlength = "2" })
+                                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                                @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NumeroPosiciones)
+                                            </div>
                                          }
                                         else
                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class = "input-mini", disabled = "disabled" })
                                         }
                                     </div>
-                                </div>
                             </td> 
                             <td class="span5">
                                 <div class="">
@@ -538,11 +552,14 @@
                                       
                         </tr>
                         <tr class="formulario-fila">
-                        <td class="span5">
-                                <div class="">
-                                    <label class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)</label>
-                                    <div class="controles">
-                                        @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
+                            <td style="width:140px">
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)</label>
+
+                            </td>
+                            <td style="width:260px">
+                                    <div class="">
+
+                                       @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                             @Html.DropDownListFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.SolicitudNuevoCargo.TipoRangoSalarial))
                                             <div class="tex-error" style="font-size:12px;color:red"> 
@@ -554,7 +571,6 @@
                                             @Html.DropDownListFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.SolicitudNuevoCargo.TipoRangoSalarial), new { disabled = "disabled" })
                                         }
                                     </div>
-                                </div>
                             </td>  
                         </tr>
                     </tbody>

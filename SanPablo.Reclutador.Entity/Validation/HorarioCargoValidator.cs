@@ -9,7 +9,7 @@
         public HorarioCargoValidator()
         {
             RuleFor(x => x.TipoHorario)
-                .NotEqual("00")
+                .NotEqual("0")
                 .WithMessage("Seleccionar un Horario");
 
             RuleFor(x => x.PuntajeHorario)
@@ -17,7 +17,7 @@
                 .WithMessage("Ingresar Puntaje");
 
             RuleFor(x => x.PuntajeHorario)
-                .InclusiveBetween(0, 10)
+                .InclusiveBetween(-1, 10)
                 .WithMessage("Ingresar un puntaje entre 0 y 10");
 
          }

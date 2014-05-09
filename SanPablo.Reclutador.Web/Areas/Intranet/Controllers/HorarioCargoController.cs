@@ -115,7 +115,7 @@
                         horarioCargo.Cargo = new Cargo();
                         horarioCargo.Cargo.IdeCargo = IdeCargo;
                         _horarioCargoRepository.Add(horarioCargo);
-                        actualizarPuntaje(horarioCargo.PuntajeHorario, 0, IdeCargo);
+                        actualizarPuntaje(Convert.ToInt32(horarioCargo.PuntajeHorario), 0, IdeCargo);
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -136,14 +136,14 @@
                     }
                     else
                     {
-                        int puntajeAnterior = horarioCargoActualizar.PuntajeHorario;
+                        int puntajeAnterior = Convert.ToInt32(horarioCargoActualizar.PuntajeHorario);
                         horarioCargoActualizar.TipoHorario = horarioCargo.TipoHorario;
                         horarioCargoActualizar.PuntajeHorario = horarioCargo.PuntajeHorario;
                         horarioCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         horarioCargoActualizar.FechaModificacion = FechaModificacion;
                         _horarioCargoRepository.Update(horarioCargoActualizar);
 
-                        actualizarPuntaje(horarioCargo.PuntajeHorario, puntajeAnterior, IdeCargo);
+                        actualizarPuntaje(Convert.ToInt32(horarioCargo.PuntajeHorario), puntajeAnterior, IdeCargo);
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -166,7 +166,7 @@
             horarioCargoViewModel.Horario = new HorarioCargo();
 
             horarioCargoViewModel.Horarios = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
-            horarioCargoViewModel.Horarios.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+            horarioCargoViewModel.Horarios.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
             return horarioCargoViewModel;
         }
 
@@ -177,7 +177,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var horarioEliminar = new HorarioCargo();
             horarioEliminar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == ideHorario);
-            int puntajeEliminar = horarioEliminar.PuntajeHorario;
+            int puntajeEliminar = Convert.ToInt32(horarioEliminar.PuntajeHorario);
             _horarioCargoRepository.Remove(horarioEliminar);
             actualizarPuntaje(0, puntajeEliminar, IdeCargo);
             

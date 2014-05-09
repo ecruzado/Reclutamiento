@@ -19,8 +19,8 @@
                 .WithMessage("Seleccionar el cargo que desempeñaba");
 
             RuleFor(x => x.NombreCargoTrabajo)
-                .Length(10,50)
-                .WithMessage("Ingresar un cargo con longitud entre 10 y 50 caracteres");
+                .Length(5,50)
+                .WithMessage("Ingresar un cargo entre 5 y 50 caracteres");
 
             RuleFor(x => x.FechaTrabajoInicio)
                 .NotEmpty()

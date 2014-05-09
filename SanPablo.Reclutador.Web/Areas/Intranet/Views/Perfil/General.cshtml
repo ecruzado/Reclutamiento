@@ -310,6 +310,10 @@
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                    $("#Horario_TipoHorario+div span").html('');
                 }
             });
 
@@ -330,11 +334,11 @@
                 if (ideHorario != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje").dialog({
-                        title: 'Sistema de reclutamiento y selección de personal',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarHorario(ideHorario); $(this).dialog("close"); $('#grdListHorario').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
@@ -381,6 +385,11 @@
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                    $("#Ubigeo_IdeDepartamento+div span").html('');
+                    
                 }
             });
 
@@ -404,7 +413,7 @@
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 

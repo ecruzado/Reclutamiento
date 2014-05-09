@@ -32,7 +32,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipoCargoTrabajoReferente { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{2,3})\)?([-]{1})([0-9]{3})([-]{1})([0-9]{3,4})$", ErrorMessage = "Formato de telefono no válido : (054)-124-1245")]
+        [RegularExpression(@"^\(?([0-9]{2,3})\)?([-]{1})([0-9]{3})([-]{1})([0-9]{3,4})$", ErrorMessage = "Formato de teléfono no válido : (054)-124-1245")]
         public virtual string NumeroFijoInstitucionReferente { get; set; }
 
         public virtual int? NumeroAnexoInstitucionReferente { get; set; }

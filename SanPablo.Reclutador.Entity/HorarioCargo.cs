@@ -12,7 +12,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdeHorarioCargo { get; set; }
         public virtual Cargo Cargo { get; set; }
         public virtual string TipoHorario { get; set; }
-        public virtual int PuntajeHorario { get; set; }
+        public virtual int? PuntajeHorario { get; set; }
         public virtual string EstadoActivo { get; set; }
 
         public virtual string DescripcionHorario { get; set; }
