@@ -147,7 +147,11 @@
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
-                }
+            },
+            open: function () {
+                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                $("#Competencia_TipoCompetencia+div span").html('');
+            }
             });
 
         // btn Eliminar
@@ -156,11 +160,11 @@
             if (ideCompetencia != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
+                    title: 'Sistema de Reclutamiento y Selección de Personal',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
+                        "Cancelar": function () { $(this).dialog("close"); }
                     }
                 });
 
@@ -211,6 +215,10 @@
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
+            },
+            open: function () {
+                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                $("#Ofrecimiento_TipoOfrecimiento+div span").html('');
             }
         });
 
@@ -219,11 +227,11 @@
             if (ideOfrecimiento != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
-                    title: 'SAN PABLO',
+                    title: 'Sistema de Reclutamiento y Selección de Personal',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
+                        "Cancelar": function () { $(this).dialog("close"); }
                     }
                 });
 
@@ -329,6 +337,10 @@
             data: { ideOfrecimiento: id },
         });
     }
+
+      $('textarea[data-val=true]').on('blur', function () {
+          $(this).valid();
+      });
 
   </script>
 

@@ -10,7 +10,15 @@
         {
             RuleFor(x => x.IdeUbigeo)
                 .NotEqual(0)
-                .WithMessage("Seleccionar Departamento, Provincia y Distrito");
+                .WithMessage("Seleccionar Distrito");
+
+            RuleFor(x => x.IdeDepartamento)
+                .NotEqual(0)
+                .WithMessage("Seleccionar Departamento");
+
+            RuleFor(x => x.IdeProvincia)
+                .NotEqual(0)
+                .WithMessage("Seleccionar Provincia");
 
             RuleFor(x => x.PuntajeUbigeo)
                 .NotEmpty()

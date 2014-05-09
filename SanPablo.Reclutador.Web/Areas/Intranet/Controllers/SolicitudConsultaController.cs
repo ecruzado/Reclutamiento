@@ -207,7 +207,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
             model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
-            model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
+            model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
             model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));

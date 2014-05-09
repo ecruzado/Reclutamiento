@@ -139,7 +139,7 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Codigo', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Posiciones', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', ''],
+            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', 'Etapa', ''],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
@@ -415,8 +415,8 @@
                         <div class="">
                             <label class="control-label" for="selectError">Fecha</label>
                             <div class="controles">
-                                <input id="fechaInicio" type="text" class="input-small" placeholder=" Inicial"/>
-                                <input id="fechaFin" type="text" class="input-small" placeholder=" Final"/>
+                                <input id="fechaInicio" type="text" class="input-small" placeholder=" Desde"/>
+                                <input id="fechaFin" type="text" class="input-small" placeholder=" Hasta"/>
                             </div>
                         </div>
                     </td>

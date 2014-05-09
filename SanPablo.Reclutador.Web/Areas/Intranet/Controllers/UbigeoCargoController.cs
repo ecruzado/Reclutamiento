@@ -114,19 +114,19 @@
                         ubigeoCargo.Cargo.IdeCargo = IdeCargo;
 
                         _ubigeoCargoRepository.Add(ubigeoCargo);
-                        actualizarPuntaje(ubigeoCargo.PuntajeUbigeo, 0, IdeCargo);
+                        actualizarPuntaje(Convert.ToInt32(ubigeoCargo.PuntajeUbigeo), 0, IdeCargo);
                     }
                     else
                     {
                         var ubigeoCargoActualizar = _ubigeoCargoRepository.GetSingle(x => x.IdeUbigeoCargo == ubigeoCargo.IdeUbigeoCargo);
 
-                        int puntajeAnterior = ubigeoCargoActualizar.PuntajeUbigeo;
+                        int puntajeAnterior = Convert.ToInt32(ubigeoCargoActualizar.PuntajeUbigeo);
                         ubigeoCargoActualizar.IdeUbigeo = ubigeoCargo.IdeUbigeo;
                         ubigeoCargoActualizar.PuntajeUbigeo = ubigeoCargo.PuntajeUbigeo;
                         ubigeoCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         ubigeoCargoActualizar.FechaModificacion = FechaModificacion;
                         _ubigeoCargoRepository.Update(ubigeoCargoActualizar);
-                        actualizarPuntaje(ubigeoCargo.PuntajeUbigeo, puntajeAnterior, IdeCargo);
+                        actualizarPuntaje(Convert.ToInt32(ubigeoCargo.PuntajeUbigeo), puntajeAnterior, IdeCargo);
                     }
                     
                     objJsonMessage.Mensaje = "Agregado Correctamente";

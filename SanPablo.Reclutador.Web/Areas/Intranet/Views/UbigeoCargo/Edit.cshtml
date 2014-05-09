@@ -63,7 +63,10 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Departamento <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos))
+                @Html.DropDownListFor(model => model.Ubigeo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Ubigeo.IdeDepartamento))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Ubigeo.IdeDepartamento)
+                </div>
                 
             </td>
         </tr>
@@ -72,7 +75,10 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Provincia <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias))
+                @Html.DropDownListFor(model => model.Ubigeo.IdeProvincia, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Ubigeo.IdeProvincia))
+                <div class="tex-error" style="font-size:12px;color:red"> 
+                    @Html.ValidationMessageFor(model => model.Ubigeo.IdeProvincia)
+                </div>
                 
             </td>
         </tr>
@@ -83,7 +89,7 @@
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Ubigeo.IdeUbigeo, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Ubigeo.IdeUbigeo))
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Ubigeo.IdeUbigeo)
+                    @Html.ValidationMessageFor(model => model.Ubigeo.IdeUbigeo)
                 </div>
             </td>
        </tr>
@@ -94,7 +100,7 @@
            <td>
                 @Html.TextBoxFor(model => model.Ubigeo.PuntajeUbigeo, new {@class="input-xxmini" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.Ubigeo.PuntajeUbigeo)
+                     @Html.ValidationMessageFor(model => model.Ubigeo.PuntajeUbigeo)
                 </div>
            </td>
        </tr>  

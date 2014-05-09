@@ -305,9 +305,12 @@
 
                 if (!result.IsValid)
                 {
-                    var nuevoCargoViewModel = inicializarSolicitudNuevoCargo(model.Pagina);
-                    nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
-                    return View(nuevoCargoViewModel);
+                    objJsonMessage.Mensaje = "Revise que todos los datos hayan sido ingresados";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                    //var nuevoCargoViewModel = inicializarSolicitudNuevoCargo(model.Pagina);
+                    //nuevoCargoViewModel.SolicitudNuevoCargo = nuevaSolicitudCargo;
+                    //return View(nuevoCargoViewModel);
                 }
                 if (nuevaSolicitudCargo.IdeSolicitudNuevoCargo == 0)
                 {

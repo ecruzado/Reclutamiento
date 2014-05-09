@@ -2,6 +2,11 @@
 @{
     Layout = "";
 }
+<script type="text/javascript">
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
+</script>
 
 @using (Html.BeginForm("Edit", "CompetenciaCargo", FormMethod.Post, new { @id = "competenciasForm" }))
 {
