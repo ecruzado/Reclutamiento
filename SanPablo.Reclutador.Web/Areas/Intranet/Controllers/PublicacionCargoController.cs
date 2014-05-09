@@ -143,18 +143,14 @@
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<ExperienciaCargo>();
 
-                //ProjectionList lista = Projections.ProjectionList();
-                //lista.Add(Projections.Property("TipoExperiencia"), "TipoExperiencia");
                
-                //where.SetProjection(Projections.Distinct(lista));
-                //where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<ExperienciaCargo>());
 
 
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                //DetachedCriteria where = DetachedCriteria.For<ExperienciaCargo>();
+               
                 where.Add(Expression.Eq("Cargo.IdeCargo", Idecargo));
                 
 

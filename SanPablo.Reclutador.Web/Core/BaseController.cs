@@ -233,8 +233,8 @@ namespace SanPablo.Reclutador.Web.Core
 
         #region Control Error
 
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
-        (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger("Errores");
+        //(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
         protected override void OnException(ExceptionContext filterContext)
@@ -253,6 +253,7 @@ namespace SanPablo.Reclutador.Web.Core
                 //error generico
             }
 
+            log.Error(string.Format("Controlador:{0}  Action:{1}  Mensaje:{2}", controllerName, actionName, filterContext.Exception.Message));
             //logger.Error(string.Format("Controlador:{0}  Action:{1}  Mensaje:{2}", controllerName, actionName, filterContext.Exception.Message));
             
             filterContext.Result = View("Error");
