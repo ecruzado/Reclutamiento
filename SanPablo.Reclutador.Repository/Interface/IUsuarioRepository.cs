@@ -18,5 +18,6 @@
     public interface IUsuarioRepository : IRepository<Usuario>
     {
         List<Usuario> GetAnalistaRespoanble(SolReqPersonal obj);
+        List<UsuarioVista> GetUsuarioVista(UsuarioVista obj);
     }
 }

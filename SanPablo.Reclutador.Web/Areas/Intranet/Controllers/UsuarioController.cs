@@ -451,24 +451,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.UsuarioRolSede = new UsuarioRolSede();
 
             model.IdUsuario = id;
-            //String IndGrilla = Visualicion.NO;
-
-            //visualiza los tipo de requerimiento
-
-            //var ListaRoles =  _usuarioRolSedeRepository.GetListaRol(id);
-
-            //if (ListaRoles!=null)
-            //{
-            //    foreach (Rol item in ListaRoles)
-            //    {
-            //        if (Roles.Encargado_Seleccion.Equals(item) || Roles.Analista_Seleccion.Equals(item))
-            //        {
-            //            IndGrilla = Visualicion.SI;
-            //        }
-            //    }
-            //}
-
-            //model.IndGrilla = IndGrilla;
+           
 
 
             return View("PopupTipoReq",model);
@@ -731,6 +714,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson); ;
         }
 
+
+        /// <summary>
+        /// Elimina la relacion de rol y sede
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminaRolSedeNivel(string id)
@@ -807,23 +796,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             try
             {
-               
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<UsuarioVista>();
+
+                List<UsuarioVista> listaUsuarios;
+                UsuarioVista objUsuarioVista;
+
+                objUsuarioVista = new UsuarioVista();
+                //DetachedCriteria where = null;
+                //where = DetachedCriteria.For<UsuarioVista>();
                 
-                ProjectionList lista = Projections.ProjectionList();
-                lista.Add(Projections.Property("FLGESTADO"), "FLGESTADO");
-                lista.Add(Projections.Property("IDUSUARIO"), "IDUSUARIO");
-                lista.Add(Projections.Property("CODUSUARIO"), "CODUSUARIO");
-                lista.Add(Projections.Property("DSCNOMBRES"), "DSCNOMBRES");
-                lista.Add(Projections.Property("DSCAPEPATERNO"), "DSCAPEPATERNO");
-                lista.Add(Projections.Property("DSCAPEMATERNO"), "DSCAPEMATERNO");
-                lista.Add(Projections.Property("DESROL"), "DESROL");
-                lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
-                lista.Add(Projections.Property("TIPUSUARIO"), "TIPUSUARIO");
+                //ProjectionList lista = Projections.ProjectionList();
+                //lista.Add(Projections.Property("FLGESTADO"), "FLGESTADO");
+                //lista.Add(Projections.Property("IDUSUARIO"), "IDUSUARIO");
+                //lista.Add(Projections.Property("CODUSUARIO"), "CODUSUARIO");
+                //lista.Add(Projections.Property("DSCNOMBRES"), "DSCNOMBRES");
+                //lista.Add(Projections.Property("DSCAPEPATERNO"), "DSCAPEPATERNO");
+                //lista.Add(Projections.Property("DSCAPEMATERNO"), "DSCAPEMATERNO");
+                //lista.Add(Projections.Property("DESROL"), "DESROL");
+                //lista.Add(Projections.Property("DESSEDE"), "DESSEDE");
+                //lista.Add(Projections.Property("TIPUSUARIO"), "TIPUSUARIO");
                
-                where.SetProjection(Projections.Distinct(lista));
-                where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
+                //where.SetProjection(Projections.Distinct(lista));
+                //where.SetResultTransformer(NHibernate.Transform.Transformers.AliasToBean<UsuarioVista>());
 
                 
                 if(
@@ -838,36 +831,47 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
-
-                        where.Add(Expression.Eq("IDROL",Convert.ToInt32(grid.rules[1].data)));
+                        objUsuarioVista.IDROL = Convert.ToInt32(grid.rules[1].data);
+                        //where.Add(Expression.Eq("IDROL",Convert.ToInt32(grid.rules[1].data)));
                     }
                     if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
                     {
-                        where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
+                        objUsuarioVista.IDESEDE = Convert.ToInt32(grid.rules[2].data);
+                        //where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
                     }
                     if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                     {
-                        where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
+                        
+                        objUsuarioVista.DSCNOMBRES = grid.rules[3].data;
+                        //where.Add(Expression.Like("DSCNOMBRES", '%' + grid.rules[3].data + '%'));
                     }
                     if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
                     {
-                        where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
+                        objUsuarioVista.CODUSUARIO = grid.rules[4].data;
+                        //where.Add(Expression.Like("CODUSUARIO", '%' + grid.rules[4].data + '%'));
 
-                    } if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
+                    } 
+                    if (!"".Equals(grid.rules[5].data) && grid.rules[5].data != null && grid.rules[5].data != "0")
                     {
-                        where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
+                         objUsuarioVista.DSCAPEPATERNO = grid.rules[5].data;
+                        
+                        //where.Add(Expression.Like("DSCAPEPATERNO", '%' + grid.rules[5].data + '%'));
                     }
                     if (!"".Equals(grid.rules[6].data) && grid.rules[6].data != null && grid.rules[6].data != "0")
                     {
-                        where.Add(Expression.Like("DSCAPEMATERNO", '%' + grid.rules[6].data + '%'));
+                        
+                        objUsuarioVista.DSCAPEMATERNO = grid.rules[6].data;
+                        //where.Add(Expression.Like("DSCAPEMATERNO", '%' + grid.rules[6].data + '%'));
                     }
                 }
 
-                where.Add(Expression.Eq("TIPUSUARIO", TipUsuario.Instranet));
+                //where.Add(Expression.Eq("TIPUSUARIO", TipUsuario.Instranet));
+                listaUsuarios = new List<UsuarioVista>();
 
-                var generic = Listar(_usuarioVistaRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
+                listaUsuarios = _usuarioRepository.GetUsuarioVista(objUsuarioVista);
+
+                var generic = GetListar(listaUsuarios,
+                                        grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
