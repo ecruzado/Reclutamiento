@@ -782,7 +782,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             }
 
-            return Json(objJson); ;
+            return Json(objJson);
         }
         
 
