@@ -1030,6 +1030,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         // Se obtiene el usaurio reponsable
                         var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Seleccion
                                                             && x.IdSede == Sede
+
                                                             );
                         // se valida que exista y se toma al primer responsable
                         if (ObjUsuarioResp != null)
@@ -1042,15 +1043,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
 
                             var objRol = _rolRepository.GetSingle(x => x.IdRol == usuarioRolSede.IdRol && x.FlgEstado==IndicadorActivo.Activo);
-                            
-                            retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
 
-                            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
+                            var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == usuarioRolSede.IdUsuario);
+
+                            if (ObjUsuario!=null)
+                            {
+                                retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
+                                var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
-
-
-                            MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
-
+                                MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
+ 
+                            }
+                            else
+                            {
+                                retorno = 0;
+                                objJson.Resultado = false;
+                                objJson.Mensaje = "No se encuentra un responsable(Encargado de selección) asignado";
+                            }
                             
                         }
                         else

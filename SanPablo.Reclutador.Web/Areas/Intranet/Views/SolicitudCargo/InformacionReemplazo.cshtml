@@ -772,6 +772,8 @@
 
     function valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo){
 
+        var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
+
         if ("S"==TipoReemplazo) {
 
             if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
@@ -780,10 +782,21 @@
                 return false;
             }
 
+            if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
+                MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "Mensaje");
+                return false;
+            }
+
+            
+
+
             if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
                 MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
                 return false;
             }
+
+
+
         } else {
 
             if ((fechaFinal.length == 0)) {
@@ -1107,8 +1120,17 @@
                         <td class="span5">
                        
                             <label class="control-label" for="inputSuccess">Dependecia</label>
+                            
                             <div class="controles">
-                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia))                      
+                            @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
+                            {
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled ="disabled" })                      
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia))
+                            }
+                                   
                             </div>
                         </td>
                     </tr>
@@ -1117,7 +1139,18 @@
                        
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
+                                
+                            
+                            @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
+                            {
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo), new { disabled ="disabled" })
+                            }
+                            else
+                            {
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
+                            }
+                            
+                            
                             </div>
                        
                         </td>
@@ -1125,7 +1158,18 @@
                          <td class="span5">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento))                      
+                             
+
+                            @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
+                            {
+                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled ="disabled" })                      
+                            }
+                            else
+                            {
+                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento))                      
+                            }
+
+
                             </div>
                            
                         </td>  
@@ -1137,7 +1181,17 @@
                         
                             <label class="control-label" for="selectError">Tipo Vacante</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante))
+                                
+                            
+                            @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
+                            {
+                              @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante), new { disabled ="disabled"})
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante))
+                            }
+                            
                             </div>
                         
                         </td>
@@ -1145,7 +1199,17 @@
                            <td class="span5">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea))                      
+                                
+                            @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
+                            {
+                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled ="disabled" })                      
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea))                      
+                            }
+                            
+                            
                             </div>
                         </td>
 

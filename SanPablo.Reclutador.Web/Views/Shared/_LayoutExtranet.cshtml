@@ -170,12 +170,12 @@
                   modal: true,
                   title: "Mensaje",
                   buttons: {
-                      "Si": function () {
+                      "Aceptar": function () {
                           window.location = '@Url.Action("Login", "Seguridad")';
                          
                           $(this).dialog("close");
                       },
-                      "No": function () {
+                      "Cancelar": function () {
                           $(this).dialog("close");
                       }
                   }

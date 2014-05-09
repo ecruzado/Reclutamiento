@@ -195,7 +195,7 @@
             var numVacantes = rowObject[9];
             
             
-            var a = '<a onclick="detalleGrupoCargo(' + idCargo + ',' + idSede + ',' + fechaIncial + ',' + fechaFinal + ',' + tipo + ',' + numVacantes + ');" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
+            var a = '<a href="#" onclick="detalleGrupoCargo(' + idCargo + ',' + idSede + ',' + fechaIncial + ',' + fechaFinal + ',' + tipo + ',' + numVacantes + ');" style="color:blue;text-decoration:underline" >' + cellvalue + '</a>';
             
 
             
@@ -206,7 +206,7 @@
         function PostularFormatter(cellvalue, options, rowObject) {
             var imgPath = '@Url.Content("~/Content/images/")';
             var archivo = 'right_2.png';
-            var strImg = '<img onclick="confirmapostulacion()" src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
+            var strImg = '<img  onclick="confirmapostulacion()" src="' + imgPath + archivo + '" width="16" height="16" title="Editar" alt="Editar">';
             return strImg;
         }
 
@@ -264,6 +264,12 @@
             //}
 
             if (fechaInicial.length > 0) {
+
+                if (fechaFinal.length==0) {
+                    MostrarMensaje('La fecha final es obligatoria', "Mensaje");
+                    return false;
+                }
+
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
                     MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
                     return false;
@@ -271,6 +277,12 @@
             }
 
             if (fechaFinal.length > 0) {
+
+                if (fechaInicial.length == 0) {
+                    MostrarMensaje('La fecha inicial es obligatoria', "Mensaje");
+                    return false;
+                }
+
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
                     MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
                     return false;
