@@ -74,6 +74,9 @@
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    iniciar();
                 }
             });
 
@@ -181,6 +184,17 @@
 
            
             
+        }
+
+        function iniciar()
+        {
+            var span = document.getElementById('spanFecNac');
+            var opcion = $('Pariente_TipoDeVinculo').val();
+
+            if (opcion == "03") {
+                span.innerHTML = "*";
+            }
+            else { span.innerHTML = ""; }
         }
     </script>
 }

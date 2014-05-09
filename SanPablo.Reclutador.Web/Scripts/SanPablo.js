@@ -662,5 +662,12 @@ SanPablo = {
         $this.keypress(function (e) {
             if (String.fromCharCode(e.keyCode).match(/[^a-zA-Z\s]/g)) return false;
         });
+    },
+
+    DateSpecial: function (selector) {
+        var $this = $('#' + selector);
+        $this.keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9|/|]/g)) return false;
+        });
     }
 };

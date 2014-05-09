@@ -6,13 +6,13 @@
 @section Head{
 }
 
-@section Scripts{
-<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 
-    <script type="text/javascript">
-
-        $(document).ready(function () {
+<script type="text/javascript">
+ $(document).ready(function () {
 
             mostrarAlerta();
             actualizarBarra();
@@ -90,6 +90,10 @@
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                    $("#Estudio_TipoEducacion+div span").html('');
                 }
             });
 
@@ -142,8 +146,6 @@
                 }
             });
 
-
-           
 
             $('#btnEstudioSiguiente').click(function () {
                 $.ajax({
@@ -198,7 +200,7 @@
             Funciones.Alert("divMensajeCon", "spnMensajeCon", mensaje, titulo);
         }
 
-    </script>
+ </script>
 }
 <div class="span12">
     @Html.Partial("MenuCv")

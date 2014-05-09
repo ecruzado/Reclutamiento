@@ -8,19 +8,12 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <script type="text/javascript">
 
-        $(document).ready(function () {
-        $('input[data-val=true]').on('blur', function () {
-        $(this).valid();
-        });
+$(document).ready(function () {
+  $('input[data-val=true]').on('blur', function () {
+  $(this).valid();
+  });
 
-        var span = document.getElementById('spanFecNac');
-        var opcion = $('Pariente_TipoDeVinculo').val();
-
-        if (opcion == "03")
-        {
-            span.innerHTML = "*";
-        }
-        else { span.innerHTML = ""; }
+        
 
 
         SanPablo.LetrasSpace('Pariente_ApellidoPaterno');

@@ -13,6 +13,11 @@
             SanPablo.Numeros('Experiencia_NumeroAnexoInstitucionReferente');
             SanPablo.NumeroTelefono('Experiencia_NumeroFijoInstitucionReferente');
 
+            SanPablo.LetrasSpace('Experiencia_NombreReferente');
+
+            SanPablo.DateSpecial('Experiencia_FechaInicio');
+            SanPablo.DateSpecial('Experiencia_FechaFin');
+
             var indActual = $('#indActuaTrabajando').is(":checked");
             habilitarFecha(indActual);
 
@@ -233,7 +238,7 @@
                 <label class="etiquetaFormulario" > Fecha inicio <span class="text-error">*</span></label>
               </td>
               <td class="colInput">
-                  @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000" , onblur = "fechaValidaInicio();"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaInicio, new {placeholder="01/2000" , onblur = "fechaValidaInicio();", maxlength = "7"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
                       @Html.ValidationMessageFor(model => model.Experiencia.FechaInicio)
                   </div>
@@ -244,7 +249,7 @@
                 <label class="etiquetaFormulario" style="width:160px"> Fecha fin </label>
               </td>
               <td class="colInput">
-                  @Html.TextBoxFor(model => model.Experiencia.FechaFin, new { placeholder = "01/2000", onblur = "fechaValidaFin();"})
+                  @Html.TextBoxFor(model => model.Experiencia.FechaFin, new { placeholder = "01/2000", onblur = "fechaValidaFin();", maxlength = "7"})
                   <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaFin)
                   </div>
