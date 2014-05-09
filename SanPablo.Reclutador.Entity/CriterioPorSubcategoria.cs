@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FECMODIFICA { get; set; }
         public virtual string PuntajeMax { get; set; }
         public virtual string PUNTAJECAL { get; set; }
-        
 
+        public virtual int IdeSede { get; set; }
     }
 }

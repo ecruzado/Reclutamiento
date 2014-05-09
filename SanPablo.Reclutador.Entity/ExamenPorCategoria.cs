@@ -13,7 +13,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual DateTime FecCreacion { get; set; }
         public virtual string UsrModifica { get; set; }
         public virtual DateTime FecModifica { get; set; }
-         
+        public virtual int IdeSede { get; set; }
         public virtual Examen Examen { get; set; }
         public virtual Categoria Categoria { get; set; }
 
