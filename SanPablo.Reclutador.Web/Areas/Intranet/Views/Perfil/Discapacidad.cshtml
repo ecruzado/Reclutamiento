@@ -16,7 +16,7 @@
 
         $('#updateDialogDiscapacidad').dialog({
             autoOpen: false,
-            width: 600,
+            width: 500,
             resizable: false,
             modal: true,
             buttons: {
@@ -37,13 +37,17 @@
                             }
                         );
                     }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados sean válidos");
-                    }
+                    //else {
+                    //    notificacionError("ERROR: Verifique que los datos ingresados sean válidos");
+                    //}
             },
             "Cancelar": function () {
                 $(this).dialog("close");
                 }
+            },
+            open: function () {
+                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                $("#Discapacidad_TipoDiscapacidad+div span").html('');
             }
         });
 
@@ -56,7 +60,7 @@
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
+                        "Cancelar": function () { $(this).dialog("close"); }
                     }
                 });
 

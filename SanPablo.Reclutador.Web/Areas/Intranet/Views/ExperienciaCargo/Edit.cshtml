@@ -2,6 +2,9 @@
 @{
     Layout = "";
 }
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
@@ -10,6 +13,10 @@
         SanPablo.Numeros('Experiencia_CantidadAnhosExperiencia');
         SanPablo.Numeros('Experiencia_CantidadMesesExperiencia');
         SanPablo.Numeros('Experiencia_PuntajeExperiencia');
+    });
+
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
     });
 </script>
 

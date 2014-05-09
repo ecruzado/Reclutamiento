@@ -189,12 +189,12 @@
                 byte[] data;
                 if (!result.IsValid)
                 {
-                    //postulanteModel = inicializarPostulante();
-                    //postulanteModel.Postulante = model.Postulante;
-                    //return View("General", postulanteModel);
-                    objJsonMessage.Mensaje = "Verificar los datos ingresados";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    postulanteModel = inicializarPostulante();
+                    postulanteModel.Postulante = model.Postulante;
+                    return View("General", postulanteModel);
+                    //objJsonMessage.Mensaje = "Verificar los datos ingresados";
+                    //objJsonMessage.Resultado = false;
+                    //return Json(objJsonMessage);
 
                 }
 

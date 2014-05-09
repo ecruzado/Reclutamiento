@@ -114,7 +114,7 @@
                         discapacidadCargo.Cargo.IdeCargo = IdeCargo;
 
                         _discapacidadCargoRepository.Add(discapacidadCargo);
-                        _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, 0, IdeCargo);
+                        _discapacidadCargoRepository.actualizarPuntaje(Convert.ToInt32(discapacidadCargo.PuntajeDiscapacidad), 0, IdeCargo);
 
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -138,13 +138,13 @@
                     else
                     {
                         
-                        int valorEditar = discapacidadCargoActualizar.PuntajeDiscapacidad;
+                        int valorEditar = Convert.ToInt32(discapacidadCargoActualizar.PuntajeDiscapacidad);
                         discapacidadCargoActualizar.TipoDiscapacidad = discapacidadCargo.TipoDiscapacidad;
                         discapacidadCargoActualizar.PuntajeDiscapacidad = discapacidadCargo.PuntajeDiscapacidad;
                         discapacidadCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         discapacidadCargoActualizar.FechaModificacion = FechaModificacion;
                         _discapacidadCargoRepository.Update(discapacidadCargoActualizar);
-                        _discapacidadCargoRepository.actualizarPuntaje(discapacidadCargo.PuntajeDiscapacidad, valorEditar, IdeCargo);
+                        _discapacidadCargoRepository.actualizarPuntaje(Convert.ToInt32(discapacidadCargo.PuntajeDiscapacidad), valorEditar, IdeCargo);
 
                         objJsonMessage.Mensaje = "Agregado Correctamente";
                         objJsonMessage.Resultado = true;
@@ -181,7 +181,7 @@
             int IdeCargo = CargoPerfil.IdeCargo;
             var discapacidadCargo = new DiscapacidadCargo();
             discapacidadCargo = _discapacidadCargoRepository.GetSingle(x => x.IdeDiscapacidadCargo == ideDiscapacidad);
-            int valorEliminar = discapacidadCargo.PuntajeDiscapacidad;
+            int valorEliminar = Convert.ToInt32(discapacidadCargo.PuntajeDiscapacidad);
             _discapacidadCargoRepository.Remove(discapacidadCargo);
             _discapacidadCargoRepository.actualizarPuntaje(0, valorEliminar, IdeCargo);
 

@@ -158,10 +158,10 @@
                     if (result) {
                         $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
                         $("#divMensaje").dialog({
-                            title: 'SAN PABLO',
+                            title: 'Sistema de Reclutamiento y Selección de Personal',
                             modal: true,
                             buttons: {
-                                "Si": function () {
+                                "Aceptar": function () {
                                     $(this).dialog("close");
                                     $("#updateDialogAprobacion").dialog("close");
                                     $.blockUI({
@@ -178,7 +178,7 @@
                                     });
                                     enviarAprobacionRechazo();
                                 },
-                                "No": function () { $(this).dialog("close"); }
+                                "Cancelar": function () { $(this).dialog("close"); }
                             }
                         });
 
@@ -221,7 +221,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mostrarMensaje("Solicitud aceptada exitosamente");
+                                mensajeRedirecciona("Solicitud aceptada exitosamente","Sistema de Reclutamiento y Selección de Personal");
                             }
                             else {
                                 $.unblockUI();
@@ -261,7 +261,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mostrarMensaje("Solicitud enviada exitosamente");
+                                mensajeRedirecciona("Solicitud enviada exitosamente","Sistema de Reclutamiento y Selección de Personal");
                             }
                             else {
                                 $.unblockUI();
@@ -346,7 +346,7 @@
              function (respuesta) {
                  $.unblockUI();
                  if (respuesta.Resultado) {
-                     mostrarMensaje("Aprobacion/Rechazo enviado exitosamente");
+                     mensajeRedirecciona("Aprobacion/Rechazo enviado exitosamente","Sistema de Reclutamiento y Selección de Personal");
                  }
                  else {
                      notificacionError(respuesta.Mensaje);
@@ -361,7 +361,19 @@
         var url = '@Url.Action("Edit", "PublicacionCargo", new { id = "",area="Intranet" })?id=' + "0" + "&pagina=" + pagina;
         window.location = url;
     }
-
+    function mensajeRedirecciona(mensaje, titulo) {
+        $("#spanMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            modal: true,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                }
+            }
+        });
+    }
 
 </script>
 }

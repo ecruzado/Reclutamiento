@@ -104,12 +104,12 @@
             {
                 if (!result.IsValid)
                 {
-                    if (!validarPtjeCero(evaluacionCargo))
-                    {
+                    //if (!validarPtjeCero(evaluacionCargo))
+                    //{
                         var evaluacionViewModel = inicializarEvaluacion();
                         evaluacionViewModel.Evaluacion = evaluacionCargo;
                         return View(evaluacionViewModel);
-                    }
+                    //}
                 }
                 if (evaluacionCargo.IdeEvaluacionCargo == 0)
                 {
@@ -142,7 +142,7 @@
                 {
                     var evaluacionCargoActualizar = _evaluacionCargoRepository.GetSingle(x => x.IdeEvaluacionCargo == evaluacionCargo.IdeEvaluacionCargo);
 
-                    int contador = _evaluacionCargoRepository.CountByExpress(x => x.Examen.IdeExamen == evaluacionCargo.Examen.IdeExamen
+                    int contador = _evaluacionCargoRepository.CountByExpress(x => x.Examen.IdeExamen == evaluacionCargo.IdeExamen
                                                                                && x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.IdeEvaluacionCargo !=  evaluacionCargo.IdeEvaluacionCargo);
 
                     if (contador > 0)
@@ -154,7 +154,7 @@
                     else
                     {
                         int valorEditar = evaluacionCargoActualizar.PuntajeExamen;
-                        evaluacionCargoActualizar.Examen = evaluacionCargo.Examen;
+                        evaluacionCargoActualizar.Examen.IdeExamen = evaluacionCargo.IdeExamen;
                         evaluacionCargoActualizar.TipoExamen = evaluacionCargo.TipoExamen;
                         evaluacionCargoActualizar.TipoAreaResponsable = evaluacionCargo.TipoAreaResponsable;
                         evaluacionCargoActualizar.PuntajeExamen = evaluacionCargo.PuntajeExamen;

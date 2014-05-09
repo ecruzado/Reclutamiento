@@ -13,12 +13,16 @@ namespace SanPablo.Reclutador.Entity.Validation
                .NotEmpty()
                .WithMessage("Seleccionar un Examen");
 
+            RuleFor(x => x.IdeExamen)
+                .NotEqual(0)
+                .WithMessage("Seleccionar un Examen");
+
             RuleFor(x => x.NotaMinimaExamen)
                  .NotEmpty()
                 .WithMessage("Ingresar una nota mínima");
             RuleFor(x => x.NotaMinimaExamen)
                 .InclusiveBetween(0, 20)
-               .WithMessage("Ingresar un nota mínima entre 0 y 10");
+               .WithMessage("Ingresar un nota mínima entre 0 y 20");
 
         }
 
