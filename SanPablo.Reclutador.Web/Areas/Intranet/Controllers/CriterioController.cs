@@ -452,10 +452,7 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
                 
-                //obtiene el valor del criterio
                
-                
-               // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
                 DetachedCriteria where = DetachedCriteria.For<Alternativa>();
 
