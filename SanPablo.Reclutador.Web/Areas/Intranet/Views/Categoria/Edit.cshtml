@@ -1006,11 +1006,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10",onkeyup="aMays(event, this)" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
                                 }
                                 
                                 <div class="tex-error" style="font-size:12px;color:red">    

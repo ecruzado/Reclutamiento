@@ -39,7 +39,7 @@
             </td>
             <td class="colInput;input-xxlarge">
 
-               @Html.TextBoxFor(model => model.SubCategoria.DESCSUBCATEGORIA, new { @maxlength = "100" ,onkeyup="aMays(event, this)"})
+               @Html.TextBoxFor(model => model.SubCategoria.DESCSUBCATEGORIA, new { @maxlength = "50" ,onkeyup="aMays(event, this)"})
                <div class="tex-error" style="font-size:12px;color:red">   
                @Html.ValidationMessageFor(model => model.SubCategoria.DESCSUBCATEGORIA)
                </div>
