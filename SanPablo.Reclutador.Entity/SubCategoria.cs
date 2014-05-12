@@ -20,9 +20,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual IList<Criterio> Criterios { get; set; }
         public virtual int TIEMPO { get; set; }
 
-        
-
-
+        public virtual int IdeSede { get; set; }
         
         public SubCategoria()
         {

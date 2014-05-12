@@ -5,6 +5,8 @@ using SanPablo.Reclutador.Entity;
 using NHibernate.Criterion;
 using System.Linq;
 using SanPablo.Reclutador.Repository.Interface;
+using NHibernate;
+using System.Linq.Expressions;
 
 namespace SanPablo.Reclutador.Test.Repository
 {
@@ -14,15 +16,33 @@ namespace SanPablo.Reclutador.Test.Repository
         [TestMethod]
         public void TestMethod1()
         {
-            var repository = new CriterioRepository(NHibernateHelper.OpenSession());
-            var criterio = new Criterio();
-            criterio.TipoMedicion = "02";
-            criterio.TipoModo = "02";
-            criterio.TipoCriterio = "02";
-            criterio.Pregunta = "02";
-            criterio.TipoCalificacion = "02";
-            criterio.FechaCreacion = DateTime.Now;
-            repository.Add(criterio);
+            //var repository = new CriterioRepository(NHibernateHelper.OpenSession());
+            //var criterio = new Criterio();
+            //criterio.TipoMedicion = "02";
+            //criterio.TipoModo = "02";
+            //criterio.TipoCriterio = "02";
+            //criterio.Pregunta = "02";
+            //criterio.TipoCalificacion = "02";
+            //criterio.FechaCreacion = DateTime.Now;
+            //repository.Add(criterio);
+            //Expression<Func<CriterioPorSubcategoria, bool>> where;
+            //where = x=> x.SubCategoria.IdeSede == 1;
+
+            //var session = NHibernateHelper.OpenSession();
+            //var test = session.QueryOver<CriterioPorSubcategoria>()
+            //    .Where(where)
+            //    .List();
+
+            //IQueryOver<CriterioPorSubcategoria> query = session.QueryOver<CriterioPorSubcategoria>();
+            //var t = session.QueryOver<CriterioPorSubcategoria>()
+            //            .JoinQueryOver(sh => sh.SubCategoria)
+            //            .Where(hb => hb.IdeSede == 5)
+            //            .List();
+
+            //var repository = new CriterioPorSubcategoriaRepository();
+
+            
+            //var lista = repository.GetSingle(x => x.SubCategoria.IdeSede == 1);
         }
 
          [TestMethod]

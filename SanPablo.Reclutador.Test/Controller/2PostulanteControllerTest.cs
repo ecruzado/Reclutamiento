@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using SanPablo.Reclutador.Entity;
+    using SanPablo.Reclutador.Repository;
     using SanPablo.Reclutador.Repository.Interface;
     using SanPablo.Reclutador.Web.Controllers;
     using SanPablo.Reclutador.Web.Models;
@@ -11,7 +12,10 @@
 
     [TestClass]
     public class otro
-    { }
+    {
+
+
+    }
     //public class 2PostulanteControllerTest
     //{
 

@@ -105,6 +105,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
+        [ValidarSesion]
         public ActionResult Edit(CategoriaViewModel model)
         {
             
@@ -115,6 +116,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJsonMessage = new JsonMessage();
             DateTime Hoy = DateTime.Today;
             string fecha_actual = Hoy.ToString("DD/MM/YYYY");
+
+            int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
+
 
             result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
             if ("02".Equals(model.Categoria.TIPOEJEMPLO))
@@ -179,6 +184,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         }
                         
                     }
+                    objCategoria.IdeSede = IdSede;
+
                     _categoriaRepository.Update(objCategoria);
                     
                 }
@@ -202,7 +209,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     maxOrdenImp = maxOrdenImp + 1;
 
                     model.Categoria.ORDENIMPRESION = maxOrdenImp;
-
+                    model.Categoria.IdeSede = IdSede;
                     _categoriaRepository.Add(model.Categoria);
                     
                     Session["Tabla1"] = Grilla.Tabla1;
@@ -238,6 +245,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         }
                         
                     }
+                    objCategoria.IdeSede = IdSede;
                     _categoriaRepository.Update(objCategoria);
                     
                 }
@@ -283,6 +291,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult PopupSubCategoria(CategoriaViewModel model)
         {
             
@@ -290,6 +299,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA","TIEMPO");
             JsonMessage objJsonMessge = new JsonMessage();
 
+
+            int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
             if (!result.IsValid)
             {
@@ -312,6 +323,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objCategoriaModel.SubCategoria.Categoria = model.Categoria;
                 objCategoriaModel.SubCategoria.ORDENIMPRESION = model.SubCategoria.ORDENIMPRESION;
                 objCategoriaModel.SubCategoria.TIEMPO = model.SubCategoria.TIEMPO;
+
                 _subcategoriaRepository.Update(objCategoriaModel.SubCategoria);
             }
             else
@@ -337,6 +349,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 maxOrdenImp = maxOrdenImp + 1;
 
                 objCategoriaModel.SubCategoria.ORDENIMPRESION = maxOrdenImp;
+                objCategoriaModel.SubCategoria.IdeSede = IdSede;
 
                 _subcategoriaRepository.Add(objCategoriaModel.SubCategoria);
             }
@@ -362,22 +375,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJsonMessge);
            
         }
-
-        public ViewResult PopupSubCategoria(int id,string idSubCategoria)
+        
+        [ValidarSesion]
+        public ActionResult PopupSubCategoria(int id,string idSubCategoria)
         {
-            CategoriaViewModel model = new CategoriaViewModel();
-            model.Categoria = new Categoria();
-            model.SubCategoria = new SubCategoria();
-            model.Categoria.IDECATEGORIA = id;
-            int dato = Convert.ToInt32(idSubCategoria);
-            if (dato == 0)
+
+            try
             {
-                 return View(model);
+
+            
+                CategoriaViewModel model = new CategoriaViewModel();
+                model.Categoria = new Categoria();
+                model.SubCategoria = new SubCategoria();
+                model.Categoria.IDECATEGORIA = id;
+                int dato = Convert.ToInt32(idSubCategoria);
+                if (dato == 0)
+                {
+                     return View(model);
+                }
+                else
+                {
+                    model.SubCategoria = _subcategoriaRepository.GetSingle(x => x.IDESUBCATEGORIA == Convert.ToInt32(idSubCategoria));
+                    return View(model);
+                }
             }
-            else
+            catch (Exception)
             {
-                model.SubCategoria = _subcategoriaRepository.GetSingle(x => x.IDESUBCATEGORIA == Convert.ToInt32(idSubCategoria));
-                return View(model);
+
+                return MensajeError();
             }
 
         }
@@ -389,21 +414,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                //DetachedCriteria where = null;
+                
 
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
-
-                //obtiene el valor del criterio
+                int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 
-                
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
                 DetachedCriteria where = DetachedCriteria.For<SubCategoria>();
                 where.Add(Expression.Eq("Categoria.IDECATEGORIA", idCategoria));
+               
                 
+
                 var generic = Listar(_subcategoriaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
@@ -450,6 +473,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<CriterioPorSubcategoria>();
 
+                int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
                 if ((grid.rules[0].data!=null))
                 {
                    
@@ -463,6 +488,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     where.Add(Expression.Eq("SubCategoria.IDESUBCATEGORIA", 0));
                 }
+
+               
+                
 
                 grid.page = (grid.page == 0) ? 1 : grid.page;
 
@@ -563,7 +591,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 DetachedCriteria where = null;
                 where = DetachedCriteria.For<Alternativa>();
-
+                int IdSede = (Session[ConstanteSesion.Sede]==null?0:Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 if ((grid.rules[0].data != null))
                 {
 
@@ -578,6 +606,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     where.Add(Expression.Eq("Criterio.IdeCriterio", 0));
                 }
 
+                
 
                 var generic = Listar(_alternativaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -613,18 +642,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult Index(CategoriaViewModel model)
         {
+            try
+            {
 
-            CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel();
+                CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel();
             
-            objCategoriaViewModel = InicializarCategoriaIndex();
-            objCategoriaViewModel.Criterio = new Criterio();
-            objCategoriaViewModel.Categoria = new Categoria();
+                objCategoriaViewModel = InicializarCategoriaIndex();
+                objCategoriaViewModel.Criterio = new Criterio();
+                objCategoriaViewModel.Categoria = new Categoria();
 
-            objCategoriaViewModel.Categoria.TipoCriterio = model.Categoria.TipoCriterio;
-            objCategoriaViewModel.Categoria.ESTACTIVO = model.Categoria.ESTACTIVO;
+                objCategoriaViewModel.Categoria.TipoCriterio = model.Categoria.TipoCriterio;
+                objCategoriaViewModel.Categoria.ESTACTIVO = model.Categoria.ESTACTIVO;
 
-            return View(objCategoriaViewModel);
+                return View(objCategoriaViewModel);
+            }
+            catch (Exception)
+            {
 
+                return MensajeError();
+            }
         }
 
 
@@ -636,6 +672,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
                 DetachedCriteria where = null;
+                int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+                where = DetachedCriteria.For<Categoria>();
 
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
                     (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
@@ -643,7 +681,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                    )
                 {
-                    where = DetachedCriteria.For<Categoria>();
+                    
 
                     if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
@@ -659,6 +697,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
                   
                 }
+
+                where.Add(Expression.Eq("IdeSede", IdSede));
 
                 var generic = Listar(_categoriaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -702,52 +742,62 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult btnEditarDetalle(string id)
         {
 
-            CategoriaViewModel model;
-            model = new CategoriaViewModel();
+            try
+            {
+
+                CategoriaViewModel model;
+                model = new CategoriaViewModel();
            
 
-            model = InicializarCategoriaEdit();
-            model.Categoria = new Categoria();
-            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+                model = InicializarCategoriaEdit();
+                model.Categoria = new Categoria();
+                var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
-            model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
-            model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
-            model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
-            model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
-            model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
-            model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
-            model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
+                model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
+                model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
+                model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
+                model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
+                model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
+                model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
+                model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
 
-            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-            int contTiempo = 0;
-            if (objLista != null)
-            {
-                foreach (SubCategoria item in objLista)
+                var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+                int contTiempo = 0;
+                if (objLista != null)
                 {
-                    contTiempo = contTiempo + item.TIEMPO;
+                    foreach (SubCategoria item in objLista)
+                    {
+                        contTiempo = contTiempo + item.TIEMPO;
+                    }
                 }
-            }
 
-            model.Categoria.TIEMPO = contTiempo;
+                model.Categoria.TIEMPO = contTiempo;
             
-            Session["AccionCategoria"] = Accion.Editar;
-            Session["Tabla1"] = Grilla.Tabla1;
-            Session["Tabla2"] = Grilla.Tabla2;
+                Session["AccionCategoria"] = Accion.Editar;
+                Session["Tabla1"] = Grilla.Tabla1;
+                Session["Tabla2"] = Grilla.Tabla2;
 
 
-            if("01".Equals(model.Categoria.TIPOEJEMPLO)){
-                Session["Tipo"] = "T";
-                model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
-            }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
-              Session["Tipo"]  = "I";
-              model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+                if("01".Equals(model.Categoria.TIPOEJEMPLO)){
+                    Session["Tipo"] = "T";
+                    model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
+                }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
+                  Session["Tipo"]  = "I";
+                  model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+                }
+                else
+                {
+                    Session["Tipo"] = 1;
+                }
+
+                return View("Edit", model);
+
             }
-            else
+            catch (Exception)
             {
-                Session["Tipo"] = 1;
-            }
 
-            return View("Edit", model);
+                return MensajeError();
+            }
         }
 
         /// <summary>
@@ -759,51 +809,61 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult btnConsultarDetalle(string id)
         {
 
-            CategoriaViewModel model;
-            model = new CategoriaViewModel();
+            try
+            {
+
+                CategoriaViewModel model;
+                model = new CategoriaViewModel();
 
 
-            model = InicializarCategoriaEdit();
+                model = InicializarCategoriaEdit();
 
-            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+                var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
-            model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
-            model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
-            model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
-            model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
-            model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
-            model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
+                model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
+                model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
+                model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
+                model.Categoria.TIPCATEGORIA = objCategoria.TIPCATEGORIA;
+                model.Categoria.TIPOEJEMPLO = objCategoria.TIPOEJEMPLO;
+                model.Categoria.INSTRUCCIONES = objCategoria.INSTRUCCIONES;
             
-            Session["Tabla1"] = Grilla.Tabla1;
-            Session["Tabla2"] = Grilla.Tabla2;
-            Session["AccionCategoria"] = Accion.Consultar;
+                Session["Tabla1"] = Grilla.Tabla1;
+                Session["Tabla2"] = Grilla.Tabla2;
+                Session["AccionCategoria"] = Accion.Consultar;
 
-            if("01".Equals(model.Categoria.TIPOEJEMPLO)){
-                Session["Tipo"] = "T";
-                model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
-            }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
-              Session["Tipo"]  = "I";
-              model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
-              model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
-            }
-            else
-            {
-                Session["Tipo"] = 1;
-            }
-
-            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-            int contTiempo = 0;
-            if (objLista != null)
-            {
-                foreach (SubCategoria item in objLista)
-                {
-                    contTiempo = contTiempo + item.TIEMPO;
+                if("01".Equals(model.Categoria.TIPOEJEMPLO)){
+                    Session["Tipo"] = "T";
+                    model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
+                }else if("02".Equals(model.Categoria.TIPOEJEMPLO)){
+                  Session["Tipo"]  = "I";
+                  model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+                  model.Categoria.NOMBREIMAGEN = objCategoria.NOMBREIMAGEN;
                 }
+                else
+                {
+                    Session["Tipo"] = 1;
+                }
+
+                var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+                int contTiempo = 0;
+                if (objLista != null)
+                {
+                    foreach (SubCategoria item in objLista)
+                    {
+                        contTiempo = contTiempo + item.TIEMPO;
+                    }
+                }
+
+                model.Categoria.TIEMPO = contTiempo;
+
+                return View("Edit", model);
             }
+            catch (Exception)
+            {
 
-            model.Categoria.TIEMPO = contTiempo;
-
-            return View("Edit", model);
+                return MensajeError();
+            }
+            
         }
 
 
@@ -816,24 +876,35 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult ActivarDesactivar(string id, string estado)
         {
-            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
-            if (IndicadorActivo.Activo.Equals(estado))
+            try
             {
-                objCategoria.ESTACTIVO = IndicadorActivo.Inactivo;
+
+                var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+                if (IndicadorActivo.Activo.Equals(estado))
+                {
+                    objCategoria.ESTACTIVO = IndicadorActivo.Inactivo;
+                }
+                else
+                {
+                    objCategoria.ESTACTIVO = IndicadorActivo.Activo;
+                }
+
+                _categoriaRepository.Update(objCategoria);
+
+                CategoriaViewModel model = new CategoriaViewModel();
+                model.Categoria = new Categoria();
+                model = InicializarCategoriaIndex();
+
+                return View("Index", model);
             }
-            else
+            catch (Exception)
             {
-                objCategoria.ESTACTIVO = IndicadorActivo.Activo;
+
+                return MensajeError();
             }
 
-            _categoriaRepository.Update(objCategoria);
-
-            CategoriaViewModel model = new CategoriaViewModel();
-            model.Categoria = new Categoria();
-            model = InicializarCategoriaIndex();
-
-            return View("Index", model); ;
         }
 
         /// <summary>
@@ -844,19 +915,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult EliminarCategoria(string id)
         {
-            CategoriaViewModel model = new CategoriaViewModel();
-            model.Categoria = new Categoria();
+            try
+            {
+                CategoriaViewModel model = new CategoriaViewModel();
+                model.Categoria = new Categoria();
 
-            model = InicializarCategoriaIndex();
-            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
-            _categoriaRepository.Remove(objCategoria);
+                model = InicializarCategoriaIndex();
+                var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+                _categoriaRepository.Remove(objCategoria);
 
+                return View("Index", model);
+            }
+            catch (Exception)
+            {
 
-
-
-
-            return View("Index", model);
-
+                return MensajeError();
+            }
         }
 
         /// <summary>
@@ -866,62 +940,71 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codSub"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminarSubCategoria(string id, string codSub)
         {
 
-            var jsonMessage = new JsonMessage();
-            int i = 1; 
+            try
+            {
+                    var jsonMessage = new JsonMessage();
+                    int i = 1; 
           
+                    var ListaCriterios = _criterioPorSubcategoriaRepository.GetBy(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub));
 
-            var ListaCriterios = _criterioPorSubcategoriaRepository.GetBy(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub));
+                    if (ListaCriterios != null && ListaCriterios.Count>0)
+                    {
+                        jsonMessage.Mensaje = "Existen " + ListaCriterios.Count + " criterios asociados a la subcategoria";
+                        jsonMessage.Resultado = false;
+                    }
+                    else
+                    {
+                        jsonMessage.Resultado = true;
 
-            if (ListaCriterios != null && ListaCriterios.Count>0)
-            {
-                jsonMessage.Mensaje = "Existen " + ListaCriterios.Count + " criterios asociados a la subcategoria";
-                jsonMessage.Resultado = false;
+                        var objSubCategoria = _subcategoriaRepository.GetSingle(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)
+                                                                           && x.IDESUBCATEGORIA == Convert.ToInt32(codSub));
+                        _subcategoriaRepository.Remove(objSubCategoria);
+
+
+                        var listaActualizar = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)).OrderBy(x => x.ORDENIMPRESION);
+
+
+                        foreach (SubCategoria item in listaActualizar)
+                        {
+                            item.ORDENIMPRESION = i++;
+                            _subcategoriaRepository.Update(item);
+                        }
+
+
+                    }
+
+                    //CALCULA EL TIEMPO
+                    var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+                    int contTiempo = 0;
+                    if (objLista != null)
+                    {
+                        foreach (SubCategoria item in objLista)
+                        {
+                            contTiempo = contTiempo + item.TIEMPO;
+                        }
+                    }
+
+                    jsonMessage.IdDato = contTiempo;
+
+                    var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+                    obj.TIEMPO = contTiempo;
+
+                    _categoriaRepository.Update(obj);
+
+
+
+                    return Json(jsonMessage);
             }
-            else
+            catch (Exception)
             {
-                jsonMessage.Resultado = true;
 
-                var objSubCategoria = _subcategoriaRepository.GetSingle(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)
-                                                                   && x.IDESUBCATEGORIA == Convert.ToInt32(codSub));
-                _subcategoriaRepository.Remove(objSubCategoria);
-
-
-                var listaActualizar = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id)).OrderBy(x => x.ORDENIMPRESION);
-
-
-                foreach (SubCategoria item in listaActualizar)
-                {
-                    item.ORDENIMPRESION = i++;
-                    _subcategoriaRepository.Update(item);
-                }
-
-
+                return MensajeError();
             }
 
-            //CALCULA EL TIEMPO
-            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
-            int contTiempo = 0;
-            if (objLista != null)
-            {
-                foreach (SubCategoria item in objLista)
-                {
-                    contTiempo = contTiempo + item.TIEMPO;
-                }
-            }
-
-            jsonMessage.IdDato = contTiempo;
-
-            var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
-            obj.TIEMPO = contTiempo;
-
-            _categoriaRepository.Update(obj);
-
-
-
-            return Json(jsonMessage);
         }
 
 
@@ -932,39 +1015,49 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="codSub">id de subcategoria</param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult EliminarCritxSub(string id, string codSub)
         {
+            try
+            {
 
-            var jsonMessage = new JsonMessage();
-            int i = 1;
+                var jsonMessage = new JsonMessage();
+                int i = 1;
 
            
-            var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub) 
-                                                                          && s.Criterio.IdeCriterio == Convert.ToInt32(id));
+                var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub) 
+                                                                              && s.Criterio.IdeCriterio == Convert.ToInt32(id));
 
-            _criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
+                _criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
             
-            var lista = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)).OrderBy(x => x.PRIORIDAD);
+                var lista = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)).OrderBy(x => x.PRIORIDAD);
 
-            if (lista != null)
-            {
-                foreach (CriterioPorSubcategoria item in lista)
+                if (lista != null)
                 {
+                    foreach (CriterioPorSubcategoria item in lista)
+                    {
                     
-                    var objeto = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == item.SubCategoria.IDESUBCATEGORIA
-                                                                          && s.Criterio.IdeCriterio == item.Criterio.IdeCriterio);
+                        var objeto = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == item.SubCategoria.IDESUBCATEGORIA
+                                                                              && s.Criterio.IdeCriterio == item.Criterio.IdeCriterio);
 
-                    objeto.PRIORIDAD = i++;
+                        objeto.PRIORIDAD = i++;
 
-                    _criterioPorSubcategoriaRepository.Update(objeto);
+                        _criterioPorSubcategoriaRepository.Update(objeto);
+                    }
                 }
-            }
             
-            jsonMessage.Mensaje = "Se elimino el criterio";
-            jsonMessage.Resultado = true;
+                jsonMessage.Mensaje = "Se elimino el criterio";
+                jsonMessage.Resultado = true;
            
          
-            return Json(jsonMessage);
+                return Json(jsonMessage);
+            }
+            catch (Exception)
+            {
+
+                return MensajeError();
+            }
+
         }
 
         /// <summary>
@@ -972,7 +1065,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ViewResult IniciaPopupCategoria(int id)
+        [ValidarSesion]
+        public ActionResult IniciaPopupCategoria(int id)
         {
 
             CategoriaViewModel objCategoria = new CategoriaViewModel();
@@ -1007,14 +1101,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 // int idCriterio = Convert.ToInt32(grid.rules[0].data);
                 DetachedCriteria where = null;
-
+                where = DetachedCriteria.For<Categoria>();
+                int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
                     (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
                     (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
                     (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                    )
                 {
-                    where = DetachedCriteria.For<Categoria>();
+                    
 
                     if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
@@ -1030,6 +1125,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
 
                 }
+
+                where.Add(Expression.Eq("IdeSede", IdSede));
+                
+
 
                 var generic = Listar(_categoriaRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -1061,6 +1160,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult OrdenarSubCategorias(int ideCategoria, int ideSubcategoria, string accion)
         {
 
@@ -1086,28 +1186,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 _subcategoriaRepository.Update(subCategoriaActual);
                 _subcategoriaRepository.Update(subCategoriaContiguo);
-	        }
+                jsonMessage.Resultado = true;
+                return Json(jsonMessage);
+            }
 	        catch (Exception ex)
 	        {
-		
-		        jsonMessage.Mensaje = "Se elimino el criterio";
+                return MensajeError();
 	        }
-               
-         
-           
-
-            //var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)
-            //                                                              && s.Criterio.IdeCriterio == Convert.ToInt32(id));
-
-            jsonMessage.Mensaje = "Se elimino el criterio";
-            jsonMessage.Resultado = true;
-            //_criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
-
-            return Json(jsonMessage);
+            
         }
 
        
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult OrdenarCriterios(int ideCategoria, int ideSubcategoria, int ideCriterio,string accion)
         {
 
@@ -1133,24 +1224,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 _criterioPorSubcategoriaRepository.Update(critxCategoriaActual);
                 _criterioPorSubcategoriaRepository.Update(critxCategoriaContiguo);
+
+                jsonMessage.Resultado = true;
+                return Json(jsonMessage);
 	        }
 	        catch (Exception ex)
 	        {
-		
-		        jsonMessage.Mensaje = "Se elimino el criterio";
+
+                return MensajeError();
 	        }
-               
-         
-           
-
-            //var objCriterioxSub = _criterioPorSubcategoriaRepository.GetSingle(s => s.SubCategoria.IDESUBCATEGORIA == Convert.ToInt32(codSub)
-            //                                                              && s.Criterio.IdeCriterio == Convert.ToInt32(id));
-
-            jsonMessage.Mensaje = "Se elimino el criterio";
-            jsonMessage.Resultado = true;
-            //_criterioPorSubcategoriaRepository.Remove(objCriterioxSub);
-
-            return Json(jsonMessage);
+            
+            
         }
 
         /// <summary>

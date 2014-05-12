@@ -34,6 +34,7 @@
         /// <param name="id"></param>
         /// <param name="codCriterio"></param>
         /// <returns></returns>
+        [ValidarSesion]
         public ActionResult Editar(int ideCriterio, int ideAlternativa, string tipo)
         {
             AlternativaViewModel modelo = new AlternativaViewModel();
@@ -41,24 +42,37 @@
             modelo.Alternativa = new Alternativa();
             modelo.Alternativa.Criterio = new Criterio();
             modelo.tipoModel = tipo;
+           
 
-            
-            if (ideAlternativa == 0)
+            try
             {
 
-                modelo.Alternativa.Criterio.IdeCriterio = ideCriterio;
-                return View("Edit",modelo);
-            }
-            else
-            {
-
-                modelo.Alternativa.Criterio.IdeCriterio = ideCriterio;
-                modelo.Alternativa.IdeAlternativa = ideAlternativa;
-                modelo.Alternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == ideAlternativa);
                
-                return View("Edit",modelo);
+                
+                if (ideAlternativa == 0)
+                {
+                
+                    modelo.Alternativa.Criterio.IdeCriterio = ideCriterio;
+                    return View("Edit",modelo);
+                }
+                else
+                {
+
+                    modelo.Alternativa.Criterio.IdeCriterio = ideCriterio;
+                    modelo.Alternativa.IdeAlternativa = ideAlternativa;
+                    modelo.Alternativa = _alternativaRepository.GetSingle(x => x.IdeAlternativa == ideAlternativa);
+               
+                    return View("Edit",modelo);
+
+                }
 
             }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+
         }
 
         /// <summary>
@@ -68,92 +82,103 @@
         /// <param name="imagenAlternativa"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult Editar(AlternativaViewModel model)
         {
             JsonMessage objJsonMensage = new JsonMessage();
             DateTime Hoy = DateTime.Today;
             string fullPath = null;
+            int IdSede = (Session[ConstanteSesion.Sede]==null?0:Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
-            if ("01".Equals(model.tipoModel))
+            try
             {
+                    if ("01".Equals(model.tipoModel))
+                    {
 
-                AlternativaValidator validator = new AlternativaValidator();
-                ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
+                        AlternativaValidator validator = new AlternativaValidator();
+                        ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
                 
                 
 
-                if (!result.IsValid)
-                {
-                    objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
-                    return Json(objJsonMensage);
-                }
-            }
+                        if (!result.IsValid)
+                        {
+                            objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
+                            return Json(objJsonMensage);
+                        }
+                    }
 
 
-            if ("02".Equals(model.tipoModel))
-            {
+                    if ("02".Equals(model.tipoModel))
+                    {
 
-                if (model.Alternativa.RutaDeImagen == null)
-                {
-                    objJsonMensage.Mensaje = "Ingrese una imagen";
-                    objJsonMensage.Resultado = false;
-                    return Json(objJsonMensage);     
-                }
+                        if (model.Alternativa.RutaDeImagen == null)
+                        {
+                            objJsonMensage.Mensaje = "Ingrese una imagen";
+                            objJsonMensage.Resultado = false;
+                            return Json(objJsonMensage);     
+                        }
                
-            }
+                    }
 
 
-            if (!string.IsNullOrEmpty(model.NombImagenAlternativa))
-            {
-                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-                string directoryPath = "Archivos\\Imagenes\\";
-                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombImagenAlternativa));
+                    if (!string.IsNullOrEmpty(model.NombImagenAlternativa))
+                    {
+                        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                        string directoryPath = "Archivos\\Imagenes\\";
+                        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombImagenAlternativa));
 
-                using (Stream s = System.IO.File.OpenRead(fullPath))
-                {
-                    byte[] buffer = new byte[s.Length];
-                    s.Read(buffer, 0, (int)s.Length);
-                    int len = (int)s.Length;
-                    s.Close();
-                    model.Alternativa.Image = buffer;
-                }
-            }
+                        using (Stream s = System.IO.File.OpenRead(fullPath))
+                        {
+                            byte[] buffer = new byte[s.Length];
+                            s.Read(buffer, 0, (int)s.Length);
+                            int len = (int)s.Length;
+                            s.Close();
+                            model.Alternativa.Image = buffer;
+                        }
+                    }
 
-            if (model.Alternativa.IdeAlternativa != 0)
-            {
+                    if (model.Alternativa.IdeAlternativa != 0)
+                    {
 
-                var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
-                alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
-                alter.Peso = model.Alternativa.Peso;
-                model.Alternativa.FechaModificacion = Hoy;
-                model.Alternativa.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                if (model.Alternativa.Image != null)
-                {
-                    alter.Image = model.Alternativa.Image;
-                }
+                        var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
+                        alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
+                        alter.Peso = model.Alternativa.Peso;
+                        model.Alternativa.FechaModificacion = Hoy;
+                        model.Alternativa.IdeSede = IdSede;
+                        model.Alternativa.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        if (model.Alternativa.Image != null)
+                        {
+                            alter.Image = model.Alternativa.Image;
+                        }
 
-                _alternativaRepository.Update(alter);
-                objJsonMensage.Resultado = true;
-                objJsonMensage.Mensaje = "Se actualizo el registro correctamente";
-            }
-            else
-            {
-                model.Alternativa.FechaCreacion = Hoy;
-                model.Alternativa.UsuarioCreacion = UsuarioActual.NombreUsuario;
-                model.Alternativa.ESTACTIVO = IndicadorActivo.Activo;
-                _alternativaRepository.Add(model.Alternativa);
-                objJsonMensage.Resultado = true;
-                objJsonMensage.Mensaje = "Se registro el registro correctamente";
-            }
+                        _alternativaRepository.Update(alter);
+                        objJsonMensage.Resultado = true;
+                        objJsonMensage.Mensaje = "Se actualizo el registro correctamente";
+                    }
+                    else
+                    {
+                        model.Alternativa.FechaCreacion = Hoy;
+                        model.Alternativa.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                        model.Alternativa.ESTACTIVO = IndicadorActivo.Activo;
+                        model.Alternativa.IdeSede = IdSede;
+                        _alternativaRepository.Add(model.Alternativa);
+                        objJsonMensage.Resultado = true;
+                        objJsonMensage.Mensaje = "Se registro el registro correctamente";
+                    }
 
-            if (fullPath!=null)
-            {
-                System.IO.File.Delete(fullPath);    
-            }
+                    if (fullPath!=null)
+                    {
+                        System.IO.File.Delete(fullPath);    
+                    }
             
 
-                return Json(objJsonMensage);
-            
+                        return Json(objJsonMensage);
+            }
+            catch (Exception)
+            {
+
+                return MensajeError();
+            }
         }
 
 

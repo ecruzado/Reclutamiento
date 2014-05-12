@@ -145,6 +145,9 @@
                     
                     traditional: true,
                     success: function () {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                        }
                         flag = selr;
                         $('#grdList').trigger('reloadGrid');
                     }
@@ -215,8 +218,10 @@
                     url: '@Url.Action("OrdenarCriterios", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                        }
                         flag2 = selr;
-                       
                         $('#grdListCriterio').trigger('reloadGrid');
                     }
                 });
@@ -303,6 +308,9 @@
                         $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
                          $("#frmPopupSubCategoria").serialize(),
                            function (data) {
+                               if (data.redirecciona) {
+                                   SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                               }
                                // $("#ValSubCat").dialog("close");
                                $("#updateDialog").dialog("close");
                                $("#updateDialog").html(data);
@@ -875,6 +883,9 @@
             url: '@Url.Action("EliminarSubCategoria", "Categoria", new {area="Intranet" })',
             traditional: true,
             success: function (data) {
+                if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }
                 if (data.Resultado == false) {
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                 } else {
@@ -902,7 +913,9 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado) {
-
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     $('#grdListCriterio').trigger('reloadGrid');
 
