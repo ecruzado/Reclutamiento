@@ -417,13 +417,22 @@
             </div>
 
            <div class="form-actions">
+               @if(Model.btnVerRanking.Equals(Indicador.Si))
+               {
                 <a class="btn btn-info" id="btnRankingSol"><i class="icon-eye-open icon-white"></i> Ranking</a>
+               }
+               @if(Model.btnVerPreSeleccion.Equals(Indicador.Si))
+               {
                 <a class="btn btn-info" id="btnPreseleccion"><i class="icon-tasks  icon-white"></i> Pre-select</a>
-                @*<a class="btn btn-info" href="@Url.Action("Edit", "SolicitudAmpliacionCargo")"><i class="icon-zoom-in icon-white"></i> Consultar</a>*@
-                <a id="btnNuevoAmpliacion" class="btn btn-info"@* href="@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "0"})"*@><i class="icon-plus icon-white"></i> Nuevo</a>
+               }
+               @if(Model.btnVerNuevo.Equals(Indicador.Si))
+               {
+                <a id="btnNuevoAmpliacion" class="btn btn-info"><i class="icon-plus icon-white"></i> Nuevo</a>
+               }
+               @if(Model.btnVerRequerimiento.Equals(Indicador.Si))
+               {
                 <a id="btnAproRechaSol" class="btn btn-info" ><i class="icon-pencil icon-white"></i> Requerimiento</a>
-                @*<a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>*@
-                @*<button type="submit" class="btn btn-danger"><i class="icon-remove icon-white"></i> Eliminar</button>*@
+               }
             </div>
         }
         </div>

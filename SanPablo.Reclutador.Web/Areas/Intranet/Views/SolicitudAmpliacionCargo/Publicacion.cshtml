@@ -45,7 +45,7 @@
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudAmpliacionCargo", new { area="Intranet"})',
                 traditional: true,
                     success: function (data) {
                         if (data.Resultado)
@@ -63,7 +63,7 @@
         $('#btnAnteriorPublica').click(function () {
             var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
 
-            window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = "", area = "Intranet"})' + '/' + selr;
+            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet"})' + '/' + selr;
 
         });
         
@@ -92,7 +92,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Conocimientos", "SolicitudCargo")',
+                    url: '@Url.Action("Conocimientos", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -108,8 +108,9 @@
                     }
                 });
             },
-            colNames: ['Descripci&oacuten'],
+            colNames: ['Tipo de Conocimiento', 'Descripci&oacuten'],
             colModel: [
+                    { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
             ],
 
@@ -160,7 +161,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Estudios", "SolicitudCargo")',
+                    url: '@Url.Action("Estudios", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -178,6 +179,7 @@
             },
             colNames: ['Descripci&oacuten'],
             colModel: [
+                    
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 600 }
             ],
 
@@ -228,7 +230,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Competencias", "SolicitudCargo")',
+                    url: '@Url.Action("Competencias", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -297,7 +299,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Experiencia", "SolicitudCargo")',
+                    url: '@Url.Action("Experiencia", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -367,7 +369,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Ofrecemos", "SolicitudCargo")',
+                    url: '@Url.Action("Ofrecemos", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -552,7 +554,7 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
                             <div class="controles">
-                               @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                               @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
                             </div>
                         </td>
                     </tr>
@@ -561,7 +563,7 @@
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
-                               @Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                               @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
                             </div>
                         </td>
                     </tr>
@@ -666,11 +668,11 @@
                          <div class="controls">
                              @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
-                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "254", disabled = "disabled" })
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", disabled = "disabled"})
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px" ,maxlength="254"})     
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "255", disabled = "disabled", onkeyup="aMays(event, this)"  })     
                              }
                          </div>
                         </td>

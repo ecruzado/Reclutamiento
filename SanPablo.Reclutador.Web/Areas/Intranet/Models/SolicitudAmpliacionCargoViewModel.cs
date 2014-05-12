@@ -23,6 +23,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public Departamento DepartamentoSession { get; set; }
         public Area AreaSession { get; set; }
 
+        public int TotalMaxino { get; set; }
         public string Area { get; set; }
         public string Dependencia { get; set; }
         public string Departamento { get; set; }
@@ -38,6 +39,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> TipoPuestos { get; set; }
 
         public string Pagina { get; set; }
+
+        public string btnVerRanking { get; set; }
+        public string btnVerPreSeleccion { get; set; }
+        public string btnVerNuevo { get; set; }
+        public string btnVerRequerimiento { get; set; }
 
     }
 

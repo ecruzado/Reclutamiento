@@ -143,10 +143,12 @@
                                         <td></td>
                                         <td class="td-label"><b>Totales</b></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="84" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model => model.TotalMaxino, new { @Class = "input-xxmini text-right", @disabled = "disabled" })
+                                            @*<input id="puntajeTotal" type="text" class="input-xxmini text-right"  disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+                                            @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>*@
+                                            @Html.TextBoxFor(model => model.SolicitudRequerimiento.PuntajeMinimoGeneral, new { @Class = "input-xxmini text-right", @disabled = "disabled" })
 
                                     </tr>
                                 </table>
