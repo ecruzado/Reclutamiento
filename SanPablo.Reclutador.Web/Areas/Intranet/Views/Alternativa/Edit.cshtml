@@ -9,6 +9,7 @@
     @Html.TextBoxFor(model => model.Alternativa.Criterio.IdeCriterio,  new { style = "display: none;" })
     @Html.TextBoxFor(model => model.Alternativa.IdeAlternativa,  new { style = "display: none;" })
     @Html.TextBoxFor(model => model.tipoModel,  new { style = "display: none;" })
+    
        
 
     <table style="margin-left:30px;">
@@ -136,12 +137,11 @@
                     data: $("#frmAlternativa").serialize(),
                     traditional: true,
                     success: function (data) {
-                        
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                        }
                         if (data.Resultado) {
-                           
-                            //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                             parent.CerrarPopupAlternativa();
-                           
                         }
                         if (!data.Resultado) {
                             MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");

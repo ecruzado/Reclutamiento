@@ -104,15 +104,18 @@
             try
             {
                 DetachedCriteria where = null;
-                
+
+                int idSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
+                where = DetachedCriteria.For<Criterio>();
+
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data) ) ||
                     (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
                     (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
                     (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data !="0")
                    )
                 {
-                    where = DetachedCriteria.For<Criterio>();
-
+                   
                     if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
                     {
                         where.Add(Expression.Eq("TipoCriterio", grid.rules[0].data));
@@ -132,6 +135,13 @@
 
 
                 }
+
+                //obtiene por la Sede
+                if (idSede>0) 
+                {
+                    where.Add(Expression.Eq("IdeSede",idSede));
+                }
+                
                 
                 var generic = Listar(_criterioRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -500,115 +510,125 @@
         [HttpPost]
         public ActionResult Edit(CriterioViewModel model)
         {
-            var criterioViewModel = InicializarCriteriosEdit();
-            JsonMessage objJsonMessage = new JsonMessage();
 
-            string fullPath = null;
-            //if (!ModelState.IsValid){
-            //    criterioViewModel.Criterio = model.Criterio;
-            //    return View(criterioViewModel);
-            //}
-
-            if ("02".Equals(model.Criterio.TipoModo))
+            try
             {
-                if (model.Criterio.rutaImagen == null)
-                {
-                    objJsonMessage.Resultado = false;
-                    objJsonMessage.Mensaje = "Ingrese una imagen";
-                    return Json(objJsonMessage);
-                }
-            }
+                    var criterioViewModel = InicializarCriteriosEdit();
+                    JsonMessage objJsonMessage = new JsonMessage();
+
+                    string fullPath = null;
+                   
+
+                    if ("02".Equals(model.Criterio.TipoModo))
+                    {
+                        if (model.Criterio.rutaImagen == null)
+                        {
+                            objJsonMessage.Resultado = false;
+                            objJsonMessage.Mensaje = "Ingrese una imagen";
+                            return Json(objJsonMessage);
+                        }
+                    }
           
            
-            model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
+                    model.Criterio.IndicadorActivo = IndicadorActivo.Activo;
 
 
-            if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
-            {
-                
-                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-                string directoryPath = "Archivos\\Imagenes\\";
-                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
-
-                using (Stream s = System.IO.File.OpenRead(fullPath))
-                {
-                    byte[] buffer = new byte[s.Length];
-                    s.Read(buffer, 0, (int)s.Length);
-                    int len = (int)s.Length;
-                    s.Close();
-                    model.Criterio.IMAGENCRIT = buffer;
-                    model.Criterio.rutaImagen = model.Criterio.rutaImagen;
-                }
-            }
-
-            
-            
-            if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
-            {
-                model.Criterio.FechaCreacion = DateTime.Now;
-                model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
-
-                model.Criterio.OrdenImpresion = 0;
-
-                _criterioRepository.Add(model.Criterio);
-                objJsonMessage.Accion = "N";
-                objJsonMessage.Resultado = true;
-                objJsonMessage.Mensaje = "Se registro el criterio correctamente";
-                objJsonMessage.IdDato = model.Criterio.IdeCriterio;
-                
-            }
-            else
-            {
-                
-                var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == model.Criterio.IdeCriterio);
-                objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
-                objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
-                objCriterio.TipoModo = model.Criterio.TipoModo;
-               // objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
-                objCriterio.Pregunta = model.Criterio.Pregunta;
-                objCriterio.FechaModificacion = DateTime.Now;
-                objCriterio.UsuarioModificacion = UsuarioActual.NombreUsuario;
-
-                if ("02".Equals(model.Criterio.TipoModo))
-                {
-                    if ( model.Criterio.IMAGENCRIT!=null)
+                    if (!string.IsNullOrEmpty(model.NombreTemporalArchivo))
                     {
-                        objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
-                        objCriterio.rutaImagen = model.Criterio.rutaImagen;     
-                    }
-                   
-                }
                 
-                _criterioRepository.Update(objCriterio);
-                objJsonMessage.Accion = "S";
-                objJsonMessage.Resultado = true;
-                objJsonMessage.Mensaje = "Se actualizó el criterio correctamente";
-                objJsonMessage.IdDato = objCriterio.IdeCriterio;
-            }
+                        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                        string directoryPath = "Archivos\\Imagenes\\";
+                        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTemporalArchivo));
 
-            criterioViewModel.IndVisual = Visualicion.SI;
-            criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
-            criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
-            criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
-            if("01".Equals(model.Criterio.TipoModo))
+                        using (Stream s = System.IO.File.OpenRead(fullPath))
+                        {
+                            byte[] buffer = new byte[s.Length];
+                            s.Read(buffer, 0, (int)s.Length);
+                            int len = (int)s.Length;
+                            s.Close();
+                            model.Criterio.IMAGENCRIT = buffer;
+                            model.Criterio.rutaImagen = model.Criterio.rutaImagen;
+                        }
+                    }
+
+
+                    int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
+
+                    if (Accion.Nuevo.Equals(model.Criterio.IndPagina))
+                    {
+                        model.Criterio.FechaCreacion = DateTime.Now;
+                        model.Criterio.UsuarioCreacion = UsuarioActual.NombreUsuario;
+                        //se agrega la sede
+                        model.Criterio.IdeSede = IdSede;
+                        model.Criterio.OrdenImpresion = 0;
+
+                        _criterioRepository.Add(model.Criterio);
+                        objJsonMessage.Accion = "N";
+                        objJsonMessage.Resultado = true;
+                        objJsonMessage.Mensaje = "Se registro el criterio correctamente";
+                        objJsonMessage.IdDato = model.Criterio.IdeCriterio;
+                
+                    }
+                    else
+                    {
+                
+                        var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == model.Criterio.IdeCriterio);
+                        objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
+                        objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
+                        objCriterio.TipoModo = model.Criterio.TipoModo;
+                       // objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+                        objCriterio.Pregunta = model.Criterio.Pregunta;
+                        objCriterio.FechaModificacion = DateTime.Now;
+                        objCriterio.UsuarioModificacion = UsuarioActual.NombreUsuario;
+
+                        if ("02".Equals(model.Criterio.TipoModo))
+                        {
+                            if ( model.Criterio.IMAGENCRIT!=null)
+                            {
+                                objCriterio.IMAGENCRIT = model.Criterio.IMAGENCRIT;
+                                objCriterio.rutaImagen = model.Criterio.rutaImagen;     
+                            }
+                   
+                        }
+                
+                        _criterioRepository.Update(objCriterio);
+                        objJsonMessage.Accion = "S";
+                        objJsonMessage.Resultado = true;
+                        objJsonMessage.Mensaje = "Se actualizó el criterio correctamente";
+                        objJsonMessage.IdDato = objCriterio.IdeCriterio;
+                    }
+
+                    criterioViewModel.IndVisual = Visualicion.SI;
+                    criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
+                    criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
+                    criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
+                    if("01".Equals(model.Criterio.TipoModo))
+                    {
+                        Session["TipoModo"] = "T";
+                    }
+                    else
+	                {
+                        Session["TipoModo"] = "I";
+                        criterioViewModel.image = model.image;
+                        criterioViewModel.Criterio.rutaImagen = model.Criterio.rutaImagen;
+	                }
+                    criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
+                   // criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
+                    criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
+                    if (fullPath != null)
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    //return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
+                    return Json(objJsonMessage);
+                    }
+            
+            catch (Exception)
             {
-                Session["TipoModo"] = "T";
+
+                return MensajeError();
             }
-            else
-	        {
-                Session["TipoModo"] = "I";
-                criterioViewModel.image = model.image;
-                criterioViewModel.Criterio.rutaImagen = model.Criterio.rutaImagen;
-	        }
-            criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
-           // criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
-            criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
-            if (fullPath != null)
-            {
-                System.IO.File.Delete(fullPath);
-            }
-            //return RedirectToAction("Edicion", "Criterio", new { id = model.Criterio.IdeCriterio });
-            return Json(objJsonMessage);
 
         }
 
@@ -702,7 +722,7 @@
             {
                 
                 Criterio objCriterio = new Criterio();
-
+                int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 List<Criterio> listaCriterios = new List<Criterio>();
 
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
@@ -752,6 +772,9 @@
                 }
 
                 }
+
+                objCriterio.IdeSede = IdSede;
+
 
                 listaCriterios = _criterioRepository.ObtenerCriterios(objCriterio);
 
@@ -812,7 +835,7 @@
         /// <param name="idSubCategoria"></param>
         /// <returns></returns>
         [ValidarSesion]
-        public ViewResult PopupListaCriterio(int id, string idSubCategoria)
+        public ActionResult PopupListaCriterio(int id, string idSubCategoria)
         {
             try
             {
@@ -844,7 +867,7 @@
             int codSubCategoria = Convert.ToInt32(subCategoria);
             int codCriterio=0;
             DateTime Hoy = DateTime.Today;
-            
+            int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
             int maxOrdenImp = 0;
 
             CriterioPorSubcategoria objCriterioxSubCategoria;
@@ -896,13 +919,12 @@
                        objCriterioxSubCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
                        objCriterioxSubCategoria.FECCREACION = Hoy;
                        objCriterioxSubCategoria.FECMODIFICA = Hoy;
+                       objCriterioxSubCategoria.IdeSede = IdSede;
 
                        _criterioPorSubcategoriaRepository.Add(objCriterioxSubCategoria);
 
 
                    }
-
-                    
 
                 }
             }

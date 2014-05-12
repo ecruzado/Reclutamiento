@@ -252,6 +252,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objExamenViewModal.Examen = new Examen();
             DateTime Hoy = DateTime.Today;
             JsonMessage ObjJsonMessage = new JsonMessage();
+            int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+
 
             result = objExamenValid.Validate(model.Examen, "DescExamen", "NomExamen", "TipExamen");
 
@@ -271,9 +273,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 objExamenViewModal.Examen.FecCreacion = Hoy;
                 objExamenViewModal.Examen.UsrCreacion = UsuarioActual.NombreUsuario;
-                objExamenViewModal.Examen.EstActivo = "A";
-                objExamenViewModal.Examen.EstRegistro = "A";
-
+                objExamenViewModal.Examen.EstActivo = IndicadorActivo.Activo;
+                objExamenViewModal.Examen.EstRegistro = IndicadorActivo.Activo;
+                objExamenViewModal.Examen.IdeSede = IdSede;
                 _examenRepository.Add(objExamenViewModal.Examen);
                 Session["Accion"] = Accion.Editar;
             }
@@ -307,13 +309,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 
                 DetachedCriteria where = null;
+                int IdeSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
+                where = DetachedCriteria.For<Examen>();
                 if ((!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
                     (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
                     (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                    )
                 {
-                    where = DetachedCriteria.For<Examen>();
+                  
 
                     if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                     {
@@ -328,8 +332,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         where.Add(Expression.Like("DescExamen", '%' + grid.rules[3].data + '%'));
                     }
 
+                   
                 }
 
+                where.Add(Expression.Eq("IdeSede", IdeSede));
+                    
                 var generic = Listar(_examenRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
@@ -383,6 +390,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJson= new JsonMessage();
             int codigo = 0;
             int codCategoria = 0;
+            int IdeSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
             if (codExamen!=null)
             {
@@ -403,8 +411,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     
 
                     codCategoria = selc[i]==null?0:selc[i];
+                    //valida si ya existe en la Sede
                     var objCriterio = _examenPorCategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == codCategoria
-                                                                              && x.Examen.IdeExamen == codigo);
+                                                                              && x.Examen.IdeExamen == codigo
+                                                                              && x.Examen.IdeSede == IdeSede
+                                                                              );
 
                     if (objCriterio!=null && objCriterio.Count>0)
                     {
@@ -419,11 +430,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         objExamenPorCategoria.Examen.IdeExamen = codigo;
                         objExamenPorCategoria.Categoria.IDECATEGORIA = codCategoria;
-                        objExamenPorCategoria.EstActivo = "A";
+                        objExamenPorCategoria.EstActivo = IndicadorActivo.Activo;
                         objExamenPorCategoria.FechaCreacion = Hoy;
-                        objExamenPorCategoria.UsrCreacion = "Prueba 01";
-                        objExamenPorCategoria.UsrModifica = "Prueba 02";
+                        objExamenPorCategoria.UsrCreacion = UsuarioActual.NombreUsuario;
+                        objExamenPorCategoria.UsrModifica = UsuarioActual.NombreUsuario;
                         objExamenPorCategoria.FecModifica = Hoy;
+                        objExamenPorCategoria.IdeSede = IdeSede;
                         _examenPorCategoriaRepository.Add(objExamenPorCategoria);
                         objJson.Mensaje = "";
 
