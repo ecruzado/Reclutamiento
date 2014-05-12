@@ -222,7 +222,7 @@
             {
 
                 var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
-                alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
+                alter.NombreAlternativa = model.Alternativa.NombreAlternativa.Trim();
                 alter.Peso = model.Alternativa.Peso;
                 model.Alternativa.FechaModificacion = Hoy;
                 model.Alternativa.UsuarioModificacion = UsuarioActual.NombreUsuario;
@@ -238,7 +238,10 @@
             {
                 model.Alternativa.FechaCreacion = Hoy;
                 model.Alternativa.UsuarioCreacion = UsuarioActual.NombreUsuario;
-               
+                string nombreAlter = model.Alternativa.NombreAlternativa.Trim();
+                model.Alternativa.NombreAlternativa = nombreAlter;
+
+
                 _alternativaRepository.Add(model.Alternativa);
             }
 
@@ -562,6 +565,13 @@
                         //se agrega la sede
                         model.Criterio.IdeSede = IdSede;
                         model.Criterio.OrdenImpresion = 0;
+                        if (model.Criterio.Pregunta!=null)
+                        {
+                            string pregunta = model.Criterio.Pregunta.Trim();
+                            model.Criterio.Pregunta = pregunta;
+                        }
+                        
+
 
                         _criterioRepository.Add(model.Criterio);
                         objJsonMessage.Accion = "N";
@@ -640,15 +650,11 @@
 
             criterioViewModel.Criterio = model.Criterio;
             
-            //_criterioRepository.Add(model.Criterio);
-
             criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
             criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
             criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
             criterioViewModel.Criterio.Pregunta = model.Criterio.Pregunta;
-           // criterioViewModel.Criterio.TipoCalificacion = model.Criterio.TipoCalificacion;
-
-            //criterioViewModel.Criterio.IdeCriterio = model.Criterio.IdeCriterio;
+          
 
 
             return View(criterioViewModel);

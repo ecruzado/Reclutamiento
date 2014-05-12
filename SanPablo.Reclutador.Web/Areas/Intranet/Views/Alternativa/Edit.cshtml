@@ -24,7 +24,7 @@
                
               
 
-                 @Html.TextAreaFor(model => model.Alternativa.NombreAlternativa,  new { rows = 2, cols = 5, style = "margin: 0px 0px 10px; width: 250px; height: 70px;", maxlength = "255" ,onkeyup="aMays(event, this)"})  
+                 @Html.TextAreaFor(model => model.Alternativa.NombreAlternativa,  new { rows = 2, cols = 5, style = "margin: 0px 0px 10px; width: 250px; height: 70px;", maxlength = "255" ,onblur="aMays(event, this)"})  
                  
             @*    <div class="tex-error" style="font-size:12px;color:red">    
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )
@@ -38,7 +38,7 @@
                 <label class="etiquetaFormulario" for="setInstitucion">Peso<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                @Html.TextBoxFor(model => model.Alternativa.Peso, new { @maxlength = "2", @class="input-mini" })
+                @Html.TextBoxFor(model => model.Alternativa.Peso, new { @maxlength = "2", @class="input-mini"  })
                 <div class="tex-error" style="font-size:12px;color:red">   
                 @Html.ValidationMessageFor(model => model.Alternativa.Peso)
                 </div>
@@ -73,23 +73,27 @@
                 </td>
                 <td></td>
             </tr>
-            <tr>
+            <tr id="verImagenAlternativa">
                <td >
                </td>
 
-              <td colspan="2">
-             
-                @if (Model.Alternativa.Image != null && "02".Equals(Model.tipoModel))
-                {
-                    <table>
+              <td colspan="2" >
+                  <table>
                         <tr>
-                       
+                            @if (Model.Alternativa.IdeAlternativa!=null && Model.Alternativa.IdeAlternativa>0)
+                            {
+                            
                             <td class ="colInput"  style="text-align:center">
                                 <img id="ImgAlternativa"  height ="150" width="150" src="@Url.Action("GetImageAlternativa", "Alternativa",new { id = Model.Alternativa.IdeAlternativa })" /> 
                             </td>
+                            }
+                            else
+                            {
+                                <img id="ImgAlternativa"  height ="150" width="150" />
+                            }
                         </tr>
                     </table>    
-                }
+             
 
               </td>
             </tr>
@@ -117,6 +121,15 @@
 <script type="text/javascript">
     $(function () {
         $("#Alternativa_Peso").numerico();
+
+
+        var tipModel = '@Model.tipoModel';
+        if (tipModel=="02") {
+            $("#verImagenAlternativa").show();
+        } else {
+            $("#verImagenAlternativa").hide();
+        }
+
 
         var dato = '@Session["TipoModo"]';
         if (dato == 1) {
@@ -211,12 +224,15 @@
                    
                     $("#Alternativa_RutaDeImagen").val(rsp.Data.NombreArchivo);
                     $("#NombImagenAlternativa").val(rsp.Data.NombreTemporalArchivo);
-                   
-                         
+                    
+                    var pathAlternativa = '@Url.Content("~/Archivos/Imagenes/")';
+                    var fullPathAlternativa = pathAlternativa + rsp.Data.NombreTemporalArchivo;
+                
+                    $("#ImgAlternativa").attr("src", fullPathAlternativa);
                 }
-                else {
+                //else {
 
-                }
+                //}
             }
         });
 

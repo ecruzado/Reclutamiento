@@ -168,11 +168,14 @@
                             $("#Criterio_rutaImagen").val(rsp.Data.NombreArchivo);
                             $("#NombreTemporalArchivo").val(rsp.Data.NombreTemporalArchivo);
                             
+                            var path = '@Url.Content("~/Archivos/Imagenes/")';
+                            var fullpath = path + rsp.Data.NombreTemporalArchivo;
+                            $('#imgCriterio').attr("src", fullpath);
 
                         }
-                        else {
+                        //else {
 
-                        }
+                        //}
                     }
         });
 
@@ -208,6 +211,18 @@
                 
         });
 
+        $('#btnEliminar').click(function () {
+            var codigoCriterio = $("#Criterio_IdeCriterio").val();
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            if (selr != null) {
+                $('#confirmacion').dialog('open');
+            } else {
+                MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
+            }
+
+        });
+        
+
 
         
 
@@ -229,9 +244,9 @@
         $('#confirmacion').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "Confirmación",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var codigoCriterio = $("#Criterio_IdeCriterio").val();
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     if (selr != null) {
@@ -241,7 +256,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -527,7 +542,7 @@
                     <div class="controles">
                         @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                         {
-                            @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { @readonly = "readonly" })
+                            @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion),new { @disabled = "disabled" })
                         }
                         else
                         {
@@ -548,7 +563,7 @@
 
                         @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                         { 
-                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { @readonly = "readonly" }) 
+                        @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio),new { @disabled = "disabled" }) 
                         }
                         else
                         {
@@ -564,9 +579,9 @@
                       <label class="control-label">Modo</label>
                    
                          <div class="controles">
-                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
+                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina) || @Accion.Actualizar.Equals(Model.Criterio.IndPagina))
                             {
-                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @readonly = "readonly"})
+                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @disabled = "disabled"})
                             }
                             else
                             {
@@ -586,16 +601,14 @@
                       <div class="controles">
                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                            {
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onkeyup="aMays(event, this)"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onblur="aMays(event, this)"})  
                              
                            }
                            else
                            {
-                            
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" ,onkeyup="aMays(event, this)"})  
                              
-                        
-                               
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
+                             
                            } 
                            @* <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
@@ -697,7 +710,7 @@
                     <div class="opciones">
                     <a id="Agregar" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a> 
                     <a id="btnEditar" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar"  onclick="$('#confirmacion').dialog('open'); return false;"><i class="icon-remove icon-white"></i></a>        
+                    <a id="btnEliminar" class="btn btn-small btn-info" title="Eliminar" ><i class="icon-remove icon-white"></i></a>        
                     </div>
                 }
                 <div style="clear:both"></div>

@@ -11,7 +11,7 @@
     <div class="span12">
        <div class="widget-box">
             <div class="widget-title">
-                <h5>Criterio</h5>
+                <h5>Listado de Criterios</h5>
             </div>
             <table style="margin-left:120px;">
                 <tr>
@@ -298,7 +298,7 @@
         $("#spanEliminar").html("¿Desea eliminar?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = $('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdList').jqGrid('getRowData', selr);
                     if (selr != null) {
@@ -308,7 +308,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

@@ -43,6 +43,7 @@
             modelo.Alternativa.Criterio = new Criterio();
             modelo.tipoModel = tipo;
            
+            
 
             try
             {
@@ -98,13 +99,14 @@
                         AlternativaValidator validator = new AlternativaValidator();
                         ValidationResult result = validator.Validate(model.Alternativa, "NombreAlternativa");
                 
-                
-
                         if (!result.IsValid)
                         {
-                            objJsonMensage.Mensaje = "Ingres un nombre de alternativa";
+                            objJsonMensage.Mensaje = "Ingrese un nombre de alternativa";
                             return Json(objJsonMensage);
                         }
+
+                       
+
                     }
 
 
@@ -120,6 +122,7 @@
                
                     }
 
+                  
 
                     if (!string.IsNullOrEmpty(model.NombImagenAlternativa))
                     {
@@ -141,7 +144,12 @@
                     {
 
                         var alter = _alternativaRepository.GetSingle(x => x.IdeAlternativa == model.Alternativa.IdeAlternativa);
-                        alter.NombreAlternativa = model.Alternativa.NombreAlternativa;
+                        
+                        if (model.Alternativa.NombreAlternativa!=null)
+                        {
+                            alter.NombreAlternativa = model.Alternativa.NombreAlternativa.Trim();
+                        }
+                       
                         alter.Peso = model.Alternativa.Peso;
                         model.Alternativa.FechaModificacion = Hoy;
                         model.Alternativa.IdeSede = IdSede;
@@ -161,6 +169,14 @@
                         model.Alternativa.UsuarioCreacion = UsuarioActual.NombreUsuario;
                         model.Alternativa.ESTACTIVO = IndicadorActivo.Activo;
                         model.Alternativa.IdeSede = IdSede;
+
+                        if (model.Alternativa.NombreAlternativa!=null)
+                        {
+                            var desAlternativa = model.Alternativa.NombreAlternativa.Trim();
+                            model.Alternativa.NombreAlternativa = desAlternativa;
+                        }
+                       
+
                         _alternativaRepository.Add(model.Alternativa);
                         objJsonMensage.Resultado = true;
                         objJsonMensage.Mensaje = "Se registro el registro correctamente";
@@ -249,15 +265,24 @@
         public ActionResult GetImageAlternativa(int id)
         {
             var firstOrDefault = _alternativaRepository.GetSingle(c => c.IdeAlternativa == id);
-            if (firstOrDefault.Image != null)
+            if (firstOrDefault!=null)
             {
-                byte[] image = firstOrDefault.Image;
-                return File(image, "image/jpg");
+                if (firstOrDefault.Image != null)
+                {
+                    byte[] image = firstOrDefault.Image;
+                    return File(image, "image/jpg");
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
                 return null;
             }
+            
+           
         }
 
     }
