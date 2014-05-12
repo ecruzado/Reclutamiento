@@ -375,6 +375,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     logSolicitud.TipEtapa = Etapa.Aceptado;
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    logSolicitud.Observacion = "";
 
                     int ideUsuario = _logAmpliacionRepository.solicitarAprobacion(logSolicitud,Convert.ToInt32(solicitud.IdeSolReqPersonal), solicitud.IdeSede, solicitud.IdeArea, IndArea);
 
@@ -944,7 +945,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             model.btnVerRanking = Indicador.Si;
                             model.btnVerPreSeleccion = Indicador.Si;
                             model.btnVerNuevo = Indicador.No;
-                            model.btnVerRequerimiento = Indicador.No;
+                            model.btnVerRequerimiento = Indicador.Si;
                             break;
                         }
 
@@ -1035,7 +1036,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
             model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
-            model.Etapas =new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapaSolicitud));
+            model.Etapas =new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
             model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
@@ -1187,6 +1188,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario == null ? "" : ObjSol.TipoRangoSalario;
 
+                model.Pagina = pagina;
+
             }
 
             if (pagina == TipoSolicitud.ConsultaRequerimientos)
@@ -1206,75 +1209,75 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-        /// <summary>
-        /// Realiza la publicacion de la solicitud de reemplazo de personal
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [ValidarSesion]
-        public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model)
-        {
-            JsonMessage objJson = new JsonMessage();
-            var verSalario = model.verSalario;
-            string IndVerSalario;
+        ///// <summary>
+        ///// Realiza la publicacion de la solicitud de reemplazo de personal
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //[ValidarSesion]
+        //public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model)
+        //{
+        //    JsonMessage objJson = new JsonMessage();
+        //    var verSalario = model.verSalario;
+        //    string IndVerSalario;
 
-            if (verSalario)
-            {
-                IndVerSalario = "S";
-            }
-            else
-            {
-                IndVerSalario = "N";
-            }
-
-
-            if (model != null)
-            {
-
-                var objSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
-                if (objSol != null)
-                {
-
-                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-
-                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
-                    objSol.FechaModificacion = FechaSistema;
-                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
-                    objSol.TipEtapa = Etapa.Publicado;
-                    objSol.IndicadorSalario = IndVerSalario;
-                    objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
-
-                    _solicitudAmpliacionPersonal.Update(objSol);
-
-                    model.LogSolReqPersonal = new LogSolReqPersonal();
-                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
-                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
-                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
-                    model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
-
-                    _solicitudAmpliacionPersonal.ActualizaLogSolReq(model.LogSolReqPersonal);
-
-                    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
-
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
-
-                    objJson.Resultado = true;
-                    objJson.Mensaje = "Se publico la Solicitud";
-                }
-            }
-            else
-            {
-                objJson.Resultado = false;
-                objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
-            }
+        //    if (verSalario)
+        //    {
+        //        IndVerSalario = "S";
+        //    }
+        //    else
+        //    {
+        //        IndVerSalario = "N";
+        //    }
 
 
+        //    if (model != null)
+        //    {
 
-            return Json(objJson);
-        }
+        //        var objSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
+        //        if (objSol != null)
+        //        {
+
+        //            var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
+        //            objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+        //            objSol.FechaModificacion = FechaSistema;
+        //            objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+        //            objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+        //            objSol.TipEtapa = Etapa.Publicado;
+        //            objSol.IndicadorSalario = IndVerSalario;
+        //            objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
+
+        //            _solicitudAmpliacionPersonal.Update(objSol);
+
+        //            model.LogSolReqPersonal = new LogSolReqPersonal();
+        //            model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+        //            model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+        //            model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+        //            string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+        //            model.LogSolReqPersonal.FecSuceso = FechaSistema;
+        //            model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
+
+        //            _solicitudAmpliacionPersonal.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+        //            var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+        //            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "", objCargo.NombreCargo, objCargo.CodigoCargo);
+
+        //            objJson.Resultado = true;
+        //            objJson.Mensaje = "Se publico la Solicitud";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        objJson.Resultado = false;
+        //        objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
+        //    }
+
+
+
+        //    return Json(objJson);
+        //}
 
 
         public ActionResult actualizarFechaExpiracion(string idSolicitud, string fechaExpiracion)

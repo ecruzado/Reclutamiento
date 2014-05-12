@@ -40,12 +40,12 @@
 
         
         $('#btnPublicarSolReq').click(function () {
-            if (validaPublicacion)
+            if (validaPublicacion())
             {
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudAmpliacionCargo", new { area="Intranet"})',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
                 traditional: true,
                     success: function (data) {
                         if (data.Resultado)
@@ -442,7 +442,15 @@
             MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "Sistema de Reclutamiento Y Seleccion de Personal");
             return false;
         }
-        return true;
+
+        var observacion = $('#SolReqPersonal_ObservacionPublica').val();
+        if (observacion.length > 0) {
+            return true;
+        }
+        else {
+            MostrarMensaje('Debe ingresar una observación para la publicación', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
 
 
     }
@@ -672,7 +680,7 @@
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "255", disabled = "disabled", onkeyup="aMays(event, this)"  })     
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "255", onkeyup="aMays(event, this)"  })     
                              }
                          </div>
                         </td>

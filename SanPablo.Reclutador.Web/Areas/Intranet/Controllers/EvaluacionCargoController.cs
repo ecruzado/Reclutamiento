@@ -185,7 +185,9 @@
             evaluacionCargoViewModel.Cargo = new Cargo();
             evaluacionCargoViewModel.Evaluacion = new EvaluacionCargo();
 
-            evaluacionCargoViewModel.Examenes = new List<Examen>(_examenRepository.GetBy(x=>x.EstActivo == IndicadorActivo.Activo));
+            int ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+
+            evaluacionCargoViewModel.Examenes = new List<Examen>(_examenRepository.GetBy(x=>x.EstActivo == IndicadorActivo.Activo && x.IdeSede == ideSede));
             evaluacionCargoViewModel.Examenes.Insert(0, new Examen { IdeExamen = 0, DescExamen = "Seleccionar" });
 
             return evaluacionCargoViewModel;

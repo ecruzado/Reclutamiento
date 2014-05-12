@@ -65,11 +65,19 @@
                             objJsonMessage.Resultado = false;
                             return Json(objJsonMessage);
                         }
-                        aprobarRechazarSolicitud(model);
 
-                        objJsonMessage.Mensaje = "Enviado Correctamente";
-                        objJsonMessage.Resultado = true;
-                        return Json(objJsonMessage);
+                        if (aprobarRechazarSolicitud(model)) 
+                        {
+                            objJsonMessage.Mensaje = "Enviado Correctamente";
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
+                        }
+                        else
+                        {
+                            objJsonMessage.Mensaje = "ERROR: Ocurrio un error al intentar enviar la aprobación/rechazo, intente de nuevo";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
                     }
                     objJsonMessage.Mensaje = "Usuario sin permiso para esta accion";
                     objJsonMessage.Resultado = false;
@@ -148,7 +156,7 @@
             return logSolicitudAmpCargoViewModel;
         }
 
-        public void aprobarRechazarSolicitud(LogSolicitudAmpliacionCargoViewModel model)
+        public bool aprobarRechazarSolicitud(LogSolicitudAmpliacionCargoViewModel model)
         {
             SendMail enviar = new SendMail();
            
@@ -189,7 +197,7 @@
 
                 ideUsuarioResp = _logSolicitudAmpliacionRepository.solicitarAprobacion(model.LogSolicitudAmpliacion, (Int32)model.SolicitudRequerimiento.IdeSolReqPersonal, model.SolicitudRequerimiento.IdeSede, model.SolicitudRequerimiento.IdeArea, indicadorArea);
 
-                if (ideUsuarioResp != 0)
+                if (ideUsuarioResp != -1)
                 {
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
                     var SedeDesc = Session[ConstanteSesion.SedeDes];
@@ -198,14 +206,19 @@
                     {
                         SedeDescripcion = SedeDesc.ToString();
                     }
-                    SolReqPersonal cargo = _solicitudAmpliacionCargoRepository.GetSingle(x=>x.IdeSolReqPersonal == model.SolicitudRequerimiento.IdeSolReqPersonal);
-                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoSolicitud.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, usuario.Email, "UN SUCESSO");
+                    SolReqPersonal cargo = _solicitudAmpliacionCargoRepository.GetSingle(x => x.IdeSolReqPersonal == model.SolicitudRequerimiento.IdeSolReqPersonal);
+                    enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, usuario.Email, "UN SUCESSO");
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
 
             }
             catch (Exception ex)
             {
-                //manejar el error
+                return false;
             }
         }
 

@@ -525,6 +525,20 @@
         public ActionResult ListaCargos()
         {
             var mantenimientoViewModel = inicializarListaMantenimiento();
+            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+            if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+            {
+                mantenimientoViewModel.btnVerConsultar = Indicador.Si;
+                mantenimientoViewModel.btnVerActivarDesc = Indicador.Si;
+                mantenimientoViewModel.btnVerEditar = Indicador.Si;
+            }
+            else
+            {
+                mantenimientoViewModel.btnVerConsultar = Indicador.No;
+                mantenimientoViewModel.btnVerActivarDesc = Indicador.Si;
+                mantenimientoViewModel.btnVerEditar = Indicador.No;
+            }
             return View("ListaCargos", mantenimientoViewModel);
         }
 
@@ -654,16 +668,16 @@
 
                 cargos.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
                 cargos.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
-                cargos.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+                cargos.IdeArea = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
 
-                if (grid.rules[5].data != null && grid.rules[6].data != null)
+                if (grid.rules[8].data != null && grid.rules[9].data != null)
                 {
-                    cargos.FechaInicio = Convert.ToDateTime(grid.rules[5].data);
-                    cargos.FechaFin = Convert.ToDateTime(grid.rules[6].data);
+                    cargos.FechaInicio = Convert.ToDateTime(grid.rules[8].data);
+                    cargos.FechaFin = Convert.ToDateTime(grid.rules[9].data);
                 }
 
-                cargos.IdeDepartamento = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[7].data));
-                Estado = (grid.rules[9].data == null ? "A" : grid.rules[9].data);
+                cargos.IdeDepartamento = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
+                Estado = (grid.rules[7].data == null ? "A" : grid.rules[7].data);
 
                 lista = _cargoRepository.listaCargos(cargos, Estado, Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
@@ -684,12 +698,12 @@
                                 item.CodigoCargo ==null?"":item.CodigoCargo,
                                 item.NombreCargo==null?"":item.NombreCargo,
                                 //item.DescripcionCargo==null?"":item.DescripcionCargo,
-                                item.IdeArea==0?"":item.IdeArea.ToString(),
-                                item.NombreArea==null?"":item.NombreArea,
-                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
-                                item.NombreDepartamento==null?"":item.NombreDepartamento,
                                 item.IdeDependencia==0?"":item.IdeDependencia.ToString(),
                                 item.NombreDependencia==null?"":item.NombreDependencia,
+                                item.IdeDepartamento==0?"":item.IdeDepartamento.ToString(),
+                                item.NombreDepartamento==null?"":item.NombreDepartamento,
+                                item.IdeArea==0?"":item.IdeArea.ToString(),
+                                item.NombreArea==null?"":item.NombreArea,
                                 item.version==0?"":item.version.ToString(),
                             }
                 }).ToArray();
@@ -713,6 +727,7 @@
             var model = new MantenimientoCargoViewModel();
             model.Cargo = new Cargo();
 
+            var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             //modificar para filtrar unicamente los cargo cuyo proceso ha concluido
             model.Cargos = new List<Cargo>(_cargoRepository.All());
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
@@ -720,7 +735,7 @@
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoRegistro));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-            model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == ideSede));
             model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
             model.Departamentos = new List<Departamento>();

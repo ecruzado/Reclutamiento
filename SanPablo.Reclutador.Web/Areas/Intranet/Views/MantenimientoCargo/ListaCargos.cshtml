@@ -47,10 +47,10 @@
                 url: '@Url.Action("listaAreas","SolicitudNuevoCargo")',
                 data: { ideDepartamento: ideDepartamento },
                 success: function (respuesta) {
-                    $("select#SolicitudNuevoCargo_IdeArea").empty();
-                    $("select#SolicitudNuevoCargo_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $("select#Cargo_IdeArea").empty();
+                    $("select#Cargo_IdeArea").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
-                        $("select#SolicitudNuevoCargo_IdeArea").append("<option value='"
+                        $("select#Cargo_IdeArea").append("<option value='"
                         + item.IdeArea + "'>" + item.NombreArea + "</option>");
                     }
                 );
@@ -458,9 +458,18 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a id="btnConsultarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Consultar</a>
-                <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
-                <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                @if(Model.btnVerConsultar.Equals(Indicador.Si))
+                {
+                    <a id="btnConsultarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Consultar</a>
+                }
+                @if(Model.btnVerEditar.Equals(Indicador.Si))
+                {
+                    <a id="btnEditarSolicitud" class="btn btn-info"><i class="icon-pencil icon-white"></i> Editar</a>
+                }
+                @if(Model.btnVerActivarDesc.Equals(Indicador.Si))
+                {
+                    <a id="btnActivarDesactivar" class="btn btn-info"><i class="icon-check icon-white"></i> Activar / Desactivar</a>
+                }
             </div>
 
         </div>
