@@ -23,6 +23,7 @@
             Map(x => x.FechaModificacion, "FECMODIFICACION");
             Map(x => x.IMAGENCRIT, "IMAGENCRIT");
             Map(x => x.rutaImagen, "NOMIMAGEN");
+            Map(x => x.IdeSede, "IDESEDE");
             Map(x => x.TipoMedicionDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.Medicion + ",TIPMEDICION) from dual)");
             Map(x => x.TipoCriterioDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCriterio + ",TIPCRITERIO) from dual)");
             Map(x => x.TipoModoDes).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.Modo + ",TIPMODO) from dual)");

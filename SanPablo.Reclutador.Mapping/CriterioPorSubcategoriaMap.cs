@@ -20,7 +20,7 @@
             Map(x => x.USRMODIFICA, "USRMODIFICA");
             Map(x => x.FECMODIFICA, "FECMODIFICA");
             Map(x => x.PUNTAJECAL).Formula("(SELECT CHSPRP.PR_INTRANET.FN_GETMAXPUNTAJE(IDECRITERIO) FROM DUAL)");
-           
+            Map(x => x.IdeSede, "IDESEDE");
             Table("CRITERIO_X_SUBCATEGORIA");
 
         }

@@ -20,7 +20,7 @@
            Map(x => x.FechaModificacion, "FECMODIFICACION");
            Map(x => x.Image, "IMAGE");
            Map(x => x.ESTACTIVO, "ESTACTIVO");
-            
+           Map(x => x.IdeSede, "IDESEDE");
            Table("ALTERNATIVA");
         }
     }

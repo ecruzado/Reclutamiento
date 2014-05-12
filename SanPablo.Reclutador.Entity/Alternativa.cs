@@ -9,7 +9,7 @@
         public virtual string RutaDeImagen { get; set; }
         public virtual string ESTACTIVO { get; set; }
         public virtual byte[] Image { get; set; }
-
+        public virtual int IdeSede { get; set; }
         public virtual bool IndRespuesta { get; set; }
 
 

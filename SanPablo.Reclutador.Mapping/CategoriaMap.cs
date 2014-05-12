@@ -25,6 +25,7 @@
             Map(x => x.TEXTOEJEMPLO, "TEXTOEJEMPLO");
             Map(x => x.NOMBREIMAGEN, "NOMBREIMAGEN");
 
+            Map(x => x.IdeSede, "IDESEDE");
             Map(x => x.TIEMPO, "TIEMPO");
 
 

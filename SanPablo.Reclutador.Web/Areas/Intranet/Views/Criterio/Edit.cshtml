@@ -32,26 +32,29 @@
 
         
         $("#btnGuardarCriterio").click(function () {
-            if ($("#frmCriterio").validate().form()) {
+            //if ($("#frmCriterio").validate().form()) {
+
+            if(valida()){
                 $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Edit", "Criterio")',
-                    data: $("#frmCriterio").serialize(),
-                    traditional: true,
-                    success: function (data) {
-                        if (data.redirecciona) {
-                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                         }
+                        type: "POST",
+                        url: '@Url.Action("Edit", "Criterio")',
+                        data: $("#frmCriterio").serialize(),
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                             }
 
-                        if (data.Resultado) {
-                            information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato,data.Accion);
-                        }
-                        if (!data.Resultado) {
-                            notificacionExito(data.Mensaje);
-                        }
+                            if (data.Resultado) {
+                                information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato,data.Accion);
+                            }
+                            if (!data.Resultado) {
+                                //notificacionExito(data.Mensaje);
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            }
 
-                    }
-                });
+                        }
+                    });
             };
           });
 
@@ -454,6 +457,38 @@
 
     }
 
+    function valida()
+    {
+        var tipCriterio = $('#Criterio_TipoCriterio').val();
+        var tipMedicion = $('#Criterio_TipoMedicion').val();
+        var tipModo = $('#Criterio_TipoModo').val();
+        var tipPregunta = $('#Criterio_Pregunta').val();
+
+
+        if (tipCriterio == "0") {
+            MostrarMensaje('Seleccione un tipo de criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+
+        if (tipMedicion == "0") {
+            MostrarMensaje('Seleccione un tipo de medición', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+
+        if (tipModo == "0") {
+            MostrarMensaje('Seleccione un modo', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+
+        if (tipPregunta.length ==0) {
+            MostrarMensaje('Ingrese una pregunta', "Sistema de Reclutamiento Y Seleccion de Personal");
+            return false;
+        }
+
+        return true;
+
+    }
+
 
 </script>
 }
@@ -498,9 +533,9 @@
                         {
                             @Html.DropDownListFor(model => model.Criterio.TipoMedicion, new SelectList(Model.Medicion, "Valor", "Descripcion", Model.Criterio.TipoMedicion))
 		                }
-                        <div class="tex-error" style="font-size:12px;color:red">    
+                       @* <div class="tex-error" style="font-size:12px;color:red">    
                         @Html.ValidationMessageFor(model => model.Criterio.TipoMedicion)
-                        </div>
+                        </div>*@
                      </div>
                     </td>
                  </tr>
@@ -519,9 +554,9 @@
                         {
                         @Html.DropDownListFor(model => model.Criterio.TipoCriterio, new SelectList(Model.TipoCriterio, "Valor", "Descripcion", Model.Criterio.TipoCriterio))     
                         }
-                        <div class="tex-error" style="font-size:12px;color:red">         
+                       @* <div class="tex-error" style="font-size:12px;color:red">         
                         @Html.ValidationMessageFor(model => model.Criterio.TipoCriterio)
-                        </div>
+                        </div>*@
                     </div>
                        </td>
                     <td style="width:40px;"></td>
@@ -537,9 +572,9 @@
                             {
                               @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo))  
                             }
-                         <div class="tex-error" style="font-size:12px;color:red">     
+                         @*  <div class="tex-error" style="font-size:12px;color:red">     
                          @Html.ValidationMessageFor(model => model.Criterio.TipoModo)
-                         </div>
+                         </div>*@
                        </div>
                     </td>
 
@@ -562,9 +597,9 @@
                         
                                
                            } 
-                            <div class="tex-error" style="font-size:12px;color:red">    
+                           @* <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
-                            </div>
+                            </div>*@
                           </div>
                        </td>
                         

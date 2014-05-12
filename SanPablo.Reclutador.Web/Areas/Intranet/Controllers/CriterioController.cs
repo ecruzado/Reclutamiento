@@ -452,10 +452,7 @@
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
                 
-                //obtiene el valor del criterio
                
-                
-               // int idCriterio = Convert.ToInt32(grid.rules[0].data);
 
                 DetachedCriteria where = DetachedCriteria.For<Alternativa>();
 
@@ -507,10 +504,10 @@
             JsonMessage objJsonMessage = new JsonMessage();
 
             string fullPath = null;
-            if (!ModelState.IsValid){
-                criterioViewModel.Criterio = model.Criterio;
-                return View(criterioViewModel);
-            }
+            //if (!ModelState.IsValid){
+            //    criterioViewModel.Criterio = model.Criterio;
+            //    return View(criterioViewModel);
+            //}
 
             if ("02".Equals(model.Criterio.TipoModo))
             {
@@ -703,8 +700,7 @@
         {
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                //DetachedCriteria where = null;
+                
                 Criterio objCriterio = new Criterio();
 
                 List<Criterio> listaCriterios = new List<Criterio>();
@@ -755,19 +751,10 @@
                     objCriterio.IndicadorActivo = grid.rules[3].data;
                 }
 
-
-                    
-                   
-                  
                 }
-
-
-
 
                 listaCriterios = _criterioRepository.ObtenerCriterios(objCriterio);
 
-
-                
                 var generic = GetListar(listaCriterios,
                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
@@ -904,9 +891,9 @@
 
                        objCriterioxSubCategoria.Criterio.IdeCriterio = codCriterio;
                        objCriterioxSubCategoria.PUNTAMAXIMO = 0;
-                       objCriterioxSubCategoria.ESTREGISTRO = "A";
-                       objCriterioxSubCategoria.USRCREACION = "PRUEBA";
-                       objCriterioxSubCategoria.USRMODIFICA = "PRUEBA2";
+                       objCriterioxSubCategoria.ESTREGISTRO = IndicadorActivo.Activo;
+                       objCriterioxSubCategoria.USRCREACION = UsuarioActual.NombreUsuario;
+                       objCriterioxSubCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
                        objCriterioxSubCategoria.FECCREACION = Hoy;
                        objCriterioxSubCategoria.FECMODIFICA = Hoy;
 

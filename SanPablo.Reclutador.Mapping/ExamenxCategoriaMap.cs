@@ -20,6 +20,9 @@ namespace SanPablo.Reclutador.Mapping
             Map(m => m.FecCreacion, "FECCREACION");
             Map(m => m.UsrModifica, "USRMODIFICA");
             Map(m => m.FecModifica, "FECMODIFICA");
+
+            Map(x => x.IdeSede, "IDESEDE");
+
             Table("EXAMEN_X_CATEGORIA");
 
         }
