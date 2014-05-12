@@ -5,5 +5,6 @@
 
     public interface IConocimientoGeneralPostulanteRepository : IRepository<ConocimientoGeneralPostulante>
     {
+       
     }
 }

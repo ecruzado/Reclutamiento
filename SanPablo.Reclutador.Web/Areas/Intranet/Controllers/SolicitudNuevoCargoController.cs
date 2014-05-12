@@ -230,14 +230,9 @@
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 solicitudNuevoCargoViewModel.SolicitudNuevoCargo = solNuevoCargo;
                 actualizarDatosAreas(solicitudNuevoCargoViewModel, solNuevoCargo.IdeArea);
-                if (solNuevoCargo.EstadoActivo == IndicadorActivo.Activo)
+                if ((solNuevoCargo.TipoEtapa == Etapa.Aceptado)||(solNuevoCargo.TipoEtapa==Etapa.Validado))
                 {
-                    solicitudNuevoCargoViewModel.Estado = "Activo";
                     solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
-                }
-                else
-                {
-                    solicitudNuevoCargoViewModel.Estado = "Inactivo"; 
                 }
                 
             }

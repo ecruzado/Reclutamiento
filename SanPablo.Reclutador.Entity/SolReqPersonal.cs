@@ -72,6 +72,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PuntMinExamen { get; set; }
         public virtual int CantPreSelec { get; set; }
 
+
+        public virtual int PuntajeMinimoGeneral { get; set; }
+
+        public virtual int PuntajeTotalGeneral { get; set; }
+
         /// <summary>
         /// Codigo del cargo
         /// </summary>
@@ -87,7 +92,7 @@ namespace SanPablo.Reclutador.Entity
 
 
         public virtual string TipVacante { get; set; }
-        public virtual int NumVacantes { get; set; }
+        public virtual int? NumVacantes { get; set; }
         public virtual int IdeCargo { get; set; }
         public virtual string nombreCargo { get; set; }
         public virtual string NomPersonReemplazo { get; set; }

@@ -118,7 +118,7 @@
 
                 cmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = cargo.IdeCargo;
                 cmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = cargo.IdeDependencia;
-                cmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = cargo.IdeDependencia;
+                cmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = cargo.IdeDepartamento;
                 cmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = cargo.IdeArea;
                 cmd.Parameters.Add("p_cFecIni", OracleType.VarChar).Value = cFechaIncial;
                 cmd.Parameters.Add("p_cFeFin", OracleType.VarChar).Value = cFechaFinal;

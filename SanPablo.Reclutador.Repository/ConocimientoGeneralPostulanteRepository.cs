@@ -3,6 +3,10 @@
     using NHibernate;
     using SanPablo.Reclutador.Entity;
     using SanPablo.Reclutador.Repository.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.OracleClient;
 
     public class ConocimientoGeneralPostulanteRepository : Repository<ConocimientoGeneralPostulante>, IConocimientoGeneralPostulanteRepository
     {
@@ -10,5 +14,7 @@
             : base(session)
         {
         }
+
+        
     }
 }

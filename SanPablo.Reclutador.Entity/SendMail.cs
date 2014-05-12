@@ -109,11 +109,11 @@
                     }
                 case Etapa.Aprobado:
                     {
-                        if (tipoRequerimiento == "Ampliacion de cargo")
+                        if (tipoRequerimiento == TipoRequerimientoEmail.Ampliacion)
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Aprobado el Requerimiento de " + tipoRequerimiento + " de " + cargo +
                                      " en la Sede " + Sede + " y se requiere de la su aceptación como Encargado de Selección";
-                            asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                            asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
                             break;
                         }
                         else

@@ -300,4 +300,10 @@
     
     }
 
+    public sealed class TipoRequerimientoEmail
+    {
+        public const string Ampliacion = "Ampliación de Cargo";
+        public const string Nuevo = "Nuevo Cargo";
+    }
+
 }

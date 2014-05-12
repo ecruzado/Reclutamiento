@@ -14,13 +14,16 @@
 
 <script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        $.validator.unobtrusive.parse($("#solicitudAmpliacionCargoForm"));
         $("#tabs").tabs();
 
         SanPablo.Numeros('SolicitudRequerimiento_NumVacantes');
@@ -41,24 +44,35 @@
                     e.preventDefault();
                     var result = $('#solicitudAmpliacionCargoForm').valid();
                     if (result) {
+                        $("#updateDialogConfirmacion").dialog("close");
+                        $.blockUI({
+                            message: '<h1>Enviando...</h1>',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }
+                        });
                         $.post('@Url.Action("Edit", "SolicitudAmpliacionCargo")',
                         $("#solicitudAmpliacionCargoForm").serialize(),
                         function (respuesta) {
                             if (respuesta.Resultado) {
-                                $("#updateDialogConfirmacion").dialog("close");
-                                $("#SolReqPersonal_IdeSolReqPersonal").val(respuesta.IdDato);
-                                MostrarMensaje("Solicitud enviada exitosamente", "SAN PABLO");
-                                SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
+                                $.unblockUI();
+                                mensajeRedirecciona("Solicitud enviada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
                             }
                             else {
-                                $("#updateDialogConfirmacion").dialog("close");
-                                MostrarMensaje("Solicitud no enviada intente nuevamente".Mensaje);
+                                $.unblockUI();
+                                MostrarMensaje(repuesta.Mensaje, "Sistema de Reclutamiento y Selección de Personal");
                             }
                         });
                     }
                     else {
                         $("#updateDialogConfirmacion").dialog("close");
-                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "SAN PABLO");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "Sistema de Reclutamiento y Selección de Personal");
                     }
 
                 },
@@ -481,8 +495,7 @@
                          function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                MostrarMensaje("Solicitud aceptada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
-                                SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
+                                mensajeRedirecciona("Solicitud aceptada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
                             }
                             else {
                                 MostrarMensaje(respuesta.Mensaje, "Sistema de Reclutamiento y Selección de Personal");
@@ -507,13 +520,15 @@
                     e.preventDefault();
                     var result = $('#aprobRechazForm').valid();
                     if (result) {
+
+                        
                         $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
                         $("#divMensaje").dialog({
                             title: 'SAN PABLO',
                             modal: true,
                             buttons: {
-                                "Si": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
-                                "No": function () { $(this).dialog("close"); }
+                                "Aceptar": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+                                "Cancelar": function () { $(this).dialog("close"); }
                             }
                         });
 
@@ -564,10 +579,15 @@
 
   function confirmarEnvio()
   {
-    var dialogDiv = $('#updateDialogConfirmacion');
-    dialogDiv.dialog('open');
-    return false;
+      if ($('#solicitudAmpliacionCargoForm').valid()) {
+          var dialogDiv = $('#updateDialogConfirmacion');
+          dialogDiv.dialog('open');
+          return false;
+      }
+
   }
+
+
 
   function deshabilitarControles()
   {
@@ -593,6 +613,20 @@
       $("#SolicitudRequerimiento_TipPuesto").removeAttr("disabled");
   }
 
+  function mensajeRedirecciona(mensaje, titulo) {
+      $("#spanMensaje").html(mensaje);
+      $("#divMensaje").dialog({
+          title: titulo,
+          modal: true,
+          buttons: {
+              "Ok": function () {
+                  $(this).dialog("close");
+                  SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
+                }
+            }
+        });
+    }
+
   function MostrarMensaje(mensaje, titulo)
   {
     Funciones.Alert("divMensaje", "spanMensaje", mensaje, titulo);
@@ -603,8 +637,8 @@
   }
 
   function mostrarAprobarRechazar() {
-      var estado = $('#SolicitudRequerimiento_EstadoActivo').val();
-      if (estado == "A") {
+      //var estado = $('#SolicitudRequerimiento_EstadoActivo').val();
+      //if (estado == "A") {
           var dialogDiv = $('#updateDialogAprobacion');
           var ideSolicitud = $('#SolicitudRequerimiento_IdeSolReqPersonal').val();
           $.get('@Url.Action("Edit", "LogSolicitudAmpliacionCargo")', { ideSolicitud: ideSolicitud }, function (data) {
@@ -612,11 +646,11 @@
                 $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
                 dialogDiv.dialog('open');
             });
-        }
-        else {
-            mensajeResultado("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
-        }
-        return false;
+        //}
+        //else {
+        //  MostrarMensaje("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado");
+        //}
+        //return false;
     }
 
     function enviarAprobacionRechazo() {
@@ -641,8 +675,7 @@
                  $.unblockUI();
                  if (respuesta.Resultado) {
                      $('#updateDialogAprobacion').dialog("close");
-                     MostrarMensaje("Aprobación/Rechazo enviado exitosamente");
-                     SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
+                     mensajeRedirecciona("Aprobación/Rechazo enviado exitosamente", "Sistema de Reclutamiento y Selección de Personal");
                  }
                  else {
                      MostrarMensaje(respuesta.Mensaje);
@@ -684,7 +717,13 @@
 
     }
 
+    $('input[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 
+    $('textarea[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 }
 @using (Html.BeginForm("Edit", "SolicitudAmpliacionCargo", FormMethod.Post, new { @id = "solicitudAmpliacionCargoForm" }))

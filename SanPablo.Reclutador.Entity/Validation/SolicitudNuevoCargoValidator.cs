@@ -47,21 +47,21 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.DescripcionEstudios)
                 .NotEmpty()
-                .WithMessage("Ingresar una descripción de estudio");
+                .WithMessage("Ingrese los estudios");
             RuleFor(x => x.DescripcionEstudios)
                 .Length(5,255)
                 .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
 
             RuleFor(x => x.DescripcionFunciones)
                 .NotEmpty()
-                .WithMessage("Ingresar una descripción de Funciones");
+                .WithMessage("Ingrese las funciones");
             RuleFor(x => x.DescripcionFunciones)
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
 
             RuleFor(x => x.DescripcionCompetencias)
                 .NotEmpty()
-                .WithMessage("Ingresar una descripción de Competencias");
+                .WithMessage("Ingrese las competencias");
             RuleFor(x => x.DescripcionCompetencias)
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
@@ -69,7 +69,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.DescripcionObservaciones)
                 .NotEmpty()
-                .WithMessage("Ingresar una descripcion de Observaciones");
+                .WithMessage("Ingrese las observaciones adicionales");
             RuleFor(x => x.DescripcionObservaciones)
                 .Length(5, 255)
                 .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");

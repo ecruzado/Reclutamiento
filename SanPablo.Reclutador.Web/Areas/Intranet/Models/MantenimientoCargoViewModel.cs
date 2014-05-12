@@ -30,6 +30,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public List<Cargo> Cargos { get; set; }
         public string Accion { get; set; }
+
+        public string btnVerConsultar { get; set; }
+        public string btnVerEditar { get; set; }
+        public string btnVerActivarDesc { get; set; }
+
         
     }
 }
