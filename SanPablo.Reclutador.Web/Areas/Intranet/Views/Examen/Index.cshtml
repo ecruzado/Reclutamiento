@@ -60,8 +60,90 @@
         });
 
         
-
         jQuery("#grdList").jqGrid({
+            colNames: ['Estado', '', '', 'Nombre', 'Descripci&oacuten', '', 'Tipo', 'Duraci&oacuten (min)', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colModel: [
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                    { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', sortable: false, width: 50, hidden: true },
+                    { name: 'IdeExamen', index: 'IdeExamen', align: 'center', sortable: false, hidden: true },
+                    { name: 'Nombre', index: 'Nombre', align: 'left', width: 250, sortable: false },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', width: 250, sortable: false },
+                    { name: 'Tipo', index: 'Tipo', align: 'left', hidden: true, sortable: false },
+                    { name: 'TipExamenDes', index: 'TipExamenDes', align: 'left', width: 120, sortable: false },
+                    { name: 'TiempoTotal', index: 'TiempoTotal', align: 'left', sortable: false },
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 100, hidden: true, sortable: false },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 100, hidden: true, sortable: false },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 100, hidden: true, sortable: false },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 100, hidden: true, sortable: false }
+            ],
+            pager: jQuery('#grdPager'),
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            autowidth: true,
+            rules: true,
+            sortname: 'IdeExamen',
+            sortorder: 'desc',
+            viewrecords: true,
+            height: 350,
+            cellsubmit: 'clientArray',
+            hidegrid: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            datatype: 'local',
+            postData: {
+            }, loadComplete: function (data) {
+
+                jQuery("#grdList").jqGrid('setGridParam', {
+                    datatype: function (postdata) {
+                        var migrilla = new Object();
+                        migrilla.page = postdata.page;
+                        migrilla.rows = postdata.rows;
+                        migrilla.sidx = postdata.sidx;
+                        migrilla.sord = postdata.sord;
+                        migrilla._search = postdata.isSearch;
+                        migrilla.filters = postdata.filters;
+                        migrilla.Rules = [
+                               { field: 'idExamen', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+							   { field: 'tipExamen', data: $("#Examen_TipExamen").val() },
+							   { field: 'estado', data: $("#Examen_EstActivo").val() },
+							   { field: 'descrip', data: $("#Examen_DescExamen").val() }
+
+                        ];
+
+                        if (migrilla._search == true) {
+                            migrilla.searchField = postdata.searchField;
+                            migrilla.searchOper = postdata.searchOper;
+                            migrilla.searchString = postdata.searchString;
+                        }
+
+                        var params = { grid: migrilla };
+
+                        $.ajax({
+                            url: '@Url.Action("ListaExamen", "Examen")',
+                            type: 'post',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(params),
+                            async: false,
+                            success: function (data, st) {
+                                if (st == 'success') {
+                                    var jq = $('#grdList')[0];
+                                    jq.addJSONData(data);
+                                }
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
+
+
+            }
+        });
+
+
+
+        @*jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -134,7 +216,7 @@
              postData: {
              }, loadComplete: function (data) {
              }
-         });
+         });*@
 
 
         $('#btnNuevoExamen').click(function () {
@@ -147,6 +229,12 @@
 
         });
 
+
+        $('#btnLimpiarExamen').click(function () {
+            location.reload();
+         });
+
+        
 
 
         $('#btnActivarDesactivar').click(function () {
@@ -337,21 +425,25 @@
                     </td>
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Descripcion</label>
+                            <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "50", data_val = "false", onkeyup = "aMays(event, this)" }) 
+                               @Html.DropDownListFor(model => model.Examen.EstActivo, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Examen.EstActivo), new { data_val = "false" }) 
                             </div>
                         </div>
                     </td>
                  </tr>
                  <tr class="formulario-fila">
                     <td class="span5">
+                        
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <label class="control-label" for="inputSuccess">Descripción</label>
                             <div class="controles">
-                               @Html.DropDownListFor(model => model.Examen.EstActivo, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Examen.EstActivo), new { data_val = "false" }) 
+                                @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "50", data_val = "false", onblur = "aMays(event, this)" }) 
+                            <div>Máx. 50 caracteres</div>
                             </div>
                         </div>
+                        
+                        
                     </td>
                 </tr>
                 <tr class="formulario-accion offset9">
@@ -362,7 +454,7 @@
                     }
                     @if (Visualicion.SI.Equals(Model.btnLimpiar))
                     {
-                      <button id ="btnLimpiarExamen" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                      <a id ="btnLimpiarExamen"  class="btn"><i class="icon-trash"></i> Limpiar</a>
                     }
                     </td>
                 </tr>

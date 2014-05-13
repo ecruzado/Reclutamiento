@@ -201,7 +201,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                             _categoriaRepository.Update(objCategoria);
 
-                            mensaje = "Se actulizo la categoría correctamente";
+                            mensaje = "Se actualizó la categoría correctamente";
                             resultado = true;
                     
                         }
@@ -566,7 +566,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Categoria = new Categoria();
 
             model = InicializarCategoriaEdit();
-           
+            model.Categoria = new Categoria();
+            model.Categoria.DesEstado = "Activo";
+              
+
+
+
             model.IndVisual = Visualicion.NO;
             Session["AccionCategoria"] = Accion.Nuevo;
             Session["Tabla1"] = null;
@@ -798,6 +803,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.Categoria = new Categoria();
                 var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
+                if (objCategoria!=null)
+                {
+                    if (IndicadorActivo.Activo.Equals(objCategoria.ESTACTIVO))
+                    {
+                        model.Categoria.DesEstado = "Activo";
+                    }
+                    else
+                    {
+                        model.Categoria.DesEstado = "Inactivo";
+                    }
+                }
+
+
                 model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
                 model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
                 model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
@@ -864,6 +882,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model = InicializarCategoriaEdit();
 
                 var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+
+                if (objCategoria != null)
+                {
+                    if (IndicadorActivo.Activo.Equals(objCategoria.ESTACTIVO))
+                    {
+                        model.Categoria.DesEstado = "Activo";
+                    }
+                    else
+                    {
+                        model.Categoria.DesEstado = "Inactivo";
+                    }
+                }
 
                 model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
                 model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;

@@ -281,7 +281,10 @@
             model = InicializarCriteriosEdit();
             model.Criterio.IndPagina = Accion.Nuevo;
             model.IndVisual = Visualicion.NO;
-            
+
+            model.Criterio.EstadoDes = "Activo";
+
+
             Session["TipoModo"] = 1;
             
             return View("Edit", model);
@@ -298,6 +301,22 @@
             model = InicializarCriteriosEdit();
             
             var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+
+            if (objCriterio!=null)
+            {
+
+                if (IndicadorActivo.Activo.Equals(objCriterio.IndicadorActivo))
+                {
+                    model.Criterio.EstadoDes = "Activo";
+                }
+                else
+                {
+                    model.Criterio.EstadoDes = "Inactivo";
+                }
+                
+            }
+            
+            
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
            // model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
             model.Criterio.TipoCriterio = objCriterio.TipoCriterio;
@@ -395,6 +414,22 @@
             model = InicializarCriteriosEdit();
 
             var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == Convert.ToInt32(id));
+
+
+            if (objCriterio != null)
+            {
+
+                if (IndicadorActivo.Activo.Equals(objCriterio.IndicadorActivo))
+                {
+                    model.Criterio.EstadoDes = "Activo";
+                }
+                else
+                {
+                    model.Criterio.EstadoDes = "Inactivo";
+                }
+
+            }
+            
             model.Criterio.IdeCriterio = objCriterio.IdeCriterio;
             //model.Criterio.TipoCalificacion = objCriterio.TipoCalificacion;
             model.Criterio.TipoCriterio = objCriterio.TipoCriterio;

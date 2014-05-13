@@ -111,7 +111,11 @@
         </tr>
         <tr>
             <td></td>
-            <td style="text-align:right" colspan="4"><a id="btnGuardarAlternativa" class="btn btn-info" ><i class="icon-hdd icon-white"></i> Grabar</a></td>
+            <td style="text-align:right" >
+                <a id="btnGuardarAlternativa" class="btn btn-info" >
+                    <i class="icon-hdd icon-white"></i> Grabar</a>
+                <a id="btnCancelar" class="btn" > Cancelar</a></td>
+            
         </tr>
 
     </table>
@@ -165,6 +169,12 @@
            // };
         });
         
+        $("#btnCancelar").click(function () {
+            parent.CerrarPopupAlternativa();
+        });
+
+
+
         $("#fileAlternativa").uploadify({
             'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
                     'script': '@Url.Action("Upload")',

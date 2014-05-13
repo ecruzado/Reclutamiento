@@ -454,8 +454,8 @@
 
                     { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
                     { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'center', sortable: false, width: 100, hidden: true },
-                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 350 },
-                    { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
+                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 280 },
+                    { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 380 },
                     { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
                     { name: 'TIEMPO', index: 'TIEMPO', align: 'left', sortable: false, width: 110 },
                     { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false, width: 110, hidden: true },
@@ -730,8 +730,8 @@
             colModel: [
 
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 750, editable: false, sortable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter, width: 750 },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 830, editable: false, sortable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter, width: 830 },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
                     { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden: true },
 
@@ -914,7 +914,13 @@
         var tipoCategoria = $('#Categoria_TIPCATEGORIA').val();
         
 
+        
 
+        if (tipoCategoria == "0") {
+            MostrarMensaje("Ingrese un tipo de categoría", "Sistema de Reclutamiento Y Seleccion de Personal");
+
+            return false;
+        }
 
         if (desCategoria.length==0) {
             MostrarMensaje("Ingrese una descripción", "Sistema de Reclutamiento Y Seleccion de Personal");
@@ -1161,7 +1167,7 @@
                 <h5>Categoría</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">@Model.Categoria.DesEstado</button>
                 </div>
             </div>
             <table class="formulario-busqueda">
@@ -1372,7 +1378,12 @@
 
             </table>
 
-
+            <div class="form-actions">
+               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+               {
+                 <a   class="btn btn-info"  id="btnGuardar"><i class=" icon-hdd icon-white"></i> Grabar</a>
+               }
+            </div>
 
             @if (Grilla.Tabla1.Equals(Session["Tabla1"]))
             {
@@ -1391,7 +1402,13 @@
                     </div>
                 }   
                     <div class="grilla-opciones">
+                        <h6>Subcategorías</h6>
+                        <div class="opciones">
+                        </div>
+                        <div style="clear:both"></div>
                     </div>
+                
+                
                      <div class="tabla-datos">
                         <table id="grdList">
                         </table>
@@ -1406,7 +1423,7 @@
                 if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                 {
                     <div class="grilla-opciones">
-                    <h6>Criterio</h6>
+                    <h6>Criterios</h6>
                         <div class="opciones">
                             <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                             <a id="btnSubirCriterio"  class ="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
@@ -1416,8 +1433,16 @@
                     <div style="clear:both"></div>
                     </div>
                 }
+            
+              
             <div class="grilla-opciones">
-            </div>  
+                <h6>Criterios</h6>
+                <div class="opciones">
+                </div>
+                <div style="clear:both"></div>
+            </div>
+
+
             <div class="tabla-datos">
                 <table id="grdListCriterio">
                 </table>
@@ -1442,11 +1467,7 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-               {
-                 <a   class="btn btn-info"  id="btnGuardar"><i class=" icon-hdd icon-white"></i> Grabar</a>
-                @*<input id="btnGuardar" type="submit" style="visibility: hidden" />*@
-               }
+              
 
             </div>
         </div>

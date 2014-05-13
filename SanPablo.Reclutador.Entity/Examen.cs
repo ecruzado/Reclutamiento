@@ -16,6 +16,9 @@ namespace SanPablo.Reclutador.Entity
         public virtual string TipExamenDes { get; set; }
         
         public virtual string EstActivo { get; set; }
+
+        public virtual string DesEstado { get; set; }
+
         public virtual string UsrCreacion { get; set; }
         public virtual DateTime FecCreacion { get; set; }
         public virtual string UsrModificacion { get; set; }
