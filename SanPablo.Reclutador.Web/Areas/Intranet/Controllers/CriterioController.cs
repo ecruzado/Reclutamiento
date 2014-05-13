@@ -947,6 +947,10 @@
         public ActionResult GetImage(int id)
         {
             var firstOrDefault = _criterioRepository.GetSingle(c => c.IdeCriterio == id);
+            if (firstOrDefault!=null)
+            {
+                
+            
             if (firstOrDefault.IMAGENCRIT != null)
             {
                 byte[] image = firstOrDefault.IMAGENCRIT;
@@ -955,6 +959,12 @@
             else
             {
                 return null;
+            }
+            }
+            else
+            {
+                return null;
+            
             }
         }
 

@@ -303,7 +303,7 @@
             colModel: [
     
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 700, editable: false, sortable: false },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 780, editable: false, sortable: false },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 100, editable: false },
                     { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, width: 700, editable: false, formatter: ImagenFormatter },
                     { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden:true },
@@ -610,6 +610,7 @@
                              @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
                              
                            } 
+                          <span>Máxima longitud de 2000 caracteres</span>
                            @* <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
                             </div>*@
@@ -663,6 +664,14 @@
                                                 </td>
                                             
                                    }
+                                   else
+                                   {   <td class="span5">
+                                         <div class="controles">
+                                           <img id="imgCriterio"  height ="150" width="150" />
+                                         </div>  
+                                       </td>
+                                   }
+
                                  </tr>
                                  
                                        
