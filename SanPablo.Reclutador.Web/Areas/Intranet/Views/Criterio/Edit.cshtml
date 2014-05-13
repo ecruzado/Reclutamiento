@@ -601,23 +601,22 @@
                       <div class="controles">
                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                            {
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onblur="aMays(event, this)"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onblur="aMays(event, this)"})  
                              
                            }
                            else
                            {
                              
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
                              
                            } 
-                          <span>Máxima longitud de 2000 caracteres</span>
-                           @* <div class="tex-error" style="font-size:12px;color:red">    
-                            @Html.ValidationMessageFor(model => model.Criterio.Pregunta)
-                            </div>*@
+                        
+                          <p style="font-size:11px" class="help-block">Máx. 2000 caracteres</p>
+                          
                           </div>
                        </td>
                         
-                       
+                      
                        
                              </tr>
                    
