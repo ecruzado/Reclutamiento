@@ -230,7 +230,7 @@
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 solicitudNuevoCargoViewModel.SolicitudNuevoCargo = solNuevoCargo;
                 actualizarDatosAreas(solicitudNuevoCargoViewModel, solNuevoCargo.IdeArea);
-                if ((solNuevoCargo.TipoEtapa == Etapa.Aceptado)||(solNuevoCargo.TipoEtapa==Etapa.Validado))
+                if ((solNuevoCargo.TipoEtapa == Etapa.Pendiente)||(solNuevoCargo.TipoEtapa==Etapa.Validado))
                 {
                     solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
                 }
