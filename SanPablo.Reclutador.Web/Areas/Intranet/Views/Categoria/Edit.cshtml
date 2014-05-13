@@ -1071,12 +1071,15 @@
                             @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                             {
                               @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255",onkeyup="aMays(event, this)" }) 
+                            //<span>Máx. 255 caracteres</span>
                             }
                             else
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly",onkeyup="aMays(event, this)" }) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly", onkeyup = "aMays(event, this)" }) 
+                            //<span>Máx. 255 caracteres</span>
                             }
-                             <div class="tex-error" style="font-size:12px;color:red">  
+                             
+                            <div class="tex-error" style="font-size:12px;color:red">  
                              @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
                              </div>
                         </div>
@@ -1108,7 +1111,7 @@
                      <td class="span5">
                             <label class="control-label" for="inputSuccess">Duración(Min)</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" ,onkeypress="return Funciones.isNumberKey(event)"    })  
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5", @readonly = "readonly", onkeypress = "return Funciones.isNumberKey(event)" })  
                             </div>
                     </td>
                     
@@ -1120,14 +1123,17 @@
                                 <div class="controles">
                                     
                                         @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                                {
-                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false",onkeyup="aMays(event, this)" }) 
-                                                }
+                                        {
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false", onkeyup = "aMays(event, this)" }) 
+                                          <span>Máx. 255 caracteres</span>   
+                                        }
                                         else
                                         {
-                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly",onkeyup="aMays(event, this)"}) 
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false", @readonly = "readonly", onkeyup = "aMays(event, this)" }) 
+                                            <span>Máx. 255 caracteres</span> 
                                         }
-                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
+                                            
+                                    @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>
                                             <tr id="nombreImagen">
                                    
@@ -1141,7 +1147,7 @@
                                             </tr>
        
                                              @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                            {
+                                             {
                                             <tr id="selecImagen">
                                               <td class="colEtiqueta">
                                                 <label class="etiquetaFormulario">Imagen</label>
@@ -1258,10 +1264,10 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                {
+               {
                  <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
                 <input id="btnGuardar" type="submit" style="visibility: hidden" />
-                }
+               }
 
             </div>
         </div>
