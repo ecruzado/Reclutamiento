@@ -58,7 +58,7 @@
         $("#spanEliminar").html("¿Desea Eliminar la Subcategoria?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var codCategoria = $("#Categoria_IDECATEGORIA").val();
                     var selr = $('#grdList').jqGrid('getGridParam', 'selrow');
                    
@@ -69,7 +69,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -80,7 +80,7 @@
         $("#spanEliminarSubCrit").html("¿Desea Eliminar el Criterio?")
         $('#divEliminarSubCrit').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     
                     var selsub = $('#grdList').jqGrid('getGridParam', 'selrow');
                     var selCritxSub = $('#grdListCriterio').jqGrid('getGridParam', 'selrow');
@@ -92,7 +92,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -276,7 +276,7 @@
             var codigoSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             
             if (codigoCategoria == null && codigoCategoria <= 0) {
-                MostrarMensaje('Ingrese una categorría', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Ingrese una categoría', "Sistema de Reclutamiento Y Seleccion de Personal");
                 return;
             }
 
@@ -353,9 +353,9 @@
         $('#ValCriterio').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "Confirmación",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     $.ajax({
                         data: {
                             test: $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow'),
@@ -376,7 +376,7 @@
                         }
                     });
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -862,10 +862,10 @@
         var title = "Habilitar"
         if (rowObject[14] == "Activo") {
             archivo = 'enabled.png';
-            var title = "Habilitar"
+            var title = "Habilitado"
         } else {
             archivo = 'enabled.png';
-            var title = "Habilitar"
+            var title = "Desabilitado"
         }
 
         var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
@@ -1006,11 +1006,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10",onkeyup="aMays(event, this)" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "10", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
                                 }
                                 
                                 <div class="tex-error" style="font-size:12px;color:red">    

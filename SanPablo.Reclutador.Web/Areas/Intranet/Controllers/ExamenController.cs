@@ -414,7 +414,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     //valida si ya existe en la Sede
                     var objCriterio = _examenPorCategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == codCategoria
                                                                               && x.Examen.IdeExamen == codigo
-                                                                              && x.Examen.IdeSede == IdeSede
+                                                                              
                                                                               );
 
                     if (objCriterio!=null && objCriterio.Count>0)

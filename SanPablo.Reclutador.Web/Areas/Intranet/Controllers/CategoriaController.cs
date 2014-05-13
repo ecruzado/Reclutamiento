@@ -664,7 +664,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
-        
+        /// <summary>
+        /// Lista principal de categoria
+        /// </summary>
+        /// <param name="grid">los rules</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ListaPrincipalCategoria(GridTable grid)
         {
@@ -693,7 +697,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
                     if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                     {
-                        where.Add(Expression.Like("DESCCATEGORIA", '%' + grid.rules[3].data + '%'));
+
+                        string desc = grid.rules[3].data;
+
+                        if (desc!=null)
+                        {
+                            where.Add(Expression.Like("DESCCATEGORIA", '%' + desc.Trim() + '%'));
+                        }
+                        
+                       
                     }
                   
                 }
