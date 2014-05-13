@@ -19,10 +19,9 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .WithMessage("Ingresar descripción subCategoría");
 
             RuleFor(x => x.TIEMPO)
-                .NotEqual(0)
+                .InclusiveBetween(1, 99999)
                 .WithMessage("Ingresar el periodo de duracíon");
 
-       
             
            
         }
