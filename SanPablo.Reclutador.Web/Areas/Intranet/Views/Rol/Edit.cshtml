@@ -282,11 +282,11 @@
                         
                           @if (Accion.Consultar.Equals(Model.Accion)) 
                           { 
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled",onkeyup="aMays(event, this)"})                      
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled",onblur="aMays(event, this)"})                      
                           }
                           else
                           {
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario", onkeyup="aMays(event, this)" })                     
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario", onblur="aMays(event, this)" })                     
                           }
                          
                         
@@ -304,11 +304,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled",onblur="aMays(event, this)" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        

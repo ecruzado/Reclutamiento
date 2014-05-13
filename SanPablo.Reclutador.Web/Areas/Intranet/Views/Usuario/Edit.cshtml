@@ -892,11 +892,11 @@
 
                     @if (Accion.Consultar.Equals(Model.Accion))
                     { 
-                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})                      
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})                      
                     }
                     else
                     {
-                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})                     
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})                     
                     }
                         <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Usuario.CodUsuario)
@@ -933,11 +933,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled",onblur="aMays(event, this)" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        
@@ -954,11 +954,11 @@
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                          }
                          else
                          {
-                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})  
                          }
 
                        
@@ -977,11 +977,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        <div class="tex-error" style="font-size:12px;color:red">         
@@ -996,11 +996,11 @@
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                          }
                          else
                          {
-                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})  
                          }
 
                         <div class="tex-error" style="font-size:12px;color:red">     
@@ -1018,11 +1018,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        <div class="tex-error" style="font-size:12px;color:red">         
