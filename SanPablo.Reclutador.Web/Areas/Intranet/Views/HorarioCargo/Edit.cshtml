@@ -11,6 +11,9 @@
     $('input[data-val=true]').on('blur', function () {
         $(this).valid();
     });
+
+    SanPablo.Numeros("Horario_PuntajeHorario");
+
 </script>
 
 @using (Html.BeginForm("Edit", "HorarioCargo", FormMethod.Post, new { @id = "horariosForm" }))
