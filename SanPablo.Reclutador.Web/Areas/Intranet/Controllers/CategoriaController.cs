@@ -1174,7 +1174,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (ListaCriterios != null && ListaCriterios.Count>0)
                     {
-                        jsonMessage.Mensaje = "No se puede eliminar el registro porque se encuentra asociado a Criterios";
+                        jsonMessage.Mensaje = "No se puede eliminar el registro debido a que tiene criterios asociados";
                         jsonMessage.Resultado = false;
                     }
                     else
