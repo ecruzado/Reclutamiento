@@ -359,12 +359,14 @@
 
         $('#updateDialog').dialog({
             autoOpen: false,
-            width: 600,
-            height: 300,
+            width: 390,
+            height: 280,
             resizable: false,
             modal: true,
             buttons: {
                 "Grabar": function () {
+
+                    $.blockUI({ message: null });
                     if ($("#frmPopupSubCategoria").validate().form()) {
                         $.post("@Url.Action("PopupSubCategoria", "Categoria", new { area = "Intranet"})",
                          $("#frmPopupSubCategoria").serialize(),
@@ -381,7 +383,7 @@
                            }
                        );
                     }
-
+                    $.unblockUI();
 
                 },
                 "Cancelar": function () {
@@ -399,6 +401,7 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
+                    
                     $('#ValCriterio').dialog('open');
                    
 
