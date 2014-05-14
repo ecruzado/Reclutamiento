@@ -10,8 +10,8 @@
 @using (Html.BeginForm("Idiomas", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "idiomasForm" }))
     {
     @Html.ValidationSummary(true)
-    <div class="alert alert-info" id="mensajeError" style="display:none" >
-        <a class="close" onclick="hide('mensajeError')" >×</a>
+    <div class="alert alert-info" id="mensajeErrorIdioma" style="display:none" >
+        <a class="close" onclick="hide('mensajeErrorIdioma')" >×</a>
          <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
     </div>
     

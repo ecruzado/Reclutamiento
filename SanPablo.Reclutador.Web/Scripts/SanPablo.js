@@ -657,6 +657,14 @@ SanPablo = {
             if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z\s|Ñ|ñ|]/g)) return false;
         });
     },
+
+    DatoEmpresa: function (selector) {
+        var $this = $('#' + selector);
+        $this.keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z\s|Ñ|ñ|.|]/g)) return false;
+        });
+    },
+
     LetrasSpace: function (selector) {
         var $this = $('#' + selector);
         $this.keypress(function (e) {

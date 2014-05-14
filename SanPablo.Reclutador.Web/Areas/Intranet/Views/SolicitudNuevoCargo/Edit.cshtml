@@ -320,40 +320,20 @@
     }
     function deshabilitarControles()
     {
-        //$('#SolicitudNuevoCargo_CodigoCargo').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_NombreCargo').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_DescripcionCargo').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_TipoRangoSalarial').attr("disabled", "disabled");
         $('#Dependencias').attr("disabled", "disabled");
         $('#Departamentos').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_IdeArea').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_IdeDependencia').attr("disabled", "disabled");
         $('#SolicitudNuevoCargo_IdeDepartamento').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_DescripcionEstudios').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_DescripcionCompetencias').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_DescripcionFunciones').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_DescripcionObservaciones').attr("disabled", "disabled");
-        //$('#SolicitudNuevoCargo_NumeroPosiciones').attr("disabled", "disabled");
-        //$('#btnEnviar').attr("disabled", "disabled");
 
     }
 
     function habilitarControles() {
-        //$('#SolicitudNuevoCargo_CodigoCargo').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_NombreCargo').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_DescripcionCargo').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_TipoRangoSalarial').removeAttr("disabled");
         $('#Dependencias').removeAttr("disabled");
         $('#Departamentos').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeDependencia').removeAttr("disabled");
         $('#SolicitudNuevoCargo_IdeDepartamento').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_DescripcionEstudios').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_DescripcionCompetencias').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_DescripcionFunciones').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_DescripcionObservaciones').removeAttr("disabled");
-        //$('#SolicitudNuevoCargo_NumeroPosiciones').removeAttr("disabled");
-        //$('#btnEnviar').removeAttr("disabled");
     }
 
     function mensajeRedirecciona(mensaje, titulo)
@@ -412,7 +392,7 @@
                             </td>
                             <td class="span5">
                                 <div class="">
-                                    <label   class="control-label" for="inputSuccess">Código de Cargo</label>
+                                    <label   class="control-label" for="inputSuccess">Código de Cargo<span class="text-error">*</span></label>
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
@@ -434,7 +414,7 @@
                         <tr class="formulario-fila">
                             <td></td>
                             <td style="width:140px">
-                                    <label style="width:130px" class="control-label" for="inputSuccess">Cargo</label>
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Cargo<span class="text-error">*</span></label>
                             </td>
                             <td style="width:260px">
                                     <div class="">
@@ -453,7 +433,7 @@
                             </td>
                             <td class="span5">
                                 <div class="">
-                                    <label class="control-label" for="selectError">Dependencia</label>
+                                    <label class="control-label" for="selectError">Dependencia<span class="text-error">*</span></label>
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
@@ -474,7 +454,7 @@
                         <tr class="formulario-fila">
                             <td></td>
                             <td style="width:140px">
-                                    <label style="width:130px" class="control-label" for="inputSuccess">Descripción</label>
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Descripción<span class="text-error">*</span></label>
                             </td>
                             <td style="width:260px">
                                     <div class="">
@@ -493,7 +473,7 @@
                             </td>
                              <td class="span5">
                                 <div class="">
-                                    <label class="control-label" for="inputSuccess">Departamento</label>
+                                    <label class="control-label" for="inputSuccess">Departamento<span class="text-error">*</span></label>
                                     <div class="controles">
                                         @*@Html.TextBoxFor(model => model.DepartamentoSession.NombreDepartamento, new { @disabled = "disabled" })
                                         @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)*@
@@ -516,7 +496,7 @@
                         <tr class="formulario-fila">
                             <td></td>
                             <td style="width:140px">
-                               <label style="width:130px" class="control-label" for="inputSuccess">Nro. Posiciones</label>
+                               <label style="width:130px" class="control-label" for="inputSuccess">Nro. Posiciones<span class="text-error">*</span></label>
                             </td>
                              <td style="width:260px">
                                     <div class="">
@@ -535,7 +515,7 @@
                             </td> 
                             <td class="span5">
                                 <div class="">
-                                    <label class="control-label" for="inputSuccess">Área</label>
+                                    <label class="control-label" for="inputSuccess">Área<span class="text-error">*</span></label>
                                     <div class="controles">
                                          @* @Html.TextBoxFor(model => model.AreaSession.NombreArea, new { @disabled = "disabled" })
                                         @Html.HiddenFor(model => model.AreaSession.IdeArea)*@
@@ -557,7 +537,7 @@
                         </tr>
                         <tr class="formulario-fila">
                             <td style="width:140px">
-                                    <label style="width:130px" class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)</label>
+                                    <label style="width:130px" class="control-label" for="inputSuccess">Rango salarial bruto propuesto (S/.)<span class="text-error">*</span></label>
 
                             </td>
                             <td style="width:260px">
@@ -586,11 +566,11 @@
             
             <div>
                 <div class="grilla-opciones">
-                <h6>Estudios</h6>
+                <h6>Estudios<span class="text-error">*</span></h6>
                 <div style="clear:both"></div>
                      @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                      {
-                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", maxlength = "255", onblur = "aMays(event, this)" })
+                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", maxlength = "255", onblur = "aMays(event, this)" })
                         <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionEstudios)
                         </div>
@@ -603,11 +583,11 @@
             </div>
             <div>
                 <div class="grilla-opciones">
-                <h6>Competencias</h6>
+                <h6>Competencias<span class="text-error">*</span></h6>
                 <div style="clear:both"></div>
                  @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                  {
-                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", maxlength = "255", onblur = "aMays(event, this)" })
+                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", maxlength = "255", onblur = "aMays(event, this)" })
                     <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                         @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias)
                     </div>
@@ -620,11 +600,11 @@
             </div>
             <div>
                 <div class="grilla-opciones">
-                <h6>Funciones</h6>
+                <h6>Funciones<span class="text-error">*</span></h6>
                 <div style="clear:both"></div>
                 @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                 {
-                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px; ", maxlength = "255", onblur = "aMays(event, this)" })
+                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none; ", maxlength = "255", onblur = "aMays(event, this)" })
                     <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                         @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
                     </div>
@@ -637,11 +617,11 @@
             </div>
             <div>
                 <div class="grilla-opciones">
-                <h6>Observaciones adicionales</h6>
+                <h6>Observaciones adicionales<span class="text-error">*</span></h6>
                 <div style="clear:both"></div>
                      @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                      {
-                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", maxlength = "255", onblur = "aMays(event, this)" })
+                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", maxlength = "255", onblur = "aMays(event, this)" })
                         <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
                         </div>
