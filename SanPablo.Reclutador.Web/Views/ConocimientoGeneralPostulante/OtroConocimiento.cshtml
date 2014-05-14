@@ -16,7 +16,7 @@
                     data: { tipoConocimiento: tipoConocimiento },
                     success: function (respuesta) {
                         $("select#nombreConocimiento").empty();
-                        $("select#nombreConocimiento").append("<option value='00'> Seleccionar </option>");
+                        $("select#nombreConocimiento").append("<option value='00'> SELECCIONE </option>");
                         $.each(respuesta, function (i, items) {
                             $("select#nombreConocimiento").append("<option value='"
                             + items.Valor + "'>" + items.Descripcion + "</option>");
@@ -42,6 +42,7 @@
                 label.style.display = "block";
             }
             else {
+                $('#ConocimientoGeneral_NombreConocimientoGeneral').val('');
                 campo.style.display = "none";
                 label.style.display = "none";
             }

@@ -640,7 +640,7 @@ SanPablo = {
     Alfanumerico: function (selector) {
         var $this = $('#' + selector);
         $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z]/g)) return false;
+            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z|Ñ|ñ|]/g)) return false;
         });
     },
 
@@ -654,13 +654,13 @@ SanPablo = {
     AlfanumericoSpace: function (selector) {
         var $this = $('#' + selector);
         $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z\s]/g)) return false;
+            if (String.fromCharCode(e.keyCode).match(/[^0-9a-zA-Z\s|Ñ|ñ|]/g)) return false;
         });
     },
     LetrasSpace: function (selector) {
         var $this = $('#' + selector);
         $this.keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^a-zA-Z\s]/g)) return false;
+            if (String.fromCharCode(e.keyCode).match(/[^a-zA-Z\s|Ñ|ñ|]/g)) return false;
         });
     },
 
