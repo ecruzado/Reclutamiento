@@ -1320,40 +1320,31 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             try
             {
-                // int idCriterio = Convert.ToInt32(grid.rules[0].data);
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<Categoria>();
+               
+                Categoria objCategoria;
+                List<Categoria> listaCategorias = new List<Categoria>();
+
+                objCategoria = new Categoria();
+
                 int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
-                if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
-                    (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
-                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                   )
+                
+                if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
                 {
+                    objCategoria.TIPCATEGORIA = (grid.rules[1].data == null ? "" : grid.rules[1].data);
+                }
                     
-
-                    if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))
-                    {
-                        where.Add(Expression.Eq("TIPCATEGORIA", grid.rules[1].data));
-                    }
-                    if (!"".Equals(grid.rules[2].data) && !"0".Equals(grid.rules[2].data))
-                    {
-                        where.Add(Expression.Eq("ESTACTIVO", "A"));
-                    }
-                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Like("DESCCATEGORIA", '%' + grid.rules[3].data + '%'));
-                    }
-
+                if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                {
+                    objCategoria.DESCCATEGORIA = (grid.rules[3].data == null ? "" : grid.rules[3].data).Trim();
                 }
 
-                where.Add(Expression.Eq("IdeSede", IdSede));
+                objCategoria.IdeSede = (IdSede==null?0:IdSede);
                 
+                listaCategorias = _categoriaRepository.ObtenerCategorias(objCategoria);
 
+                var generic = GetListar(listaCategorias,
+                                            grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-                var generic = Listar(_categoriaRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
-                var i = grid.page * grid.rows;
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
