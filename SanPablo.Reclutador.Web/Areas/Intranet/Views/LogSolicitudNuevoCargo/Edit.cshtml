@@ -2,6 +2,12 @@
 @{
     Layout = "";
 }
+
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         document.getElementById('AreaObservaciones').style.display = "block";
@@ -17,20 +23,29 @@
     });
     function mostrarObservacion()
     {
-        var aprobado = $('input[name="Aprobado"]:checked').val();
+       
+        var aprobado = $('input[name="LogSolicitudNuevoCargo.Aprobado"]:checked').val();
+        
         if (aprobado == "false") {
             document.getElementById('AreaObservaciones').style.display = "block";
         }
-        else { document.getElementById('AreaObservaciones').style.display = "none"; }
+        else {
+            document.getElementById('AreaObservaciones').style.display = "none";
+            $('#LogSolicitudNuevoCargo_Observacion').val('');
+        }
     }
+
+    $('textarea[data-val=true]').on('blur', function () {
+        $(this).valid();
+    });
 </script>
 
 
 @using (Html.BeginForm("Edit", "LogSolicitudNuevoCargo", FormMethod.Post, new { @id = "LogSolicitudNuevoCargoForm" }))
 {
     @Html.ValidationSummary(true)
-    <div class="alert alert-info" id="mensajeError" style="display:none" >
-        <a class="close" onclick="hide('mensajeError')" >×</a>
+    <div class="alert alert-info" id="mensajeErrorLog" style="display:none" >
+        <a class="close" onclick="hide('mensajeErrorLog')" >×</a>
          <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
     </div>
     <table style="margin-left:0px;">
@@ -41,11 +56,11 @@
             @Html.HiddenFor(model=>model.SolicitudNuevoCargo.IdeArea)
             <td class="colImput" style="width:50px"></td>
             <td>
-                @Html.RadioButtonFor(model => model.Aprobado, "true", new { @id="Aprobado"}) Aprobar
+                @Html.RadioButtonFor(model => model.LogSolicitudNuevoCargo.Aprobado, "true", new { @id="Aprobado"}) Aprobar
             </td>
             <td class="colImput" style="width:50px"></td>
             <td>
-                @Html.RadioButtonFor(model => model.Aprobado, "false", new { @id="Rechazado"}) @Html.DisplayFor(model =>model.rechazadoObservado)
+                @Html.RadioButtonFor(model => model.LogSolicitudNuevoCargo.Aprobado, "false", new { @id="Rechazado"}) @Html.DisplayFor(model =>model.rechazadoObservado)
             </td>
         </tr>
     </table>
@@ -56,9 +71,9 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Observación <span class="text-error">*</span></label>
             </td>
             <td>
-                @Html.TextAreaFor(model => model.LogSolicitudNuevoCargo.Observacion)
+                @Html.TextAreaFor(model => model.LogSolicitudNuevoCargo.Observacion, new { style = "resize:none;" , @onkey = "aMays(event, this)", onblur="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
-                @Html.ValidationMessageFor(model => model.LogSolicitudNuevoCargo.Observacion)
+                     @Html.ValidationMessageFor(model => model.LogSolicitudNuevoCargo.Observacion)
                 </div>
             </td>
         </tr>  

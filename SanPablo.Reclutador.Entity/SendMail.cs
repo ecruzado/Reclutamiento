@@ -96,7 +96,7 @@
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                                  "Requerimiento de " + tipoRequerimiento + " de " + cargo + " en la Sede " + Sede + " y se requiere de su Aprobación o Rechazo como Gerente" +
                                  " para continuar con el procedimiento.";
-                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Validado:
@@ -104,7 +104,7 @@
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                                  "Requerimiento de " + tipoRequerimiento + " de " + cargo + " en la Sede " + Sede + " y se requiere de su Aprobación o Rechazo como Gerente  General Adjunto" +
                                  " para continuar con el procedimiento.";
-                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Aprobado:
@@ -113,14 +113,14 @@
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Aprobado el Requerimiento de " + tipoRequerimiento + " de " + cargo +
                                      " en la Sede " + Sede + " y se requiere de la su aceptación como Encargado de Selección";
-                            asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                            asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                             break;
                         }
                         else
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                             " Requerimiento de " + tipoRequerimiento + " en la Sede " + Sede + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
-                            asunto = "Elaboracion de Perfil de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                            asunto = "Elaboracion de Perfil de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                             break;
                         }
                     }
@@ -129,35 +129,35 @@
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el Requerimiento de "
                                   + tipoRequerimiento + " en la Sede " + Sede + " y se requiere de su Aprobación/Rechazo como Solicitante para continuar con el procedimiento.";
-                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Aprobacion_Perfil:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Aprobado el perfil para el Requerimiento de " + tipoRequerimiento +" de " + cargo +
                                    " en la Sede " + Sede + " y se requiere de la publicación como Analista de Selección";
-                        asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Observado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se  ha Observado el perfil de " + tipoRequerimiento +" de " +cargo+
                                    " en la Sede " + Sede + " por el motivo de " + Observacion;
-                        asunto = "Aprobacion/Observado de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aprobacion/Observado de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Rechazado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que se ha Rechazado el Requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " por el motivo de " + Observacion;
-                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aprobacion/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Publicado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que respecto al Requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " se realizó la publicación del Cargo solicitado";
-                        asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
 
@@ -165,7 +165,7 @@
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que respecto al Requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " se realizo la aceptacion correspondiente";
-                        asunto = "Aceptación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede:" + Sede;
+                        asunto = "Aceptación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
 

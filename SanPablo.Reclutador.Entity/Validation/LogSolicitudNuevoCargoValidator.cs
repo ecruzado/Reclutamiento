@@ -8,9 +8,15 @@
     {
         public LogSolicitudNuevoCargoValidator()
         {
+
+            RuleFor(x => x.Observacion)
+                .NotEmpty().When(x => x.Aprobado.Equals(false))
+                .WithMessage("Debe ingresar una observación");
+            
             RuleFor(x => x.Observacion)
                 .Length(0,250)
-                .WithMessage("La observacion no puede tener mas de 250 caracteres");
+                .WithMessage("Máx. 250 caracteres");
+
 
          }
 
