@@ -60,7 +60,7 @@ $(document).ready(function () {
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Apellido paterno <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Pariente.ApellidoPaterno, new {  onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Pariente.ApellidoPaterno, new {  onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Pariente.ApellidoPaterno)
                 </div>
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 <label class="etiquetaFormulario" >Apellido materno <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Pariente.ApellidoMaterno, new {  onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Pariente.ApellidoMaterno, new {  onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Pariente.ApellidoMaterno)
                 </div>
@@ -82,7 +82,7 @@ $(document).ready(function () {
                 <label class="etiquetaFormulario"> Nombres<span class="text-error">*</span></label>
             </td>
             <td >
-                @Html.TextBoxFor(model => model.Pariente.Nombres, new { onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Pariente.Nombres, new { onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Pariente.Nombres)
                 </div>

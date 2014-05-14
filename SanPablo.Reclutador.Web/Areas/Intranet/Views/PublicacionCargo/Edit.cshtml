@@ -521,11 +521,11 @@
                          <div class="controls">
                              @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                              { 
-                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)", disabled="disabled"})
+                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onblur="aMays(event, this)", disabled="disabled"})
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onkeyup="aMays(event, this)"})
+                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onblur="aMays(event, this)"})
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                      @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
                                 </div>

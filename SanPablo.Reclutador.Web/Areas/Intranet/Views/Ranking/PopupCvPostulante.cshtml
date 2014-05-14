@@ -61,7 +61,7 @@
             </td>
             <td class="colInput" >
                
-                @Html.TextBoxFor(model => model.CvPostulanteEx.Nombre, new { @class = "textoFormulario" , maxlength="100",onkeyup="aMays(event, this)" })                      
+                @Html.TextBoxFor(model => model.CvPostulanteEx.Nombre, new { @class = "textoFormulario" , maxlength="100",onblur="aMays(event, this)" })                      
                 <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.Nombre)
                    </div>
@@ -75,7 +75,7 @@
             </td>
             <td class="colInput;input-xxlarge">
 
-                   @Html.TextBoxFor(model => model.CvPostulanteEx.ApePaterno, new { @class = "textoFormulario" , maxlength="100" ,onkeyup="aMays(event, this)"})                      
+                   @Html.TextBoxFor(model => model.CvPostulanteEx.ApePaterno, new { @class = "textoFormulario" , maxlength="100" ,onblur="aMays(event, this)"})                      
                    <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.ApePaterno)
                    </div>
@@ -87,7 +87,7 @@
                 <label class="etiquetaFormulario" >Apellido Materno<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.TextBoxFor(model => model.CvPostulanteEx.ApeMaterno, new { @class = "textoFormulario" , maxlength="100",onkeyup="aMays(event, this)" })                      
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.ApeMaterno, new { @class = "textoFormulario" , maxlength="100",onblur="aMays(event, this)" })                      
                <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.ApeMaterno)
                    </div>

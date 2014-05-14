@@ -204,7 +204,7 @@
                 <label class="etiquetaFormulario" style="width:160px">Empresa <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreEmpresa, new { onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreEmpresa)
                 </div>
@@ -228,7 +228,7 @@
                 <label class="etiquetaFormulario" style="width:160px;display:none" id="labelOtro"> Otros </label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "display:none;", onkeyup="aMays(event, this)" })
+                @Html.TextBoxFor(model => model.Experiencia.NombreCargoTrabajo, new { @id = "NombreCargo_otro", @style = "display:none;", onblur="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreCargoTrabajo )
                 </div>
@@ -291,7 +291,7 @@
                 <label class="etiquetaFormulario" style="width:160px" >Funciones </label>
             </td>
             <td class="colInput">
-                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;" , onkeyup="aMays(event, this)" })
+                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;" , onblur="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FuncionesDesempenadas)
                 </div>
@@ -309,7 +309,7 @@
                 <label class="etiquetaFormulario" style="width:160px" > Nombre del Referente <span class="text-error">*</span></label>
             </td>
             <td class="colInput" >
-                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Experiencia.NombreReferente, new { maxlength="100", onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.NombreReferente)
                 </div>
@@ -339,7 +339,7 @@
                 <label class="etiquetaFormulario" > Correo de referencia  </label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Experiencia.CorreoReferente, new {onkeyup="aMays(event, this)"})
+                @Html.TextBoxFor(model => model.Experiencia.CorreoReferente, new {onblur="aMays(event, this)"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.CorreoReferente)
                 </div>

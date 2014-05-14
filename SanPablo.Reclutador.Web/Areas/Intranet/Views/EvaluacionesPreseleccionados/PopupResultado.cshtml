@@ -152,7 +152,7 @@
                 </td>
                <td>
                    @Html.TextAreaFor(model => model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen, new { style = "display: none;" })
-                   @Html.TextAreaFor(model => model.ReclutaPersonaExamen.ComentarioResultado, new { rows="5", style="width:250px", maxlength = "255", onkeyup = "aMays(event, this)" })
+                   @Html.TextAreaFor(model => model.ReclutaPersonaExamen.ComentarioResultado, new { rows="5", style="width:250px", maxlength = "255", onblur = "aMays(event, this)" })
                    <div class="tex-error" style="font-size:12px;color:red">    
                       @Html.ValidationMessageFor(model => model.ReclutaPersonaExamen.ComentarioResultado)
                    </div>

@@ -20,7 +20,7 @@
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , onkeyup="aMays(event, this)" })
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , onblur="aMays(event, this)" })
             <div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Cargo.ObjetivoCargo)
             </div>
@@ -38,7 +38,7 @@
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", onkeyup="aMays(event, this)" })
+            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", onblur="aMays(event, this)" })
             <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Cargo.FuncionCargo)
             </div>

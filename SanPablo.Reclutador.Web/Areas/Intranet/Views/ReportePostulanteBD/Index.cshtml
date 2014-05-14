@@ -339,7 +339,7 @@
                         <div class="">
                             <label class="control-label" for="selectError">Busqueda rápida<span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onkeyup="aMays(event, this)"})
+                                @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onblur="aMays(event, this)"})
                             </div>
                         </div>
                     </td>

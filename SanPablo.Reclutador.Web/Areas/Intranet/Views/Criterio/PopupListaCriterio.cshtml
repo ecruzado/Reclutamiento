@@ -172,7 +172,7 @@
                 <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" ,onkeyup="aMays(event, this)"})  
+                @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" ,onblur="aMays(event, this)"})  
             </td>
             <td style="width:40px;"></td>
            @* <td class="colEtiqueta">

@@ -328,11 +328,11 @@
                                 
                                 @if (Accion.Consultar.Equals(Session["Accion"]))
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled",onkeyup="aMays(event, this)"}) 
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled",onblur="aMays(event, this)"}) 
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" })     
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onblur="aMays(event, this)" })     
                                 }
 
                                 
@@ -347,11 +347,11 @@
                             <div class="controles">
                                  @if (Accion.Consultar.Equals(Session["Accion"]))
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled",onkeyup="aMays(event, this)" }) 
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled",onblur="aMays(event, this)" }) 
                                  }
                                  else
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onkeyup="aMays(event, this)" })  
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onblur="aMays(event, this)" })  
                                  }
                             </div>
                         

@@ -457,7 +457,7 @@
                             <label class="etiquetaFormulario" for="txtapellidopaterno">Apellido paterno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario", onkeyup="aMays(event, this)"})
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoPaterno, new { @class = "textoFormulario", onblur="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoPaterno)
                             </div>
@@ -468,7 +468,7 @@
                             <label class="etiquetaFormulario" for="txtapellidomaterno">Apellido materno <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" , onkeyup="aMays(event, this)"})
+                            @Html.TextBoxFor(model => model.Postulante.ApellidoMaterno, new { @class = "textoFormulario" , onblur="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ApellidoMaterno)
                             </div>
@@ -479,7 +479,7 @@
                             <label class="etiquetaFormulario" for="txtprimernombre">Primer nombre <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario", onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.PrimerNombre, new { @class = "textoFormulario", onblur="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.PrimerNombre)
                             </div>
@@ -490,7 +490,7 @@
                             <label class="etiquetaFormulario" for="txtsegundonombre">Segundo nombre</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.SegundoNombre, new { @class = "textoFormulario" ,onblur="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.SegundoNombre)
                             </div>
@@ -532,7 +532,7 @@
                             <label class="etiquetaFormulario" for="txtnumerolicencia">Licencia de conducir</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.NumeroLicencia, new { @class = "textoFormulario" , maxlength="9", onblur="aMays(event, this)" })
 
                         </td>
                         <td style="width:40px;"></td>
@@ -554,7 +554,7 @@
                             <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px" , onkeyup="aMays(event, this)" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px" , onblur="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Observacion)
                             </div>
@@ -612,7 +612,7 @@
                             <label class="etiquetaFormulario" for="txtnombrevia">Nombre de vía</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.NombreVia, new { @class = "textoFormulario" ,onblur="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NombreVia)
                             </div>
@@ -636,7 +636,7 @@
                         <td class="colInput">
                             @Html.TextBoxFor(model => model.Postulante.NumeroDireccion, new { @class = "input-xmini",maxlength="4" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interior&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", onkeyup="aMays(event, this)"})                           
+                            @Html.TextBoxFor(model => model.Postulante.InteriorDireccion, new { @class = "input-xmini", maxlength="4", onblur="aMays(event, this)"})                           
                             
                         </td>
                     </tr>
@@ -656,10 +656,10 @@
                             <label class="etiquetaFormulario" for="txtnumero">Manzana </label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , onkeyup="aMays(event, this)"})
+                            @Html.TextBoxFor(model => model.Postulante.Manzana, new { @class = "input-xmini" , maxlength="2" , onblur="aMays(event, this)"})
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lote&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.Lote, new { @class = "input-xmini" , maxlength="2" , onblur="aMays(event, this)" })
                             
                         </td>
                     </tr>
@@ -678,9 +678,9 @@
                             <label class="etiquetaFormulario" for="txtnumero">Bloque</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.Bloque, new { @class = "input-xmini", maxlength="3", onblur="aMays(event, this)" })
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Etapa&nbsp;&nbsp;&nbsp;
-                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="3", onkeyup="aMays(event, this)" })
+                            @Html.TextBoxFor(model => model.Postulante.Etapa, new { @class = "input-xmini", maxlength="3", onblur="aMays(event, this)" })
                             
                         </td>
                     </tr>
@@ -722,7 +722,7 @@
                             <label class="etiquetaFormulario" for="setipozona">Nombre zona</label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.NombreZona, new { onkeyup="aMays(event, this)"})
+                             @Html.TextBoxFor(model => model.Postulante.NombreZona, new { onblur="aMays(event, this)"})
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.NombreZona)
                             </div>
@@ -736,7 +736,7 @@
                             <label class="etiquetaFormulario" for="txttelefonofijo">Referencia <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion, new {onkeyup="aMays(event, this)"} )
+                             @Html.TextBoxFor(model => model.Postulante.ReferenciaDireccion, new {onblur="aMays(event, this)"} )
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.ReferenciaDireccion)
                             </div>
