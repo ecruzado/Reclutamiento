@@ -14,7 +14,7 @@
         <tr>
             <td class="colEtiqueta">
                 @Html.HiddenFor(model => model.Cargo.IdeCargo)
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Ofrecimientos <span class="text-error">*</span></label>
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.Ofrecimiento.TipoOfrecimiento, new SelectList(Model.Ofrecimientos, "Valor", "Descripcion", Model.Ofrecimiento.TipoOfrecimiento))
