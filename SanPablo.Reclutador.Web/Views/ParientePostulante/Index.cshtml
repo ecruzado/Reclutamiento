@@ -58,14 +58,15 @@
                             $.post('@Url.Action("Edit", "ParientePostulante")',
                                 $("#parientePostulanteForm").serialize(),
                                 function (respuesta) {
-                                    if (respuesta.msj) {
+                                    if (respuesta.Resultado) {
                                         $("#updateDialog").dialog("close");
                                         location.reload(true);
 
                                     }
                                     else {
                                         var mensj = document.getElementById("mensajeError");
-                                       // mensj.style.display = "block";
+                                        mensj.innerHTML = respuesta.Mensaje;
+                                        mensj.style.display = "block";
                                     }
                                 }
                             );

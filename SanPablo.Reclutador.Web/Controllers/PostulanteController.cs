@@ -408,15 +408,41 @@
         {
             ActionResult result = null;
             bool valido = false;
+
+            var PostulanteSession = new Postulante();
+            if (IdePostulante != null)
+            {
+                PostulanteSession = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+            }
+            
             int nroDocumentos = _postulanteRepository.CountByExpress(x => x.NumeroDocumento == dni);
 
-            if (nroDocumentos == 0)
+            if (PostulanteSession != null)
             {
-                valido = true;
+                if (dni == PostulanteSession.NumeroDocumento)
+                {
+                    valido = true;
+                }
+                else
+                {
+                    if (nroDocumentos > 0)
+                    {
+                        valido = false;
+                    }
+                    else
+                    { valido = true; }
+                }
             }
             else
             {
-                valido = false;
+                if (nroDocumentos == 0)
+                {
+                    valido = true;
+                }
+                else
+                {
+                    valido = false;
+                }
             }
             return result = Json(valido);
         }

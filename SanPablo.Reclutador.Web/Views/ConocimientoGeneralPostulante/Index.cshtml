@@ -320,53 +320,89 @@
             // btn Eliminar
             $('#btnEliminar').click(function () {
                 var ideConocimiento = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
-                    title: 'Sistema de Reclutamiento y Selección de Personal',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () {
-                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
-                        },
-                        "Cancelar": function () { $(this).dialog("close"); }
-                    }
-                });
+                if (ideConocimiento != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () {
+                                eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                            },
+                            "Cancelar": function () { $(this).dialog("close"); }
+                        }
+                    });
 
-                return false;
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccionar un item a eliminar');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
             $('#btnEliminarIdioma').click(function () {
                 var ideConocimiento = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
-                    title: 'Sistema de Reclutamiento y Selección de Personal',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () {
-                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
-                        },
-                        "Cancelar": function () { $(this).dialog("close"); }
-                    }
-                });
+                if (ideConocimiento != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () {
+                                eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                            },
+                            "Cancelar": function () { $(this).dialog("close"); }
+                        }
+                    });
 
-                return false;
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccionar un item a eliminar');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
             $('#btnEliminarOtro').click(function () {
                 var ideConocimiento = jQuery('#grdOtrosConocimientos').jqGrid('getGridParam', 'selrow');
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
-                    title: 'Sistema de Reclutamiento y Selección de Personal',
-                    modal: true,
-                    buttons: {
-                        "Eliminar": function () {
-                            eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
-                        },
-                        "Cancelar": function () { $(this).dialog("close"); }
-                    }
-                });
+                if (ideConocimiento != null) {
+                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Eliminar": function () {
+                                eliminarConocimiento(ideConocimiento); $(this).dialog("close"); location.reload(true)
+                            },
+                            "Cancelar": function () { $(this).dialog("close"); }
+                        }
+                    });
 
-                return false;
+                    return false;
+                }
+                else {
+                    $("#spanMensaje").html('Seleccionar un item a eliminar');
+                    $("#divMensaje").dialog({
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () { $(this).dialog("close"); }
+                        }
+                    });
+                }
             });
 
         });

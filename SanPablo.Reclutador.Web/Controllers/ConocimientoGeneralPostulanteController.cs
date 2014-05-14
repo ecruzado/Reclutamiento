@@ -193,28 +193,37 @@
                     conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoGeneralPostulante;
                     return View(conocimientoGeneralViewModel);
                 }
-                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                if (!existeOfimatica(conocimientoGeneralPostulante))
                 {
-                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                    conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
-                    conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
-                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                    {
+                        conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                        conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
+                        var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                        postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                        _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                        conocimientoEdit.TipoNombreOfimatica = conocimientoGeneralPostulante.TipoNombreOfimatica;
+                        conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                        conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
+                        conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                        conocimientoEdit.FechaModificacion = FechaModificacion;
+                        conocimientoEdit.UsuarioModificacion = usuarioActual;
+                        _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
-                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                    conocimientoEdit.TipoNombreOfimatica = conocimientoGeneralPostulante.TipoNombreOfimatica;
-                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                    conocimientoEdit.TipoConocimientoOfimatica = conocimientoGeneralPostulante.TipoConocimientoOfimatica;
-                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-                    conocimientoEdit.FechaModificacion = FechaModificacion;
-                    conocimientoEdit.UsuarioModificacion = usuarioActual;
-                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
-                    objJsonMessage.Resultado = true;
+                    objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                    objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
                 
@@ -226,6 +235,125 @@
                 objJsonMessage.Resultado = false;
                 return Json(objJsonMessage);
             }
+        }
+
+        /// <summary>
+        /// validar si estiste el conocimiento ofimatica 
+        /// </summary>
+        /// <param name="ofimatica"></param>
+        /// <returns></returns>
+        public bool existeOfimatica(ConocimientoGeneralPostulante ofimatica)
+        {
+            bool respuesta = false;
+            int nroOfimatica = 0;
+
+            if (ofimatica.IdeConocimientoGeneralPostulante == 0)
+            {
+                nroOfimatica = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoOfimatica == ofimatica.TipoConocimientoOfimatica
+                                                                                       && x.TipoNombreOfimatica == ofimatica.TipoNombreOfimatica
+                                                                                       && x.TipoNivelConocimiento == ofimatica.TipoNivelConocimiento);
+            }
+            else
+            {
+                nroOfimatica = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoOfimatica == ofimatica.TipoConocimientoOfimatica
+                                                                                       && x.TipoNombreOfimatica == ofimatica.TipoNombreOfimatica
+                                                                                       && x.TipoNivelConocimiento == ofimatica.TipoNivelConocimiento
+                                                                                       && x.IdeConocimientoGeneralPostulante != ofimatica.IdeConocimientoGeneralPostulante);
+            }
+            if (nroOfimatica > 0)
+            {
+                respuesta = true;
+            }
+            else
+            {
+                respuesta = false;
+            }
+            
+
+            return respuesta;
+ 
+        }
+
+        /// <summary>
+        /// validar si estiste el conocimiento idioma
+        /// </summary>
+        /// <param name="idioma"></param>
+        /// <returns></returns>
+        public bool existeIdioma(ConocimientoGeneralPostulante idioma)
+        {
+            bool respuesta = false;
+            int nroIdioma = 0;
+
+            if (idioma.IdeConocimientoGeneralPostulante == 0)
+            {
+                nroIdioma = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoIdioma == idioma.TipoConocimientoIdioma
+                                                                                       && x.TipoIdioma == idioma.TipoIdioma
+                                                                                       && x.TipoNivelConocimiento == idioma.TipoNivelConocimiento);
+            }
+            else
+            {
+                nroIdioma = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoIdioma == idioma.TipoConocimientoIdioma
+                                                                                       && x.TipoIdioma == idioma.TipoIdioma
+                                                                                       && x.TipoNivelConocimiento == idioma.TipoNivelConocimiento
+                                                                                       && x.IdeConocimientoGeneralPostulante != idioma.IdeConocimientoGeneralPostulante);
+            }
+            if (nroIdioma > 0)
+            {
+                respuesta = true;
+            }
+            else
+            {
+                respuesta = false;
+            }
+
+
+            return respuesta;
+
+        }
+
+        /// <summary>
+        /// validar si estiste el conocimiento otro
+        /// </summary>
+        /// <param name="otroConocimiento"></param>
+        /// <returns></returns>
+        public bool existeOtro(ConocimientoGeneralPostulante otroConocimiento)
+        {
+            bool respuesta = false;
+            int nroOtro = 0;
+
+            if (otroConocimiento.IdeConocimientoGeneralPostulante == 0)
+            {
+                nroOtro = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoGeneral == otroConocimiento.TipoConocimientoGeneral
+                                                                                       && x.TipoNombreConocimientoGeneral == otroConocimiento.TipoNombreConocimientoGeneral
+                                                                                       && x.NombreConocimientoGeneral == otroConocimiento.NombreConocimientoGeneral
+                                                                                       && x.TipoNivelConocimiento == otroConocimiento.TipoNivelConocimiento);
+            }
+            else
+            {
+                nroOtro = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                                       && x.TipoConocimientoGeneral == otroConocimiento.TipoConocimientoGeneral
+                                                                                       && x.TipoNombreConocimientoGeneral == otroConocimiento.TipoNombreConocimientoGeneral
+                                                                                       && x.NombreConocimientoGeneral == otroConocimiento.NombreConocimientoGeneral
+                                                                                       && x.TipoNivelConocimiento == otroConocimiento.TipoNivelConocimiento
+                                                                                       && x.IdeConocimientoGeneralPostulante != otroConocimiento.IdeConocimientoGeneralPostulante);
+            }
+            if (nroOtro > 0)
+            {
+                respuesta = true;
+            }
+            else
+            {
+                respuesta = false;
+            }
+
+
+            return respuesta;
+
         }
 
         public ConocimientoPostulanteGeneralViewModel InicializarConocimiento()
@@ -303,29 +431,38 @@
                 }
                 else
                 {
-                    if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                    if (!existeIdioma(conocimientoGeneralPostulante))
                     {
-                        conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                        conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
-                        conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
-                        var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                        postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                        _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                        objJsonMessage.Resultado = true;
-                        return Json(objJsonMessage);
+                        if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                        {
+                            conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                            conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                            conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
+                            var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                            postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                            _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
 
+                        }
+                        else
+                        {
+                            var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                            conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                            conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
+                            conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
+                            conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                            conocimientoEdit.FechaModificacion = FechaModificacion;
+                            conocimientoEdit.UsuarioModificacion = usuarioActual;
+                            _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
+                        }
                     }
                     else
                     {
-                        var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                        conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                        conocimientoEdit.TipoIdioma = conocimientoGeneralPostulante.TipoIdioma;
-                        conocimientoEdit.TipoConocimientoIdioma = conocimientoGeneralPostulante.TipoConocimientoIdioma;
-                        conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-                        conocimientoEdit.FechaModificacion = FechaModificacion;
-                        conocimientoEdit.UsuarioModificacion = usuarioActual;
-                        _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
-                        objJsonMessage.Resultado = true;
+                        objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                        objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
                 }
@@ -402,30 +539,39 @@
                     conocimientoGeneralViewModel.ConocimientoGeneral = conocimientoGeneralPostulante;
                     return View(conocimientoGeneralViewModel);
                 }
-                if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                if (!existeOtro(conocimientoGeneralPostulante))
                 {
-                    conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
-                    conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
-                    conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
-                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                    postulante.agregarConocimiento(conocimientoGeneralPostulante);
-                    _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    if (conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante == 0)
+                    {
+                        conocimientoGeneralPostulante.EstadoActivo = IndicadorActivo.Activo;
+                        conocimientoGeneralPostulante.FechaCreacion = FechaCreacion;
+                        conocimientoGeneralPostulante.UsuarioCreacion = usuarioActual;
+                        var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                        postulante.agregarConocimiento(conocimientoGeneralPostulante);
+                        _conocimientoGeneralPostulanteRepository.Add(conocimientoGeneralPostulante);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
 
+                    }
+                    else
+                    {
+                        var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
+                        conocimientoEdit.TipoNombreConocimientoGeneral = conocimientoGeneralPostulante.TipoNombreConocimientoGeneral;
+                        conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
+                        conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
+                        conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
+                        conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
+                        conocimientoEdit.FechaModificacion = FechaModificacion;
+                        conocimientoEdit.UsuarioModificacion = usuarioActual;
+                        _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
-                    var conocimientoEdit = _conocimientoGeneralPostulanteRepository.GetSingle(x => x.IdeConocimientoGeneralPostulante == conocimientoGeneralPostulante.IdeConocimientoGeneralPostulante);
-                    conocimientoEdit.TipoNombreConocimientoGeneral = conocimientoGeneralPostulante.TipoNombreConocimientoGeneral;
-                    conocimientoEdit.TipoNivelConocimiento = conocimientoGeneralPostulante.TipoNivelConocimiento;
-                    conocimientoEdit.TipoConocimientoGeneral = conocimientoGeneralPostulante.TipoConocimientoGeneral;
-                    conocimientoEdit.NombreConocimientoGeneral = conocimientoGeneralPostulante.NombreConocimientoGeneral;
-                    conocimientoEdit.IndicadorCertificacion = conocimientoGeneralPostulante.IndicadorCertificacion;
-                    conocimientoEdit.FechaModificacion = FechaModificacion;
-                    conocimientoEdit.UsuarioModificacion = usuarioActual;
-                    _conocimientoGeneralPostulanteRepository.Update(conocimientoEdit);
-                    objJsonMessage.Resultado = true;
+                    objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                    objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
                 

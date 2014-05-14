@@ -92,47 +92,66 @@
 
 
         [HttpPost]
-        public JsonResult Edit([Bind(Prefix = "Pariente")]ParientePostulante parientePostulante)
+        public ActionResult Edit([Bind(Prefix = "Pariente")]ParientePostulante parientePostulante)
         {
-            //var result = new JsonResult();
-            var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
-            string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
+                string usuarioActual = objetoUsuario.CodUsuario.Length <= 15 ? objetoUsuario.CodUsuario : objetoUsuario.CodUsuario.Substring(0, 15);
 
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
-            }
-            if (parientePostulante.IdeParientePostulante == 0)
-            {
-                if (IdePostulante != 0)
+                if (!ModelState.IsValid)
                 {
-                    parientePostulante.EstadoActivo = IndicadorActivo.Activo;
-                    parientePostulante.FechaCreacion = FechaCreacion;
-                    parientePostulante.UsuarioCreacion = usuarioActual;
-                    var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
-                    postulante.agregarPariente(parientePostulante);
-                    _parientePostulanteRepository.Add(parientePostulante);
+                    //return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                    var parientePostulanteViewModel = InicializarParientes();
+                    parientePostulanteViewModel.Pariente = parientePostulante;
+                    return View(parientePostulanteViewModel);
+                }
+
+                if (!existePariente(parientePostulante))
+                {
+                    if (parientePostulante.IdeParientePostulante == 0)
+                    {
+                       
+                        parientePostulante.EstadoActivo = IndicadorActivo.Activo;
+                        parientePostulante.FechaCreacion = FechaCreacion;
+                        parientePostulante.UsuarioCreacion = usuarioActual;
+                        var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
+                        postulante.agregarPariente(parientePostulante);
+                        _parientePostulanteRepository.Add(parientePostulante);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+
+                    }
+                    else
+                    {
+                        var parienteEdit = _parientePostulanteRepository.GetSingle(x => x.IdeParientePostulante == parientePostulante.IdeParientePostulante);
+                        parienteEdit.TipoDeVinculo = parientePostulante.TipoDeVinculo;
+                        parienteEdit.Nombres = parientePostulante.Nombres;
+                        parienteEdit.FechaNacimiento = parientePostulante.FechaNacimiento;
+                        parienteEdit.ApellidoPaterno = parientePostulante.ApellidoPaterno;
+                        parienteEdit.ApellidoMaterno = parientePostulante.ApellidoMaterno;
+                        parienteEdit.FechaModificacion = FechaModificacion;
+                        parienteEdit.UsuarioModificacion = usuarioActual;
+                        _parientePostulanteRepository.Update(parienteEdit);
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
-                    return Json(new { msj = false }, JsonRequestBehavior.DenyGet);
+                    objJsonMessage.Mensaje = "ERROR: No puede este tipo de pariente dos veces" ;
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
                 }
-                
             }
-            else
+            catch (Exception ex)
             {
-                var parienteEdit = _parientePostulanteRepository.GetSingle(x => x.IdeParientePostulante == parientePostulante.IdeParientePostulante);
-                parienteEdit.TipoDeVinculo = parientePostulante.TipoDeVinculo;
-                parienteEdit.Nombres = parientePostulante.Nombres;
-                parienteEdit.FechaNacimiento = parientePostulante.FechaNacimiento;
-                parienteEdit.ApellidoPaterno = parientePostulante.ApellidoPaterno;
-                parienteEdit.ApellidoMaterno = parientePostulante.ApellidoMaterno;
-                parienteEdit.FechaModificacion = FechaModificacion;
-                parienteEdit.UsuarioModificacion = usuarioActual;
-                _parientePostulanteRepository.Update(parienteEdit);
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             }
-            return Json(new { msj = true }, JsonRequestBehavior.DenyGet);
 
         }
 
@@ -162,6 +181,38 @@
            
 
             return result;
+        }
+
+        public bool existePariente(ParientePostulante pariente)
+        {
+            bool respuesta = false;
+            int nroPariente = 0;
+            if (TipoVinculo.Hijo != pariente.TipoDeVinculo)
+            {
+                if (pariente.IdeParientePostulante == 0)
+                {
+                    nroPariente = _parientePostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                               && x.TipoDeVinculo == pariente.TipoDeVinculo);
+
+                }
+                else
+                {
+                    nroPariente = _parientePostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
+                                                                               && x.TipoDeVinculo == pariente.TipoDeVinculo
+                                                                               && x.IdeParientePostulante != pariente.IdeParientePostulante);
+                }
+                if (nroPariente > 0)
+                {
+                    respuesta = true;
+                }
+                else
+                {
+                    respuesta = false;
+                }
+
+            }
+            return respuesta;
+
         }
 
 

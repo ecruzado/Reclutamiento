@@ -14,7 +14,7 @@
             SanPablo.NumeroTelefono('Experiencia_NumeroFijoInstitucionReferente');
 
             SanPablo.LetrasSpace('Experiencia_NombreReferente');
-
+            SanPablo.AlfanumericoSpace('Experiencia_FuncionesDesempenadas');
             SanPablo.DateSpecial('Experiencia_FechaInicio');
             SanPablo.DateSpecial('Experiencia_FechaFin');
 
@@ -288,7 +288,7 @@
     <table style="margin-left:20px;">
         <tr>
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" style="width:160px" >Funciones </label>
+                <label class="etiquetaFormulario" style="width:160px" >Funciones <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;" , onkeyup="aMays(event, this)" })
