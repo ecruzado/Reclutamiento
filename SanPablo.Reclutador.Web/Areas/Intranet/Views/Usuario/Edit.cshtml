@@ -290,7 +290,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
 
                 var selr = jQuery('#grdListaTipoReqInicial').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListaTipoReqInicial').jqGrid('getRowData', selr);
@@ -304,7 +304,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -317,7 +317,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
 
                 var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
 
@@ -328,7 +328,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -342,7 +342,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
               
                 var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
               
@@ -353,7 +353,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -462,7 +462,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSedeNivel").validate().form()) {
                     $.ajax({
                         type: "POST",
@@ -481,7 +481,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -494,7 +494,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSede").validate().form()) {
                     $.ajax({
 
@@ -516,7 +516,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -529,7 +529,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSedeRol").validate().form()) {
                     $.ajax({
                        
@@ -556,7 +556,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -622,7 +622,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmTipoReq").validate().form()) {
                     $.ajax({
                         data: {
@@ -644,7 +644,7 @@
                         });
                     }
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

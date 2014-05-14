@@ -29,7 +29,7 @@
             </td>
             <td class="colInput" >
                
-                @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "textoFormulario" , maxlength="100",placeholder="Correo Electrónico",onkeyup="aMays(event, this)" })                      
+                @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "textoFormulario" , maxlength="100",placeholder="Correo Electrónico",onblur="aMays(event, this)" })                      
                 <div class="tex-error" style="font-size:12px;color:red">    
                 @Html.ValidationMessageFor(model => model.UsuarioExtranet.Usuario )
                 </div>

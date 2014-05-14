@@ -76,7 +76,7 @@
         $("#spanEliminar").html("¿Desea eliminar el registro?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
                     var estado = rowData.CodigoEstado;
@@ -87,7 +87,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -99,7 +99,7 @@
         $("#spanActivarDesactivar").html("¿Desea Activar/Desactivar el registro?")
         $('#divActivarDesactivar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
                     var estado = rowData.FLGESTADO;
@@ -110,7 +110,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

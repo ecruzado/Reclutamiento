@@ -79,7 +79,7 @@
             Sistema de Reclutamiento y Seleccion de Personal
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
-        @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "input-block-level" ,placeholder="Usuario",onkeyup="aMays(event, this)"}) 
+        @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "input-block-level" ,placeholder="Usuario",onblur="aMays(event, this)"}) 
         <div class="tex-error" style="font-size:12px;color:red">         
           @Html.ValidationMessageFor(model => model.UsuarioExtranet.Usuario)
         </div>

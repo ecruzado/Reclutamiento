@@ -34,7 +34,7 @@
             </td>
             <td class="colInput" >
                
-                @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "textoFormulario" , maxlength="100",onkeyup="aMays(event, this)" })                      
+                @Html.TextBoxFor(model => model.UsuarioExtranet.Usuario, new { @class = "textoFormulario" , maxlength="100",onblur="aMays(event, this)" })                      
                 <div class="tex-error" style="font-size:12px;color:red">    
                 @Html.ValidationMessageFor(model => model.UsuarioExtranet.Usuario )
                 </div>

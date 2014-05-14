@@ -334,7 +334,7 @@
         $("#spanConfirmacion").html("¿Desea Activar/Desactivar?")
         $('#confirmacion').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
                     if (selr != null) {
@@ -344,7 +344,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

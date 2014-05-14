@@ -258,7 +258,7 @@
                 modal: true,
                 title: "Sistema de Reclutamiento Y Seleccion de Personal",
                 buttons: {
-                    "Si": function () {
+                    "Aceptar": function () {
                         if ($("#frmPopuExclucion").validate().form()) {
                             $.ajax({
                                 type: "POST",
@@ -280,7 +280,7 @@
             });
             }
             },
-              "No": function () {
+              "Cancelar": function () {
               $(this).dialog("close");
                }
               }

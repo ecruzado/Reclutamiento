@@ -61,7 +61,7 @@
         $("#spanEliminar").html("¿Desea Eliminar el registro?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = $('#grdListRol').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdListRol').jqGrid('getRowData', selr);
                    
@@ -72,7 +72,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

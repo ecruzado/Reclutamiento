@@ -44,7 +44,7 @@
     $("#message").html("¿Esta seguro de Activar/Desactivar la solicitud?")
     $('#updateDialog').dialogo({
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
                 var estado = rowData.TipEstado;
@@ -59,7 +59,7 @@
                 }
                 
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }

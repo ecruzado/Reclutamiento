@@ -1026,11 +1026,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         if (contExamen == 1)
                         {
-                            mensaje = "La categoría esta relacionada con el examen: " + nombExamen;
+                            mensaje = "No se puede eliminar la categoría debido a que se encuentra relacionada con el examen: " + nombExamen;
                         }
                         else
                         {
-                            mensaje = "La categoría esta relacionada con los examenes: " + nombExamen;
+                            mensaje = "No se puede eliminar la categoría debido a que se encuentra relacionada con los examenes: " + nombExamen;
                         }
                        
 
@@ -1050,11 +1050,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         if (listaSubcategoria.Count==1)
                         {
-                            mensaje = "La categoría contiene : " + listaSubcategoria.Count + " subcategoría";
+                            mensaje = "No se puede eliminar la categoría debido a que contiene: " + listaSubcategoria.Count + " Subcategoría";
                         }
                         else
                         {
-                            mensaje = "La categoría contiene : " + listaSubcategoria.Count + " subcategorías";
+                            mensaje = "No se puede eliminar la categoría debido a que contiene: " + listaSubcategoria.Count + " subcategorías";
                         }
                        
 

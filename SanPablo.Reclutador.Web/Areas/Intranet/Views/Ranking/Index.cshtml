@@ -73,7 +73,7 @@
              modal: true,
              title: "Sistema de Reclutamiento Y Seleccion de Personal",
              buttons: {
-                 "Si": function () {
+                 "Aceptar": function () {
                       var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
                       var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
                       var idPostulante = rowData.IdePostulante;
@@ -86,7 +86,7 @@
                      }
                      $(this).dialog("close");
                  },
-                 "No": function () {
+                 "Cancelar": function () {
                      $(this).dialog("close");
                  }
              }
@@ -99,7 +99,7 @@
              modal: true,
              title: "Sistema de Reclutamiento Y Seleccion de Personal",
              buttons: {
-                 "Si": function () {
+                 "Aceptar": function () {
 
                      var selr = jQuery('#grdListCvPostulante').jqGrid('getGridParam', 'selrow');
 
@@ -110,7 +110,7 @@
                      }
                      $(this).dialog("close");
                  },
-                 "No": function () {
+                 "Cancelar": function () {
                      $(this).dialog("close");
                  }
              }
@@ -197,7 +197,7 @@
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     if ($("#frmPopupCvPostulante").validate().form()) {
                         $.ajax({
                             type: "POST",
@@ -219,7 +219,7 @@
                 });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
             $(this).dialog("close");
             }
             }
