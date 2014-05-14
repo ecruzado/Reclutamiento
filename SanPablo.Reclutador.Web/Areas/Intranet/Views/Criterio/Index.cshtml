@@ -37,7 +37,8 @@
                     <label class="etiquetaFormulario" for="inputSuccess">Pregunta</label>
                     </td>
                     <td class="colInput">
-                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false", onkeyup = "aMays(event, this)",@maxlength = "50" })  
+                        @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false", onblur = "aMays(event, this)" ,@maxlength = "50" })  
+                    
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
@@ -333,7 +334,7 @@
         $("#spanConfirmacion").html("¿Desea Activar/Desactivar?")
         $('#confirmacion').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
                     if (selr != null) {
@@ -343,7 +344,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }

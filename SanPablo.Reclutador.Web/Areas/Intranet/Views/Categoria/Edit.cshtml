@@ -15,6 +15,7 @@
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/uploadify/swfobject.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.blockUI.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -111,6 +112,16 @@
         });
 
 
+        $('#btnGuardar').click(function () {
+          
+            if (validacion()) {
+                EditCategoria();
+            }
+
+        });
+
+        
+
         $('#btnEditarSubCategoria').click(function () {
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -125,14 +136,19 @@
 
 
 
+        
+        $('#btnSubirSubCategoria').click(function () {
 
-        $('#btnBajarSubCategoria').click(function () {
+            $.blockUI({ message: null });
+
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var gridArr = $('#grdList').getDataIDs();
 
             if (selr != null && selr > 0) {
-                
+
+               
+
                 $.ajax({
                     data: {
                         ideCategoria: codigoCategoria,
@@ -144,31 +160,41 @@
                     url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
                     
                     traditional: true,
-                    success: function () {
+                    success: function (data) {
                         if (data.redirecciona) {
                             SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                         }
+                        
                         flag = selr;
                         $('#grdList').trigger('reloadGrid');
+                        $.unblockUI();
+                    },
+                    error: function (e) {
+                        $.unblockUI();
+                        console.log(e);
                     }
                 });
 
 
             } else {
+                $.unblockUI();
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
         
 
 
-        $('#btnSubirSubCategoria').click(function () {
+        $('#btnBajarSubCategoria').click(function () {
+
+            $.blockUI({ message: null });
+
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var gridArr = $('#grdList').getDataIDs();
 
             if (selr != null && selr > 0) {
                 
-
+               
                 $.ajax({
                     data: {
                         ideCategoria: codigoCategoria,
@@ -180,21 +206,30 @@
                     url: '@Url.Action("OrdenarSubCategorias", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
-                      
+                        
                         flag = selr;
                         
                         $('#grdList').trigger('reloadGrid');
-                       
+                        $.unblockUI();
+                    },
+                    error: function (e) {
+                        $.unblockUI();
+                        console.log(e);
                     }
                 });
 
             } else {
+                $.unblockUI();
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
 
 
-        $('#btnBajarCriterio').click(function () {
+        $('#btnSubirCriterio').click(function () {
+
+
+            $.blockUI({ message: null });
+
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             
@@ -203,6 +238,9 @@
           
 
             if (rowData.CodigoCrit != null && rowData.CodigoCrit > 0) {
+
+
+              
 
                 $.ajax({
                     data: {
@@ -213,27 +251,37 @@
 
                     },
                     type: "POST",
-                   
-
                     url: '@Url.Action("OrdenarCriterios", "Categoria", new { area="Intranet"})',
                     traditional: true,
                     success: function (data) {
                         if (data.redirecciona) {
                             SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                         }
+                        
                         flag2 = selr;
                         $('#grdListCriterio').trigger('reloadGrid');
+                        $.unblockUI();
+                    },
+                    error: function (e) {
+                        $.unblockUI();
+                        console.log(e);
                     }
+
                 });
 
 
             } else {
+                $.unblockUI();
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
         
         
-        $('#btnSubirCriterio').click(function () {
+        $('#btnBajarCriterio').click(function () {
+
+            $.blockUI({ message: null });
+
+
             var codigoCategoria = $("#Categoria_IDECATEGORIA").val();
             var selrSub = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
 
@@ -242,6 +290,9 @@
 
 
             if (rowData.CodigoCrit != null && rowData.CodigoCrit > 0) {
+
+               
+
 
                 $.ajax({
                     data: {
@@ -256,14 +307,24 @@
                     //url: "/Intranet/Categoria/OrdenarCriterios",
                     traditional: true,
                     success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                        }
+                       
                         flag2 = selr;
-                        
                         $('#grdListCriterio').trigger('reloadGrid');
+
+                        $.unblockUI();
+                    },
+                    error: function (e) {
+                        $.unblockUI();
+                        console.log(e);
                     }
                 });
 
 
             } else {
+                $.unblockUI();
                 MostrarMensaje('Seleccione una subcategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
             }
         });
@@ -393,8 +454,8 @@
 
                     { name: 'IDESUBCATEGORIA', index: 'IDESUBCATEGORIA', align: 'center', sortable: false, hidden: true, width: 10 },
                     { name: 'ESTACTIVO', index: 'ESTACTIVO', align: 'center', sortable: false, width: 100, hidden: true },
-                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 350 },
-                    { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 300 },
+                    { name: 'NOMSUBCATEGORIA', index: 'NOMSUBCATEGORIA', align: 'center', sortable: false, width: 280 },
+                    { name: 'DESCSUBCATEGORIA', index: 'DESCSUBCATEGORIA', align: 'left', sortable: false, width: 380 },
                     { name: 'ORDENIMPRESION', index: 'ORDENIMPRESION', align: 'left', sortable: false, width: 150 },
                     { name: 'TIEMPO', index: 'TIEMPO', align: 'left', sortable: false, width: 110 },
                     { name: 'FECCREACION', index: 'FECCREACION', align: 'left', sortable: false, width: 110, hidden: true },
@@ -451,6 +512,7 @@
         if (dato == 1) {
             $("#ejemplo").hide();
             $("#Categoria_TEXTOEJEMPLO").hide();
+            $("#maxTextoEjemplo").hide();
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
             $("#verImagen").hide();
@@ -458,6 +520,7 @@
         if (dato == "I") {
             $("#ejemplo").show();
             $("#Categoria_TEXTOEJEMPLO").hide();
+            $("#maxTextoEjemplo").hide();
             $("#nombreImagen").show();
             $("#selecImagen").show();
             $("#verImagen").show();
@@ -465,6 +528,8 @@
         if (dato == "T") {
             $("#ejemplo").show();
             $("#Categoria_TEXTOEJEMPLO").show();
+            $("#maxTextoEjemplo").show();
+            
             $("#nombreImagen").hide();
             $("#selecImagen").hide();
             $("#verImagen").hide();
@@ -478,6 +543,7 @@
             if (vvalor == "01") {
                 $("#ejemplo").show();
                 $("#Categoria_TEXTOEJEMPLO").show();
+                $("#maxTextoEjemplo").show();
                 $("#nombreImagen").hide();
                 $("#selecImagen").hide();
                 $("#verImagen").hide();
@@ -485,7 +551,7 @@
             else if (vvalor == "02") {
                 $("#ejemplo").show();
                 $("#Categoria_TEXTOEJEMPLO").hide();
-               
+                $("#maxTextoEjemplo").hide();
                 $("#nombreImagen").show();
                 $("#selecImagen").show();
                 $("#verImagen").show();
@@ -493,11 +559,21 @@
             else {
                 $("#ejemplo").hide();
                 $("#Categoria_TEXTOEJEMPLO").hide();
+                $("#maxTextoEjemplo").hide();
                 $("#nombreImagen").hide();
                 $("#selecImagen").hide();
                 $("#verImagen").hide();
             }
         });
+
+
+       
+
+
+
+
+
+
 
         jQuery("#grdListCriterio").jqGrid({
             datatype: function (postdata) {
@@ -654,8 +730,8 @@
             colModel: [
 
                     { name: 'IdeAlternativa', index: 'IdeAlternativa', align: 'left', width: 10, editable: false, sortable: false, hidden: true },
-                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 750, editable: false, sortable: false },
-                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter, width: 750 },
+                    { name: 'NombreAlternativa', index: 'NombreAlternativa', align: 'left', width: 830, editable: false, sortable: false },
+                    { name: 'RutaDeImagen', index: 'RutaDeImagen', align: 'center', sortable: false, editable: false, formatter: ImagenFormatter, width: 830 },
                     { name: 'Peso', index: 'Peso', align: 'left', sortable: false, width: 50, editable: false },
                     { name: 'TipoModo', index: 'TipoModo', align: 'center', sortable: false, width: 80, editable: false, hidden: true },
 
@@ -786,6 +862,34 @@
     }
 
 
+  
+    function EditCategoria() {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Edit", "Categoria")',
+                    data: $("#frmCategoria").serialize(),
+                    traditional: true,
+                    success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }
+
+
+                            if (data.Resultado) {
+                                information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                            }
+                            if (!data.Resultado) {
+                                //notificacionExito(data.Mensaje);
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            }
+
+                        }
+                });
+    }
+    
+
+
     function ImagenFormatter(cellvalue, options, rowObject) {
 
         var strboton = '<input type="button" value="Imagen.." onclick="mostrarsubirarchivoimagen();" class="btn btn-mini" />';
@@ -801,40 +905,93 @@
         var nombreImagen = $('#Categoria_NOMBREIMAGEN').val();
 
 
+        
+        var desCategoria = $('#Categoria_DESCCATEGORIA').val();
+        var instrucciones = $('#Categoria_INSTRUCCIONES').val();
+        var nombCategoria = $('#Categoria_NOMCATEGORIA').val();
+        
+
         var tipoCategoria = $('#Categoria_TIPCATEGORIA').val();
         
+
+        
+
+        if (tipoCategoria == "0") {
+            MostrarMensaje("Ingrese un tipo de categoría", "Sistema de Reclutamiento Y Seleccion de Personal");
+
+            return false;
+        }
+
+        if (desCategoria.length==0) {
+            MostrarMensaje("Ingrese una descripción", "Sistema de Reclutamiento Y Seleccion de Personal");
+           
+            return false;
+        }
+
+        if (instrucciones.length == 0) {
+            MostrarMensaje("Ingrese Instrucciones", "Sistema de Reclutamiento Y Seleccion de Personal");
+           
+            return false;
+        }
+
+        if (nombCategoria.length == 0) {
+            MostrarMensaje("Ingrese el nombre de categoría", "Sistema de Reclutamiento Y Seleccion de Personal");
+          
+            return false;
+        }
+
+
+
+
+
+
+
         if ("02"!=tipoCategoria) {
+
+
+            if (tipo == 0) {
+                MostrarMensaje("Ingrese una tipo de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+               
+                return false;
+            }
 
             if ("02" == tipo) {
                 if (nombreImagen.length > 0) {
 
-                    $('#btnGuardar').trigger('click');
+                    //$('#btnGuardar').trigger('click');
+                    // EditCategoria();
+                    return true;
                 } else {
                     MostrarMensaje("Ingrese una imagen de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+                    return false;
                 }
             
             }
             if ("01" == tipo) {
             
                 if (texto.length > 0) {
-                    $('#btnGuardar').trigger('click');
+                    //$('#btnGuardar').trigger('click');
+                    //EditCategoria();
+                    return true;
                 } else {
+                    
                     MostrarMensaje("Ingrese una texto de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
+              
+                    return false;
                 }
             }
         
-            if (tipo==0) {
-                MostrarMensaje("Ingrese una tipo de ejemplo", "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
+            
         
         
         }
 
         if ("02" == tipoCategoria) {
-            $('#btnGuardar').trigger('click');
+            //$('#btnGuardar').trigger('click');
+            return true;
         }
         
-
+        return true;
        
     
     }
@@ -971,6 +1128,32 @@
 
 
 
+    function information(selectorDiv, selectorSpan, msg, title, selr) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaCategoria(selr);
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+
+
+    function RedireccionaCategoria(selr) {
+        var loc = window.location.href
+        console.log(loc);
+
+       window.location = '@Url.Action("btnEditarDetalle", "Categoria", new { id = ""})' + '/' + selr;
+    }
+
+
 </script>
 }
 
@@ -984,7 +1167,7 @@
                 <h5>Categoría</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">@Model.Categoria.DesEstado</button>
                 </div>
             </div>
             <table class="formulario-busqueda">
@@ -1006,11 +1189,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20",onblur ="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20", @readonly = "readonly" ,onkeyup="aMays(event, this)"})    
+                                  @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "20", @readonly = "readonly" ,onblur="aMays(event, this)"})    
                                 }
                                 
                                 <div class="tex-error" style="font-size:12px;color:red">    
@@ -1027,11 +1210,11 @@
                                 
                                 @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255",onkeyup="aMays(event, this)" }) 
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255",onblur="aMays(event, this)" }) 
                                 }
                                 else
                                 {
-                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255", @readonly = "readonly" ,onkeyup="aMays(event, this)"}) 
+                                  @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "255", @readonly = "readonly" ,onblur="aMays(event, this)"}) 
                                 }
                                 
                                  <div class="tex-error" style="font-size:12px;color:red"> 
@@ -1070,13 +1253,17 @@
                          
                             @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255",onkeyup="aMays(event, this)" }) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255",onblur="aMays(event, this)" }) 
+                                //<span>Máx. 255 caracteres</span>
                             }
                             else
                             {
-                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly",onkeyup="aMays(event, this)" }) 
+                              @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255", @readonly = "readonly", onblur = "aMays(event, this)" }) 
+                                //<span>Máx. 255 caracteres</span>
                             }
-                             <div class="tex-error" style="font-size:12px;color:red">  
+                            <div><span>Máx. 255 caracteres</span></div>
+                             
+                            <div class="tex-error" style="font-size:12px;color:red">  
                              @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
                              </div>
                         </div>
@@ -1108,7 +1295,7 @@
                      <td class="span5">
                             <label class="control-label" for="inputSuccess">Duración(Min)</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5",@readonly = "readonly" ,onkeypress="return Funciones.isNumberKey(event)"    })  
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5", @readonly = "readonly", onkeypress = "return Funciones.isNumberKey(event)" })  
                             </div>
                     </td>
                     
@@ -1120,14 +1307,18 @@
                                 <div class="controles">
                                     
                                         @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                                {
-                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false",onkeyup="aMays(event, this)" }) 
-                                                }
+                                        {
+                                          @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false", onblur = "aMays(event, this)" }) 
+                                           
+                                        }
                                         else
                                         {
-                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false" ,@readonly="readonly",onkeyup="aMays(event, this)"}) 
+                                           @Html.TextAreaFor(model => model.Categoria.TEXTOEJEMPLO, new { @maxlength = "255", rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", data_val = "false", @readonly = "readonly", onblur = "aMays(event, this)" }) 
+                                          
                                         }
-                                        @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
+                                        <div id="maxTextoEjemplo">Máx. 255 caracteres</div>      
+                                      
+                                    @* @Html.TextBoxFor(model => model.image, new { type = "file", accept = "image/*" })*@
                                         <table>
                                             <tr id="nombreImagen">
                                    
@@ -1141,7 +1332,7 @@
                                             </tr>
        
                                              @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                                            {
+                                             {
                                             <tr id="selecImagen">
                                               <td class="colEtiqueta">
                                                 <label class="etiquetaFormulario">Imagen</label>
@@ -1187,7 +1378,12 @@
 
             </table>
 
-
+            <div class="form-actions">
+               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
+               {
+                 <a   class="btn btn-info"  id="btnGuardar"><i class=" icon-hdd icon-white"></i> Grabar</a>
+               }
+            </div>
 
             @if (Grilla.Tabla1.Equals(Session["Tabla1"]))
             {
@@ -1204,9 +1400,19 @@
                         </div>
                         <div style="clear:both"></div>
                     </div>
-                }   
+                }
+                else
+                {
+                    
+                  
                     <div class="grilla-opciones">
+                        <h6>Subcategorías</h6>
+                        <div class="opciones">
+                        </div>
+                        <div style="clear:both"></div>
                     </div>
+                } 
+                
                      <div class="tabla-datos">
                         <table id="grdList">
                         </table>
@@ -1221,7 +1427,7 @@
                 if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
                 {
                     <div class="grilla-opciones">
-                    <h6>Criterio</h6>
+                    <h6>Criterios</h6>
                         <div class="opciones">
                             <a id="btnAgregarCriterio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                             <a id="btnSubirCriterio"  class ="btn btn-small btn-info" title="Subir"><i class="icon-arrow-up icon-white"></i></a>
@@ -1231,8 +1437,20 @@
                     <div style="clear:both"></div>
                     </div>
                 }
-            <div class="grilla-opciones">
-            </div>  
+                else
+                {
+                     <div class="grilla-opciones">
+                        <h6>Criterios</h6>
+                        <div class="opciones">
+                        </div>
+                        <div style="clear:both"></div>
+                    </div> 
+                }
+            
+              
+          
+
+
             <div class="tabla-datos">
                 <table id="grdListCriterio">
                 </table>
@@ -1257,11 +1475,7 @@
             
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Categoria", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
-               @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
-                {
-                 <a   class="btn btn-info"   onclick="validacion()"><i class=" icon-hdd icon-white"></i> Grabar</a>
-                <input id="btnGuardar" type="submit" style="visibility: hidden" />
-                }
+              
 
             </div>
         </div>

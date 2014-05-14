@@ -580,7 +580,7 @@
         $("#spanEliminar").html("¿Desea eliminar el registro?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdListReemplazosReq').jqGrid('getRowData', selr);
                     var idReq = rowData.IdeSolReqPersonal;
@@ -592,7 +592,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -640,7 +640,7 @@
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
 
 
                     $('#DialogAprobReem').dialog('close');
@@ -683,7 +683,7 @@
                         });
 
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -727,7 +727,7 @@
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                                 
                             
                    
@@ -750,7 +750,7 @@
                    
                 
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -1239,7 +1239,7 @@
                         <td class="span5">
                         <label class="control-label" for="inputSuccess">Observaciones</label>
                         <div class="controles">
-                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" ,onkeyup="aMays(event, this)"}) 
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" ,onblur="aMays(event, this)"}) 
                         </div>
                         </td>                    
                     </tr>

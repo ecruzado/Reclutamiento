@@ -61,7 +61,7 @@
         $("#spanEliminar").html("¿Desea Eliminar el registro?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = $('#grdListRol').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdListRol').jqGrid('getRowData', selr);
                    
@@ -72,7 +72,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -199,14 +199,14 @@
                       <label class="etiquetaFormulario" for="inputSuccess">Nombre</label>
                     </td>
                     <td class="colInput">
-                        @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,data_val = "false" ,onkeyup="aMays(event, this)"})  
+                        @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,data_val = "false" ,onblur="aMays(event, this)"})  
                     </td>
                      <td style="width:40px;"></td>
                      <td class="colEtiqueta">
                         <label class="etiquetaFormulario" for="selectError">Descripción</label>
                      </td>   
                      <td class="colInput">
-                         @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario" ,data_val = "false" , onkeyup="aMays(event, this)"})  
+                         @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario" ,data_val = "false" , onblur="aMays(event, this)"})  
                      </td>
                 <tr/>
                  <tr>

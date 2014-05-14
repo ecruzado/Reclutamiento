@@ -121,7 +121,7 @@
              <label class="etiquetaFormulario" >Descripción</label>
             </td>   
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onkeyup="aMays(event, this)"}) 
+                @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onblur="aMays(event, this)"}) 
             </td>
         </tr>
         @*<tr >
@@ -136,7 +136,7 @@
         <tr >
             <td class="opciones" style="text-align:right" colspan="6">
                 <a id="btnBuscarCategoria" class="btn btn-small btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                <a id="btnLimpiarCategoria" class="btn btn-small btn-info"><i class="icon-trash"></i> Limpiar</a>
+                <a id="btnLimpiarCategoria" class="btn"><i class="icon-trash"></i> Limpiar</a>
                  <div style="clear:both"></div>
             </td>
         </tr>

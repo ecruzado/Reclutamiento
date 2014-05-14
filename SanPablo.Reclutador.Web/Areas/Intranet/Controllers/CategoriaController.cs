@@ -30,6 +30,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICriterioRepository _criterioRepository;
         private ICriterioPorSubcategoriaRepository _criterioPorSubcategoriaRepository;
         private IExamenRepository _examenRepository;
+        private IExamenPorCategoriaRepository _examenPorCategoriaRepository;
 
         public CategoriaController(ICategoriaRepository categoriaRepository, 
             IDetalleGeneralRepository detalleGeneralRepository, 
@@ -37,7 +38,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ISubcategoriaRepository subcategoriaRepository,
             ICriterioRepository criterioRepository,
             ICriterioPorSubcategoriaRepository criterioPorSubcategoriaRepository,
-            IExamenRepository examenRepository
+            IExamenRepository examenRepository,
+            IExamenPorCategoriaRepository examenPorCategoriaRepository
             )
         {
             _categoriaRepository = categoriaRepository;
@@ -47,6 +49,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _criterioRepository = criterioRepository;
             _criterioPorSubcategoriaRepository = criterioPorSubcategoriaRepository;
             _examenRepository = examenRepository;
+            _examenPorCategoriaRepository = examenPorCategoriaRepository;
         }
 
         [AuthorizeUser]
@@ -104,11 +107,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
+
+        /// <summary>
+        /// Edicion de categoria update y Insert
+        /// </summary>
+        /// <param name="model">modelo</param>
+        /// <returns></returns>
         [HttpPost]
-        [ValidarSesion]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult Edit(CategoriaViewModel model)
         {
-            
+
+            JsonMessage objJson = new JsonMessage();
             ValidationResult result = null;
             CategoriaValidator validator = new CategoriaValidator();
             CategoriaViewModel categoriaViewModel = new CategoriaViewModel();
@@ -116,176 +126,199 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJsonMessage = new JsonMessage();
             DateTime Hoy = DateTime.Today;
             string fecha_actual = Hoy.ToString("DD/MM/YYYY");
+            string mensaje = "";
+            Boolean resultado = false;
 
-            int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+            //try
+            //{
 
+                    int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
+                    //result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
+                    if ("02".Equals(model.Categoria.TIPOEJEMPLO))
+                    {
+                        Session["Tipo"] = "I";
+                    }
+                    if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+                    {
+                        Session["Tipo"] = "T";
+                    }
 
-            result = validator.Validate(model.Categoria, "DESCCATEGORIA", "NOMCATEGORIA", "TIPCATEGORIA", "INSTRUCCIONES");
-            if ("02".Equals(model.Categoria.TIPOEJEMPLO))
-            {
-                Session["Tipo"] = "I";
-            }
-            if ("01".Equals(model.Categoria.TIPOEJEMPLO))
-            {
-                Session["Tipo"] = "T";
-            }
-
-            categoriaViewModel = InicializarCategoriaEdit();
-            if (!result.IsValid)
-            {
-                return View(categoriaViewModel);
-            }
+                    categoriaViewModel = InicializarCategoriaEdit();
+                    //if (!result.IsValid)
+                    //{
+                    //    return View(categoriaViewModel);
+                    //}
 
            
-            string fullPath = null;
-            if (!string.IsNullOrEmpty(model.NombreTempImgCategoria))
-            {
-                string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-                string directoryPath = "Archivos\\Imagenes\\";
-                fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTempImgCategoria));
-
-                using (Stream s = System.IO.File.OpenRead(fullPath))
-                {
-                    byte[] buffer = new byte[s.Length];
-                    s.Read(buffer, 0, (int)s.Length);
-                    int len = (int)s.Length;
-                    s.Close();
-                    model.Categoria.IMAGENEJEMPLO = buffer;
-                }
-            }
-
-
-            if (Accion.Nuevo.Equals(Session["AccionCategoria"]))
-            {
-
-                if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-                {
-                    var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-                    objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
-                    objCategoria.FECCREACION = Hoy;
-                    objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
-                    objCategoria.FECMODIFICA = Hoy;
-                    objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
-                    objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
-                    objCategoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
-                    objCategoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
-                    objCategoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
-                    if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+                    string fullPath = null;
+                    if (!string.IsNullOrEmpty(model.NombreTempImgCategoria))
                     {
-                        objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
-                    }
-                    else if (("02".Equals(model.Categoria.TIPOEJEMPLO)))
-                    {
-                        if (model.NombreTempImgCategoria != null)
+                        string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                        string directoryPath = "Archivos\\Imagenes\\";
+                        fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, model.NombreTempImgCategoria));
+
+                        using (Stream s = System.IO.File.OpenRead(fullPath))
                         {
-                            objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
-                            objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
+                            byte[] buffer = new byte[s.Length];
+                            s.Read(buffer, 0, (int)s.Length);
+                            int len = (int)s.Length;
+                            s.Close();
+                            model.Categoria.IMAGENEJEMPLO = buffer;
                         }
-                        
                     }
-                    objCategoria.IdeSede = IdSede;
-
-                    _categoriaRepository.Update(objCategoria);
-                    
-                }
-                else
-                {
-                    model.Categoria.USRCREACION = UsuarioActual.NombreUsuario;
-                    model.Categoria.FECCREACION = Hoy;
-                    model.Categoria.USRMODIFICA = UsuarioActual.NombreUsuario;
-                    model.Categoria.FECMODIFICA = Hoy;
-                    //model.Categoria.ORDENIMPRESION = "1";
-                    model.Categoria.ESTACTIVO = IndicadorActivo.Activo;
 
 
-                    var listaCategoria = _categoriaRepository.All();
-                    int maxOrdenImp = 0;
-                    if (listaCategoria!=null && listaCategoria.Count>0)
+                    if (Accion.Nuevo.Equals(Session["AccionCategoria"]))
                     {
-                        maxOrdenImp = (listaCategoria.Select(d => d.ORDENIMPRESION).Max()) == null ? 0 : (listaCategoria.Select(d => d.ORDENIMPRESION).Max());    
-                    }
-                    
-                    maxOrdenImp = maxOrdenImp + 1;
 
-                    model.Categoria.ORDENIMPRESION = maxOrdenImp;
-                    model.Categoria.IdeSede = IdSede;
-                    _categoriaRepository.Add(model.Categoria);
-                    
-                    Session["Tabla1"] = Grilla.Tabla1;
-                    Session["Tabla2"] = Grilla.Tabla2;
-                }
-            }
-            
-            if (Accion.Editar.Equals(Session["AccionCategoria"]))
-            {
-                if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
-                {
-                    var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-                    objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
-                    objCategoria.FECCREACION = Hoy;
-                    objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
-                    objCategoria.FECMODIFICA = Hoy;
-                    objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
-                    objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
-                    objCategoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
-                    objCategoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
-                    objCategoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
-                    objCategoria.ORDENIMPRESION = model.Categoria.ORDENIMPRESION;
-                    if ("01".Equals(model.Categoria.TIPOEJEMPLO))
-                    {
-                        objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
-                    }
-                    else if ("02".Equals(model.Categoria.TIPOEJEMPLO))
-                    {
-                        if (model.NombreTempImgCategoria!=null)
+                        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
                         {
-                            objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
-                            objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;    
-                        }
+                            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+                            objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
+                            objCategoria.FECCREACION = Hoy;
+                            objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
+                            objCategoria.FECMODIFICA = Hoy;
+                            objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
+                            objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
+                            objCategoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
+                            objCategoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
+                            objCategoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
+                            if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+                            {
+                                objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
+                            }
+                            else if (("02".Equals(model.Categoria.TIPOEJEMPLO)))
+                            {
+                                if (model.NombreTempImgCategoria != null)
+                                {
+                                    objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                                    objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
+                                }
                         
-                    }
-                    objCategoria.IdeSede = IdSede;
-                    _categoriaRepository.Update(objCategoria);
+                            }
+                            objCategoria.IdeSede = IdSede;
+
+                            _categoriaRepository.Update(objCategoria);
+
+                            mensaje = "Se actualizó la categoría correctamente";
+                            resultado = true;
                     
-                }
-            }
+                        }
+                        else
+                        {
+                            model.Categoria.USRCREACION = UsuarioActual.NombreUsuario;
+                            model.Categoria.FECCREACION = Hoy;
+                            model.Categoria.USRMODIFICA = UsuarioActual.NombreUsuario;
+                            model.Categoria.FECMODIFICA = Hoy;
+                            //model.Categoria.ORDENIMPRESION = "1";
+                            model.Categoria.ESTACTIVO = IndicadorActivo.Activo;
+
+
+                            var listaCategoria = _categoriaRepository.All();
+                            int maxOrdenImp = 0;
+                            if (listaCategoria!=null && listaCategoria.Count>0)
+                            {
+                                maxOrdenImp = (listaCategoria.Select(d => d.ORDENIMPRESION).Max()) == null ? 0 : (listaCategoria.Select(d => d.ORDENIMPRESION).Max());    
+                            }
+                    
+                            maxOrdenImp = maxOrdenImp + 1;
+
+                            model.Categoria.ORDENIMPRESION = maxOrdenImp;
+                            model.Categoria.IdeSede = IdSede;
+                            _categoriaRepository.Add(model.Categoria);
+                    
+                            Session["Tabla1"] = Grilla.Tabla1;
+                            Session["Tabla2"] = Grilla.Tabla2;
+
+                            mensaje = "Se registro la categoría correctamente";
+                            resultado = true;
+                        }
+                    }
+            
+                    if (Accion.Editar.Equals(Session["AccionCategoria"]))
+                    {
+                        if (model.Categoria.IDECATEGORIA != null && model.Categoria.IDECATEGORIA > 0)
+                        {
+                            var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+                            objCategoria.USRCREACION = UsuarioActual.NombreUsuario;
+                            objCategoria.FECCREACION = Hoy;
+                            objCategoria.USRMODIFICA = UsuarioActual.NombreUsuario;
+                            objCategoria.FECMODIFICA = Hoy;
+                            objCategoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
+                            objCategoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
+                            objCategoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
+                            objCategoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
+                            objCategoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
+                            objCategoria.ORDENIMPRESION = model.Categoria.ORDENIMPRESION;
+                            if ("01".Equals(model.Categoria.TIPOEJEMPLO))
+                            {
+                                objCategoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
+                            }
+                            else if ("02".Equals(model.Categoria.TIPOEJEMPLO))
+                            {
+                                if (model.NombreTempImgCategoria!=null)
+                                {
+                                    objCategoria.IMAGENEJEMPLO = model.Categoria.IMAGENEJEMPLO;
+                                    objCategoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;    
+                                }
+                        
+                            }
+                            objCategoria.IdeSede = IdSede;
+                            _categoriaRepository.Update(objCategoria);
+
+                            mensaje = "Se actulizo la categoría correctamente";
+                            resultado = true;
+                        }
+                    }
             
             
-            categoriaViewModel.Categoria.IDECATEGORIA = model.Categoria.IDECATEGORIA;
-            categoriaViewModel.Categoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
-            categoriaViewModel.Categoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
-            categoriaViewModel.Categoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
-            categoriaViewModel.Categoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
-            categoriaViewModel.Categoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
-            categoriaViewModel.Categoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
-            categoriaViewModel.Categoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
-            categoriaViewModel.image = model.image;
+                    categoriaViewModel.Categoria.IDECATEGORIA = model.Categoria.IDECATEGORIA;
+                    categoriaViewModel.Categoria.NOMCATEGORIA = model.Categoria.NOMCATEGORIA;
+                    categoriaViewModel.Categoria.DESCCATEGORIA = model.Categoria.DESCCATEGORIA;
+                    categoriaViewModel.Categoria.TIPCATEGORIA = model.Categoria.TIPCATEGORIA;
+                    categoriaViewModel.Categoria.TIPOEJEMPLO = model.Categoria.TIPOEJEMPLO;
+                    categoriaViewModel.Categoria.TEXTOEJEMPLO = model.Categoria.TEXTOEJEMPLO;
+                    categoriaViewModel.Categoria.INSTRUCCIONES = model.Categoria.INSTRUCCIONES;
+                    categoriaViewModel.Categoria.NOMBREIMAGEN = model.Categoria.NOMBREIMAGEN;
+                    categoriaViewModel.image = model.image;
 
-            if (fullPath != null)
-            {
-                System.IO.File.Delete(fullPath);
-            }
+                    if (fullPath != null)
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
 
-            var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == categoriaViewModel.Categoria.IDECATEGORIA);
-            int contTiempo = 0;
-            if (objLista != null)
-            {
-                foreach (SubCategoria item in objLista)
-                {
-                    contTiempo = contTiempo + item.TIEMPO;
-                }
-            }
+                    var objLista = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == categoriaViewModel.Categoria.IDECATEGORIA);
+                    int contTiempo = 0;
+                    if (objLista != null)
+                    {
+                        foreach (SubCategoria item in objLista)
+                        {
+                            contTiempo = contTiempo + item.TIEMPO;
+                        }
+                    }
             
-            categoriaViewModel.Categoria.TIEMPO = contTiempo;
+                    categoriaViewModel.Categoria.TIEMPO = contTiempo;
 
-            //Se actualiza el tiempo
-            var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
-            obj.TIEMPO = categoriaViewModel.Categoria.TIEMPO;
-            _categoriaRepository.Update(obj);
+                    //Se actualiza el tiempo
+                    var obj = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == model.Categoria.IDECATEGORIA);
+                    obj.TIEMPO = categoriaViewModel.Categoria.TIEMPO;
+                    _categoriaRepository.Update(obj);
 
-            return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
+                    //return RedirectToAction("btnEditarDetalle", "Categoria", new { id = categoriaViewModel.Categoria.IDECATEGORIA });
 
+                    objJson.Mensaje = mensaje;
+                    objJson.Resultado = resultado;
+                    objJson.IdDato = categoriaViewModel.Categoria.IDECATEGORIA;
+
+                    return Json(objJson);
+
+            //}
+            //catch (Exception)
+            //{
+
+            //    MensajeError();
+            //}
 
         }
 
@@ -296,16 +329,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             
             SubCategoriaValidator objSubCategoriaValidate = new SubCategoriaValidator();
-            ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA","TIEMPO");
+            //ValidationResult result = objSubCategoriaValidate.Validate(model.SubCategoria, "NOMSUBCATEGORIA", "DESCSUBCATEGORIA","TIEMPO");
             JsonMessage objJsonMessge = new JsonMessage();
 
 
             int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
-            if (!result.IsValid)
-            {
-                return View(model);
-            }
+            //if (!result.IsValid)
+            //{
+            //    return View(model);
+            //}
 
             CategoriaViewModel objCategoriaModel = new CategoriaViewModel();
             objCategoriaModel.SubCategoria = new SubCategoria();
@@ -533,7 +566,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Categoria = new Categoria();
 
             model = InicializarCategoriaEdit();
-           
+            model.Categoria = new Categoria();
+            model.Categoria.DesEstado = "Activo";
+              
+
+
+
             model.IndVisual = Visualicion.NO;
             Session["AccionCategoria"] = Accion.Nuevo;
             Session["Tabla1"] = null;
@@ -765,6 +803,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.Categoria = new Categoria();
                 var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
 
+                if (objCategoria!=null)
+                {
+                    if (IndicadorActivo.Activo.Equals(objCategoria.ESTACTIVO))
+                    {
+                        model.Categoria.DesEstado = "Activo";
+                    }
+                    else
+                    {
+                        model.Categoria.DesEstado = "Inactivo";
+                    }
+                }
+
+
                 model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
                 model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
                 model.Categoria.DESCCATEGORIA = objCategoria.DESCCATEGORIA;
@@ -831,6 +882,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model = InicializarCategoriaEdit();
 
                 var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
+
+
+                if (objCategoria != null)
+                {
+                    if (IndicadorActivo.Activo.Equals(objCategoria.ESTACTIVO))
+                    {
+                        model.Categoria.DesEstado = "Activo";
+                    }
+                    else
+                    {
+                        model.Categoria.DesEstado = "Inactivo";
+                    }
+                }
 
                 model.Categoria.IDECATEGORIA = objCategoria.IDECATEGORIA;
                 model.Categoria.NOMCATEGORIA = objCategoria.NOMCATEGORIA;
@@ -919,6 +983,107 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+
+
+        /// <summary>
+        /// valida si no hay dependencias
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        public ActionResult ValidaCategoria(int id) 
+        {
+
+            try
+            {
+                JsonMessage jsonMensaje = new JsonMessage();
+                string mensaje = "";
+                
+                string nombExamen = "";
+                int contExamen = 0;
+                var ListaExemxCategoria = _examenPorCategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+                if (ListaExemxCategoria!=null)
+                {
+                    if (ListaExemxCategoria.Count>0)
+                    {
+                        contExamen = contExamen + 1;
+                        foreach (ExamenPorCategoria item in ListaExemxCategoria)
+                        {
+
+                            var ObjExamen = _examenRepository.GetSingle(x => x.IdeExamen == item.Examen.IdeExamen);
+                            
+                            if (contExamen==1)
+                            {
+                                nombExamen = nombExamen + ObjExamen.NomExamen;
+                            }
+                            else
+                            {
+                                nombExamen = nombExamen + ", " + ObjExamen.NomExamen;
+                            }
+                    
+                        }
+
+                        if (contExamen == 1)
+                        {
+                            mensaje = "No se puede eliminar la categoría debido a que se encuentra relacionada con el examen: " + nombExamen;
+                        }
+                        else
+                        {
+                            mensaje = "No se puede eliminar la categoría debido a que se encuentra relacionada con los examenes: " + nombExamen;
+                        }
+                       
+
+                        jsonMensaje.Resultado = false;
+                        jsonMensaje.Mensaje = mensaje;
+
+                        return Json(jsonMensaje);
+                    }    
+                }
+
+                var listaSubcategoria = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+
+                if (listaSubcategoria!=null)
+                {
+                    if (listaSubcategoria.Count>0)
+                    {
+
+                        if (listaSubcategoria.Count==1)
+                        {
+                            mensaje = "No se puede eliminar la categoría debido a que contiene: " + listaSubcategoria.Count + " Subcategoría";
+                        }
+                        else
+                        {
+                            mensaje = "No se puede eliminar la categoría debido a que contiene: " + listaSubcategoria.Count + " subcategorías";
+                        }
+                       
+
+                        jsonMensaje.Resultado = false;
+                        jsonMensaje.Mensaje = mensaje;
+
+                        return Json(jsonMensaje);
+
+                    }    
+                }
+
+                jsonMensaje.Resultado = true;
+
+                return Json(jsonMensaje);
+
+            }
+            catch (Exception)
+            {
+
+                return MensajeError();
+            }
+
+        }
+
+
+
+
+
+
         /// <summary>
         /// EliminarCategoria Elimina la categoria seleccionada
         /// </summary>
@@ -933,8 +1098,52 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.Categoria = new Categoria();
 
                 model = InicializarCategoriaIndex();
+
+                ExamenPorCategoria objExamenxCategoria;
+
+                var ListaExemxCategoria = _examenPorCategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+                if (ListaExemxCategoria != null)
+                {
+                    foreach (ExamenPorCategoria item in ListaExemxCategoria)
+                    {
+                        objExamenxCategoria = new ExamenPorCategoria();
+                        objExamenxCategoria = item;
+                        _examenPorCategoriaRepository.Remove(objExamenxCategoria);
+                    }
+                }
+
+
                 var objCategoria = _categoriaRepository.GetSingle(x => x.IDECATEGORIA == Convert.ToInt32(id));
-                _categoriaRepository.Remove(objCategoria);
+                if (objCategoria!=null)
+                {
+                    _categoriaRepository.Remove(objCategoria);
+                }
+
+                SubCategoria objSub;
+                CriterioPorSubcategoria objCritSub;
+                var objSubcategoria = _subcategoriaRepository.GetBy(x => x.Categoria.IDECATEGORIA == Convert.ToInt32(id));
+                if (objSubcategoria!=null)
+                {
+                    foreach (SubCategoria item in objSubcategoria)
+                    {
+                        objSub = new SubCategoria();
+                        objSub = item;
+                        _subcategoriaRepository.Remove(objSub);
+
+
+                        var ListCritSub = _criterioPorSubcategoriaRepository.GetBy(x => x.SubCategoria.IDESUBCATEGORIA == item.IDESUBCATEGORIA);
+                        if (ListCritSub != null)
+                        {
+                            foreach (CriterioPorSubcategoria item2 in ListCritSub)
+                            {
+                                objCritSub = new CriterioPorSubcategoria();
+                                objCritSub = item2;
+                                _criterioPorSubcategoriaRepository.Remove(objCritSub);
+                            }
+                        }
+                    }
+
+                }
 
                 return View("Index", model);
             }
@@ -965,7 +1174,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (ListaCriterios != null && ListaCriterios.Count>0)
                     {
-                        jsonMessage.Mensaje = "Existen " + ListaCriterios.Count + " criterios asociados a la subcategoria";
+                        jsonMessage.Mensaje = "No se puede eliminar el registro porque se encuentra asociado a Criterios";
                         jsonMessage.Resultado = false;
                     }
                     else

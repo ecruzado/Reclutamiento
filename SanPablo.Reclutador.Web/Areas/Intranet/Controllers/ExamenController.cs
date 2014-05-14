@@ -74,8 +74,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ExamenViewModel model = new ExamenViewModel();
 
             model = InicializarExamenEdit();
+            model.Examen = new Examen();
+
+            model.Examen.DesEstado = "Activo";
 
             Session["Accion"] = Accion.Nuevo;
+
 
             return View("Edit", model);
         }
@@ -92,7 +96,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model = InicializarExamenEdit();
             model.Examen = new Examen();
             model.Examen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
-            
+
+            if (model.Examen != null)
+            {
+                if (IndicadorActivo.Activo.Equals(model.Examen.EstActivo))
+                {
+                    model.Examen.DesEstado = "Activo";
+                }
+                else
+                {
+                    model.Examen.DesEstado = "Inactivo";
+                }
+            }
+
+
             Session["Accion"] = Accion.Editar;
 
             return View("Edit",model);
@@ -110,7 +127,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model = InicializarExamenEdit();
             model.Examen = new Examen();
             model.Examen = _examenRepository.GetSingle(x => x.IdeExamen == Convert.ToInt32(id));
-            
+
+            if (model.Examen!=null)
+            {
+                if (IndicadorActivo.Activo.Equals(model.Examen.EstActivo))
+                {
+                    model.Examen.DesEstado = "Activo";
+                }
+                else
+                {
+                    model.Examen.DesEstado = "Inactivo"; 
+                }
+            }
+
+
             Session["Accion"] = Accion.Consultar;
 
             return View("Edit",model);
@@ -242,25 +272,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <returns></returns>
 
         [HttpPost]
-        [ValidarSesion]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult Edicion(ExamenViewModel model)
         {
 
             ValidationResult result;
+            JsonMessage objJson = new JsonMessage();
             ExamenValidator objExamenValid = new ExamenValidator();
             ExamenViewModel objExamenViewModal= new ExamenViewModel();
             objExamenViewModal.Examen = new Examen();
             DateTime Hoy = DateTime.Today;
             JsonMessage ObjJsonMessage = new JsonMessage();
             int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
+            string mensaje = "";
+            Boolean resultado = false;
+            int IdDato = 0;
+            //result = objExamenValid.Validate(model.Examen, "DescExamen", "NomExamen", "TipExamen");
 
-
-            result = objExamenValid.Validate(model.Examen, "DescExamen", "NomExamen", "TipExamen");
-
-            if (!result.IsValid)
-            {
-                return View(model);
-            }
+            //if (!result.IsValid)
+            //{
+            //    return View(model);
+            //}
 
             objExamenViewModal = InicializarExamenEdit();
             objExamenViewModal.Examen.TipExamen = model.Examen.TipExamen;
@@ -278,6 +310,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objExamenViewModal.Examen.IdeSede = IdSede;
                 _examenRepository.Add(objExamenViewModal.Examen);
                 Session["Accion"] = Accion.Editar;
+                IdDato = objExamenViewModal.Examen.IdeExamen;
+                resultado = true;
+                mensaje = "Se registro correctamente";
             }
             else
             {
@@ -291,12 +326,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objExamen.NomExamen = model.Examen.DescExamen;
                     _examenRepository.Update(objExamen);  
                     objExamenViewModal.Examen.IdeExamen = model.Examen.IdeExamen;
-                      
+                    IdDato = objExamenViewModal.Examen.IdeExamen;
+                    resultado = true;
+                    mensaje = "Se actualizó correctamente";
                 }
                 
             }
 
-            return RedirectToAction("Edicion", "Examen", new { id = objExamenViewModal.Examen.IdeExamen });
+            //return RedirectToAction("Edicion", "Examen", new { id = objExamenViewModal.Examen.IdeExamen });
+            
+
+            
+            objJson.Mensaje = mensaje;
+            objJson.Resultado = resultado;
+            objJson.IdDato = IdDato;
+
+
+            return Json(objJson);
+
+
         }
 
 

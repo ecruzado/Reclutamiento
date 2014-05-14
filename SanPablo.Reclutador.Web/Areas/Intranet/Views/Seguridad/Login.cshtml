@@ -84,7 +84,7 @@
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
         @Html.TextBoxFor(model => model.IndSede,  new { style = "display: none;" })  
-        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",onblur="getRol()" ,onkeyup="aMays(event, this)"})  
+        @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "input-block-level" ,data_val = "false",onblur="aMays(event, this);getRol();"})  
     
          <label style="font-weight:bold;font-size:13px;">Contraseña</label>
        

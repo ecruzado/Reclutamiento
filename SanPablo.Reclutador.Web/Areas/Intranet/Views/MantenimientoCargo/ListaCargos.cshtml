@@ -61,7 +61,7 @@
         $("#spanMessage").html("¿Desea Activar/Desactivar el registro?")
         $('#updateDialog').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
                     var estado = rowData.EstadoActivo;
@@ -72,7 +72,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -81,7 +81,7 @@
         $("#spanMessageConfirmacion").html("¿Está seguro que desea realizar modificaciones al cargo?")
         $('#updateDialogConfirmacion').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                     var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
                     if (rowData.IdeCargo != null) {
@@ -91,7 +91,7 @@
                         MostrarMensaje('Seleccione un cargo a editar');
                     }
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $('#updateDialogConfirmacion').dialog("close");
                 }
             }

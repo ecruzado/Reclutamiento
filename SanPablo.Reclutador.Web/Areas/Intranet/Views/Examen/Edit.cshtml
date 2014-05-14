@@ -29,6 +29,34 @@
     });
 
 
+    $("#btnGuardarExamen").click(function () {
+        //if ($("#frmCriterio").validate().form()) {
+
+       
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edicion", "Examen")',
+                data: $("#frmExamenEdicion").serialize(),
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }
+
+                            if (data.Resultado) {
+                                information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                            }
+                            else{
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            }
+
+                        }
+                });
+              
+    });
+
+
+
     $('#btnEliminarCategoria').click(function () {
         var codigoExamen = $("#Examen_IdeExamen").val();
         var codigoCategoria = jQuery('#grdListaCatxExamen').jqGrid('getGridParam', 'selrow');
@@ -49,7 +77,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 var codigoExamen = $("#Examen_IdeExamen").val();
 
                 var selr = jQuery('#grdListaCatxExamen').jqGrid('getGridParam', 'selrow');
@@ -63,7 +91,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -97,7 +125,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                   $.ajax({
                     data: { 
                         selc: $("#grdListaCategoriaPopup").jqGrid('getGridParam', 'selarrrow'),
@@ -114,7 +142,7 @@
                     }
                 });
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -174,6 +202,37 @@
          return strImg;
 
     }
+
+
+    function RedireccionaExamen(selr) {
+        var loc = window.location.href
+        console.log(loc);
+
+       
+        window.location = '@Url.Action("Edicion", "Examen", new { id = ""})' + '/' + selr;
+       
+
+    }
+
+
+    function information(selectorDiv, selectorSpan, msg, title, selr) {
+        $('#' + selectorSpan).html(msg);
+        var opt = {
+            title: title,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    RedireccionaExamen(selr);
+                }
+            }
+        };
+        $('#' + selectorDiv).dialog(opt).dialog('open');
+
+    }
+
+
 
     function getTiempoExamen() {
         var codigoExamen = $("#Examen_IdeExamen").val();
@@ -248,7 +307,7 @@
                 <h5>Examen</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
+                    <button class="btn btn-primary btn-small disabled" disabled="disabled">@Model.Examen.DesEstado</button>
                 </div>
             </div>
             <table class="formulario-busqueda">
@@ -269,11 +328,11 @@
                                 
                                 @if (Accion.Consultar.Equals(Session["Accion"]))
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled",onkeyup="aMays(event, this)"}) 
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",disabled = "disabled",onblur="aMays(event, this)"}) 
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onkeyup="aMays(event, this)" })     
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onblur="aMays(event, this)" })     
                                 }
 
                                 
@@ -288,11 +347,11 @@
                             <div class="controles">
                                  @if (Accion.Consultar.Equals(Session["Accion"]))
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled",onkeyup="aMays(event, this)" }) 
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",disabled = "disabled",onblur="aMays(event, this)" }) 
                                  }
                                  else
                                  {
-                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onkeyup="aMays(event, this)" })  
+                                    @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onblur="aMays(event, this)" })  
                                  }
                             </div>
                         
@@ -326,6 +385,19 @@
                
             </table>
 
+            <div class="form-actions">
+            
+                @if (Session["Accion"].Equals(Accion.Consultar))
+                {
+                  <div></div>
+                }else
+	            {
+                  <a  id="btnGuardarExamen" class ="btn btn-info"><i class=" icon-hdd icon-white"></i>Grabar</a>
+                }
+                
+            </div>
+
+
             @if (Session["Accion"].Equals(Accion.Editar) || Session["Accion"].Equals(Accion.Consultar))
             {
 
@@ -355,13 +427,7 @@
             <div class="form-actions">
             <a class="btn" href="@Url.Action("Index", "Examen", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             
-                @if (Session["Accion"].Equals(Accion.Consultar))
-                {
-                  <div></div>
-                }else
-	            {
-                  <button   type="submit"  class ="btn btn-info"><i class=" icon-hdd icon-white"></i>Grabar</button>
-                }
+              
                 
             </div>
             

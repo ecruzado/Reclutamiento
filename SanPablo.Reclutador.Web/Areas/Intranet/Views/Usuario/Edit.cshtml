@@ -290,7 +290,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
 
                 var selr = jQuery('#grdListaTipoReqInicial').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListaTipoReqInicial').jqGrid('getRowData', selr);
@@ -304,7 +304,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -317,7 +317,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
 
                 var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
 
@@ -328,7 +328,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -342,7 +342,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
               
                 var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
               
@@ -353,7 +353,7 @@
                 }
                 $(this).dialog("close");
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -462,7 +462,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSedeNivel").validate().form()) {
                     $.ajax({
                         type: "POST",
@@ -481,7 +481,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -494,7 +494,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSede").validate().form()) {
                     $.ajax({
 
@@ -516,7 +516,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -529,7 +529,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmPopupSedeRol").validate().form()) {
                     $.ajax({
                        
@@ -556,7 +556,7 @@
                     });
                 }
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
             }
         }
@@ -622,7 +622,7 @@
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
-            "Si": function () {
+            "Aceptar": function () {
                 if ($("#frmTipoReq").validate().form()) {
                     $.ajax({
                         data: {
@@ -644,7 +644,7 @@
                         });
                     }
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -892,11 +892,11 @@
 
                     @if (Accion.Consultar.Equals(Model.Accion))
                     { 
-                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})                      
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})                      
                     }
                     else
                     {
-                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})                     
+                    @Html.TextBoxFor(model => model.Usuario.CodUsuario, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})                     
                     }
                         <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.Usuario.CodUsuario)
@@ -933,11 +933,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario", disabled = "disabled",onblur="aMays(event, this)" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        
@@ -954,11 +954,11 @@
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                          }
                          else
                          {
-                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})  
                          }
 
                        
@@ -977,11 +977,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        <div class="tex-error" style="font-size:12px;color:red">         
@@ -996,11 +996,11 @@
                         
                          @if (Accion.Consultar.Equals(Model.Accion))
                          {
-                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                          }
                          else
                          {
-                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Email, new { @class = "textoFormulario" ,onblur="aMays(event, this)"})  
                          }
 
                         <div class="tex-error" style="font-size:12px;color:red">     
@@ -1018,11 +1018,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" ,onkeyup="aMays(event, this)"})  
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario", disabled = "disabled" ,onblur="aMays(event, this)"})  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.Usuario.Telefono, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        <div class="tex-error" style="font-size:12px;color:red">         

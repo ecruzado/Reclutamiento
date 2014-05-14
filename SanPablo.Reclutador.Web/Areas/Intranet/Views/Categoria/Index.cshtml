@@ -48,18 +48,35 @@
 
         $('#btnEliminarCategoria').click(function () {
             var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
-
-
             var rowData = $('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
             var indEstado = rowData.ESTACTIVO;
-
 
             if (selr != null) {
 
                 if ("I" == indEstado) {
                     MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
                 } else {
-                    $('#divEliminar').dialog('open');
+
+                    $.ajax({
+                        data: {
+                            id: selr
+                        },
+                        type: "POST",
+                        url: '@Url.Action("ValidaCategoria", "Categoria", new { area="Intranet"})',
+
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }
+                            if (data.Resultado) {
+                                $('#divEliminar').dialog('open');
+                            } else {
+                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            }
+                            
+                        }
+                    });
                 }
 
             } else {
@@ -84,7 +101,7 @@
         $("#spanConfirmacion").html("¿Desea Activar/Desactivar?")
         $('#confirmacion').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = jQuery('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
                     
                     var rowData = jQuery('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
@@ -95,7 +112,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -107,7 +124,7 @@
         $("#spanEliminar").html("¿Desea eliminar?")
         $('#divEliminar').dialogo({
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var selr = $('#grdListaPrincipalCategoria').jqGrid('getGridParam', 'selrow');
                     var rowData = $('#grdListaPrincipalCategoria').jqGrid('getRowData', selr);
                     if (selr != null) {
@@ -117,7 +134,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -332,7 +349,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Categoría</h5>
+                <h5>Listado de Categorías</h5>
             </div>
             <table style="margin-left:120px;">
                 <tr>
@@ -360,6 +377,7 @@
                     </td>   
                     <td class="colInput">
                       @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "50" , data_val = "false",onblur="aMays(event, this)" }) 
+                    
                     </td>
                     
                     

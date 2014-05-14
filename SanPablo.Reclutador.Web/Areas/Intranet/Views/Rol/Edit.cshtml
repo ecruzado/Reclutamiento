@@ -125,7 +125,7 @@
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     var codRol = $("#rol_IdRol").val();
 
                     var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
@@ -139,7 +139,7 @@
                     }
                     $(this).dialog("close");
                 },
-                "No": function () {
+                "Cancelar": function () {
                     $(this).dialog("close");
                 }
             }
@@ -177,7 +177,7 @@
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
-                "Si": function () {
+                "Aceptar": function () {
                     $.ajax({
                         data: {
                             selc: $("#grdListaOpcionPopup").jqGrid('getGridParam', 'selarrrow'),
@@ -194,7 +194,7 @@
                     }
                   });
             },
-            "No": function () {
+            "Cancelar": function () {
                 $(this).dialog("close");
                 }
             }
@@ -282,11 +282,11 @@
                         
                           @if (Accion.Consultar.Equals(Model.Accion)) 
                           { 
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled",onkeyup="aMays(event, this)"})                      
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario" ,disabled="disabled",onblur="aMays(event, this)"})                      
                           }
                           else
                           {
-                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario", onkeyup="aMays(event, this)" })                     
+                            @Html.TextBoxFor(model => model.rol.CodRol, new { @class = "textoFormulario", onblur="aMays(event, this)" })                     
                           }
                          
                         
@@ -304,11 +304,11 @@
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario", disabled="disabled",onblur="aMays(event, this)" })  
                        }
                        else
                        {
-                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario",onkeyup="aMays(event, this)" })  
+                            @Html.TextBoxFor(model => model.rol.DscRol, new { @class = "textoFormulario",onblur="aMays(event, this)" })  
                        }
                        
                        
