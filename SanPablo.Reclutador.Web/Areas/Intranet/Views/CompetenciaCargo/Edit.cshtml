@@ -6,6 +6,9 @@
     $('input[data-val=true]').on('blur', function () {
         $(this).valid();
     });
+
+    SanPablo.Numeros('Competencia_Puntaje');
+
 </script>
 
 @using (Html.BeginForm("Edit", "CompetenciaCargo", FormMethod.Post, new { @id = "competenciasForm" }))
@@ -22,7 +25,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Competencias <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Competencia.TipoCompetencia, new SelectList(Model.Competencias, "Valor", "Descripcion", Model.Competencia.TipoCompetencia))
+                @Html.DropDownListFor(model => model.Competencia.TipoCompetencia, new SelectList(Model.Competencias, "Valor", "Descripcion", Model.Competencia.TipoCompetencia), new { style = "width: 300px;"})
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Competencia.TipoCompetencia)
                 </div>
@@ -33,7 +36,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.Competencia.Puntaje, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.Competencia.Puntaje, new {@class="input-xxmini" , @maxlength="2" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Competencia.Puntaje)
                 </div>

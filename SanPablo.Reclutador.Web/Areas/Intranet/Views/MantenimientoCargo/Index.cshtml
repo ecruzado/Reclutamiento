@@ -24,7 +24,7 @@
             }
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
-            <h6>Funciones</h6>
+            <h6>Funciones<span class="text-error">*</span></h6>
             <div class="opciones">
             </div>
             <div style="clear:both"></div>
@@ -38,7 +38,7 @@
                 @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" })
             }
         <div class="grilla-opciones">
-            <h6>Competencias</h6>
+            <h6>Competencias<span class="text-error">*</span></h6>
             <div class="opciones">
             @if (Accion.Editar == Model.Accion)
             {
@@ -112,7 +112,7 @@
 
         $('#updateDialog').dialog({
             autoOpen: false,
-            width: 600,
+            width: 400,
             resizable: false,
             modal: true,
             buttons: {

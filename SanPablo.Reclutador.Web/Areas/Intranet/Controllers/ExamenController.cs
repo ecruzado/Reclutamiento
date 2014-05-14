@@ -1062,63 +1062,92 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             var listaCodAlternativa = listaCriterio.GroupBy(x => x.Idealternativa).Select(x => x.Key).ToList();
                             foreach (Int32 itemAlternativa in listaCodAlternativa)
                             {
+
+                                opcion = "";
                                 listaAlternativa= new List<PdfExamen>();
 
                                 listaAlternativa = lista.Where(x => x.Idesubcategoria == itemSubCategoria
                                                        && x.Idecategoria == itemCategoria && x.Idecriterio == itemCriterio
                                                        && x.Idealternativa == itemAlternativa).ToList();
-
-                                PdfExamen objAlternativa = new PdfExamen();
-
-                                objAlternativa = (PdfExamen)listaAlternativa[0];
-                                //ToLetras
-                                opcion = ToLetras(nContAltenativa);
-
-                                PdfPTable table6 = new PdfPTable(3);
-                                float[] ancho6 = new float[] { 5.0f, 85.0f, 10.0f };
-                                table6.SetWidths(ancho6);
-                                
-                                PdfPCell CellAlternativa = new PdfPCell(new Phrase(opcion+")", negrita));
-                                CellAlternativa.HorizontalAlignment = Element.ALIGN_LEFT;
-                                CellAlternativa.Colspan = 1;
-                                CellAlternativa.Border = Rectangle.NO_BORDER;
-                                table6.AddCell(CellAlternativa);
-
-
-                                PdfPCell CellOpcionAlternativa = null;
-
-                                if ("02".Equals(objCriterio.Codmod))
+                                if (listaAlternativa != null)
                                 {
-                                    if (objAlternativa.Image != null)
+                                    if (listaAlternativa.Count>0)
                                     {
-                                        Image OpcionImage = Image.GetInstance(objAlternativa.Image);
-                                        OpcionImage.ScaleToFit(160f, 160f);
+                                        
+                                        PdfExamen objAlternativa = new PdfExamen();
 
-                                        CellOpcionAlternativa = new PdfPCell(OpcionImage);
+                                        objAlternativa = (PdfExamen)listaAlternativa[0];
+                                        //ToLetras
+
+                                        if ("02".Equals(objCriterio.Codmod))
+                                        {
+                                            if (objAlternativa.Image != null)
+                                            {
+                                                opcion = ToLetras(nContAltenativa);
+                                            }
+                                        }
+
+                                        if ("01".Equals(objCriterio.Codmod))
+                                        {
+                                            if (objAlternativa.Alternativa != null && objAlternativa.Alternativa!="")
+                                            {
+                                                opcion = ToLetras(nContAltenativa);
+                                            }
+                                        }
+
+                                        if (opcion.Equals(""))
+                                        {
+                                            continue;
+                                        }
+
+                                            
+
+                                            PdfPTable table6 = new PdfPTable(3);
+                                            float[] ancho6 = new float[] { 5.0f, 85.0f, 10.0f };
+                                            table6.SetWidths(ancho6);
+                                
+                                            PdfPCell CellAlternativa = new PdfPCell(new Phrase(opcion+")", negrita));
+                                            CellAlternativa.HorizontalAlignment = Element.ALIGN_LEFT;
+                                            CellAlternativa.Colspan = 1;
+                                            CellAlternativa.Border = Rectangle.NO_BORDER;
+                                            table6.AddCell(CellAlternativa);
+
+
+                                            PdfPCell CellOpcionAlternativa = null;
+
+                                            if ("02".Equals(objCriterio.Codmod))
+                                            {
+                                                if (objAlternativa.Image != null)
+                                                {
+                                                    Image OpcionImage = Image.GetInstance(objAlternativa.Image);
+                                                    OpcionImage.ScaleToFit(160f, 160f);
+
+                                                    CellOpcionAlternativa = new PdfPCell(OpcionImage);
                                        
 
-                                    }
-                                    else
-                                    {
-                                        CellOpcionAlternativa = new PdfPCell(new Phrase("", normal));
-                                    }
+                                                }
+                                                else
+                                                {
+                                                    CellOpcionAlternativa = new PdfPCell(new Phrase("", normal));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                CellOpcionAlternativa = new PdfPCell(new Phrase(objAlternativa.Alternativa, normal));
+                                            }
+
+                                            CellOpcionAlternativa.Colspan = 2;
+                                            CellOpcionAlternativa.Border = Rectangle.NO_BORDER;
+                                            CellOpcionAlternativa.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                                            table6.AddCell(CellOpcionAlternativa);
+
+                                            table6.SpacingBefore = 2f;
+                                            table6.SpacingAfter = 2f;
+                                            doc.Add(table6);
+
+                                            nContAltenativa = nContAltenativa + 1;
+                                      }
                                 }
-                                else
-                                {
-                                    CellOpcionAlternativa = new PdfPCell(new Phrase(objAlternativa.Alternativa, normal));
-                                }
-
-                                CellOpcionAlternativa.Colspan = 2;
-                                CellOpcionAlternativa.Border = Rectangle.NO_BORDER;
-                                CellOpcionAlternativa.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
-                                table6.AddCell(CellOpcionAlternativa);
-
-                                table6.SpacingBefore = 2f;
-                                table6.SpacingAfter = 2f;
-                                doc.Add(table6);
-
-                                nContAltenativa = nContAltenativa + 1;
-
                             }
 
 
