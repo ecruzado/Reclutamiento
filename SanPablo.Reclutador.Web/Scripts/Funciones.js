@@ -377,8 +377,8 @@ Funciones = {
         //$('#' + selectorDiv).dialog('open');
         var opt = {
             title: title,
-            autoOpen: false,
             modal: true,
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");

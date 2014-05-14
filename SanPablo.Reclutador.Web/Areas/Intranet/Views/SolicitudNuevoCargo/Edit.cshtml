@@ -38,41 +38,20 @@
             buttons: {
                 "Enviar": function (e) {
                     e.preventDefault();
-                    var result = $('#LogSolicitudNuevoCargoForm').valid();
-                    if (result) {
-                        
-                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
-                        $("#divMensaje").dialog({
-                            title: 'Sistema de reclutamiento y Selección de personal',
-                            modal: true,
-                            buttons: [{
-                                text: "Aceptar",
-                                click: function () {
-                                    $(this).dialog("close");
-                                    
-                                    $.blockUI({
-                                        message: '<h1>Enviando...</h1>',
-                                        css: {
-                                            border: 'none',
-                                            padding: '15px',
-                                            backgroundColor: '#000',
-                                            '-webkit-border-radius': '10px',
-                                            '-moz-border-radius': '10px',
-                                            opacity: .5,
-                                            color: '#fff'
-                                        }
-                                    });
-                                        enviarAprobacionRechazo();
-                                }},{
-                                text:"Cancelar",
-                                click: function () { $(this).dialog("close"); }
-                                }]
-                            });
-                       
+                    if (validarObservacion()) {
+                        var result = $('#LogSolicitudNuevoCargoForm').valid();
+                        if (result) {
+                            mostrarMensajeConfirmacion();
+                        }
+                        else {
+                            $.unblockUI();
+                            notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                        }
                     }
                     else {
-                        $.unblockUI();
-                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                        var msje = document.getElementById('mensajeErrorLog');
+                        msje.innerHTML = "ERROR: Debe ingresar una observación";
+                        msje.style.display = "block";
                     }
                 },
                 "Cancelar": function () {
@@ -108,21 +87,21 @@
                         $.post('@Url.Action("Edit", "SolicitudNuevoCargo")',
                         $("#solicitudNuevoCargoForm").serialize(),
                         function (respuesta) {
-                            $.unblockUI();
                             if (respuesta.Resultado) {
-                                $("#SolicitudNuevoCargo_IdeSolicitudNuevoCargo").value = respuesta.IdDato;
+                                $.unblockUI();
                                 //actualizarCodigo(codigo);
-                                mensajeRedirecciona("Solicitud enviada exitosamente", "Sistema de reclutamiento y selección de personal");
+                                mensajeRedirecciona("Solicitud enviada exitosamente", "MENSAJE");
                                 
                             }
                             else {
-                                MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                                $.unblockUI();
+                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                             }
                         });
                     }
                     else {
                         $('#updateDialogConfirmacion').dialog("close");
-                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "Sistema de reclutamiento y selección de personal");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "ALERTA");
                     }
                    
                  },
@@ -178,12 +157,40 @@
         var strRdo = '<input type ="radio" name = "codigo">';
         return strRdo;
     }
-
+    function mostrarMensajeConfirmacion()
+    {
+        $('#spnMensaje').html("¿Está seguro de “Aprobar” o “Rechazar” la Solicitud de Nuevo Cargo?");
+        $('#divMensaje').dialog({
+            resizable: false,
+            title: 'CONFIRMACIÓN',
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    //$(this).dialog("close");
+                    $("#divMensaje").dialog("close");
+                    $.blockUI({
+                        message: '<h1>Enviando...</h1>',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }
+                    });
+                    enviarAprobacionRechazo();
+                },
+                "Cancelar": function () { $(this).dialog("close"); }
+            }
+        });
+    }
     function mostrarAprobarDesaprobar() {
 
         
-        var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
-        if (estado == "A") {
+        //var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
+        //if (estado == "A") {
             var dialogDiv = $('#updateDialogAprobacion');
             var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
             if (guardarDatosEditados()) {
@@ -196,11 +203,25 @@
             else {
                 MostrarMensaje("Verifique los datos ingresados e intente nuevamente", "Sistema de reclutamiento y selección de personal");
             }
+        //}
+        //else {
+        //    MostrarMensaje("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado", "Sistema de reclutamiento y selección de personal");
+        //}
+        // return false;
+    }
+
+    function validarObservacion()
+    {
+        var aprobado = $('input[id="Rechazado"]:checked').val();
+        var observacion = $('#LogSolicitudNuevoCargo_Observacion').val();
+        if (aprobado == "false") {
+            if (observacion.length > 0)
+            { return true; }
+            else
+            { return false; }
         }
-        else {
-            MostrarMensaje("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado", "Sistema de reclutamiento y selección de personal");
-        }
-        return false;
+        else { return true;}
+        
     }
 
     function guardarDatosEditados()
@@ -240,7 +261,7 @@
                  if (respuesta.Resultado) {
                     
                      $.unblockUI();
-                     mensajeRedirecciona("Aprobación/Rechazo enviado exitosamente", "Sistema de reclutamiento y selección de personal");
+                     mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
                      //notificacionExito();
                  }
                  else {
@@ -295,10 +316,10 @@
             if ($("#solicitudNuevoCargoForm").validate().form()) {
                 mostrarConfirmacion();
             }
-            else { MostrarMensaje("Verifique que los campos esten llenados correctamente", "Sistema de reclutamiento y selección de personal"); }
+            else { MostrarMensaje("Verifique que los campos esten llenados correctamente", "ALERTA"); }
         }
         else {
-            MostrarMensaje("Solicitud en estado: 'INACTIVO'", "Sistema de reclutamiento y selección de personal");
+            MostrarMensaje("Solicitud en estado: 'INACTIVO'", "ALERTA");
         }
     }
     function actualizarCodigo(codigo) {
@@ -338,12 +359,13 @@
 
     function mensajeRedirecciona(mensaje, titulo)
     {
-        $("#spanMensaje").html(mensaje);
+        $("#spnMensaje").html(mensaje);
         $("#divMensaje").dialog({
             title: titulo,
             modal: true,
+            resizable: false,
             buttons: {
-                "Ok": function () {
+                "Aceptar": function () {
                     $(this).dialog("close");
                     SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
                 }
@@ -673,7 +695,7 @@
 
 @*<div id="divMensaje">
     <span id="spnMensaje"></span>
-</div>  *@  
+</div> *@ 
   
 @*<div id="divMensajeOtro">
     <span id="spnMensajeOtro"></span>

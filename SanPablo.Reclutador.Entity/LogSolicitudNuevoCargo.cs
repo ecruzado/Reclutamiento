@@ -21,6 +21,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int UsuarioSuceso { get; set; }
         public virtual int RolSuceso { get; set; }
 
+        public virtual Boolean Aprobado { get; set; }
+
 
 
 

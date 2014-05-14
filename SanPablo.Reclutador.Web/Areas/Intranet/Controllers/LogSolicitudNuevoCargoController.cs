@@ -93,11 +93,11 @@
 
             if ((solicitud.TipoEtapa == Etapa.Generacion_Perfil) || (solicitud.TipoEtapa == Etapa.Observado))
             {
-                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Observado";
+                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Observar";
             }
             else
             {
-                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Rechazado";
+                logSolicitudNuevoCargoViewModel.rechazadoObservado = "Rechazar";
             }
 
             logSolicitudNuevoCargoViewModel.LogSolicitudNuevoCargo.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
@@ -137,7 +137,7 @@
                         break;
 
                     case Etapa.Generacion_Perfil:
-                        if (model.Aprobado == true)
+                        if (logSolicitud.Aprobado == true)
                         {
                             logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
                             logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
@@ -160,7 +160,7 @@
                     //    logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
                     //    break;
                 }
-                if (model.Aprobado)
+                if (logSolicitud.Aprobado)
                 {
                     logSolicitud.Observacion = "";
                 }
@@ -191,7 +191,7 @@
 
                 if (ideUsuarioResp != -1)
                 {
-                    if (!model.Aprobado)
+                    if (!logSolicitud.Aprobado)
                     {
                         var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
                         ideUsuarioResp = logSolicitudInicial.UsuarioResponsable;
