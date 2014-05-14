@@ -621,7 +621,7 @@
                         var objCriterio = _criterioRepository.GetSingle(x => x.IdeCriterio == model.Criterio.IdeCriterio);
                         objCriterio.TipoCriterio = model.Criterio.TipoCriterio;
                         objCriterio.TipoMedicion = model.Criterio.TipoMedicion;
-                        objCriterio.TipoModo = model.Criterio.TipoModo;
+                        //objCriterio.TipoModo = model.Criterio.TipoModo;
                        // objCriterio.TipoCalificacion = model.Criterio.TipoCalificacion;
                         objCriterio.Pregunta = model.Criterio.Pregunta;
                         objCriterio.FechaModificacion = DateTime.Now;
@@ -647,7 +647,7 @@
                     criterioViewModel.IndVisual = Visualicion.SI;
                     criterioViewModel.Criterio.TipoMedicion = model.Criterio.TipoMedicion;
                     criterioViewModel.Criterio.TipoCriterio = model.Criterio.TipoCriterio;
-                    criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
+                    //criterioViewModel.Criterio.TipoModo = model.Criterio.TipoModo;
                     if("01".Equals(model.Criterio.TipoModo))
                     {
                         Session["TipoModo"] = "T";
