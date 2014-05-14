@@ -222,7 +222,7 @@
                 }
                 else
                 {
-                    objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                    objJsonMessage.Mensaje = "ERROR: Ud. ya ingreso este conocimiento de ofimática, verifique la información a ingresar";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }
@@ -461,7 +461,7 @@
                     }
                     else
                     {
-                        objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                        objJsonMessage.Mensaje = "ERROR: Ud. ya ingreso este conocimiento de idioma, verifique la información a ingresar";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
@@ -570,7 +570,7 @@
                 }
                 else
                 {
-                    objJsonMessage.Mensaje = "ERROR: No puede ingresar datos duplicados";
+                    objJsonMessage.Mensaje = "ERROR: Ud. ya ingreso este conocimiento de otros conocimientos, verifique la información a ingresar";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

@@ -141,7 +141,7 @@
                 }
                 else
                 {
-                    objJsonMessage.Mensaje = "ERROR: No puede este tipo de pariente dos veces" ;
+                    objJsonMessage.Mensaje = "ERROR: Ud. ya ingreso a este tipo de vínculo, verifique la información a ingresar";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

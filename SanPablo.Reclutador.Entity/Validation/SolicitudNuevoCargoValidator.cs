@@ -25,8 +25,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                .NotEmpty()
                .WithMessage("Ingresar el nombre de cargo");
             RuleFor(x => x.NombreCargo)
-                .Length(3, 50)
-                .WithMessage("Ingresar el nombre con un mínimo de 3 y un máximo de 50 caracteres");
+                .Length(1, 50)
+                .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.NumeroPosiciones)
                 .NotEmpty()
@@ -36,8 +36,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingresar la descripción de cargo");
             RuleFor(x => x.DescripcionCargo)
-                .Length(3, 100)
-                .WithMessage("Ingresar la descripción con un mínimo de 3 y un máximo de 100 caracteres");
+                .Length(1, 100)
+                .WithMessage("Máx. 100 caracteres");
  
             
 
@@ -49,30 +49,30 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingrese los estudios");
             RuleFor(x => x.DescripcionEstudios)
-                .Length(5,255)
-                .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
+                .Length(1,255)
+                .WithMessage("Máx. 255 caracteres");
 
             RuleFor(x => x.DescripcionFunciones)
                 .NotEmpty()
                 .WithMessage("Ingrese las funciones");
             RuleFor(x => x.DescripcionFunciones)
-                .Length(5, 255)
-                .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
+                .Length(1, 255)
+                .WithMessage("Máx. 255 caracteres");
 
             RuleFor(x => x.DescripcionCompetencias)
                 .NotEmpty()
                 .WithMessage("Ingrese las competencias");
             RuleFor(x => x.DescripcionCompetencias)
-                .Length(5, 255)
-                .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
+                .Length(1, 255)
+                .WithMessage("Máx. 255 caracteres");
 
 
             RuleFor(x => x.DescripcionObservaciones)
                 .NotEmpty()
                 .WithMessage("Ingrese las observaciones adicionales");
             RuleFor(x => x.DescripcionObservaciones)
-                .Length(5, 255)
-                .WithMessage("Ingresar la descripción con un mínimo de 5 y un máximo de 255 caracteres");
+                .Length(1, 255)
+                .WithMessage("Máx. 255 caracteres");
 
 
             RuleFor(x => x.FechaPublicacion)
@@ -87,8 +87,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingresar una descripcion de Observaciones");
             RuleFor(x => x.ObservacionPublicacion)
-                .Length(5, 255)
-                .WithMessage("Ingresar la descripcion con un mínimo de 5 y un máximo de 255 caracteres");
+                .Length(1, 255)
+                .WithMessage("Máx. 255 caracteres");
 
         }
     }

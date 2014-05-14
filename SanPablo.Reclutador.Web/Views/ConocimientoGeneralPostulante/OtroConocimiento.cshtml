@@ -52,8 +52,8 @@
 @using (Html.BeginForm("OtroConocimiento", "ConocimientoGeneralPostulante", FormMethod.Post, new { @id = "otroConocimientoForm" }))
     {
     @Html.ValidationSummary(true)
-    <div class="alert alert-info" id="mensajeError" style="display:none" >
-        <a class="close" onclick="hide('mensajeError')" >×</a>
+    <div class="alert alert-info" id="mensajeErrorOtro" style="display:none" >
+        <a class="close" onclick="hide('mensajeErrorOtro')" >×</a>
          <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
     </div>
     <table style="margin-left:30px;">
