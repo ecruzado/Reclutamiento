@@ -11,40 +11,54 @@
 <!--PUESTO -->
     <div class="tab-pane active" id="A">
         <div class="grilla-opciones" style="margin-top:0px;">
-            <h6>Objetivos</h6>
+            <h6>Objetivos <span class="text-error">*</span></h6>
             <div style="clear:both"></div>
         </div>
         @if(Accion.Consultar.Equals(Model.Accion))
         {
-            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" });
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", disabled = "disabled",@maxlength="255" });
+           <div style="margin-top:0px;">
+                <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+                </div>
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;" , onblur="aMays(event, this)" })
-            <div class="tex-error" style="font-size:12px;color:red"> 
+            @Html.TextAreaFor(model => model.Cargo.ObjetivoCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", onblur = "aMays(event, this)", @maxlength = "255" })
+            <div style="margin-top:0px;">
+                <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+                </div>
+                <div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Cargo.ObjetivoCargo)
             </div>
         }
+        
         <div class="espacio-division-entre-fieldset"></div>
         <div class="grilla-opciones">
-            <h6>Funciones</h6>
+            <h6>Funciones <span class="text-error">*</span></h6>
             <div class="opciones">
             </div>
             <div style="clear:both"></div>
         </div>
         @if (Accion.Consultar.Equals(Model.Accion))
         {
-               @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" }) 
+               @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", disabled = "disabled", @maxlength = "255" }) 
+               
+                 <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+              
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", onblur="aMays(event, this)" })
-            <div class="tex-error" style="font-size:12px;color:red"> 
+            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", onblur = "aMays(event, this)", @maxlength = "255" })
+             
+                <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+               
+                <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Cargo.FuncionCargo)
             </div>
         }
+
         <div class="grilla-opciones">
-            <h6>Competencias</h6>
+            <h6>Competencias <span class="text-error">*</span></h6>
             <div class="opciones">
             @if (Accion.Enviar == Model.Accion)
             {
@@ -81,7 +95,7 @@
                         
         <div class="formulario-accion">                                          
             <div class="opciones">
-            @if(Accion.Enviar == Model.Accion)
+            @if (Accion.Enviar == Model.Accion)
             {    
                 <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
             }
@@ -118,7 +132,7 @@
 
         $('#updateDialog').dialog({
             autoOpen: false,
-            width: 600,
+            width: 500,
             resizable: false,
             modal: true,
             buttons: {
@@ -140,8 +154,8 @@
                             );
                         }
                         else {
-                            notificacionError("Seleccionar una competencia");
-
+                            //notificacionError("Seleccionar una competencia");
+                            console.log("validacion de competencia");
                         }
                     },
                     "Cancelar": function () {
@@ -208,8 +222,8 @@
                             );
                     }
                     else {
-                        notificacionError("Seleccionar una competencia");
-
+                        //notificacionError("Seleccionar una competencia");
+                        console.log("validacion de competencia");
                     }
                 },
                 "Cancelar": function () {
@@ -255,7 +269,7 @@
             sortname: 'DescripcionCompetencia',
             sortorder: 'desc',
             viewrecords: false,
-            cellEdit: true,
+            //cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -285,7 +299,7 @@
             sortname: 'DescripcionOfrecimiento',
             sortorder: 'desc',
             viewrecords: false,
-            cellEdit: true,
+            //cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,

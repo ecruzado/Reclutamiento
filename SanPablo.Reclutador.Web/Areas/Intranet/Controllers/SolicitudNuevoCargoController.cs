@@ -551,7 +551,7 @@
                 }
                 else  
                 {
-                    objJsonMessage.Mensaje = "ERROR: La solicitud no tiene las aprobaciones necesarias";
+                    objJsonMessage.Mensaje = "La solicitud no tiene aun definido un perfil, le recomendamos que ubique la solicitud en el Menú de Consulta de Requerimientos para conocer en que etapa se encuentra";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

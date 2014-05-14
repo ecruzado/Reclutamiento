@@ -109,7 +109,7 @@
                 }
                 if (existe(competenciaCargo.TipoCompetencia))
                 {
-                    objJsonMessage.Mensaje = "No puede insertar elementos duplicados";
+                    objJsonMessage.Mensaje = "La competencia seleccionada ya fue ingresada";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

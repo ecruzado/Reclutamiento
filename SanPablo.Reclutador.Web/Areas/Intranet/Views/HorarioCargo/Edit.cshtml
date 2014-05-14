@@ -38,7 +38,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Horario.PuntajeHorario, new {@class="input-xxmini" })
+                @Html.TextBoxFor(model => model.Horario.PuntajeHorario, new {@class="input-xxmini" , maxlength="2" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Horario.PuntajeHorario)
                 </div>
