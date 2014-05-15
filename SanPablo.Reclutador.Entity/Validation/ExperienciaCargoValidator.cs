@@ -40,7 +40,7 @@
 
             RuleFor(x => x.PuntajeExperiencia)
                .InclusiveBetween(0, 10)
-               .WithMessage("Ingresar un puntaje entre 0 y 10");
+               .WithMessage("0 - 10");
 
          }
 

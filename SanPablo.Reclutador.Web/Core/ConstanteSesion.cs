@@ -85,7 +85,10 @@ namespace SanPablo.Reclutador.Web.Core
         /// </summary>
         public const string ReporteResumen = "ReporteResumen";
 
-
+        /// <summary>
+        /// hace referencia al objeto criterio cuando se consulta 
+        /// </summary>
+        public const string Criterio = "Criterio";
         
 
     }

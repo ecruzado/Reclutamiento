@@ -18,7 +18,7 @@
 
             RuleFor(x => x.PuntajeHorario)
                 .InclusiveBetween(-1, 10)
-                .WithMessage("Ingresar un puntaje entre 0 y 10");
+                .WithMessage("0 - 10");
 
          }
 

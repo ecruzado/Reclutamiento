@@ -414,8 +414,13 @@
             modal: true,
             buttons: {
                 "Grabar": function () {
+                    var count = $("#grdListCriterios").jqGrid('getGridParam', 'selarrrow');
+                    if (count != null && count!="") {
+                        $('#ValCriterio').dialog('open');
+                    } else {
+                        MostrarMensaje('Seleccione un criterio', "Alerta");
+                    }
                     
-                    $('#ValCriterio').dialog('open');
                    
 
                 },
@@ -816,14 +821,26 @@
              'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
 
                     'onError': function (a, b, c, d) {
+                        //if (d.status == 404)
+                        //    alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                        //else if (d.type === "HTTP")
+                        //    alert("error " + d.type + ": " + d.status);
+                        //else if (d.type === "File Size")
+                        //    alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                        //else
+                        //    alert("error " + d.type + ": " + d.text);
+                        alert("xD");
                         if (d.status == 404)
-                            alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                            MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>", "Alerta");
                         else if (d.type === "HTTP")
-                            alert("error " + d.type + ": " + d.status);
+                            // MostrarMensaje("error " + d.type + ": " + d.status);
+                            MostrarMensaje('Los tipos de archivos permitidos son: jpeg, jpg, gif, bmp y png favor de verificar el tipo de archivo', "Alerta");
                         else if (d.type === "File Size")
-                            alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                            MostrarMensaje(c.name + " " + d.type + " Limite: " + Math.round(d.info / (1024 * 1024)) + "MB", "Alerta");
                         else
-                            alert("error " + d.type + ": " + d.text);
+                            //alert("error " + d.type + ": " + d.text);
+                            MostrarMensaje('No se puede subir el archivo, ingrese otro tipo de archivo', "Alerta");
+
                     },
                     'onSelect': function (e, q, f) {
                         var estado = true;
@@ -1499,7 +1516,7 @@
 </div>
    
 }
-<div id="updateDialog" title="Agregar SubCategoria"></div>
+<div id="updateDialog" title="SubCategoria"></div>
 <div id="criterioDialog" title="Buscar Criterio"></div>
 <div id="divEliminar"><span id="spanEliminar"></span></div>
 <div id="divEliminarSubCrit"><span id="spanEliminarSubCrit"></span></div>

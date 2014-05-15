@@ -108,6 +108,10 @@
             }
         });
 
+        
+        
+
+
        
         $("#image").uploadify({
             'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
@@ -117,6 +121,7 @@
             'buttonText': 'Subir',
             'fileDesc': 'Image Files',
             'fileExt': '*.jpeg;*.jpg;*.gif;*.bmp;*.png;',
+            'fileType': 'image/*',
             'multi': false,
             'auto': true,
             'queueSizeLimit': '90',
@@ -126,13 +131,15 @@
 
                     'onError': function (a, b, c, d) {
                         if (d.status == 404)
-                            alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                            MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>","Alerta");
                         else if (d.type === "HTTP")
-                            alert("error " + d.type + ": " + d.status);
+                            // MostrarMensaje("error " + d.type + ": " + d.status);
+                            MostrarMensaje('Los tipos de archivos permitidos son: jpeg, jpg, gif, bmp y png favor de verificar el tipo de archivo', "Alerta");
                         else if (d.type === "File Size")
-                            alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                            MostrarMensaje(c.name + " " + d.type + " Limite: " + Math.round(d.info / (1024 * 1024)) + "MB", "Alerta");
                         else
-                            alert("error " + d.type + ": " + d.text);
+                            //alert("error " + d.type + ": " + d.text);
+                            MostrarMensaje('No se puede subir el archivo, ingrese otro tipo de archivo', "Alerta");
                     },
                     'onSelect': function (e, q, f) {
                         var estado = true;
@@ -579,9 +586,10 @@
                       <label class="control-label">Modo</label>
                    
                          <div class="controles">
-                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina) || @Accion.Actualizar.Equals(Model.Criterio.IndPagina))
+                          
+                              @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina) || @Accion.Actualizar.Equals(Model.Criterio.IndPagina))
                             {
-                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @disabled = "disabled"})
+                              @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.TipoModo, "Valor", "Descripcion", Model.Criterio.TipoModo), new { @disabled="disabled"})
                             }
                             else
                             {
@@ -664,12 +672,14 @@
                                             
                                    }
                                    else
-                                   {   <td class="span5">
-                                         <div class="controles">
-                                           <img id="imgCriterio"  height ="150" width="150" />
-                                         </div>  
-                                       </td>
+                                   {
+                                       <td class="span5">
+                                            <div class="controles">
+                                                     <img id="imgCriterio"  height ="150" width="150"  /> 
+                                                </div>  
+                                                </td>
                                    }
+                                  
 
                                  </tr>
                                  

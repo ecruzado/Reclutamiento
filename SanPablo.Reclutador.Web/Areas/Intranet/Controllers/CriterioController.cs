@@ -342,6 +342,8 @@
                
             }
 
+            Session[ConstanteSesion.Criterio] = model.Criterio;
+
             return View("Edit", model);
         }
 
@@ -551,6 +553,17 @@
 
             try
             {
+
+
+                    Criterio ObjCriterioConsulta = new Criterio();
+                    var crit = Session[ConstanteSesion.Criterio];
+                    if (crit!=null)
+                    {
+                        ObjCriterioConsulta = (Criterio)Session[ConstanteSesion.Criterio];
+                        model.Criterio.TipoModo = ObjCriterioConsulta.TipoModo;
+                    }
+                
+                
                     var criterioViewModel = InicializarCriteriosEdit();
                     JsonMessage objJsonMessage = new JsonMessage();
 
@@ -627,7 +640,7 @@
                         objCriterio.FechaModificacion = DateTime.Now;
                         objCriterio.UsuarioModificacion = UsuarioActual.NombreUsuario;
 
-                        if ("02".Equals(model.Criterio.TipoModo))
+                        if ("02".Equals(objCriterio.TipoModo))
                         {
                             if ( model.Criterio.IMAGENCRIT!=null)
                             {
