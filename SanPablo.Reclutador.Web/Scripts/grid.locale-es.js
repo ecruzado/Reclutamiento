@@ -11,7 +11,7 @@
 $.jgrid = {
 	defaults : {
 		recordtext: "Mostrando {0} - {1} de {2}",
-	    emptyrecords: "Sin registros que mostrar",
+	    emptyrecords: "No se encontraron coincidencias",
 		loadtext: "Cargando...",
 		pgtext : "Página {0} de {1}"
 	},

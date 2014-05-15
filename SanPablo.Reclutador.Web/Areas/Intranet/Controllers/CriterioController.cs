@@ -556,8 +556,13 @@
 
 
                     Criterio ObjCriterioConsulta = new Criterio();
-                    ObjCriterioConsulta = (Criterio)Session[ConstanteSesion.Criterio];
-                    model.Criterio.TipoModo = ObjCriterioConsulta.TipoModo;
+                    var crit = Session[ConstanteSesion.Criterio];
+                    if (crit!=null)
+                    {
+                        ObjCriterioConsulta = (Criterio)Session[ConstanteSesion.Criterio];
+                        model.Criterio.TipoModo = ObjCriterioConsulta.TipoModo;
+                    }
+                
                 
                     var criterioViewModel = InicializarCriteriosEdit();
                     JsonMessage objJsonMessage = new JsonMessage();
