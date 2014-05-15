@@ -19,5 +19,13 @@
     {
         List<Usuario> GetAnalistaRespoanble(SolReqPersonal obj);
         List<UsuarioVista> GetUsuarioVista(UsuarioVista obj);
+
+        /// <summary>
+        /// lista de usuarios para busqueda
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        List<Usuario> listarUsuario(Usuario usuario, int ideSede);
     }
 }

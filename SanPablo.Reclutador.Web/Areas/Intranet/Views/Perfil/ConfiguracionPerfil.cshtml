@@ -54,7 +54,7 @@
 
             var msjeError = document.getElementById('msjErrorPtjExamen');
 
-            if (ptjeMin > ptjePromMin) {
+            if (parseInt(ptjeMin) > parseInt(ptjePromMin)) {
                 
                 msjeError.innerHTML = "El ptje. mín no puede ser superior al ptje. prom. mín."
                 msjeError.style.display = "block";
@@ -68,7 +68,7 @@
 
             var msjeError = document.getElementById('msjErrorPtj');
 
-            if (ptjeMin > ptjeMax) {
+            if (parseInt(ptjeMin) > parseInt(ptjeMax)) {
 
                 msjeError.innerHTML = "El ptje. mín no puede ser superior al ptje. prom. mín."
                 msjeError.style.display = "block";

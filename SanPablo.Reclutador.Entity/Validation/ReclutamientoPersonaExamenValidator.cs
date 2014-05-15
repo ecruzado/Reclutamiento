@@ -20,24 +20,20 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.IdeUsuarioResponsable)
                 .NotEmpty()
-                .WithMessage("Debe ingresar responsable de la evaluacion");
+                .WithMessage("Ingresar responsable");
             RuleFor(x => x.IdeUsuarioResponsable)
                 .NotEqual(0)
-                .WithMessage("Debe ingresar un responsable de la evaluacion");
+                .WithMessage("Ingresar un responsable");
 
             RuleFor(x => x.Observacion)
                 .NotEmpty()
-                .WithMessage("Debe ingresar una observacion para la evaluacion");
-            RuleFor(x => x.Observacion)
-                .Length(1,255)
-                .WithMessage("No debe sobrepasar los 255 caracteres");
+                .WithMessage("Ingresar una observacion");
+
 
             RuleFor(x => x.ComentarioResultado)
                 .NotEmpty()
-                .WithMessage("Debe ingresar el comentario del resultado");
-            RuleFor(x => x.ComentarioResultado)
-                .Length(1,255)
-                .WithMessage("No debe sobrepasar los 255 caracteres");
+                .WithMessage("Ingresar el comentario");
+            
 
         }
 

@@ -38,6 +38,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string IndicadorPostulante { get; set; }
 
 
+        public virtual int IdRol { get; set; }
+        public virtual string Rol { get; set; }
        
         
         

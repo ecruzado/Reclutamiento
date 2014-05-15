@@ -24,6 +24,7 @@
                     { field: 'ApellidoPaterno', data: $("#Usuario_DscApePaterno").val() },
                     { field: 'ApellidoMaterno', data: $("#Usuario_DscApePaterno").val() },
                     { field: 'Nombres', data: $("#Usuario_DscNombres").val() },
+                    { field: 'idRol', data: $("#Usuario_IdRol").val() },
                 ];
                 if (migrilla._search == true) {
                     migrilla.searchField = postdata.searchField;
@@ -50,14 +51,14 @@
                     }
                 });
             },
-            colNames: ['', 'Ape. Paterno','Ape. Materno','Nombres'],
+            colNames: ['', 'Ape. Paterno','Ape. Materno','Nombres','','Rol'],
             colModel: [
                     { name: 'IdUSuario', index: 'IdUSuario', align: 'left', hidden: true },
                     { name: 'ApePaterno', index: 'ApePaterno', align: 'left',sortable: false, width: 130 },
                     { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left',sortable: false, width: 130 },
-                    { name: 'Nombres', index: 'Nombres', align: 'center', sortable: false, width: 130 }
-                    //{ name: 'idRol', index: 'idRol', align: 'center', sortable: false, hidden: true },
-                    //{ name: 'Rol', index: 'Rol', align: 'center', sortable: false, width: 130 }
+                    { name: 'Nombres', index: 'Nombres', align: 'center', sortable: false, width: 130 },
+                    { name: 'idRol', index: 'idRol', align: 'center', sortable: false, hidden: true },
+                    { name: 'Rol', index: 'Rol', align: 'center', sortable: false, width: 130 }
 
             ],
             pager: jQuery('#grdPagerUsuario'),
@@ -95,7 +96,7 @@
             </td>
             <td class="colInput" >
                  @Html.TextBoxFor(model => model.Usuario.IdUsuario, new { style = "display: none;" })  
-                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , maxlength="100" })                      
+                @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , maxlength="100", @onblur = "aMays(event, this)" })                      
             </td>
         </tr>
         <tr >
@@ -103,7 +104,7 @@
                 <label class="etiquetaFormulario" >Apellido Paterno</label>
             </td>
             <td class="colInput;input-xxlarge">
-                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" })                      
+                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100", @onblur = "aMays(event, this)" })                      
             </td>
         </tr> 
         <tr >
@@ -111,7 +112,15 @@
                 <label class="etiquetaFormulario" >Apellido Materno</label>
             </td>
             <td class="colInput;input-xxlarge">
-                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" })                      
+                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" , @onblur = "aMays(event, this)"})                      
+            </td>
+        </tr> 
+         <tr >
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Rol</label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                   @Html.DropDownListFor(model => model.Usuario.IdRol, new SelectList(Model.Roles, "IdRol" , "DscRol" , Model.Usuario.IdRol))                      
             </td>
         </tr> 
     </table>

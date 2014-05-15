@@ -173,27 +173,26 @@
             //buscarPreguntaRef();
         });
         
-
         $('#btnSiguiente').on('mousedown', stopNavigate);
 
-        //$('#btnSiguiente').on('mouseleave', function () {
-        //    $(window).on('beforeunload', function () {
-        //        return 'Are you sure you want to leave?';
-        //    });
+        $('#btnSiguiente').on('mouseleave', function () {
+                $(window).on('beforeunload', function () {
+                    return 'Esta seguro de terminar la prueba?';
+                });
+            });
 
-        //$(window).on('beforeunload', function(){
-        //      return 'Are you sure you want to leave?';
-        //});
+            $(window).on('beforeunload', function () {
+                return '¿Esta seguro terminar la prueba?';
+            });
 
-        window.onbeforeunload = function(e) {
-            return '¿Estas seguro de terminar la prueba?';
-        };
+            $(window).on('unload', function () {
 
-        $(window).on('unload', function(){
-            cerrarPrueba();
-        });
-    
-        });
+                logout();
+
+            });
+
+       
+    });
 
     function mueveReloj() {
         momentoActual = new Date()
