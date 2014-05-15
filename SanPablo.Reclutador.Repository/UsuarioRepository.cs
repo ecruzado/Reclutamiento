@@ -178,5 +178,86 @@
         }
 
 
+        public List<Usuario> listarUsuario(Usuario usuario, int ideSede)
+        {
+
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader ldrUsuario;
+                Usuario lobUsuario;
+                List<Usuario> llstUsuario;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_LISTAR_USUARIOS");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_apePaterno", OracleType.VarChar).Value = usuario.DscApePaterno;
+                lspcmd.Parameters.Add("p_apeMaterno", OracleType.VarChar).Value = usuario.DscApeMaterno;
+                lspcmd.Parameters.Add("p_nombres", OracleType.VarChar).Value = usuario.DscNombres;
+                lspcmd.Parameters.Add("p_idRol", OracleType.Int32).Value = usuario.IdRol;
+                lspcmd.Parameters.Add("p_idSede", OracleType.Int32).Value = ideSede;
+                lspcmd.Parameters.Add("p_retVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                ldrUsuario = (OracleDataReader)lspcmd.ExecuteReader();
+                lobUsuario = null;
+                llstUsuario = new List<Usuario>();
+
+
+                while (ldrUsuario.Read())
+                {
+                    lobUsuario = new Usuario();
+
+                    if (ldrUsuario["IDUSUARIO"] != DBNull.Value)
+                    {
+                        lobUsuario.IdUsuario = Convert.ToInt32(ldrUsuario["IDUSUARIO"]);
+                    }
+                    if (ldrUsuario["DSCAPEPATERNO"] != DBNull.Value)
+                    {
+
+                        lobUsuario.DscApePaterno = Convert.ToString(ldrUsuario["DSCAPEPATERNO"]);
+                    }
+                    if (ldrUsuario["DSCAPEMATERNO"] != DBNull.Value)
+                    {
+
+                        lobUsuario.DscApeMaterno = Convert.ToString(ldrUsuario["DSCAPEMATERNO"]);
+                    }
+                    if (ldrUsuario["DSCNOMBRES"] != DBNull.Value)
+                    {
+
+                        lobUsuario.DscNombres = Convert.ToString(ldrUsuario["DSCNOMBRES"]);
+                    }
+                    if (ldrUsuario["IDROL"] != DBNull.Value)
+                    {
+
+                        lobUsuario.IdRol = Convert.ToInt32(ldrUsuario["IDROL"]);
+                    }
+                    if (ldrUsuario["DSCROL"] != DBNull.Value)
+                    {
+
+                        lobUsuario.Rol = Convert.ToString(ldrUsuario["DSCROL"]);
+                    }
+
+
+
+                    llstUsuario.Add(lobUsuario);
+
+                }
+                ldrUsuario.Close();
+                return llstUsuario;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
     }
 }

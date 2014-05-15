@@ -17,6 +17,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public virtual List<DetalleGeneral> TipRol { get; set; }
         public virtual List<DetalleGeneral> TipSede { get; set; }
+
+        public virtual List<Rol> Roles { get; set; }
         public string Accion;
 
     }

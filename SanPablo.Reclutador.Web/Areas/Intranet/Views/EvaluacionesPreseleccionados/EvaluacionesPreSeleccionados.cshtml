@@ -26,9 +26,9 @@
                     var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable;
                     window.location = url;
                 }
-                else { MostrarMensaje('No es necesaria la programación de la evaluacion', "Sistema de reclutamiento y selección de personal");}
+                else { MostrarMensaje('No es necesaria la programación de la evaluacion', "MENSAJE");}
             } else {
-                MostrarMensaje('Seleccione un exámen a programar', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un exámen a programar', "MENSAJE");
             }
 
         });
@@ -46,7 +46,7 @@
                 window.location = url;
 
             } else {
-                MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione una solicitud', "MENSAJE");
             }
         });
 
@@ -254,7 +254,7 @@
                 });
             }
             else {
-                MostrarMensaje(data.Mensaje,"Reclutamiento y Selección de personal");
+                MostrarMensaje(data.Mensaje,"MENSAJE");
             }
          }
         });
@@ -290,7 +290,7 @@
                     <div class="controles">
                         @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.IdeSolReqPersonal, new { style = "display: none;" }) 
-                        @Html.TextBoxFor(model => model.Tipsol, new { style = "display: none;" })  
+                        @Html.TextBoxFor(model => model.tipsol, new { style = "display: none;" })  
                         @Html.TextBoxFor(model => model.usuarioSession, new { style = "display:none;" })
                        
                         @Html.TextBoxFor(model => model.ReclutaPersona.IdeReclutaPersona, new { style = "display: none" })

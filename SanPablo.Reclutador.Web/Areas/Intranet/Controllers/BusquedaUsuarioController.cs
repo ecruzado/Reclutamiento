@@ -61,7 +61,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public UsuarioViewModel InicializarPopupUsuario()
         {
             UsuarioViewModel model = new UsuarioViewModel();
+
             model.Usuario = new Usuario();
+            model.Roles = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo));
+            model.Roles.Insert(0, new Rol { IdRol = 0, DscRol = "Seleccione" });
 
             return model;
         }
@@ -75,48 +78,33 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             try
             {
-               
-                DetachedCriteria where = null;
-                where = DetachedCriteria.For<Usuario>();
+                var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                var usuarioResponsable = new Usuario();
                 
-                if(
-                    (!"".Equals(grid.rules[1].data) && grid.rules[1].data != null && grid.rules[1].data != "0") ||
-                    (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") 
-                   )
-                {
+                usuarioResponsable.DscApePaterno = (grid.rules[1].data == null ? "":(grid.rules[1].data).ToString());
+                usuarioResponsable.DscApeMaterno = (grid.rules[2].data == null ? "":(grid.rules[2].data).ToString());
+                usuarioResponsable.DscNombres = (grid.rules[3].data == null ? "":(grid.rules[3].data).ToString());
+                usuarioResponsable.IdRol = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
+               
+                var lista = _usuarioRepository.listarUsuario(usuarioResponsable,ideSede);
 
-                    if (!"".Equals(grid.rules[1].data) && grid.rules[1].data != null && "0"!=(grid.rules[1].data))
-                    {
 
-                        where.Add(Expression.Like("DscApePaterno", '%' + grid.rules[1].data + '%'));
-                    }
-                    if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && "0"!=(grid.rules[2].data))
-                    {
-                        where.Add(Expression.Like("DscApeMaterno", '%' + grid.rules[2].data + '%'));
-                    }
-                    if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
-                    {
-                        where.Add(Expression.Like("DscNombres", '%' + grid.rules[3].data + '%'));
-                    }
-                }
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
 
-                where.Add(Expression.Eq("FlgEstado", IndicadorActivo.Activo));
-                where.Add(Expression.Eq("TipUsuario", TipUsuario.Instranet));
-
-                var generic = Listar(_usuarioRepository,
-                                     grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
                 var i = grid.page * grid.rows;
 
                 generic.Value.rows = generic.List.Select(item => new Row
                 {
-                    id = item.IdUsuario.ToString(),
+                    id = item.IdUsuario.ToString()+item.IdRol.ToString(),
                     cell = new string[]
                             {
                                 item.IdUsuario==0?"":item.IdUsuario.ToString(),
                                 item.DscApePaterno==null?"":item.DscApePaterno.ToString(),
                                 item.DscApeMaterno==null?"":item.DscApeMaterno.ToString(),
-                                item.DscNombres==null?"":item.DscNombres.ToString()
+                                item.DscNombres==null?"":item.DscNombres.ToString(),
+                                item.IdRol == null?"":item.IdRol.ToString(),
+                                item.Rol == null?"":item.Rol.ToString()
                             }
 
 

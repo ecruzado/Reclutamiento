@@ -21,7 +21,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string nombreUsuario { get; set; }
         public string pagina { get; set; }
         public int IdeSolReqPersonal { get; set; }
-        public string Tipsol { get; set; }
+        public string tipsol { get; set; }
         public string IndPagina { get; set; }
         public int idSol { get; set; }
 
@@ -31,6 +31,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public List<DetalleGeneral> ListaAprobadoDesaprobado { get; set; }
         public string tipoArchivo { get; set; }
         public int usuarioSession { get; set; }
+
+
+        public string id { get; set; }
+        public string idReclutaPost { get; set; }
+        //public string tipSol { get; set; }
+        public string ind { get; set; }
+            
 
 
     }

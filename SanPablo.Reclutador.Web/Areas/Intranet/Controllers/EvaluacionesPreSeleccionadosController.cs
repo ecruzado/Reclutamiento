@@ -38,6 +38,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IPostulanteRepository _postulanteRepository;
         private IReclutamientoPersonaExamenRepository _reclutamientoPersonaExamenRepository;
+        private IUsuarioRepository _usuarioRepository;
 
 
 
@@ -46,7 +47,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                       ICvPostulanteRepository cvPostulanteRepository,
                                                       IReclutamientoPersonaRepository reclutamientoPersonaRepository,
                                                       IPostulanteRepository postulanteRepository,
-                                                      IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository
+                                                      IReclutamientoPersonaExamenRepository reclutamientoPersonaExamenRepository,
+                                                      IUsuarioRepository usuarioRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -55,7 +57,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _postulanteRepository = postulanteRepository;
             _reclutamientoPersonaExamenRepository = reclutamientoPersonaExamenRepository;
-           
+            _usuarioRepository = usuarioRepository;
         }
 
 
@@ -95,6 +97,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     modelEvaluaciones.Solicitud = (SolReqPersonal)listaSolicitud[0];
                 }
             }
+            modelEvaluaciones.id = id;
+            modelEvaluaciones.idReclutaPost = idRecluPost;
+            modelEvaluaciones.idSol = Convert.ToInt32(idSol);
+            modelEvaluaciones.pagina = pagina;
+            modelEvaluaciones.ind = ind;
 
             return View("EvaluacionesPreSeleccionados", modelEvaluaciones);
         }
@@ -111,7 +118,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Solicitud = new SolReqPersonal();
 
             model.pagina = pagina;
-            model.Tipsol = tipSol;
+            model.tipsol = tipSol;
             model.IdeSolReqPersonal = Convert.ToInt32(idSol);
             return model;
         }
@@ -180,38 +187,53 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return View("ProgramarEvaluacion",modelEvaluacion);
         }
 
-        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+       // [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult ProgramarEvaluacion(EvaluacionesPreSeleccionadosViewModel model)
         {
+            JsonMessage objJsonMessage = new JsonMessage();
+
             EvaluacionesPreSeleccionadosViewModel modelEvaluacion = iniciarProgramarEvaluacion();
 
             ReclutamientoPersonaExamenValidator validator = new ReclutamientoPersonaExamenValidator();
             ValidationResult result = validator.Validate(model.ReclutaPersonaExamen, "FechaEvaluacion", "HoraEvaluacion", "Observacion", "IdeUsuarioResponsable");
 
-            if (!result.IsValid)
+            try
             {
-                modelEvaluacion = iniciarProgramarEvaluacion();
-                modelEvaluacion.ReclutaPersonaExamen = model.ReclutaPersonaExamen;
-                return View("ProgramarEvaluacion", modelEvaluacion);
+                if (!result.IsValid)
+                {
+                    modelEvaluacion = iniciarProgramarEvaluacion();
+                    modelEvaluacion.ReclutaPersonaExamen = model.ReclutaPersonaExamen;
+                    return View("ProgramarEvaluacion", modelEvaluacion);
+                }
+                else
+                {
+                    var reclutamientoExamenEditar = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen);
+
+                    reclutamientoExamenEditar.FechaEvaluacion = model.ReclutaPersonaExamen.FechaEvaluacion;
+                    reclutamientoExamenEditar.HoraEvaluacion = model.ReclutaPersonaExamen.HoraEvaluacion;
+                    reclutamientoExamenEditar.IdeUsuarioResponsable = model.ReclutaPersonaExamen.IdeUsuarioResponsable;
+                    reclutamientoExamenEditar.Observacion = model.ReclutaPersonaExamen.Observacion;
+                    reclutamientoExamenEditar.FechaModificacion = FechaModificacion;
+                    reclutamientoExamenEditar.TipoEstadoEvaluacion = EstadoEvaluacion.Programado;
+                    reclutamientoExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
+                    reclutamientoExamenEditar.EsEntrevistaFinal = model.ReclutaPersonaExamen.EsEntrevistaFinal;
+
+                    _reclutamientoPersonaExamenRepository.Update(reclutamientoExamenEditar);
+                    enviarCorreo(reclutamientoExamenEditar);
+                    //return RedirectToAction("../EvaluacionesPreSeleccionados/Index");
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                var reclutamientoExamenEditar = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen);
-
-                reclutamientoExamenEditar.FechaEvaluacion = model.ReclutaPersonaExamen.FechaEvaluacion;
-                reclutamientoExamenEditar.HoraEvaluacion = model.ReclutaPersonaExamen.HoraEvaluacion;
-                reclutamientoExamenEditar.IdeUsuarioResponsable = model.ReclutaPersonaExamen.IdeUsuarioResponsable;
-                reclutamientoExamenEditar.Observacion = model.ReclutaPersonaExamen.Observacion;
-                reclutamientoExamenEditar.FechaModificacion = FechaModificacion;
-                reclutamientoExamenEditar.TipoEstadoEvaluacion = EstadoEvaluacion.Programado;
-                reclutamientoExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
-                reclutamientoExamenEditar.EsEntrevistaFinal = model.ReclutaPersonaExamen.EsEntrevistaFinal;
-
-                _reclutamientoPersonaExamenRepository.Update(reclutamientoExamenEditar);
-
-                return RedirectToAction("../EvaluacionesPreSeleccionados/Index");
+                objJsonMessage.Mensaje = "ERROR:" + ex;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
             }
+
+
         }
 
 
@@ -250,6 +272,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
  
         }
 
+        [ValidarSesion]
         [HttpPost]
         public ActionResult PopupResultado(EvaluacionesPreSeleccionadosViewModel model)
         {
@@ -342,7 +365,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+        public void enviarCorreo(ReclutamientoPersonaExamen reclutaExamen)
+        {
+            try
+            {
+                var enviarMail = new SendMail();
+                var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
 
+                var reclutaPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == reclutaExamen.IdeReclutamientoPersona);
+                var postulante = _postulanteRepository.GetSingle(x => x.IdePostulante == reclutaPersona.IdePostulante);
+                var responsable = _usuarioRepository.GetSingle(x => x.IdUsuario == reclutaExamen.IdeUsuarioResponsable);
+
+                SedeNivel datosSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes] ==null?"":Session[ConstanteSesion.UsuarioDes].ToString();
+                enviarMail.Rol = Session[ConstanteSesion.RolDes]==null?"": Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Sede = datosSession.SEDEDES == null ? "" : datosSession.SEDEDES;
+                enviarMail.Area = datosSession.AREADES == null ? "" : datosSession.AREADES;
+
+                var SedeDesc = Session[ConstanteSesion.SedeDes];
+
+                var fecha = String.Format("{0:dddd, MMMM d, yyyy}", reclutaExamen.FechaEvaluacion);
+
+                var hora = String.Format("{0:t}", reclutaExamen.HoraEvaluacion);
+
+                enviarMail.enviarCorreoProgramacion(dir.ToString(), responsable.Email, "entrevista personal", fecha, hora, postulante.NombreCompleto, "CARGO");
+            }
+            catch (Exception ex)
+            {
+               //return ex;
+            }
+
+        }
         public EvaluacionesPreSeleccionadosViewModel iniciarPopupResultado()
         {
             EvaluacionesPreSeleccionadosViewModel model = new EvaluacionesPreSeleccionadosViewModel();
@@ -469,17 +522,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             else
             {
-                if ((reclutaPersExamen.TipoExamen == TipoExamen.Evaluacion) &&
-                    ((reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Evaluado)||
-                     (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Aprobado)||
-                     (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Desaprobado)))
+                if (reclutaPersExamen.TipoExamen == TipoExamen.Evaluacion)
                 {
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    if ((reclutaPersExamen.TipoExamen == TipoExamen.Evaluacion) &&
+                        ((reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Evaluado) ||
+                         (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Aprobado) ||
+                         (reclutaPersExamen.TipoEstadoEvaluacion == EstadoEvaluacion.Desaprobado)))
+                    {
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        objJsonMessage.Mensaje = "Evaluación aún no rendida";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
                 else
                 {
-                    if (reclutaPersExamen.IdeUsuarioResponsable != 0)
+
+                    if(reclutaPersExamen.IdeUsuarioResponsable != 0)
                     {
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
@@ -487,10 +550,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     else
                     {
                         objJsonMessage.Mensaje = "Requiere el registro de programación previa";
-                        objJsonMessage.Resultado = true;
+                        objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
                 }
+                
             }
             
         }

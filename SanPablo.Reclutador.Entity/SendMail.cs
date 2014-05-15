@@ -209,6 +209,29 @@
             EnviarMail(destinatario, mail[1], "", body);
 
         }
+
+        public void enviarCorreoProgramacion(string dir, string destinatario, string entrevistaDesc, string fecha, string hora, string postulante, string cargo)
+        {
+            //Dar formato a textos
+            Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
+            Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
+            Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
+            Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
+
+
+            List<string> mail = new List<string>();
+            string cuerpoMail = "Luego de saludarlo(a), la presente es para comunicarle que se ha programado la entrevista "+entrevistaDesc+" a "+postulante+ " , para el cargo de "+cargo+
+                                ". Programado para el dia "+fecha+" a las "+hora+" horas. ";
+            string asuntoMail = "Programacion de entrevista para el cargo " + cargo;
+
+            mail.Add(cuerpoMail);
+            mail.Add(asuntoMail);
+
+            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
+                                                   new List<string> { mail[0], Usuario, Rol, Area, Sede });
+
+            EnviarMail(destinatario, mail[1], "", body);
+        }
        
     }
 }
