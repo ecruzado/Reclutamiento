@@ -17,7 +17,7 @@
 
         $('#updateDialogNivelAcademico').dialog({
             autoOpen: false,
-            width: 600,
+            width: 450,
             resizable: false,
             modal: true,
             buttons: {
@@ -25,6 +25,9 @@
                     e.preventDefault();
                     var result = $('#nivelAcademicoForm').valid();
                     if (result) {
+
+                        //mensaje
+
                         $.post('@Url.Action("Edit", "NivelAcademicoCargo")',
                             $("#nivelAcademicoForm").serialize(),
                             function (respuesta) {
@@ -33,6 +36,7 @@
                                     $('#grdListNivelAcademico').trigger('reloadGrid');
                                 }
                                 else {
+                                   
                                     notificacionError(respuesta.Mensaje);
                                 }
                             }
@@ -177,7 +181,7 @@
             sortname: 'IdeNivelAcademicoCargo',
             sortorder: 'desc',
             viewrecords: false,
-            cellEdit: true,
+            //cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -205,7 +209,7 @@
             sortname: 'IdeCentroEstudioCargo',
             sortorder: 'desc',
             viewrecords: false,
-            cellEdit: true,
+            //cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -219,6 +223,9 @@
             }
         });
     });
+
+    
+
 
     function mostrarAgregarNivelAcademico() {
         var dialogDiv = $('#updateDialogNivelAcademico');

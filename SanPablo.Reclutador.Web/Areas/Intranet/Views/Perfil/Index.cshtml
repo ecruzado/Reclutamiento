@@ -97,7 +97,8 @@
             <div class="opciones">
             @if (Accion.Enviar == Model.Accion)
             {    
-                <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
+                <a id="btnGrabarPuesto" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
             }
                <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
             </div>
@@ -116,11 +117,14 @@
     <div id="divMensaje2">
         <span id="spanMensaje2"></span>
     </div>
+<div id="divInfo"><span id="spanInfo"></span></div>
 
 
 @section ScriptsCargo{ 
   <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
   <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
   <script type="text/javascript">
     $(function () {
@@ -129,6 +133,33 @@
         $('#btnAgregarCompetencia').click(function () {
             mostrarAgregarCompetencia();
         });
+
+
+        $('#btnGrabarPuesto').click(function () {
+            
+
+            if ($("#puestoPerfilForm").validate().form()) {
+
+                $.ajax({
+                    type: "POST",
+                    data: $("#puestoPerfilForm").serialize(),
+                    url: '@Url.Action("Index", "Perfil", new { area = "Intranet"})',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                         }
+                        if (data.Resultado) {
+                            MostrarInfo(data.Mensaje, "Mensaje");
+                        }
+                    }
+                });
+            }
+
+        });
+        
+
+
 
         $('#updateDialog').dialog({
             autoOpen: false,
@@ -351,6 +382,10 @@
             data: { ideOfrecimiento: id },
         });
     }
+
+      function MostrarInfo(mensaje, titulo) {
+          Funciones.Alert("divInfo", "spanInfo", mensaje, titulo);
+      }
 
       $('textarea[data-val=true]').on('blur', function () {
           $(this).valid();

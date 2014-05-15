@@ -17,7 +17,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Ofrecimiento.TipoOfrecimiento, new SelectList(Model.Ofrecimientos, "Valor", "Descripcion", Model.Ofrecimiento.TipoOfrecimiento))
+                @Html.DropDownListFor(model => model.Ofrecimiento.TipoOfrecimiento, new SelectList(Model.Ofrecimientos, "Valor", "Descripcion", Model.Ofrecimiento.TipoOfrecimiento), new { style = "width: 400px;"})
                  <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Ofrecimiento.TipoOfrecimiento)
                 </div>
