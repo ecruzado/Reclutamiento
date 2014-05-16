@@ -96,7 +96,7 @@
             cellEdit: true,
             /*caption: 'Horario de Trabajo',*/
             height: 100,
-            width: 600,
+            width: 800,
             rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
@@ -122,7 +122,7 @@
             viewrecords: true,
             cellEdit: true,
             height: 100,
-            width: 600,
+            width: 800,
             rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
@@ -147,7 +147,7 @@
              viewrecords: true,
              cellEdit: true,
              height: 100,
-             width: 600,
+             width: 800,
              rowNum: 0,
              cellsubmit: 'clientArray',
              hidegrid: false,
@@ -174,7 +174,7 @@
               cellEdit: true,
               /*caption: 'Horario de Trabajo',*/
               height: 100,
-              width: 600,
+              width: 800,
               rowNum: 0,
               cellsubmit: 'clientArray',
               hidegrid: false,
@@ -201,7 +201,7 @@
               cellEdit: true,
               /*caption: 'Horario de Trabajo',*/
               height: 100,
-              width: 600,
+              width: 800,
               rowNum: 0,
               cellsubmit: 'clientArray',
               hidegrid: false,
@@ -478,7 +478,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.Cargo.FuncionCargo, new {@disabled = "disabled", @style = "width:600px; height:100px"})
+                            @Html.TextAreaFor(model=>model.Cargo.FuncionCargo, new {@disabled = "disabled", @style = "width:800px; height:100px; resize:none;"})
                          </div>
                        </td>
                     </tr>
@@ -521,11 +521,11 @@
                          <div class="controls">
                              @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                              { 
-                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onblur="aMays(event, this)", disabled="disabled"})
+                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px; resize:none;", onblur="aMays(event, this)", disabled="disabled"})
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:600px;height:100px", onblur="aMays(event, this)"})
+                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur="aMays(event, this)"})
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                      @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
                                 </div>

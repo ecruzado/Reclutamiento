@@ -66,7 +66,7 @@
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(repuesta.Mensaje, "MENSAJE");
+                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                             }
                         });
                     }
@@ -495,10 +495,10 @@
                          function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                mensajeRedirecciona("Solicitud aceptada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
+                                mensajeRedirecciona("Solicitud aceptada exitosamente", "MENSAJE");
                             }
                             else {
-                                MostrarMensaje(respuesta.Mensaje, "Sistema de Reclutamiento y Selección de Personal");
+                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                             }
                         }
                     );
@@ -564,7 +564,7 @@
                     window.location = url;
                    
                 } else {
-                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Genere una Solicitud', "MENSAJE");
                 }
             }
 
@@ -760,6 +760,7 @@
                             <div class="controles">
                                 @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
                                 {
+                                       @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDependencia, new { style="display:none;"}) 
                                        @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia), new { disabled = "disabled" })
                                 }
                                 else
@@ -791,6 +792,7 @@
                             <div class="controles">
                                 @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
                                 {
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDepartamento, new { style="display:none;"}) 
                                     @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento), new { disabled = "disabled" })
                                 }
                                 else
@@ -821,6 +823,7 @@
                             <div class="controles">
                                 @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
                                 {
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeArea, new { style="display:none;"}) 
                                     @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea), new { disabled = "disabled" })
                                 }
                                 else

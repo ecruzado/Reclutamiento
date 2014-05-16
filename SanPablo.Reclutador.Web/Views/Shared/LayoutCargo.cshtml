@@ -108,19 +108,19 @@
                     <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i>Pág. Anterior</a>
                 }
                 
-                @if (Accion.Aprobar.Equals(Model.Accion))
+                @if (Visualicion.SI.Equals(Model.btnVerAprobar))
                 {
-                    <a class="btn btn-info" onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> @Html.DisplayFor(model=>model.aproObser)</a>
+                    <a class="btn btn-info"  onclick="mostrarAprobarDesaprobar();"><i class="icon-list icon-white"></i> @Html.DisplayFor(model=>model.aproObser)</a>
                 }
-                @if (Accion.Enviar.Equals(Model.Accion))
+                @if (Visualicion.SI.Equals(Model.btnVerEnviar))
                 {
                     <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
                 }
-                @if (Accion.Aceptar.Equals(Model.Accion))
+                @if (Visualicion.SI.Equals(Model.btnVerAceptar))
                 {
                     <a class="btn btn-info" onclick="mostrarConfirmaAceptar();" href="#"><i class="icon-list icon-white"></i> Aceptar</a>
                 }
-                @if (Accion.Publicar.Equals(Model.Accion))
+                @if (Visualicion.SI.Equals(Model.btnVerPublicar))
                 {
                     <a class="btn btn-info" onclick="publicar();" ><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                 }
@@ -130,7 +130,7 @@
 </div>
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
-<div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
+<div id="updateDialogAprobacion" title="Aprobar/Observar Solicitud" ></div>
 <div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de nuevo cargo?</p></div>
 
 <div id="divMensajeAlert">
@@ -154,43 +154,54 @@
             buttons: {
                 "Enviar": function (e) {
                     e.preventDefault();
-                    var result = $('#LogSolicitudNuevoCargoForm').valid();
-                    if (result) {
-                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
-                        $("#divMensaje").dialog({
-                            title: 'CONFIRMACIÓN',
-                            modal: true,
-                            buttons: {
-                                "Aceptar": function () {
-                                    $(this).dialog("close");
-                                    $("#updateDialogAprobacion").dialog("close");
-                                    $.blockUI({
-                                        message: '<h1>Enviando...</h1>',
-                                        css: {
-                                            border: 'none',
-                                            padding: '15px',
-                                            backgroundColor: '#000',
-                                            '-webkit-border-radius': '10px',
-                                            '-moz-border-radius': '10px',
-                                            opacity: .5,
-                                            color: '#fff'
-                                        }
-                                    });
-                                    enviarAprobacionRechazo();
-                                },
-                                "Cancelar": function () { $(this).dialog("close"); }
-                            }
-                        });
+                    if (validarObservacion()) {
+                        var result = $('#LogSolicitudNuevoCargoForm').valid();
+                        if (result) {
+                            $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                            $("#divMensaje").dialog({
+                                title: 'CONFIRMACIÓN',
+                                modal: true,
+                                resizable: false,
+                                buttons: {
+                                    "Aceptar": function () {
+                                        $(this).dialog("close");
+                                        $("#updateDialogAprobacion").dialog("close");
+                                        $.blockUI({
+                                            message: '<h1>Enviando...</h1>',
+                                            css: {
+                                                border: 'none',
+                                                padding: '15px',
+                                                backgroundColor: '#000',
+                                                '-webkit-border-radius': '10px',
+                                                '-moz-border-radius': '10px',
+                                                opacity: .5,
+                                                color: '#fff'
+                                            }
+                                        });
+                                        enviarAprobacionRechazo();
+                                    },
+                                    "Cancelar": function () { $(this).dialog("close"); }
+                                }
+                            });
 
+                        }
+                        else {
+
+                            notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                        }
                     }
                     else {
-
-                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                        var msje = document.getElementById('mensajeErrorLog');
+                        msje.innerHTML = "ERROR: Debe ingresar una observación";
+                        msje.style.display = "block";
                     }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
+            },
+            open: function () {
+                $("#LogSolicitudNuevoCargo_Observacion").focus();
             }
         });
 
@@ -201,6 +212,7 @@
             width: 300,
             resizable: false,
             modal: true,
+            position: [200,0],
             buttons: {
                 "Aceptar": function (e) {
                     $('#updateDialogAceptar').dialog("close");
@@ -346,7 +358,7 @@
              function (respuesta) {
                  $.unblockUI();
                  if (respuesta.Resultado) {
-                     mensajeRedirecciona("Aprobacion/Rechazo enviado exitosamente","MENSAJE");
+                     mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
                  }
                  else {
                      notificacionError(respuesta.Mensaje);
@@ -366,6 +378,7 @@
         $("#divMensaje").dialog({
             title: titulo,
             modal: true,
+            resizable: false,
             buttons: {
                 "Ok": function () {
                     $(this).dialog("close");
@@ -375,6 +388,18 @@
         });
     }
 
+    function validarObservacion() {
+        var aprobado = $('input[id="Rechazado"]:checked').val();
+        var observacion = $('#LogSolicitudNuevoCargo_Observacion').val();
+        if (aprobado == "false") {
+            if (observacion.length > 0)
+            { return true; }
+            else
+            { return false; }
+        }
+        else { return true; }
+
+    }
 </script>
 }
 

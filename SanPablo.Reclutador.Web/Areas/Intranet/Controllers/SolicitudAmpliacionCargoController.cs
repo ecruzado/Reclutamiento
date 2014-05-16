@@ -77,6 +77,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             IdeSolicitudAmpliacion = Convert.ToInt32(id);
 
+            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+            solicitudModel.rolSession = rolSession;
+
+
+
             if (IdeSolicitudAmpliacion != 0)
             {
                 var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
@@ -95,9 +101,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudModel.Areas.Add(area);
                 solicitudModel.Departamentos.Add(departamento);
                 
-                var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-                solicitudModel.rolSession = rolSession;
                 //determinar Accion
 
                 if ((solicitud.TipEtapa == Etapa.Pendiente) && (rolSession == Roles.Gerente))
@@ -121,12 +125,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 solicitudModel.Accion = Accion.Enviar;
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+
                 solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
                 solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;
                 solicitudAmpliacion.Area_des = usuario.AREADES;
                 solicitudAmpliacion.IdeSede = usuario.IDESEDE;
                 solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
                 solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
+                solicitudAmpliacion.IdeArea = usuario.IDEAREA;
+
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
             }
             return View(solicitudModel);
@@ -143,7 +150,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             try
             {
                 SolReqPersonalValidator validation = new SolReqPersonalValidator();
-                ValidationResult result = validation.Validate(solicitudAmpliacion, "IdeCargo", "NumVacantes","Observacion", "Motivo");
+                ValidationResult result = validation.Validate(solicitudAmpliacion, "IdeCargo", "IdeDependencia", "IdeDepartamento", "IdeArea", 
+                                                                                    "NumVacantes", "Observacion", "Motivo");
                 
                 if (!result.IsValid)
                 {
@@ -231,8 +239,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.SolicitudRequerimiento = new SolReqPersonal();
 
             model.Pagina = pagina;
-
-            model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            
+            model.Cargos = new List<Cargo>(_cargoRepository.listaCargosCompletos(idSede));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             model.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));

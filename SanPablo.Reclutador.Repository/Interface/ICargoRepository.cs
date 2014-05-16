@@ -16,6 +16,15 @@ using System.Data;
         /// <param name="IdeUSuarioCreacion"></param>
         int mantenimientoCargo(int ideCargo, string IdeUSuarioCreacion);
 
+
+        /// <summary>
+        /// lista de cargos para lista desplegable de ampliacion
+        /// lista por sede y cargos con perfil completo
+        /// </summary>
+        /// <param name="IdeSede"></param>
+        /// <returns></returns>
+        List<Cargo> listaCargosCompletos(int IdeSede);
+
         /// <summary>
         /// 
         /// </summary>
