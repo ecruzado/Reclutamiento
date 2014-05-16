@@ -10,22 +10,22 @@
         {
             RuleFor(x => x.TipoExperiencia)
                 .NotEqual("00")
-                .WithMessage("Seleccionar una Experiencia");
+                .WithMessage("Seleccionar un cargo");
 
             RuleFor(x => x.CantidadAnhosExperiencia)
                 .NotEmpty()
-                .WithMessage("Ingresar Años de Experiencia");
+                .WithMessage("Pendiente");
             RuleFor(x => x.CantidadAnhosExperiencia)
                 .InclusiveBetween(0, 70)
-                .WithMessage("Ingresar una cantidad válida");
+                .WithMessage("0 - 70");
 
             RuleFor(x => x.CantidadMesesExperiencia)
                 .NotEmpty()
-                .WithMessage("Ingresar Meses de Experiencia");
+                .WithMessage("Pendiente");
 
             RuleFor(x => x.CantidadMesesExperiencia)
                 .InclusiveBetween(0,12)
-                .WithMessage("Ingresar nro de meses válido");
+                .WithMessage("0 - 12");
 
             //RuleFor(x => x.CantidadMesesExperiencia)
             //    .GreaterThan(-1)
@@ -36,7 +36,7 @@
 
             RuleFor(x => x.PuntajeExperiencia)
                 .NotEmpty()
-                .WithMessage("Ingresar Puntaje");
+                .WithMessage("0 - 10");
 
             RuleFor(x => x.PuntajeExperiencia)
                .InclusiveBetween(0, 10)

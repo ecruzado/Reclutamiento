@@ -62,6 +62,11 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual("0")
                 .WithMessage("Seleccionar Sexo");
 
+            RuleFor(x => x.TipoRangoSalarial)
+                .NotEqual("00")
+                .WithMessage("Seccionar rango salarial");
+            
+
             RuleFor(x => x.PuntajeSexo)
                  .NotEmpty()
                  .WithMessage("0 - 10")

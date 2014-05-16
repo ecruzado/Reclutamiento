@@ -44,6 +44,20 @@
         </tr>
     </table>
     <table>
+        
+        <tr>
+            <td></td>
+            
+            <td class="colEtiqueta">
+                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">Años <span class="text-error">*</span></label>
+            </td>
+            <td class="colEtiqueta">
+                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">Meses <span class="text-error">*</span></label>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        
         <tr>
             <td class="colEtiqueta">
                 <label style="width:160px" class="etiquetaFormulario" for="setipoInstitucion">Tiempo de Experiencia <span class="text-error">*</span></label>
@@ -55,9 +69,9 @@
                 @Html.ValidationMessageFor(model => model.Experiencia.CantidadAnhosExperiencia)
                 </div>
             </td>
-            <td class="colEtiqueta">
+            @*<td class="colEtiqueta">
                 <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">AÑOS <span class="text-error">*</span></label>
-            </td>
+            </td>*@
            
             <td class="colInput">
                  @Html.TextBoxFor(model => model.Experiencia.CantidadMesesExperiencia, new {@class="input-mini",  maxlength="2" })
@@ -65,13 +79,11 @@
                  @Html.ValidationMessageFor(model => model.Experiencia.CantidadMesesExperiencia)
                 </div>
             </td>
-             <td class="colEtiqueta">
-                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">MESES <span class="text-error">*</span></label>
-            </td>
+             
         </tr>
         <tr>
            <td class="colEtiqueta">
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
+                <label style="width:160px" class="etiquetaFormulario" for="setipoInstitucion">Puntaje <span class="text-error">*</span></label>
            </td>
            <td>
                 @Html.TextBoxFor(model => model.Experiencia.PuntajeExperiencia, new {@class="input-xxmini" ,  maxlength="2" })

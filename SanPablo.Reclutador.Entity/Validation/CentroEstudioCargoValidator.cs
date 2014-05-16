@@ -10,7 +10,7 @@
         {
             RuleFor(x => x.TipoCentroEstudio)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un Tipo de Centro de Estudios");
+                .WithMessage("Seleccionar un Tipo de Institución");
 
             RuleFor(x => x.TipoNombreCentroEstudio)
                 .NotEqual("00")
@@ -18,7 +18,7 @@
 
             RuleFor(x => x.PuntajeCentroEstudios)
                 .NotEmpty()
-                .WithMessage("Ingresar Puntaje");
+                .WithMessage("0 a 10");
             RuleFor(x => x.PuntajeCentroEstudios)
                 .InclusiveBetween(0, 10)
                 .WithMessage("0 a 10");

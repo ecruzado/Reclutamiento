@@ -164,18 +164,28 @@
                     <tr>
                         <td></td>
                         <td style =" width:450px" >
-                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
+                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
                         @if (Model.Accion.Equals(Accion.Consultar))
                         {
                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })
                         }
                         else
-                        { 
-                            @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
-                            </div>
+                        {
+                            if (Visualicion.SI.Equals(Model.indVisibilidad))
+                            {
+                              @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
+                             
+                            }
+                            else
+                            {
+                              @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled"  })
+                              
+                            }
+                            
                         }
+                         <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
+                              </div>
                         </td>
                         <td style="width:80px">
                         @if (Model.Accion.Equals(Accion.Consultar))
@@ -259,19 +269,19 @@
     </div>
 }
   <!--General Fin-->
-<div id="updateDialogHorario" title="Agregar Horario"></div>
+<div id="updateDialogHorario" title="Horario"></div>
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>
 <div id="divInfo"><span id="spanInfo"></span></div>
-<div id="updateDialogUbigeo" title="Agregar Ubigeo"></div>
+<div id="updateDialogUbigeo" title="Ubigeo"></div>
    
 @section ScriptsCargo{   
 
     <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-   <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+   @*<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>*@
 
 
     <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
@@ -286,6 +296,8 @@
          SanPablo.Numeros("Cargo_EdadFin");
          SanPablo.Numeros("Cargo_PuntajeEdad");
          SanPablo.Numeros("Cargo_PuntajeSalario");
+
+        
 
          $("#msjErrorEdad").hide();
 
@@ -317,6 +329,7 @@
                        });
                        } else {
                            validarEdad();
+                           
                        }
                 }
             

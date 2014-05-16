@@ -22,7 +22,7 @@
 
             RuleFor(x => x.PuntajeNivelEstudio)
                 .NotEmpty()
-                .WithMessage("Ingresar Puntaje");
+                .WithMessage("0 - 10");
 
             RuleFor(x => x.PuntajeNivelEstudio)
                 .InclusiveBetween(0, 10)

@@ -209,7 +209,13 @@
                     cargoEditar.Sexo = cargo.Sexo;
                     cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
                     cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
-                    cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+
+                    if (cargo.TipoRangoSalarial!=null && cargo.TipoRangoSalarial!="")
+                    {
+                        cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+                    }
+                
+                
                     cargoEditar.IndicadorEdadRanking = cargo.IndicadorEdadRanking;
                     cargoEditar.IndicadorSalarioRanking = cargo.IndicadorSalarioRanking;
                     cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
@@ -648,30 +654,35 @@
                 case Etapa.Aprobado:
                     perfilViewModel.btnVerEnviar = Visualicion.SI;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.indVisibilidad = Visualicion.NO;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Generacion_Perfil:
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.SI;
+                    perfilViewModel.indVisibilidad = Visualicion.NO;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aprobacion_Perfil:
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     perfilViewModel.btnVerAceptar = Visualicion.SI;
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aceptado:
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
                     perfilViewModel.btnVerPublicar = Visualicion.SI;
                     break;
                 case Etapa.Observado:
                     perfilViewModel.btnVerEnviar = Visualicion.SI;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
