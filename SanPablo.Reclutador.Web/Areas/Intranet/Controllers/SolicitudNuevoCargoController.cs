@@ -83,7 +83,7 @@
 
                 lista = _solicitudNuevoCargoRepository.GetListaSolicitudNuevo(solicitudNuevo);
 
-
+                
 
                 var generic = GetListar(lista,
                                          grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
@@ -111,7 +111,8 @@
                                 item.PreSeleccionados==0?"":item.PreSeleccionados.ToString(),
                                 item.Evaluados==0?"":item.Evaluados.ToString(),
                                 item.Seleccionados==0?"":item.Seleccionados.ToString(),
-                                
+                                item.Contratados==0?"":item.Contratados.ToString(),
+
                                 item.FechaCreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FechaCreacion),
                                 item.FechaExpiracion==null?"":String.Format("{0:dd/MM/yyyy}",item.FechaExpiracion),
                                
@@ -144,8 +145,8 @@
 
             //determinar los permisos de botones
             var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-
-           
+            
+            solicitudnuevoViewModel.rolSession =  rolSession;
 
             if (rolSession == Roles.Jefe) 
             {
@@ -227,6 +228,9 @@
         public ActionResult Edit(string id , string pagina)
         {
             var solicitudNuevoCargoViewModel = inicializarSolicitudNuevoCargo(pagina);
+            var rolSesion = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            solicitudNuevoCargoViewModel.rolSession = rolSesion;
+
             if (id != "0")
             {
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
