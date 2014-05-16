@@ -172,18 +172,7 @@
                 "Aceptar": function () {
                     //$(this).dialog("close");
                     $("#divMensaje").dialog("close");
-                    $.blockUI({
-                        message: '<h1>Enviando...</h1>',
-                        css: {
-                            border: 'none',
-                            padding: '15px',
-                            backgroundColor: '#000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .5,
-                            color: '#fff'
-                        }
-                    });
+                   
                     enviarAprobacionRechazo();
                 },
                 "Cancelar": function () { $(this).dialog("close"); }
@@ -197,16 +186,17 @@
         //if (estado == "A") {
             var dialogDiv = $('#updateDialogAprobacion');
             var ideSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
-            if (guardarDatosEditados()) {
+            var result = $('#solicitudNuevoCargoForm').valid();
+            if (result) {
                 $.get('@Url.Action("Edit", "LogSolicitudNuevoCargo")', { ideSolicitud: ideSolicitud }, function (data) {
                     dialogDiv.html(data);
                     $.validator.unobtrusive.parse($("#updateDialogAprobacion"));
                     dialogDiv.dialog('open');
                 });
-            }
-            else {
-                MostrarMensaje("Verifique los datos ingresados e intente nuevamente", "Sistema de reclutamiento y selección de personal");
-            }
+           }
+           else {
+             MostrarMensaje("Verifique los datos ingresados e intente nuevamente", "ALERTA");
+           }
         //}
         //else {
         //    MostrarMensaje("No puede realizar esta accion en una solicitud en estado 'INACTIVO' o no Enviado", "Sistema de reclutamiento y selección de personal");
@@ -258,23 +248,42 @@
 
     function enviarAprobacionRechazo()
     {
-        $('#updateDialogAprobacion').dialog("close");
-        $.post('@Url.Action("Edit", "LogSolicitudNuevoCargo")',
-             $('#LogSolicitudNuevoCargoForm').serialize(),
-             function (respuesta) {
-                 if (respuesta.Resultado) {
-                    
-                     $.unblockUI();
-                     mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
-                     //notificacionExito();
+        $.blockUI({
+            message: '<h1>Enviando...</h1>',
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }
+        });
+        if (guardarDatosEditados()) {
+
+            $('#updateDialogAprobacion').dialog("close");
+            $.post('@Url.Action("Edit", "LogSolicitudNuevoCargo")',
+                 $('#LogSolicitudNuevoCargoForm').serialize(),
+                 function (respuesta) {
+                     if (respuesta.Resultado) {
+
+                         $.unblockUI();
+                         mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
+                         //notificacionExito();
+                     }
+                     else {
+                         $.unblockUI();
+                         MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                         // notificacionError(respuesta.Mensaje);
+                     }
                  }
-                 else {
-                     $.unblockUI();
-                     MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
-                     // notificacionError(respuesta.Mensaje);
-                 }
-              }
-        );
+            );
+        }
+        else {
+            $.unblockUI();
+            MostrarMensaje("Verifique los datos ingresados e intente nuevamente", "ALERTA");
+        }
     }
 
 
@@ -465,6 +474,7 @@
                                         {
                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
                                             {
+                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDependencia, new { style = "display:none;" })
                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia), new { disabled = "disabled" }) 
                                             }
                                             else
@@ -514,6 +524,7 @@
                                          {
                                              if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
                                              {
+                                                 @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new { style = "display:none;" })
                                                  @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento), new { disabled = "disabled"}) 
                                              }
                                              else{
@@ -556,13 +567,12 @@
                                 <div class="">
                                     <label class="control-label" for="inputSuccess">Área<span class="text-error">*</span></label>
                                     <div class="controles">
-                                         @* @Html.TextBoxFor(model => model.AreaSession.NombreArea, new { @disabled = "disabled" })
-                                        @Html.HiddenFor(model => model.AreaSession.IdeArea)*@
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
                                             {
-                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled="disabled"})
+                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeArea, new { style = "display:none;" })
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled="disabled"})
                                             }
                                             else
                                             {

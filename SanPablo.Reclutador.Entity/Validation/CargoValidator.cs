@@ -74,11 +74,15 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeMinimoGeneral)
                 .NotEmpty()
-                .WithMessage("Debe ingresar el puntaje mínimo general");
+                .WithMessage("Pendiente");
+
+            RuleFor(x => x.PuntajeMinimoExamen)
+                .NotEmpty()
+                .WithMessage("Pendiente");
 
             RuleFor(x => x.CantidadPreseleccionados)
                 .NotEmpty()
-                .WithMessage("Debe ingresar la cantidad de pre seleccionados");
+                .WithMessage("Pendiente");
                 
 
             //RuleFor(x => x.PuntajeMinimoPostulanteInterno)
