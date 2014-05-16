@@ -10,7 +10,7 @@
         {
             RuleFor(x => x.TipoCentroEstudio)
                 .NotEqual("00")
-                .WithMessage("Seleccionar un Tipo de Centro de Estudios");
+                .WithMessage("Seleccionar un Tipo de Institución");
 
             RuleFor(x => x.TipoNombreCentroEstudio)
                 .NotEqual("00")
