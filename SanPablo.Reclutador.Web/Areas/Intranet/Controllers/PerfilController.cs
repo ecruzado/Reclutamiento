@@ -191,7 +191,13 @@
                     cargoEditar.Sexo = cargo.Sexo;
                     cargoEditar.PuntajeSexo = cargo.PuntajeSexo;
                     cargoEditar.TipoRequerimiento = cargo.TipoRequerimiento;
-                    cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+
+                    if (cargo.TipoRangoSalarial!=null && cargo.TipoRangoSalarial!="")
+                    {
+                        cargoEditar.TipoRangoSalarial = cargo.TipoRangoSalarial;
+                    }
+                
+                
                     cargoEditar.IndicadorEdadRanking = cargo.IndicadorEdadRanking;
                     cargoEditar.IndicadorSalarioRanking = cargo.IndicadorSalarioRanking;
                     cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
@@ -608,18 +614,23 @@
             {
                 case Etapa.Aprobado:
                     perfilViewModel.Accion = Accion.Enviar;
+                    perfilViewModel.indVisibilidad = Visualicion.NO;
                     break;
                 case Etapa.Generacion_Perfil:
                     perfilViewModel.Accion = Accion.Aprobar;
+                    perfilViewModel.indVisibilidad = Visualicion.NO;
                     break;
                 case Etapa.Aprobacion_Perfil:
                     perfilViewModel.Accion = Accion.Aceptar;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     break;
                 case Etapa.Aceptado:
                     perfilViewModel.Accion = Accion.Publicar;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     break;
                 case Etapa.Observado:
                     perfilViewModel.Accion = Accion.Enviar;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
                     break;
             }
 
