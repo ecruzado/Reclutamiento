@@ -10,7 +10,7 @@
         {
             RuleFor(x => x.TipoCompetencia)
                 .NotEqual("00")
-                .WithMessage("Seleccionar una competenecia");
+                .WithMessage("Seleccionar una competencia");
 
 
             RuleFor(x => x.Puntaje)

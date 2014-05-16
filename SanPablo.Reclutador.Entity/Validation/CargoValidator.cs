@@ -27,7 +27,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeTotalPostulanteInterno)
                 .NotEmpty()
-                .WithMessage("Debe ingresar el puntaje para el postulante interno")
+                .WithMessage("0 - 10")
                 .InclusiveBetween(0, 10)
                 .WithMessage("0 - 10");
 
@@ -47,14 +47,14 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeEdad)
                 .NotEmpty()
-                .WithMessage("Debe ingresar puntaje de edad")
+                .WithMessage("0 - 10")
                 .InclusiveBetween(0,10)
                 .WithMessage("0 - 10");
 
 
             RuleFor(x => x.PuntajeSalario)
                 .NotEmpty()
-                .WithMessage("Debe ingresar puntaje de edad")
+                .WithMessage("0 - 10")
                 .InclusiveBetween(0, 10)
                 .WithMessage("0 - 10");
 
@@ -64,7 +64,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.PuntajeSexo)
                  .NotEmpty()
-                 .WithMessage("Debe ingresar puntaje de sexo")
+                 .WithMessage("0 - 10")
                 .InclusiveBetween(0, 10)
                 .WithMessage("0 - 10");
 
