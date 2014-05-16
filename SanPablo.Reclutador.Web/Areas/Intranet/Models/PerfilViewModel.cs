@@ -30,6 +30,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string aproObser { get; set; }
 
 
+        public string btnVerAprobar { get; set; }
+        public string btnVerEnviar { get; set; }
+        public string btnVerAceptar { get; set; }
+        public string btnVerPublicar { get; set; }
+
+
         
     }
 }

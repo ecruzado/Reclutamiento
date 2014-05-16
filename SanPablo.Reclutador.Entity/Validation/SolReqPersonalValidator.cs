@@ -10,7 +10,7 @@
 
             RuleFor(x => x.IdeCargo)
                 .NotEqual(0)
-                .WithMessage("Seleccion el cargo del cual se solicita ampliacion");
+                .WithMessage("Seleccionar un cargo");
 
             RuleFor(x => x.NumVacantes)
                 .NotEmpty()
@@ -26,6 +26,18 @@
                 .Length(1, 255)
                 .WithMessage("El número máximo de caracteres permitido paea este campo es 255");
 
+            RuleFor(x => x.IdeDependencia)
+               .NotEmpty()
+               .WithMessage("Seleccionar dependencia");
+
+            RuleFor(x => x.IdeDepartamento)
+               .NotEmpty()
+               .WithMessage("Seleccionar departamento");
+
+            RuleFor(x => x.IdeArea)
+               .NotEmpty()
+               .WithMessage("Seleccionar area");
+
             RuleFor(x => x.Motivo)
               .NotEmpty()
               .WithMessage("Ingrese los motivos del requerimiento");
@@ -40,7 +52,7 @@
 
             RuleFor(x => x.TipPuesto)
                 .NotEqual("00")
-                .WithMessage("Seleccione una opción");
+                .WithMessage("Seleccionar una opción");
 
            
             

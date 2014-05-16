@@ -95,6 +95,50 @@
         }
 
         /// <summary>
+        /// lista de cargos para lista desplegable de ampliacion
+        /// </summary>
+        /// <param name="IdCargo"></param>
+        /// <returns></returns>
+        public List<Cargo> listaCargosCompletos(int IdeSede)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                IDataReader ldrCargo;
+                Cargo lobCargo;
+                List<Cargo> llstCargo;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_LISTACARGOS");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_idSede", OracleType.Int32).Value = IdeSede;
+                lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                ldrCargo = (OracleDataReader)lspcmd.ExecuteReader();
+                lobCargo = null;
+                llstCargo = new List<Cargo>();
+
+
+                while (ldrCargo.Read())
+                {
+                    lobCargo = new Cargo();
+                    lobCargo.IdeCargo = Convert.ToInt32(ldrCargo["IDECARGO"]);
+                    lobCargo.NombreCargo = Convert.ToString(ldrCargo["NOMCARGO"]);
+                    llstCargo.Add(lobCargo);
+                }
+                ldrCargo.Close();
+                return llstCargo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        /// <summary>
         /// Listar los cargos para mantenimiento
         /// </summary>
         /// <param name="IdeSolicitud"></param>

@@ -69,12 +69,6 @@
             {
                 Session[ConstanteSesion.pagina] = pagina;
             }
-            //var ideSolicitud = null;
-
-            //if ((id != "0") && (id != null))
-            //{
-            //    ideSolicitud = id;
-            //}
             
             try
             {
@@ -652,28 +646,62 @@
             switch (tipoEtapa)
             {
                 case Etapa.Aprobado:
-                    perfilViewModel.Accion = Accion.Enviar;
+                    perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Generacion_Perfil:
-                    perfilViewModel.Accion = Accion.Aprobar;
+                    perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerAprobar = Visualicion.SI;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aprobacion_Perfil:
-                    perfilViewModel.Accion = Accion.Aceptar;
+                    perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.btnVerAceptar = Visualicion.SI;
+                    perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aceptado:
-                    perfilViewModel.Accion = Accion.Publicar;
+                    perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    perfilViewModel.btnVerPublicar = Visualicion.SI;
                     break;
                 case Etapa.Observado:
-                    perfilViewModel.Accion = Accion.Enviar;
+                    perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    perfilViewModel.btnVerPublicar = Visualicion.NO;
+                    break;
+                default:
+                    perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
             }
 
             if (pagina == TipoSolicitud.ConsultaRequerimientos)
             {
                 perfilViewModel.Accion = Accion.Consultar;
+                perfilViewModel.btnVerEnviar = Visualicion.NO;
+                perfilViewModel.btnVerAprobar = Visualicion.NO;
+                perfilViewModel.btnVerAceptar = Visualicion.NO;
+                perfilViewModel.btnVerPublicar = Visualicion.NO;
             }
 
-            if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
+            //if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto)
+            //    || (rolSession == Roles.Encargado_Seleccion) || (rolSession == Roles.Analista_Seleccion))
+            //{
+            //    perfilViewModel.Accion = Accion.Consultar;
+            //}
+            if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+            {
+                perfilViewModel.Accion = Accion.Enviar;
+            }
+            else
             {
                 perfilViewModel.Accion = Accion.Consultar;
             }
