@@ -212,6 +212,7 @@
             width: 300,
             resizable: false,
             modal: true,
+            position: [200,0],
             buttons: {
                 "Aceptar": function (e) {
                     $('#updateDialogAceptar').dialog("close");
@@ -377,6 +378,7 @@
         $("#divMensaje").dialog({
             title: titulo,
             modal: true,
+            resizable: false,
             buttons: {
                 "Ok": function () {
                     $(this).dialog("close");
