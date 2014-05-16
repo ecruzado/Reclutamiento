@@ -97,6 +97,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
+                solicitudModel.rolSession = rolSession;
                 //determinar Accion
 
                 if ((solicitud.TipEtapa == Etapa.Pendiente) && (rolSession == Roles.Gerente))
@@ -142,7 +143,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             try
             {
                 SolReqPersonalValidator validation = new SolReqPersonalValidator();
-                ValidationResult result = validation.Validate(solicitudAmpliacion, "IdeCargo", "NumVacantes", "Observacion", "Motivo");
+                ValidationResult result = validation.Validate(solicitudAmpliacion, "IdeCargo", "NumVacantes","Observacion", "Motivo");
                 
                 if (!result.IsValid)
                 {
@@ -897,6 +898,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
+               
                 var sede = Session[ConstanteSesion.Sede];
                 if (sede != null)
                 {
@@ -906,6 +908,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 #region botonera
 
+                model.rolSession = rolSession;
                 switch (rolSession)
                 {
                     case Roles.Jefe:
@@ -1121,6 +1124,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.CantPreSelec==null?"":item.CantPreSelec.ToString(),
                                 item.CantEvaluados==null?"":item.CantEvaluados.ToString(),
                                 item.CantSeleccionados==null?"":item.CantSeleccionados.ToString(),
+                                item.CantContratados==null?"":item.CantContratados.ToString(),
                                 item.Feccreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.Feccreacion),
                                 item.FecExpiracacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FecExpiracacion),
                                
