@@ -146,8 +146,9 @@
          @RenderSection("Scripts", required: false)
         <script type="text/javascript">
           $(document).ready(function () {
-
-
+              $(".ui-dialog-titlebar-close").hide();
+              $('#dialog-id [data-icon="delete"]').hide();
+              
               // reconstruye la imagen para IE
               $("#imgLogoExtranet").attr("src", '@Url.Content("~/Content/images/LogoSanPabloPeque.png")')
                   .css({

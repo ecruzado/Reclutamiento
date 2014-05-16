@@ -14,6 +14,8 @@ Funciones = {
         $(elemento).slideDown(200).animate({ opacity: 1 }, 300);
     },
 
+    
+
     HideElement: function (elemento) {
         $(elemento).animate({
             opacity: 0.25
@@ -376,9 +378,11 @@ Funciones = {
         //});
         //$('#' + selectorDiv).dialog('open');
         var opt = {
+            //closeOnEscape: false,
             title: title,
             modal: true,
             resizable: false,
+            
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
@@ -448,8 +452,10 @@ Funciones = {
         });
     },
     MensajeSiNo: function (selectorDiv, selectorSpan, mensaje, callBackFunction) {
+
         $('#' + selectorSpan).html(mensaje);
         $('#' + selectorDiv).dialog({
+            closeOnEscape: false,
             title: 'Confirmación',
             modal: true,
             open: function (event, ui) {
