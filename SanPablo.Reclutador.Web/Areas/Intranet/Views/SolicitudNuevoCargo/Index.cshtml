@@ -139,7 +139,7 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
+            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', sortable: false, align: 'center', width: 50, hidden: true },
@@ -158,6 +158,7 @@
                             { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', sortable: false, width: 60 },
                             { name: 'Evaluados', index: 'Evaluados', align: 'right', sortable: false, width: 60 },
                             { name: 'Seleccionados', index: 'Seleccionados', align: 'right', sortable: false, width: 60 },
+                            { name: 'Contratados', index: 'Contratados', align: 'right', sortable: false, width: 60 },
                             { name: 'Inicio', index: 'Inicio', align: 'left', sortable: false, width: 100 },
                             { name: 'Cierre', index: 'Cierre', align: 'left', sortable: false, width: 100 },
                             { name: 'ideResponsable', index: 'ideRol', align: 'left', hidden: true },
@@ -427,7 +428,15 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia","NombreDependencia",Model.Dependencias ))
+                                @if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.Dependencias), new { disabled= "disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Dependencias, new SelectList(Model.Dependencias, "IdeDependencia","NombreDependencia",Model.Dependencias ))
+                                }
+                                 
                             </div>
                         </div>
                     </td>
@@ -436,7 +445,15 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Responsables, new SelectList(Model.Responsables, "IdRol", "DscRol", Model.Responsables))
+                                 @if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente))
+                                     || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)))
+                                 {
+                                    @Html.DropDownListFor(model => model.Responsables, new SelectList(Model.Responsables, "IdRol", "DscRol", Model.Responsables), new { disabled= "disabled"})
+                                 }
+                                else
+                                {
+                                     @Html.DropDownListFor(model => model.Responsables, new SelectList(Model.Responsables, "IdRol", "DscRol", Model.Responsables))
+                                 }
                             </div>
                         </div>
                     </td>  
@@ -449,7 +466,14 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento","NombreDepartamento",Model.Departamentos ))
+                                @if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.Departamentos), new { disabled= "disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeDepartamento","NombreDepartamento",Model.Departamentos ))
+                                }
                             </div>
                         </div>
                     </td>
@@ -458,7 +482,14 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Etapa</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
+                                @if(Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe))
+                                {
+                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas), new {disabled="disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
+                                }
                             </div>
                         </div>
                     </td>
@@ -470,7 +501,14 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
+                                @if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ),new {disabled = "disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea","NombreArea",Model.SolicitudNuevoCargo.IdeArea ))
+                                }
                             </div>
                         </div>
                     </td>

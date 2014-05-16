@@ -202,7 +202,10 @@ namespace SanPablo.Reclutador.Repository
                         resulExamen.NombreExamen = Convert.ToString(lector["NOMEXAMEN"]);
                         resulExamen.DescripcionExamen = Convert.ToString(lector["DESCEXAMEN"]);
                         resulExamen.TipoExamen = Convert.ToString(lector["TIPEXAMEN"]);
-                        resulExamen.NotaFinal = Convert.ToInt32(lector["NOTAFINAL"]);
+                        if (lector["NOTAFINAL"] != DBNull.Value)
+                        {
+                            resulExamen.NotaFinal = Convert.ToInt32(lector["NOTAFINAL"]);
+                        }
                         resulExamen.nombrePostulante = Convert.ToString(lector["NOMBPOSTULANTE"]);
 
                     }

@@ -234,7 +234,7 @@
                     solicitudNuevo.PreSeleccionados = Convert.ToInt32(drSolicitudNuevo["PRESELECCIONADOS"]);
                     solicitudNuevo.Evaluados = Convert.ToInt32(drSolicitudNuevo["EVALUADOS"]);
                     solicitudNuevo.Seleccionados = Convert.ToInt32(drSolicitudNuevo["SELECCIONADOS"]);
-
+                    solicitudNuevo.Contratados = Convert.ToInt32(drSolicitudNuevo["CONTRATADOS"]);
 
                     solicitudNuevo.IdRolSuceso = Convert.ToInt32(drSolicitudNuevo["IDROL"]);
                     solicitudNuevo.RolSuceso = Convert.ToString(drSolicitudNuevo["DSCROL"]);

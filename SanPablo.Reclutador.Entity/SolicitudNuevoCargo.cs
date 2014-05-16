@@ -58,6 +58,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int PreSeleccionados { get; set; }
         public virtual int Evaluados { get; set; }
         public virtual int Seleccionados { get; set; }
+        public virtual int Contratados { get; set; }
         public virtual int IdRolSuceso { get; set; }
         public virtual string RolSuceso { get; set; }
         public virtual string NombreResponsable { get; set; }

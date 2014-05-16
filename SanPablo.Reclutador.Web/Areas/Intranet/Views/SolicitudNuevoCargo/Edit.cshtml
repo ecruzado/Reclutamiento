@@ -343,18 +343,18 @@
     {
         $('#Dependencias').attr("disabled", "disabled");
         $('#Departamentos').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_IdeArea').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_IdeDependencia').attr("disabled", "disabled");
-        $('#SolicitudNuevoCargo_IdeDepartamento').attr("disabled", "disabled");
+        //$('#SolicitudNuevoCargo_IdeArea').attr("disabled", "disabled");
+        //$('#SolicitudNuevoCargo_IdeDependencia').attr("disabled", "disabled");
+        //$('#SolicitudNuevoCargo_IdeDepartamento').attr("disabled", "disabled");
 
     }
 
     function habilitarControles() {
         $('#Dependencias').removeAttr("disabled");
         $('#Departamentos').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_IdeDependencia').removeAttr("disabled");
-        $('#SolicitudNuevoCargo_IdeDepartamento').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_IdeArea').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_IdeDependencia').removeAttr("disabled");
+        //$('#SolicitudNuevoCargo_IdeDepartamento').removeAttr("disabled");
     }
 
     function mensajeRedirecciona(mensaje, titulo)
@@ -459,10 +459,17 @@
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
-                                            @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
-                                            </div>
+                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                            {
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia), new { disabled = "disabled" }) 
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
+                                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
@@ -481,14 +488,14 @@
                             <td style="width:260px">
                                     <div class="">
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
-                                        {
+                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { maxlength = "100", onblur = "aMays(event, this)" })
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionCargo)
                                             </div>
                                          }
-                                        else
-                                        {
+                                         else
+                                         {
                                              @Html.TextBoxFor(model => model.SolicitudNuevoCargo.DescripcionCargo, new { disabled = "disabled" })
                                          }
                                     </div>
@@ -500,14 +507,20 @@
                                         @*@Html.TextBoxFor(model => model.DepartamentoSession.NombreDepartamento, new { @disabled = "disabled" })
                                         @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)*@
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
-                                        {
-                                             @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
-                                             <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDepartamento)
-                                            </div>
+                                         {
+                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                             {
+                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento), new { disabled = "disabled"}) 
+                                             }
+                                             else{
+                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
+                                                 <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDepartamento)
+                                                </div>
+                                            }
                                          }
-                                        else
-                                        {
+                                         else
+                                         {
                                               @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento), new { disabled = "disabled" })
                                          }
                                     </div>
@@ -528,7 +541,7 @@
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.NumeroPosiciones)
                                             </div>
-                                         }
+                                        }
                                         else
                                         {
                                             @Html.TextBoxFor(model => model.SolicitudNuevoCargo.NumeroPosiciones, new { @class = "input-mini", disabled = "disabled" })
@@ -543,15 +556,22 @@
                                         @Html.HiddenFor(model => model.AreaSession.IdeArea)*@
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
-                                            @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
-                                            </div>
-                                         }
+                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                            {
+                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled="disabled"})
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
+                                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                                    @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
+                                                </div>
+                                            }
+                                        }
                                         else
                                         {
                                              @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled = "disabled" })
-                                         }
+                                        }
                                    </div>
                                 </div>
                             </td>  
@@ -566,16 +586,16 @@
                                     <div class="">
 
                                        @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
-                                        {
+                                       {
                                             @Html.DropDownListFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.SolicitudNuevoCargo.TipoRangoSalarial))
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial)
                                             </div>
-                                        }
-                                        else
-                                        {
+                                       }
+                                       else
+                                       {
                                             @Html.DropDownListFor(model => model.SolicitudNuevoCargo.TipoRangoSalarial, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.SolicitudNuevoCargo.TipoRangoSalarial), new { disabled = "disabled" })
-                                        }
+                                       }
                                     </div>
                             </td>  
                         </tr>
@@ -599,9 +619,9 @@
                         <div class="tex-error" style="font-size:11px;color:gray ;margin-left: 10px;">Máx. 255 caracteres</div>
                         
                      }
-                    else
-                    {
-                          @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled"})
+                     else
+                     {
+                          @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionEstudios, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" })
                      }
                 </div>
             </div>
@@ -620,7 +640,7 @@
                  }
                  else
                  {
-                     @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled"})
+                     @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionCompetencias, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;", disabled = "disabled" })
                  }
                 </div>
             </div>
