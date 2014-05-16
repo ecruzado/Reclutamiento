@@ -29,8 +29,8 @@
                 .WithMessage("0 - 10");
 
             RuleFor(x => x.CicloSemestre)
-               .InclusiveBetween(0, 99)
-               .WithMessage("Ingresar un Ciclo/Semestre válido");
+               .InclusiveBetween(0, 12)
+               .WithMessage("Ingresar un ciclo/Semestre válido");
 
          }
 

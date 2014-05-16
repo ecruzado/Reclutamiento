@@ -45,7 +45,12 @@
     function habilitarTextOtro(tipoNivelAcad) {
         var laCiclo = document.getElementById('laCiclo');
         var textCiclo = document.getElementById('NivelAcademico_CicloSemestre');
-        if ((tipoNivelAcad == '08') || (tipoNivelAcad == '12') || (tipoNivelAcad == '05') || (tipoNivelAcad == '18')) {
+
+      
+                       
+                       
+
+        if ((tipoNivelAcad == '07') || (tipoNivelAcad == '08') || (tipoNivelAcad == '12') || (tipoNivelAcad == '05') || (tipoNivelAcad == '18') || (tipoNivelAcad == '17') || (tipoNivelAcad == '11') || (tipoNivelAcad == '21')) {
             laCiclo.style.display = "block";
             textCiclo.style.display = "block";
         }
@@ -86,7 +91,7 @@
         <tr>
             <td class="colEtiqueta">
                 @Html.HiddenFor(model => model.NivelAcademico.IdeNivelAcademicoCargo)
-                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo Educación <span class="text-error">*</span></label>
+                <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Tipo de Educación <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
                 @Html.DropDownListFor(model => model.NivelAcademico.TipoEducacion, new SelectList(Model.TiposEducacion, "Valor", "Descripcion", Model.NivelAcademico.TipoEducacion))

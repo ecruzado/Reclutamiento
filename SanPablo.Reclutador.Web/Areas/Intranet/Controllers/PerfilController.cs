@@ -101,22 +101,24 @@
             return cargoViewModel;
         }
 
-        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult Index([Bind(Prefix = "Cargo")]Cargo cargo)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarGeneral();
+            JsonMessage objJson = new JsonMessage();
+            
             try
             {
                 CargoValidator validation = new CargoValidator();
-                ValidationResult result = validation.Validate(cargo, "ObjetivoCargo", "FuncionCargo");
-                if (!result.IsValid)
-                {
-                    cargoViewModel.Cargo = cargo;
-                    return View(cargoViewModel);
-                }
+                //ValidationResult result = validation.Validate(cargo, "ObjetivoCargo", "FuncionCargo");
+                //if (!result.IsValid)
+                //{
+                //    cargoViewModel.Cargo = cargo;
+                //    return View(cargoViewModel);
+                //}
 
                 cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                 cargoEditar.FechaModificacion = FechaCreacion;
@@ -124,12 +126,17 @@
                 cargoEditar.FuncionCargo = cargo.FuncionCargo;
                 _cargoRepository.Update(cargoEditar);
 
-                return RedirectToAction("../Perfil/General");
+                objJson.Resultado = true;
+                objJson.Mensaje = "Se grabo correctamente";
+
+                return Json(objJson);
+                //return RedirectToAction("../Perfil/General");
             }
             catch (Exception ex)
             {
-                cargoViewModel.Cargo = cargo;
-                return View(cargoViewModel);
+                //cargoViewModel.Cargo = cargo;
+                //return View(cargoViewModel);
+                return MensajeError();
             }
         }
 
@@ -148,8 +155,8 @@
             return View(perfilViewModel);
         }
 
-        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         public ActionResult General([Bind(Prefix = "Cargo")]Cargo cargo)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
@@ -157,22 +164,23 @@
             var cargoViewModel = inicializarGeneral();
             try
             {
+                JsonMessage objJson = new JsonMessage();
                 var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo); 
                 CargoValidator validation = new CargoValidator();
-                ValidationResult resul = validation.Validate(cargo, "PuntajePostulanteInterno", "EdadInicio", "EdadFin",
-                                                             "PuntajeEdad", "Sexo", "PuntajeSexo", "TipoRequerimiento", "TipoRangoSalarial", "PuntajeSalario");
+                //ValidationResult resul = validation.Validate(cargo, "PuntajePostulanteInterno", "EdadInicio", "EdadFin",
+                //                                             "PuntajeEdad", "Sexo", "PuntajeSexo", "TipoRequerimiento", "TipoRangoSalarial", "PuntajeSalario");
 
-                if (!resul.IsValid)
-                {
-                    cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                    cargoViewModel.Cargo = cargo;
-                    actualizarDatosCargo(cargoViewModel, cargo);
-                    actualizarAccion(cargoViewModel);
+                //if (!resul.IsValid)
+                //{
+                //    cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                //    cargoViewModel.Cargo = cargo;
+                //    actualizarDatosCargo(cargoViewModel, cargo);
+                //    actualizarAccion(cargoViewModel);
                     
-                    return View(cargoViewModel);
-                }
-                else
-                {
+                //    return View(cargoViewModel);
+                //}
+                //else
+                //{
                     cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
                     cargoEditar.FechaModificacion = FechaCreacion;
                     cargoEditar.PuntajeTotalPostulanteInterno = cargo.PuntajeTotalPostulanteInterno;
@@ -189,15 +197,20 @@
                     cargoEditar.IndicadorSexoRanking = cargo.IndicadorSexoRanking;
                     cargoEditar.PuntajeSalario = cargo.PuntajeSalario;
                     _cargoRepository.Update(cargoEditar);
-                    return RedirectToAction("../Perfil/Estudio");
-                }
 
-                
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se grabo correctamanete";
+
+                    return Json(objJson);
+                   // return RedirectToAction("../Perfil/Estudio");
+                //}
+
             }
             catch (Exception ex)
             {
-                cargoViewModel.Cargo = cargo;
-                return View(cargoViewModel);
+                //cargoViewModel.Cargo = cargo;
+                //return View(cargoViewModel);
+                return MensajeError();
             }
 
         }

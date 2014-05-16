@@ -96,18 +96,63 @@
             JsonMessage objJsonMessage = new JsonMessage();
             try
             {
-                if (!ModelState.IsValid)
+
+
+                if (nivelAcademicoCargo!=null)
                 {
-                    //objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
-                    //objJsonMessage.Resultado = false;
-                    //return Json(objJsonMessage);
-                    var nivelAcademicoViewModel = inicializarNivelAcademico();
-                    nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
-                    return View(nivelAcademicoViewModel);
+                    if (nivelAcademicoCargo.TipoEducacion.Equals("02") ||
+                        nivelAcademicoCargo.TipoEducacion.Equals("03") ||
+                        nivelAcademicoCargo.TipoEducacion.Equals("04"))
+                    {
+
+                        if (nivelAcademicoCargo.TipoAreaEstudio.Equals("00"))
+                        {
+                            objJsonMessage.Resultado = false;
+                            objJsonMessage.Mensaje = "Seleccione una área de estudios";
+
+                            return Json(objJsonMessage);
+                        }
+
+                       
+
+                    }
+
+                    if ( nivelAcademicoCargo.TipoNivelAlcanzado.Equals("05") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("07") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("08") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("11") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("12") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("17") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("21") ||
+                         nivelAcademicoCargo.TipoNivelAlcanzado.Equals("18") 
+                         )
+                    {
+
+                        if (nivelAcademicoCargo.CicloSemestre == null || nivelAcademicoCargo.CicloSemestre == 0)
+                        {
+                            objJsonMessage.Resultado = false;
+                            objJsonMessage.Mensaje = "Ingrese un ciclo";
+                            return Json(objJsonMessage);
+                        }
+
+                    }
+
+                    
+                    
                 }
+                
+                //if (!ModelState.IsValid)
+                //{
+                //    //objJsonMessage.Mensaje = "Verifique que haya ingresado los datos obligatorios y que el puntaje sea mayor a cero";
+                //    //objJsonMessage.Resultado = false;
+                //    //return Json(objJsonMessage);
+                //    var nivelAcademicoViewModel = inicializarNivelAcademico();
+                //    nivelAcademicoViewModel.NivelAcademico = nivelAcademicoCargo;
+                //    return View(nivelAcademicoViewModel);
+                //}
                
-                else
-                {
+                //else
+                //{
                     if (nivelAcademicoCargo.IdeNivelAcademicoCargo == 0)
                     {
                         if (existe(nivelAcademicoCargo.TipoEducacion))
@@ -163,7 +208,7 @@
                     }
 
                     
-                }
+                //}
             }
             catch (Exception ex)
             {
