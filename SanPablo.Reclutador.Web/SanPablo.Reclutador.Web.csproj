@@ -524,6 +524,8 @@
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.jstepper.js" />
+    <Content Include="Scripts\jquery.jstepper.min.js" />
     <Content Include="Scripts\ui.datepicker-es.js" />
     <Content Include="TemplateEmail\Bienvenido.htm" />
     <Content Include="TemplateEmail\EnviarSolicitud.htm" />
