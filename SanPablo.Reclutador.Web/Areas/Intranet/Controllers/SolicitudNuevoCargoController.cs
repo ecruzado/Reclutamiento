@@ -268,15 +268,24 @@
             {
                 if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente))
                 {
+                    var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                         && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo);
                     solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
-                    solicitudNuevoViewModel.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
-                                                                                                && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo));
+                    solicitudNuevoViewModel.Dependencias.Add(dependencia);
 
+                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDependencia = dependencia.IdeDependencia;
+
+                    var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
                     solicitudNuevoViewModel.Departamentos = new List<Departamento>();
-                    solicitudNuevoViewModel.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO));
+                    solicitudNuevoViewModel.Departamentos.Add(departamento);
 
+                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDepartamento = departamento.IdeDepartamento;
+
+                    var area = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
                     solicitudNuevoViewModel.Areas = new List<Area>();
-                    solicitudNuevoViewModel.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA));
+                    solicitudNuevoViewModel.Areas.Add(area);
+
+                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeArea = area.IdeArea;
 
                     solicitudNuevoViewModel.Responsables = new List<Rol>();
                     solicitudNuevoViewModel.Responsables.Add(_rolRepository.GetSingle(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol == rolSession));
@@ -501,15 +510,24 @@
                 var rolUsuario = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 if ((rolUsuario == Roles.Jefe) || (rolUsuario == Roles.Gerente))
                 {
+                    var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                        && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo);
                     solicitudCargoViewModel.Dependencias = new List<Dependencia>();
-                    solicitudCargoViewModel.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA 
-                                                                                                && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo));
-                    
-                    solicitudCargoViewModel.Departamentos = new List<Departamento>();
-                    solicitudCargoViewModel.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO));
+                    solicitudCargoViewModel.Dependencias.Add(dependencia);
 
+                    solicitudCargoViewModel.SolicitudNuevoCargo.IdeDependencia = dependencia.IdeDependencia;
+
+                    var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
+                    solicitudCargoViewModel.Departamentos = new List<Departamento>();
+                    solicitudCargoViewModel.Departamentos.Add(departamento);
+
+                    solicitudCargoViewModel.SolicitudNuevoCargo.IdeDepartamento = departamento.IdeDepartamento;
+
+                    var area = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
                     solicitudCargoViewModel.Areas = new List<Area>();
-                    solicitudCargoViewModel.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA));
+                    solicitudCargoViewModel.Areas.Add(area);
+
+                    solicitudCargoViewModel.SolicitudNuevoCargo.IdeArea = area.IdeArea;
                 }
                 else
                 {

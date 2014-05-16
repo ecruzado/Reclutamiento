@@ -205,7 +205,7 @@
             if (ideCompetencia != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
-                    title: 'Sistema de Reclutamiento y Selección de Personal',
+                    title: 'CONFIRMACIÓN',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
@@ -272,7 +272,7 @@
             if (ideOfrecimiento != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
-                    title: 'Sistema de Reclutamiento y Selección de Personal',
+                    title: 'CONFIRMACIÓN',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },

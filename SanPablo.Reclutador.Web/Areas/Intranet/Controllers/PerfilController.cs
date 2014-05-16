@@ -24,18 +24,42 @@
         private ILogSolicitudNuevoCargoRepository _logSolicitudNuevoRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private IUsuarioRepository _usuarioRepository;
+        private IConocimientoGeneralCargoRepository _conocimientoGeneralRepository;
+        private IOfrecemosCargoRepository _ofrecemmosCargoRepository;
+        private ICompetenciaCargoRepository _competenciaCargoRepository;
+        private INivelAcademicoCargoRepository _nivelAcademicoRepository;
+        private IHorarioCargoRepository _horarioCargoRepository;
+        private IUbigeoCargoRepository _ubigeoCargoRepository;
+        private IExperienciaCargoRepository _experienciaCargoRepository;
+        private IEvaluacionCargoRepository _evaluacionCargoRepository;
        
         public PerfilController(ICargoRepository cargoRepository,
                                 IDetalleGeneralRepository detalleGeneralRepository,
                                 ILogSolicitudNuevoCargoRepository logSolicitudNuevoRepository,
                                 ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
-                                IUsuarioRepository usuarioRepository)
+                                IUsuarioRepository usuarioRepository,
+                                IConocimientoGeneralCargoRepository conocimientoGeneralRepository,
+                                IOfrecemosCargoRepository ofrecemosCargoRepository,
+                                ICompetenciaCargoRepository competenciaCargoRepository,
+                                INivelAcademicoCargoRepository nivelAcademicoRepository,
+                                IHorarioCargoRepository horarioCargoRepository,
+                                IUbigeoCargoRepository ubigeoCargoRepository,
+                                IExperienciaCargoRepository experienciaCargoRepository,
+                                IEvaluacionCargoRepository evaluacionCargoRepository)
         {
             _cargoRepository = cargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
             _logSolicitudNuevoRepository = logSolicitudNuevoRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _usuarioRepository = usuarioRepository;
+            _conocimientoGeneralRepository = conocimientoGeneralRepository;
+            _ofrecemmosCargoRepository = ofrecemosCargoRepository;
+            _competenciaCargoRepository = competenciaCargoRepository;
+            _nivelAcademicoRepository = nivelAcademicoRepository;
+            _horarioCargoRepository = horarioCargoRepository;
+            _ubigeoCargoRepository = ubigeoCargoRepository;
+            _experienciaCargoRepository = experienciaCargoRepository;
+            _evaluacionCargoRepository = evaluacionCargoRepository;
         }
 
         [ValidarSesion]
@@ -205,7 +229,7 @@
                     _cargoRepository.Update(cargoEditar);
 
                     objJson.Resultado = true;
-                    objJson.Mensaje = "Se grabo correctamanete";
+                    objJson.Mensaje = "Se grabo correctamente";
 
                     return Json(objJson);
                    // return RedirectToAction("../Perfil/Estudio");
@@ -498,11 +522,30 @@
             try 
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                if ((cargo.PuntajeMinimoExamen != null) && (cargo.PuntajeMinimoGeneral != null) && (cargo.NumeroPosiciones != null) && (cargo.PuntajeTotalPostulanteInterno != null) &&
+
+                var nroConocimientos = _conocimientoGeneralRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroOfrecemos = _ofrecemmosCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroCompetencias = _competenciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroHorario = _horarioCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroUbigeo = _ubigeoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroNivelAcademico = _nivelAcademicoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroExperiencia = _experienciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+                var nroExamenes = _evaluacionCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
+ 
+
+                if ((cargo.PuntajeMinimoExamen != null) && 
+                    (cargo.PuntajeMinimoGeneral != null) && 
+                    (cargo.NumeroPosiciones != null) && 
+                    (cargo.PuntajeTotalPostulanteInterno != null) &&
                     (cargo.PuntajeEdad != null)&&
-                    (cargo.PuntajeTotalCentroEstudio != 0) && (cargo.PuntajeTotalConocimientoGeneral != 0) && 
-                    (cargo.PuntajeTotalExamen != 0) && (cargo.PuntajeTotalExperiencia != 0) && (cargo.PuntajeTotalNivelEstudio != 0) &&
-                    (cargo.PuntajeTotalOfimatica != 0))
+                    (nroOfrecemos > 0) && 
+                    (nroCompetencias > 0) && 
+                    (nroHorario > 0) && 
+                    (nroUbigeo > 0) && 
+                    (nroNivelAcademico > 0) && 
+                    (nroConocimientos > 0) && 
+                    (nroExperiencia > 0) &&
+                    (nroExamenes > 0))
                 {
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
@@ -609,6 +652,8 @@
         {
             string pagina = Session[ConstanteSesion.pagina].ToString();
 
+            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
             var tipoEtapa = CargoPerfil.TipoEtapa;
             switch (tipoEtapa)
             {
@@ -635,6 +680,11 @@
             }
 
             if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            {
+                perfilViewModel.Accion = Accion.Consultar;
+            }
+
+            if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente) || (rolSession == Roles.Gerente_General_Adjunto))
             {
                 perfilViewModel.Accion = Accion.Consultar;
             }

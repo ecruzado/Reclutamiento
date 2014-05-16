@@ -44,7 +44,7 @@
         }
         function mostrarMensaje()
         {
-            mostrarMensaje("El puntaje Mínimo no puede ser mayor al puntaje Máximo")
+            mostrarMensaje("El ptje. mínimo debe ser menor")
         }
 
         function verificarPuntaje()
@@ -56,7 +56,7 @@
 
             if (parseInt(ptjeMin) > parseInt(ptjePromMin)) {
                 
-                msjeError.innerHTML = "El ptje. mín no puede ser superior al ptje. prom. mín."
+                msjeError.innerHTML = "El ptje. mín debe ser menor"
                 msjeError.style.display = "block";
             }
             else { msjeError.style.display = "none";}
@@ -70,7 +70,7 @@
 
             if (parseInt(ptjeMin) > parseInt(ptjeMax)) {
 
-                msjeError.innerHTML = "El ptje. mín no puede ser superior al ptje. prom. mín."
+                msjeError.innerHTML = "El ptje. mín debe ser menor"
                 msjeError.style.display = "block";
             }
             else { msjeError.style.display = "none"; }
@@ -257,15 +257,16 @@
                                     <tr>
                                         <td style="width: 80px;"></td>
                                         <td></td>
-                                        <td>Ptje Total.
+                                        <td>
                                         </td>
                                         <td style="width: 10px;"></td>
-                                        <td>Ptje.Minimo
+                                        <td>Ptje.Minimo <span class="text_error">*</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td class="td-label"><b> </b></td>
+                                        
+                                        <td class="td-label">Ptje. Total</td>
                                         <td>
                                             @Html.TextBoxFor(model=>model.TotalMaximo, new {@class="input-xxmini text-right",disabled="disabled"})
                                         </td>
@@ -297,7 +298,7 @@
                                         <td>Ptje.Prom.Min
                                             </td>
                                             <td style="width:10px;"></td>
-                                        <td>Ptje.Min
+                                        <td>Ptje.Min <span class="text-error">*</span>
                                             </td>
 
                                     </tr>
