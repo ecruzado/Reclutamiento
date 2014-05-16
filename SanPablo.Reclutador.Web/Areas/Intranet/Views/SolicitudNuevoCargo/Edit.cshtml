@@ -57,8 +57,12 @@
                 "Cancelar": function () {
                     $('#updateDialogAprobacion').dialog("close");
                 }
+            },
+            open: function () {
+                $("#LogSolicitudNuevoCargo_Observacion").focus();
             }
-                });
+
+        });
 
         $('#updateDialogConfirmacion').dialog({
             autoOpen: false,

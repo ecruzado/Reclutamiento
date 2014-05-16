@@ -134,7 +134,7 @@
                 }
                 else
                 {
-                    <a class="btn btn-info" id="btnTerminar" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    <a class="btn btn-info" id="btnTerminar" @*href="#" onclick="cerrarPrueba();"*@><i class="icon-adjust icon-white"></i> Terminar</a>
                 }
 
                 
@@ -173,6 +173,17 @@
             //buscarPreguntaRef();
         });
         
+
+        //$('#btnSiguiente').on('mousedown', stopNavigate);
+
+        //$('#btnSiguiente').on('mouseleave', function () {
+        //    $(window).on('beforeunload', function () {
+        //        return 'Esta seguro de terminar la prueba?';
+        //    });
+        //});
+
+
+
         $('#btnSiguiente').on('mousedown', stopNavigate);
 
         $('#btnSiguiente').on('mouseleave', function () {
@@ -191,7 +202,19 @@
 
             });
 
-       
+            $('#btnTerminar').click(function () { 
+                $("#spnMensaje8").html('¿Está seguro de terminar la evaluación?.');
+                $("#divMensaje8").dialog({
+                    title: 'CONFIRMACIÓN',
+                    modal: true,
+                    buttons: {
+                        "Aceptar": function () { cerrarPrueba(); $(this).dialog("close"); },
+                        "Cancelar": function () { $(this).dialog("close"); }
+                    }
+                });
+            });
+
+
     });
 
     function mueveReloj() {
@@ -251,6 +274,7 @@
 
     function cerrarPrueba()
     {
+       
 
         $.post('@Url.Action("terminarPrueba", "Evaluacion")',
               $("#examenForm").serialize(),
@@ -260,7 +284,7 @@
 
                   }
                   else {
-                      MostrarMensaje(respuesta.Mensaje,"Sistema de reclutamiento y selección de personal");
+                      MostrarMensaje(respuesta.Mensaje,"MENSAJE");
                   }
                }
         );

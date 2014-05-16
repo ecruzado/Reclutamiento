@@ -16,7 +16,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.CodigoCargo)
                 .NotEmpty()
-                .WithMessage("Debe ingresar el codigo del Cargo");
+                .WithMessage("Debe ingresar el código del cargo");
             RuleFor(x => x.CodigoCargo)
                 .Length(1, 10)
                 .WithMessage("Máx. 10 caracteres");
@@ -38,12 +38,22 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.DescripcionCargo)
                 .Length(1, 100)
                 .WithMessage("Máx. 100 caracteres");
- 
-            
+
+            RuleFor(x => x.IdeDependencia)
+                .NotEqual(0)
+                .WithMessage("Seleccione una dependencia");
+
+            RuleFor(x => x.IdeDepartamento)
+                .NotEqual(0)
+                .WithMessage("Seleccione un departamento");
+
+            RuleFor(x => x.IdeArea)
+                .NotEqual(0)
+                .WithMessage("Seleccione una área");
 
             RuleFor(x => x.TipoRangoSalarial)
                 .NotEqual("00")
-                .WithMessage ("Seleccione el rango salarial para el cargo");
+                .WithMessage ("Seleccione el rango salarial");
 
             RuleFor(x => x.DescripcionEstudios)
                 .NotEmpty()

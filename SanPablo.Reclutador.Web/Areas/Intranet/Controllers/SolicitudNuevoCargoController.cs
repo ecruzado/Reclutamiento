@@ -355,7 +355,9 @@
             try
             {
                 SolicitudNuevoCargoValidator solicitudValidator = new SolicitudNuevoCargoValidator();
-                ValidationResult result = solicitudValidator.Validate(nuevaSolicitudCargo, "IdeArea", "CodigoCargo", "NombreCargo", "DescripcionCargo", "NumeroPosiciones", "TipoRangoSalarial", "DescripcionEstudios", "DescripcionFunciones", "DescripcionCompetencias", "DescripcionObservaciones");
+                ValidationResult result = solicitudValidator.Validate(nuevaSolicitudCargo, "IdeArea", "CodigoCargo", "NombreCargo", "DescripcionCargo", "NumeroPosiciones", "TipoRangoSalarial",
+                                                                                            "IdeDependencia", "IdeDepartamento", "IdeArea",
+                                                                                            "DescripcionEstudios", "DescripcionFunciones", "DescripcionCompetencias", "DescripcionObservaciones");
 
                 if (!result.IsValid)
                 {

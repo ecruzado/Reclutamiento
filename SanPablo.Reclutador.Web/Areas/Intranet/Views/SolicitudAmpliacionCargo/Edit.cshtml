@@ -62,17 +62,17 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Solicitud enviada exitosamente", "Sistema de Reclutamiento y Selección de Personal");
+                                mensajeRedirecciona("Solicitud enviada exitosamente", "MENSAJE");
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(repuesta.Mensaje, "Sistema de Reclutamiento y Selección de Personal");
+                                MostrarMensaje(repuesta.Mensaje, "MENSAJE");
                             }
                         });
                     }
                     else {
                         $("#updateDialogConfirmacion").dialog("close");
-                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "Sistema de Reclutamiento y Selección de Personal");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "MENSAJE");
                     }
 
                 },
@@ -594,9 +594,9 @@
       $("#SolicitudRequerimiento_IdeCargo").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_NumVacantes").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_Observacion").attr("disabled", "disabled");
-      $("#SolicitudRequerimiento_IdeDependencia").attr("disabled", "disabled");
-      $("#SolicitudRequerimiento_IdeDepartamento").attr("disabled", "disabled");
-      $("#SolicitudRequerimiento_IdeArea").attr("disabled", "disabled");
+      //$("#SolicitudRequerimiento_IdeDependencia").attr("disabled", "disabled");
+      //$("#SolicitudRequerimiento_IdeDepartamento").attr("disabled", "disabled");
+      //$("#SolicitudRequerimiento_IdeArea").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_Motivo").attr("disabled", "disabled");
       $("#SolicitudRequerimiento_TipPuesto").attr("disabled", "disabled");
   }
@@ -606,9 +606,9 @@
       $("#SolicitudRequerimiento_IdeCargo").removeAttr("disabled");
       $("#SolicitudRequerimiento_NumVacantes").removeAttr("disabled");
       $("#SolicitudRequerimiento_Observacion").removeAttr("disabled");
-      $("#SolicitudRequerimiento_IdeDependencia").removeAttr("disabled");
-      $("#SolicitudRequerimiento_IdeDepartamento").removeAttr("disabled");
-      $("#SolicitudRequerimiento_IdeArea").removeAttr("disabled");
+      //$("#SolicitudRequerimiento_IdeDependencia").removeAttr("disabled");
+      //$("#SolicitudRequerimiento_IdeDepartamento").removeAttr("disabled");
+      //$("#SolicitudRequerimiento_IdeArea").removeAttr("disabled");
       $("#SolicitudRequerimiento_Motivo").removeAttr("disabled");
       $("#SolicitudRequerimiento_TipPuesto").removeAttr("disabled");
   }
@@ -758,10 +758,17 @@
                         <div class="">
                             <label class="control-label" for="selectError">Dependencia </label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
-                                </div>
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                       @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia), new { disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
+                                    <div class="tex-error" style="font-size:12px;color:red"> 
+                                         @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                    </div>
+                                }
                             </div>
                         </div>
                     </td>
@@ -782,10 +789,17 @@
                         <div class="">
                             <label class="control-label" for="selectError">Departamento </label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento))
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
-                                </div>
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento), new { disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento))
+                                    <div class="tex-error" style="font-size:12px;color:red"> 
+                                        @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                    </div>
+                                }
                             </div>
                         </div>
                     </td>
@@ -805,10 +819,17 @@
                     <td class="span5">
                             <label class="control-label" for="inputSuccess">Área </label>
                             <div class="controles">
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea), new { disabled = "disabled" })
+                                }
+                                else
+                                {
                                 @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea))
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeArea)
                                 </div>
+                                }
                             </div>
                    </td> 
                 </tr >
@@ -954,5 +975,5 @@
 <div id="updateDialogAprobacion" title="Aprobación/Rechazo Solicitud" ></div>
 <div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
 <div id="updateDialogAceptar" title="ACEPTAR" ><p>¿Está seguro de aceptar la solicitud de ampliación de cargo?</p></div>
-<div id="divMensaje"><span id="spanMensaje"></span></div>
+@*<div id="divMensaje"><span id="spnMensaje"></span></div>*@
 

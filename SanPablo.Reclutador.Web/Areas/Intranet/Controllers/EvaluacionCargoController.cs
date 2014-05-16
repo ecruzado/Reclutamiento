@@ -154,7 +154,10 @@
                     else
                     {
                         int valorEditar = evaluacionCargoActualizar.PuntajeExamen;
-                        evaluacionCargoActualizar.Examen.IdeExamen = evaluacionCargo.IdeExamen;
+
+                        var examen = _examenRepository.GetSingle(x => x.IdeExamen == evaluacionCargo.IdeExamen);
+                        evaluacionCargoActualizar.Examen = examen;
+
                         evaluacionCargoActualizar.TipoExamen = evaluacionCargo.TipoExamen;
                         evaluacionCargoActualizar.TipoAreaResponsable = evaluacionCargo.TipoAreaResponsable;
                         evaluacionCargoActualizar.PuntajeExamen = evaluacionCargo.PuntajeExamen;

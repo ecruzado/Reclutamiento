@@ -489,6 +489,7 @@ namespace SanPablo.Reclutador.Repository
                      lobSolReqPersonal.CantEvaluados = Convert.ToInt32(ldrSolReqPersonal["EVALUADOS"]);
                      lobSolReqPersonal.CantSeleccionados = Convert.ToInt32(ldrSolReqPersonal["SELECCIONADOS"]);
 
+                     lobSolReqPersonal.CantContratados = Convert.ToInt32(ldrSolReqPersonal["CONTRATADOS"]);
 
                      lobSolReqPersonal.idRolSuceso = Convert.ToInt32(ldrSolReqPersonal["ROL"]);
                      lobSolReqPersonal.DesRolSuceso = Convert.ToString(ldrSolReqPersonal["DESROL"]);
