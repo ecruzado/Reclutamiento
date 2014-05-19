@@ -282,6 +282,8 @@
             model.Criterio.IndPagina = Accion.Nuevo;
             model.IndVisual = Visualicion.NO;
 
+            Session[ConstanteSesion.Criterio] = null;
+
             model.Criterio.EstadoDes = "Activo";
 
 
@@ -294,7 +296,7 @@
         [ValidarSesion]
         public ActionResult Edicion(string id)
         {
-
+            Session[ConstanteSesion.Criterio] = null;
             CriterioViewModel model = new CriterioViewModel();
             model.Criterio = new Criterio();
 
