@@ -191,22 +191,30 @@
 
 
         $('#btnRankingSol').click(function () {
+
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
-            var pagina = '@TipoSolicitud.Nuevo';
-            var tipSol = '@TipoSolicitud.Nuevo';
-
-        if (selr != null) {
-
-
-            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + tipSol + "&pagina=" + pagina;
-            window.location = url;
-
-
-        } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
-        }
-
+            var ideSolicitud = selr;
+            if (selr != null) {
+                $.ajax({
+                    data: { ideSolicitud: ideSolicitud },
+                    type: "POST",
+                    url: "@Url.Action("EstadoSolicitudPublicacion", "SolicitudNuevoCargo")",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado == true) {
+                            var pagina = '@TipoSolicitud.Nuevo';
+                            var tipSol = '@TipoSolicitud.Nuevo';
+                            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + tipSol + "&pagina=" + pagina;
+                            window.location = url;
+                            }
+                        else { 
+                            MostrarMensaje(data.Mensaje, "MENSAJE"); }
+                    }
+                });
+            }
+            else {
+                MostrarMensaje('Seleccione una solicitud', "MENSAJE");}
         });
 
 
@@ -219,16 +227,24 @@
             var tipSol = '@TipoSolicitud.Nuevo';
             var pagina = '@TipoSolicitud.Nuevo';
             var indPagina = '@Indicador.No';
-
-             if (idSol != null) {
-
-                 var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
-                 window.location = url;
-
-             } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
-             }
-
+            if (idSol != null) {
+                $.ajax({
+                    data: { ideSolicitud: idSol },
+                    type: "POST",
+                    url: "@Url.Action("EstadoSolicitudPublicacion", "SolicitudNuevoCargo")",
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado == true) {
+                            var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                            window.location = url;
+                        }
+                        else {
+                            MostrarMensaje(data.Mensaje, "MENSAJE"); }
+                    }
+                });
+            } else {
+                MostrarMensaje('Seleccione una solicitud', "MENSAJE");
+            }
          });
 
         $('#btnNuevo').click(function () {
@@ -239,18 +255,6 @@
         });
 
    
-
-        //$('#btnActivarDesactivar').click(function () {
-        //    var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-        //    if (selr != null) {
-        //        $('#updateDialog').dialog('open');
-        //    } else {
-        //        MostrarMensaje('Seleccione una solicitud para Activar/Desactivar', "Sistema de reclutamiento y selección de personal");
-        //    }
-
-        //});
-
-
         $('#btnEditarSolicitud').click(function () {
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var pagina = '@TipoSolicitud.Nuevo'
@@ -262,14 +266,13 @@
 
             }
             else {
-                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo","Sistema de Reclutamiento y Selección de personal");
+                MostrarMensaje("Seleccione una Solicitud para su Aprobación/Rechazo","MENSAJE");
             }
 
         });
         
         $('#btnPerfil').click(function () {
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-            //var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
             var estado = rowData.EstadoActivo;
             estadoSolicitud(ideSolicitud, estado);
@@ -277,29 +280,7 @@
 
     });
 
-    @*function ActivarDesactivarSolicitud(selr, estado) {
-
-        $.ajax({
-            data: {
-                id: selr,
-                codEstado: estado
-            },
-            type: "POST",
-            url: "@Url.Action("CambiarEstado", "SolicitudNuevoCargo")",
-            traditional: true,
-            success: function (data) {
-                if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal")
-                    
-                } else {
-                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y seleccion de personal");
-                    $('#grdList').trigger('reloadGrid');
-                }
-            }
-        });
-
-    }*@
-
+   
    
     function HabilitarFormatter(cellvalue, options, rowObject) {
         var imgPath = '@Url.Content("~/Content/images/")';

@@ -66,12 +66,12 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Requerimiento Publicado exitosamente", "Sistema de reclutamiento y selección de personal");
+                                mensajeRedirecciona("Requerimiento Publicado exitosamente", "MENSAJE");
 
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                             }
                         });
                     
@@ -268,9 +268,9 @@
         
     }
     function mensajeResultado(mensaje) {
-        $("#spanMensaje").html(mensaje);
+        $("#spnMensaje").html(mensaje);
         $("#divMensaje").dialog({
-            title: 'Sistema de Reclutamiento y Selección de Personal',
+            title: 'MENSAJE',
             modal: true,
             buttons: {
                 "Ok": function () { $(this).dialog("close"); }
@@ -325,7 +325,7 @@
     }
 
     function mensajeRedirecciona(mensaje, titulo) {
-        $("#spanMensaje").html(mensaje);
+        $("#spnMensaje").html(mensaje);
         $("#divMensaje").dialog({
             title: titulo,
             modal: true,
@@ -368,24 +368,21 @@
                             @Html.HiddenFor(model=>model.SolicitudCargo.IdeArea)
                             @Html.TextBoxFor(model => model.Area, new { @disabled = "disabled" })
                         </td>
-                    </tr>
-                      
-                    <tr class="formulario-fila">
+                        <td style="width:45px">&nbsp;</td>
                         <td class="control-label" >Tipo</td>
                         <td class="controls">
                             @Html.TextBoxFor(model=>model.TipoHorario, new {@disabled="disabled"})
                             @*<input type="text" class="input-small" id="txttipo" disabled="disabled" value="Tiempo Completo">*@
                         </td>
-                    </tr>
 
+                    </tr>
+                      
                     <tr class="formulario-fila">
                         <td class="control-label" >Vacantes</td>
                         <td class="controls">
                            @Html.TextBoxFor(model=>model.SolicitudCargo.NumeroPosiciones, new {@disabled = "disabled",  @class="input-small" })
                         </td>
-                    </tr>
-
-                    <tr class="formulario-fila">
+                        <td>&nbsp;</td>
                         <td class="control-label">Rango Salarial</td>
                         <td class="controls">
                             @Html.TextBoxFor(model => model.RangoSalario, new {@disabled = "disabled"})
@@ -400,6 +397,7 @@
                         </td>
                     </tr>
 
+
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
@@ -408,9 +406,7 @@
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
                             </div>
                         </td>
-                    </tr>
-
-                    <tr class="formulario-fila">
+                        <td>&nbsp;</td>
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
                             @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
@@ -420,7 +416,7 @@
                            
                         </td>
                     </tr>
-                    
+
                         <tr><td>&nbsp;</td></tr>
                     </table>
 
@@ -517,7 +513,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Observaciones</label>
+                        <label class="control-label" for="input01">Observaciones<span class="text-error">*</span> </label>
                          <div class="controls">
                              @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                              { 
@@ -525,10 +521,11 @@
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur="aMays(event, this)"})
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                     @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
-                                </div>
+                                @Html.TextAreaFor(model => model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur = "aMays(event, this)", maxlength = "255" })
+                                <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
+                                    <div class="tex-error" style="font-size:12px;color:red"> 
+                                        @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
+                                    </div>
                              }
                          </div>
                         </td>
