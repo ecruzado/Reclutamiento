@@ -158,13 +158,42 @@
             }
         }
 
+        
+        /// <summary>
+        /// Inicializa el tab general
+        /// </summary>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult General()
         {
             var perfilViewModel = inicializarGeneral();
+            List<Edad> ListaEdad = new List<Edad>();
+            Edad rangoEdad;
+            
             if (CargoPerfil != null)
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+
+                //Se obtiene las edades
+                for (int i = 18; i < 71; i++)
+                {
+                    rangoEdad = new Edad();
+                    rangoEdad.IdEdad = i;
+                    rangoEdad.DesEdad = i.ToString();
+                    ListaEdad.Add(rangoEdad);
+                }
+                //Se guardan las edades
+                perfilViewModel.ListaEdad = ListaEdad;
+
+                if (cargo!=null)
+                {
+                    perfilViewModel.Cargo.EdadInicio = cargo.EdadInicio;
+                    perfilViewModel.Cargo.EdadFin = cargo.EdadFin;   
+                }
+
+                //perfilViewModel.ListaEdad.Insert(0, new Edad { IdEdad = 0, DesEdad = "Seleccionar" });
+
+
                 perfilViewModel.Cargo = cargo;
                 actualizarDatosCargo(perfilViewModel, cargo);
                 actualizarAccion(perfilViewModel);
@@ -172,6 +201,8 @@
 
             return View(perfilViewModel);
         }
+
+
 
         [HttpPost]
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]

@@ -72,12 +72,15 @@
                          else
                          {
                              
-                             
+                             @*
                             @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini", @maxlength ="2" ,data_val = "false" }) <label style="width:10px;display:inline-block">-</label>
                             @Html.TextBoxFor(model => model.Cargo.EdadFin, new {  @class = "input-xmini", style ="display:inline-block", @maxlength ="2" , onblur="validarEdad();" ,data_val = "false"})
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
-                            </div>*@
+                           *@
+                             
+                             @Html.DropDownListFor(model => model.Cargo.EdadInicio, new SelectList(Model.ListaEdad, "IdEdad", "DesEdad", Model.Cargo.EdadInicio), new { @style = "width: 80px; display:inline-block" })
+                             @Html.DropDownListFor(model => model.Cargo.EdadFin, new SelectList(Model.ListaEdad, "IdEdad", "IdEdad", Model.Cargo.EdadFin), new { @style = "width: 80px; display:inline-block" })
+                             
+                             
                             <div id="msjErrorEdad" class="tex-error" style="font-size:12px;color:red; display:none;"> 
                             </div>
                          }
@@ -95,7 +98,7 @@
                                   @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
                                </div>
                             }
-                        @*<td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>*@
+                       
                        </td>
                         
                         
@@ -103,7 +106,7 @@
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo <span class="text-error">*</span></label> 
+                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Sexo <span class="text-error">*</span></label> 
                             @if (Model.Accion.Equals(Accion.Consultar))
                             { 
                                 @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" , disabled = "disabled"})
@@ -164,7 +167,7 @@
                     <tr>
                         <td></td>
                         <td style =" width:450px" >
-                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
+                            <label style="width:180px; display:inline-block" class="control-label" for="input01" >Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
                         @if (Model.Accion.Equals(Accion.Consultar))
                         {
                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })

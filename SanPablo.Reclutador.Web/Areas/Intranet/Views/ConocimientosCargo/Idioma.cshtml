@@ -12,11 +12,13 @@
     $(document).ready(function () {
                
         SanPablo.Numeros('Conocimiento_PuntajeConocimiento');
+
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
     });
 
-    $('input[data-val=true]').on('blur', function () {
-        $(this).valid();
-    });
+   
 </script>
 
 

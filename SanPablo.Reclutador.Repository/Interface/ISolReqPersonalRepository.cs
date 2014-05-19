@@ -18,6 +18,9 @@ namespace SanPablo.Reclutador.Repository.Interface
     public interface ISolReqPersonalRepository : IRepository<SolReqPersonal>
     {
         List<Cargo> GetTipCargo(int IdCargo);
+
+        List<Cargo> GetCargoxSede(Cargo obj);
+
         List<SolReqPersonal> GetListaSolReqPersonal(SolReqPersonal obj);
         int EliminaListaReemplazo(Reemplazo obj);
         int InsertTempReemplazo(Reemplazo obj);

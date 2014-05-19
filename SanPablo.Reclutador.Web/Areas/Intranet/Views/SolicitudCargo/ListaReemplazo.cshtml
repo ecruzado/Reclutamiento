@@ -471,14 +471,17 @@
                             </div>
                       
                     </td>
-                    <td class="span5">
+                    @if (Visualicion.SI.Equals(Model.CampoEtapa))
+                    {
+                        <td class="span5">
                         
-                            <label class="control-label" for="inputSuccess">Etapa</label>
-                            <div class="controles">
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false"})
-                            </div>
+                                <label class="control-label" for="inputSuccess">Etapa</label>
+                                <div class="controles">
+                                     @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false"})
+                                </div>
                       
-                    </td>
+                        </td>
+                    }
                 </tr>
                 <tr class="formulario-fila">
                                   

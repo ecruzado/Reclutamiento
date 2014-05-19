@@ -11,19 +11,66 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        //var tipoEducacion = document.getElementById('NivelAcademico_TipoEducacion');
+        //var tipoAreaEdtudio = document.getElementById('NivelAcademico_TipoAreaEstudio');
+        //var tipoNivelAlcanzado = document.getElementById('NivelAcademico_TipoNivelAlcanzado');
+        //var cicloSemestre = document.getElementById('NivelAcademico_CicloSemestre');
+        //var puntajeNivelEstudio = document.getElementById('NivelAcademico_PuntajeNivelEstudio');
+
+        //if (tipoEducacion!="00") {
+        //    tipoEducacion.style.display = "block";
+        //} else {
+        //    tipoEducacion.style.display = "none";
+        //}
+
+        //if (tipoAreaEdtudio != "00") {
+        //    tipoAreaEdtudio.style.display = "block";
+        //} else {
+        //    tipoAreaEdtudio.style.display = "none";
+        //}
+
+        //if (tipoNivelAlcanzado != "00") {
+        //    tipoNivelAlcanzado.style.display = "block";
+        //} else {
+        //    tipoNivelAlcanzado.style.display = "none";
+        //}
+
+
+        //if (cicloSemestre.value != null && (cicloSemestre.value).lenght > 0) {
+        //    cicloSemestre.style.display = "block";
+        //} else {
+        //    cicloSemestre.style.display = "none";
+        //}
+
+        //if (puntajeNivelEstudio.value != null && puntajeNivelEstudio.value > 0) {
+        //    puntajeNivelEstudio.style.display = "block";
+        //} else {
+        //    puntajeNivelEstudio.style.display = "none";
+        //}
+            
+
+
         SanPablo.Numeros("NivelAcademico_PuntajeNivelEstudio");
         SanPablo.Numeros("NivelAcademico_CicloSemestre");
         
 
-        var tipoNivelAcad = $('#NivelAcademico_TipoNivelAlcanzado').val();
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
+
+        //var tipoNivelAcad = $('#NivelAcademico_TipoNivelAlcanzado').val();
        // habilitarTextOtro(tipoNivelAcad);
 
         $('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
             var tipoNivelAcad = $(this).val();
+            $("#NivelAcademico_CicloSemestre").val(0);
             habilitarTextOtro(tipoNivelAcad);
         })
 
         $('select#NivelAcademico_TipoEducacion').change(function () {
+            
+            
+
             var tipoEducacion = $(this).val();
             habilitarAreaEstudio(tipoEducacion);
             $.ajax({
@@ -33,26 +80,36 @@
                     success: function (respuesta) {
                         $("select#NivelAcademico_TipoNivelAlcanzado").empty();
                         $("select#NivelAcademico_TipoNivelAlcanzado").append("<option value='00'> SELECCIONE </option>");
+
+                        
+
                         $.each(respuesta, function (i, items) {
                             $("select#NivelAcademico_TipoNivelAlcanzado").append("<option value='"
                             + items.Valor + "'>" + items.Descripcion + "</option>");
                         }
                         );
+
+                        $('select#NivelAcademico_TipoNivelAlcanzado').change(function () {
+                            var tipoNivelAcad = $(this).val();
+                            $("#NivelAcademico_CicloSemestre").val(0);
+                            habilitarTextOtro(tipoNivelAcad);
+                        })
+
+                       
                     },
                     error: function (e) {
                         alert(e);
                     }
                 });
         })
+
+
+       
         
     });
     function habilitarTextOtro(tipoNivelAcad) {
         var laCiclo = document.getElementById('laCiclo');
         var textCiclo = document.getElementById('NivelAcademico_CicloSemestre');
-
-      
-                       
-                       
 
         if ((tipoNivelAcad == '07') || (tipoNivelAcad == '08') || (tipoNivelAcad == '12') || (tipoNivelAcad == '05') || (tipoNivelAcad == '18') || (tipoNivelAcad == '17') || (tipoNivelAcad == '11') || (tipoNivelAcad == '21')) {
             laCiclo.style.display = "block";
@@ -77,9 +134,7 @@
         }
     }
 
-    $('input[data-val=true]').on('blur', function () {
-        $(this).valid();
-    });
+  
 </script>
 
 
@@ -106,10 +161,12 @@
         </tr>
         <tr>
             <td class="colEtiqueta">
-                <label id="laAreaEstudio" style="width:130px; display:none;" class="etiquetaFormulario" for="setipoInstitucion">Área de Estudio <span class="text-error">*</span></label>
+                @*<label id="laAreaEstudio" style="width:130px; display:none;" class="etiquetaFormulario" for="setipoInstitucion">Área de Estudio <span class="text-error">*</span></label>*@
+                <label id="laAreaEstudio" style="width:130px;" class="etiquetaFormulario" for="setipoInstitucion">Área de Estudio <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                 @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio), new { style="display:none;"})
+                @* @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio), new { style="display:none;"})*@
+                 @Html.DropDownListFor(model => model.NivelAcademico.TipoAreaEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.NivelAcademico.TipoAreaEstudio))
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.TipoAreaEstudio)
                 </div>
@@ -128,10 +185,12 @@
        </tr>
            <tr>
             <td class="colEtiqueta">
-                <label id="laCiclo" style="width:130px;display:none;" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>
+                @*<label id="laCiclo" style="width:130px;display:none;" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>*@
+                <label id="laCiclo" style="width:130px;" class="etiquetaFormulario" for="setipoInstitucion">Ciclo/Semestre</label>
             </td>
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini", style = "display:none;" , maxlength="2" })
+                 @*@Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini", style = "display:none;" , maxlength="2" })*@
+                @Html.TextBoxFor(model => model.NivelAcademico.CicloSemestre, new {@class="input-mini", maxlength="2" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.NivelAcademico.CicloSemestre)
                 </div>

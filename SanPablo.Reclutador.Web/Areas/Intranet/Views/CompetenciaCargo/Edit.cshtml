@@ -3,11 +3,17 @@
     Layout = "";
 }
 <script type="text/javascript">
-    $('input[data-val=true]').on('blur', function () {
-        $(this).valid();
+
+    $(document).ready(function () {
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
+
+        SanPablo.Numeros('Competencia_Puntaje');
     });
 
-    SanPablo.Numeros('Competencia_Puntaje');
+
+   
 
 </script>
 

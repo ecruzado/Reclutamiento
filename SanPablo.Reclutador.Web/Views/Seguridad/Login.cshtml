@@ -145,9 +145,9 @@
                 }
             });
 
-            //if ($.browser.msie) {
-            //    alert($.browser.version);
-            //}
+            if ($.browser.msie) {
+                MostrarMensaje("Para una mejor experiencia de usuario y mejor rendimiento del sistema, se recomienda usar los navegadores Mozilla Firefox y Chrome.", "Mensaje");
+            }
 
             $("#lnkRegistrarUsuario").click(function (e) {
                 e.preventDefault();
