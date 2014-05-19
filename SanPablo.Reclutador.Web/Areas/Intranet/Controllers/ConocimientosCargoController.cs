@@ -266,7 +266,7 @@
                 }
                 if (idiomaCargo.IdeConocimientoGeneralCargo == 0)
                 {
-                    if (existeIdioma(idiomaCargo.TipoIdioma))
+                    if (existeIdioma(idiomaCargo.TipoIdioma, idiomaCargo.TipoConocimientoIdioma))
                     {
                         objJsonMessage.Mensaje = "No puede agregar el mismo idioma más de una vez";
                         objJsonMessage.Resultado = false;
@@ -293,7 +293,7 @@
                     var idiomaCargoActualizar = _conocimientoCargoRepository.GetSingle(x => x.IdeConocimientoGeneralCargo == idiomaCargo.IdeConocimientoGeneralCargo);
 
                     int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoIdioma == idiomaCargo.TipoIdioma && x.Cargo.IdeCargo == CargoPerfil.IdeCargo
-                                                                               && x.IdeConocimientoGeneralCargo != idiomaCargo.IdeConocimientoGeneralCargo);
+                                                                               && x.IdeConocimientoGeneralCargo != idiomaCargo.IdeConocimientoGeneralCargo && x.TipoConocimientoIdioma == idiomaCargo.TipoConocimientoIdioma);
 
                     if (contador > 0)
                     {
@@ -559,11 +559,11 @@
             return result;
         }
 
-        public bool existeIdioma(string descripcion)
+        public bool existeIdioma(string descripcion, string tipoConocimiento)
         {
             int IdeCargo = CargoPerfil.IdeCargo;
             bool result = false;
-            int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoIdioma == descripcion && x.Cargo.IdeCargo == IdeCargo);
+            int contador = _conocimientoCargoRepository.CountByExpress(x => x.TipoIdioma == descripcion && x.Cargo.IdeCargo == IdeCargo && x.TipoConocimientoIdioma == tipoConocimiento);
 
             if (contador > 0)
             {

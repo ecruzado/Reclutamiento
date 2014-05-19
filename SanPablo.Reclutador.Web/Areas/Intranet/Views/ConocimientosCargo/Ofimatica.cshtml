@@ -25,8 +25,8 @@
 @using (Html.BeginForm("Ofimatica", "ConocimientosCargo", FormMethod.Post, new { @id = "ofimaticaForm" }))
 {
     @Html.ValidationSummary(true)
-    <div class="alert alert-info" id="mensajeError" style="display:none" >
-        <a class="close" onclick="hide('mensajeError')" >×</a>
+    <div class="alert alert-info" id="mensajeErrorOfimatica" style="display:none" >
+        <a class="close" onclick="hide('mensajeErrorOfimatica')" >×</a>
          <strong>ERROR : </strong> Verifique que los datos ingresados sean correctos.
     </div>
     <table style="margin-left:30px;">

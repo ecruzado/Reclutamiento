@@ -52,11 +52,11 @@
         {
             var minResultDate = QueryOver.Of<LogSolReqPersonal>()
                 .Where(condition)
-                .Select(Projections.Min<LogSolReqPersonal>(x => x.FechaCreacion));
+                .Select(Projections.Min<LogSolReqPersonal>(x => x.FecSuceso));
 
             return _session.QueryOver<LogSolReqPersonal>()
                            .Where(condition)
-                           .WithSubquery.WhereProperty(x => x.FechaCreacion).Eq(minResultDate)
+                           .WithSubquery.WhereProperty(x => x.FecSuceso).Eq(minResultDate)
                            .SingleOrDefault();
         }
 

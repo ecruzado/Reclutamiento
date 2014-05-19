@@ -23,7 +23,7 @@
                     data: { tipoConocimiento: tipoConocimiento },
                     success: function (respuesta) {
                         $("select#Conocimiento_TipoNombreConocimientoGeneral").empty();
-                        $("select#Conocimiento_TipoNombreConocimientoGeneral").append("<option value='00'> Seleccionar </option>");
+                        $("select#Conocimiento_TipoNombreConocimientoGeneral").append("<option value='00'> SELECCIONAR </option>");
                         $.each(respuesta, function (i, items) {
                             $("select#Conocimiento_TipoNombreConocimientoGeneral").append("<option value='"
                             + items.Valor + "'>" + items.Descripcion + "</option>");
@@ -49,8 +49,8 @@
 @using (Html.BeginForm("OtrosConocimientos", "ConocimientosCargo", FormMethod.Post, new { @id = "otrosConocimientosForm" }))
 {
     @Html.ValidationSummary(true)
-    <div class="alert alert-info" id="mensajeError" style="display:none" >
-        <a class="close" onclick="hide('mensajeError')" >×</a>
+    <div class="alert alert-info" id="mensajeErrorOtro" style="display:none" >
+        <a class="close" onclick="hide('mensajeErrorOtro')" >×</a>
          <strong>ERROR : </strong> 
     </div>
     <table style="margin-left:30px;">

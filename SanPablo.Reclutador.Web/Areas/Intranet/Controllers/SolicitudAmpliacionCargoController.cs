@@ -69,24 +69,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         [ValidarSesion]
         public ActionResult Edit(string id, string pagina)
         {
-            SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo( pagina);
+            SolReqPersonal solicitud = null;
+            IdeSolicitudAmpliacion = Convert.ToInt32(id);
+
+            if (IdeSolicitudAmpliacion != 0)
+            {
+                solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
+            }
+
+            SolicitudAmpliacionCargoViewModel solicitudModel = inicializarAmpliacionCargo( pagina, solicitud);
             
             var usuario = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             
             SolReqPersonal solicitudAmpliacion = new SolReqPersonal();
 
-            IdeSolicitudAmpliacion = Convert.ToInt32(id);
-
-            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-
-            solicitudModel.rolSession = rolSession;
-
-
-
-            if (IdeSolicitudAmpliacion != 0)
+            if (solicitud != null)
             {
-                var solicitud = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == IdeSolicitudAmpliacion && x.TipoSolicitud == TipoSolicitud.Ampliacion);
+
+                
                 solicitudModel.SolicitudRequerimiento = solicitud;
+
+                actualizarDatosAreas(solicitudModel, solicitud.IdeArea, solicitud.IdeDepartamento, solicitud.IdeDependencia);
 
                 int puntajeTotal = Convert.ToInt32(solicitud.PuntTotCentroEst) + Convert.ToInt32(solicitud.PuntTotConoGen) + Convert.ToInt32(solicitud.PuntTotDisCapa) +
                                Convert.ToInt32(solicitud.PuntEdad) + Convert.ToInt32(solicitud.PuntTotExpLaboral) + Convert.ToInt32(solicitud.PuntTotHorario) +
@@ -95,35 +98,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 solicitudModel.TotalMaxino = puntajeTotal;
 
-                var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == solicitud.IdeDepartamento);
-                var area = _areaRepository.GetSingle(x => x.IdeArea == solicitud.IdeArea);
 
-                solicitudModel.Areas.Add(area);
-                solicitudModel.Departamentos.Add(departamento);
+                //var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == solicitud.IdeDepartamento);
+                //var area = _areaRepository.GetSingle(x => x.IdeArea == solicitud.IdeArea);
+
+                //solicitudModel.Areas.Add(area);
+                //solicitudModel.Departamentos.Add(departamento);
                 
-
-                //determinar Accion
-
-                if ((solicitud.TipEtapa == Etapa.Pendiente) && (rolSession == Roles.Gerente))
-                {
-                    solicitudModel.Accion = Accion.Aprobar;
-                }
-                if ((solicitud.TipEtapa == Etapa.Validado) && (rolSession == Roles.Gerente_General_Adjunto))
-                {
-                    solicitudModel.Accion = Accion.Aprobar;
-                }
-                if ((solicitud.TipEtapa == Etapa.Aprobado) && (rolSession == Roles.Encargado_Seleccion))
-                {
-                    solicitudModel.Accion = Accion.Aceptar;
-                }
-                if ((solicitud.TipEtapa == Etapa.Aceptado) && ((rolSession == Roles.Encargado_Seleccion) || (rolSession == Roles.Analista_Seleccion)))
-                {
-                    solicitudModel.Accion = Accion.Publicar;
-                }
             }
             else
             {
-                solicitudModel.Accion = Accion.Enviar;
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
 
                 solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
@@ -133,6 +117,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
                 solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
                 solicitudAmpliacion.IdeArea = usuario.IDEAREA;
+                solicitudAmpliacion.NumVacantes = 1;
+
 
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
             }
@@ -162,64 +148,87 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     //solicitudAmpliacionModel.SolicitudRequerimiento = solicitudAmpliacion;
                     //return View(solicitudAmpliacionModel);
                 }
-               
-                solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion; 
-                solicitudAmpliacion.FechaModificacion = FechaCreacion;
-                Cargo cargoSol = _cargoRepository.GetSingle(x=>x.IdeCargo == solicitudAmpliacion.IdeCargo);
-                var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                var rolResponsable = 0;
-                var etapaInicio = "";
-                /// 
-                ///enviar dependiendo el usuario que registra la solicitud
-                /// 
-                switch (rolSuceso)
+                if (model.SolicitudRequerimiento.IdeSolReqPersonal == null)
                 {
-                    case Roles.Jefe:
-                        rolResponsable = Roles.Gerente;
-                        etapaInicio = Etapa.Pendiente;
-                        break;
-
-                    case Roles.Gerente:
-                        rolResponsable = Roles.Gerente_General_Adjunto;
-                        etapaInicio = Etapa.Validado;
-                        break;
-
-                    case Roles.Gerente_General_Adjunto:
-                        rolResponsable = Roles.Encargado_Seleccion;
-                        etapaInicio = Etapa.Aprobado;
-                        break;
-                }
-
-                if ((rolResponsable != 0) && (etapaInicio != ""))
-                {
-                    var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, "SI");
-                    if (idUsuarioResponsable != -1)
+                    solicitudAmpliacion.TipoSolicitud = TipoSolicitud.Ampliacion;
+                    solicitudAmpliacion.FechaModificacion = FechaCreacion;
+                    Cargo cargoSol = _cargoRepository.GetSingle(x => x.IdeCargo == solicitudAmpliacion.IdeCargo);
+                    var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    var rolResponsable = 0;
+                    var etapaInicio = "";
+                    /// 
+                    ///enviar dependiendo el usuario que registra la solicitud
+                    /// 
+                    switch (rolSuceso)
                     {
-                        var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+                        case Roles.Jefe:
+                            rolResponsable = Roles.Gerente;
+                            etapaInicio = Etapa.Pendiente;
+                            break;
 
-                        bool flag = EnviarCorreo(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo);
-                        string msj = "";
-                        if (!flag)
+                        case Roles.Gerente:
+                            rolResponsable = Roles.Gerente_General_Adjunto;
+                            etapaInicio = Etapa.Validado;
+                            break;
+
+                        case Roles.Gerente_General_Adjunto:
+                            rolResponsable = Roles.Encargado_Seleccion;
+                            etapaInicio = Etapa.Aprobado;
+                            break;
+                    }
+
+                    if ((rolResponsable != 0) && (etapaInicio != ""))
+                    {
+                        var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, "SI");
+                        if (idUsuarioResponsable != -1)
                         {
-                            msj = "Falló envio de correo";
+                            var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+
+                            bool flag = EnviarCorreo(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo);
+                            string msj = "";
+                            if (!flag)
+                            {
+                                msj = "Falló envio de correo";
+                            }
+                            objJsonMessage.Mensaje = "Solicitud enviada correctamente " + msj;
+                            objJsonMessage.Resultado = true;
+                            return Json(objJsonMessage);
                         }
-                        objJsonMessage.Mensaje = "Solicitud enviada correctamente " + msj;
-                        objJsonMessage.Resultado = true;
-                        return Json(objJsonMessage);
+                        else
+                        {
+                            objJsonMessage.Mensaje = "Solicitud no enviada, intente de nuevo ";
+                            objJsonMessage.Resultado = false;
+                            return Json(objJsonMessage);
+                        }
+
                     }
                     else
                     {
-                        objJsonMessage.Mensaje = "Solicitud no enviada, intente de nuevo ";
+                        objJsonMessage.Mensaje = "No puede realizar esta accion, revise sus permisos";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
-                    
                 }
-                else
+                else 
                 {
-                    objJsonMessage.Mensaje = "No puede realizar esta accion, revise sus permisos";
-                    objJsonMessage.Resultado = false;
+                    var solicitudAnterior = model.SolicitudRequerimiento;
+                    var solicitudEditar = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == model.SolicitudRequerimiento.IdeSolReqPersonal);
+                    solicitudEditar.TipPuesto = solicitudAnterior.TipPuesto;
+                    solicitudEditar.IdeCargo = solicitudAnterior.IdeCargo;
+                    solicitudEditar.NumVacantes = solicitudAnterior.NumVacantes;
+                    solicitudEditar.Motivo = solicitudAnterior.Motivo;
+                    solicitudEditar.Observacion = solicitudAnterior.Observacion;
+                    if ((solicitudAnterior.IdeDependencia != 0) || (solicitudAnterior.IdeDepartamento != 0) || (solicitudAnterior.IdeArea != 0))
+                    {
+                        solicitudEditar.IdeDependencia = solicitudAnterior.IdeDependencia;
+                        solicitudEditar.IdeDepartamento = solicitudAnterior.IdeDepartamento;
+                        solicitudEditar.IdeArea = solicitudAnterior.IdeArea;
+                    }
+                    _solicitudAmpliacionPersonal.Update(solicitudEditar);
+                    
+                    objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
+
                 }
             }
             catch (Exception ex)
@@ -231,14 +240,30 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
-        public SolicitudAmpliacionCargoViewModel inicializarAmpliacionCargo(string pagina)
+        public SolicitudAmpliacionCargoViewModel inicializarAmpliacionCargo(string pagina, SolReqPersonal solicitud)
         {
             SolicitudAmpliacionCargoViewModel model = new SolicitudAmpliacionCargoViewModel();
 
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+            int rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             model.SolicitudRequerimiento = new SolReqPersonal();
 
             model.Pagina = pagina;
+            model.rolSession = rolSession;
+
+            if (pagina == TipoSolicitud.Ampliacion)
+            {
+                if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente_General_Adjunto) || (rolSession == Roles.Gerente))
+                {
+                    model.Accion = Accion.Editar;
+                }
+                else
+                { model.Accion = Accion.Consultar; }
+            }
+            else
+            {
+                model.Accion = Accion.Consultar;
+            }
             
             model.Cargos = new List<Cargo>(_cargoRepository.listaCargosCompletos(idSede));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
@@ -257,7 +282,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
             model.Departamentos = new List<Departamento>();
             model.Areas = new List<Area>();
-            if (Convert.ToInt32(Session[ConstanteSesion.Rol]) == Roles.Gerente_General_Adjunto)
+            if (rolSession == Roles.Gerente_General_Adjunto)
             {
                 model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == idSede));
 
@@ -279,9 +304,99 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.Areas = new List<Area>();
                 model.Areas.Add(new Area { IdeArea = usuarioSession.IDEAREA, NombreArea = usuarioSession.AREADES });
             }
+
+            
+
+            #region iniciar botonera
+            switch (rolSession)
+            {
+                case Roles.Jefe:
+                    model.btnVerEnviar = Visualicion.SI;
+                    model.btnVerAceptar = Visualicion.NO;
+                    model.btnVerAproRech = Visualicion.NO;
+                    model.btnVerPublicar = Visualicion.NO;
+                    model.btnVerPerfil = Visualicion.NO;
+                    break;
+                case Roles.Gerente:
+                    if (IdeSolicitudAmpliacion == 0)
+                    {
+                        model.btnVerEnviar = Visualicion.SI;
+                        model.btnVerAproRech = Visualicion.NO;
+                    }
+                    else
+                    {
+                        model.btnVerEnviar = Visualicion.NO;
+                        model.btnVerAproRech = Visualicion.SI;
+                    }
+                    model.btnVerAceptar = Visualicion.NO;
+
+                    model.btnVerPublicar = Visualicion.NO;
+                    model.btnVerPerfil = Visualicion.NO;
+                    break;
+                case Roles.Gerente_General_Adjunto:
+                    if (IdeSolicitudAmpliacion == 0)
+                    {
+                        model.btnVerEnviar = Visualicion.SI;
+                        model.btnVerAproRech = Visualicion.NO;
+                    }
+                    else
+                    {
+                        model.btnVerEnviar = Visualicion.NO;
+                        model.btnVerAproRech = Visualicion.SI;
+                    }
+                    model.btnVerAceptar = Visualicion.NO;
+
+                    model.btnVerPublicar = Visualicion.NO;
+                    model.btnVerPerfil = Visualicion.NO;
+                    break;
+                case Roles.Encargado_Seleccion:
+                    model.btnVerEnviar = Visualicion.NO;
+                    model.btnVerAproRech = Visualicion.NO;
+                    if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aceptado))
+                    {
+                        model.btnVerPublicar = Visualicion.SI;
+                        model.btnVerAceptar = Visualicion.NO;
+                    }
+                    else
+                    {
+                        model.btnVerPublicar = Visualicion.NO;
+                        model.btnVerAceptar = Visualicion.SI;
+                    }
+                    model.btnVerPerfil = Visualicion.NO;
+                    break;
+                case Roles.Analista_Seleccion:
+                    model.btnVerEnviar = Visualicion.NO;
+                    model.btnVerAceptar = Visualicion.NO;
+                    model.btnVerAproRech = Visualicion.NO;
+                    if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aceptado))
+                    {
+                        model.btnVerPublicar = Visualicion.SI;
+                    }
+                    else
+                    {
+                        model.btnVerPublicar = Visualicion.NO;
+                    }
+                    model.btnVerPerfil = Visualicion.SI;
+                    break;
+                default:
+                    model.btnVerEnviar = Visualicion.NO;
+                    model.btnVerAceptar = Visualicion.NO;
+                    model.btnVerAproRech = Visualicion.NO;
+                    model.btnVerPublicar = Visualicion.NO;
+                    model.btnVerPerfil = Visualicion.NO;
+                    break;
+            }
+            #endregion
+
             return model;
         }
 
+        public void actualizarDatosAreas(SolicitudAmpliacionCargoViewModel model, int ideArea, int ideDepartamento, int ideDependencia )
+        {
+            model.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == ideArea));
+            model.Departamentos.Add(_departamentoRepository.GetSingle(x=>x.IdeDepartamento == ideDepartamento));
+            model.Dependencias.Add(_dependenciaRepository.GetSingle(x=>x.IdeDependencia == ideDependencia));
+        }
 
         [ValidarSesion]
         public ActionResult Puesto(string ideSolicitud)

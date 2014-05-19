@@ -35,7 +35,7 @@
                                         $('#grdListOfimatica').trigger('reloadGrid');
                                     }
                                     else {
-                                        notificacionError(respuesta.Mensaje);
+                                        notificacionError(respuesta.Mensaje, "mensajeErrorOfimatica");
                                     }
                                 }
                             );
@@ -107,7 +107,7 @@
                                             $('#grdListIdioma').trigger('reloadGrid');
                                         }
                                         else {
-                                            notificacionError(respuesta.Mensaje);
+                                            notificacionError(respuesta.Mensaje, "mensajeErrorIdioma");
                                         }
                                     }
                                 );
@@ -179,13 +179,13 @@
                                             $('#grdListOtrosConocimientos').trigger('reloadGrid');
                                         }
                                         else {
-                                            notificacionError(respuesta.Mensaje);
+                                            notificacionError(respuesta.Mensaje, "mensajeErrorOtro");
                                         }
                                     }
                                 );
                         }
                         else {
-                            notificacionError("ERROR: Verifique que los datos ingresados sean los correctos");
+                            notificacionError("ERROR: Verifique que los datos ingresados sean los correctos", "mensajeErrorOtro");
                         }
                     },
                     "Cancelar": function () {
@@ -318,6 +318,13 @@
                 }
             });
         });
+
+
+        function notificacionError(mensaje, selector) {
+            $('#'+selector).html(mensaje);
+            var mensj = document.getElementById(selector);
+            mensj.style.display = "block";
+        };
 
         function mostrarAgregarOfimatica() {
             var dialogDiv = $('#updateDialogOfimatica');

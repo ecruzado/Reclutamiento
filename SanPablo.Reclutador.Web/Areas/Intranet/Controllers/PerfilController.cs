@@ -339,10 +339,11 @@
             var cargoViewModel = new PerfilViewModel();
             var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
 
-            int puntajeTotal = Convert.ToInt32(cargoActual.PuntajeTotalCentroEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalConocimientoGeneral) + Convert.ToInt32(cargoActual.PuntajeTotalDiscapacidad)+
-                               Convert.ToInt32(cargoActual.PuntajeTotalEdad) + Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalHorario)+
-                               Convert.ToInt32(cargoActual.PuntajeTotalIdioma) + Convert.ToInt32(cargoActual.PuntajeTotalNivelEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalOfimatica) + Convert.ToInt32(cargoActual.PuntajeTotalPostulanteInterno)+
-                               Convert.ToInt32(cargoActual.PuntajeTotalSalario) + Convert.ToInt32(cargoActual.PuntajeTotalSexo) + Convert.ToInt32(cargoActual.PuntajeTotalUbigeo);
+            int puntajeTotal =Convert.ToInt32(cargoActual.PuntajeTotalPostulanteInterno)+ Convert.ToInt32(cargoActual.PuntajeEdad) + Convert.ToInt32(cargoActual.PuntajeSexo)+
+                              Convert.ToInt32(cargoActual.PuntajeSalario) + Convert.ToInt32(cargoActual.PuntajeTotalNivelEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalCentroEstudio)+
+                              Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalOfimatica) + Convert.ToInt32(cargoActual.PuntajeTotalIdioma) +
+                              Convert.ToInt32(cargoActual.PuntajeTotalConocimientoGeneral) + Convert.ToInt32(cargoActual.PuntajeTotalDiscapacidad) + Convert.ToInt32(cargoActual.PuntajeTotalHorario) +
+                              Convert.ToInt32(cargoActual.PuntajeTotalUbigeo);
 
             cargoViewModel.TotalMaximo = puntajeTotal;
             cargoViewModel.Cargo = cargoActual;
@@ -355,6 +356,8 @@
         [HttpPost]
         public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
         {
+            JsonMessage objJson = new JsonMessage();
+
             int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarGeneral();
@@ -364,11 +367,7 @@
                 CargoValidator validation = new CargoValidator();
                 ValidationResult result = validation.Validate(cargo, "PuntajeMinimoExamen", "PuntajeMin");
 
-                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
-                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
-                cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
+                
 
                 if (!result.IsValid)
                 {
@@ -376,17 +375,29 @@
                     actualizarDatosCargo(cargoViewModel,cargo);
                     return View(cargoViewModel);
                 }
-                             
+
+                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                cargoEditar.FechaModificacion = FechaCreacion;
+                cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
+                cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
+
                 _cargoRepository.Update(cargoEditar);
-                cargoViewModel.Cargo = cargoEditar;
-                actualizarDatosCargo(cargoViewModel, cargoEditar);
-                actualizarAccion(cargoViewModel);
-                return View(cargoViewModel);
+                
+                //cargoViewModel.Cargo = cargoEditar;
+                //actualizarDatosCargo(cargoViewModel, cargoEditar);
+                //actualizarAccion(cargoViewModel);
+                //return View(cargoViewModel);
+                objJson.Resultado = true;
+                return Json(objJson);
             }
             catch (Exception ex)
             {
-                cargoViewModel.Cargo = cargo;
-                return View(cargoViewModel);
+                //cargoViewModel.Cargo = cargo;
+                //return View(cargoViewModel);
+                objJson.Mensaje = "ERROR:" + ex;
+                objJson.Resultado = false;
+                return Json(objJson);
             }
 
         }

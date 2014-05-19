@@ -162,8 +162,9 @@
                         id = item.IdeExperienciaCargo.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionExperiencia,
-                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
+                                item.DescripcionExperiencia==null?"":item.DescripcionExperiencia,
+                                (item.CantidadAnhosExperiencia==0?"":item.CantidadAnhosExperiencia.ToString() + " AÑO(S) ") +
+                                (item.CantidadMesesExperiencia==0?"":item.CantidadMesesExperiencia + " MES(ES)"),
                             }
                     }).ToArray();
 

@@ -44,6 +44,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string btnVerPreSeleccion { get; set; }
         public string btnVerNuevo { get; set; }
         public string btnVerRequerimiento { get; set; }
+        public string btnVerPerfil { get; set; }
+
+
+        public string btnVerAproRech { get; set; }
+        public string btnVerEnviar { get; set; }
+        public string btnVerPublicar { get; set; }
+        public string btnVerAceptar { get; set; }
 
         public int rolSession { get; set; }
 

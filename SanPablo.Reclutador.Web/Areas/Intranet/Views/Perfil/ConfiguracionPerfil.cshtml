@@ -14,6 +14,26 @@
     <script type="text/javascript">
         $(document).ready(function () {
             
+            $('#btnGrabar').click(function () {
+                var result = $('#configuracionPerfilForm').valid();
+                if (result) {
+                    $.post('@Url.Action("ConfiguracionPerfil", "Perfil")',
+                      $("#configuracionPerfilForm").serialize(),
+                      function (respuesta) {
+                          if (respuesta.Resultado) {
+                              MostrarMensaje("Datos guardados exitosamente", "MENSAJE");
+
+                          }
+                          else {
+                              MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                          }
+                      });
+                }
+                else { MostrarMensaje("Verificar los datos ingresados", "ALERTA"); }
+            });
+
+
+
             SanPablo.Numeros('Cargo_PuntajeMinimoExamen');
             SanPablo.Numeros('Cargo_CantidadPreseleccionados');
             SanPablo.Numeros('Cargo_PuntajeMinimoGeneral');
@@ -26,22 +46,7 @@
 
         });
 
-        function calcularTotales()
-        {
-            if (parseInt($("#Cargo_PuntajeMinimoPostulanteInterno").val()) > parseInt($("#Cargo_PuntajeTotalPostulanteInterno").val())) {
-                mostrarMensaje()
-                $("#Cargo_PuntajeMinimoPostulanteInterno").val('0');
-            }
-            else {
-                var total = parseInt($("#Cargo_PuntajeMinimoPostulanteInterno").val()) + parseInt($("#Cargo_PuntajeMinimoEdad").val()) +
-                            parseInt($("#Cargo_PuntajeMinimoSexo").val()) + parseInt($("#Cargo_PuntajeMinimoSalario").val()) + parseInt($("#Cargo_PuntajeMinimoNivelEstudio").val()) +
-                            parseInt($("#Cargo_PuntajeMinimoCentroEstudio").val()) + parseInt($("#Cargo_PuntajeMinimoExperiencia").val()) + parseInt($("#Cargo_PuntajeMinimoOfimatica").val()) +
-                            parseInt($("#Cargo_PuntajeMinimoIdioma").val()) + parseInt($("#Cargo_PuntajeMinimoConocimientoGeneral").val()) + parseInt($("#Cargo_PuntajeMinimoDiscapacidad").val()) +
-                            parseInt($("#Cargo_PuntajeMinimoHorario").val()) + parseInt($("#Cargo_PuntajeMinimoUbigeo").val()) + parseInt($("#Cargo_PuntajeMinimoExamen").val());
 
-                $("#TotalMinimo").val(total);
-            }
-        }
         function mostrarMensaje()
         {
             mostrarMensaje("El ptje. mínimo debe ser menor")
@@ -364,7 +369,7 @@
             <div class="opciones">
              @if (Accion.Enviar == Model.Accion)
              {
-                 <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
+                 <a id="btnGrabar" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
              }
                  <a class="btn" href="@Url.Action("Evaluacion", "Perfil")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             </div>

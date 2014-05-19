@@ -30,7 +30,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.NumeroPosiciones)
                 .NotEmpty()
-                .WithMessage("Ingresar el número de posiciones para la solicitud");
+                .WithMessage("Ingresar el número de posiciones");
 
             RuleFor(x => x.DescripcionCargo)
                 .NotEmpty()

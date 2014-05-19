@@ -20,8 +20,12 @@
         var aprobado = $('input[name="Aprobado"]:checked').val();
         if (aprobado == "false") {
             document.getElementById('AreaObservaciones').style.display = "block";
+
         }
-        else { document.getElementById('AreaObservaciones').style.display = "none"; }
+        else {
+            document.getElementById('AreaObservaciones').style.display = "none";
+            $('#LogSolicitudAmpliacion_Observacion').val('');
+        }
     }
 </script>
 
@@ -60,7 +64,8 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Observación <span class="text-error">*</span></label>
             </td>
             <td>
-                @Html.TextAreaFor(model => model.LogSolicitudAmpliacion.Observacion)
+                @Html.TextAreaFor(model => model.LogSolicitudAmpliacion.Observacion, new { style="resize:none;" , maxlength="250", onblur="aMays(event, this)" })
+                <div class="tex-error" style="font-size:11px;color:gray">Máx. 250 caracteres </div>
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.LogSolicitudAmpliacion.Observacion)
                 </div>

@@ -101,11 +101,11 @@
             <div class="form-actions">     
                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                 { 
-                    <a class="btn" href="@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Pág. Anterior</a>
+                    <a class="btn" href="@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i> Ir listado</a>
                 }
                 else
                 {
-                    <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i>Pág. Anterior</a>
+                    <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet" })"><i class="icon-arrow-left icon-cog"></i>Ir listado</a>
                 }
                 
                 @if (Visualicion.SI.Equals(Model.btnVerAprobar))
@@ -158,7 +158,7 @@
                     if (validarObservacion()) {
                         var result = $('#LogSolicitudNuevoCargoForm').valid();
                         if (result) {
-                            $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+                            $("#spanMensaje").html("¿Está seguro de “Aprobar” o “Rechazar” la Solicitud de Nuevo Cargo");
                             $("#divMensaje").dialog({
                                 title: 'CONFIRMACIÓN',
                                 modal: true,

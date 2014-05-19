@@ -290,15 +290,13 @@
             {
                 nroIdioma = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
                                                                                        && x.TipoConocimientoIdioma == idioma.TipoConocimientoIdioma
-                                                                                       && x.TipoIdioma == idioma.TipoIdioma
-                                                                                       && x.TipoNivelConocimiento == idioma.TipoNivelConocimiento);
+                                                                                       && x.TipoIdioma == idioma.TipoIdioma);
             }
             else
             {
                 nroIdioma = _conocimientoGeneralPostulanteRepository.CountByExpress(x => x.Postulante.IdePostulante == IdePostulante
                                                                                        && x.TipoConocimientoIdioma == idioma.TipoConocimientoIdioma
                                                                                        && x.TipoIdioma == idioma.TipoIdioma
-                                                                                       && x.TipoNivelConocimiento == idioma.TipoNivelConocimiento
                                                                                        && x.IdeConocimientoGeneralPostulante != idioma.IdeConocimientoGeneralPostulante);
             }
             if (nroIdioma > 0)
