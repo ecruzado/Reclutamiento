@@ -71,6 +71,7 @@
     <Compile Include="CompetenciaRequerimiento.cs" />
     <Compile Include="CentroEstudioRequerimiento.cs" />
     <Compile Include="ConocimientoGeneralRequerimiento.cs" />
+    <Compile Include="Edad.cs" />
     <Compile Include="ReportePostulantePotencial.cs" />
     <Compile Include="PostulanteBDReporte.cs" />
     <Compile Include="Reporte.cs" />

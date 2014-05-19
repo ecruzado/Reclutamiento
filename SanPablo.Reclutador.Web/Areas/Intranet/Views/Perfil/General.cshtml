@@ -72,12 +72,15 @@
                          else
                          {
                              
-                             
+                             @*
                             @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini", @maxlength ="2" ,data_val = "false" }) <label style="width:10px;display:inline-block">-</label>
                             @Html.TextBoxFor(model => model.Cargo.EdadFin, new {  @class = "input-xmini", style ="display:inline-block", @maxlength ="2" , onblur="validarEdad();" ,data_val = "false"})
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
-                            </div>*@
+                           *@
+                             
+                             @Html.DropDownListFor(model => model.Cargo.EdadInicio, new SelectList(Model.ListaEdad, "IdEdad", "DesEdad", Model.Cargo.EdadInicio), new { @style = "width: 80px; display:inline-block" })
+                             @Html.DropDownListFor(model => model.Cargo.EdadFin, new SelectList(Model.ListaEdad, "IdEdad", "IdEdad", Model.Cargo.EdadFin), new { @style = "width: 80px; display:inline-block" })
+                             
+                             
                             <div id="msjErrorEdad" class="tex-error" style="font-size:12px;color:red; display:none;"> 
                             </div>
                          }
@@ -95,7 +98,7 @@
                                   @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
                                </div>
                             }
-                        @*<td><label class="checkbox" style="display:inline-block"><input type="checkbox"/>**</label></td>*@
+                       
                        </td>
                         
                         

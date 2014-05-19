@@ -10,7 +10,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $('input[data-val=true]').on('blur', function () {
+            $(this).valid();
+        });
 
+        SanPablo.Numeros("CentroEstudio_PuntajeCentroEstudios");
 
         //ELEGIR EL TIPO DE INSTITUCIONES
         $('select#CentroEstudio_TipoCentroEstudio').change(function () {
@@ -36,12 +40,10 @@
         
     });
 
-    $('input[data-val=true]').on('blur', function () {
-        $(this).valid();
-    });
+   
 
     
-    SanPablo.Numeros("CentroEstudio_PuntajeCentroEstudios");
+   
 
 </script>
 

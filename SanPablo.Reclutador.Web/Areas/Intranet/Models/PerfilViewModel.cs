@@ -38,6 +38,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string btnVerPublicar { get; set; }
 
 
+        public List<Edad> ListaEdad { get; set; }
+
+
         
     }
 }
