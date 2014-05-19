@@ -99,7 +99,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             try
             {
                 model = new SolicitudRempCargoViewModel();
-                
+                SedeNivel usuarioSede = new SedeNivel();
 
                 var sede = Session[ConstanteSesion.Sede];
                 if (sede!=null)
@@ -107,10 +107,41 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                   
                   model = InicializarListaReemplazo(Convert.ToInt32(sede));
                   model.SolReqPersonal = new SolReqPersonal();
-                  
 
-                 // accesos de botones
+
+                  var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
                   int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+                  if (objUsuarioSede != null)
+                  {
+                      
+                      usuarioSede = (SedeNivel)objUsuarioSede;
+                  }
+
+
+                  if (Roles.Jefe.Equals(idRol) || Roles.Gerente.Equals(idRol))
+                  {
+
+                      model.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                      model.Areas = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                                && x.EstadoActivo == IndicadorActivo.Activo));
+
+                      
+                      
+                      model.SolReqPersonal.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                      model.SolReqPersonal.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                      model.SolReqPersonal.IdeArea = usuarioSede.IDEAREA;
+                  }
+
+
+
+                  // accesos de botones
+                  
+                  model.idRol = idRol;
+                    
                   if (idRol>0)
                   {
                       if (Roles.Analista_Seleccion.Equals(idRol))
@@ -119,6 +150,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "S";
+                          model.CampoEtapa = "S";
                           
                       }
 
@@ -128,6 +160,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "S";
+                          model.CampoEtapa = "S";
                          
                       }
 
@@ -138,6 +171,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
+                          model.CampoEtapa = "S";
                         
                       }
 
@@ -148,6 +182,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "N";
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "N";
+                          model.CampoEtapa = "S";
 
                       }
 
@@ -158,6 +193,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
+                          model.CampoEtapa = "N";
 
                       }
 
@@ -165,9 +201,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                       {
 
                           model.btnRanking = "N";
-                          model.btnPreselec = "S";
+                          model.btnPreselec = "N";
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "N";
+                          model.CampoEtapa = "N";
 
                       }
 
@@ -178,6 +215,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
+                          model.CampoEtapa = "S";
 
                       }
 
@@ -264,6 +302,41 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
         }
 
+
+        /// <summary>
+        /// obtiene los cargos x sede
+        /// </summary>
+        /// <param name="idDependencia"></param>
+        /// <param name="idDepartamento"></param>
+        /// <param name="idArea"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaCargoxSede(string idDependencia, string idDepartamento, string idArea)
+        {
+            ActionResult result = null;
+
+            //var listaCargoxSede = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
+
+            //foreach (Area item in listaResultado)
+            //{
+            //    item.Departamento = null;
+            //}
+            Cargo objCargo = new Cargo();
+
+            var idSede = Session[ConstanteSesion.Sede];
+
+
+            objCargo.IdeSede = Convert.ToInt32(idSede);
+            objCargo.IdeDependencia = (idDependencia==null?0:Convert.ToInt32(idDependencia));
+            objCargo.IdeDepartamento = (idDepartamento == null ? 0 : Convert.ToInt32(idDepartamento));
+            objCargo.IdeArea = (idArea == null ? 0 : Convert.ToInt32(idArea));
+
+
+            var listaCargoxSede = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+
+            result = Json(listaCargoxSede);
+            return result;
+        }
 
 
         /// <summary>
@@ -449,16 +522,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model = new SolicitudRempCargoViewModel();
             
             var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
+            var idSede = Session[ConstanteSesion.Sede];
 
             if (objUsuarioSede!=null)
             {
                 UsuarioSede = new SedeNivel();
                 UsuarioSede = (SedeNivel)objUsuarioSede;
+
+                //incializa
                 model = Inicializar(UsuarioSede);
+
                 model.Pagina = TipoSolicitud.Remplazo;
                 model.SolReqPersonal = new SolReqPersonal();
 
-                if (idRol!=Roles.Gerente && idRol!=Roles.Gerente_General_Adjunto)
+                if (idRol == Roles.Gerente || idRol == Roles.Jefe)
                 {
                     model.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                         && x.IdeSede == UsuarioSede.IDESEDE
@@ -475,6 +552,32 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                                               && x.Departamento.IdeDepartamento == UsuarioSede.IDEDEPARTAMENTO
                                                                               && x.EstadoActivo == IndicadorActivo.Activo));
 
+                    Cargo objCargo = new Cargo();
+
+                    objCargo.IdeSede = Convert.ToInt32(idSede);
+                    objCargo.IdeDependencia = UsuarioSede.IDEDEPENDENCIA;
+                    objCargo.IdeDepartamento = UsuarioSede.IDEDEPARTAMENTO;
+                    objCargo.IdeArea = UsuarioSede.IDEAREA;
+
+                    model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+                
+                }
+
+
+                if (Roles.Gerente_General_Adjunto.Equals(idRol))
+                {
+
+                    model.listaDepartamento = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == UsuarioSede.IDEDEPENDENCIA
+                                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                    model.listaArea = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == UsuarioSede.IDEDEPARTAMENTO
+                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+                    model.SolReqPersonal.IdeDependencia = UsuarioSede.IDEDEPENDENCIA;
+                    model.SolReqPersonal.IdeDepartamento= UsuarioSede.IDEDEPARTAMENTO;
+                    model.SolReqPersonal.IdeArea= UsuarioSede.IDEAREA;
                 }
                 
             }
@@ -497,7 +600,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
             model.Accion = Accion.Enviar;
-
+            model.idRol = Convert.ToInt32(codRol);
 
             return View("InformacionReemplazo", model);
         }
@@ -520,9 +623,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
             objModel.listaTipPuesto.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-
+            //inicio cargo x sede
             objModel.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetTipCargo(0));
             objModel.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            //fin cargo x sede
 
             objModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                          && x.IdeSede == UsuarioSede.IDESEDE));

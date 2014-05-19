@@ -16,10 +16,10 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
 
-       
+
 
         $('select#SolReqPersonal_IdeDependencia').change(function () {
             var ideDependencia = $(this).val();
@@ -28,18 +28,18 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listaDepartamentos", "SolicitudCargo", new { area = "Intranet"})',
-            data: { ideDependencia: ideDependencia },
-            success: function (respuesta) {
-                $("select#SolReqPersonal_IdeDepartamento").empty();
-                $("select#SolReqPersonal_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
-                $.each(respuesta, function (i, item) {
-                    $("select#SolReqPersonal_IdeDepartamento").append("<option value='"
-                    + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+                    $("select#SolReqPersonal_IdeDepartamento").empty();
+                    $("select#SolReqPersonal_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolReqPersonal_IdeDepartamento").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
                 }
-            );
-            }
-        });
-         })
+            });
+        })
 
         $('select#SolReqPersonal_IdeDepartamento').change(function () {
             var ideDepartamento = $(this).val();
@@ -57,17 +57,44 @@
                 );
                 }
             });
-       })
+        })
+
+
+
+        $('select#SolReqPersonal_IdeArea').change(function () {
+            var idArea = $(this).val();
+            var idDependencia = $("#SolReqPersonal_IdeDependencia").val();
+            var idDepartamento = $("#SolReqPersonal_IdeDepartamento").val();
+               
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaCargoxSede","SolicitudCargo",new { area = "Intranet"})',
+                data: {
+                    idArea: idArea,
+                    idDependencia: idDependencia,
+                    idDepartamento: idDepartamento
+                },
+                success: function (respuesta) {
+                    $("select#SolReqPersonal_IdeCargo").empty();
+                    $("select#SolReqPersonal_IdeCargo").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolReqPersonal_IdeCargo").append("<option value='"
+                        + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
+                    }
+                );
+                }
+            });
+        })
 
 
         jQuery("#grdListCompetencias").jqGrid({
             url: '@Url.Action("ListarCompetencias", "SolicitudCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Descripci&oacuten','Puntaje'],
+            colNames: ['Descripci&oacuten', 'Puntaje'],
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false, width:50 }
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', editable: false, sortable: false, width: 50 }
             ],
             pager: jQuery('#grdPagerCompetencia'),
             sortname: 'DescripcionCompetencia',
@@ -161,7 +188,7 @@
             sortname: 'IdeUbigeoCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 890,
             rowNum: 0,
@@ -191,7 +218,7 @@
             sortname: 'IdeNivelAcademicoCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -219,7 +246,7 @@
             sortname: 'IdeCentroEstudioCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -248,7 +275,7 @@
             sortname: 'IdeConocimientoGeneralCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -277,7 +304,7 @@
             sortname: 'IdeConocimientoGeneralCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -306,7 +333,7 @@
             sortname: 'IdeConocimientoGeneralCargo',
             sortorder: 'desc',
             viewrecords: false,
-          //  cellEdit: true,
+            //  cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -335,7 +362,7 @@
             sortname: 'IdeExperienciaCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -362,7 +389,7 @@
             sortname: 'IdeDiscapacidadCargo',
             sortorder: 'desc',
             viewrecords: false,
-           // cellEdit: true,
+            // cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -392,7 +419,7 @@
             sortname: 'TipoExamen',
             sortorder: 'desc',
             viewrecords: true,
-           // cellEdit: true,
+            // cellEdit: true,
             /*caption: 'Horario de Trabajo',*/
             height: 200,
             width: 898,
@@ -414,7 +441,7 @@
 
 
 
-     jQuery("#grdListReemplazosReq").jqGrid({
+        jQuery("#grdListReemplazosReq").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -425,8 +452,8 @@
                 migrilla.filters = postdata.filters;
                 migrilla.Rules = [
                     { field: 'codigo', data: $("#SolReqPersonal_CodSolReqPersonal").val() }
-                   
-                       
+
+
                 ];
 
                 if (migrilla._search == true) {
@@ -454,43 +481,43 @@
                     }
                 });
             },
-             colNames: ['','','', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
-             colModel: [
+         colNames: ['', '', '', 'Fecha Inicio', 'Fecha Fin', 'Nombre', 'Apellido Paterno'],
+         colModel: [
 
-                      { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
-                      { name: 'IdPersona', index: 'IdPersona', align: 'left', editable: false, sortable: false, hidden: true },
-                      { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
-                     
-                      { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                      { name: 'FecFinalReemplazo', index: 'FecFinalReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                      { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
-                      { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 200, editable: false },
-                     
-             ],
+                  { name: 'IdReemplazo', index: 'IdReemplazo', align: 'left', editable: false, sortable: false, hidden: true },
+                  { name: 'IdPersona', index: 'IdPersona', align: 'left', editable: false, sortable: false, hidden: true },
+                  { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', editable: false, sortable: false, hidden: true },
 
+                  { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
+                  { name: 'FecFinalReemplazo', index: 'FecFinalReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
+                  { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
+                  { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 200, editable: false },
 
-             pager: jQuery('#grdPagerReemplazosReq'),
-             rowNum: 10,
-             
-             autowidth: true,
-             rules: true,
-             sortname: 'IdReemplazo',
-             sortorder: 'desc',
-             viewrecords: true,
-             height: 250,
-             cellsubmit: 'clientArray',
-             hidegrid: false,
-             rownumbers: true,
-             shrinkToFit: false,
-
-             postData: {
-             },
-             loadComplete: function (data) {
-             }
-         });
+         ],
 
 
-        
+         pager: jQuery('#grdPagerReemplazosReq'),
+         rowNum: 10,
+
+         autowidth: true,
+         rules: true,
+         sortname: 'IdReemplazo',
+         sortorder: 'desc',
+         viewrecords: true,
+         height: 250,
+         cellsubmit: 'clientArray',
+         hidegrid: false,
+         rownumbers: true,
+         shrinkToFit: false,
+
+         postData: {
+         },
+         loadComplete: function (data) {
+         }
+     });
+
+
+
 
         $('#btnAprobarRechazarReemplazo').click(function () {
 
@@ -526,7 +553,7 @@
 
         });
 
-       
+
         $('#btnAgregarReemplazo').click(function () {
 
             id = $("#SolReqPersonal_CodSolReqPersonal").val();
@@ -552,7 +579,7 @@
             var idReemplazo = rowData.IdReemplazo;
 
             var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
-            
+
             if (selr != null) {
                 mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo);
             } else {
@@ -561,9 +588,9 @@
 
 
         });
-        
 
-       
+
+
         $('#btnEliminaReemplazo').click(function () {
             var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
@@ -622,8 +649,8 @@
                     } else {
                         MostrarMensaje('Ingrese una observación', "Sistema de Reclutamiento Y Seleccion de Personal");
                     }
-                       
-                    
+
+
 
                 },
                 "Cancelar": function () {
@@ -664,23 +691,23 @@
                     $.ajax({
                         data: $("#frmPopupAprobReem").serialize(),
                         type: "POST",
-                       
+
                         url: '@Url.Action("SetPopupAprobReem", "SolicitudCargo")',
-                            traditional: true,
-                            success: function (data) {
+                        traditional: true,
+                        success: function (data) {
 
-                                //desbloqueo
-                                $.unblockUI();
+                            //desbloqueo
+                            $.unblockUI();
 
 
-                                if (data.Resultado) {
-                                    //$('#DialogAprobReem').dialog('close');
-                                    //$('#popupDialogAprobReem').dialog('close');
+                            if (data.Resultado) {
+                                //$('#DialogAprobReem').dialog('close');
+                                //$('#popupDialogAprobReem').dialog('close');
 
-                                    MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                }
+                                MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                             }
-                        });
+                        }
+                    });
 
                 },
                 "Cancelar": function () {
@@ -706,12 +733,11 @@
                     var TipoReemplazo = $("#TipoReemplazo").val();
 
 
-                    if (valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo))
-                    {
+                    if (valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo)) {
 
-                    $('#DialogReemplazo').dialog('open');
+                        $('#DialogReemplazo').dialog('open');
 
-                   }
+                    }
 
                 },
                 "Cancelar": function () {
@@ -728,18 +754,18 @@
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
             buttons: {
                 "Aceptar": function () {
-                                
-                            
-                   
-                        $.ajax({
-                            data: $("#frmPopupReemplazo").serialize(),
-                            type: "POST",
-                            url: '@Url.Action("SetPopupReemplazo", "SolicitudCargo")',
+
+
+
+                    $.ajax({
+                        data: $("#frmPopupReemplazo").serialize(),
+                        type: "POST",
+                        url: '@Url.Action("SetPopupReemplazo", "SolicitudCargo")',
                             traditional: true,
                             success: function (data) {
                                 if (data.Resultado) {
                                     MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                
+
                                     $('#DialogReemplazo').dialog('close');
                                     $('#popupDialogReemplazo').dialog('close');
                                     $('#grdListReemplazosReq').trigger('reloadGrid');
@@ -747,85 +773,85 @@
                                 }
                             }
                         });
-                   
-                
-            },
-            "Cancelar": function () {
-                $(this).dialog("close");
+
+
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
             }
-        }
+        });
+
+
+
+
     });
-
-
-  
-
-    });
-    function RadioFormatter(cellvalue, options, rowObject) {
-        var strRdo = '<input type ="radio" name = "codigo">';
-        return strRdo;
-    }
-
-    function irATab(tab) {
-        $('a[href=#' + tab + ']').tab('show');
-    }
-
-
-    function valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo){
-
-        var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
-
-        if ("S"==TipoReemplazo) {
-
-            if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
-
-                MostrarMensaje('Las fechas son obligatorias', "Mensaje");
-                return false;
-            }
-
-            if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
-                MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "Mensaje");
-                return false;
-            }
-
-            
-
-
-            if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-                MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
-                return false;
-            }
-
-
-
-        } else {
-
-            if ((fechaFinal.length == 0)) {
-
-                MostrarMensaje('La fechas es obligatoria', "Mensaje");
-                return false;
-            }
+        function RadioFormatter(cellvalue, options, rowObject) {
+            var strRdo = '<input type ="radio" name = "codigo">';
+            return strRdo;
         }
 
-        if (Nombres.length==0) {
-            MostrarMensaje('Ingrese el Nombre', "Mensaje");
-            return false;
+        function irATab(tab) {
+            $('a[href=#' + tab + ']').tab('show');
         }
 
-        if (Nombres.length == 0) {
-            MostrarMensaje('Ingrese el apellido paterno', "Mensaje");
-            return false;
+
+        function valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo) {
+
+            var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
+
+            if ("S" == TipoReemplazo) {
+
+                if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+
+                    MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+                    return false;
+                }
+
+                if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
+                    MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "Mensaje");
+                    return false;
+                }
+
+
+
+
+                if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    return false;
+                }
+
+
+
+            } else {
+
+                if ((fechaFinal.length == 0)) {
+
+                    MostrarMensaje('La fechas es obligatoria', "Mensaje");
+                    return false;
+                }
+            }
+
+            if (Nombres.length == 0) {
+                MostrarMensaje('Ingrese el Nombre', "Mensaje");
+                return false;
+            }
+
+            if (Nombres.length == 0) {
+                MostrarMensaje('Ingrese el apellido paterno', "Mensaje");
+                return false;
+            }
+
+            return true;
+
         }
 
-        return true;
 
-    }
-   
+        //inicio
+        function mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo) {
+            var dialogDiv = $('#popupDialogReemplazo');
 
-    //inicio
-    function mostrarPopuprReemplazo(id, tipReemplazo,idReemplazo) {
-        var dialogDiv = $('#popupDialogReemplazo');
-
-        $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id + "&tipReemplazo=" + tipReemplazo + "&idReemplazo=" + idReemplazo, function (data) {
+            $.get('@Url.Action("InicioPopupReemplazo", "SolicitudCargo", new { area = "Intranet", id=""})?id=' + id + "&tipReemplazo=" + tipReemplazo + "&idReemplazo=" + idReemplazo, function (data) {
 
             dialogDiv.html(data);
             $.validator.unobtrusive.parse($("#popupDialogReemplazo"));
@@ -847,7 +873,7 @@
         });
         return false;
     }
-   
+
 
     function EliminarReemplazo(selr, idReq, idPersona) {
 
@@ -860,48 +886,47 @@
             },
             type: "POST",
             url: "@Url.Action("EliminarReemplazo", "SolicitudCargo")",
-			traditional: true,
-			success: function (data) {
-			    if (data.Resultado == true) {
-			        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-			        $('#grdListReemplazosReq').trigger('reloadGrid');
-			    }
-			}
-		});
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado == true) {
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListReemplazosReq').trigger('reloadGrid');
+                }
+            }
+        });
 
     }
 
     function validaAprobacion(observacion, aprobado) {
-        
+
         var longitud = observacion.length;
-       
-        if (aprobado==1) {
+
+        if (aprobado == 1) {
             return true;
         }
-        else
-        {
-           
+        else {
+
             if (observacion != null && longitud > 0) {
                 return true;
             } else {
                 return false;
             }
-            
+
         }
     }
 
-   
+
 
     function GeneraSolicitud() {
         if (validaEnvio()) {
             creaSolicitudReempCargo();
-        } 
-        
+        }
+
     }
 
-    
+
     function validaEnvio() {
-        
+
         var tipVacante = $('#SolReqPersonal_TipVacante').val();
         var solReqIdeCargo = $('#SolReqPersonal_Idecargo').val();
         var numVacante = $('#SolReqPersonal_NumVacantes').val();
@@ -910,12 +935,12 @@
 
         var observ = $('#SolReqPersonal_Observacion').val();
         var tipoPuesto = $('#SolReqPersonal_TipPuesto').val();
-        
+
         var idDependencia = $('#SolReqPersonal_IdeDependencia').val();
         var idDepartamento = $('#SolReqPersonal_IdeDepartamento').val();
         var idArea = $('#SolReqPersonal_IdeArea').val();
 
-        if (tipVacante=="0") {
+        if (tipVacante == "0") {
             MostrarMensaje("Seleccione un tipo de vacante", "Mensaje");
             return false;
         }
@@ -930,7 +955,7 @@
             return false;
         }
 
-        if (tipoPuesto=="0") {
+        if (tipoPuesto == "0") {
             MostrarMensaje("Seleccione un tipo de puesto", "Mensaje");
             return false;
         }
@@ -948,10 +973,16 @@
             return false;
         }
 
+        if (observ.length==0) {
+            MostrarMensaje("Ingrese observaciones", "Mensaje");
+            return false;
+        }
+
+
         return true;
 
     }
-    
+
 
     function EnvioSolicitud() {
 
@@ -963,7 +994,7 @@
         if (numVacante.length >= 0) {
 
             var nVacante = parseInt(numVacante);
-            if (nVacante==0) {
+            if (nVacante == 0) {
                 //notificacionExito("Ingrese el numero de vacantes");
                 MostrarMensaje("Ingrese el número de vacantes", "Mensaje");
                 return;
@@ -1024,16 +1055,16 @@
             data: $("#frmSolReemplazoCargo").serialize(),
             type: "POST",
             url: '@Url.Action("SetSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
-                traditional: true,
-                success: function (data) {
-                    if (data.Resultado) {
-                       
-                        $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                        $('#grdListReemplazosReq').trigger('reloadGrid');
-                    }
+            traditional: true,
+            success: function (data) {
+                if (data.Resultado) {
+
+                    $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
+                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    $('#grdListReemplazosReq').trigger('reloadGrid');
                 }
-          });
+            }
+        });
 
     }
 
@@ -1119,7 +1150,7 @@
                         </td>
                         <td class="span5">
                        
-                            <label class="control-label" for="inputSuccess">Dependecia</label>
+                            <label class="control-label" for="inputSuccess">Dependecia <span class="text-error">*</span></label>
                             
                             <div class="controles">
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
@@ -1128,7 +1159,17 @@
                             }
                             else
                             {
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia))
+
+                                if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(Model.idRol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(Model.idRol))
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { @readonly="readonly"})    
+                                }
+                                else
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia))
+                                }
+                                
+                                
                             }
                                    
                             </div>
@@ -1137,7 +1178,7 @@
                     <tr class="formulario-fila">
                        <td class="span5">
                        
-                            <label class="control-label" for="inputSuccess">Cargo</label>
+                            <label class="control-label" for="inputSuccess">Cargo <span class="text-error">*</span></label>
                             <div class="controles">
                                 
                             
@@ -1149,14 +1190,12 @@
                             {
                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo))
                             }
-                            
-                            
                             </div>
                        
                         </td>
                         
                          <td class="span5">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <label class="control-label" for="inputSuccess">Departamento <span class="text-error">*</span></label>
                             <div class="controles">
                              
 
@@ -1166,7 +1205,15 @@
                             }
                             else
                             {
-                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento))                      
+
+                                if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(Model.idRol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(Model.idRol))
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { @readonly ="readonly"})                      
+                                }
+                                else
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento))                        
+                                }
                             }
 
 
@@ -1179,7 +1226,7 @@
                     <tr class="formulario-fila">
                         <td class="span5">
                         
-                            <label class="control-label" for="selectError">Tipo Vacante</label>
+                            <label class="control-label" for="selectError">Tipo Vacante <span class="text-error">*</span></label>
                             <div class="controles">
                                 
                             
@@ -1197,7 +1244,7 @@
                         </td>
                    
                            <td class="span5">
-                            <label class="control-label" for="inputSuccess">Área</label>
+                            <label class="control-label" for="inputSuccess">Área <span class="text-error">*</span></label>
                             <div class="controles">
                                 
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
@@ -1206,7 +1253,17 @@
                             }
                             else
                             {
-                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea))                      
+
+                                if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(Model.idRol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(Model.idRol))
+                                { 
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new {@readonly = "readonly" })                      
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea))                      
+                                }
+                                
+                                
                             }
                             
                             
@@ -1217,17 +1274,17 @@
                     <tr class="formulario-fila">
                         <td class="span5">
                        
-                            <label class="control-label" for="inputSuccess">Vacantes</label>
+                            <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
                             <div class="controles">
                                 
-                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "4"}) 
+                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "2",style="width: 50px"}) 
                             </div>
                         
                         </td> 
                         
                         <td class="span5">
                         
-                            <label class="control-label" for="selectError">Tipo puesto</label>
+                            <label class="control-label" for="selectError">Tipo puesto <span class="text-error">*</span></label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
                             </div>
@@ -1237,9 +1294,9 @@
                     </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="inputSuccess">Observaciones</label>
+                        <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
                         <div class="controles">
-                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;", maxlength = "255" ,onblur="aMays(event, this)"}) 
+                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize: none;", maxlength = "255" ,onblur="aMays(event, this)"}) 
                         </div>
                         </td>                    
                     </tr>

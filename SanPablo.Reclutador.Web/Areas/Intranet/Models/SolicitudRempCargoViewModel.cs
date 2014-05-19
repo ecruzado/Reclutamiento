@@ -46,7 +46,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public string Pagina { get; set; }
         public string TipoReemplazo { get; set; }
-       
+        public int idRol { get; set; }
+
+
         #region Botonera de busqueda
         /// <summary>
         /// boton ranking
@@ -80,6 +82,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         /// boton Actualizar - Publicación
         /// </summary>
         public string btnActualizar { get; set; }
+
+        /// <summary>
+        /// Campo Etapa
+        /// </summary>
+        public string CampoEtapa { get; set; }
+        
+
         #endregion
 
     }

@@ -106,7 +106,7 @@
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo <span class="text-error">*</span></label> 
+                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Sexo <span class="text-error">*</span></label> 
                             @if (Model.Accion.Equals(Accion.Consultar))
                             { 
                                 @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" , disabled = "disabled"})
@@ -167,7 +167,7 @@
                     <tr>
                         <td></td>
                         <td style =" width:450px" >
-                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
+                            <label style="width:180px; display:inline-block" class="control-label" for="input01" >Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
                         @if (Model.Accion.Equals(Accion.Consultar))
                         {
                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })
