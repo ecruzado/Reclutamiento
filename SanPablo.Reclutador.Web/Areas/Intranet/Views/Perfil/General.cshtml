@@ -12,7 +12,7 @@
     @Html.ValidationSummary(true)
     <div class="tab-pane" id="B">
         <form>
-            <div class="grilla-opciones" style="margin-top:0px;">
+            <div id="datosGeneral"  class="grilla-opciones" style="margin-top:0px;">
                 <h6>Datos generales</h6>
                 <div class="opciones">
                 </div>
@@ -67,14 +67,14 @@
                          @if (Model.Accion.Equals(Accion.Consultar))
                          {
                              @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" , disabled = "disabled" }) <label style="width:10px;display:inline-block">-</label>
-                             @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini", disabled = "disabled", style ="display:inline-block" })
+                             @Html.TextBoxFor(model => model.Cargo.EdadFin, new {@class = "input-xmini", disabled = "disabled", style ="display:inline-block" })
                          }
                          else
                          {
                              
                              
-                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new {  @class = "input-xmini", maxlength ="2" ,data_val = "false" }) <label style="width:10px;display:inline-block">-</label>
-                            @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini", style ="display:inline-block", maxlength ="2" , onblur="validarEdad();" ,data_val = "false"})
+                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini", @maxlength ="2" ,data_val = "false" }) <label style="width:10px;display:inline-block">-</label>
+                            @Html.TextBoxFor(model => model.Cargo.EdadFin, new {  @class = "input-xmini", style ="display:inline-block", @maxlength ="2" , onblur="validarEdad();" ,data_val = "false"})
                             @*<div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
                             </div>*@
@@ -290,6 +290,13 @@
 
      $(document).ready(function () {
 
+         //$('input[data-val=true]').on('blur', function () {
+         //    $(this).valid();
+         //});
+        
+        // $('#Cargo_EdadInicio').jStepper({ minValue: 18, maxValue: 99, minLength: 2 });
+        // $('#Cargo_EdadFin').jStepper({ minValue: 18, maxValue: 99, minLength: 2 });
+
          SanPablo.Numeros("Cargo_PuntajeTotalPostulanteInterno");
          SanPablo.Numeros("Cargo_PuntajeSexo");
          SanPablo.Numeros("Cargo_EdadInicio");
@@ -329,9 +336,11 @@
                        });
                        } else {
                            validarEdad();
-                           
+                           $("#Cargo_Sexo").focus();
                        }
-                }
+                   } else {
+                       $("#Cargo_Sexo").focus();
+                   }
             
             });
 
@@ -655,9 +664,7 @@
      }
 
 
-     $('input[data-val=true]').on('blur', function () {
-         $(this).valid();
-     });
+     
 </script>
 
 }
