@@ -317,7 +317,7 @@
                     }
                     else
                     {
-                        solicitudNuevoViewModel.Responsables = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo));
+                        solicitudNuevoViewModel.Responsables = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol != Roles.Administrador_Sistema && x.IdRol != Roles.Consultor && x.IdRol != Roles.Postulante ));
                         solicitudNuevoViewModel.Responsables.Insert(0, new Rol { IdRol = 0, DscRol = "Seleccionar" });
 
                         solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
@@ -604,6 +604,37 @@
                 return Json(objJsonMessage);
             }
         }
+
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult EstadoSolicitudPublicacion(string ideSolicitud)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                LogSolicitudNuevoCargo estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
+
+                if ((Etapa.Publicado == estado.TipoEtapa) && (Etapa.Finalizado == estado.TipoEtapa))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "El requerimiento no se encuentra publicado,para ver el estado revise en el menu 'Consulta de Requerimientos'";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
+        }
+
 
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]

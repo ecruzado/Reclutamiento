@@ -114,11 +114,11 @@
                 }
                 @if (Visualicion.SI.Equals(Model.btnVerEnviar))
                 {
-                    <a class="btn btn-info" onclick="mostrarConfirmacion();" href="#"><i class="icon-screenshot icon-white"></i> Enviar</a>
+                    <a class="btn btn-info" onclick="mostrarConfirmacion();" ><i class="icon-screenshot icon-white"></i> Enviar</a>
                 }
                 @if (Visualicion.SI.Equals(Model.btnVerAceptar))
                 {
-                    <a class="btn btn-info" onclick="mostrarConfirmaAceptar();" href="#"><i class="icon-list icon-white"></i> Aceptar</a>
+                    <a class="btn btn-info"  onclick="mostrarConfirmaAceptar();"><i class="icon-list icon-white"></i> Aceptar</a>
                 }
                 @if (Visualicion.SI.Equals(Model.btnVerPublicar))
                 {
@@ -146,6 +146,7 @@
 
 <script type="text/javascript">
     $(function () {
+        
         $('#updateDialogAprobacion').dialog({
             autoOpen: false,
             width: 400,
@@ -212,7 +213,7 @@
             width: 300,
             resizable: false,
             modal: true,
-            position: [200,0],
+            // position: { top: "250px", of: window },
             buttons: {
                 "Aceptar": function (e) {
                     $('#updateDialogAceptar').dialog("close");
@@ -291,7 +292,7 @@
     function mostrarMensaje(msj)
     {
         
-        $("#spanMensaje").html(msj);
+        $("#spnMensaje").html(msj);
         $("#divMensaje").dialog({
             title: 'MENSAJE',
             modal: true,
@@ -304,6 +305,7 @@
     function mostrarConfirmaAceptar() {
         var dialogDiv = $('#updateDialogAceptar');
         dialogDiv.dialog('open');
+        return false;
     }
 
     function mostrarConfirmacion() {
@@ -374,8 +376,8 @@
         window.location = url;
     }
     function mensajeRedirecciona(mensaje, titulo) {
-        $("#spanMensaje").html(mensaje);
-        $("#divMensaje").dialog({
+        $("#spanMensajeAlert").html(mensaje);
+        $("#divMensajeAlert").dialog({
             title: titulo,
             modal: true,
             resizable: false,
