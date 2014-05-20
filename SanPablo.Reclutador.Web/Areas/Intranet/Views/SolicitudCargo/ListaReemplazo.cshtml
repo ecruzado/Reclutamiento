@@ -453,6 +453,30 @@
                             </div>
                         
                     </td>
+                   @* <td class="span5">
+                       
+                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false"})
+                            </div>
+                        
+                    </td>*@
+                   
+                       <td class="span5">
+                       
+                            <label class="control-label" for="inputSuccess">Estado</label>
+                            <div class="controles">
+                               @Html.DropDownListFor(model => model.SolReqPersonal.TipEstado, new SelectList(Model.listaEstados, "Valor", "Descripcion", Model.SolReqPersonal.TipEstado),new {  data_val = "false"})
+                            </div>
+                       
+                    </td>
+
+                   
+
+                </tr>
+                <tr class="formulario-fila">
+                    
+                    
                     <td class="span5">
                        
                             <label class="control-label" for="inputSuccess">Departamento</label>
@@ -461,17 +485,7 @@
                             </div>
                         
                     </td>
-                </tr>
-                <tr class="formulario-fila">
-                    <td class="span5">
-                      
-                            <label class="control-label" for="inputSuccess">Área</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false"})
-                            </div>
-                      
-                    </td>
-                    @if (Visualicion.SI.Equals(Model.CampoEtapa))
+                      @if (Visualicion.SI.Equals(Model.CampoEtapa))
                     {
                         <td class="span5">
                         
@@ -482,17 +496,22 @@
                       
                         </td>
                     }
+                   
+                  
                 </tr>
                 <tr class="formulario-fila">
                                   
-                    <td class="span5">
-                       
-                            <label class="control-label" for="inputSuccess">Estado</label>
+                    
+                     <td class="span5">
+                      
+                            <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                               @Html.DropDownListFor(model => model.SolReqPersonal.TipEstado, new SelectList(Model.listaEstados, "Valor", "Descripcion", Model.SolReqPersonal.TipEstado),new {  data_val = "false"})
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false"})
                             </div>
-                       
+                      
                     </td>
+                    
+                   
                 </tr>
              
              </table>

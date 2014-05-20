@@ -87,7 +87,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         /// Campo Etapa
         /// </summary>
         public string CampoEtapa { get; set; }
-        
+
+
+        /// <summary>
+        /// campo vacante
+        /// </summary>
+        public string CampoVacante { get; set; }
+        /// <summary>
+        /// Campo puesto
+        /// </summary>
+        public string CampoPuesto { get; set; }
+        /// <summary>
+        /// Campo observacion
+        /// </summary>
+        public string CampoObservacion { get; set; }
+
+
 
         #endregion
 
