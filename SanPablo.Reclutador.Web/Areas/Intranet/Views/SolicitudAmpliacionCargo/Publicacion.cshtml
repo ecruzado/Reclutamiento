@@ -42,18 +42,34 @@
         $('#btnPublicarSolReq').click(function () {
             if (validaPublicacion())
             {
+                $.blockUI({
+                    message: '<h1>Publicando...</h1>',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .5,
+                        color: '#fff'
+                    }
+                });
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area = "Intranet" })',
                 traditional: true,
                     success: function (data) {
-                        if (data.Resultado)
-                        {
+                        if (data.Resultado) {
+                            $.unblockUI();
                             // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                          information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-
+                            mensajeRedirecciona(data.Mensaje, "MENSAJE");
                         }
+                        else {
+                            $.unblockUI();
+                            MostrarMensaje(data.mensaje, "MENSAJE");
+                        }
+
                     }
                 });
             }
@@ -63,7 +79,7 @@
         $('#btnAnteriorPublica').click(function () {
             var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
 
-            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet"})' + '/' + selr;
+            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })' + '/' + selr;
 
         });
         
@@ -415,45 +431,72 @@
 
     function validaPublicacion() {
 
-        var fecInicial = $("#SolReqPersonal_FecPublicacion").val();
-        var fecFinal = $("#SolReqPersonal_FecExpiracacion").val();
-
-        var firstValue = fecInicial.split('-');
-        var secondValue = fecFinal.split('-');
-
-        if (firstValue == 0 && firstValue=="") {
-            
-            MostrarMensaje('Ingrese fecha de publicación', "Sistema de Reclutamiento Y Seleccion de Personal");
-            return false;
-        }
-        if (secondValue == 0 && secondValue=="") {
-            
-            MostrarMensaje('Ingrese fecha de expiración', "Sistema de Reclutamiento Y Seleccion de Personal");
-            return false;
-        }
-
-        var firstDate = new Date();
-        firstDate.setFullYear(firstValue[0], (firstValue[1] - 1), firstValue[2]);
-
-        var secondDate = new Date();
-        secondDate.setFullYear(secondValue[0], (secondValue[1] - 1), secondValue[2]);
-
-        if (firstDate > secondDate) {
-            MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "Sistema de Reclutamiento Y Seleccion de Personal");
-            return false;
-        }
+        var fechaInicial = $('#SolReqPersonal_FecPublicacion').val();
+        var fechaFinal = $('#SolReqPersonal_FecExpiracacion').val();
 
         var observacion = $('#SolReqPersonal_ObservacionPublica').val();
-        if (observacion.length > 0) {
-            return true;
-        }
-        else {
-            MostrarMensaje('Debe ingresar una observación para la publicación', "Sistema de Reclutamiento Y Seleccion de Personal");
+
+        if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
+
+            MostrarMensaje('Las fechas son obligatorias', "MENSAJE");
             return false;
         }
 
+        if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "MENSAJE");
+            return false;
+        }
+
+        if ((observacion.length == 0) || (observacion.length > 255)) {
+            MostrarMensaje('Ingresar una observación', "MENSAJE");
+            return false;
+        }
+
+        return true;
 
     }
+
+    //function validaPublicacion() {
+
+    //    var fecInicial = $("#SolReqPersonal_FecPublicacion").val();
+    //    var fecFinal = $("#SolReqPersonal_FecExpiracacion").val();
+
+    //    var firstValue = fecInicial.split('-');
+    //    var secondValue = fecFinal.split('-');
+
+    //    if (firstValue == 0 && firstValue=="") {
+            
+    //        MostrarMensaje('Ingrese fecha de publicación', "MENSAJE");
+    //        return false;
+    //    }
+    //    if (secondValue == 0 && secondValue=="") {
+            
+    //        MostrarMensaje('Ingrese fecha de expiración', "MENSAJE");
+    //        return false;
+    //    }
+
+    //    var firstDate = new Date();
+    //    firstDate.setFullYear(firstValue[0], (firstValue[1] - 1), firstValue[2]);
+
+    //    var secondDate = new Date();
+    //    secondDate.setFullYear(secondValue[0], (secondValue[1] - 1), secondValue[2]);
+
+    //    if (firstDate > secondDate) {
+    //        MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experiración', "MENSAJE");
+    //        return false;
+    //    }
+
+    //    var observacion = $('#SolReqPersonal_ObservacionPublica').val();
+    //    if (observacion.length > 0) {
+    //        return true;
+    //    }
+    //    else {
+    //        MostrarMensaje('Debe ingresar una observación para la publicación', "MENSAJE");
+    //        return false;
+    //    }
+
+
+    //}
 
 
     function MostrarMensaje(mensaje, titulo) {
@@ -478,8 +521,24 @@
 
     }
 
+    
+
     function RedireccionaBus() {
-        window.location = '@Url.Action("Index", "SolicitudAmpliacionCargo", new { area = "Intranet"})';
+        window.location = '@Url.Action("Index", "SolicitudAmpliacionCargo", new { area = "Intranet" })';
+    }
+
+    function mensajeRedirecciona(mensaje, titulo) {
+        $("#spnMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            modal: true,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                }
+            }
+        });
     }
 
 
@@ -491,7 +550,7 @@
             <div class="widget-title">
                 <h5>@Model.SolReqPersonal.nombreCargo - @Model.SolReqPersonal.DesCargo</h5>
             </div>
-@using (Html.BeginForm("Publicacion", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo"}))
+@using (Html.BeginForm("Publicacion", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo" }))
 {
     @Html.ValidationSummary(true)
 
@@ -503,18 +562,14 @@
                     <table class="formulario-busqueda">
 
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess">Area</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
+                        <td class="control-label" >Area</td>
+                        <td class="controls">                     
+                              @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </td>
-
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess">Tipo</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
+                        <td style="width:45px">&nbsp;</td>
+                        <td class="control-label" >Tipo</td>
+                        <td class="controls">                     
+                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </td>
                     </tr>
                       
@@ -522,55 +577,34 @@
                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes</label>
                             <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                              @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario", disabled = "disabled" }) 
                             </div>
                         </td>
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Rango salarial</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
-                                
-                                @*<label class="checkbox" style="display:inline-table"><input type="checkbox" id="IndVerSalario" name="IndVerSalario" class="chkclass" value="@Model.SolReqPersonal.IndicadorSalario" /> No Publicar</label>*@
-                               
-                            </div>
-                             <label class="control-label" for="selectError" style="display:inline-block">Publicar</label>
-                            <div class="controles">
+                        <td class="control-label" style="width:120px;margin-right: 5px">Rango Salarial</td>
+                        <td class="controls">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled" })
                                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" }) 
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox", disabled = "disabled", style = "display:inline-block;" })<Label style="display:inline-block; font-size:10pt" for="publicar">No Publicar</Label>  
                                 }
                                 else
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox" })<Label style="display:inline-block; font-size:10pt" for="publicar">No Publicar</Label> 
                                 }
-                            </div>
-                        </td>
-                        @*<td class="span5">
-                            <label class="control-label" for="selectError" style="display:inline-block">Publicar</label>
-                            <div class="controles">
-                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
-                                {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" }) 
-                                }
-                                else
-                                {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
-                                }
-                            </div>
-                        </td>*@
+                       <td class="controls">
                     </tr>
 
                     <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
                             <div class="controles">
-                               @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                               @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario", maxlength = "15", placeholder = " Inicial" })      
                             </div>
                         </td>
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
-                               @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
+                               @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario", maxlength = "15", placeholder = " Inicial" })      
                             </div>
                         </td>
                     </tr>
@@ -632,7 +666,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:800px; height:100px; resize:none;"})
+                            @Html.TextAreaFor(model => model.SolReqPersonal.FuncionesCargo, new { @disabled = "disabled", @style = "width:800px; height:100px; resize:none;" })
                          </div>
                        </td>
                     </tr>
@@ -673,13 +707,14 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                             @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
-                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px", disabled = "disabled"})
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px", disabled = "disabled" })
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur="aMays(event, this)"  })     
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur = "aMays(event, this)" })     
+                                 <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>
                              }
                          </div>
                         </td>
