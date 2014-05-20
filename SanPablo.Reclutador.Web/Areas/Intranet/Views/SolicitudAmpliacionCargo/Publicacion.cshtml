@@ -123,7 +123,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 600,
+             width: 800,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -192,7 +192,7 @@
             sortorder: 'desc',
             viewrecords: true,
             height: 180,
-            width: 600,
+            width: 800,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -260,7 +260,7 @@
             sortorder: 'desc',
             viewrecords: true,
             height: 180,
-            width: 600,
+            width: 800,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -330,7 +330,7 @@
               sortorder: 'desc',
               viewrecords: true,
               height: 180,
-              width: 600,
+              width: 800,
               cellsubmit: 'clientArray',
               hidegrid: false,
               rownumbers: true,
@@ -399,7 +399,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 600,
+             width: 800,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -509,9 +509,7 @@
                               @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
-                      
-                     <tr class="formulario-fila">
+
                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">                         
@@ -519,7 +517,7 @@
                             </div>
                         </td>
                     </tr>
-
+                      
                     <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes</label>
@@ -527,9 +525,6 @@
                               @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
-
-                    <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Rango salarial</label>
                             <div class="controles">
@@ -538,16 +533,11 @@
                                 @*<label class="checkbox" style="display:inline-table"><input type="checkbox" id="IndVerSalario" name="IndVerSalario" class="chkclass" value="@Model.SolReqPersonal.IndicadorSalario" /> No Publicar</label>*@
                                
                             </div>
-                        </td>
-                        
-                    </tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Publicar</label>
+                             <label class="control-label" for="selectError" style="display:inline-block">Publicar</label>
                             <div class="controles">
                                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" }) 
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" }) 
                                 }
                                 else
                                 {
@@ -555,9 +545,21 @@
                                 }
                             </div>
                         </td>
-                        
+                        @*<td class="span5">
+                            <label class="control-label" for="selectError" style="display:inline-block">Publicar</label>
+                            <div class="controles">
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" }) 
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                }
+                            </div>
+                        </td>*@
                     </tr>
-                         
+
                     <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
@@ -565,9 +567,6 @@
                                @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
                             </div>
                         </td>
-                    </tr>
-
-                      <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
@@ -633,7 +632,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:600px; height:100px"})
+                            @Html.TextAreaFor(model=>model.SolReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:800px; height:100px; resize:none;"})
                          </div>
                        </td>
                     </tr>
@@ -676,11 +675,11 @@
                          <div class="controls">
                              @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
-                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", disabled = "disabled"})
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px", disabled = "disabled"})
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:600px;height:100px", maxlength = "255", onblur="aMays(event, this)"  })     
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur="aMays(event, this)"  })     
                              }
                          </div>
                         </td>

@@ -577,9 +577,13 @@
         {
             List<string> datosArea = _solicitudNuevoCargoRepository.obtenerDatosArea(ideArea);
 
-            model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
-            model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
-            model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
+            if (datosArea.Count != 0)
+            {
+                model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
+                model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
+                model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
+            }
+            
         }
 
         [HttpPost]
@@ -615,7 +619,7 @@
             {
                 LogSolicitudNuevoCargo estado = _logSolicitudNuevoCargoRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
 
-                if ((Etapa.Publicado == estado.TipoEtapa) && (Etapa.Finalizado == estado.TipoEtapa))
+                if ((Etapa.Publicado == estado.TipoEtapa) || (Etapa.Finalizado == estado.TipoEtapa))
                 {
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
