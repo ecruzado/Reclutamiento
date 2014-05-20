@@ -41,12 +41,6 @@
                                         <td>
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntPostuinte, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinPostuinte, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinPostuinte)
-                                            </div>
-
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -54,12 +48,6 @@
                                         <td>
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntEdad, new {@Class ="input-xxmini text-right", @disabled = "disabled"})</td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinEdad, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinEdad)
-                                            </div>
-                                            </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -69,11 +57,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntSexo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinSexo, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                 @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinSexo)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -82,11 +65,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntSalario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                          <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinSalario, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinSalario)
-                                        </div>    </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -95,11 +73,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotNivelEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinNivelEst, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                        <div class="tex-error" style="font-size:12px;color:red"> 
-                                            @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinNivelEst)
-                                        </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -108,11 +81,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotCentroEst, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinNivelEst, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinNivelEst)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -121,11 +89,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotExpLaboral, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinExplaboral, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinExplaboral)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -134,11 +97,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntajeTotalOfimatica, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntajeMinimoOfimatica, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntajeMinimoOfimatica)
-                                            </div>                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -147,12 +105,7 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotConoIdioma, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinConoIdioma, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinConoIdioma)
-                                            </div>                                    </tr>
+                                    </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label">Conoc. Generales</td>
@@ -160,11 +113,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotConoGen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinConoGen, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinConoGen)
-                                            </div> </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -174,12 +122,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotDisCapa, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinDisCapa, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                             @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinDisCapa)
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -188,12 +130,6 @@
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotHorario, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                          </td>
                                         <td></td>
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinHorario, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinHorario)
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -201,23 +137,21 @@
                                         <td>
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotUbigeo, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
-                                        <td></td>
 
-                                        <td>
-                                            @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinUbigeo, new {@Class ="input-xxmini text-right", disabled = "disabled" })
-                                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                                @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinUbigeo)
-                                            </div>
+                                       <td >
+                                           
                                         </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td class="td-label"><b>Totales</b></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="84" disabled="disabled"></td>
+                                            @Html.TextBoxFor(model => model.TotalMaxino, new { @Class = "input-xxmini text-right", @readonly="readonly" })
+                                            @*<input id="puntajeTotal" type="text" class="input-xxmini text-right"  disabled="disabled">*@</td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>
+                                            @*<input type="text" class="input-xxmini text-right" value="0" disabled="disabled"></td>*@
+                                            @Html.TextBoxFor(model => model.SolReqPersonal.PuntajeMinimoGeneral, new { @Class = "input-xxmini text-right", @disabled = "disabled" })
 
                                     </tr>
                                 </table>
@@ -228,7 +162,7 @@
                                 <table border="0">
                                         <tr>
                                         <td></td>
-                                        <td>Ptje.
+                                        <td>Ptje.Prom
                                             </td>
                                             <td style="width:10px;"></td>
                                         <td>Ptje.Min
@@ -241,7 +175,7 @@
                                              @Html.TextBoxFor(model=>model.SolReqPersonal.PuntTotExamen, new {@Class ="input-xxmini text-right", @disabled = "disabled"})
                                         </td>
                                         <td></td>
-                                        <td>
+                                        <td  style="text-align:left">
                                             @Html.TextBoxFor(model=>model.SolReqPersonal.PuntMinExamen, new {@Class ="input-xxmini text-right", disabled = "disabled" })
                                             <div class="tex-error" style="font-size:12px;color:red"> 
                                                 @Html.ValidationMessageFor(model => model.SolReqPersonal.PuntMinExamen)

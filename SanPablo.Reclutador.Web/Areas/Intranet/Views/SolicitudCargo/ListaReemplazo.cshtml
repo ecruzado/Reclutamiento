@@ -6,6 +6,9 @@
 @{
     ViewBag.Title = "Listado Solicitudes Ampliacion";
 
+    int idrol = (Session[ConstanteSesion.Rol]==null?0:Convert.ToInt32(Session[ConstanteSesion.Rol]));
+    
+    
   }
 @section Head{
 }
@@ -449,25 +452,24 @@
                         
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia),new {  data_val = "false"})
+                              
+                                @if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(idrol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(idrol))
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia),new {  data_val = "false",disabled="disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia),new {  data_val = "false"})
+                                }
                             </div>
                         
                     </td>
-                   @* <td class="span5">
-                       
-                            <label class="control-label" for="inputSuccess">Departamento</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false"})
-                            </div>
-                        
-                    </td>*@
-                   
-                       <td class="span5">
-                       
-                            <label class="control-label" for="inputSuccess">Estado</label>
-                            <div class="controles">
-                               @Html.DropDownListFor(model => model.SolReqPersonal.TipEstado, new SelectList(Model.listaEstados, "Valor", "Descripcion", Model.SolReqPersonal.TipEstado),new {  data_val = "false"})
-                            </div>
+                 
+                    <td class="span5">
+                       <label class="control-label" for="inputSuccess">Estado</label>
+                        <div class="controles">
+                            @Html.DropDownListFor(model => model.SolReqPersonal.TipEstado, new SelectList(Model.listaEstados, "Valor", "Descripcion", Model.SolReqPersonal.TipEstado),new {  data_val = "false"})
+                        </div>
                        
                     </td>
 
@@ -475,13 +477,20 @@
 
                 </tr>
                 <tr class="formulario-fila">
-                    
-                    
                     <td class="span5">
                        
+                        
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false"})
+                                @if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(idrol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(idrol))
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false",@disabled="disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento),new {  data_val = "false"})
+                                }
+                                
                             </div>
                         
                     </td>
@@ -491,7 +500,15 @@
                         
                                 <label class="control-label" for="inputSuccess">Etapa</label>
                                 <div class="controles">
-                                     @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false"})
+                                    @if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(idrol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(idrol) || SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto.Equals(idrol))
+                                    {
+                                        @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false",@disabled="disabled"})
+                                    }
+                                    else
+                                    {
+                                      @Html.DropDownListFor(model => model.SolReqPersonal.TipEtapa, new SelectList(Model.listaEtapas, "Valor", "Descripcion", Model.SolReqPersonal.TipEtapa),new {  data_val = "false"})    
+                                    }
+                                    
                                 </div>
                       
                         </td>
@@ -500,13 +517,21 @@
                   
                 </tr>
                 <tr class="formulario-fila">
-                                  
                     
-                     <td class="span5">
+                    <td class="span5">
                       
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false"})
+                                
+                                @if (SanPablo.Reclutador.Entity.Roles.Jefe.Equals(idrol) || SanPablo.Reclutador.Entity.Roles.Gerente.Equals(idrol))
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false",disabled="disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea),new {  data_val = "false"})
+                                }
+
                             </div>
                       
                     </td>

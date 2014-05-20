@@ -171,7 +171,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "S";
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
-                          model.CampoEtapa = "S";
+                          model.CampoEtapa = "N";
                         
                       }
 
@@ -182,7 +182,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnPreselec = "N";
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "N";
-                          model.CampoEtapa = "S";
+                          model.CampoEtapa = "N";
 
                       }
 
@@ -790,15 +790,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             EtapaSol = ObjSol.TipEtapa;
             
             var idRolUsuario = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            var solicitud = ObjSol;
 
             if (ObjSol!=null)
             {
                 SedeNivel sedeNivel = new SedeNivel();
-
+                model.SolReqPersonal = new SolReqPersonal();
                 sedeNivel.IDESEDE = ObjSol.IdeSede;
 
                 model = Inicializar(sedeNivel);
-                model.SolReqPersonal = new SolReqPersonal();
+               
                 model.SolReqPersonal = ObjSol;
                 model.Pagina = pagina;
                 
@@ -816,6 +817,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.listaArea = new List<Area>(_areaRepository.GetBy(x => x.IdeArea == model.SolReqPersonal.IdeArea
                                                                             && x.Departamento.IdeDepartamento == model.SolReqPersonal.IdeDepartamento
                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                int puntajeTotal = Convert.ToInt32(solicitud.PuntTotCentroEst) + Convert.ToInt32(solicitud.PuntTotConoGen) + Convert.ToInt32(solicitud.PuntTotDisCapa) +
+                              Convert.ToInt32(solicitud.PuntEdad) + Convert.ToInt32(solicitud.PuntTotExpLaboral) + Convert.ToInt32(solicitud.PuntTotHorario) +
+                              Convert.ToInt32(solicitud.PuntTotConoIdioma) + Convert.ToInt32(solicitud.PuntTotNivelEst) + Convert.ToInt32(solicitud.PuntajeTotalOfimatica) + Convert.ToInt32(solicitud.PuntTotPostuinte) +
+                              Convert.ToInt32(solicitud.PuntTotSalario) + Convert.ToInt32(solicitud.PuntTotSexo) + Convert.ToInt32(solicitud.PuntTotUbigeo);
+
+                model.TotalMaxino = puntajeTotal;
 
 
                 IdeSolicitudReemplazo = (int)ObjSol.IdeSolReqPersonal;
