@@ -42,19 +42,31 @@
 
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
-
         var idSol = selr;
         var tipSol = rowData.Tipsol;
         var pagina = '@TipoSolicitud.Ampliacion';
         var indPagina = '@Indicador.No';
 
-         if (idSol != null) {
+        if (idSol != null) {
 
-             var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
-                 window.location = url;
-
+            $.ajax({
+                data: { ideSolicitud: idSol },
+                type: "POST",
+                url: "@Url.Action("EstadoSolicitudPublicacion", "SolicitudAmpliacionCargo")",
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                        window.location = url;
+                    }
+                    else
+                    {
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
+                    }
+                }
+             });
              } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione una solicitud', "MENSAJE");
              }
 
      });
@@ -70,18 +82,30 @@
 
 
     $('#btnRankingSol').click(function () {
+
+
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
         var pagina = '@TipoSolicitud.Ampliacion';
         if (selr != null) {
-
-
-            var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
-            window.location = url;
-
-
+           $.ajax({
+               data: { ideSolicitud: selr },
+                type: "POST",
+                url: "@Url.Action("EstadoSolicitudPublicacion", "SolicitudAmpliacionCargo")",
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + selr + "&tipSol=" + rowData.Tipsol + "&pagina=" + pagina;
+                        window.location = url;
+                    }
+                    else
+                    {
+                        MostrarMensaje(data.Mensaje, "MENSAJE"); 
+                    }
+                }
+           });
         } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione una solicitud', "MENSAJE");
         }
 
      });
@@ -189,7 +213,7 @@
                 }
             });
         },
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Vacantes', 'Post.', 'Pre-Selec.', 'Evaluados', 'Selec.', 'Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', 'Etapa'],
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', 'Etapa'],
      colModel: [
              { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
              { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
@@ -343,7 +367,15 @@
                         
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                              @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false"})
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDependencia, new { style = "display:none;" })
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia), new { data_val = "false", disabled = "disabled" }) 
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false"})
+                                }
                             </div>
                         
                     </td>
@@ -360,7 +392,13 @@
                         
                             <label class="control-label" for="inputSuccess">Etapa</label>
                             <div class="controles">
-                                 @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipEtapa, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipEtapa),new {  data_val = "false"})
+                                @if (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) 
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipEtapa, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipEtapa),new {  data_val = "false", disabled = "disabled"})
+                                }else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipEtapa, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipEtapa),new {  data_val = "false"})
+                                }
                             </div>
                       
                     </td>
@@ -372,7 +410,15 @@
                        
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false"})
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDepartamento, new { style = "display:none;" })
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento), new { data_val = "false", disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false"})
+                                }
                             </div>
                         
                     </td>
@@ -392,7 +438,15 @@
                       
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false"})
+                                @if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                {
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeArea, new { style = "display:none;" })
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false", disabled = "disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false"})
+                                }
                             </div>
                       
                     </td>

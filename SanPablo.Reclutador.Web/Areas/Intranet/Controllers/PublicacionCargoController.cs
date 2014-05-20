@@ -408,8 +408,14 @@
             publicacionNuevoViewModel.SolicitudCargo = new SolicitudNuevoCargo();
 
             var area = _areaRepository.GetSingle(x => x.IdeArea == cargo.IdeArea);
-
-            publicacionNuevoViewModel.Area = area.NombreArea;
+            if (area != null)
+            {
+                publicacionNuevoViewModel.Area = area.NombreArea;
+            }
+            else
+            {
+                publicacionNuevoViewModel.Area = "Error. verificar datos";
+            }
 
             publicacionNuevoViewModel.Sede = Session[ConstanteSesion.SedeDes].ToString();
 

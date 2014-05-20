@@ -362,7 +362,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.btnVerPublicar = Visualicion.NO;
                         model.btnVerAceptar = Visualicion.SI;
                     }
-                    model.btnVerPerfil = Visualicion.NO;
+                    model.btnVerPerfil = Visualicion.SI;
                     break;
                 case Roles.Analista_Seleccion:
                     model.btnVerEnviar = Visualicion.NO;
@@ -396,6 +396,36 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == ideArea));
             model.Departamentos.Add(_departamentoRepository.GetSingle(x=>x.IdeDepartamento == ideDepartamento));
             model.Dependencias.Add(_dependenciaRepository.GetSingle(x=>x.IdeDependencia == ideDependencia));
+        }
+
+
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult EstadoSolicitudPublicacion(string ideSolicitud)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
+            {
+                LogSolReqPersonal estado = _logAmpliacionRepository.estadoSolicitud(Convert.ToInt32(ideSolicitud));
+
+                if ((Etapa.Publicado == estado.TipEtapa) || (Etapa.Finalizado == estado.TipEtapa))
+                {
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "El requerimiento no se encuentra publicado,para ver el estado revise en el menu 'Consulta de Requerimientos'";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                objJsonMessage.Mensaje = "ERROR:" + ex.Message;
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
         }
 
         [ValidarSesion]
@@ -1021,13 +1051,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
-               
+
+
                 var sede = Session[ConstanteSesion.Sede];
-                if (sede != null)
-                {
-                    model = InicializarListaReemplazo(Convert.ToInt32(sede));
-                    model.SolicitudRequerimiento = new SolReqPersonal();
-                }
+
+                model = InicializarListasAmpliacion(Convert.ToInt32(sede), rolSession);
+
+               
 
                 #region botonera
 
@@ -1142,29 +1172,91 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// </summary>
         /// <param name="idSel"></param>
         /// <returns></returns>
-        public SolicitudAmpliacionCargoViewModel InicializarListaReemplazo(int idSel)
+        public SolicitudAmpliacionCargoViewModel InicializarListasAmpliacion(int idSel, int rolSession)
         {
+
             var model = new SolicitudAmpliacionCargoViewModel();
+            model.SolicitudRequerimiento = new SolReqPersonal();
 
-            model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
-                                                                         && x.IdeSede == idSel));
-            model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+            var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
 
-            model.Departamentos = new List<Departamento>();
-            model.Departamentos.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+            model.rolSession = rolSession;
 
-            model.Areas = new List<Area>();
-            model.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
+            if ((idSel != null) || (idSel != 0))
+            {
+
+                if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente))
+                {
+
+                    var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                            && x.IdeSede == idSel && x.EstadoActivo == IndicadorActivo.Activo);
+                    model.Dependencias = new List<Dependencia>();
+                    model.Dependencias.Add(dependencia);
+
+                    model.SolicitudRequerimiento.IdeDependencia = dependencia.IdeDependencia;
+
+                    var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
+                    model.Departamentos = new List<Departamento>();
+                    model.Departamentos.Add(departamento);
+
+                    model.SolicitudRequerimiento.IdeDepartamento = departamento.IdeDepartamento;
+
+                    var area = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
+                    model.Areas = new List<Area>();
+                    model.Areas.Add(area);
+
+                    model.SolicitudRequerimiento.IdeArea = area.IdeArea;
+
+                    //model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
+                    //model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+                    if (rolSession == Roles.Jefe)
+                    {
+                        model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && x.Valor == "05"));
+                    }
+                    if (rolSession == Roles.Gerente)
+                    {
+                        model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "01"))));
+                        model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                    }
+
+
+
+                }
+                else
+                {
+                    if (rolSession == Roles.Gerente_General_Adjunto)
+                    {
+                        model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "02"))));
+                        model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                    }
+                    else
+                    {
+                        model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
+                        model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                    }
+
+
+                    model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == idSel));
+                    model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+                    model.Departamentos = new List<Departamento>();
+                    model.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+                    model.Areas = new List<Area>();
+                    model.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+                }
+            }
+            
             model.Cargos = new List<Cargo>(_solicitudAmpliacionPersonal.GetTipCargo(0));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
-            model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
-            model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
+            //model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
+            //model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
-            model.Etapas =new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
-            model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
+           
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
