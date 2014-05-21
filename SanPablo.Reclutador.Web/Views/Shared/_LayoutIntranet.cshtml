@@ -306,27 +306,27 @@
             function HabilitarFormatterSemaforo(cellvalue, options, rowObject) {
                 var imgPath = '@Url.Content("~/Content/images/")';
                 var archivo = 'enabled.png';
-                var title = "Habilitar"
+                var title = "Óptimo"
                 
                 if (rowObject[1] == "V") {
                     archivo = 'enabled.png';
-                    var title = "Habilitar"
+                    var title = "Óptimo"
 
                 }
                 else {
                     if (rowObject[1] == "M") {
                         archivo = 'yellow.png';
-                        var title = "Habilitar"
+                        var title = "Revisar"
                     }
                     else {
                         if (rowObject[1] == "R") {
                             archivo = 'red.png';
-                            var title = "Habilitar"
+                            var title = "Observado"
                         }
                         else {
                             if (rowObject[1] == "I") {
                                 archivo = 'black.png';
-                                var title = "Habilitar"
+                                var title = "Desactivado"
                             }
                         }
                     }

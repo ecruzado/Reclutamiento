@@ -117,6 +117,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
                 }
+                else if (Roles.Encargado_Seleccion.Equals(idRol))
+                {
+                    model.btnRanking = Visualicion.SI;
+                    model.btnPreSeleccion = Visualicion.SI;
+                }
                 else
                 {
                     model.btnRanking = Visualicion.NO;
@@ -282,12 +287,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.NombreArea==null?"":item.NombreArea,
                                 item.NumeroVacantes==0?"0":item.NumeroVacantes.ToString(),
                                 item.Postulantes==0?"0":item.Postulantes.ToString(),
-                                item.Preseleccionados==0?"":item.Preseleccionados.ToString(),
+                                item.Preseleccionados==0?"0":item.Preseleccionados.ToString(),
                                 item.Evaluados==0?"0":item.Evaluados.ToString(),
                                 item.Seleccionados==0?"0":item.Seleccionados.ToString(),
-                                item.FechaCreacion==null?"":item.FechaCreacion.ToString(),
-                                item.FechaExpiracion==null?"":item.FechaExpiracion.ToString(),
+                                item.Contratados == 0?"0":item.Contratados.ToString(),
                                
+                                item.FechaCreacion==null?"":String.Format("{0:dd/MM/yyyy}", item.FechaCreacion),
+                                item.FechaExpiracion==null?"":String.Format("{0:dd/MM/yyyy}", item.FechaExpiracion),
+                                
                                 item.IdeRolResponsable==0?"0":item.IdeRolResponsable.ToString(),
                                 item.RolResponsable==null?"":item.RolResponsable,
                                 item.NombreResponsable==null?"":item.NombreResponsable,

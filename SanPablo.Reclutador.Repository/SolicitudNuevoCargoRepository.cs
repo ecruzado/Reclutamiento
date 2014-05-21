@@ -209,6 +209,7 @@
                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = solicitud.IdeSede;
 
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
                 drSolicitudNuevo = (OracleDataReader)lspcmd.ExecuteReader();
                 solicitudNuevo = null;
                 listaSolicitudesNuevo = new List<SolicitudNuevoCargo>();

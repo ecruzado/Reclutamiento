@@ -110,15 +110,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
 
-                solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
-                solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;
-                solicitudAmpliacion.Area_des = usuario.AREADES;
-                solicitudAmpliacion.IdeSede = usuario.IDESEDE;
-                solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
-                solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
-                solicitudAmpliacion.IdeArea = usuario.IDEAREA;
-                solicitudAmpliacion.NumVacantes = 1;
+                var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
+                if (rolSession != Roles.Gerente_General_Adjunto)
+                {
+                    solicitudAmpliacion.Departamento_des = usuarioSession.DEPARTAMENTODES;
+                    solicitudAmpliacion.Dependencia_des = usuario.DEPENDENCIADES;
+                    solicitudAmpliacion.Area_des = usuario.AREADES;
+                    solicitudAmpliacion.IdeDependencia = usuario.IDEDEPENDENCIA;
+                    solicitudAmpliacion.IdeDepartamento = usuario.IDEDEPARTAMENTO;
+                    solicitudAmpliacion.IdeArea = usuario.IDEAREA;
+                }
+                solicitudAmpliacion.IdeSede = usuario.IDESEDE;
+                solicitudAmpliacion.NumVacantes = 1;
 
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
             }
@@ -156,6 +160,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var rolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     var rolResponsable = 0;
                     var etapaInicio = "";
+                    string indicadorArea = "NO";
                     /// 
                     ///enviar dependiendo el usuario que registra la solicitud
                     /// 
@@ -164,6 +169,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         case Roles.Jefe:
                             rolResponsable = Roles.Gerente;
                             etapaInicio = Etapa.Pendiente;
+                            indicadorArea = "SI";
                             break;
 
                         case Roles.Gerente:
@@ -179,7 +185,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if ((rolResponsable != 0) && (etapaInicio != ""))
                     {
-                        var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, "SI");
+                        var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, indicadorArea);
                         if (idUsuarioResponsable != -1)
                         {
                             var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
@@ -285,7 +291,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (rolSession == Roles.Gerente_General_Adjunto)
             {
                 model.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == idSede));
-
                 model.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccione" });
                 
                 model.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccione" });
@@ -393,9 +398,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         public void actualizarDatosAreas(SolicitudAmpliacionCargoViewModel model, int ideArea, int ideDepartamento, int ideDependencia )
         {
-            model.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == ideArea));
-            model.Departamentos.Add(_departamentoRepository.GetSingle(x=>x.IdeDepartamento == ideDepartamento));
-            model.Dependencias.Add(_dependenciaRepository.GetSingle(x=>x.IdeDependencia == ideDependencia));
+           
+                model.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == ideArea));
+                model.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == ideDepartamento));
+                model.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == ideDependencia));
         }
 
 
@@ -1257,7 +1263,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             //model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
            
-            model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.Puestos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
@@ -1309,7 +1315,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var idSede = Session[ConstanteSesion.Sede];
                     solicitudRequerimiento.IdeSede = Convert.ToInt32(idSede);
 
-                    lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
+                    lista = _solicitudAmpliacionPersonal.GetListaAmpliacionPersonal(solicitudRequerimiento);
                 //}
 
 

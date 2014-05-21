@@ -26,7 +26,8 @@
                 string cFechaIncial = busqueda.FechaInicioBus == null ? "" : String.Format("{0:dd/MM/yyyy}", busqueda.FechaInicioBus);
                 string cFechaFinal = busqueda.FechaFinBus == null ? "" : String.Format("{0:dd/MM/yyyy}", busqueda.FechaFinBus);
 
-                IDataReader drSolicitudConsulta;
+
+                IDataReader drSolicitudConsulta ;
                 SolicitudConsulta solicitudConsulta;
                 List<SolicitudConsulta> listaSolicitudConsulta;
                 lcon.Open();
@@ -46,10 +47,12 @@
                 lspcmd.Parameters.Add("p_cTipoSolicitud", OracleType.VarChar).Value = busqueda.TipoSolicitud;
                 lspcmd.Parameters.Add("p_cCodSolicitud", OracleType.VarChar).Value = busqueda.CodSolReqPersonal;
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
-                drSolicitudConsulta = (OracleDataReader)lspcmd.ExecuteReader();
-                solicitudConsulta = null;
-                listaSolicitudConsulta = new List<SolicitudConsulta>();
 
+                drSolicitudConsulta = (OracleDataReader)lspcmd.ExecuteReader();
+                
+                solicitudConsulta = null;
+                
+                listaSolicitudConsulta = new List<SolicitudConsulta>();
 
 
                 while (drSolicitudConsulta.Read())
@@ -72,7 +75,7 @@
                     solicitudConsulta.Preseleccionados = Convert.ToInt32(drSolicitudConsulta["PRESELECCIONADOS"]);
                     solicitudConsulta.Evaluados = Convert.ToInt32(drSolicitudConsulta["EVALUADOS"]);
                     solicitudConsulta.Seleccionados = Convert.ToInt32(drSolicitudConsulta["SELECCIONADOS"]);
-
+                    solicitudConsulta.Contratados = Convert.ToInt32(drSolicitudConsulta["CONTRATADOS"]);
                     var fecCreacion = Convert.ToString(drSolicitudConsulta["INICIO"]);
                     if (fecCreacion.Length > 0)
                     {
@@ -109,7 +112,7 @@
                     
                     listaSolicitudConsulta.Add(solicitudConsulta);
                 }
-                drSolicitudConsulta.Dispose();
+                //drSolicitudConsulta.Dispose();
                 drSolicitudConsulta.Close();
 
                 return listaSolicitudConsulta;

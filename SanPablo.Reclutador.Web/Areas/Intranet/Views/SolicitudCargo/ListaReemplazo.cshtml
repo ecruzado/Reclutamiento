@@ -295,7 +295,7 @@
             },
         colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', '', 'Etapa'],
         colModel: [
-                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
                 { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
                 { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
@@ -378,39 +378,7 @@
 
 
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-           var archivo = 'enabled.png';
-           var title = "Habilitar";
-
-           if (rowObject[1] == "V") {
-               archivo = 'enabled.png';
-               var title = "Habilitar";
-
-           }
-           else {
-               if (rowObject[1] == "M") {
-                   archivo = 'yellow.png';
-                   var title = "Habilitar";
-               }
-               else {
-                   if (rowObject[1] == "R") {
-                       archivo = 'red.png';
-                       var title = "Habilitar";
-                   }
-                   else {
-                       if (rowObject[1] == "I") {
-                           archivo = 'black.png';
-                           var title = "Habilitar";
-                       }
-                   }
-               }
-           }
-           var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-           return strImg;
-       }
-
-    //------------fin de grilla anidada
+  
 </script>
 }
 <div class="row">
