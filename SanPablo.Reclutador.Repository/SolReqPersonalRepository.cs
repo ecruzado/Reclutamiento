@@ -479,6 +479,117 @@ namespace SanPablo.Reclutador.Repository
 
         
 
+             /// <summary>
+        /// obtiene las solicitudes resultado de la busqueda inicial
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public List<SolReqPersonal> GetListaAmpliacionPersonal(SolReqPersonal obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+
+                 string cFechaIncial = obj.FechaInicioBus == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FechaInicioBus);
+                 string cFechaFinal = obj.FechaFinBus == null ? "" : String.Format("{0:dd/MM/yyyy}", obj.FechaFinBus);
+
+                 IDataReader ldrSolReqPersonal;
+                 SolReqPersonal lobSolReqPersonal;
+                 List<SolReqPersonal> llstSolReqPersonal;
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_GET_LISTA_AMPLIACION");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+                 lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = obj.IdeCargo;
+                 lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = obj.IdeDependencia;
+                 lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = obj.IdeDepartamento;
+                 lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = obj.IdeArea;
+                 lspcmd.Parameters.Add("p_cTipEtapa", OracleType.VarChar).Value = obj.TipEtapa;
+                 lspcmd.Parameters.Add("p_cTipResp", OracleType.VarChar).Value = obj.TipResponsable;
+                 lspcmd.Parameters.Add("p_cEstado", OracleType.VarChar).Value = obj.TipEstado;
+                 lspcmd.Parameters.Add("p_cFecIni", OracleType.VarChar).Value = cFechaIncial;
+                 lspcmd.Parameters.Add("p_cFeFin", OracleType.VarChar).Value = cFechaFinal;
+                 lspcmd.Parameters.Add("p_cTipSol", OracleType.VarChar).Value = obj.Tipsol;
+                 lspcmd.Parameters.Add("p_nIdRoL", OracleType.Number).Value = obj.IdRolResp;
+                 lspcmd.Parameters.Add("p_nIdUsuario", OracleType.Number).Value = obj.idUsuarioResp;
+                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdeSede;
+                 
+                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+                 ldrSolReqPersonal = (OracleDataReader)lspcmd.ExecuteReader();
+                 lobSolReqPersonal = null;
+                 llstSolReqPersonal = new List<SolReqPersonal>();
+
+              
+
+                 while (ldrSolReqPersonal.Read())
+                 {
+                     lobSolReqPersonal = new SolReqPersonal();
+                     lobSolReqPersonal.IdeSolReqPersonal = Convert.ToInt32(ldrSolReqPersonal["IDESOLREQPERSONAL"]);
+                     lobSolReqPersonal.CodSolReqPersonal = Convert.ToString(ldrSolReqPersonal["CODSOLREQPERSONAL"]);
+                     lobSolReqPersonal.IdeCargo = Convert.ToInt32(ldrSolReqPersonal["IDECARGO"]);
+                     lobSolReqPersonal.DesCargo = Convert.ToString(ldrSolReqPersonal["DESCARGO"]);
+                     lobSolReqPersonal.IdeDependencia = Convert.ToInt32(ldrSolReqPersonal["IDEDEPENDENCIA"]);
+                     lobSolReqPersonal.Dependencia_des = Convert.ToString(ldrSolReqPersonal["DESDEPENDENCIA"]);
+                     lobSolReqPersonal.IdeDepartamento = Convert.ToInt32(ldrSolReqPersonal["IDEDEPARTAMENTO"]);
+                     lobSolReqPersonal.Departamento_des = Convert.ToString(ldrSolReqPersonal["DESDEPARTAMENTO"]);
+                     lobSolReqPersonal.IdeArea = Convert.ToInt32(ldrSolReqPersonal["IDEAREA"]);
+                     lobSolReqPersonal.Area_des = Convert.ToString(ldrSolReqPersonal["DESAREA"]);
+
+                     lobSolReqPersonal.NumVacantes = Convert.ToInt32(ldrSolReqPersonal["NUMVACANTES"]);
+                     lobSolReqPersonal.CantPostulante = Convert.ToInt32(ldrSolReqPersonal["POSTULANTE"]);
+                     lobSolReqPersonal.CantPreSelec = Convert.ToInt32(ldrSolReqPersonal["PRESELECCIONADOS"]);
+                     lobSolReqPersonal.CantEvaluados = Convert.ToInt32(ldrSolReqPersonal["EVALUADOS"]);
+                     lobSolReqPersonal.CantSeleccionados = Convert.ToInt32(ldrSolReqPersonal["SELECCIONADOS"]);
+
+                     lobSolReqPersonal.CantContratados = Convert.ToInt32(ldrSolReqPersonal["CONTRATADOS"]);
+
+                     lobSolReqPersonal.idRolSuceso = Convert.ToInt32(ldrSolReqPersonal["ROL"]);
+                     lobSolReqPersonal.DesRolSuceso = Convert.ToString(ldrSolReqPersonal["DESROL"]);
+
+                     lobSolReqPersonal.TipEstado = Convert.ToString(ldrSolReqPersonal["ESTADO"]);
+                     lobSolReqPersonal.TipEtapa = Convert.ToString(ldrSolReqPersonal["TIPETAPA"]);
+
+                     var fecPublicacion = Convert.ToString(ldrSolReqPersonal["FECPUBLICACION"]);
+                     if (fecPublicacion.Length>0)
+                     {
+                         lobSolReqPersonal.FecPublicacion = Convert.ToDateTime(ldrSolReqPersonal["FECPUBLICACION"]);
+                     }
+                     var fecCreacion = Convert.ToString(ldrSolReqPersonal["FECCREACION"]);
+                     if (fecCreacion.Length>0)
+                     {
+                         lobSolReqPersonal.Feccreacion = Convert.ToDateTime(ldrSolReqPersonal["FECCREACION"]);
+                     }
+
+                     var fecExpiracion = Convert.ToString(ldrSolReqPersonal["FECEXPIRACACION"]);
+                     if (fecExpiracion.Length>0)
+                     {
+                         lobSolReqPersonal.FecExpiracacion = Convert.ToDateTime(ldrSolReqPersonal["FECEXPIRACACION"]);
+                     }
+                     
+                     
+                     lobSolReqPersonal.NomPersonReemplazo = Convert.ToString(ldrSolReqPersonal["NOMPERSONREEMPLAZO"]);
+                     lobSolReqPersonal.FlagPublicado = Convert.ToString(ldrSolReqPersonal["PUBLICADO"]);
+                     lobSolReqPersonal.idUsuarioResp = Convert.ToInt32(ldrSolReqPersonal["ID_USUARIO_RESP"]);
+                     lobSolReqPersonal.Tipsol = Convert.ToString(ldrSolReqPersonal["TIPSOL"]);
+
+                     lobSolReqPersonal.Des_etapa = Convert.ToString(ldrSolReqPersonal["DES_ETAPA"]);
+
+                     llstSolReqPersonal.Add(lobSolReqPersonal);
+                 }
+                 ldrSolReqPersonal.Close();
+                 return llstSolReqPersonal;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
         /// <summary>
         /// obtiene las solicitudes resultado de la busqueda inicial
         /// </summary>

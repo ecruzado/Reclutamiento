@@ -1263,7 +1263,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             //model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
 
            
-            model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.Puestos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoHorario));
@@ -1315,7 +1315,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var idSede = Session[ConstanteSesion.Sede];
                     solicitudRequerimiento.IdeSede = Convert.ToInt32(idSede);
 
-                    lista = _solicitudAmpliacionPersonal.GetListaSolReqPersonal(solicitudRequerimiento);
+                    lista = _solicitudAmpliacionPersonal.GetListaAmpliacionPersonal(solicitudRequerimiento);
                 //}
 
 

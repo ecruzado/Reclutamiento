@@ -24,6 +24,9 @@ namespace SanPablo.Reclutador.Repository.Interface
         List<SolReqPersonal> GetListaSolReqPersonal(SolReqPersonal obj);
         int EliminaListaReemplazo(Reemplazo obj);
         int InsertTempReemplazo(Reemplazo obj);
+
+        List<SolReqPersonal> GetListaAmpliacionPersonal(SolReqPersonal obj);
+
         List<Reemplazo> GetListaReemplazo(Reemplazo obj);
         Int32 CreaSolicitudReemplazo(SolReqPersonal obj,Reemplazo objReemplazo);
         Int32 EnviaSolicitud(SolReqPersonal obj);

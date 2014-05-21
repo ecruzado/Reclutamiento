@@ -402,17 +402,17 @@
                         <td class="control-label" >Fecha de Publicación</td>
                         <td class="controls">
                             @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
+                            @*<div class="tex-error" style="font-size:12px;color:red"> 
                                  @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
-                            </div>
+                            </div>*@
                         </td>
                         <td>&nbsp;</td>
                         <td class="control-label" >Fecha de Expiracion</td>
                         <td class="controls">
                             @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
+                            @*<div class="tex-error" style="font-size:12px;color:red"> 
                                      @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
-                            </div>
+                            </div>*@
                            
                         </td>
                     </tr>

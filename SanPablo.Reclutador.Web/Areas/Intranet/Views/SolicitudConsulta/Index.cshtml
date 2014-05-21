@@ -11,7 +11,11 @@
 
 @section Scripts{
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script type="text/javascript">
+
+    SanPablo.Alfanumerico('SolicitudRequerimiento_CodSolReqPersonal');
 
     $('#SolicitudRequerimiento_FechaInicioBus,#SolicitudRequerimiento_FechaFinBus').datepicker({
         showOn: "button",
@@ -36,7 +40,7 @@
         if (selr != null) {
             $('#updateDialog').dialog('open');
         } else {
-            MostrarMensaje('Seleccione una solicitud para Activar/Desactivar', "Sistema de reclutamiento y selección de personal");
+            MostrarMensaje('Seleccione una solicitud para Activar/Desactivar', "MENSAJE");
         }
 
     });
@@ -55,7 +59,7 @@
                 if (selr != null) {
                     ActivarDesactivarSolicitud(tSol, estado, idSR,codS);
                 } else {
-                    MostrarMensaje('Seleccione una solicitud', "Sistema de reclutamiento y selección de personal");
+                    MostrarMensaje('Seleccione una solicitud', "MENSAJE");
                 }
                 
             },
@@ -95,11 +99,16 @@
 
             if (idSol != null) {
 
-                var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
-                 window.location = url;
+                if (rowData.FlagPublicado == "SI") {
+                    var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
+                    window.location = url;
+                }
+                else {
+                    MostrarMensaje('El requerimiento no se encuentra publicado, revise el estado', "MENSAJE");
+                }
 
              } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione una solicitud', "MENSAJE");
              }
 
         });
@@ -112,10 +121,15 @@
              var pagina = '@TipoSolicitud.ConsultaRequerimientos';
              var idSol = rowData.IdeSolReqPersonal;
              if (idSol != null) {
+                 if (rowData.FlagPublicado == "SI") {
                  var url = '@Url.Action("Index", "Ranking", new { id = "",area="Intranet" })?id=' + idSol + "&tipSol=" + rowData.TipoSol + "&pagina=" + pagina;
-                 window.location = url;
+                     window.location = url;
+                 }
+                 else {
+                     MostrarMensaje('El requerimiento no se encuentra publicado, revise el estado', "MENSAJE");
+                 }
              } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione una solicitud', "MENSAJE");
              }
 
     });
@@ -210,12 +224,12 @@
                 }
             });
         },
-     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
+     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
      colModel: [
-             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
              { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
              { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
-             { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 200, sortable: false },
+             { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
              { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
              { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
              { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
@@ -227,10 +241,11 @@
              { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 50, sortable: false },
              { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 50, sortable: false },
              { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 50, sortable: false },
-             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 50, sortable: false },
-             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 50, sortable: false },
-             { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 200, sortable: false },
-             { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 200, sortable: false },
+             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'right', width: 50, sortable: false },
+             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'right', width: 50, sortable: false },
+             { name: 'CantContratados', index: 'CantContratados', align: 'right', width: 50, sortable: false },
+             { name: 'Feccreacion', index: 'Feccreacion', align: 'center', width: 120, sortable: false },
+             { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'center', width: 120, sortable: false },
              { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true, sortable: false },
              { name: 'DesRol', index: 'DesRol', align: 'left', width: 200, sortable: false },
              { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300, sortable: false },
@@ -367,38 +382,6 @@
         return strRdo;
     }
 
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar";
-
-        if (rowObject[1] == "V") {
-            archivo = 'enabled.png';
-            var title = "Habilitar";
-        }
-        else {
-            if (rowObject[1] == "M") {
-                archivo = 'yellow.png';
-                var title = "Habilitar";
-            }
-            else {
-                if (rowObject[1] == "R") {
-                    archivo = 'red.png';
-                    var title = "Habilitar";
-                }
-                else {
-                    if (rowObject[1] == "I") {
-                        archivo = 'black.png';
-                        var title = "Habilitar";
-                    }
-                }
-            }
-        }
-
-        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-        return strImg;
-    }
-
   
 </script>
 }
@@ -495,7 +478,7 @@
                    <td class="span5">
                             <label class="control-label" for="inputSuccess">Codigo Solicitud</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal)
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })
                             </div>
                     </td>
                 </tr>

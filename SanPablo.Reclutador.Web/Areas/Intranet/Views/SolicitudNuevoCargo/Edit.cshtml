@@ -18,6 +18,14 @@
        
 
         SanPablo.Numeros('SolicitudNuevoCargo_NumeroPosiciones');
+        SanPablo.Alfanumerico('SolicitudNuevoCargo_CodigoCargo');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_NombreCargo');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCargo');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionEstudios');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCompetencias');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionFunciones');
+        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionObservaciones');
+
         var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
         if (estado == "I")
         { deshabilitarControles(); }

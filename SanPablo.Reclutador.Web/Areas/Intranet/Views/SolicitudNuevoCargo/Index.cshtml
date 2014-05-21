@@ -80,7 +80,7 @@
                     if (selr != null) {
                         ActivarDesactivarSolicitud(selr, estado);
                     } else {
-                        MostrarMensaje('Seleccione una solicitud', "Sistema de reclutamiento y selección de personal");
+                        MostrarMensaje('Seleccione una solicitud', "MENSAJE");
                     }
                     $(this).dialog("close");
                 },
@@ -139,31 +139,31 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vacantes', 'Postulantes', 'Pre-Sel', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
+            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre-Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
                     colModel: [
-                            { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
+                            { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                             { name: 'EstadoActivo', index: 'EstadoActivo', sortable: false, align: 'center', width: 50, hidden: true },
                             { name: 'IdeSolicitudNuevo', index: 'IdeSolicitudNuevo', sortable: false, align: 'center', hidden: true },
-                            { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, width: 80 },
+                            { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, width: 100 },
                             { name: 'IdCargo', index: 'IdCargo', align: 'left', sortable: false, hidden: true },
-                            { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false },
+                            { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false, width: 200 },
                             { name: 'ideDependencia', index: 'Cargo', align: 'left', sortable: false, hidden: true },
-                            { name: 'Dependencia', index: 'Dependencia', align: 'left', sortable: false, width: 160 },
+                            { name: 'Dependencia', index: 'Dependencia', align: 'left', sortable: false, width: 300 },
                             { name: 'ideDepartamento', index: 'Cargo', align: 'left', hidden: true },
-                            { name: 'Departamento', index: 'Departamento', align: 'left', sortable: false, width: 160 },
+                            { name: 'Departamento', index: 'Departamento', align: 'left', sortable: false, width: 300 },
                             { name: 'ideArea', index: 'Cargo', align: 'left', hidden: true },
-                            { name: 'Area', index: 'Area', align: 'left', sortable: false, width: 160 },
+                            { name: 'Area', index: 'Area', align: 'left', sortable: false, width: 300 },
                             { name: 'Posiciones', index: 'Posiciones', align: 'right', sortable: false, width: 60 },
                             { name: 'Postulantes', index: 'Postulantes', align: 'right', sortable: false, width: 60 },
                             { name: 'PreSeleccionados', index: 'PreSeleccionados', align: 'right', sortable: false, width: 60 },
                             { name: 'Evaluados', index: 'Evaluados', align: 'right', sortable: false, width: 60 },
                             { name: 'Seleccionados', index: 'Seleccionados', align: 'right', sortable: false, width: 60 },
                             { name: 'Contratados', index: 'Contratados', align: 'right', sortable: false, width: 60 },
-                            { name: 'Inicio', index: 'Inicio', align: 'left', sortable: false, width: 100 },
-                            { name: 'Cierre', index: 'Cierre', align: 'left', sortable: false, width: 100 },
+                            { name: 'Inicio', index: 'Inicio', align: 'center', sortable: false, width: 120 },
+                            { name: 'Cierre', index: 'Cierre', align: 'center', sortable: false, width: 120 },
                             { name: 'ideResponsable', index: 'ideRol', align: 'left', hidden: true },
-                            { name: 'Responsable', index: 'Responsable', align: 'left', sortable: false, width: 120 },
-                            { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', sortable: false, width: 150 },
+                            { name: 'Responsable', index: 'Responsable', align: 'left', sortable: false, width: 250 },
+                            { name: 'NombreResponsable', index: 'NombreResponsable', align: 'left', sortable: false, width: 300 },
                             { name: 'Publicado', index: 'Publicado', align: 'left', sortable: false, width: 100 },
                             { name: 'TipoEtapa', index: 'ideEtapa', align: 'left', sortable: false, width: 100 },
                             { name: 'idUsuarioRespo', index: 'Etapa', align: 'center', sortable: false, hidden: true }
@@ -282,37 +282,6 @@
 
    
    
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar";
-
-        if (rowObject[1] == "V") {
-            archivo = 'enabled.png';
-            var title = "Habilitar";
-
-        }
-        else {
-            if (rowObject[1] == "M") {
-                archivo = 'yellow.png';
-                var title = "Habilitar";
-            }
-            else {
-                if (rowObject[1] == "R") {
-                    archivo = 'red.png';
-                    var title = "Habilitar";
-                }
-                else {
-                    if (rowObject[1] == "I") {
-                        archivo = 'black.png';
-                        var title = "Habilitar";
-                    }
-                }
-            }
-        }
-        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-        return strImg;
-    }
 
     function estadoSolicitud(ideSolicitud, estado) {
         if (ideSolicitud != null) {

@@ -27,6 +27,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int Preseleccionados { get; set; }
         public virtual int Evaluados { get; set; }
         public virtual int Seleccionados { get; set; }
+
+        public virtual int Contratados { get; set; }
         
         public virtual DateTime? FechaInicio { get; set; }
         
