@@ -10,6 +10,9 @@ namespace SanPablo.Reclutador.Entity
     
     public class CvPostulante : BaseEntity
     {
+
+        public virtual string Modificacion { get; set; }
+        
         /// <summary>
         /// id del postulante
         /// </summary>
@@ -179,7 +182,7 @@ namespace SanPablo.Reclutador.Entity
         public virtual int Ideexppostulante { get; set; }
         public virtual string Nomempresa { get; set; }
         public virtual string Tiemposervicio { get; set; }
-        public virtual string Cargo { get; set; }
+        public virtual string CargoExp { get; set; }
         public virtual string Fectrabajo { get; set; }
         public virtual string Fucniones { get; set; }
         public virtual string Motivocese { get; set; }
@@ -189,6 +192,26 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Cargoreferente { get; set; }
         public virtual string Fonoreferente { get; set; }
         public virtual string Correoreferente { get; set; }
+
+        //Estudios
+
+        public virtual int Ideestudiospostulante { get; set; }
+        public virtual string Institucion { get; set; }
+        public virtual string Areaestudio { get; set; }
+        public virtual string Nivelestudio { get; set; }
+        public virtual string Nivelalcanzado { get; set; }
+        public virtual string DesdeEstudio { get; set; }
+        public virtual string HastaEstudio { get; set; }
+        public virtual string Fecestudio { get; set; }
+
+        //conocimiento
+
+        public virtual int Ideconogenpostulante { get; set; }
+        public virtual string TipoConocimiento { get; set; }
+        public virtual string DescripcionConocimiento { get; set; }
+        public virtual string Tipnivelconocimiento { get; set; }
+        public virtual string IndcertificacionConc { get; set; }
+
 
     }
 }

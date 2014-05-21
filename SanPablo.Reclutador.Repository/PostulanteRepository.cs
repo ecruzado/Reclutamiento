@@ -1584,9 +1584,12 @@
                     {
                         objCvPostulante.Desdir = Convert.ToString(drListaCvPostulante["DESDIR"]);
                     }
-                  
+                    if (drListaCvPostulante["MODIFICACION"] != null && drListaCvPostulante["MODIFICACION"] != DBNull.Value)
+                    {
+                        objCvPostulante.Modificacion = Convert.ToString(drListaCvPostulante["MODIFICACION"]);
+                    }
                    
-
+                    
 
 
                     
@@ -1607,6 +1610,300 @@
         }
 
 
+        /// <summary>
+        /// lista de experiencias para el cv
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<CvPostulante> ListaCvExperiencia(CvPostulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+
+                IDataReader drListaCvPostulante;
+                CvPostulante objCvPostulante;
+                List<CvPostulante> listaCvPostulante;
+                objCvPostulante = null;
+                listaCvPostulante = new List<CvPostulante>();
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_EXPERIENCIA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                if (obj.IdCvPostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdCvPostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+                lspcmd.Parameters.Add("p_rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaCvPostulante = (OracleDataReader)lspcmd.ExecuteReader();
+
+                while (drListaCvPostulante.Read())
+                {
+
+                    objCvPostulante = new CvPostulante();
+
+
+                    if (drListaCvPostulante["IDEEXPPOSTULANTE"] != null && drListaCvPostulante["IDEEXPPOSTULANTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Ideexppostulante = Convert.ToInt32(drListaCvPostulante["IDEEXPPOSTULANTE"]);
+                    }
+
+                    if (drListaCvPostulante["NOMEMPRESA"] != null && drListaCvPostulante["NOMEMPRESA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nomempresa = Convert.ToString(drListaCvPostulante["NOMEMPRESA"]);
+                    }
+                    if (drListaCvPostulante["TIEMPOSERVICIO"] != null && drListaCvPostulante["TIEMPOSERVICIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Tiemposervicio = Convert.ToString(drListaCvPostulante["TIEMPOSERVICIO"]);
+                    }
+                    if (drListaCvPostulante["CARGO"] != null && drListaCvPostulante["CARGO"] != DBNull.Value)
+                    {
+                        objCvPostulante.CargoExp = Convert.ToString(drListaCvPostulante["CARGO"]);
+                    }
+                    if (drListaCvPostulante["FECTRABAJO"] != null && drListaCvPostulante["FECTRABAJO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fectrabajo = Convert.ToString(drListaCvPostulante["FECTRABAJO"]);
+                    }
+                    if (drListaCvPostulante["FUCNIONES"] != null && drListaCvPostulante["FUCNIONES"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fucniones = Convert.ToString(drListaCvPostulante["FUCNIONES"]);
+                    }
+                    if (drListaCvPostulante["MOTIVOCESE"] != null && drListaCvPostulante["MOTIVOCESE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Motivocese = Convert.ToString(drListaCvPostulante["MOTIVOCESE"]);
+                    }
+
+                    if (drListaCvPostulante["NOMREFERENTE"] != null && drListaCvPostulante["NOMREFERENTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nomreferente = Convert.ToString(drListaCvPostulante["NOMREFERENTE"]);
+                    }
+
+                    if (drListaCvPostulante["FONOINST"] != null && drListaCvPostulante["FONOINST"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fonoinst = Convert.ToString(drListaCvPostulante["FONOINST"]);
+                    }
+
+                    if (drListaCvPostulante["ANEXOINST"] != null && drListaCvPostulante["ANEXOINST"] != DBNull.Value)
+                    {
+                        objCvPostulante.Anexoinst = Convert.ToString(drListaCvPostulante["ANEXOINST"]);
+                    }
+
+                    if (drListaCvPostulante["CARGOREFERENTE"] != null && drListaCvPostulante["CARGOREFERENTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Cargoreferente = Convert.ToString(drListaCvPostulante["CARGOREFERENTE"]);
+                    }
+                    if (drListaCvPostulante["FONOREFERENTE"] != null && drListaCvPostulante["FONOREFERENTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fonoreferente = Convert.ToString(drListaCvPostulante["FONOREFERENTE"]);
+                    }
+
+                    if (drListaCvPostulante["CORREOREFERENTE"] != null && drListaCvPostulante["CORREOREFERENTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Correoreferente = Convert.ToString(drListaCvPostulante["CORREOREFERENTE"]);
+                    }
+
+                    listaCvPostulante.Add(objCvPostulante);
+                }
+                drListaCvPostulante.Close();
+
+                return listaCvPostulante;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+
+        /// <summary>
+        /// Estudios nivel Academico
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<CvPostulante> ListaCvEstudios(CvPostulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+
+                IDataReader drListaCvPostulante;
+                CvPostulante objCvPostulante;
+                List<CvPostulante> listaCvPostulante;
+                objCvPostulante = null;
+                listaCvPostulante = new List<CvPostulante>();
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_NIVEL_ACADEMICO");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                if (obj.IdCvPostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdCvPostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+                lspcmd.Parameters.Add("p_rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaCvPostulante = (OracleDataReader)lspcmd.ExecuteReader();
+
+                while (drListaCvPostulante.Read())
+                {
+
+                    objCvPostulante = new CvPostulante();
+
+
+                    if (drListaCvPostulante["IDEESTUDIOSPOSTULANTE"] != null && drListaCvPostulante["IDEESTUDIOSPOSTULANTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Ideestudiospostulante = Convert.ToInt32(drListaCvPostulante["IDEESTUDIOSPOSTULANTE"]);
+                    }
+
+                    if (drListaCvPostulante["INSTITUCION"] != null && drListaCvPostulante["INSTITUCION"] != DBNull.Value)
+                    {
+                        objCvPostulante.Institucion = Convert.ToString(drListaCvPostulante["INSTITUCION"]);
+                    }
+                    if (drListaCvPostulante["AREAESTUDIO"] != null && drListaCvPostulante["AREAESTUDIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Areaestudio = Convert.ToString(drListaCvPostulante["AREAESTUDIO"]);
+                    }
+                    if (drListaCvPostulante["NIVELESTUDIO"] != null && drListaCvPostulante["NIVELESTUDIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nivelestudio = Convert.ToString(drListaCvPostulante["NIVELESTUDIO"]);
+                    }
+                    if (drListaCvPostulante["NIVELALCANZADO"] != null && drListaCvPostulante["NIVELALCANZADO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nivelalcanzado = Convert.ToString(drListaCvPostulante["NIVELALCANZADO"]);
+                    }
+                    if (drListaCvPostulante["DESDE"] != null && drListaCvPostulante["DESDE"] != DBNull.Value)
+                    {
+                        objCvPostulante.DesdeEstudio = Convert.ToString(drListaCvPostulante["DESDE"]);
+                    }
+                    if (drListaCvPostulante["HASTA"] != null && drListaCvPostulante["HASTA"] != DBNull.Value)
+                    {
+                        objCvPostulante.HastaEstudio = Convert.ToString(drListaCvPostulante["HASTA"]);
+                    }
+
+                    if (drListaCvPostulante["FECESTUDIO"] != null && drListaCvPostulante["FECESTUDIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fecestudio = Convert.ToString(drListaCvPostulante["FECESTUDIO"]);
+                    }
+
+
+
+                    listaCvPostulante.Add(objCvPostulante);
+                }
+                drListaCvPostulante.Close();
+
+                return listaCvPostulante;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+        /// <summary>
+        /// lista de conocimientos de ofimatica
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<CvPostulante> ListaCvConocOfimatica(CvPostulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+
+                IDataReader drListaCvPostulante;
+                CvPostulante objCvPostulante;
+                List<CvPostulante> listaCvPostulante;
+                objCvPostulante = null;
+                listaCvPostulante = new List<CvPostulante>();
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_CONOFIMATICA");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                if (obj.IdCvPostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdCvPostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+                lspcmd.Parameters.Add("p_rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaCvPostulante = (OracleDataReader)lspcmd.ExecuteReader();
+
+                while (drListaCvPostulante.Read())
+                {
+
+                    objCvPostulante = new CvPostulante();
+
+
+                    if (drListaCvPostulante["IDECONOGENPOSTULANTE"] != null && drListaCvPostulante["IDECONOGENPOSTULANTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Ideconogenpostulante = Convert.ToInt32(drListaCvPostulante["IDECONOGENPOSTULANTE"]);
+                    }
+
+                    if (drListaCvPostulante["TIPO"] != null && drListaCvPostulante["TIPO"] != DBNull.Value)
+                    {
+                        objCvPostulante.TipoConocimiento = Convert.ToString(drListaCvPostulante["TIPO"]);
+                    }
+                    if (drListaCvPostulante["DESCRIPCION"] != null && drListaCvPostulante["DESCRIPCION"] != DBNull.Value)
+                    {
+                        objCvPostulante.DescripcionConocimiento = Convert.ToString(drListaCvPostulante["DESCRIPCION"]);
+                    }
+                    if (drListaCvPostulante["TIPNIVELCONOCIMIENTO"] != null && drListaCvPostulante["TIPNIVELCONOCIMIENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Tipnivelconocimiento = Convert.ToString(drListaCvPostulante["TIPNIVELCONOCIMIENTO"]);
+                    }
+                    if (drListaCvPostulante["INDCERTIFICACION"] != null && drListaCvPostulante["INDCERTIFICACION"] != DBNull.Value)
+                    {
+                        objCvPostulante.IndcertificacionConc = Convert.ToString(drListaCvPostulante["INDCERTIFICACION"]);
+                    }
+
+                    
+
+
+                    listaCvPostulante.Add(objCvPostulante);
+                }
+                drListaCvPostulante.Close();
+
+                return listaCvPostulante;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
 
     }
 }

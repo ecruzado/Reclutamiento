@@ -73,6 +73,11 @@
 
         List<CvPostulante> ListaCvPostulante(CvPostulante obj);
 
+        List<CvPostulante> ListaCvExperiencia(CvPostulante obj);
+
+        List<CvPostulante> ListaCvEstudios(CvPostulante obj);
+
+        List<CvPostulante> ListaCvConocOfimatica(CvPostulante obj);
     }
 
 
