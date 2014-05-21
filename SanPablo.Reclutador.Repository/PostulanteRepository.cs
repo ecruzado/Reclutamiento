@@ -1373,11 +1373,13 @@
                     }
                     if (drListaCvPostulante["APEPATERNO"] != null && drListaCvPostulante["APEPATERNO"] != DBNull.Value)
                     {
-                        objCvPostulante.Apepaterno = Convert.ToString(drListaCvPostulante["APEPATERNO"]);
+                        objCvPostulante.ApePaterno = Convert.ToString(drListaCvPostulante["APEPATERNO"]);
+                        //objCvPostulante.Apepaterno = Convert.ToString(drListaCvPostulante["APEPATERNO"]);
                     }
                     if (drListaCvPostulante["APEMATERNO"] != null && drListaCvPostulante["APEMATERNO"] != DBNull.Value)
                     {
-                        objCvPostulante.Apematerno = Convert.ToString(drListaCvPostulante["APEMATERNO"]);
+                        objCvPostulante.ApeMaterno = Convert.ToString(drListaCvPostulante["APEMATERNO"]);
+                        //objCvPostulante.Apematerno = Convert.ToString(drListaCvPostulante["APEMATERNO"]);
                     }
                     if (drListaCvPostulante["PRINOMBRE"] != null && drListaCvPostulante["PRINOMBRE"] != DBNull.Value)
                     {

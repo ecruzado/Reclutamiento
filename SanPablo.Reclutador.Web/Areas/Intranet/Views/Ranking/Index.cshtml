@@ -16,7 +16,8 @@
 
         $(document).ready(function () {
 
-
+           
+            
          $('#btnAgregarRanking').click(function () {
              var idSol = $("#Solicitud_IdeSolReqPersonal").val();
              var tipSol = $("#Solicitud_Tipsol").val();
@@ -35,7 +36,7 @@
              if (selr != null && selr > 0) {
                  $('#confirmacionAprob').dialog('open');
              } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
 
          });
@@ -71,7 +72,7 @@
          $('#confirmacionAprob').dialog({
              autoOpen: false,
              modal: true,
-             title: "Sistema de Reclutamiento Y Seleccion de Personal",
+             title: "CONFIRMACIÓN",
              buttons: {
                  "Aceptar": function () {
                       var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
@@ -175,7 +176,7 @@
          $('#popupDialogCv').dialog({
              autoOpen: false,
              width: 520,
-             height: 500,
+             //height: 500,
              resizable: false,
              modal: true,
              buttons: {
@@ -273,9 +274,9 @@
                         { name: 'IdCvPostulante', index: 'IdCvPostulante', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdSolicitud', index: 'IdSolicitud', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'TipSol', index: 'TipSol', align: 'center', editable: false, sortable: false, hidden: true },
-                        { name: 'ApePaterno', index: 'ApePaterno', align: 'center', editable: false, sortable: false, width: 300 },
-                        { name: 'ApeMaterno', index: 'ApeMaterno', align: 'center', editable: false, sortable: false, width: 300 },
-                        { name: 'Nombre', index: 'Nombre', align: 'center', editable: false, sortable: false, width: 300 },
+                        { name: 'ApePaterno', index: 'ApePaterno', align: 'center', editable: false, sortable: false, width: 180 },
+                        { name: 'ApeMaterno', index: 'ApeMaterno', align: 'center', editable: false, sortable: false, width: 180 },
+                        { name: 'Nombre', index: 'Nombre', align: 'center', editable: false, sortable: false, width: 180 },
                         { name: 'Dni', index: 'Dni', align: 'center', editable: false, sortable: false, width: 150 },
                         { name: 'Telefono', index: 'Telefono', align: 'center', editable: false, sortable: false, width: 150 },
                         { name: 'Fechacita', index: 'Fechacita', align: 'center', editable: false, sortable: false, width: 150 },
@@ -287,14 +288,14 @@
 
 
                  pager: jQuery('#grdPagerCvPostulante'),
-                 rowNum: 10,
-                 rowList: [10, 30, 50],
+                 rowNum: 5,
+                 rowList: [5, 10, 30],
                  autowidth: true,
                  rules: true,
                  sortname: 'IdCvPostulante',
                  sortorder: 'desc',
                  viewrecords: true,
-                 height: 350,
+                 //height: 350,
                  cellsubmit: 'clientArray',
                  hidegrid: false,
                  rownumbers: true,
@@ -740,7 +741,8 @@
                     <div class="opciones">
                         @if (Visualicion.SI.Equals(Model.btnBuscar))
                         {
-                          <a class="btn btn-info" href="#" id="btnBuscarPostulantes"><i class="icon-search icon-white"></i> Buscar</a>    
+                          <button id ="btnLimpiarPostulantes" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>  
+                          <a class="btn btn-info" id="btnBuscarPostulantes"><i class="icon-search icon-white"></i> Buscar</a>    
                         }
                     </div>
                 </div>
@@ -784,12 +786,12 @@
                     {
                       <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a>     
                     }
-                    
+
                 }
                 
                 @if (Visualicion.SI.Equals(Model.btnCvPreseleccion))
                 {
-                  <a class="btn btn-info" id="btnAprobarPre"><i class="icon-edit icon-white"></i> CV-Preselección</a>                                 
+                  <a class="btn btn-info" id="btnAprobarPre"><i class="icon-tasks  icon-white"></i> Pre-selec</a>                                 
                 }
                      
             </div>

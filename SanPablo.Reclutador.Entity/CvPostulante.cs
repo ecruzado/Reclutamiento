@@ -123,8 +123,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string Codtipdocumento { get; set; }
         public virtual string Destipdocumento { get; set; }
         public virtual string Numdocumento { get; set; }
-        public virtual string Apepaterno { get; set; }
-        public virtual string Apematerno { get; set; }
+        //public virtual string Apepaterno { get; set; }
+        //public virtual string Apematerno { get; set; }
         public virtual string Prinombre { get; set; }
         public virtual string Segnombre { get; set; }
         public virtual string Codnacionalidad { get; set; }
