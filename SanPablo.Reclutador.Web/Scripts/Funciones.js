@@ -382,7 +382,6 @@ Funciones = {
             title: title,
             modal: true,
             resizable: false,
-            
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");

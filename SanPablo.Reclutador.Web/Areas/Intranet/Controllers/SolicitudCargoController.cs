@@ -578,6 +578,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.SolReqPersonal.IdeDependencia = UsuarioSede.IDEDEPENDENCIA;
                     model.SolReqPersonal.IdeDepartamento= UsuarioSede.IDEDEPARTAMENTO;
                     model.SolReqPersonal.IdeArea= UsuarioSede.IDEAREA;
+
+
+                    Cargo objCargo = new Cargo();
+
+                    objCargo.IdeSede = Convert.ToInt32(idSede);
+                    objCargo.IdeDependencia = UsuarioSede.IDEDEPENDENCIA;
+                    objCargo.IdeDepartamento = UsuarioSede.IDEDEPARTAMENTO;
+                    objCargo.IdeArea = UsuarioSede.IDEAREA;
+
+                    model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
                 }
                 
             }
@@ -771,6 +782,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model = new SolicitudRempCargoViewModel();
             string EtapaSol = null;
 
+            model.CampoVacante = Visualicion.SI;
+            model.CampoPuesto = Visualicion.SI;
+            model.CampoObservacion = Visualicion.SI;
+
             var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
             EtapaSol = ObjSol.TipEtapa;
             
@@ -820,8 +835,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (Roles.Encargado_Seleccion.Equals(idRolUsuario) || Roles.Analista_Seleccion.Equals(idRolUsuario))
                 {
                     model.Accion = Accion.Publicar;
+
+
+                    model.CampoVacante = Visualicion.NO;
+                    model.CampoPuesto = Visualicion.NO;
+                    model.CampoObservacion = Visualicion.NO;
+                   
                 }
             }
+
+                   
 
             return View("InformacionReemplazo", model);
         }
@@ -998,7 +1021,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     if (retorno > 0)
                     {
                         objJson.Resultado = true;
-                        objJson.Mensaje = "Se genero la Solicitud";
+                        objJson.Mensaje = "Se generó la solicitud";
                         objJson.IdDato = retorno;
                     }
                 }
@@ -1155,8 +1178,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
                                 var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
-                                MensajeInformativo = "Se envío la solicitud de reeemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
- 
+                                MensajeInformativo = "Se envío la solicitud de reemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
+
                             }
                             else
                             {
@@ -1305,7 +1328,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         if (retorno>0)
                         {
                             objJson.Resultado = true;
-                            mensaje = "Se Realizo la aprobación de la solicitud de reemplazo: " + model.SolReqPersonal.CodSolReqPersonal + " , se envio la solicitud al usuario:" + objUsuario.CodUsuario + " con rol:" + objRol.DscRol;
+                            mensaje = "Se acepto la Solicitud de reemplazo: " + model.SolReqPersonal.CodSolReqPersonal + " , se envió la solicitud al usuario:" + objUsuario.CodUsuario + " con rol:" + objRol.DscRol;
                         }
                     }
                     else

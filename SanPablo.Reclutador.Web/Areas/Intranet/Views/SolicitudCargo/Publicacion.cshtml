@@ -538,9 +538,7 @@
                               @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
-                      
-                     <tr class="formulario-fila">
+
                         <td class="span5">
                             <label class="control-label" for="inputSuccess">Tipo</label>
                             <div class="controles">                         
@@ -548,6 +546,15 @@
                             </div>
                         </td>
                     </tr>
+                      
+                    @* <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <div class="controles">                         
+                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+                    </tr>*@
 
                     <tr class="formulario-fila">
                         <td class="span5">
@@ -556,10 +563,9 @@
                               @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
-                    </tr>
 
-                    <tr class="formulario-fila">
-                        <td class="span5">
+
+                         <td class="span5">
                             <label class="control-label" for="selectError">Rango salarial</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
@@ -568,9 +574,20 @@
                                
                             </div>
                         </td>
-                        
                     </tr>
-                    <tr class="formulario-fila">
+
+                   @* <tr class="formulario-fila">
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Rango salarial</label>
+                            <div class="controles">
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
+                            </div>
+                        </td>
+                        
+                    </tr>*@
+
+
+@*                    <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Publicar</label>
                             <div class="controles">
@@ -587,29 +604,20 @@
                             </div>
                         </td>
                         
-                    </tr>
+                    </tr>*@
                          
                     <tr class="formulario-fila">
                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
                             <div class="controles">
-                               @* @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
-                                {
-                                    @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      
-                                }
-                                else
-                                {
-                                    @Html.EditorFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial", disabled = "disabled"})      
-                                }*@
+                              
                                  <input type="text" class="input-small"  id="SolReqPersonal_FecPublicacion" name="SolReqPersonal.FecPublicacion" placeholder="Publicaci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecPublicacion)" >
 
 
                             </div>
                         </td>
-                    </tr>
 
-                      <tr class="formulario-fila">
-                        <td class="span5">
+                         <td class="span5">
                             <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
                             <div class="controles">
                                @*@Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
@@ -619,6 +627,29 @@
 
                             </div>
                         </td>
+
+                    </tr>
+
+                      <tr class="formulario-fila">
+                        
+                          
+                          <td class="span5">
+                            <label class="control-label" for="selectError">Publicar</label>
+                            <div class="controles">
+                                @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" })
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox" })
+                                }
+
+                                
+                            </div>
+                        </td>
+                          
+                         
                     </tr>
 
 

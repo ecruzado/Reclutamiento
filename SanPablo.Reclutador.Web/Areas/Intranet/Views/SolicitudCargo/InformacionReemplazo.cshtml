@@ -490,8 +490,8 @@
 
                   { name: 'FecInicioReemplazo', index: 'FecInicioReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
                   { name: 'FecFinalReemplazo', index: 'FecFinalReemplazo', align: 'left', sortable: false, editable: false, width: 180 },
-                  { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 200 },
-                  { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 200, editable: false },
+                  { name: 'Nombres', index: 'Nombres', align: 'left', sortable: false, editable: false, width: 270 },
+                  { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 270, editable: false },
 
          ],
 
@@ -606,6 +606,7 @@
 
         $("#spanEliminar").html("¿Desea eliminar el registro?")
         $('#divEliminar').dialogo({
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     var selr = jQuery('#grdListReemplazosReq').jqGrid('getGridParam', 'selrow');
@@ -661,11 +662,12 @@
 
 
 
-        $("#spanDialogAprobReem").html("¿Desea guardar los cambios?")
+        $("#spanDialogAprobReem").html("¿Desea grabar los cambios?")
         $('#DialogAprobReem').dialog({
             autoOpen: false,
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
 
@@ -717,10 +719,25 @@
         });
 
 
+        $("#spanEnviar").html("¿Esta seguro que desea enviar esta solicitud de reemplazo de Cargo?")
+        $('#divEnviar').dialogo({
+            resizable: false,
+            buttons: {
+                "Aceptar": function () {
+                    enviaSolicitud();
+                    $(this).dialog("close");
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
         $('#popupDialogReemplazo').dialog({
             autoOpen: false,
-            width: 500,
-            height: 400,
+            width: 420,
+            height: 350,
             resizable: false,
             modal: true,
             buttons: {
@@ -752,6 +769,7 @@
             autoOpen: false,
             modal: true,
             title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
 
@@ -764,7 +782,7 @@
                             traditional: true,
                             success: function (data) {
                                 if (data.Resultado) {
-                                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
 
                                     $('#DialogReemplazo').dialog('close');
                                     $('#popupDialogReemplazo').dialog('close');
@@ -799,6 +817,17 @@
         function valida(fechaInicial, fechaFinal, Nombres, ApePaterno, TipoReemplazo) {
 
             var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
+
+
+            if (Nombres.trim().length==0) {
+                MostrarMensaje('Ingreser un nombre', "Mensaje");
+                return false;
+            }
+
+            if (ApePaterno.trim().length == 0) {
+                MostrarMensaje('Ingreser un apellido', "Mensaje");
+                return false;
+            }
 
             if ("S" == TipoReemplazo) {
 
@@ -1008,8 +1037,8 @@
 
         }
 
-        enviaSolicitud();
-
+        $('#divEnviar').dialog('open');
+      
     }
 
 
@@ -1059,8 +1088,16 @@
             success: function (data) {
                 if (data.Resultado) {
 
-                    $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    if (data.IdDato != null && data.IdDato > 0) {
+
+                        //$('#SolReqPersonal_TipVacante').attr("readonly", "readonly");
+                        $("#SolReqPersonal_TipVacante").attr("disabled", true);
+                        $("#SolReqPersonal_CodSolReqPersonal").val(data.IdDato);
+                    }
+                    
+
+
+                    MostrarMensaje(data.Mensaje, "Información");
                     $('#grdListReemplazosReq').trigger('reloadGrid');
                 }
             }
@@ -1074,6 +1111,7 @@
             title: title,
             autoOpen: false,
             modal: true,
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
@@ -1103,6 +1141,7 @@
             title: title,
             autoOpen: false,
             modal: true,
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
@@ -1277,7 +1316,16 @@
                             <label class="control-label" for="inputSuccess">Vacantes <span class="text-error">*</span></label>
                             <div class="controles">
                                 
-                                @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "2",style="width: 50px"}) 
+                                @if (!Accion.Publicar.Equals(Model.Accion))
+                                {
+                                    @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "2",style="width: 50px"})     
+                                }
+                                else
+	                            {
+                                   @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario", onkeypress = "return Funciones.isNumberKey(event)", maxlength = "2", style = "width: 50px",@readonly = "readonly" })     
+                                }
+                                
+                                
                             </div>
                         
                         </td> 
@@ -1286,9 +1334,17 @@
                         
                             <label class="control-label" for="selectError">Tipo puesto <span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
-                            </div>
-                        
+                            @if (!Accion.Publicar.Equals(Model.Accion))
+                                {
+                                
+                                    @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
+                                
+                                }
+                            else
+                            {
+                                      @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto), new { @readonly = "readonly"})
+                            }
+                        </div>
                         </td>                   
                         
                     </tr>
@@ -1296,7 +1352,17 @@
                         <td class="span5">
                         <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
                         <div class="controles">
-                                @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize: none;", maxlength = "255" ,onblur="aMays(event, this)"}) 
+                               
+                            
+                            @if (!Accion.Publicar.Equals(Model.Accion))
+                            {
+                                 @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize: none;", maxlength = "255" ,onblur="aMays(event, this)"}) 
+                            }
+                            else
+                            {
+                                 @Html.TextAreaFor(model => model.SolReqPersonal.Observacion, new { @readonly = "readonly",rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize: none;", maxlength = "255" ,onblur="aMays(event, this)"}) 
+                            }
+                            
                         </div>
                         </td>                    
                     </tr>
@@ -1305,7 +1371,7 @@
         
                     <div class="grilla-opciones">
                             <div class="opciones">
-                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina) || Accion.Publicar.Equals(Model.Accion))
                                 {
                                     <span></span> 
                                 }
@@ -1321,7 +1387,7 @@
                      <div class="grilla-opciones">
                         <h6>Reemplazos</h6>
                             <div class="opciones">
-                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina) || Accion.Publicar.Equals(Model.Accion))
                                 {
                                     <span></span> 
                                 }
@@ -1450,6 +1516,11 @@
 <div id="divEliminar">
 	<span id="spanEliminar"></span>
 </div>
+
+<div id="divEnviar">
+	<span id="spanEnviar"></span>
+</div>
+
 <div id="divMensajeInfo">
         <span id="spnMensajeInfo"></span>
 </div>
