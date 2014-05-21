@@ -84,7 +84,7 @@
             $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet"})',
+                url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
             data: { ideDependencia: ideDependencia },
             success: function (respuesta) {
                 $("select#SolicitudRequerimiento_IdeDepartamento").empty();
@@ -102,7 +102,7 @@
             var ideDepartamento = $(this).val();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("listaAreas","SolicitudAmpliacionCargo",new { area = "Intranet"})',
+                url: '@Url.Action("listaAreas", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
             data: { ideDepartamento: ideDepartamento },
             success: function (respuesta) {
                 $("select#SolicitudRequerimiento_IdeArea").empty();
@@ -560,7 +560,7 @@
 
                 if (id != null && id > 0) {
 
-                    var url = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=' + id + "&pagina=" + pagina;
+                    var url = '@Url.Action("Publica", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })?id=' + id + "&pagina=" + pagina;
                     window.location = url;
                    
                 } else {
@@ -608,7 +608,7 @@
           buttons: {
               "Ok": function () {
                   $(this).dialog("close");
-                  SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
+                  SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
                 }
             }
         });
@@ -754,7 +754,7 @@
                     <label>Estado</label>
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSede, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
-                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new {style = "display:none;" })
+                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { style = "display:none;" })
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                     @*@Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })*@
                 </div>            
@@ -776,16 +776,16 @@
                             <div class="controles">
                                 @if (TipoSolicitud.Ampliacion.Equals(Model.Pagina))
                                 {
-                                    if (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) 
+                                    if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                     {
-                                       @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
-                                       <div class="tex-error" style="font-size:12px;color:red"> 
-                                           @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
+                                        @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia))
+                                        <div class="tex-error" style="font-size:12px;color:red"> 
+                                            @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeDepartamento)
                                         </div>
-                                     }
+                                    }
                                     else
                                     {
-                                       @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDependencia, new { style="display:none;"}) 
+                                       @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDependencia, new { style = "display:none;" }) 
                                        @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia), new { disabled = "disabled" }) 
                                     }
                                 }
@@ -804,7 +804,7 @@
                             <div class="controles">
                                 @if (Model.Accion.Equals(Accion.Consultar))
                                 {
-                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipPuesto, new SelectList(Model.TipoPuestos, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipPuesto), new { disabled= "disabled"})
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.TipPuesto, new SelectList(Model.TipoPuestos, "Valor", "Descripcion", Model.SolicitudRequerimiento.TipPuesto), new { disabled = "disabled" })
                                 }
                                 else
                                 { 
@@ -822,7 +822,7 @@
                             <div class="controles">
                                 @if (TipoSolicitud.Ampliacion.Equals(Model.Pagina))
                                 {
-                                    if (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) 
+                                    if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                     {
                                         @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
@@ -832,14 +832,14 @@
                                     }
                                     else
                                     {
-                                        @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDepartamento, new { style="display:none;"}) 
+                                        @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeDepartamento, new { style = "display:none;" }) 
                                         @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento), new { disabled = "disabled" }) 
                                     }
-                                    }
+                                }
                                 else
                                 {
                                      @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento), new { disabled = "disabled" })
-                                 }
+                                }
                             </div>
                         </div>
                     </td>
@@ -868,7 +868,7 @@
                             <div class="controles">
                                 @if (TipoSolicitud.Ampliacion.Equals(Model.Pagina))
                                 {
-                                    if (Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) 
+                                    if ((Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                     {
                                         @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea))
                                         <div class="tex-error" style="font-size:12px;color:red"> 
@@ -878,7 +878,7 @@
                                     }
                                     else
                                     {
-                                        @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeArea, new { style="display:none;"}) 
+                                        @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeArea, new { style = "display:none;" }) 
                                         @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea), new { disabled = "disabled" }) 
                                     }
                                 }
@@ -895,11 +895,11 @@
                             <div class="controles">
                                 @if (Model.Accion.Equals(Accion.Consultar))
                                 { 
-                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small", maxlength = "2" ,disabled = "disabled" })
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small", maxlength = "2", disabled = "disabled" })
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small" , maxlength="2" })
+                                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.NumVacantes, new { @class = "input-small", maxlength = "2" })
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.NumVacantes)
                                     </div>
@@ -922,7 +922,7 @@
                                 }
                                 else
                                 { 
-                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255" , onblur="aMays(event, this)" })
+                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Motivo, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)" })
                                     <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Motivo)
@@ -944,7 +944,7 @@
                                 }
                                 else
                                 {
-                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur="aMays(event, this)" })
+                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)" })
                                     <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Observacion)
@@ -1025,12 +1025,12 @@
                     {
                         <a  class="btn btn-info" onclick ="mostrarAprobarRechazar()"><i class="icon-list icon-white"></i> Aprob/Rech</a>    
                     }
-               
+
                     if (Model.btnVerEnviar.Equals(Visualicion.SI))
                     {
                         <a  class="btn btn-info" onclick="confirmarEnvio()"><i class="icon-screenshot icon-white"></i> Enviar</a>    
                     }
-                
+
                     if (Model.btnVerPublicar.Equals(Visualicion.SI))
                     {
                         <a class="btn btn-info" id ="btnPublicar"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
@@ -1050,7 +1050,7 @@
 }
 
 <div id="updateDialogAprobacion" title="Aprobación/Rechazo Solicitud" ></div>
-<div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de personal?</span></div>
+<div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de cargo?</span></div>
 <div id="updateDialogAceptar" title="CONFIRMACIÓN" ><p>¿Está seguro de aceptar la solicitud de ampliación de cargo?</p></div>
 @*<div id="divMensaje"><span id="spnMensaje"></span></div>*@
 

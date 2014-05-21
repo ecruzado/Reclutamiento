@@ -97,7 +97,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                Convert.ToInt32(solicitud.PuntTotSalario) + Convert.ToInt32(solicitud.PuntTotSexo) + Convert.ToInt32(solicitud.PuntTotUbigeo);
 
                 solicitudModel.TotalMaxino = puntajeTotal;
-
+                solicitudModel.nuevaSolicitud = Indicador.No;
 
                 //var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == solicitud.IdeDepartamento);
                 //var area = _areaRepository.GetSingle(x => x.IdeArea == solicitud.IdeArea);
@@ -125,6 +125,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudAmpliacion.NumVacantes = 1;
 
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
+                solicitudModel.nuevaSolicitud = Indicador.Si;
             }
             return View(solicitudModel);
         }

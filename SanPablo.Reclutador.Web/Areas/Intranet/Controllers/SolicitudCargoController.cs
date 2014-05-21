@@ -390,7 +390,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.listaEtapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.listaEstados =
-            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoMant));
+            new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
             model.listaEstados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             model.listaTipPuesto =
@@ -625,7 +625,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             var objModel = new SolicitudRempCargoViewModel();
             objModel.SolReqPersonal = new SolReqPersonal();
-           
+
+            objModel.SolReqPersonal.NumVacantes = 1; //iniciar en 1
+
             objModel.listaTipVacante=
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVacante));
             objModel.listaTipVacante.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
@@ -658,6 +660,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             objModel.RangoSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             objModel.RangoSalariales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
+
 
             return objModel;
         }

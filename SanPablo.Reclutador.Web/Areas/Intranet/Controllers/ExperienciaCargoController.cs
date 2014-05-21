@@ -95,14 +95,23 @@
             try
             {
                 ExperienciaCargoValidator validator = new ExperienciaCargoValidator();
-                ValidationResult resultValidator = validator.Validate(experienciaCargo, "TipoExperiencia", "PuntajeExperiencia");
+                ValidationResult resultValidator = validator.Validate(experienciaCargo, "CantidadAnhosExperiencia", "CantidadMesesExperiencia", "TipoExperiencia", "PuntajeExperiencia");
                 //bool result = validarExperiencia(experienciaCargo);
 
                 if (!resultValidator.IsValid)
                 {
-                    var experienciaViewModel = inicializarExperiencia();
-                    experienciaViewModel.Experiencia = experienciaCargo;
-                    return View(experienciaViewModel);
+                    if ((experienciaCargo.CantidadAnhosExperiencia == 0) && (experienciaCargo.CantidadMesesExperiencia == 0))
+                    {
+                        objJsonMessage.Mensaje = "Debe ingresar al menos un valor diferente a cero en años o meses de experiencia";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        var experienciaViewModel = inicializarExperiencia();
+                        experienciaViewModel.Experiencia = experienciaCargo;
+                        return View(experienciaViewModel);
+                    }
                 }
                 if (experienciaCargo.IdeExperienciaCargo == 0)
                 {

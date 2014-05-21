@@ -69,11 +69,9 @@
    
     <table style="margin-left:30px;">
         <tr >
-
              @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { style = "display: none;" })
              @Html.TextBoxFor(model => model.TipoReemplazo, new { style = "display: none;" })
              @Html.TextBoxFor(model => model.Reemplazo.IdReemplazo, new { style = "display: none;" })
-
 
             <td class="colEtiqueta" >
                 <label class="etiquetaFormulario" >Nombres<span class="text-error">*</span></label>
@@ -86,8 +84,6 @@
                 </div>*@
             </td>
         </tr>
-        
-        
         <tr >
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" >Apellido Paterno<span class="text-error">*</span></label>
@@ -104,7 +100,6 @@
         @if (Visualicion.SI.Equals(Model.TipoReemplazo))
         {
             
-        
          <tr >
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" >Fecha Inicio<span class="text-error">*</span></label>
@@ -112,7 +107,6 @@
             <td class="colInput;input-xxlarge">
                 
                  <input type="text" class="input-small"  id="Reemplazo_FecInicioReemplazo" name="Reemplazo.FecInicioReemplazo" placeholder=" Inicial" value="@String.Format("{0:dd/MM/yyyy}",Model.Reemplazo.FecInicioReemplazo)">
-                              
                               
                 @* @Html.EditorFor(model => model.Reemplazo.FecInicioReemplazo, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
               @*  <div class="tex-error" style="font-size:12px;color:red">   
@@ -134,15 +128,5 @@
                 </div>*@
             </td>
         </tr>    
-
-
-         
-        
-        <tr>
-            <td>
-                &nbsp;
-            </td>
-        </tr>
-       
-    </table>
+     </table>
     }

@@ -62,9 +62,10 @@
                 $("#divMensaje10").dialog({
                     title: 'SAN PABLO',
                     modal: true,
+                    resizable : false,
                     buttons: {
                         "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); $('#grdListExperiencia').trigger('reloadGrid'); },
-                        "Cancel": function () { $(this).dialog("close"); }
+                        "Cancelar": function () { $(this).dialog("close"); }
                     }
                 });
 
