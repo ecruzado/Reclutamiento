@@ -17,7 +17,7 @@
                 .WithMessage("Pendiente");
             RuleFor(x => x.CantidadAnhosExperiencia)
                 .InclusiveBetween(0, 70)
-                .WithMessage("0 - 70");
+                .WithMessage("1 - 70");
 
             RuleFor(x => x.CantidadMesesExperiencia)
                 .NotEmpty()
@@ -25,7 +25,7 @@
 
             RuleFor(x => x.CantidadMesesExperiencia)
                 .InclusiveBetween(0,12)
-                .WithMessage("0 - 12");
+                .WithMessage("1 - 12");
 
             //RuleFor(x => x.CantidadMesesExperiencia)
             //    .GreaterThan(-1)

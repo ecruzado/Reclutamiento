@@ -1316,5 +1316,297 @@
 
 
 
+        
+        /// <summary>
+        /// obtiene los datos del postulante para la impresion del Cv
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public List<CvPostulante> ListaCvPostulante(CvPostulante obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+
+            try
+            {
+
+                IDataReader drListaCvPostulante;
+                CvPostulante objCvPostulante;
+                List<CvPostulante> listaCvPostulante;
+                objCvPostulante = null;
+                listaCvPostulante = new List<CvPostulante>();
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_CV_POSTULANTE");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                if (obj.IdCvPostulante > 0)
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = obj.IdCvPostulante;
+                }
+                else
+                {
+                    lspcmd.Parameters.Add("p_nidpostulante", OracleType.Number).Value = 0;
+                }
+                lspcmd.Parameters.Add("p_rpta", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drListaCvPostulante = (OracleDataReader)lspcmd.ExecuteReader();
+
+                while (drListaCvPostulante.Read())
+                {
+
+                    objCvPostulante = new CvPostulante();
+
+
+                    if (drListaCvPostulante["CODTIPDOCUMENTO"] != null && drListaCvPostulante["CODTIPDOCUMENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codtipdocumento = Convert.ToString(drListaCvPostulante["CODTIPDOCUMENTO"]);
+                    }
+
+                    if (drListaCvPostulante["DESTIPDOCUMENTO"] != null && drListaCvPostulante["DESTIPDOCUMENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Destipdocumento = Convert.ToString(drListaCvPostulante["DESTIPDOCUMENTO"]);
+                    }
+                    if (drListaCvPostulante["NUMDOCUMENTO"] != null && drListaCvPostulante["NUMDOCUMENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Numdocumento = Convert.ToString(drListaCvPostulante["NUMDOCUMENTO"]);
+                    }
+                    if (drListaCvPostulante["APEPATERNO"] != null && drListaCvPostulante["APEPATERNO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Apepaterno = Convert.ToString(drListaCvPostulante["APEPATERNO"]);
+                    }
+                    if (drListaCvPostulante["APEMATERNO"] != null && drListaCvPostulante["APEMATERNO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Apematerno = Convert.ToString(drListaCvPostulante["APEMATERNO"]);
+                    }
+                    if (drListaCvPostulante["PRINOMBRE"] != null && drListaCvPostulante["PRINOMBRE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Prinombre = Convert.ToString(drListaCvPostulante["PRINOMBRE"]);
+                    }
+                    if (drListaCvPostulante["SEGNOMBRE"] != null && drListaCvPostulante["SEGNOMBRE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Segnombre = Convert.ToString(drListaCvPostulante["SEGNOMBRE"]);
+                    }
+                    if (drListaCvPostulante["CODNACIONALIDAD"] != null && drListaCvPostulante["CODNACIONALIDAD"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codnacionalidad = Convert.ToString(drListaCvPostulante["CODNACIONALIDAD"]);
+                    }
+
+                    if (drListaCvPostulante["DESNACIONALIDAD"] != null && drListaCvPostulante["DESNACIONALIDAD"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desnacionalidad = Convert.ToString(drListaCvPostulante["DESNACIONALIDAD"]);
+                    }
+
+                    if (drListaCvPostulante["FECNACIMIENTO"] != null && drListaCvPostulante["FECNACIMIENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Fecnacimiento = Convert.ToString(drListaCvPostulante["FECNACIMIENTO"]);
+                    }
+                    if (drListaCvPostulante["CODSEXO"] != null && drListaCvPostulante["CODSEXO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codsexo = Convert.ToString(drListaCvPostulante["CODSEXO"]);
+                    }
+
+                    if (drListaCvPostulante["DESSEXO"] != null && drListaCvPostulante["DESSEXO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Dessexo = Convert.ToString(drListaCvPostulante["DESSEXO"]);
+                    }
+                    if (drListaCvPostulante["CODESTADOCIVIL"] != null && drListaCvPostulante["CODESTADOCIVIL"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codestadocivil = Convert.ToString(drListaCvPostulante["CODESTADOCIVIL"]);
+                    }
+
+                    if (drListaCvPostulante["DESESTADOCIVIL"] != null && drListaCvPostulante["DESESTADOCIVIL"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desestadocivil = Convert.ToString(drListaCvPostulante["DESESTADOCIVIL"]);
+                    }
+                    if (drListaCvPostulante["NUMLICENCIA"] != null && drListaCvPostulante["NUMLICENCIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Numlicencia = Convert.ToString(drListaCvPostulante["NUMLICENCIA"]);
+                    }
+
+                    if (drListaCvPostulante["OBSERVACION"] != null && drListaCvPostulante["OBSERVACION"] != DBNull.Value)
+                    {
+                        objCvPostulante.Observacion = Convert.ToString(drListaCvPostulante["OBSERVACION"]);
+                    }
+                    if (drListaCvPostulante["PAIS"] != null && drListaCvPostulante["PAIS"] != DBNull.Value)
+                    {
+                        objCvPostulante.Pais = Convert.ToString(drListaCvPostulante["PAIS"]);
+                    }
+                    if (drListaCvPostulante["IDEUBIGEO"] != null && drListaCvPostulante["IDEUBIGEO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Ideubigeo = Convert.ToString(drListaCvPostulante["IDEUBIGEO"]);
+                    }
+                    if (drListaCvPostulante["DESDISTRITO"] != null && drListaCvPostulante["DESDISTRITO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desdistrito = Convert.ToString(drListaCvPostulante["DESDISTRITO"]);
+                    }
+                    if (drListaCvPostulante["DESPROVINCIA"] != null && drListaCvPostulante["DESPROVINCIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desprovincia = Convert.ToString(drListaCvPostulante["DESPROVINCIA"]);
+                    }
+                    if (drListaCvPostulante["DESDEPARTAMENTO"] != null && drListaCvPostulante["DESDEPARTAMENTO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desdepartamento = Convert.ToString(drListaCvPostulante["DESDEPARTAMENTO"]);
+                    }
+                    if (drListaCvPostulante["CORREO"] != null && drListaCvPostulante["CORREO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Correo = Convert.ToString(drListaCvPostulante["CORREO"]);
+                    }
+                    if (drListaCvPostulante["TELMOVIL"] != null && drListaCvPostulante["TELMOVIL"] != DBNull.Value)
+                    {
+                        objCvPostulante.Telmovil = Convert.ToString(drListaCvPostulante["TELMOVIL"]);
+                    }
+                    if (drListaCvPostulante["TELFIJO"] != null && drListaCvPostulante["TELFIJO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Telfijo = Convert.ToString(drListaCvPostulante["TELFIJO"]);
+                    }
+
+                    if (drListaCvPostulante["REFERENCIA"] != null && drListaCvPostulante["REFERENCIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Referencia = Convert.ToString(drListaCvPostulante["REFERENCIA"]);
+                    }
+                    if (drListaCvPostulante["CODTIPVIA"] != null && drListaCvPostulante["CODTIPVIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codtipvia = Convert.ToString(drListaCvPostulante["CODTIPVIA"]);
+                    }
+                    if (drListaCvPostulante["DESTIPVIA"] != null && drListaCvPostulante["DESTIPVIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Destipvia = Convert.ToString(drListaCvPostulante["DESTIPVIA"]);
+                    }
+                    if (drListaCvPostulante["NOMVIA"] != null && drListaCvPostulante["NOMVIA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nomvia = Convert.ToString(drListaCvPostulante["NOMVIA"]);
+                    }
+                    if (drListaCvPostulante["NUMDIRECCION"] != null && drListaCvPostulante["NUMDIRECCION"] != DBNull.Value)
+                    {
+                        objCvPostulante.Numdireccion = Convert.ToString(drListaCvPostulante["NUMDIRECCION"]);
+                    }
+                    if (drListaCvPostulante["MANZANA"] != null && drListaCvPostulante["MANZANA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Manzana = Convert.ToString(drListaCvPostulante["MANZANA"]);
+                    }
+
+                    if (drListaCvPostulante["BLOQUE"] != null && drListaCvPostulante["BLOQUE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Bloque = Convert.ToString(drListaCvPostulante["BLOQUE"]);
+                    }
+
+                    if (drListaCvPostulante["CODTIPZONA"] != null && drListaCvPostulante["CODTIPZONA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Codtipzona = Convert.ToString(drListaCvPostulante["CODTIPZONA"]);
+                    }
+                    if (drListaCvPostulante["DESTIPZONA"] != null && drListaCvPostulante["DESTIPZONA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Destipzona = Convert.ToString(drListaCvPostulante["DESTIPZONA"]);
+                    }
+                    if (drListaCvPostulante["NOMZONA"] != null && drListaCvPostulante["NOMZONA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nomzona = Convert.ToString(drListaCvPostulante["NOMZONA"]);
+                    }
+                    if (drListaCvPostulante["INTERIOR"] != null && drListaCvPostulante["INTERIOR"] != DBNull.Value)
+                    {
+                        objCvPostulante.Interior = Convert.ToString(drListaCvPostulante["INTERIOR"]);
+                    }
+                    if (drListaCvPostulante["LOTE"] != null && drListaCvPostulante["LOTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Lote = Convert.ToString(drListaCvPostulante["LOTE"]);
+                    }
+                    if (drListaCvPostulante["ETAPA"] != null && drListaCvPostulante["ETAPA"] != DBNull.Value)
+                    {
+                        objCvPostulante.Etapa = Convert.ToString(drListaCvPostulante["ETAPA"]);
+                    }
+                   
+                                       
+                    if (drListaCvPostulante["FOTOPOSTULANTE"]!=null && drListaCvPostulante["FOTOPOSTULANTE"] !=DBNull.Value)
+                    {
+                        objCvPostulante.Fotopostulante = (byte[])(drListaCvPostulante["FOTOPOSTULANTE"]);
+                    }
+
+                    if (drListaCvPostulante["SALARIO"] != null && drListaCvPostulante["SALARIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Salario = Convert.ToString(drListaCvPostulante["SALARIO"]);
+                    }
+
+                    if (drListaCvPostulante["DISPTRABAJO"] != null && drListaCvPostulante["DISPTRABAJO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Disptrabajo = Convert.ToString(drListaCvPostulante["DISPTRABAJO"]);
+                    }
+
+                    if (drListaCvPostulante["DISPPHORARIO"] != null && drListaCvPostulante["DISPPHORARIO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Dispphorario = Convert.ToString(drListaCvPostulante["DISPPHORARIO"]);
+                    }
+                    if (drListaCvPostulante["HORATRABAJO"] != null && drListaCvPostulante["HORATRABAJO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Horatrabajo = Convert.ToString(drListaCvPostulante["HORATRABAJO"]);
+                    }
+                    if (drListaCvPostulante["REUBICACION"] != null && drListaCvPostulante["REUBICACION"] != DBNull.Value)
+                    {
+                        objCvPostulante.Reubicacion = Convert.ToString(drListaCvPostulante["REUBICACION"]);
+                    }
+
+                    if (drListaCvPostulante["PARIENTETRAB"] != null && drListaCvPostulante["PARIENTETRAB"] != DBNull.Value)
+                    {
+                        objCvPostulante.Parientetrab = Convert.ToString(drListaCvPostulante["PARIENTETRAB"]);
+                    }
+
+                    if (drListaCvPostulante["PARIENTESEDE"] != null && drListaCvPostulante["PARIENTESEDE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Parientesede = Convert.ToString(drListaCvPostulante["PARIENTESEDE"]);
+                    }
+                    if (drListaCvPostulante["PARIENTECARGO"] != null && drListaCvPostulante["PARIENTECARGO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Parientecargo = Convert.ToString(drListaCvPostulante["PARIENTECARGO"]);
+                    }
+                    if (drListaCvPostulante["COMOSEENTERO"] != null && drListaCvPostulante["COMOSEENTERO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Comoseentero = Convert.ToString(drListaCvPostulante["COMOSEENTERO"]);
+                    }
+
+                    if (drListaCvPostulante["EDAD"] != null && drListaCvPostulante["EDAD"] != DBNull.Value)
+                    {
+                        objCvPostulante.Edad = Convert.ToString(drListaCvPostulante["EDAD"]);
+                    }
+                    if (drListaCvPostulante["DESEDAD"] != null && drListaCvPostulante["DESEDAD"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desedad = Convert.ToString(drListaCvPostulante["DESEDAD"]);
+                    }
+                    if (drListaCvPostulante["NOMBRECOMPLETO"] != null && drListaCvPostulante["NOMBRECOMPLETO"] != DBNull.Value)
+                    {
+                        objCvPostulante.Nombrecompleto = Convert.ToString(drListaCvPostulante["NOMBRECOMPLETO"]);
+                    }
+                    if (drListaCvPostulante["IDEPOSTULANTE"] != null && drListaCvPostulante["IDEPOSTULANTE"] != DBNull.Value)
+                    {
+                        objCvPostulante.Idepostulante = Convert.ToString(drListaCvPostulante["IDEPOSTULANTE"]);
+                    }
+
+                    if (drListaCvPostulante["DESDIR"] != null && drListaCvPostulante["DESDIR"] != DBNull.Value)
+                    {
+                        objCvPostulante.Desdir = Convert.ToString(drListaCvPostulante["DESDIR"]);
+                    }
+                  
+                   
+
+
+
+                    
+                    listaCvPostulante.Add(objCvPostulante);
+                }
+                drListaCvPostulante.Close();
+
+                return listaCvPostulante;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+
+
     }
 }

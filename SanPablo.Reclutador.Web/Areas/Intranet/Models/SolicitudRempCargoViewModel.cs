@@ -14,7 +14,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public SolReqPersonal SolReqPersonal { get; set; }
         public Reemplazo Reemplazo { get; set; }
         public LogSolReqPersonal LogSolReqPersonal { get; set; }
-
+       
         public List<DetalleGeneral> listaTipPuesto { get; set; }
         public List<DetalleGeneral> listaTipVacante { get; set; }
         public List<Dependencia> Dependencias { get; set; }
@@ -102,7 +102,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         /// </summary>
         public string CampoObservacion { get; set; }
 
-
+        public int TotalMaxino { get; set; }
 
         #endregion
 

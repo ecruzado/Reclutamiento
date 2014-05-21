@@ -70,6 +70,9 @@
         /// <returns></returns>
         DataTable DtReportePostulantesPotencial(ReportePostulantePotencial postulante);
 
+
+        List<CvPostulante> ListaCvPostulante(CvPostulante obj);
+
     }
 
 
