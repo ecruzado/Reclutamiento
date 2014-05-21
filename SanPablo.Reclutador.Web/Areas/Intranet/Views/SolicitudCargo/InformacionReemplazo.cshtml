@@ -737,7 +737,6 @@
         $('#popupDialogReemplazo').dialog({
             autoOpen: false,
             width: 420,
-            height: 350,
             resizable: false,
             modal: true,
             buttons: {
@@ -768,16 +767,15 @@
         $('#DialogReemplazo').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "CONFIRMACIÓN",
             resizable: false,
             buttons: {
-                "Aceptar": function () {
-
-
-
+                "Aceptar": function (e) {
+                    e.preventDefault();
                     $.ajax({
                         data: $("#frmPopupReemplazo").serialize(),
                         type: "POST",
+                        async : false,
                         url: '@Url.Action("SetPopupReemplazo", "SolicitudCargo")',
                             traditional: true,
                             success: function (data) {

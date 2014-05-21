@@ -239,12 +239,14 @@
                 if ((solNuevoCargo.TipoEtapa == Etapa.Pendiente)||(solNuevoCargo.TipoEtapa==Etapa.Validado))
                 {
                     solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
+                    solicitudNuevoCargoViewModel.nuevaSolicitud = Indicador.No;
                 }
                 
             }
             else
             {
                 solicitudNuevoCargoViewModel.Accion = Accion.Enviar;
+                solicitudNuevoCargoViewModel.nuevaSolicitud = Indicador.Si;
             }
             return View(solicitudNuevoCargoViewModel);
         }

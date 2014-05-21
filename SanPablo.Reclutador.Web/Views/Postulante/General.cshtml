@@ -552,7 +552,7 @@
                             <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil</label>
                         </td >
                         <td colspan="4" class="colInput">
-                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px" , onblur="aMays(event, this)" })
+                            @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px;height: 80px;resize:none;" , onblur="aMays(event, this)" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.Observacion)
                             </div>

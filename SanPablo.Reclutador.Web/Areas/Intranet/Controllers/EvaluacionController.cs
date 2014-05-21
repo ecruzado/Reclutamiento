@@ -456,7 +456,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (ListaCriterioEval.criterios[PreguntaActual - 1].IndRespuesta == Indicador.No)
             {
-                string usuario = Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15);
+                string usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                if (usuario.Length > 15)
+                {
+                    usuario = usuario.Substring(0, 15);
+                }
 
                 if (model.Alternativa != null)
                 {

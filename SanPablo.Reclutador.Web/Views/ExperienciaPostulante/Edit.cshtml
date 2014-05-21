@@ -292,7 +292,7 @@
                 <label class="etiquetaFormulario" style="width:160px" >Funciones <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;" , onblur="aMays(event, this)" })
+                @Html.TextAreaFor(model => model.Experiencia.FuncionesDesempenadas, new { style = "width:600px;height: 100px;resize:none;" , onblur="aMays(event, this)" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.FuncionesDesempenadas)
                 </div>

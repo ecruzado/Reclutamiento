@@ -395,8 +395,22 @@
                             </div>
                         </div>
                     </td>
-
-                     <td class="span5">
+                    <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess">Etapa</label>
+                            <div class="controles">
+                                @if(Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe))
+                                {
+                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas), new {disabled="disabled"})
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    @* <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess">Responsable</label>
                             <div class="controles">
@@ -411,7 +425,7 @@
                                  }
                             </div>
                         </div>
-                    </td>  
+                    </td>  *@
 
                 </tr>
 
@@ -435,19 +449,14 @@
 
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Etapa</label>
+                            <label class="control-label" for="inputSuccess">Estado</label>
                             <div class="controles">
-                                @if(Model.rolSession.Equals(SanPablo.Reclutador.Entity.Roles.Jefe))
-                                {
-                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas), new {disabled="disabled"})
-                                }
-                                else
-                                {
-                                    @Html.DropDownListFor(model => model.Etapas, new SelectList(Model.Etapas, "Valor", "Descripcion", Model.Etapas))
-                                }
+                                @Html.DropDownListFor(model => model.Estados, new SelectList (Model.Estados, "Valor", "Descripcion", Model.Estados ))
                             </div>
                         </div>
                     </td>
+
+
                 </tr>
 
                 <tr class="formulario-fila">
@@ -468,14 +477,7 @@
                         </div>
                     </td>
 
-                    <td class="span5">
-                        <div class="">
-                            <label class="control-label" for="inputSuccess">Estado</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.Estados, new SelectList (Model.Estados, "Valor", "Descripcion", Model.Estados ))
-                            </div>
-                        </div>
-                    </td>
+                    
                 </tr>
 
                 <tr class="formulario-accion offset9">

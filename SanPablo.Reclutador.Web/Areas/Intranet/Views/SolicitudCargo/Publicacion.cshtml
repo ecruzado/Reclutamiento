@@ -18,18 +18,34 @@
         
     $(document).ready(function () {
 
+        var dateToday = new Date();
 
+        var dates = $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            //defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: dateToday,
+            onSelect: function (selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker");
+                //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                //dates.not(this).datepicker("option", option, date);
+            }
+        });
 
-        $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
+        $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').attr("readonly", "readonly");
+
+        @*$('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
         buttonImageOnly: true,
         onSelect: function (date) {
             $(this).valid();
         }
-         });
-
-        $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').attr("readonly", "readonly");
+         });*@
 
 
         $('#btnActualizar').click(function () {
@@ -135,7 +151,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 750,
+             width: 800,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -203,7 +219,7 @@
             sortorder: 'desc',
             viewrecords: true,
             height: 180,
-            width: 750,
+            width: 800,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -271,7 +287,7 @@
             sortorder: 'desc',
             viewrecords: true,
             height: 180,
-            width: 750,
+            width: 800,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -341,7 +357,7 @@
               sortorder: 'desc',
               viewrecords: true,
               height: 180,
-              width: 750,
+              width: 800,
               cellsubmit: 'clientArray',
               hidegrid: false,
               rownumbers: true,
@@ -410,7 +426,7 @@
              sortorder: 'desc',
              viewrecords: true,
              height: 180,
-             width: 750,
+             width: 800,
              cellsubmit: 'clientArray',
              hidegrid: false,
              rownumbers: true,
@@ -533,14 +549,14 @@
 
                     <tr class="formulario-fila">
                         <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="text-align:left;width:140px">Area</label>
+                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Area</label>
                             <div class="controles">                         
                               @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
 
                         <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="text-align:left;width:140px">Tipo</label>
+                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Tipo</label>
                             <div class="controles">                         
                               @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
@@ -558,22 +574,26 @@
 
                     <tr class="formulario-fila">
                         <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="text-align:left;width:140px">Vacantes</label>
+                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Vacantes</label>
                             <div class="controles">                         
                               @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                             </div>
                         </td>
 
+                        <td class="control-label" style="width:135px;margin-right: 5px">Rango Salarial</td>
+                        <td class="controls">
+                            @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
+                                <label for="TipoRangoSalarior" style="display:inline-block">Publicar</label>
+                                @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" })
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox",style="display:inline-block;" })
+                                }
 
-                         <td class="span5">
-                            <label class="control-label" for="selectError" style="text-align:left;width:140px">Rango salarial</label>
-                            <div class="controles">
-                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
-                                
-                                @*<label class="checkbox" style="display:inline-table"><input type="checkbox" id="IndVerSalario" name="IndVerSalario" class="chkclass" value="@Model.SolReqPersonal.IndicadorSalario" /> No Publicar</label>*@
-                               
-                            </div>
-                        </td>
+                            <td class="controls">
                     </tr>
 
                    @* <tr class="formulario-fila">
@@ -630,7 +650,7 @@
 
                     </tr>
 
-                      <tr class="formulario-fila">
+                     @* <tr class="formulario-fila">
                         
                           
                           <td class="span5">
@@ -650,7 +670,7 @@
                         </td>
                           
                          
-                    </tr>
+                    </tr>*@
 
 
                     </table>

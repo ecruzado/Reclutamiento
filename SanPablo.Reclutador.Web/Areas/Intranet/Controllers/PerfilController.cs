@@ -25,8 +25,8 @@
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private IUsuarioRepository _usuarioRepository;
         private IConocimientoGeneralCargoRepository _conocimientoGeneralRepository;
-        private IOfrecemosCargoRepository _ofrecemmosCargoRepository;
-        private ICompetenciaCargoRepository _competenciaCargoRepository;
+        //private IOfrecemosCargoRepository _ofrecemmosCargoRepository;
+        //private ICompetenciaCargoRepository _competenciaCargoRepository;
         private INivelAcademicoCargoRepository _nivelAcademicoRepository;
         private IHorarioCargoRepository _horarioCargoRepository;
         private IUbigeoCargoRepository _ubigeoCargoRepository;
@@ -39,8 +39,8 @@
                                 ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                 IUsuarioRepository usuarioRepository,
                                 IConocimientoGeneralCargoRepository conocimientoGeneralRepository,
-                                IOfrecemosCargoRepository ofrecemosCargoRepository,
-                                ICompetenciaCargoRepository competenciaCargoRepository,
+                                //IOfrecemosCargoRepository ofrecemosCargoRepository,
+                                //ICompetenciaCargoRepository competenciaCargoRepository,
                                 INivelAcademicoCargoRepository nivelAcademicoRepository,
                                 IHorarioCargoRepository horarioCargoRepository,
                                 IUbigeoCargoRepository ubigeoCargoRepository,
@@ -53,8 +53,8 @@
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _usuarioRepository = usuarioRepository;
             _conocimientoGeneralRepository = conocimientoGeneralRepository;
-            _ofrecemmosCargoRepository = ofrecemosCargoRepository;
-            _competenciaCargoRepository = competenciaCargoRepository;
+            //_ofrecemmosCargoRepository = ofrecemosCargoRepository;
+            //_competenciaCargoRepository = competenciaCargoRepository;
             _nivelAcademicoRepository = nivelAcademicoRepository;
             _horarioCargoRepository = horarioCargoRepository;
             _ubigeoCargoRepository = ubigeoCargoRepository;
@@ -560,8 +560,6 @@
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
 
                 var nroConocimientos = _conocimientoGeneralRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
-                var nroOfrecemos = _ofrecemmosCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
-                var nroCompetencias = _competenciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
                 var nroHorario = _horarioCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
                 var nroUbigeo = _ubigeoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
                 var nroNivelAcademico = _nivelAcademicoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo);
@@ -574,8 +572,6 @@
                     (cargo.NumeroPosiciones != null) && 
                     (cargo.PuntajeTotalPostulanteInterno != null) &&
                     (cargo.PuntajeEdad != null)&&
-                    (nroOfrecemos > 0) && 
-                    (nroCompetencias > 0) && 
                     (nroHorario > 0) && 
                     (nroUbigeo > 0) && 
                     (nroNivelAcademico > 0) && 

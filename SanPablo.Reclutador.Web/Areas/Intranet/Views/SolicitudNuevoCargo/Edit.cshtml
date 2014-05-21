@@ -22,11 +22,11 @@
         SanPablo.Numeros('SolicitudNuevoCargo_NumeroPosiciones');
         SanPablo.Alfanumerico('SolicitudNuevoCargo_CodigoCargo');
         SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_NombreCargo');
-        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCargo');
-        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionEstudios');
-        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCompetencias');
-        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionFunciones');
-        SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionObservaciones');
+        //SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCargo');
+        //SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionEstudios');
+        //SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionCompetencias');
+        //SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionFunciones');
+        //SanPablo.AlfanumericoSpace('SolicitudNuevoCargo_DescripcionObservaciones');
 
         var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
         if (estado == "I")
@@ -482,17 +482,17 @@
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
-                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
-                                            {
-                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDependencia, new { style = "display:none;" })
-                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia), new { disabled = "disabled" }) 
-                                            }
-                                            else
+                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                             {
                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia))
                                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDependencia)
                                                 </div>
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDependencia, new { style = "display:none;" })
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudNuevoCargo.IdeDependencia), new { disabled = "disabled" }) 
                                             }
                                         }
                                         else
@@ -532,17 +532,18 @@
                                         @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)*@
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                          {
-                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
+                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                              {
-                                                 @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new { style = "display:none;" })
-                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento), new { disabled = "disabled"}) 
-                                             }
-                                             else{
                                                  @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
                                                  <div class="tex-error" style="font-size:12px;color:red"> 
                                                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeDepartamento)
                                                 </div>
                                             }
+                                            else
+                                            {
+                                                 @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new { style = "display:none;" })
+                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento), new { disabled = "disabled"}) 
+                                             }
                                          }
                                          else
                                          {
@@ -579,17 +580,17 @@
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
-                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente)))
-                                            {
-                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeArea, new { style = "display:none;" })
-                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled="disabled"})
-                                            }
-                                            else
+                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                             {
                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
                                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                                     @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.IdeArea)
                                                 </div>
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.SolicitudNuevoCargo.IdeArea, new { style = "display:none;" })
+                                                @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea), new { disabled="disabled"})
                                             }
                                         }
                                         else
