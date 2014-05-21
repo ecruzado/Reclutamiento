@@ -117,5 +117,78 @@ namespace SanPablo.Reclutador.Entity
          public virtual string UsrModifcacion { get; set; }
         
 
+
+        ///datos del cv del postulante
+        ///
+        public virtual string Codtipdocumento { get; set; }
+        public virtual string Destipdocumento { get; set; }
+        public virtual string Numdocumento { get; set; }
+        public virtual string Apepaterno { get; set; }
+        public virtual string Apematerno { get; set; }
+        public virtual string Prinombre { get; set; }
+        public virtual string Segnombre { get; set; }
+        public virtual string Codnacionalidad { get; set; }
+        public virtual string Desnacionalidad { get; set; }
+        public virtual string Fecnacimiento { get; set; }
+        public virtual string Codsexo { get; set; }
+        public virtual string Dessexo { get; set; }
+        public virtual string Codestadocivil { get; set; }
+        public virtual string Desestadocivil { get; set; }
+        public virtual string Numlicencia { get; set; }
+        public virtual string Observacion { get; set; }
+        public virtual string Pais { get; set; }
+        public virtual string Ideubigeo { get; set; }
+        public virtual string Desdistrito { get; set; }
+        public virtual string Desprovincia { get; set; }
+        public virtual string Desdepartamento { get; set; } 
+        public virtual string Correo { get; set; }
+        public virtual string Telmovil { get; set; }
+        public virtual string Telfijo { get; set; }
+        public virtual string Referencia { get; set; }
+        public virtual string Codtipvia { get; set; }
+        public virtual string Destipvia { get; set; }
+        public virtual string Nomvia { get; set; }
+        public virtual string Numdireccion { get; set; }
+        public virtual string Manzana { get; set; }
+        public virtual string Bloque { get; set; }
+        public virtual string Codtipzona { get; set; }
+        public virtual string Destipzona { get; set; }
+        public virtual string Nomzona { get; set; }
+        public virtual string Interior { get; set; }
+        public virtual string Lote { get; set; }
+        public virtual string Etapa { get; set; }
+        public virtual byte[] Fotopostulante { get; set; }
+        public virtual string Salario { get; set; }
+        public virtual string Disptrabajo { get; set; }
+        public virtual string Dispphorario { get; set; }
+        public virtual string Horatrabajo { get; set; }
+        public virtual string Reubicacion { get; set; }
+        public virtual string Parientetrab { get; set; }
+        public virtual string Parientesede { get; set; }
+        public virtual string Parientecargo { get; set; }
+        public virtual string Comoseentero { get; set; }
+        public virtual string Edad { get; set; }
+        public virtual string Desedad { get; set; }
+        public virtual string Nombrecompleto { get; set; }
+        public virtual string Idepostulante { get; set; }
+        public virtual string Desdir { get; set; }
+
+
+        //Experiencias
+
+        public virtual int Ideexppostulante { get; set; }
+        public virtual string Nomempresa { get; set; }
+        public virtual string Tiemposervicio { get; set; }
+        public virtual string Cargo { get; set; }
+        public virtual string Fectrabajo { get; set; }
+        public virtual string Fucniones { get; set; }
+        public virtual string Motivocese { get; set; }
+        public virtual string Nomreferente { get; set; }
+        public virtual string Fonoinst { get; set; }
+        public virtual string Anexoinst { get; set; }
+        public virtual string Cargoreferente { get; set; }
+        public virtual string Fonoreferente { get; set; }
+        public virtual string Correoreferente { get; set; }
+
     }
 }

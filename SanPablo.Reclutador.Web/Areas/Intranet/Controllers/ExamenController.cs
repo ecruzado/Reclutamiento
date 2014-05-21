@@ -758,15 +758,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             lista = _examenRepository.ObtenerPdfExamens(objPdfExamen);
             
             // tipo de letra
-            Font normal = new Font(FontFactory.GetFont("Arial", 10, Font.NORMAL));
+            Font normal = new Font(FontFactory.GetFont("Arial", 9, Font.NORMAL));
             //Font blanco = new Font(FontFactory.GetFont("Arial", 10, Font.NORMAL));
             BaseFont bfTimes = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
-            Font estiloBlanco = new Font(bfTimes, 10, Font.ITALIC, BaseColor.WHITE);
+            Font estiloBlanco = new Font(bfTimes, 9, Font.ITALIC, BaseColor.WHITE);
             
 
 
-            Font negrita = new Font(FontFactory.GetFont("Arial", 10, Font.BOLD));
-            Font subRayado = new Font(FontFactory.GetFont("Arial", 10, Font.UNDERLINE));
+            Font negrita = new Font(FontFactory.GetFont("Arial", 9, Font.BOLD));
+            Font subRayado = new Font(FontFactory.GetFont("Arial", 9, Font.UNDERLINE));
 
             // obtengo los datos de la cabecera
             if (lista !=null)
@@ -784,7 +784,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             using (MemoryStream ms = new MemoryStream())
             {
-                Document doc = new Document(PageSize.A4, 30, 30, 30, 30);
+                Document doc = new Document(PageSize.A4, 20, 20, 30, 30);
                 PdfWriter writer = PdfWriter.GetInstance(doc, ms);
                
                 
@@ -795,23 +795,23 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 
                 
                 //se crea la  1 tabla que contiene las celdas
-                PdfPTable table1 = new PdfPTable(2);
+                PdfPTable table1 = new PdfPTable(1);
                 
                 // se definen los anchos de la tabla
-                float[] anchos1 = new float[] { 20.0f, 80.0f };
+                float[] anchos1 = new float[] { 100.0f };
                 table1.SetWidths(anchos1);
                 // se crea la celda con el valor que contiene
-                PdfPCell cellNombExamen = new PdfPCell(new Phrase("", negrita));
-                // se alinea a la derecha
-                cellNombExamen.HorizontalAlignment = Element.ALIGN_RIGHT;
-                // se quitan los bordes de la celda
-                cellNombExamen.Border = Rectangle.NO_BORDER;
-                // se agrega la celda a la tabla
-                table1.AddCell(cellNombExamen);
+                //PdfPCell cellNombExamen = new PdfPCell(new Phrase("", negrita));
+                //// se alinea a la derecha
+                //cellNombExamen.HorizontalAlignment = Element.ALIGN_RIGHT;
+                //// se quitan los bordes de la celda
+                //cellNombExamen.Border = Rectangle.NO_BORDER;
+                //// se agrega la celda a la tabla
+                //table1.AddCell(cellNombExamen);
                
                 PdfPCell cellDesExamen = new PdfPCell(new Phrase(ConcatenExamen, normal));
                 cellDesExamen.Border = Rectangle.NO_BORDER;
-                cellDesExamen.HorizontalAlignment = Element.ALIGN_LEFT;
+                cellDesExamen.HorizontalAlignment = Element.ALIGN_CENTER;
                 table1.AddCell(cellDesExamen);
                 
                 //Espacios entre tablas
@@ -831,7 +831,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 table2.AddCell(CellTipoExamen);
 
                 PdfPCell CellTipoExamenDes = new PdfPCell(new Phrase(Tipo, normal));
-                CellTipoExamenDes.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellTipoExamenDes.HorizontalAlignment = Element.ALIGN_RIGHT;
                 CellTipoExamenDes.Border = Rectangle.NO_BORDER;
                 table2.AddCell(CellTipoExamenDes);
 
@@ -842,13 +842,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 table2.AddCell(CellDuracion);
 
                 PdfPCell CellDuracionDes = new PdfPCell(new Phrase(Duracion +" MINUTOS", normal));
-                CellDuracionDes.HorizontalAlignment = Element.ALIGN_LEFT;
+                CellDuracionDes.HorizontalAlignment = Element.ALIGN_RIGHT;
                 CellDuracionDes.Border = Rectangle.NO_BORDER;
                 table2.AddCell(CellDuracionDes);
 
                 //Espacios entre tablas
-                table2.SpacingBefore = 15f;
-                table2.SpacingAfter = 10f;
+                //table2.SpacingBefore = 15f;
+                //table2.SpacingAfter = 10f;
 
                 doc.Add(table2);
                
@@ -879,7 +879,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     table3.SetWidths(ancho3);
 
                     // celda 1
-                    PdfPCell CelltCategoria = new PdfPCell(new Phrase(objPdfExamen.Nomcategoria+" "+objPdfExamen.Tiempocat, normal));
+                    PdfPCell CelltCategoria = new PdfPCell(new Phrase(objPdfExamen.Nomcategoria+" "+objPdfExamen.Tiempocat+ " MINUTOS", normal));
                     CelltCategoria.HorizontalAlignment = Element.ALIGN_LEFT;
                     CelltCategoria.Border = Rectangle.NO_BORDER;
                     // se le indica que ocupe las 3 columnas
@@ -908,13 +908,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     // se le indica que ocupe las 3 columnas
                     CellInstruccion.Colspan = 3;
                     //celda enblanco
-                    PdfPCell CellBlanco2 = new PdfPCell(new Phrase("", normal));
-                    CellBlanco2.Colspan = 3;
-                    CellBlanco2.Border = Rectangle.NO_BORDER;
-                    table3.AddCell(CellBlanco2);
+                    //PdfPCell CellBlanco2 = new PdfPCell(new Phrase("", normal));
+                    //CellBlanco2.Colspan = 3;
+                    //CellBlanco2.Border = Rectangle.NO_BORDER;
+                    //table3.AddCell(CellBlanco2);
                    
                     
                     table3.AddCell(CellInstruccion);
+
+                    Boolean campoEjemplo = false;
 
                     //celda 4
                     if (objPdfExamen.Tipoejemplo!=null && objPdfExamen.Tipoejemplo!="")
@@ -931,31 +933,46 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                     CellEjemploCat = new PdfPCell(EjemploCategoria);
                                     CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
                                     CellEjemploCat.Border = Rectangle.NO_BORDER;
+                                    campoEjemplo = true;
                                     // se le indica que ocupe las 3 columnas
                        
                                 }
                                 else
                                 {
-                                    CellEjemploCat = new PdfPCell(new Phrase("", normal));
-                       
+                                    
+                                    campoEjemplo = false;
                                 }
                             }
 
                             if ("01".Equals(objPdfExamen.Tipoejemplo))
                             {
-                                CellEjemploCat = new PdfPCell(new Phrase(objPdfExamen.Textoejemplo, normal));
-                                CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
-                                CellEjemploCat.Border = Rectangle.NO_BORDER;
+                                if (objPdfExamen.Textoejemplo!=null && objPdfExamen.Textoejemplo!="")
+                                {
+                                    CellEjemploCat = new PdfPCell(new Phrase(objPdfExamen.Textoejemplo, normal));
+                                    CellEjemploCat.HorizontalAlignment = Element.ALIGN_LEFT;
+                                    CellEjemploCat.Border = Rectangle.NO_BORDER;
+                                    campoEjemplo = true;
+                                }
+                                else
+                                {
+                                    CellEjemploCat = new PdfPCell(new Phrase("", normal));
+                                    campoEjemplo = false;
+                                }
+                                
                             }
 
 
                             CellEjemploCat.Border = Rectangle.NO_BORDER;
                             CellEjemploCat.Colspan = 3;
-                            table3.AddCell(CellEjemploCat);
+                            if (campoEjemplo)
+                            {
+                                table3.AddCell(CellEjemploCat);    
+                            }
+                            
                     }
 
-                    table3.SpacingBefore = 10f;
-                    table3.SpacingAfter = 10f;
+                   table3.SpacingBefore = 5f;
+                   table3.SpacingAfter = 5f;
 
                     doc.Add(table3);
 
@@ -984,8 +1001,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         CellNombSubcAtegoria.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
                         CellNombSubcAtegoria.Colspan = 3;
                         CellNombSubcAtegoria.Border = Rectangle.NO_BORDER;
-                        table4.SpacingBefore = 10f;
-                        table4.SpacingAfter = 10f;
+                        table4.SpacingBefore = 5f;
+                        table4.SpacingAfter = 5f;
                         table4.AddCell(CellNombSubcAtegoria);
                         doc.Add(table4);
 
@@ -1007,11 +1024,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             float[] ancho5 = new float[] { 10.0f, 80.0f, 10.0f };
                             table5.SetWidths(ancho5);
 
-                            PdfPCell CellSpace5 = new PdfPCell(new Phrase("espacioBlanco", estiloBlanco));
-                            CellSpace5.HorizontalAlignment = Element.ALIGN_LEFT;
-                            CellSpace5.Colspan = 3;
-                            CellSpace5.Border = Rectangle.NO_BORDER;
-                            table5.AddCell(CellSpace5);
+                            
 
 
                             PdfPCell CellPregunta = new PdfPCell(new Phrase("PREGUNTA NRO. "+cont, negrita));
@@ -1019,8 +1032,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             CellPregunta.Border = Rectangle.NO_BORDER;
                             CellPregunta.SpaceCharRatio = 10f; //espacio de celda
                             table5.AddCell(CellPregunta);
-                            
 
+                            //PdfPCell CellSpace5 = new PdfPCell(new Phrase("espacioBlanco", estiloBlanco));
+                            //CellSpace5.HorizontalAlignment = Element.ALIGN_LEFT;
+                            //CellSpace5.Colspan = 3;
+                            //CellSpace5.Border = Rectangle.NO_BORDER;
+                            //table5.AddCell(CellSpace5);
                             // si el codMod es 02 muestra imagen si no muestra texto
 
                             PdfPCell CellPreguntaCriterio = null;
@@ -1141,8 +1158,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                             CellOpcionAlternativa.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
                                             table6.AddCell(CellOpcionAlternativa);
 
-                                            table6.SpacingBefore = 2f;
-                                            table6.SpacingAfter = 2f;
+                                            //table6.SpacingBefore = 2f;
+                                            //table6.SpacingAfter = 2f;
                                             doc.Add(table6);
 
                                             nContAltenativa = nContAltenativa + 1;

@@ -24,6 +24,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using CrystalDecisions.CrystalReports.Engine;
     using CrystalDecisions.CrystalReports;
     using CrystalDecisions.Web;
+
+    using iTextSharp;
+    using iTextSharp.text;
+    using iTextSharp.text.pdf;
     
     public class RankingController : BaseController
     {
@@ -857,43 +861,222 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
              try
              {
-                 objPostulante = new Postulante();
-                 objPostulante.IdePostulante = Convert.ToInt32(id);
+                 CvPostulante objCvPostulante;
+
+                     objCvPostulante = new CvPostulante();
+                 objCvPostulante.IdCvPostulante = Convert.ToInt32(id);
+                 List<CvPostulante> listaCvPostulante = new List<CvPostulante>();
+
+                 listaCvPostulante = _postulanteRepository.ListaCvPostulante(objCvPostulante);
+
+                 objCvPostulante = new CvPostulante();
+
+                 objCvPostulante = listaCvPostulante[0];
+
+                 Font normal = new Font(FontFactory.GetFont("Arial", 10, Font.NORMAL));
+                 BaseFont bfTimes = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+                 Font estiloBlanco = new Font(bfTimes, 10, Font.ITALIC, BaseColor.WHITE);
+                 Font negrita = new Font(FontFactory.GetFont("Arial", 10, Font.BOLD));
+                 Font subRayado = new Font(FontFactory.GetFont("Arial", 10, Font.UNDERLINE));
+
+                 using (MemoryStream ms = new MemoryStream())
+                 {
+                     Document doc = new Document(PageSize.A4, 30, 30, 30, 30);
+                     PdfWriter writer = PdfWriter.GetInstance(doc, ms);
+                     //se abre el documento antes de empezar
+                     doc.Open();
+                     PdfPTable tableCabecera = new PdfPTable(2);
+                     float[] anchosCabecera = new float[] { 70.0f, 30.0f };
+                     tableCabecera.SetWidths(anchosCabecera);
+
+                     PdfPTable tableCabTexto = new PdfPTable(5);
+                     float[] anchosCabTexto = new float[] { 40.0f, 30.0f, 20.0f, 5.0f, 5.0f };
+                     tableCabTexto.SetWidths(anchosCabTexto);
 
 
-                 DataTable dtPostulante = _postulanteRepository.getDataCvPostulante(objPostulante);
-                 DataTable dtNivelAcademico = _postulanteRepository.getDataCvNivelAcademico(objPostulante);
-                 DataTable dtExperiencias = _postulanteRepository.getDataCvExperiencias(objPostulante);
-                 DataTable dtConOfimatica = _postulanteRepository.getDataCvConOfimatica(objPostulante);
-                 DataTable dtConIdiomas = _postulanteRepository.getDataCvConIdiomas(objPostulante);
-                 DataTable dtConOtros = _postulanteRepository.getDataCvConOtros(objPostulante);
-                 DataTable dtParientes = _postulanteRepository.getDataCvParientes(objPostulante);
-                 DataTable dtCvDiscapacidad = _postulanteRepository.getDataCvDiscapacidad(objPostulante);
+                     string nombreCompleto = (objCvPostulante.Nombrecompleto == null ? "" : objCvPostulante.Nombrecompleto);
+                     string desEdad = (objCvPostulante.Desedad == null ? "" : objCvPostulante.Desedad);
+                     string edad = (objCvPostulante.Edad == null ? "" : objCvPostulante.Edad);
+                     string desEstadoCivil = (objCvPostulante.Desestadocivil == null ? "" : objCvPostulante.Desestadocivil);
+                     string desdir = (objCvPostulante.Desdir == null ? "" : objCvPostulante.Desdir);
+                     string fonoFijo = (objCvPostulante.Telfijo == null ? "" : objCvPostulante.Telfijo);
+                     string fonoMovil = (objCvPostulante.Telmovil == null ? "" : objCvPostulante.Telmovil);
+                     string fonoConcatenado = "";
+                     
+                     if (fonoFijo != "" && fonoMovil!="")
+                     {
+                         fonoConcatenado = fonoFijo + " / " + fonoMovil;
+                     }
+
+                     if (fonoFijo != "" && fonoMovil=="")
+                     {
+                         fonoConcatenado = fonoFijo;
+                     }
+
+                     if (fonoMovil != "" && fonoFijo == "")
+                     {
+                         fonoConcatenado = fonoMovil;
+                     }
+
+                     string correo = (objCvPostulante.Correo == null ? "" : objCvPostulante.Correo);
+                     string observacion = (objCvPostulante.Observacion == null ? "" : objCvPostulante.Observacion);
+
+                     // celda 01 fila 01
+                     PdfPCell CellNombreCompleto = new PdfPCell(new Phrase(nombreCompleto, negrita));
+                     CellNombreCompleto.HorizontalAlignment = Element.ALIGN_LEFT;
+                     CellNombreCompleto.Border = Rectangle.NO_BORDER;
+                     CellNombreCompleto.Colspan = 5;
+                     CellNombreCompleto.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellNombreCompleto);
+                    
+                     // celda 01 fila 01
+                     PdfPCell CellDesEdad = new PdfPCell(new Phrase(desEdad, normal));
+                     CellDesEdad.HorizontalAlignment = Element.ALIGN_LEFT;
+                     CellDesEdad.Border = Rectangle.NO_BORDER;
+                     
+                     tableCabTexto.AddCell(CellDesEdad);
 
 
-                 string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
-                 string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
-                 string nomReporte = "CvPostulanteReport.rpt";
-                 fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+                     // celda 01 fila 02
+                     PdfPCell CellEdad = new PdfPCell(new Phrase(edad +" años", normal));
+                     CellEdad.HorizontalAlignment = Element.ALIGN_LEFT;
+                     CellEdad.Border = Rectangle.NO_BORDER;
+                     tableCabTexto.AddCell(CellEdad);
+                     // celda 01 fila 03
+                     PdfPCell CellEstadoCivil = new PdfPCell(new Phrase(desEstadoCivil, normal));
+                     CellEstadoCivil.HorizontalAlignment = Element.ALIGN_LEFT;
+                     CellEstadoCivil.Border = Rectangle.NO_BORDER;
+                     CellEstadoCivil.Colspan = 3;
+                     CellEstadoCivil.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellEstadoCivil);
 
-                 rep.Load(fullPath);
-                 rep.Database.Tables["DtPostulante"].SetDataSource(dtPostulante);
-                 rep.Database.Tables["DtNivelAcademico"].SetDataSource(dtNivelAcademico);
-                 rep.Database.Tables["DtExperiencia"].SetDataSource(dtExperiencias);
-                 rep.Database.Tables["DtConOfimatica"].SetDataSource(dtConOfimatica);
-                 rep.Database.Tables["DtConIdioma"].SetDataSource(dtConIdiomas);
-                 rep.Database.Tables["DtConOtro"].SetDataSource(dtConOtros);
-                 rep.Database.Tables["DtPariente"].SetDataSource(dtParientes);
-                 rep.Database.Tables["DtDiscapacidad"].SetDataSource(dtCvDiscapacidad);
+                     PdfPCell CellDireccion = new PdfPCell(new Phrase(desdir, normal));
+                     CellDireccion.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                     CellDireccion.Border = Rectangle.NO_BORDER;
+                     CellDireccion.Colspan = 5;
+                     CellDireccion.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellDireccion);
 
-                 mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+                     PdfPCell CellFono = new PdfPCell(new Phrase(fonoConcatenado, normal));
+                     CellFono.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                     CellFono.Border = Rectangle.NO_BORDER;
+                     CellFono.Colspan = 5;
+                     CellFono.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellFono);
+
+                     PdfPCell CellaCorreo = new PdfPCell(new Phrase(correo, normal));
+                     CellaCorreo.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                     CellaCorreo.Border = Rectangle.NO_BORDER;
+                     CellaCorreo.Colspan = 5;
+                     CellaCorreo.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellaCorreo);
+
+                     PdfPCell CellObserv = new PdfPCell(new Phrase(observacion, normal));
+                     CellObserv.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                     CellObserv.Border = Rectangle.NO_BORDER;
+                     CellObserv.Colspan = 5;
+                     CellObserv.SpaceCharRatio = 4f;
+                     tableCabTexto.AddCell(CellObserv);
+
+
+
+                     PdfPTable tableCabImage = new PdfPTable(1);
+                     float[] anchosCabImage= new float[] { 90.0f};
+                     tableCabImage.SetWidths(anchosCabImage);
+
+                     PdfPCell CellFotoPostulante = null;
+
+                     if (objCvPostulante.Fotopostulante != null)
+                     {
+                         Image FotoPostulante = Image.GetInstance(objCvPostulante.Fotopostulante);
+                         FotoPostulante.ScaleToFit(130f, 130f);
+
+                         CellFotoPostulante = new PdfPCell(FotoPostulante);
+                         CellFotoPostulante.HorizontalAlignment = Element.ALIGN_LEFT;
+                         CellFotoPostulante.Border = Rectangle.NO_BORDER;
+                         // se le indica que ocupe las 3 columnas
+
+                     }
+                     else
+                     {
+                         CellFotoPostulante = new PdfPCell(new Phrase("", normal));
+
+                     }
+
+                     CellFotoPostulante.Border = Rectangle.NO_BORDER;
+
+                     tableCabImage.AddCell(CellFotoPostulante);
+                     
+                     PdfPCell CellCabTexto = new PdfPCell(tableCabTexto);
+                     PdfPCell CellCabImage = new PdfPCell(tableCabImage);
+
+                     CellCabTexto.Border = Rectangle.NO_BORDER;
+                     CellCabImage.Border = Rectangle.NO_BORDER;
+
+                     tableCabecera.AddCell(CellCabTexto);
+                     tableCabecera.AddCell(CellCabImage);
+
+                     tableCabecera.SpacingBefore = 20f;
+                     tableCabecera.SpacingAfter = 30f;
+
+                     doc.Add(tableCabecera);
+
+
+                     PdfPTable tableExperiencia = new PdfPTable(3);
+                     float[] anchosExperiencia = new float[] { 10.0f,60.0f, 30.0f };
+                     tableExperiencia.SetWidths(anchosExperiencia);
+
+                     PdfPCell CellCabExperiencia = new PdfPCell(new Phrase("Experiencia", negrita));
+                     CellCabExperiencia.HorizontalAlignment = Element.ALIGN_LEFT;
+                     CellCabExperiencia.Border = Rectangle.NO_BORDER;
+                     CellCabExperiencia.Colspan = 3;
+                     tableExperiencia.AddCell(CellCabExperiencia);
+
+                     doc.Add(tableExperiencia);
+
+
+                     //se cierra el documento pdf
+                     doc.Close();
+
+
+                     writer.Close();
+
+                     return File(ms.ToArray(), "application/pdf"); 
+
+                 }
+                 //DataTable dtNivelAcademico = _postulanteRepository.getDataCvNivelAcademico(objPostulante);
+                 //DataTable dtExperiencias = _postulanteRepository.getDataCvExperiencias(objPostulante);
+                 //DataTable dtConOfimatica = _postulanteRepository.getDataCvConOfimatica(objPostulante);
+                 //DataTable dtConIdiomas = _postulanteRepository.getDataCvConIdiomas(objPostulante);
+                 //DataTable dtConOtros = _postulanteRepository.getDataCvConOtros(objPostulante);
+                 //DataTable dtParientes = _postulanteRepository.getDataCvParientes(objPostulante);
+                 //DataTable dtCvDiscapacidad = _postulanteRepository.getDataCvDiscapacidad(objPostulante);
+
+
+                 //string applicationPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath;
+                 //string directoryPath = ConfigurationManager.AppSettings["ReportIntranetPath"];
+                 //string nomReporte = "CvPostulanteReport.rpt";
+                 //fullPath = Path.Combine(applicationPath, string.Format("{0}{1}", directoryPath, nomReporte));
+
+                 //rep.Load(fullPath);
+                 //rep.Database.Tables["DtPostulante"].SetDataSource(dtPostulante);
+                 //rep.Database.Tables["DtNivelAcademico"].SetDataSource(dtNivelAcademico);
+                 //rep.Database.Tables["DtExperiencia"].SetDataSource(dtExperiencias);
+                 //rep.Database.Tables["DtConOfimatica"].SetDataSource(dtConOfimatica);
+                 //rep.Database.Tables["DtConIdioma"].SetDataSource(dtConIdiomas);
+                 //rep.Database.Tables["DtConOtro"].SetDataSource(dtConOtros);
+                 //rep.Database.Tables["DtPariente"].SetDataSource(dtParientes);
+                 //rep.Database.Tables["DtDiscapacidad"].SetDataSource(dtCvDiscapacidad);
+
+                 //mem = (MemoryStream)rep.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
              }
              catch (Exception)
              {
                  return MensajeError();
              }
-             return File(mem, "application/pdf");
+             //return File(mem, "application/pdf");
 
          }
 
