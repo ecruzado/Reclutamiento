@@ -65,7 +65,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 IdeReclutaPersona = ideReclutamientoPersona;
                 if (IdeReclutaPersona != 0)
                 {
-                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuario.CodUsuario.Substring(0,15));
+                    var usuarioPostulante = usuario.CodUsuario.Length <= 15 ? usuario.CodUsuario : usuario.CodUsuario.Substring(0, 15);
+                    var usuarioDescPostul = Session[ConstanteSesion.UsuarioDes].ToString();
+                    usuarioDescPostul = usuarioDescPostul.Length <= 15 ? usuarioDescPostul : usuarioDescPostul.Substring(0, 15);
+                    _reclutamientoPersonaExamenRepository.obtenerEvaluacionesPostulante(usuario.IdePostulante, ideReclutamientoPersona, usuarioPostulante);
 
                     var reclutaPersona = _reclutamientoPersonaRepository.GetSingle(X => X.IdeReclutaPersona == IdeReclutaPersona);
                     reclutaPersona.EstPostulante = PostulanteEstado.EN_EVALUACION;
@@ -74,7 +77,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     int contador = _reclutamientoExamenCategoriaRepository.CountByExpress(x => x.IdeReclutaPersona == IdeReclutaPersona);
                     if (contador == 0)
                     {
-                        _reclutamientoExamenCategoriaRepository.obtenerExamenesPorCategoria(IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString().Substring(0, 15));
+                        _reclutamientoExamenCategoriaRepository.obtenerExamenesPorCategoria(IdeReclutaPersona, usuarioDescPostul);
                     }
                    
                 }

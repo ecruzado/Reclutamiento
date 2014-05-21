@@ -24,7 +24,7 @@
                .WithMessage("Ingrese la observación");
             RuleFor(x => x.Observacion)
                 .Length(1, 255)
-                .WithMessage("El número máximo de caracteres permitido paea este campo es 255");
+                .WithMessage("Máx. 255 caracteres");
 
             RuleFor(x => x.IdeDependencia)
                .NotEmpty()
@@ -52,11 +52,7 @@
 
             RuleFor(x => x.TipPuesto)
                 .NotEqual("00")
-                .WithMessage("Seleccionar una opción");
-
-           
-            
-            
+                .WithMessage("Seleccionar un tipo de puesto");
 
         }
     }

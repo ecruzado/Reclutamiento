@@ -1185,7 +1185,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.SolicitudRequerimiento = new SolReqPersonal();
 
             var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-
+            var idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             model.rolSession = rolSession;
 
 
@@ -1255,8 +1255,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
             }
-            
-            model.Cargos = new List<Cargo>(_solicitudAmpliacionPersonal.GetTipCargo(0));
+
+            model.Cargos = new List<Cargo>(_cargoRepository.listaCargosCompletos(idSede));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             //model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));

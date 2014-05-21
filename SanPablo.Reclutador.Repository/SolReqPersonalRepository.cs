@@ -87,6 +87,7 @@ namespace SanPablo.Reclutador.Repository
                  lcon.Close();
              }
          }
+        
 
         /// <summary>
         /// obtiene la lista de los cargos activos
