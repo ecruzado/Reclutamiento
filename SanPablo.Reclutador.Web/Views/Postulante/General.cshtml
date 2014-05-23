@@ -549,7 +549,7 @@
                 <table style="margin-left:120px;" >
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil</label>
+                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil<span class="text-error">*</span></label>
                         </td >
                         <td colspan="4" class="colInput">
                             @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px;height: 80px;resize:none;" , onblur="aMays(event, this)" })

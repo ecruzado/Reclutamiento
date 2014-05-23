@@ -344,7 +344,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 _cvPostulanteRepository.Remove(objCvPost);
 
                 objJson.Resultado = true;
-                objJson.Mensaje = "Se elimino el resgistro";
+                objJson.Mensaje = "Se elimino el registro";
 
             }
             else
@@ -356,6 +356,93 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             return Json(objJson);
         }
+        
+
+        /// <summary>
+        /// marca al postulante como no apto y no sera considerado 
+        /// para el mismo puesto por un periodo de 6 meses
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult PostulanteNoApto(int id, int idPostulante, int idSede)
+        {
+            JsonMessage objJson = new JsonMessage();
+            ReclutamientoPersona reclutaPersona = new ReclutamientoPersona();
+
+            try
+            {
+                if (id > 0)
+                {
+                    reclutaPersona.IdePostulante = idPostulante;
+                    reclutaPersona.IdSede = idSede;
+                    reclutaPersona.IdeReclutaPersona = id;
+                    reclutaPersona.EstPostulante = PostulanteEstado.NO_APTO;
+
+                    _postulanteRepository.UpdateEstadoPostulante(reclutaPersona);
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Registro actualizado correctamente";
+
+                }
+                else
+                {
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "No se pudo actualizar el registro";
+                }
+                return Json(objJson);
+            }
+            catch (Exception ex)
+            {
+                objJson.Mensaje = "ERROR: "+ ex;
+                objJson.Resultado = false;
+                return Json(objJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Realiza la validación del postulante que no esta como preSeleccionado en otra 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult ValidacionPreSeleccion(int id, int idPostulante, int idSede)
+        {
+            JsonMessage objJson = new JsonMessage();
+            ReclutamientoPersona reclutaPersona = new ReclutamientoPersona();
+            string indicadorPreSelec = "";
+
+            try
+            {
+                reclutaPersona.IdePostulante = idPostulante;
+                reclutaPersona.IdSede = idSede;
+
+                indicadorPreSelec = _postulanteRepository.ValidaSeleccion(reclutaPersona);
+
+                if (Indicador.No.Equals(indicadorPreSelec))
+                {
+                    objJson.Resultado = true;
+                }
+                else
+                {
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "El postulante se encuentra preseleccionado en otra solicitud";
+                }
+
+
+                return Json(objJson);
+            }
+            catch (Exception ex)
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "ERROR: "+ex;
+                return Json(objJson);
+            }
+        }
+
 
 
         /// <summary>
@@ -391,7 +478,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     _postulanteRepository.UpdateEstadoPostulante(objReclutamientoPersona);
 
                     objJson.Resultado = true;
-                    objJson.Mensaje = "Se actualizo el resgistro";
+                    objJson.Mensaje = "Se actualizo el registro";
 
                 }
                 else
@@ -428,22 +515,36 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 var objCvPost = _cvPostulanteRepository.GetSingle(x => x.IdCvPostulante == id);
 
-                if (Indicador.Si.Equals(objCvPost.Citado))
+                if ((objCvPost.HoraCita != null) && (objCvPost.Fechacita != null))
                 {
-                    objCvPost.Citado = Indicador.No;
-                    _cvPostulanteRepository.Update(objCvPost);
-                    objJson.Mensaje = "Se anulo la cita";
+                    if (objCvPost.Asistio == Indicador.Si)
+                    {
+                        objJson.Resultado = false;
+                        objJson.Mensaje = "No puede desmarcar la cita, el  postulante ya asistió";
+                    }
+                    else
+                    {
+                        if (Indicador.Si.Equals(objCvPost.Citado))
+                        {
+                            objCvPost.Citado = Indicador.No;
+                            _cvPostulanteRepository.Update(objCvPost);
+                            objJson.Mensaje = "Se anuló la cita satisfactoriamente";
+                        }
+                        else
+                        {
+                            objCvPost.Citado = Indicador.Si;
+                            _cvPostulanteRepository.Update(objCvPost);
+                            objJson.Mensaje = "Se realizó la cita satisfactoriamente";
+                        }
+
+                        objJson.Resultado = true;
+                    }
                 }
                 else
                 {
-                    objCvPost.Citado = Indicador.Si;
-                    _cvPostulanteRepository.Update(objCvPost);
-                    objJson.Mensaje = "Se relizo la cita";
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "No se puede realizar la cita debido a que no se cuenta con los datos de fecha y hora de cita";
                 }
-               
-                objJson.Resultado = true;
-              
-
             }
             else
             {
@@ -470,21 +571,29 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 var objCvPost = _cvPostulanteRepository.GetSingle(x => x.IdCvPostulante == id);
 
-                if (Indicador.Si.Equals(objCvPost.Asistio))
+                if (objCvPost.Citado == Indicador.Si)
                 {
-                    objCvPost.Asistio = Indicador.No;
-                    _cvPostulanteRepository.Update(objCvPost);
-                    objJson.Mensaje = "Se anulo la asistencia";
+
+                    if (Indicador.Si.Equals(objCvPost.Asistio))
+                    {
+                        objCvPost.Asistio = Indicador.No;
+                        _cvPostulanteRepository.Update(objCvPost);
+                        objJson.Mensaje = "Se anuló la asistencia satisfactoriamente";
+                    }
+                    else
+                    {
+                        objCvPost.Asistio = Indicador.Si;
+                        _cvPostulanteRepository.Update(objCvPost);
+                        objJson.Mensaje = "Se marcó la asistencia correctamente";
+                    }
+
+                    objJson.Resultado = true;
                 }
                 else
                 {
-                    objCvPost.Asistio = Indicador.Si;
-                    _cvPostulanteRepository.Update(objCvPost);
-                    objJson.Mensaje = "Se marco la asistencia";
+                    objJson.Resultado = false;
+                    objJson.Mensaje = "No se puede marcar debido a que el postulante no fue Citado";
                 }
-
-                objJson.Resultado = true;
-
 
             }
             else
@@ -567,13 +676,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     objReclutamientoPer.IndContactado = Indicador.No;
                     _reclutamientoPersonaRepository.Update(objReclutamientoPer);
-                    objJson.Mensaje = "Se actualizo el contacto";
+                    objJson.Mensaje = "Se anulo la marca en contactado";
                 }
                 else
                 {
                     objReclutamientoPer.IndContactado = Indicador.Si;
                     _reclutamientoPersonaRepository.Update(objReclutamientoPer);
-                    objJson.Mensaje = "Se actualizo el contacto";
+                    objJson.Mensaje = "Postulante contactado";
                 }
 
                 objJson.Resultado = true;
@@ -830,7 +939,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 item.EstPostulante==null?"":item.EstPostulante.ToString(),
                                 item.DesEstadoPostulante==null?"":item.DesEstadoPostulante,
                                 item.EvalPostulante==null?"":item.EvalPostulante,
-                                item.PtoTotal==null?"":item.PtoTotal.ToString(),
+                                (item.PtoTotal==-1)||(item.PtoTotal==null)?"0":item.PtoTotal.ToString(),
                                 item.IndAprobacion==null?"":item.IndAprobacion
                                 
                             }

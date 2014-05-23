@@ -36,7 +36,7 @@
         $('#btnAnterior').click(function () {
 
             var idSol = $("#IdeSolReqPersonal").val();
-            var tipSol = $("#Tipsol").val();
+            var tipSol = $("#tipsol").val();
             var pagina = $("#pagina").val();
             var indPagina = '@Indicador.Si';
 
@@ -98,16 +98,16 @@
                      { name: 'IdeEvaluacion', index: 'IdeEvaluacion', align: 'left', editable: false, sortable: false, hidden: true },
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', formatter: DescripcionFormatter },
                      { name: 'TipoExamen', index: 'TipoExamen', align: 'left', editable: false, sortable: false, hidden: true },
-                     { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                     { name: 'Fecha', index: 'Fecha', align: 'center', editable: false, sortable: false, width: 100 },
-                     { name: 'Hora', index: 'Hora', align: 'center', editable: false, sortable: false, width: 90 },
+                     { name: 'Tipo', index: 'Tipo', align: 'left', editable: false,width: 110, sortable: false },
+                     { name: 'Fecha', index: 'Fecha', align: 'center', editable: false, sortable: false, width: 80 },
+                     { name: 'Hora', index: 'Hora', align: 'center', editable: false, sortable: false, width: 80 },
                      { name: 'IdeUsuarioResp', index: 'IdeUsuarioResp', align: 'center', editable: false, sortable: false, hidden: true },
-                     { name: 'Responsable', index: 'Responsable', align: 'center', editable: false, sortable: false, width: 300 },
+                     { name: 'Responsable', index: 'Responsable', align: 'center', editable: false, sortable: false, width: 200 },
                      { name: 'TipoEstado', index: 'TipoEstado', align: 'center', editable: false, sortable: false, hidden:true },
-                     { name: 'Estado', index: 'Estado', align: 'center', editable: false, sortable: false, width: 130 },
+                     { name: 'Estado', index: 'Estado', align: 'center', editable: false, sortable: false, width: 110 },
                      { name: 'IndicadorExamen', index: 'IndicadorExamen', align: 'center', editable: false, sortable: false, hidden: true },
-                     { name: 'PuntajeTotal', index: 'PuntajeTotal', align: 'center', editable: false, sortable: false, width: 150 },
-                     { name: 'Notas', index: 'Notas', align: 'center', sortable: false, width: 60, formatter: NotaFormatter },
+                     { name: 'PuntajeTotal', index: 'PuntajeTotal', align: 'center', editable: false, sortable: false, width: 65 },
+                     { name: 'Notas', index: 'Notas', align: 'center', sortable: false, width: 70, formatter: NotaFormatter },
                      { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, hidden: true }
 
             ],

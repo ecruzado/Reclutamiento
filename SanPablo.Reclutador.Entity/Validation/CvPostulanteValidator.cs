@@ -28,12 +28,12 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.Telefono)
               .NotEmpty()
                .WithMessage("Ingresar telefono");
-            RuleFor(x => x.Fechacita)
-              .NotEmpty()
-               .WithMessage("Ingresar fecha de cita");
-            RuleFor(x => x.HoraCita)
-              .NotEmpty()
-               .WithMessage("Ingresar hora de cita");
+            //RuleFor(x => x.Fechacita)
+            //  .NotEmpty()
+            //   .WithMessage("Ingresar fecha de cita");
+            //RuleFor(x => x.HoraCita)
+            //  .NotEmpty()
+            //   .WithMessage("Ingresar hora de cita");
 
         }
 

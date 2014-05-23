@@ -279,7 +279,7 @@
                      if (respuesta.Resultado) {
 
                          $.unblockUI();
-                         mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
+                         mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
                          //notificacionExito();
                      }
                      else {

@@ -360,7 +360,7 @@
              function (respuesta) {
                  $.unblockUI();
                  if (respuesta.Resultado) {
-                     mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
+                     mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                  }
                  else {
                      notificacionError(respuesta.Mensaje);

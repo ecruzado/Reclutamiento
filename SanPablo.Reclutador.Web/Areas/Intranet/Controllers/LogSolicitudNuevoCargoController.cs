@@ -124,16 +124,19 @@
             {
                
                 var estadoSolicitud = solicitud.TipoEtapa;
+                string rol ="";
                 switch (estadoSolicitud)
                 {
                     case Etapa.Pendiente:
                         logSolicitud.TipoEtapa = Etapa.Validado;
                         logSolicitud.RolResponsable = Roles.Gerente_General_Adjunto;
+                        rol = "Gerente General Adjunto";
                         break;
 
                     case Etapa.Validado:
                         logSolicitud.TipoEtapa = Etapa.Aprobado;
                         logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                        rol = "Jefe Corporativo de Selección";
                         break;
 
                     case Etapa.Generacion_Perfil:
@@ -141,12 +144,14 @@
                         {
                             logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
                             logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
+                            rol="Encargado de Selección";
                             break;
                         }
                         else
                         {
                             logSolicitud.TipoEtapa = Etapa.Observado;
                             logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            rol = "Jefe Corporativo de Selección";
                             break;
                         }
                     case Etapa.Aprobacion_Perfil:
@@ -201,7 +206,11 @@
                     
                     if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, solicitud))
                     {
-                        return "Se envio la Aprobación correctamente";
+                        
+                        string menj = "El proceso de envío se realizó exitosamente";
+                               menj += Environment.NewLine;
+                               menj += "Solicitud derivada a " + rol +" "+usuario.DscNombres+" "+usuario.DscApePaterno;
+                            return menj;
                     }
                     else
                     {

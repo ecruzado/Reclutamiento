@@ -124,11 +124,13 @@
             RuleFor(x => x.TelefonoFijo)
                 .NotEmpty().When(x => x.TelefonoMovil == null)
                 .WithMessage("Ingresar un numero de contacto movil y/o fijo");
-                
 
             RuleFor(x => x.Observacion)
-                .Length(0, 255)
-                .WithMessage("Máx. 255 caracteres");
+                .NotEmpty()
+                .WithMessage("Ingresar descripción de Perfil");
+            RuleFor(x => x.Observacion)
+                .Length(0, 1000)
+                .WithMessage("Máx. 1000 caracteres");
 
 
             RuleFor(x => x.ReferenciaDireccion)

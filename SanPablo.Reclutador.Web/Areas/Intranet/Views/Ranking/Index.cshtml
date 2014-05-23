@@ -24,17 +24,32 @@
              if (idSol != null && idSol > 0) {
                  mostrarPopupCvPost(idSol, 0, tipSol);
             } else {
-                MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Ingrese un registro', "MENSAJE");
             }
 
          });
 
 
-         $('#btnAprobarPost').click(function () {
+         $('#btnNoApto').click(function () {
 
              var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
              if (selr != null && selr > 0) {
-                 $('#confirmacionAprob').dialog('open');
+                 $('#confirmacionNoApto').dialog('open');
+             } else {
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
+             }
+
+         });
+        
+
+         $('#btnAprobarPost').click(function () {
+             var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
+             var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
+             var idPostulante = rowData.IdePostulante;
+             var idSede = rowData.IdSede;
+
+             if (selr != null && selr > 0) {
+                 ValidarPostulante(selr, idPostulante, idSede);
              } else {
                  MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
@@ -54,7 +69,7 @@
                 window.location = url;
 
             } else {
-                MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione una solicitud', "MENSAJE");
         }
 
         });
@@ -67,11 +82,37 @@
         });
 
          
+         $("#spanConfirmacionNoApto").html("¿Desea descalificar al postulante?")
+         $('#confirmacionNoApto').dialog({
+             autoOpen: false,
+             modal: true,
+             resizable: false,
+             title: "CONFIRMACIÓN",
+             buttons: {
+                 "Aceptar": function () {
+                     var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
+                     var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
+                     var idPostulante = rowData.IdePostulante;
+                     var idSede = rowData.IdSede;
+
+                     if (selr != null && selr > 0) {
+                         PostulanteNoApto(selr, idPostulante, idSede);
+                     } else {
+                         MostrarMensaje('Seleccione un registro', "MENSAJE");
+                     }
+                     $(this).dialog("close");
+                 },
+                 "Cancelar": function () {
+                     $(this).dialog("close");
+                 }
+             }
+         });
 
          $("#spanConfirmacionAprob").html("¿Desea realizar la aprobación?")
          $('#confirmacionAprob').dialog({
              autoOpen: false,
              modal: true,
+             resizable: false,
              title: "CONFIRMACIÓN",
              buttons: {
                  "Aceptar": function () {
@@ -83,7 +124,7 @@
                      if (selr != null && selr > 0) {
                          AprobarPostulante(selr, idPostulante, idSede);
                      } else {
-                         MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                         MostrarMensaje('Seleccione un registro', "MENSAJE");
                      }
                      $(this).dialog("close");
                  },
@@ -98,7 +139,8 @@
          $('#confirmacionPos').dialog({
              autoOpen: false,
              modal: true,
-             title: "Sistema de Reclutamiento Y Seleccion de Personal",
+             resizable: false,
+             title: "CONFIRMACIÓN",
              buttons: {
                  "Aceptar": function () {
 
@@ -107,7 +149,7 @@
                      if (selr != null && selr > 0) {
                          EliminarPostulante(selr);
                      } else {
-                         MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                         MostrarMensaje('Seleccione un registro', "MENSAJE");
                      }
                      $(this).dialog("close");
                  },
@@ -124,7 +166,7 @@
              if (selr != null && selr > 0) {
                  $('#confirmacionPos').dialog('open');
              } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
 
          });
@@ -136,7 +178,7 @@
              if (selr != null && selr > 0) {
                  citaPostulante(selr);
              } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
 
          });
@@ -147,7 +189,7 @@
              if (selr != null && selr > 0) {
                  asistePostulante(selr);
              } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
 
          });
@@ -166,7 +208,7 @@
              if (idSol != null && idSol > 0) {
                  mostrarPopupCvPost(idSol, idpost, tipSol);
              } else {
-                 MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Ingrese un registro', "MENSAJE");
              }
 
          });
@@ -175,15 +217,32 @@
 
          $('#popupDialogCv').dialog({
              autoOpen: false,
-             width: 520,
+             width: 450,
              //height: 500,
              resizable: false,
              modal: true,
              buttons: {
                  "Grabar": function () {
                      if ($("#frmPopupCvPostulante").validate().form()) {
-                         $('#confCv').dialog('open');
-                     }
+                         //$('#confCv').dialog('open');
+                             $.ajax({
+                                 type: "POST",
+                                 data: $("#frmPopupCvPostulante").serialize(),
+                                 url: '@Url.Action("SetCvPostulante", "Ranking", new { area = "Intranet"})',
+                            traditional: true,
+                            success: function (data) {
+                                if (data.Resultado) {
+                                   // $('#confCv').dialog("close");
+                                    $('#popupDialogCv').dialog("close");
+                                    $('#grdListCvPostulante').trigger('reloadGrid');
+                                    //MostrarMensaje(data.Mensaje, "MENSAJE");
+                                } else {
+                                    MostrarMensaje(data.Mensaje, "MENSAJE");
+                                }
+
+                            }
+                        });
+                    }
                  },
                  "Cancelar": function () {
                      $(this).dialog("close");
@@ -192,7 +251,7 @@
          });
 
 
-            $("#spanConfCv").html("¿Desea guardar los cambios?")
+            @*$("#spanConfCv").html("¿Desea guardar los cambios?")
             $('#confCv').dialog({
             autoOpen: false,
             modal: true,
@@ -211,9 +270,9 @@
                             $('#popupDialogCv').dialog("close");
                             $('#grdListCvPostulante').trigger('reloadGrid');
                             
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "MENSAJE");
                         } else {
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "MENSAJE");
                         }
 
                     }
@@ -224,7 +283,7 @@
             $(this).dialog("close");
             }
             }
-            });
+            });*@
 
        
             jQuery("#grdListCvPostulante").jqGrid({
@@ -269,7 +328,7 @@
                     }
                 });
             },
-                colNames: ['', '', '', 'Apellido Paterno', 'Apellido Materno', 'Nombres', 'DNI', 'Telefono', 'Fecha Cita', 'Hora Cita ', 'Citado', 'Asistio'],
+                colNames: ['', '', '', 'Apellido Paterno', 'Apellido Materno', 'Nombres', 'DNI', 'Telefono/Movil', 'Fecha Cita', 'Hora Cita ', 'Citado', 'Asistio'],
                 colModel: [
                         { name: 'IdCvPostulante', index: 'IdCvPostulante', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdSolicitud', index: 'IdSolicitud', align: 'left', editable: false, sortable: false, hidden: true },
@@ -446,9 +505,9 @@
                 }*@
                         if (data.Resultado) {
                             $('#grdListCvPostulante').trigger('reloadGrid');
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "INFORMATIVO");
                         } else {
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "MENSAJE");
                         }
                     }
             });
@@ -472,9 +531,9 @@
                 }*@
                     if (data.Resultado) {
                         $('#grdListCvPostulante').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
                     }
                 }
             });
@@ -482,6 +541,56 @@
         }
 
         
+        function PostulanteNoApto(selr, idPostulante, idSede) {
+
+            $.ajax({
+                data: {
+                    id: selr,
+                    idPostulante: idPostulante,
+                    idSede: idSede
+                },
+                type: "POST",
+                url: '@Url.Action("PostulanteNoApto", "Ranking")',
+                traditional: true,
+                success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                }
+                    if (data.Resultado) {
+                        $('#grdListRankingPost').trigger('reloadGrid');
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
+                    } else {
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
+                    }
+                }
+            });
+
+    }
+
+        function ValidarPostulante(selr, idPostulante, idSede) {
+
+            $.ajax({
+                data: {
+                    id: selr,
+                    idPostulante: idPostulante,
+                    idSede: idSede
+                },
+                type: "POST",
+                url: '@Url.Action("ValidacionPreSeleccion", "Ranking")',
+                traditional: true,
+                success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
+                    if (data.Resultado) {
+                        $('#confirmacionAprob').dialog('open');
+                    } else {
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
+                    }
+                }
+            });
+
+         }
 
         function AprobarPostulante(selr, idPostulante,idSede) {
 
@@ -500,9 +609,9 @@
                 }
                         if (data.Resultado) {
                             $('#grdListRankingPost').trigger('reloadGrid');
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "INFORMATIVO");
                         } else {
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "MENSAJE");
                         }
                     }
             });
@@ -527,9 +636,9 @@
                 }
                     if (data.Resultado) {
                         $('#grdListCvPostulante').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
                     }
             }
         });
@@ -759,21 +868,21 @@
                  <div class="form-actions">
                      @if (TipoSolicitud.Remplazo.Equals(Model.pagina))
                      {
-                       <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>         
+                       <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>         
                      }
                 
                      @if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
                      {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                       <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>
                      }
 
                       @if (TipoSolicitud.Nuevo.Equals(Model.pagina))
                       {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                       <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>
                       }
                      @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                      {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>   
+                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>   
                      }
                      
                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
@@ -784,6 +893,7 @@
                 {
                     if (Visualicion.SI.Equals(Model.btnAprobado))
                     {
+                      <a class="btn btn-info" id="btnNoApto"><i class="icon-edit icon-white"></i> No Apto</a>     
                       <a class="btn btn-info" id="btnAprobarPost"><i class="icon-edit icon-white"></i> CV-Aprobado</a>     
                     }
 
@@ -799,7 +909,8 @@
     </div>
 </div>
 
-<div id="popupDialogCv" title="Postulante CV"></div>
+<div id="popupDialogCv" title="Postulantes Externos"></div>
 <div id="confCv"><span id="spanConfCv"></span></div>
 <div id="confirmacionPos"><span id="spanConfirmacionPos"></span></div>
 <div id="confirmacionAprob"><span id="spanConfirmacionAprob"></span></div>
+<div id="confirmacionNoApto"><span id="spanConfirmacionNoApto"></span></div>

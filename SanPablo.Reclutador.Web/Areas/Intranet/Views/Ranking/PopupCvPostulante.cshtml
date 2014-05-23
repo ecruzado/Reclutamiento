@@ -112,7 +112,7 @@
         </tr>    
          <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" >Telefono<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Telefono/Movil<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
                   @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="10",onkeypress="return Funciones.isNumberKey(event)" })                      
@@ -129,7 +129,7 @@
             <td class="colInput;input-xxlarge">
                  @* @Html.EditorFor(model => model.CvPostulanteEx.Fechacita, new { @class = "textoFormulario" ,  maxlength="15", placeholder="Fecha cita"})                            *@
 
-                <input class="input-small" data-val="true"  data-val-required="Ingresar fecha de cita" id="CvPostulanteEx_Fechacita" name="CvPostulanteEx.Fechacita" value="@String.Format("{0:dd/MM/yyyy}", @Model.CvPostulanteEx.Fechacita)" /> 
+                <input class="input-small" data-val="true"  @*data-val-required="Ingresar fecha de cita" *@id="CvPostulanteEx_Fechacita" name="CvPostulanteEx.Fechacita" value="@String.Format("{0:dd/MM/yyyy}", @Model.CvPostulanteEx.Fechacita)" /> 
                 
                 <div class="tex-error" style="font-size:12px;color:red">    
                     @Html.ValidationMessageFor(model => model.CvPostulanteEx.Fechacita)
@@ -144,9 +144,8 @@
             <td class="colInput;input-xxlarge">
                 @*  @Html.EditorFor(model => model.CvPostulanteEx.HoraCita,new { @class = "textoFormulario"})*@
                 
-                <input class="input-small" data-val="true" data-val-required="Ingresar hora de cita" id="CvPostulanteEx_HoraCita" name="CvPostulanteEx.HoraCita" value="@String.Format("{0:hh:mm tt}", @Model.CvPostulanteEx.HoraCita)"  >
-
-              
+                <input class="input-small" data-val="true" @*data-val-required="Ingresar hora de cita"*@ id="CvPostulanteEx_HoraCita" name="CvPostulanteEx.HoraCita" value="@String.Format("{0:hh:mm tt}", @Model.CvPostulanteEx.HoraCita)"  >
+                
                 <div class="tex-error" style="font-size:12px;color:red">    
                     @Html.ValidationMessageFor(model => model.CvPostulanteEx.HoraCita)
                 </div>

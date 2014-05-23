@@ -183,12 +183,12 @@
                       { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
                       { name: 'IdeSol', index: 'IdeSol', align: 'center', editable: false, sortable: false, hidden: true },
-                      { name: 'IdSede', index: 'IdSede', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
+                      { name: 'IdSede', index: 'IdSede', align: 'center', editable: false, sortable: false, width: 200, hidden: true },
                       { name: 'IdeCargo', index: 'IdeCargo', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
-                      { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
-                      { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 300 },
-                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 150 },
-                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 200 },
+                      { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 200 },
+                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 100 },
+                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 100 },
                       { name: 'IndicadorContactado', index: 'IndicadorContactado', align: 'center', sortable: false, width: 100, edittype: 'checkbox', formatter: "checkbox", formatoptions: { disabled: true } },
 
                       
@@ -197,7 +197,7 @@
 
                       { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
                       { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
-                      { name: 'EvalPostulante', index: 'EvalPostulante', align: 'center', sortable: false, width: 200 },
+                      { name: 'EvalPostulante', index: 'EvalPostulante', align: 'center', sortable: false, width: 100 },
                       { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
                       { name: 'IndAprobacion', index: 'IndAprobacion', align: 'center', sortable: false, hidden:true }
 
@@ -334,9 +334,9 @@
                 }
                     if (data.Resultado) {
                         $('#grdListEvaluacion').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
                     }
                 }
             });
@@ -478,34 +478,39 @@
             
             <div class="form-actions">
                 
-                @if (Indicador.Si.Equals(Model.indPagina))
+               @* @if (Indicador.Si.Equals(Model.indPagina))
                 {
-                <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                     <span></span>   
                 
                 }
                 else
                 {
-                    if (TipoSolicitud.Remplazo.Equals(Model.pagina))
+                   *@
+                    
+                    @if (TipoSolicitud.Remplazo.Equals(Model.pagina))
                     {
-                       <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>         
+                       <a class="btn" href="@Url.Action("ListaReemplazo", "SolicitudCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>         
                     }
 
-                    if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
+                    @if (TipoSolicitud.Ampliacion.Equals(Model.pagina))
                     {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                       <a class="btn" href="@Url.Action("Index", "SolicitudAmpliacionCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>
                     }
 
-                    if (TipoSolicitud.Nuevo.Equals(Model.pagina))
+                    @if (TipoSolicitud.Nuevo.Equals(Model.pagina))
                     {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                       <a class="btn" href="@Url.Action("Index", "SolicitudNuevoCargo")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>
                     }
-                    if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                    @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                     {
-                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                       <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Ir a listado</a>
                     }
 
-                }
-                
+                @*}*@
+
+                <a class="btn" id="btnAnteriorRanking"><i class="icon-arrow-left icon-cog"></i> Ir a Ranking</a> 
+
+
                 @if (Visualicion.SI.Equals(Model.btnEvaluaciones))
                 {
                   <a class="btn btn-info" id="btnEvaluaciones"><i class="icon-align-center icon-white"></i> Evaluaciones</a>
@@ -537,7 +542,7 @@
 
                     @if (Visualicion.SI.Equals(Model.btnContratar))
                     {
-                      <a class="btn btn-info" id="btnContrata"><i class="icon-edit icon-white"></i> Contratar</a>    
+                      <a class="btn btn-info" id="btnContrata"><i class="icon-arrow-right icon-white"></i> Post. a Contratar</a>    
                     }
                     
                @* }*@

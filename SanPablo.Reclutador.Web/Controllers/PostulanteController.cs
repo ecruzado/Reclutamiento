@@ -234,6 +234,8 @@
                 //Guardar postulante si es nuevo
                 if (IdePostulante == 0)
                 {
+                    string perfil = model.Postulante.Observacion;
+                    model.Postulante.Observacion = perfil.Trim();
                     model.Postulante.EstadoActivo = IndicadorActivo.Activo;
                     model.Postulante.UsuarioCreacion = usuarioSession;
                     model.Postulante.FechaCreacion = FechaCreacion;
@@ -267,7 +269,8 @@
                     postulanteEdit.SegundoNombre = postulante.SegundoNombre;
                     postulanteEdit.ReferenciaDireccion = postulante.ReferenciaDireccion;
                     postulanteEdit.PrimerNombre = postulante.PrimerNombre;
-                    postulanteEdit.Observacion = postulante.Observacion;
+                    int nro = postulante.Observacion.Length;
+                    postulanteEdit.Observacion = postulante.Observacion.Trim();
                     postulanteEdit.NumeroLicencia = postulante.NumeroLicencia;
                     postulanteEdit.NumeroDocumento = postulante.NumeroDocumento;
                     postulanteEdit.NumeroDireccion = postulante.NumeroDireccion;

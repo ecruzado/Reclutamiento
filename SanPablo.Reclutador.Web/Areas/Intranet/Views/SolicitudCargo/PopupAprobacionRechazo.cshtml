@@ -54,7 +54,7 @@
                 <label style="width:130px" class="etiquetaFormulario" for="setipoInstitucion">Observación <span class="text-error">*</span></label>
             </td>
             <td>
-                @Html.TextAreaFor(model => model.LogSolReqPersonal.Observacion, new { onblur="aMays(event, this)"})
+                @Html.TextAreaFor(model => model.LogSolReqPersonal.Observacion, new { onblur="aMays(event, this)", style="resize:none;"})
                 
             </td>
         </tr>  
