@@ -25,9 +25,9 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEqual(0)
                 .WithMessage("Ingresar un responsable");
 
-            RuleFor(x => x.Observacion)
-                .NotEmpty()
-                .WithMessage("Ingresar una observacion");
+            //RuleFor(x => x.Observacion)
+            //    .NotEmpty()
+            //    .WithMessage("Ingresar una observacion");
 
 
             RuleFor(x => x.ComentarioResultado)

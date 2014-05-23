@@ -54,11 +54,11 @@
             colNames: ['', 'Ape. Paterno','Ape. Materno','Nombres','','Rol'],
             colModel: [
                     { name: 'IdUSuario', index: 'IdUSuario', align: 'left', hidden: true },
-                    { name: 'ApePaterno', index: 'ApePaterno', align: 'left',sortable: false, width: 130 },
-                    { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left',sortable: false, width: 130 },
-                    { name: 'Nombres', index: 'Nombres', align: 'center', sortable: false, width: 130 },
+                    { name: 'ApePaterno', index: 'ApePaterno', align: 'left',sortable: false, width: 150 },
+                    { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left',sortable: false, width: 150 },
+                    { name: 'Nombres', index: 'Nombres', align: 'center', sortable: false, width: 150 },
                     { name: 'idRol', index: 'idRol', align: 'center', sortable: false, hidden: true },
-                    { name: 'Rol', index: 'Rol', align: 'center', sortable: false, width: 130 }
+                    { name: 'Rol', index: 'Rol', align: 'center', sortable: false, width: 200 }
 
             ],
             pager: jQuery('#grdPagerUsuario'),
@@ -69,7 +69,8 @@
             sortname: 'DscApePaterno',
             sortorder: 'desc',
             viewrecords: true,
-            height: 340,
+            width:680,
+            height: 300,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
@@ -98,6 +99,13 @@
                  @Html.TextBoxFor(model => model.Usuario.IdUsuario, new { style = "display: none;" })  
                 @Html.TextBoxFor(model => model.Usuario.DscNombres, new { @class = "textoFormulario" , maxlength="100", @onblur = "aMays(event, this)" })                      
             </td>
+            <td style="width:20px">&nbsp;</td>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" >Apellido Materno</label>
+            </td>
+            <td class="colInput;input-xxlarge">
+                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" , @onblur = "aMays(event, this)"})                      
+            </td>
         </tr>
         <tr >
             <td class="colEtiqueta">
@@ -106,23 +114,15 @@
             <td class="colInput;input-xxlarge">
                    @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100", @onblur = "aMays(event, this)" })                      
             </td>
-        </tr> 
-        <tr >
-            <td class="colEtiqueta">
-                <label class="etiquetaFormulario" >Apellido Materno</label>
-            </td>
-            <td class="colInput;input-xxlarge">
-                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" , @onblur = "aMays(event, this)"})                      
-            </td>
-        </tr> 
-         <tr >
-            <td class="colEtiqueta">
+            <td style="width:20px">&nbsp;</td>
+             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" >Rol</label>
             </td>
             <td class="colInput;input-xxlarge">
                    @Html.DropDownListFor(model => model.Usuario.IdRol, new SelectList(Model.Roles, "IdRol" , "DscRol" , Model.Usuario.IdRol))                      
             </td>
         </tr> 
+       
     </table>
      
       <div class="form-actions">

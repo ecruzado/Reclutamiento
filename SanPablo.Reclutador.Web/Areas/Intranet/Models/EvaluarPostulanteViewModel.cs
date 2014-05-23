@@ -36,6 +36,8 @@
 
         public DateTime HoraFin { get; set; }
 
+        public int idReclutaPersoExamenCat { get; set; }
+
 
     }
 }

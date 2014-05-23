@@ -228,6 +228,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         //    return (ActionResult)this.View("InstruccionesExamen");
         //}
 
+
+
+
         [ValidarSesion]
         public ActionResult Examen(string id)
         {
@@ -260,6 +263,58 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
             return (ActionResult)this.View("Examen",modelExamen);
+        }
+
+        [ValidarSesion]
+        [HttpPost]
+        public ActionResult preguntasSinContestar()
+        {
+            JsonMessage objJson = new JsonMessage();
+            objJson.Mensaje = "Sesion expirada";
+            objJson.Resultado = false;
+            //contra las preguntas no contestadas
+            int nroPreguntas = 0;
+            for (int i = 0; i <= ListaCriterioEval.criterios.Count - 1; i++)
+            {
+                if (ListaCriterioEval.criterios[i].IndRespuesta == Indicador.No)
+                {
+                    nroPreguntas = nroPreguntas + 1;
+                }
+
+            }
+            if (nroPreguntas > 0)
+            {
+                objJson.Mensaje = "Tiene " + nroPreguntas + " preguntas no contestadas. \r\n ¿Esta seguro de terminar el examen?.";
+                
+            }
+            objJson.IdDato = nroPreguntas;
+            return Json(objJson);
+        }
+
+        [ValidarSesion]
+        [HttpPost]
+        public ActionResult verificarInicio()
+        {
+            //id = IdeReclutamientoPersonaExamenCategoria
+            JsonMessage objJson = new JsonMessage();
+            objJson.Mensaje = "Sesion expirada";
+            objJson.Resultado = false;
+            if ((IdeReclutaPersona != 0)&&(IdeReclutamientoExamenCategoria!=0))
+            {
+                var reclutaPersonaExamenCat = _reclutamientoExamenCategoriaRepository.GetSingle(x => x.IdeReclutaPersona == IdeReclutaPersona 
+                    && x.IdeReclutamientoPersonaExamenCategoria == IdeReclutamientoExamenCategoria);
+
+                if (reclutaPersonaExamenCat.Estado == EstadoEvaluacion.Pendiente)
+                {
+                    objJson.Resultado = true;
+                }
+                else
+                {
+                    objJson.Mensaje = "No puede volver a rendir una evaluación";
+                    objJson.Resultado = false;
+                }
+            }
+            return Json(objJson);
         }
 
 
@@ -342,11 +397,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var modelExamen = inicializarExamen();
             ModelState.Clear();
             cargarCriterio(nroPregunta, modelExamen);
-            
-            modelExamen.Accion = Accion.Siguiente;
+
+            if (modelExamen.nroPregunta < ListaCriterioEval.criterios.Count)
+            {
+                modelExamen.Accion = Accion.Siguiente;
+            }
+            else
+            {
+                modelExamen.Accion = Accion.Terminar;
+            }
             return View("Examen", modelExamen);
         }
-
 
         [HttpPost]
         public ActionResult guardarPregunta(EvaluarPostulanteViewModel model)
@@ -399,7 +460,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if ((nroPregAnterior == nroPregActual)||(nroPregAnterior == -1))
             {
-                objJson.Mensaje = "No existe pregunta anterior no contestada";
+                objJson.Mensaje = "No se tiene ninguna pregunta anterior no contestada";
                 objJson.Resultado = false;
             }
             else
@@ -418,29 +479,49 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objJson.Resultado = false;
             try
             {
-                //guardar la ultima respuesta
-                ReclutamientoPersonaCriterio reclutamientoCriterio;
-                if (model.Alternativa != null)
+                ReclutamientoPersonaExamenCategoria reclutaPersExaCat = new ReclutamientoPersonaExamenCategoria();
+                if(IdeReclutamientoExamenCategoria !=0)
                 {
-                    guardarRespuesta(model);
+                    reclutaPersExaCat = _reclutamientoExamenCategoriaRepository.GetSingle(x => x.IdeReclutamientoPersonaExamenCategoria == IdeReclutamientoExamenCategoria);
                 }
-                for (int i = 0; i <= ListaCriterioEval.criterios.Count - 1; i++)
+                if (reclutaPersExaCat.Estado == EstadoEvaluacion.Evaluado)
                 {
-                    if (ListaCriterioEval.criterios[i].IndRespuesta == Indicador.No)
+                    //guardar la ultima respuesta
+                    ReclutamientoPersonaCriterio reclutamientoCriterio;
+                    string usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                    if (usuario.Length > 15)
                     {
-                        //guardar
-                        reclutamientoCriterio = new ReclutamientoPersonaCriterio();
-                        reclutamientoCriterio.IdeReclutaPersona =  IdeReclutaPersona;
-                        reclutamientoCriterio.IdeCriterioXSubcategoria = ListaCriterioEval.criterios[i].IdeCriterioPorSubcategoria;
-                        reclutamientoCriterio.IdeReclutamientoExamenCategoria = IdeReclutamientoExamenCategoria;
-                        reclutamientoCriterio.IndicadorRespuesta = Indicador.No;
-                        _reclutamientoPersonaCriterioRepository.Add(reclutamientoCriterio);
+                        usuario = usuario.Substring(0, 15);
                     }
-                   
+
+                    if (model.Alternativa != null)
+                    {
+                        guardarRespuesta(model);
+                    }
+                    for (int i = 0; i <= ListaCriterioEval.criterios.Count - 1; i++)
+                    {
+                        if (ListaCriterioEval.criterios[i].IndRespuesta == Indicador.No)
+                        {
+                            //guardar
+                            reclutamientoCriterio = new ReclutamientoPersonaCriterio();
+                            reclutamientoCriterio.IdeReclutaPersona = IdeReclutaPersona;
+                            reclutamientoCriterio.IdeCriterioXSubcategoria = ListaCriterioEval.criterios[i].IdeCriterioPorSubcategoria;
+                            reclutamientoCriterio.IdeReclutamientoExamenCategoria = IdeReclutamientoExamenCategoria;
+                            reclutamientoCriterio.IndicadorRespuesta = Indicador.No;
+                            reclutamientoCriterio.FechaCreacion = FechaCreacion;
+                            reclutamientoCriterio.UsuarioCreacion = usuario;
+                            _reclutamientoPersonaCriterioRepository.Add(reclutamientoCriterio);
+                        }
+
+                    }
+                    _reclutamientoPersonaExamenRepository.calificacionExamen(IdeReclutamientoExamenCategoria, IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString());
+                    objJson.Resultado = true;
                 }
-                _reclutamientoPersonaExamenRepository.calificacionExamen(IdeReclutamientoExamenCategoria, IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString());
-                objJson.Resultado = true;
+               
                 return Json(objJson);
+               
+                
             }
             catch (Exception ex)
             {
@@ -486,26 +567,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
-
-        public ActionResult Examen1()
-        {
-            return (ActionResult)this.View("Examen1");
-        }
-
-        public ActionResult Examen2()
-        {
-            return (ActionResult)this.View("Examen2");
-        }
-
-        public ActionResult Examen3()
-        {
-            return (ActionResult)this.View("Examen3");
-        }
-
-        public ActionResult Examen4()
-        {
-            return (ActionResult)this.View("Examen4");
-        }
 
     }
 }

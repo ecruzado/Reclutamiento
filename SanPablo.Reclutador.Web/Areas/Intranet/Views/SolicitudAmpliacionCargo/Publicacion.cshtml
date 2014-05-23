@@ -559,7 +559,7 @@
     
                 <fieldset>
                     <legend></legend>
-                    <table class="formulario-busqueda">
+                    <table style="margin-left:50px;">
 
                     <tr class="formulario-fila">
                         <td class="control-label" >Area</td>
@@ -574,13 +574,12 @@
                     </tr>
                       
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess">Vacantes</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario", disabled = "disabled" }) 
-                            </div>
+                        <td class="control-label">Vacantes</td>
+                        <td class="controles">                         
+                            @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "input-small", disabled = "disabled" }) 
                         </td>
-                        <td class="control-label" style="width:120px;margin-right: 5px">Rango Salarial</td>
+                        <td style="width:45px">&nbsp;</td>
+                        <td class="control-label">Rango Salarial</td>
                         <td class="controls">
                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled" })
                                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
@@ -595,20 +594,16 @@
                     </tr>
 
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Fecha de publicaci&oacute;n</label>
-                            <div class="controles">
-                               @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "textoFormulario", maxlength = "15", placeholder = " Inicial" })      
-                            </div>
+                        <td class="control-label" >Fecha de publicaci&oacute;n</td>
+                        <td class="controles">
+                            @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "input-small", maxlength = "15", placeholder = " Inicial" })      
                         </td>
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Fecha de expiraci&oacute;n</label>
-                            <div class="controles">
-                               @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario", maxlength = "15", placeholder = " Inicial" })      
-                            </div>
+                        <td style="width:45px">&nbsp;</td>
+                        <td class="control-label" >Fecha de expiraci&oacute;n</td>
+                        <td class="controles">
+                            @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "input-small", maxlength = "15", placeholder = " Inicial" })      
                         </td>
                     </tr>
-
 
                     </table>
 

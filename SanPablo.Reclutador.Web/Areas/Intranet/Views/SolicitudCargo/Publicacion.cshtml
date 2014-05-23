@@ -546,21 +546,17 @@
     
                 <fieldset>
                     <legend></legend>
-                    <table class="formulario-busqueda">
+                    <table style="margin-left:50px;">
 
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Area</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
+                        <td class="control-label" >Area</td>
+                        <td class="controles">                         
+                            @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                         </td>
-
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Tipo</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
+                        <td style="width:45px">&nbsp;</td>
+                        <td class="control-label" >Tipo</td>
+                        <td class="controles">                         
+                            @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                         </td>
                     </tr>
                       
@@ -574,14 +570,12 @@
                     </tr>*@
 
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="inputSuccess" style="width:133px;margin-right: 7px">Vacantes</label>
-                            <div class="controles">                         
-                              @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
+                        <td class="control-label">Vacantes</td>
+                        <td class="controles">                         
+                            @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
                         </td>
-
-                        <td class="control-label" style="width:135px;margin-right: 5px">Rango Salarial</td>
+                        <td style="width:45px">&nbsp;</td>
+                        <td class="control-label" >Rango Salarial</td>
                         <td class="controls">
                             @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
                                 <label for="TipoRangoSalarior" style="display:inline-block">Publicar</label>
@@ -628,25 +622,16 @@
                     </tr>*@
                          
                     <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="selectError" style="text-align:left;width:140px">Fecha de publicaci&oacute;n</label>
-                            <div class="controles">
-                              
-                                 <input type="text" class="input-small"  id="SolReqPersonal_FecPublicacion" name="SolReqPersonal.FecPublicacion" placeholder="Publicaci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecPublicacion)" >
-
-
-                            </div>
+                        <td class="control-label">Fecha de publicaci&oacute;n</td>
+                        <td class="controles">
+                                <input type="text" class="input-small"  id="SolReqPersonal_FecPublicacion" name="SolReqPersonal.FecPublicacion" placeholder="Publicaci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecPublicacion)" >
                         </td>
-
-                         <td class="span5">
-                            <label class="control-label" for="selectError" style="text-align:left;width:140px">Fecha de expiraci&oacute;n</label>
-                            <div class="controles">
-                               @*@Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
-
-                                <input type="text" class="input-small"  id="SolReqPersonal_FecExpiracacion" name="SolReqPersonal.FecExpiracacion" placeholder="Expiraci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecExpiracacion)" >
-
-
-                            </div>
+                        <td style="width:45px">&nbsp;</td>
+                        
+                        <td class="control-label" >Fecha de expiraci&oacute;n</td>
+                        <td class="controles">
+                            @*@Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
+                            <input type="text" class="input-small"  id="SolReqPersonal_FecExpiracacion" name="SolReqPersonal.FecExpiracacion" placeholder="Expiraci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecExpiracacion)" >
                         </td>
 
                     </tr>

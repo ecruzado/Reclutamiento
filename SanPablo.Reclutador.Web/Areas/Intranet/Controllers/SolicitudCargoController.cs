@@ -534,6 +534,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 model.Pagina = TipoSolicitud.Remplazo;
                 model.SolReqPersonal = new SolReqPersonal();
+                model.SolReqPersonal.NumVacantes = 1;
 
                 if (idRol == Roles.Gerente || idRol == Roles.Jefe)
                 {

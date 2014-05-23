@@ -38,14 +38,14 @@
             <div class="widget-title">
                 <h5>Examen</h5>
                 <div class="opciones">
-                    <a class="btn btn-info" id="btnTerminarPrueba" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                    <a class="btn btn-info" id="btnTerminarPrueba"><i class="icon-adjust icon-white"></i> Terminar</a>
                     @*<a class="btn btn-small btn-info" id="btnTerminarCabezera" href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>*@
                 </div>
             </div>
             <table>
                 <tr>
                 <td style="margin-top:5px;margin-left:10px;">
-                    <span>Pregunta </span>@Html.TextBoxFor(model => model.nroPregunta, new { @class="input-xmini"}) <span> de @Html.DisplayFor(model=>model.totalPreguntas)</span>
+                    <span>Pregunta </span>@Html.TextBoxFor(model => model.nroPregunta, new { @class="input-xmini", maxlength="3"}) <span> de @Html.DisplayFor(model=>model.totalPreguntas)</span>
                    <div style="display:inline-block">
                       <a class="btn btn-info" id="btnBuscarPregunta" style="margin:5px;display:inline-block ">Ir a</a>
                    </div>
@@ -53,22 +53,30 @@
                 <td style="margin-top:5px;margin-right:10px; ">
                    <span>Duracion </span> <h4 id="horaImprimir" style="display:inline-block" ></h4>     
                 </td>
+                <td style="float:right;margin-top:10px;margin-right:10px; width: 430px;">
+                    @Html.TextBoxFor(model => model.segundos, new { disabled = "disabled", style = "display:none;" })
+                    @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", style= "display:none;" })
+                    <span>Inicio</span> 
+                    @Html.TextBoxFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
+                    <span>Fin</span>  
+                    @Html.TextBoxFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
+                </td>
                 </tr>
                 <tr>
                     <td style="width:720px"></td>
-                    <td style="float:right;margin-top:10px;margin-right:10px;">
+                    @*<td style="float:right;margin-top:10px;margin-right:10px;">
                         @Html.TextBoxFor(model => model.segundos, new { disabled = "disabled", style = "display:none;" })
                         @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", style= "display:none;" })
                         <span>Inicio</span> 
                         @Html.TextBoxFor(model => model.Inicio, new { @class="input-mini", disabled= "disabled"}) 
                         <span>Fin</span>  
                         @Html.TextBoxFor(model => model.Fin, new {@class= "input-mini", disabled = "disabled"})
-                    </td>
+                    </td>*@
                 </tr>
             </table>
             <div style="clear:both"></div>
             <div class="grilla-opciones">
-                 <h6>@Html.DisplayFor(model=>model.SubCategoria.NOMSUBCATEGORIA)</h6>
+                 @*<h6>@Html.DisplayFor(model=>model.SubCategoria.NOMSUBCATEGORIA)</h6>*@
 
                 @Html.TextBoxFor(model => model.Criterio.IdeCriterioPorSubcategoria, new { style = "display:none;" })
                 @Html.TextBoxFor(model => model.SubCategoria.IDESUBCATEGORIA, new { style = "display:none;" })
@@ -85,6 +93,7 @@
                           
                            @Html.DisplayFor(model => model.nroPregunta) .- &nbsp;@Html.DisplayFor(model => model.Criterio.Pregunta)
                         </td>
+                         <td>&nbsp;</td>
                       }
                       else
                       {
@@ -93,19 +102,22 @@
                                 @Html.DisplayFor(model => model.nroPregunta) .- &nbsp;
                                 <img id="ImgCriterio"  height ="100" width="100" src="@Url.Action("GetImage", "Criterio", new { id = Model.Criterio.IdeCriterio })" /> 
                             </td>
+                         
                       }                     
                 </tr>
+                <tr><td>&nbsp;</td></tr>
+
                  @{ 
-                        var myList = Model.Alternativas;
+                     var myList = Model.Alternativas;
                   
                   }
                   @foreach (Alternativa Item in myList)
                   {
-                      if(Model.Criterio.TipoModo == TipoModo.Texto)
+                      if (Model.Criterio.TipoModo == TipoModo.Texto)
                       {
                     <tr>
                         <td>
-                            @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa,Item.IdeAlternativa) @Html.DisplayFor(model =>Item.NombreAlternativa)
+                            @Html.RadioButtonFor(model => model.Alternativa.IdeAlternativa, Item.IdeAlternativa) @Html.DisplayFor(model => Item.NombreAlternativa)
                         </td>
                     </tr>
                       }
@@ -119,23 +131,23 @@
                             </td>
                           </tr>
                       }
-                      
+
                   }
                   
             </tbody></table>   
             <div class="form-actions">
-                @if(Model.nroPregunta > 1)
+                @if (Model.nroPregunta > 1)
                 {
                     <a class="btn" id ="btnAnterior" onclick ="preguntaAnterior(@Model.nroPregunta)"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
                 } 
-                @if(Accion.Siguiente == Model.Accion)
+                @if (Accion.Siguiente == Model.Accion)
                 {    
                     <button type="submit" id="btnSiguiente" class="btn btn-info"><i class="icon-arrow-right icon-white"></i> Siguiente</button>
                 }
-                else
+               @* else
                 {
-                    <a class="btn btn-info" id="btnTerminar" @*href="#" onclick="cerrarPrueba();"*@><i class="icon-adjust icon-white"></i> Terminar</a>
-                }
+                    <a class="btn btn-info" id="btnTerminar" @*href="#" onclick="cerrarPrueba();"><i class="icon-adjust icon-white"></i> Terminar</a>
+                }*@
 
                 
                  
@@ -166,23 +178,41 @@
 
     $(document).ready(function () {
 
+        SanPablo.Numeros('nroPregunta');
+
         $('.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close').remove();
 
         $('#btnBuscarPregunta').click(function () {
             guardarBuscarPregunta();
             //buscarPreguntaRef();
         });
+
+
+        $('#btnTerminarPrueba').on('mousedown', stopNavigate);
+
+        $('#btnTerminarPrueba').on('mouseleave', function () {
+            $(window).on('beforeunload', function () {
+                return 'Esta seguro de terminar la prueba?';
+            });
+        });
+
         
+        $('#btnBuscarPregunta').on('mousedown', stopNavigate);
 
-        //$('#btnSiguiente').on('mousedown', stopNavigate);
+        $('#btnBuscarPregunta').on('mouseleave', function () {
+            $(window).on('beforeunload', function () {
+                return 'Esta seguro de terminar la prueba?';
+            });
+        });
 
-        //$('#btnSiguiente').on('mouseleave', function () {
-        //    $(window).on('beforeunload', function () {
-        //        return 'Esta seguro de terminar la prueba?';
-        //    });
-        //});
+       
+        $('#btnAnterior').on('mousedown', stopNavigate);
 
-
+        $('#btnAnterior').on('mouseleave', function () {
+            $(window).on('beforeunload', function () {
+                return 'Esta seguro de terminar la prueba?';
+            });
+        });
 
         $('#btnSiguiente').on('mousedown', stopNavigate);
 
@@ -192,30 +222,50 @@
                 });
             });
 
-            $(window).on('beforeunload', function () {
-                return '¿Esta seguro terminar la prueba?';
-            });
-
+        $(window).on('beforeunload', function () {
+            
             $(window).on('unload', function () {
-
-                logout();
-
+                cerrarPrueba();
             });
+            return "test";
+       });
 
-            $('#btnTerminar').click(function () { 
-                $("#spnMensaje8").html('¿Está seguro de terminar la evaluación?.');
-                $("#divMensaje8").dialog({
-                    title: 'CONFIRMACIÓN',
-                    modal: true,
-                    buttons: {
-                        "Aceptar": function () { cerrarPrueba(); $(this).dialog("close"); },
-                        "Cancelar": function () { $(this).dialog("close"); }
-                    }
-                });
+            //$(window).on('unload', function () {
+            //   // cerrarPrueba();
+
+            //});
+
+        $('#btnTerminarPrueba').click(function () {
+            verificarPreguntas();
+                
             });
-
-
     });
+
+    function verificarPreguntas()
+    {
+        $.post('@Url.Action("preguntasSinContestar", "Evaluacion")',
+             
+              function (respuesta) {
+                  if (respuesta.Resultado) {
+                      $("#spnMensaje").html(respuesta.Mensaje);
+                      $("#divMensaje").dialog({
+                          title: 'CONFIRMACIÓN',
+                          modal: true,
+                          buttons: {
+                              "Aceptar": function () { cerrarPrueba(); $(this).dialog("close"); },
+                              "Cancelar": function () { $(this).dialog("close"); }
+                          }
+                      });
+                   }
+                   else {
+
+                       MostrarMensaje(respuesta.Mensaje, "ALERTA");
+                   }
+               }
+        );
+
+        
+    }
 
     function mueveReloj() {
         momentoActual = new Date()
@@ -245,7 +295,8 @@
      
             minutes = parseInt(seconds_left / 60);
             seconds = parseInt(seconds_left % 60);
-     
+            
+
             countdown.innerHTML = hours + " : "
             + minutes + " : " + seconds ;  
             totalSegundos = totalSegundos - 1;
@@ -265,13 +316,24 @@
                   }
                    else {
                        
-                       MostrarMensaje(respuesta.Mensaje,"Sistema de reclutamiento y selección de personal");
+                       MostrarMensaje(respuesta.Mensaje,"INFORMATIVO");
                   }
                }
         );
           }
 
-
+    function MostrarMensajeSalir()
+    {
+        $("#spnMensaje").html('¿Está seguro de terminar la evaluación?.');
+        $("#divMensaje").dialog({
+            title: 'CONFIRMACIÓN',
+            modal: true,
+            buttons: {
+                "Aceptar": function () { cerrarPrueba(); $(this).dialog("close"); },
+                "Cancelar": function () { $(this).dialog("close"); }
+            }
+        });
+    }
     function cerrarPrueba()
     {
        
@@ -304,7 +366,7 @@
                       window.location = url;
                    }
                   else {
-                      MostrarMensaje(respuesta.Mensaje,"Sistema de reclutamiento y selección de personal");
+                      MostrarMensaje(respuesta.Mensaje,"INFORMATIVO");
                    }
                }
         );
