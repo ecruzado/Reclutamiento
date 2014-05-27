@@ -120,6 +120,7 @@
             fechaFin = "01/" + fechaFin;
             if ((fechaFin != null) || (fechaFin != "")) {
                 if (Date.parse(fechaInicio) > Date.parse(fechaFin)) {
+                    mensaje.innerHTML = "La fecha fin no puede ser menor a la fecha inicial.";
                     mensaje.style.display = "block";
                     $('#Experiencia_FechaFin').val("");
                 }
@@ -174,13 +175,18 @@
 
         function habilitarFecha(opcion)
         {
+            var msj = document.getElementById('msjErrorFecha');
+
             if (opcion == true) {
+                msj.style.display = "none";
                 $('#Experiencia_FechaFin').val('');
                 calcularTiempoServicio();
+                
                 $('#Experiencia_FechaFin').attr("readonly", true);
                 $('#Experiencia_TipoMotivoCese').attr("readonly", true);
             }
             else {
+                
                 $('#Experiencia_FechaFin').attr("readonly",false);
                 $('#Experiencia_TipoMotivoCese').attr("readonly",false);
             }
@@ -255,7 +261,6 @@
                     @Html.ValidationMessageFor(model => model.Experiencia.FechaFin)
                   </div>
                   <div id="msjErrorFecha" class="tex-error" style="font-size:12px;color:red;display:none;"> 
-                    La fecha fin no puede ser menor a la fecha inicial.
                   </div>
               </td>
               <td>

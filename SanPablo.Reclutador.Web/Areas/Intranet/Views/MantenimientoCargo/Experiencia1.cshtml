@@ -1,14 +1,12 @@
 ﻿@using SanPablo.Reclutador.Entity
 @model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
+
 @{
-    ViewBag.Title = "Mantenimiento Cargo";
+    ViewBag.Title = "Perfil";
     Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 
 @section ScriptsCargo{ 
-    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -41,17 +39,13 @@
                                 }
                             );
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
-                    //}
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                    }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-            },
-            open: function () {
-                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
-                $("#Experiencia_TipoExperiencia+div span").html('');
             }
         });
 
@@ -60,12 +54,11 @@
             if (ideExperiencia != null) {
                 $("#spanMensaje10").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje10").dialog({
-                    title: 'CONFIRMACIÓN',
+                    title: 'SAN PABLO',
                     modal: true,
-                    resizable : false,
                     buttons: {
                         "Eliminar": function () { eliminarExperiencia(ideExperiencia); $(this).dialog("close"); $('#grdListExperiencia').trigger('reloadGrid'); },
-                        "Cancelar": function () { $(this).dialog("close"); }
+                        "Cancel": function () { $(this).dialog("close"); }
                     }
                 });
 
@@ -74,7 +67,7 @@
             else {
                 $("#spanMensaje10").html('Seleccionar un item a eliminar');
                 $("#divMensaje10").dialog({
-                    title: 'MENSAJE',
+                    title: 'SAN PABLO',
                     modal: true,
                     buttons: {
                         "Ok": function () { $(this).dialog("close"); }
@@ -91,7 +84,7 @@
             else {
                 $("#spanMensaje10").html('Seleccionar un item a editar');
                 $("#divMensaje10").dialog({
-                    title: 'MENSAJE',
+                    title: 'SAN PABLO',
                     modal: true,
                     buttons: {
                         "Ok": function () { $(this).dialog("close"); }
@@ -122,10 +115,10 @@
             sortname: 'IdeExperienciaCargo',
             sortorder: 'desc',
             viewrecords: false,
-            //cellEdit: true,
+            cellEdit: true,
             height: 200,
             width: 898,
-            rowNum: 10,
+            rowNum: 0,
             cellsubmit: 'clientArray',
             hidegrid: false,
             postData: {
@@ -174,14 +167,14 @@
 <!--EXPERIENCIA -->
     <div class="tab-pane" id="D">
         <div class="grilla-opciones">
-            <h6>Experiencia Laboral <span class="text-error">*</span></h6>
+            <h6>Experiencia Laboral</h6>
             <div class="opciones">
-             @if (Accion.Editar == Model.Accion)
-             {
-                <a id ="btnAgregarExperiencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id ="btnEditarExperiencia" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id ="btnEliminarExperiencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+                @if (Accion.Editar == Model.Accion)
+                {
+                    <a id ="btnAgregarExperiencia" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                    <a id ="btnEditarExperiencia" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                    <a id ="btnEliminarExperiencia" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+                }
             </div>
             <div style="clear:both"></div>
         </div>

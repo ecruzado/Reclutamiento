@@ -3,8 +3,19 @@ CREATE OR REPLACE PACKAGE PR_REQUERIMIENTOS is
 
   P_ESTCAT_PENDIENTE        CONSTANT VARCHAR2(2) := '01';
   P_ESTCAT_EVALUADO         CONSTANT VARCHAR2(2) := '02';
+  P_ESTCAT_FINALIZADO       CONSTANT VARCHAR2(2) := '03';
+   
+  P_ESTEXAMEN_EVALUADO      CONSTANT VARCHAR2(2) := '03';
+  P_ESTEXAMEN_APROBADO      CONSTANT VARCHAR2(2) := '04';
+  P_ESTEXAMEN_DESAPROBADO   CONSTANT VARCHAR2(2) := '05';
+  
   P_TIPEXA_EXAMEN           CONSTANT VARCHAR2(2) := '01';
+  P_TIPEXA_ENTREVISTA       CONSTANT VARCHAR2(2) := '02';
   P_TIPEXA_EVALUACION       CONSTANT VARCHAR2(2) := '04';
+  
+  ---ETAPA DE SOLICITUDES
+  P_TIPETAPA_RECHAZADO      CONSTANT VARCHAR2(2) := '09';
+
 -----------------------------------------------------------------
 
 PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
@@ -37,6 +48,9 @@ PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARG
                           p_indArea            IN VARCHAR2,
                           p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
                           p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);                         
+                          
+PROCEDURE SP_GET_CARGOS(p_idSede   IN SEDE.IDESEDE%TYPE,
+                          p_cRetVal  OUT sys_refcursor);
                               
 PROCEDURE SP_OBTENER_ETAPA_SOLICITUD(p_ideSolCargo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
                                      p_cRetVal OUT SYS_REFCURSOR);
@@ -81,9 +95,10 @@ PROCEDURE SP_RESPONSABLE_PUBLICACION(p_idSolicitudNuevo IN SOLNUEVO_CARGO.IDESOL
                                      p_idUsuarioResp    OUT USUARIO.IDUSUARIO%TYPE,
                                      p_idRolResp        OUT ROL.IDROL%TYPE);
                                 
-PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idCargo       IN CARGO.IDECARGO%TYPE,
-                                   p_idSede         IN SEDE.IDESEDE%TYPE,
-                                   p_idUsuarioResp  OUT USUARIO.IDUSUARIO%TYPE); 
+PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                    p_idSede        IN SEDE.IDESEDE%TYPE,
+                                    p_idUsuarioResp OUT USUARIO.IDUSUARIO%TYPE,
+                                    p_idRolResp     OUT ROL.IDROL%TYPE); 
                                    
 PROCEDURE SP_OBTENER_ETAPA_SOLREQ(p_ideSolRequerimiento IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                   p_cRetVal OUT SYS_REFCURSOR);
@@ -97,7 +112,11 @@ PROCEDURE SP_INSERTAR_APROB_AMP(p_ideSolRequerimiento IN SOLREQ_PERSONAL.IDESOLR
                                 p_usuarioSuceso       IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
                                 p_ideRolSuceso        IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
                                 p_observacion         IN LOGSOLREQ_PERSONAL.OBSERVACION%TYPE,
-                                c_ideUsuarioResp      IN OUT USUARIO.IDUSUARIO%TYPE);
+                                c_ideUsuarioResp      IN USUARIO.IDUSUARIO%TYPE,
+                                c_retVal              OUT USUARIO.IDUSUARIO%TYPE);
+                                
+PROCEDURE SP_LISTACARGOS(p_idSede IN SEDE.IDESEDE%TYPE,
+                           p_cRetVal OUT SYS_REFCURSOR);
                                 
 PROCEDURE SP_LISTA_SOLGRAL(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                            p_ideSede         IN SEDE.IDESEDE%TYPE,
@@ -161,11 +180,33 @@ PROCEDURE SP_REPORTE_POSTULANTESBD(p_nombreCargo     IN CARGO.NOMCARGO%TYPE,
                                    p_departamento    IN UBIGEO.IDEUBIGEO%TYPE,                        
                                    p_provincia       IN UBIGEO.IDEUBIGEO%TYPE,
                                    p_distrito        IN UBIGEO.IDEUBIGEO%TYPE,
-                                   p_fecDesde        IN DATE,
-                                   p_fecHasta        IN DATE,
+                                   p_fecDesde        IN VARCHAR2,
+                                   p_fecHasta        IN VARCHAR2,
                                    p_edadInicio      IN NUMBER,
                                    p_edadFin         IN NUMBER,
-                                   p_cRetVal         OUT SYS_REFCURSOR);                              
+                                   p_cRetVal         OUT SYS_REFCURSOR);  
+                                   
+FUNCTION FN_TOTAL_PUNTAJE_EXAMEN(p_ideReclutaPersona IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE
+                                 )RETURN NUMBER; 
+                                  
+PROCEDURE SP_REPORTE_POST_POTENCIAL(p_ideCargo        IN CARGO.IDECARGO%TYPE,
+                                    p_areaEstudio     IN DETALLE_GENERAL.VALOR%TYPE,
+                                    p_rangoSalario    IN DETALLE_GENERAL.VALOR%TYPE,
+                                    p_ideSede         IN SEDE.IDESEDE%TYPE,                        
+                                    p_ideDependencia  IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                    p_ideDepartamento IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                    p_ideArea         IN AREA.IDEAREA%TYPE,
+                                    p_fecDesde        IN VARCHAR2,
+                                    p_fecHasta        IN VARCHAR2,
+                                    p_edadInicio      IN NUMBER,
+                                    p_edadFin         IN NUMBER,
+                                    p_cRetVal         OUT SYS_REFCURSOR);  
+                                    
+PROCEDURE SP_CARGOS_SEDE(p_ideSede IN SEDE.IDESEDE%TYPE,
+                         p_cRetVal  OUT SYS_REFCURSOR); 
+                         
+FUNCTION FN_EXISTE_RESULTADO_EXAMEN(p_ideReclutaExamen  IN RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE
+                                    ) RETURN VARCHAR;                        
 
 END PR_REQUERIMIENTOS;
 /
@@ -240,7 +281,7 @@ BEGIN
     --INSERTAR EL LOG DE SOLICITUD
     INSERT INTO LOGSOLNUEVO_CARGO
     (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
-    VALUES (IDELOGSOLREQ_PERSONAL_SQ.NEXTVAL,c_idesolCargo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
+    VALUES (IDELOGSOLNUEVOCARGO_SQ.NEXTVAL,c_idesolCargo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
    
     COMMIT;   
      
@@ -277,6 +318,7 @@ PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARG
 c_idLogSolicitud LOGSOLNUEVO_CARGO.IDELOGSOLNUEVOCARGO%TYPE;
 qWhere VARCHAR2(100);
 qQuery VARCHAR2(1000);
+c_idCargo CARGO.IDECARGO%TYPE;
 
 BEGIN   
   
@@ -289,6 +331,16 @@ BEGIN
   END IF;
     
   qQuery := 'SELECT UR.IDUSUARIO '||
+            'FROM USUARIO U,USUAROLSEDE UR, USUARIO_NIVEL UN '||
+            'WHERE UN.IDUSUARIO = UR.IDUSUARIO '||
+            'AND U.IDUSUARIO = UR.IDUSUARIO '||
+            'AND UR.IDESEDE = '||p_ideSede||' '||         
+            'AND UR.IDROL = '||p_ideRolResponsable||' '||
+             qWhere ||' '||
+            'AND UN.FLGESTADO = ''A'' '||
+            'AND ROWNUM <= 1';
+  
+/*  'SELECT UR.IDUSUARIO '||
             'FROM ROL R,USUAROLSEDE UR, USUARIO_NIVEL UN '||
             'WHERE UN.IDUSUARIO = UR.IDUSUARIO '|| 
             'AND UR.IDROL = R.IDROL '||
@@ -296,7 +348,7 @@ BEGIN
             'AND R.IDROL = '||p_ideRolResponsable||' '||
              qWhere ||' '||
             'AND UN.FLGESTADO = ''A'' '||
-            'AND ROWNUM <= 1';
+            'AND ROWNUM <= 1';*/
        
                 
   EXECUTE IMMEDIATE qQuery INTO p_ideUsuarioResp;
@@ -311,13 +363,41 @@ BEGIN
     INTO c_idLogSolicitud
     FROM DUAL;   
  
-    INSERT INTO LOGSOLNUEVO_CARGO
-    (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
-    VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
-   
-    UPDATE SOLNUEVO_CARGO SN
-    SET SN.TIPETAPA = p_etapa
+    SELECT NVL(SN.IDECARGO,0)
+    INTO c_idCargo
+    FROM SOLNUEVO_CARGO SN
     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
+    
+    IF (p_etapa = P_TIPETAPA_RECHAZADO)THEN
+      INSERT INTO LOGSOLNUEVO_CARGO
+      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,FECSUCESO,USRSUCESO,ROLSUCESO)
+      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
+   
+      UPDATE SOLNUEVO_CARGO SN
+      SET SN.TIPETAPA = p_etapa,
+          SN.ESTACTIVO = 'I'
+      WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
+    ELSE
+    
+      INSERT INTO LOGSOLNUEVO_CARGO
+      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
+      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
+
+      UPDATE SOLNUEVO_CARGO SN
+      SET SN.TIPETAPA = p_etapa
+      WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
+      
+      --ACTUALIZAR EN EL CARGO
+      IF (c_idCargo != 0)THEN
+        UPDATE CARGO CA
+        SET CA.TIPETAPA = p_etapa
+        WHERE  CA.IDECARGO = c_idCargo;
+      END IF;
+      
+      
+      
+    END IF;
+    
     COMMIT;   
      
  EXCEPTION
@@ -328,7 +408,31 @@ BEGIN
    
 END SP_INSERTAR_LOG;
 
+  /* ------------------------------------------------------------
+    Nombre      : SP_GET_CARGOS
+    Proposito   : Obtiene la lista de cargos para la lista de ampliacion
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_GET_CARGOS(p_idSede   IN SEDE.IDESEDE%TYPE,
+                          p_cRetVal  OUT SYS_REFCURSOR) IS
+  BEGIN
+  
+    OPEN P_CRETVAL FOR
+       SELECT DISTINCT C.IDECARGO, C.NOMCARGO
+        FROM CARGO C
+       WHERE C.ESTACTIVO = 'A'
+         AND NVL(C.VERSION,1) = (SELECT NVL(MAX(C1.VERSION),1) FROM CARGO C1 WHERE C1.ESTACTIVO='A')
+         AND C.IDESEDE = p_idSede
+       ORDER BY C.NOMCARGO;
 
+  
+  END SP_GET_CARGOS;
 /* ------------------------------------------------------------
     Nombre      : SP_OBTENER_ETAPA_SOLICITUD
     Proposito   : Obtener la etapa y estado actual de la solicitud de cargo.
@@ -908,7 +1012,7 @@ END SP_INSERTAR_AMPLIACION;
 
 /* ------------------------------------------------------------
     Nombre      : SP_RESPONSABLE_PUBLICACION
-    Proposito   : determinar el responsable de la publicación de la solicitud
+    Proposito   : determinar el responsable de la publicaci?n de la solicitud
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :               
                                   
@@ -951,7 +1055,7 @@ END SP_RESPONSABLE_PUBLICACION;
 
 /* ------------------------------------------------------------
     Nombre      : FN_DETERMINAR_RESPONSABLE
-    Proposito   : determinar el responsable de la publicación de la solicitud
+    Proposito   : determinar el responsable de la publicaci?n de la solicitud
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :               
                                   
@@ -959,31 +1063,36 @@ END SP_RESPONSABLE_PUBLICACION;
       Fecha       Autor                Descripcion
       06/03/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idCargo       IN CARGO.IDECARGO%TYPE,
+PROCEDURE SP_DETERMINAR_RESPONSABLE(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                     p_idSede        IN SEDE.IDESEDE%TYPE,
-                                    p_idUsuarioResp OUT USUARIO.IDUSUARIO%TYPE)
+                                    p_idUsuarioResp OUT USUARIO.IDUSUARIO%TYPE,
+                                    p_idRolResp     OUT ROL.IDROL%TYPE)
 
 IS
 
-c_tipoRequerimiento CARGO.TIPREQUERIMIENTO%TYPE;
+c_tipoRequerimiento SOLREQ_PERSONAL.TIPREQUERIMIENTO%TYPE;
 BEGIN
-  SELECT C.TIPREQUERIMIENTO
+  SELECT SQ.TIPREQUERIMIENTO
   INTO c_tipoRequerimiento
-  FROM CARGO C
-  WHERE C.IDECARGO = p_idCargo;
+  FROM SOLREQ_PERSONAL SQ
+  WHERE SQ.IDESOLREQPERSONAL = p_idSolicitud;
   
   BEGIN
-    SELECT UN.IDUSUARIO
-    INTO p_idUsuarioResp
-    FROM USUARIOREQ UQ, USUARIO_NIVEL UN
+    SELECT UN.IDUSUARIO,UN.IDROL
+    INTO p_idUsuarioResp,p_idRolResp
+    FROM USUARIOREQ UQ, USUAROLSEDE UN
     WHERE UQ.IDUSUARIO = UN.IDUSUARIO
     AND UN.IDESEDE = p_idSede
     AND UQ.TIPREQ = c_tipoRequerimiento
-    AND ROWNUM <= 1;
+    AND UN.IDROL IN (8,9)
+    AND ROWNUM < 2
+    ORDER BY UN.IDUSUARIO,UN.IDROL;
   EXCEPTION
     WHEN OTHERS THEN
     p_idUsuarioResp:= -1;
+    p_idRolResp:=-1;
   END;
+  
   
 END SP_DETERMINAR_RESPONSABLE;
 
@@ -1037,14 +1146,16 @@ PROCEDURE SP_INSERTAR_APROB_AMP(p_ideSolRequerimiento IN SOLREQ_PERSONAL.IDESOLR
                                 p_usuarioSuceso       IN LOGSOLREQ_PERSONAL.USRSUCESO%TYPE,
                                 p_ideRolSuceso        IN LOGSOLREQ_PERSONAL.ROLSUCESO%TYPE,
                                 p_observacion         IN LOGSOLREQ_PERSONAL.OBSERVACION%TYPE,
-                                c_ideUsuarioResp      IN OUT USUARIO.IDUSUARIO%TYPE)IS
+                                c_ideUsuarioResp      IN USUARIO.IDUSUARIO%TYPE,
+                                c_retVal              OUT USUARIO.IDUSUARIO%TYPE)IS
 
 qWhere  VARCHAR2(100);
 qQuery  VARCHAR2(1000);
 
+
 BEGIN
 
-  IF (c_ideUsuarioResp IS NULL)THEN
+  IF ((c_ideUsuarioResp IS NULL)OR(c_ideUsuarioResp = 0))THEN
   
   IF (p_indicArea = 'SI')THEN
     qWhere := 'AND UN.IDEAREA = '||p_ideArea;
@@ -1062,22 +1173,75 @@ BEGIN
             'AND UN.FLGESTADO = ''A'' '||
             'AND ROWNUM <= 1';
                   
-  EXECUTE IMMEDIATE qQuery INTO c_ideUsuarioResp ;
+  EXECUTE IMMEDIATE qQuery INTO c_retVal ;
+  ELSE
+    c_retVal:=c_ideUsuarioResp;
   END IF;
+  
+  
   BEGIN
- 
-   PR_INTRANET_ED.SP_INSERT_LOG_SOLREQPERSONAL(p_ideSolRequerimiento,p_tipoEtapa,SYSDATE,p_usuarioSuceso,p_ideRolSuceso,p_ideRolResponsable,c_ideUsuarioResp,p_observacion);
-   UPDATE SOLREQ_PERSONAL SP
-   SET SP.TIPETAPA = p_tipoEtapa
-   WHERE SP.IDESOLREQPERSONAL = p_ideSolRequerimiento;
+   
+  IF (p_tipoEtapa = P_TIPETAPA_RECHAZADO)THEN
+  
+    
+    
+    INSERT INTO LOGSOLREQ_PERSONAL
+    (IDELOGSOLREQ_PERSONAL,IDESOLREQPERSONAL,TIPETAPA,OBSERVACION, FECSUCESO,USRSUCESO,ROLSUCESO)
+    VALUES (IDELOGSOLREQ_PERSONAL_SQ.NEXTVAL,p_ideSolRequerimiento,p_tipoEtapa,p_observacion,SYSDATE,p_usuarioSuceso,p_ideRolSuceso);
+      
+    UPDATE SOLREQ_PERSONAL SR
+    SET SR.TIPETAPA = p_tipoEtapa,
+        SR.ESTACTIVO = 'I'
+    WHERE SR.IDESOLREQPERSONAL = p_ideSolRequerimiento;
+  ELSE
+    INSERT INTO LOGSOLREQ_PERSONAL
+    (IDELOGSOLREQ_PERSONAL,IDESOLREQPERSONAL,TIPETAPA,ROLRESPONSABLE,USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
+    VALUES (IDELOGSOLREQ_PERSONAL_SQ.NEXTVAL, p_ideSolRequerimiento,p_tipoEtapa,p_ideRolResponsable,c_retVal,SYSDATE, p_usuarioSuceso, p_ideRolSuceso);
+    
+    UPDATE SOLREQ_PERSONAL SP
+    SET SP.TIPETAPA = p_tipoEtapa
+    WHERE SP.IDESOLREQPERSONAL = p_ideSolRequerimiento;
+   END IF;
   COMMIT; 
+  
   EXCEPTION
   WHEN OTHERS THEN
-    c_ideUsuarioResp:=NULL;
+    c_retVal:=-1;
     ROLLBACK;
   END;   
   
 END SP_INSERTAR_APROB_AMP;
+
+  /* ------------------------------------------------------------
+    Nombre      : SP_LISTACARGOS
+    Proposito   : Obtiene la lista de cargos por sede
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014 jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_LISTACARGOS(p_idSede IN SEDE.IDESEDE%TYPE,
+                           p_cRetVal OUT SYS_REFCURSOR) IS
+  
+  BEGIN
+  
+    OPEN P_CRETVAL FOR
+       SELECT DISTINCT C.IDECARGO, C.NOMCARGO
+        FROM CARGO C 
+       WHERE C.IDESEDE = p_idSede
+       AND C.ESTACTIVO = 'A'
+       AND C.TIPETAPA IN ('08','06','04','10')
+       AND NVL(C.VERSION,1) = (SELECT NVL(MAX(C1.VERSION),1) 
+                               FROM CARGO C1 WHERE C1.ESTACTIVO='A'
+                               AND C1.CODCARGO = C.CODCARGO)
+       ORDER BY C.NOMCARGO;
+
+  
+  END SP_LISTACARGOS;
+
 
 /* ------------------------------------------------------------
     Nombre      : FN_GET_LISTAREQ
@@ -1114,30 +1278,153 @@ BEGIN
   DELETE T_RECLTEMP;   
 
   INSERT INTO T_RECLTEMP
-  SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.IDESOLNUEVOCARGO,'01') ESTADO, SN.CODCARGO,NVL(SN.IDECARGO,0), SN.NOMBRE,
-       DE.IDEDEPENDENCIA,DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO,DP.NOMDEPARTAMENTO,AR.IDEAREA,AR.NOMAREA, SN.NUMPOSICIONES,0 POSTULANTE, 0 PRESELECCIONADOS, 0 EVALUADOS, 0 SELECCIONADOS, SN.FECCREACION,SN.FECCREACION CIERRE,NVL(R.IDROL,0), NVL(R.DSCROL,'') ,
-       (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SN.IDESOLNUEVOCARGO,'N')) NOMRESPONSABLE,SN.FECPUBLICACION,SN.FECEXPIRACION,DECODE(SN.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LS.TIPETAPA)) TETAPA,'01' TIPSOL ,'NUEVO' TIPOSOLICITUD  
-  FROM SOLNUEVO_CARGO SN, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R
+  
+  SELECT SN.IDESOLNUEVOCARGO, 
+         PR_INTRANET.FN_ESTADO_SOLICITUD(SN.IDESOLNUEVOCARGO,'01') ESTADO, 
+         SN.CODCARGO,
+         NVL(SN.IDECARGO,0), 
+         SN.NOMBRE,
+         SN.IDEDEPENDENCIA,
+         (SELECT DE.NOMDEPENDENCIA 
+          FROM DEPENDENCIA DE 
+          WHERE DE.IDEDEPENDENCIA = SN.IDEDEPENDENCIA 
+          AND DE.IDESEDE = SN.IDESEDE
+          AND DE.ESTACTIVO = 'A'),
+         SN.IDEDEPARTAMENTO,
+         (SELECT DP.NOMDEPARTAMENTO 
+          FROM DEPARTAMENTO DP 
+          WHERE DP.IDEDEPARTAMENTO = SN.IDEDEPARTAMENTO
+          AND DP.IDEDEPENDENCIA = SN.IDEDEPENDENCIA
+          AND DP.ESTACTIVO = 'A'),
+         SN.IDEAREA,
+         (SELECT AR.NOMAREA 
+          FROM  AREA AR 
+          WHERE AR.IDEAREA = SN.IDEAREA
+          AND AR.IDEDEPARTAMENTO = SN.IDEDEPARTAMENTO
+          AND AR.ESTACTIVO = 'A'),
+         SN.NUMPOSICIONES,
+         (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SN.IDESOLNUEVOCARGO
+           AND RP.TIPSOL = '01'
+           AND RP.ESTACTIVO='A') POSTULANTES, 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SN.IDESOLNUEVOCARGO
+           AND RP.TIPSOL = '01'
+           AND RP.ESTPOSTULANTE ='02'
+           AND RP.ESTACTIVO='A') PRESELECCIONADOS, 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SN.IDESOLNUEVOCARGO
+           AND RP.TIPSOL = '01'
+           AND RP.ESTPOSTULANTE ='07'
+           AND RP.ESTACTIVO='A') EVALUADOS,  
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SN.IDESOLNUEVOCARGO
+            AND RP.TIPSOL = '01'
+            AND RP.ESTPOSTULANTE ='08'
+            AND RP.ESTACTIVO='A') SELECCIONADOS , 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SN.IDESOLNUEVOCARGO
+            AND RP.TIPSOL = '01'
+            AND RP.ESTPOSTULANTE ='09'
+            AND RP.ESTACTIVO='A') CONTRATADOS , 
+         SN.FECCREACION,
+         SN.FECCREACION CIERRE,
+         NVL(R.IDROL,0), 
+         NVL(R.DSCROL,'') ,
+         (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SN.IDESOLNUEVOCARGO,'N')) NOMRESPONSABLE,
+         SN.FECPUBLICACION,
+         SN.FECEXPIRACION,
+         DECODE(SN.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, 
+         LS.TIPETAPA,
+         (PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LS.TIPETAPA)) TETAPA,
+         '01' TIPSOL ,
+         'NUEVO' TIPOSOLICITUD
+         --SN.ESTACTIVO  
+  FROM SOLNUEVO_CARGO SN, LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R
   ON (LS.ROLRESPONSABLE = R.IDROL)
-  WHERE SN.IDEAREA = AR.IDEAREA
-  AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
-  AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
-  AND LS.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO
+  WHERE LS.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO
   AND SN.IDESEDE = p_ideSede
   AND LS.FECSUCESO = (SELECT MAX (FECSUCESO)
                            FROM  LOGSOLNUEVO_CARGO LN
                            WHERE LN.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO);
                            
+
+                           
   INSERT INTO T_RECLTEMP
-  SELECT SQ.IDESOLREQPERSONAL, PR_INTRANET.FN_ESTADO_SOLICITUD(SQ.IDESOLREQPERSONAL ,'O') ESTADO,TO_CHAR(SQ.CODSOLREQPERSONAL) CODSOLICITUD, NVL(SQ.IDECARGO,0), SQ.NOMCARGO,
-       DE.IDEDEPENDENCIA, DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO, DP.NOMDEPARTAMENTO,AR.IDEAREA, AR.NOMAREA, SQ.NUMVACANTES,0 POSTULANTE, 0 PRESELECCIONADOS, 0 EVALUADOS, 0 SELECCIONADOS, SQ.FECCREACION, SQ.FECCREACION CIERRE ,NVL(R.IDROL,0), NVL(R.DSCROL,'') ,
-       (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SQ.IDESOLREQPERSONAL,'O')) NOMRESPONSABLE,SQ.FECPUBLICACION,SQ.FECEXPIRACACION,DECODE(SQ.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, LQ.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LQ.TIPETAPA)) TETAPA,SQ.TIPSOL,(PR_INTRANET.FN_VALOR_GENERAL('TIPSOL',SQ.TIPSOL)) TIPOSOLICITUD
-  FROM SOLREQ_PERSONAL SQ, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLREQ_PERSONAL LQ LEFT JOIN ROL R 
+  SELECT SQ.IDESOLREQPERSONAL, 
+         PR_INTRANET.FN_ESTADO_SOLICITUD(SQ.IDESOLREQPERSONAL ,'O') ESTADO,
+         TO_CHAR(SQ.CODSOLREQPERSONAL) CODSOLICITUD, 
+         NVL(SQ.IDECARGO,0), 
+         SQ.NOMCARGO,
+         SQ.IDEDEPENDENCIA,
+         (SELECT DE.NOMDEPENDENCIA 
+          FROM DEPENDENCIA DE 
+          WHERE DE.IDEDEPENDENCIA = SQ.IDEDEPENDENCIA 
+          AND DE.IDESEDE = SQ.IDESEDE
+          AND DE.ESTACTIVO = 'A'),
+         SQ.IDEDEPARTAMENTO,
+         (SELECT DP.NOMDEPARTAMENTO 
+          FROM DEPARTAMENTO DP 
+          WHERE DP.IDEDEPARTAMENTO = SQ.IDEDEPARTAMENTO
+          AND DP.IDEDEPENDENCIA = SQ.IDEDEPENDENCIA
+          AND DP.ESTACTIVO = 'A'),
+         SQ.IDEAREA,
+         (SELECT AR.NOMAREA 
+          FROM  AREA AR 
+          WHERE AR.IDEAREA = SQ.IDEAREA
+          AND AR.IDEDEPARTAMENTO = SQ.IDEDEPARTAMENTO
+          AND AR.ESTACTIVO = 'A'),
+         SQ.NUMVACANTES,
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SQ.IDESOLREQPERSONAL
+           AND RP.TIPSOL = '01'
+           AND RP.ESTACTIVO='A') POSTULANTES, 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SQ.IDESOLREQPERSONAL
+           AND RP.TIPSOL = '01'
+           AND RP.ESTPOSTULANTE ='02'
+           AND RP.ESTACTIVO='A') PRESELECCIONADOS, 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SQ.IDESOLREQPERSONAL
+           AND RP.TIPSOL = '01'
+           AND RP.ESTPOSTULANTE ='07'
+           AND RP.ESTACTIVO='A') EVALUADOS,  
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SQ.IDESOLREQPERSONAL
+            AND RP.TIPSOL = '01'
+            AND RP.ESTPOSTULANTE ='08'
+            AND RP.ESTACTIVO='A') SELECCIONADOS , 
+          (SELECT COUNT(*) 
+           FROM RECLUTAMIENTO_PERSONA RP
+           WHERE RP.IDESOL = SQ.IDESOLREQPERSONAL
+            AND RP.TIPSOL = '01'
+            AND RP.ESTPOSTULANTE ='09'
+            AND RP.ESTACTIVO='A') CONTRATADOS ,
+         SQ.FECCREACION, 
+         SQ.FECCREACION CIERRE ,
+         NVL(R.IDROL,0), 
+         NVL(R.DSCROL,'') ,
+         (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SQ.IDESOLREQPERSONAL,'O')) NOMRESPONSABLE,
+         SQ.FECPUBLICACION,
+         SQ.FECEXPIRACACION,
+         DECODE(SQ.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, 
+         LQ.TIPETAPA,
+         (PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LQ.TIPETAPA)) TETAPA,
+         SQ.TIPSOL,
+         (PR_INTRANET.FN_VALOR_GENERAL('TIPSOL',SQ.TIPSOL)) TIPOSOLICITUD
+         --SQ.ESTACTIVO
+  FROM SOLREQ_PERSONAL SQ,LOGSOLREQ_PERSONAL LQ LEFT JOIN ROL R 
   ON (LQ.ROLRESPONSABLE = R.IDROL)
-  WHERE SQ.IDEAREA = AR.IDEAREA
-  AND LQ.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL
-  AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
-  AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
+  WHERE LQ.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL
   AND SQ.IDESEDE = p_ideSede
   AND LQ.FECSUCESO = (SELECT MAX (FECSUCESO)
                            FROM  LOGSOLREQ_PERSONAL LSQ
@@ -1174,7 +1461,7 @@ BEGIN
         
     END IF;
  
-    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa<>'' THEN
+    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa<>'0' THEN
         
       c_Where := c_Where || ' AND S.TIPETAPA = '||p_cTipEtapa ;
                             
@@ -1186,13 +1473,10 @@ BEGIN
         
     END IF;
     
-    IF p_cEstado IS NOT NULL AND p_cEstado<>'' THEN
+    IF p_cEstado IS NOT NULL AND p_cEstado <> '0' THEN
       
-      IF p_cEstado = 'I' THEN
         c_Where := c_Where || ' AND '''||p_cEstado||''' = S.ESTADO ';
-      ELSE
-        c_Where := c_Where || ' AND S.ESTADO != ''I'' '; 
-      END IF;   
+         
     END IF;
   
     IF LENGTH(rtrim(p_cFecIni))>0 AND LENGTH(rtrim(p_cFeFin))>0 THEN
@@ -1221,6 +1505,8 @@ BEGIN
    c_Query;
    
    COMMIT;
+   
+   
    
 END SP_LISTA_SOLGRAL; 
 
@@ -1254,14 +1540,16 @@ BEGIN
 
 c_Consulta1:= 'SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.IDESOLNUEVOCARGO,''N'') ESTADO, '
             ||'SN.CODCARGO,(SELECT C.IDECARGO FROM CARGO C WHERE C.CODCARGO = SN.CODCARGO) IDECARGO ,SN.NOMBRE,'
-            ||'DE.IDEDEPENDENCIA,DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO ,DP.NOMDEPARTAMENTO, AR.IDEAREA,AR.NOMAREA, '
+            ||'SN.IDEDEPENDENCIA, '
+            ||'(SELECT DE.NOMDEPENDENCIA FROM DEPENDENCIA DE WHERE DE.IDEDEPENDENCIA = SN.IDEDEPENDENCIA AND DE.IDESEDE = SN.SEDE AND DE.ESTACTIVO = ''A'') NOMDEPENDENCIA, '
+            ||'SN.IDEDEPARTAMENTO , '
+            ||'(SELECT DP.NOMDEPARTAMENTO FROM DEPARTAMENTO DP WHERE DP.IDEDEPARTAMENTO = SN.IDEDEPARTAMENTO AND DP.IDEDEPENDENCIA = SN.IDEDEPENDENCIA AND DP.ESTACTIVO = ''A'') NOMDEPARTAMENTO, '
+            ||'SN.IDEAREA, '
+            ||'(SELECT AR.NOMAREA FROM AREA AR WHERE AR.IDEAREA = SN.IDEAREA AND AR.IDEDEPARTAMENTO = SN.IDEDEPARTAMENTO AND SN.ESTACTIVO = ''A'') NOMAREA,'
             ||'SN.NUMPOSICIONES, SN.FECCREACION,R.IDROL ,R.DSCROL ,(PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SN.IDESOLNUEVOCARGO,''N'')) NOMRESPONSABLE, '
             ||'LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL(''ETAPA'',LS.TIPETAPA)) TETAPA '
-            ||'FROM SOLNUEVO_CARGO SN, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R ON (R.IDROL = LS.ROLRESPONSABLE) '
-            ||'WHERE SN.IDEAREA = AR.IDEAREA '
-            ||'AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO '
-            ||'AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA '
-            ||'AND LS.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO '
+            ||'FROM SOLNUEVO_CARGO SN, LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R ON (R.IDROL = LS.ROLRESPONSABLE) '
+            ||'WHERE LS.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO '
             ||'AND LS.FECSUCESO = (SELECT MAX (FECSUCESO) '
                                 ||'FROM  LOGSOLNUEVO_CARGO LN '
                                 ||'WHERE LN.IDESOLNUEVOCARGO = SN.IDESOLNUEVOCARGO) ';
@@ -1275,31 +1563,34 @@ c_Consulta1:= 'SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.ID
   
     IF p_nIdDependencia > 0 THEN
     
-      c_Where := c_Where || '  AND DE.IDEDEPENDENCIA = ' || p_nIdDependencia;
+      c_Where := c_Where || '  AND SN.IDEDEPENDENCIA = ' || p_nIdDependencia;
     
     END IF;
   
     IF p_nIdDepartamento > 0 THEN
     
-      c_Where := c_Where || '  AND DP.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
+      c_Where := c_Where || '  AND SN.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
     
     END IF;
   
     IF p_nIdArea > 0 THEN
     
-      c_Where := c_Where || ' AR.IDEAREA = ' || p_nIdArea;
+      c_Where := c_Where || ' SN.IDEAREA = ' || p_nIdArea;
     
     END IF;
   
-    IF p_cEstado IS NOT NULL AND p_cEstado <> '' THEN
+    IF p_cEstado IS NOT NULL AND  p_cEstado <> '0' THEN
       
-      IF p_cEstado = 'I' THEN
         c_Where := c_Where || ' AND '''||p_cEstado||''' = ESTADO ';
-      ELSE
-        c_Where := c_Where || ' AND ESTADO != ''I'' '; 
-      END IF;   
+        
     END IF;
   
+    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa<>'0' THEN
+        
+      c_Where := c_Where || ' AND LS.TIPETAPA = '||p_cTipEtapa ;
+                            
+    END IF;
+    
     IF p_cTipResp IS NOT NULL AND p_cTipResp <> '' THEN
     
       c_Where := c_Where || ' AND ''' || p_cTipResp || ''' = R.IDROL ';
@@ -1355,14 +1646,15 @@ c_Query VARCHAR2(4000):=NULL;
           
 BEGIN
 
-c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,DE.IDEDEPENDENCIA, '
-            ||'DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO,DP.NOMDEPARTAMENTO, AR.IDEAREA, AR.NOMAREA,C.VERSION ' 
-            ||'FROM CARGO C , AREA AR, DEPENDENCIA DE, DEPARTAMENTO DP '
-            ||'WHERE C.IDEAREA = AR.IDEAREA '
-            ||'AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO '
-            ||'AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA '
-            ||'AND C.IDESEDE = '''||p_cideSede||''' ';
-            
+c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,C.IDEDEPENDENCIA, '
+            ||'(SELECT DE.NOMDEPENDENCIA FROM DEPENDENCIA DE WHERE DE.IDEDEPENDENCIA = C.IDEDEPENDENCIA AND DE.IDESEDE = '''||p_cideSede||'''  AND DE.ESTACTIVO = ''A'') NOMDEPENDENCIA, '
+            ||'C.IDEDEPARTAMENTO, '
+            ||'(SELECT DP.NOMDEPARTAMENTO FROM DEPARTAMENTO DP WHERE DP.IDEDEPARTAMENTO = C.IDEDEPARTAMENTO AND DP.ESTACTIVO = ''A'') NOMDEPARTAMENTO,'
+            ||'C.IDEAREA, '
+            ||'(SELECT AR.NOMAREA FROM AREA AR WHERE AR.IDEAREA = C.IDEAREA AND AR.ESTACTIVO = ''A'') NOMAREA,C.VERSION '
+            ||'FROM CARGO C  '
+            ||'WHERE C.IDESEDE = '''||p_cideSede||''' ';
+
             
     IF p_nIdCargo > 0 THEN
     
@@ -1372,23 +1664,23 @@ c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,DE
   
     IF p_nIdDependencia > 0 THEN
     
-      c_Where := c_Where || '  AND DE.IDEDEPENDENCIA = ' || p_nIdDependencia;
+      c_Where := c_Where || '  AND C.IDEDEPENDENCIA = ' || p_nIdDependencia;
     
     END IF;
   
     IF p_nIdDepartamento > 0 THEN
     
-      c_Where := c_Where || '  AND DP.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
+      c_Where := c_Where || '  AND C.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
     
     END IF;
   
     IF p_nIdArea > 0 THEN
     
-      c_Where := c_Where || ' AR.IDEAREA = ' || p_nIdArea;
+      c_Where := c_Where || ' AND C.IDEAREA = ' || p_nIdArea;
     
     END IF;
   
-    IF p_cEstado IS NOT NULL AND p_cEstado<>'' THEN
+    IF p_cEstado IS NOT NULL AND p_cEstado<>'0' THEN
   
         c_Where := c_Where || ' AND '''||p_cEstado||''' = C.ESTACTIVO ';
      
@@ -1479,23 +1771,31 @@ PROCEDURE SP_GENERAR_EVAL_REQ_POSTUL(p_idePostulante   IN POSTULANTE.IDEPOSTULAN
 c_idSolicitud    RECLUTAMIENTO_PERSONA.IDESOL%TYPE;
 c_tipSolicitud   RECLUTAMIENTO_PERSONA.TIPSOL%TYPE;
 c_ideCargo       CARGO.IDECARGO%TYPE;
+c_ideSede        SEDE.IDESEDE%TYPE;
 c_contador       NUMBER;
 
 
+  
 CURSOR c_cuEvalReqSol(c_idSolicitud SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE) IS
-  SELECT ESR.IDEEVALUACIONSOLREQ,ESR.IDEEXAMEVAL ,ESR.TIPEXAMEN
+  SELECT ESR.IDEEVALUACIONSOLREQ,
+         ESR.IDEEXAMEVAL ,
+         ESR.TIPEXAMEN
   FROM EVALUACION_SOLREQ ESR
-  WHERE ESR.IDESOLREQPERSONAL = c_idSolicitud;
+  WHERE ESR.IDESOLREQPERSONAL = c_idSolicitud
+  AND ESR.ESTACTIVO = 'A';
   
 CURSOR c_cuEvalCargo(p_ideCargo CARGO.IDECARGO%TYPE) IS
-  SELECT EC.IDEEVALUACIONCARGO,EC.IDEEXAMEVAL, EC.TIPEXAMEN 
+  SELECT EC.IDEEVALUACIONCARGO,
+         EC.IDEEXAMEVAL, 
+         EC.TIPEXAMEN
   FROM EVALUACION_CARGO EC
-  WHERE EC.IDECARGO = c_ideCargo;
+  WHERE EC.IDECARGO = c_ideCargo
+  AND EC.ESTACTIVO = 'A';
     
 BEGIN
   
-    SELECT RP.IDESOL, RP.TIPSOL , RP.IDECARGO
-    INTO c_idSolicitud, c_tipSolicitud,c_ideCargo
+    SELECT RP.IDESOL, RP.TIPSOL , RP.IDECARGO, RP.IDSEDE
+    INTO c_idSolicitud, c_tipSolicitud,c_ideCargo,c_ideSede
     FROM RECLUTAMIENTO_PERSONA RP
     WHERE RP.IDERECLUTAPERSONA = p_ideReclutPost;  
     
@@ -1525,21 +1825,54 @@ BEGIN
     
     BEGIN
       OPEN p_cuExamenes FOR
-      SELECT  DISTINCT( RPE.IDERECLUPERSOEXAMEN),RPE.IDERECLUTAPERSONA,RPE.IDEEVALUACION,
-      EX.NOMEXAMEN,EX.TIPEXAMEN,PR_INTRANET.FN_VALOR_GENERAL('TIPOCRITERIO',EX.TIPEXAMEN) TIPOEXAMEN,
-      NVL(RPE.IDUSUARESPONS,0) IDUSUARESPONS,NVL((US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO||' '||US.DSCNOMBRES),'') USUARIORESP,RPE.TIPESTEVALUACION, PR_INTRANET.FN_VALOR_GENERAL('ESTADOEVALUACIO',RPE. TIPESTEVALUACION) ESTADOEVALUACION,
-      RPE.FECEVALUACION,RPE.HORAEVALUACION, NVL(RPE.NOTAFINAL,0) NOTAFINAL,NVL(RPE.COMENTARIORESUL,'') COMENTARIORESUL
-      FROM RECLU_PERSO_EXAMEN RPE LEFT  JOIN  USUARIO US ON (US.IDUSUARIO = RPE.IDUSUARESPONS), EXAMEN EX , (SELECT (DECODE(RE.TIPSOLICITUD,'01',(SELECT EC.IDEEXAMEVAL 
-                                                                               FROM EVALUACION_CARGO EC 
-                                                                               WHERE EC.IDEEVALUACIONCARGO = IDEEVALUACION),
-                                                                              (SELECT ES.IDEEXAMEVAL 
-                                                                               FROM EVALUACION_SOLREQ ES 
-                                                                               WHERE ES.IDEEVALUACIONSOLREQ = IDEEVALUACION))) IDEEXAMEN,
-                                                                               RE.IDEEVALUACION
-                                                                               FROM RECLU_PERSO_EXAMEN RE) EXAM 
-      WHERE EXAM.IDEEXAMEN = EX.IDEEXAMEN
-      AND EXAM.IDEEVALUACION = RPE.IDEEVALUACION
-      AND RPE.IDERECLUTAPERSONA = p_ideReclutPost; 
+      SELECT  EP.IDERECLUPERSOEXAMEN,
+              EP.IDERECLUTAPERSONA,
+              EP.IDEEVALUACION,
+              EP.NOMEXAMEN,
+              EP.TIPEXAMEN,
+              EP.TIPOEXAMEN,
+              EP.IDUSUARESPONS,
+              EP.USUARIORESP,
+              EP.TIPESTEVALUACION,
+              EP.ESTADOEVALUACION,
+              EP.FECEVALUACION,
+              EP.HORAEVALUACION,
+              EP.INDRESUL,
+              EP.NOTAFINAL,
+              EP.COMENTARIORESUL,
+              EP.ORDEN
+      FROM (  SELECT  DISTINCT( RPE.IDERECLUPERSOEXAMEN),
+                      RPE.IDERECLUTAPERSONA,
+                      RPE.IDEEVALUACION,
+                      EX.NOMEXAMEN,
+                      EX.TIPEXAMEN,
+                      PR_INTRANET.FN_VALOR_GENERAL('TIPOCRITERIO',EX.TIPEXAMEN) TIPOEXAMEN,
+                      NVL(RPE.IDUSUARESPONS,0) IDUSUARESPONS,
+                      NVL((US.DSCAPEPATERNO||' '||US.DSCAPEMATERNO||' '||US.DSCNOMBRES),'') USUARIORESP,
+                      RPE.TIPESTEVALUACION, 
+                      PR_INTRANET.FN_VALOR_GENERAL('ESTADOEVALUACIO',RPE. TIPESTEVALUACION) ESTADOEVALUACION,
+                      RPE.FECEVALUACION,
+                      RPE.HORAEVALUACION,
+                      PR_REQUERIMIENTOS.FN_EXISTE_RESULTADO_EXAMEN(RPE.IDERECLUPERSOEXAMEN) INDRESUL ,
+                      NVL(RPE.NOTAFINAL,0) NOTAFINAL,
+                      NVL(RPE.COMENTARIORESUL,'') COMENTARIORESUL,
+                      (CASE WHEN EX.TIPEXAMEN = P_TIPEXA_EXAMEN THEN 1
+                            WHEN EX.TIPEXAMEN = P_TIPEXA_EVALUACION THEN 2
+                            WHEN EX.TIPEXAMEN = P_TIPEXA_ENTREVISTA THEN 3
+                            ELSE 4 END) ORDEN 
+               FROM RECLU_PERSO_EXAMEN RPE LEFT  JOIN  USUARIO US ON (US.IDUSUARIO = RPE.IDUSUARESPONS), EXAMEN EX , (SELECT (DECODE(RE.TIPSOLICITUD,'01',(SELECT EC.IDEEXAMEVAL 
+                                                                      FROM EVALUACION_CARGO EC 
+                                                                      WHERE EC.IDEEVALUACIONCARGO = IDEEVALUACION),
+                                                                      (SELECT ES.IDEEXAMEVAL 
+                                                                      FROM EVALUACION_SOLREQ ES 
+                                                                      WHERE ES.IDEEVALUACIONSOLREQ = IDEEVALUACION))) IDEEXAMEN,
+                                                                      RE.IDEEVALUACION
+                                                                      FROM RECLU_PERSO_EXAMEN RE) EXAM 
+               WHERE EXAM.IDEEXAMEN = EX.IDEEXAMEN
+               AND EXAM.IDEEVALUACION = RPE.IDEEVALUACION
+               AND EX.IDESEDE = c_ideSede
+               AND RPE.IDERECLUTAPERSONA = p_ideReclutPost) EP
+      ORDER BY EP.ORDEN ; 
         
     EXCEPTION
       WHEN OTHERS THEN
@@ -1551,7 +1884,7 @@ END SP_GENERAR_EVAL_REQ_POSTUL;
 /* ------------------------------------------------------------
     Nombre      : SP_CALIFICAR_EXAMEN
     Proposito   : Verificar el termino de de evaluacion 
-                  y asignar calificación
+                  y asignar calificaci?n
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :               
                                   
@@ -1595,7 +1928,7 @@ BEGIN
    SELECT COUNT(*)
    INTO c_nroCategExamFin
    FROM RECL_PERS_EXAM_CAT RCAT
-   WHERE RCAT.ESTADO = P_ESTCAT_EVALUADO
+   WHERE RCAT.ESTADO = P_ESTCAT_FINALIZADO
    AND RCAT.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
    AND RCAT.IDERECLUTAPERSONA = p_ideReclutaPersona;
    
@@ -1616,10 +1949,10 @@ BEGIN
     SELECT REX.TIPEXAMEN
     INTO c_tipoExamen
     FROM RECLU_PERSO_EXAMEN REX
-    WHERE REX.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen;
+    WHERE REX.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen;       
      
     IF(c_tipoExamen = P_TIPEXA_EXAMEN) THEN --TIPO EXAMEN - de calificacion automatica
-     
+    
        SELECT SUM(RPCAT.NROPREGUNTAS), SUM (RPCAT.NOTAEXAMENCATEG)
        INTO c_nroTotalPreguntas, c_puntajeTotal    
        FROM RECL_PERS_EXAM_CAT RPCAT
@@ -1627,17 +1960,30 @@ BEGIN
        AND RPCAT.IDERECLUTAPERSONA = p_ideReclutaPersona;
        
        c_puntFinalExamen:= c_puntajeTotal*20/c_nroTotalPreguntas;
-       
+
        --Actualizar la nota del examen
        UPDATE RECLU_PERSO_EXAMEN RE
        SET RE.NOTAFINAL = c_puntFinalExamen,
            RE.USRMODIFICA=p_usuarioCreacion,
            RE.FECMODIFICA=SYSDATE,
            RE.FECEVALUACION = SYSDATE,
-           RE.HORAEVALUACION = SYSDATE
+           RE.HORAEVALUACION = SYSDATE,
+           RE.TIPESTEVALUACION = '03'
        WHERE RE.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
        AND RE.IDERECLUTAPERSONA = p_ideReclutaPersona;
-     END IF;
+     
+    ELSE
+      IF(c_tipoExamen = P_TIPEXA_EVALUACION) THEN
+        UPDATE RECLU_PERSO_EXAMEN RE
+          SET RE.USRMODIFICA=p_usuarioCreacion,
+            RE.FECMODIFICA=SYSDATE,
+            RE.FECEVALUACION = SYSDATE,
+            RE.HORAEVALUACION = SYSDATE,
+            RE.TIPESTEVALUACION = '03'
+          WHERE RE.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
+        AND RE.IDERECLUTAPERSONA = p_ideReclutaPersona;
+      END IF;
+    END IF;
      COMMIT;
      p_retVal:=1;
      
@@ -1672,6 +2018,7 @@ PROCEDURE SP_RECUPERAR_EXAMEN(p_ideReclutaPersona   IN RECLUTAMIENTO_PERSONA.IDE
 
     
 c_ideExamen              EXAMEN.IDEEXAMEN%TYPE; 
+c_ideSede                SEDE.IDESEDE%TYPE;
 c_idecategoria           CATEGORIA.IDECATEGORIA%TYPE; 
 c_ideCritSubcategoria    CRITERIO_X_SUBCATEGORIA.IDECRITERIOXSUBCATEGORIA%TYPE;   
 c_ideRecluPersoCriter    RECLU_PERSO_CRITERIO.IDERECLUPERSOCRITERIO%TYPE;   
@@ -1679,6 +2026,10 @@ c_ideRecluPersoCriter    RECLU_PERSO_CRITERIO.IDERECLUPERSOCRITERIO%TYPE;
 
 BEGIN
   
+  SELECT RP.IDSEDE
+  INTO c_ideSede
+  FROM RECLUTAMIENTO_PERSONA RP
+  WHERE RP.IDERECLUTAPERSONA = p_ideReclutaPersona;
   
   --Cursor de cabezera del examen
   OPEN dtExamen FOR
@@ -1696,6 +2047,7 @@ BEGIN
     FROM RECL_PERS_EXAM_CAT RCAT, EXAMEN_X_CATEGORIA EXC , CATEGORIA CT 
     WHERE RCAT.IDEEXAMENXCATEGORIA  = EXC.IDEEXAMENXCATEGORIA
     AND CT.IDECATEGORIA = EXC.IDECATEGORIA
+    AND EXC.IDESEDE = c_ideSede
     AND RCAT.IDERECLUTAPERSONA = p_ideReclutaPersona
     AND RCAT.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
     ORDER BY CT.ORDENIMPRESION ASC;
@@ -1707,6 +2059,8 @@ BEGIN
            UPPER(SC.DESCSUBCATEGORIA) DESCSUBCATEGORIA, SC.ORDENIMPRESION
     FROM RECLU_PERSO_CRITERIO RCRIT, CRITERIO_X_SUBCATEGORIA CSB, SUBCATEGORIA SC , RECL_PERS_EXAM_CAT RCAT
     WHERE RCRIT.IDECRITERIOXSUBCATEGORIA = CSB.IDECRITERIOXSUBCATEGORIA
+    AND CSB.IDESEDE = c_ideSede
+    AND SC.IDESEDE = c_ideSede
     AND CSB.IDESUBCATEGORIA = SC.IDESUBCATEGORIA 
     AND RCRIT.IDERECLPERSOEXAMNCAT = RCAT.IDERECLPERSOEXAMNCAT
     AND RCRIT.IDERECLUTAPERSONA = p_ideReclutaPersona
@@ -1719,6 +2073,8 @@ BEGIN
             CR.IMAGENCRIT,RCRIT.INDRESPUESTA, RCRIT.PUNTTOTAL
     FROM   CRITERIO CR, CRITERIO_X_SUBCATEGORIA CRSC, RECLU_PERSO_CRITERIO RCRIT, RECL_PERS_EXAM_CAT RCAT
     WHERE RCRIT.IDECRITERIOXSUBCATEGORIA = CRSC.IDECRITERIOXSUBCATEGORIA
+    AND CR.IDESEDE = c_ideSede
+    AND CRSC.IDESEDE = c_ideSede
     AND CRSC.IDECRITERIO = CR.IDECRITERIO
     AND RCRIT.IDERECLPERSOEXAMNCAT  = RCAT.IDERECLPERSOEXAMNCAT
     AND RCRIT.IDERECLUTAPERSONA = p_ideReclutaPersona
@@ -1726,14 +2082,30 @@ BEGIN
     ORDER BY CR.ORDENIMPRESION;
     
   OPEN dtAlternativas FOR
-    SELECT RC.IDERECLUPERSOCRITERIO,CS.IDECRITERIO, CS.IDECRITERIOXSUBCATEGORIA, AL.ALTERNATIVA, 
-           AL.IDEALTERNATIVA, AL.IMAGE, AL.PESO , CASE WHEN RAL.IDEALTERNATIVA IS NULL THEN 'N' ELSE 'S' END  RESPUESTA
-    FROM RECL_PERS_EXAM_CAT  RCAT,  RECLU_PERSO_CRITERIO RC , CRITERIO_X_SUBCATEGORIA CS ,ALTERNATIVA  AL  
-         LEFT JOIN  RECLU_PERSO_ALTERNATIVA RAL ON AL.IDEALTERNATIVA = RAL.IDEALTERNATIVA
+    SELECT RC.IDERECLUPERSOCRITERIO,
+           CS.IDECRITERIO, 
+           CS.IDECRITERIOXSUBCATEGORIA, 
+           AL.ALTERNATIVA, 
+           AL.IDEALTERNATIVA, 
+           AL.IMAGE, 
+           AL.PESO, 
+           RAL.IDEALTERNATIVA,
+           RAL.IDERECLUPERSOCRITERIO, 
+           CASE WHEN RAL.IDEALTERNATIVA IS NULL THEN 'N' ELSE 'S' END  RESPUESTA
+    FROM RECL_PERS_EXAM_CAT  RCAT, 
+         (SELECT * FROM  CRITERIO_X_SUBCATEGORIA C WHERE C.IDESEDE = c_ideSede)CS ,
+         RECLU_PERSO_CRITERIO RC , 
+         (SELECT * FROM  ALTERNATIVA A WHERE A.IDESEDE = c_ideSede) AL  
+         LEFT JOIN (
+                    SELECT * 
+                    FROM RECLU_PERSO_ALTERNATIVA RA 
+                    WHERE RA.IDERECLUTAPERSONA = p_ideReclutaPersona) RAL 
+         ON (AL.IDEALTERNATIVA = RAL.IDEALTERNATIVA)
     WHERE AL.IDECRITERIO = CS.IDECRITERIO
     AND RC.IDECRITERIOXSUBCATEGORIA = CS.IDECRITERIOXSUBCATEGORIA
     AND RCAT.IDERECLPERSOEXAMNCAT = RC.IDERECLPERSOEXAMNCAT
     AND RCAT.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
+    AND RCAT.IDERECLUTAPERSONA = p_ideReclutaPersona
     AND RC.IDERECLUTAPERSONA = p_ideReclutaPersona;
     --ORDER BY RC.IDERECLUPERSOCRITERIO;
     
@@ -1751,7 +2123,7 @@ END SP_RECUPERAR_EXAMEN;
                                   
     Log de Cambios
       Fecha       Autor                Descripcion
-      18/03/2014  Jaqueline Ccana       Creaci?n    
+      21/04/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
 PROCEDURE SP_REPORTE_POSTULANTESBD(p_nombreCargo     IN CARGO.NOMCARGO%TYPE,
                                    p_areaEstudio     IN ESTUDIOS_POSTULANTE.TIPAREA%TYPE,
@@ -1759,8 +2131,8 @@ PROCEDURE SP_REPORTE_POSTULANTESBD(p_nombreCargo     IN CARGO.NOMCARGO%TYPE,
                                    p_departamento    IN UBIGEO.IDEUBIGEO%TYPE,                        
                                    p_provincia       IN UBIGEO.IDEUBIGEO%TYPE,
                                    p_distrito        IN UBIGEO.IDEUBIGEO%TYPE,
-                                   p_fecDesde        IN DATE,
-                                   p_fecHasta        IN DATE,
+                                   p_fecDesde        IN VARCHAR2,
+                                   p_fecHasta        IN VARCHAR2,
                                    p_edadInicio      IN NUMBER,
                                    p_edadFin         IN NUMBER,
                                    p_cRetVal         OUT SYS_REFCURSOR)IS
@@ -1769,108 +2141,418 @@ PROCEDURE SP_REPORTE_POSTULANTESBD(p_nombreCargo     IN CARGO.NOMCARGO%TYPE,
 c_nombreCargo    CARGO.NOMCARGO%TYPE;
 c_areaEstudio    ESTUDIOS_POSTULANTE.TIPAREA%TYPE;
 c_rangoSalario   DETALLE_GENERAL.VALOR%TYPE;
-c_departamento   UBIGEO.NOMBRE%TYPE;                        
-c_provincia      UBIGEO.NOMBRE%TYPE;
-c_distrito       UBIGEO.NOMBRE%TYPE;
-c_fecDesde       DATE;
-c_fecHasta       DATE;
+c_departamento   UBIGEO.IDEUBIGEO%TYPE;                        
+c_provincia      UBIGEO.IDEUBIGEO%TYPE;
+c_distrito       UBIGEO.IDEUBIGEO%TYPE;
 c_edadInicio     NUMBER;
 c_edadFin        NUMBER;
           
 BEGIN
-
-  IF p_nombreCargo IS NULL THEN
-    c_nombreCargo := '';
-  ELSE
-    c_nombreCargo:= p_nombreCargo;
-  END IF;
-  
-  IF p_rangoSalario IS NULL THEN
-    c_rangoSalario := '';
-  ELSE
-    c_rangoSalario := p_rangoSalario;
-  END IF;
+      
+      IF p_nombreCargo IS NULL THEN
+        c_nombreCargo := 'ABC';
+      ELSE
+        c_nombreCargo := p_nombreCargo;
+      END IF;
+      
    
-  IF p_areaEstudio IS NULL THEN
-    c_areaEstudio := '';
-  ELSE
-    c_areaEstudio := p_areaEstudio;
-  END IF;
-  
-  IF p_departamento IS NULL THEN
-    c_departamento := '';
-  ELSE
-    SELECT U.NOMBRE INTO c_departamento FROM UBIGEO U WHERE U.IDEUBIGEO = p_departamento;                                                                                         
-  END IF;
-  
-  IF p_provincia IS NULL THEN
-    c_provincia := '';
-  ELSE
-   SELECT U.NOMBRE INTO c_provincia FROM UBIGEO U WHERE U.IDEUBIGEO = p_provincia;
-  END IF;
-  
-  IF p_distrito IS NULL THEN
-    c_distrito := '';
-  ELSE
-    SELECT U.NOMBRE INTO c_distrito FROM UBIGEO U WHERE U.IDEUBIGEO = p_distrito;
-  END IF;
-  
-  IF p_edadInicio IS NULL THEN
-    c_edadInicio := 0;
-  ELSE
-    c_edadInicio:= p_edadInicio;
-  END IF;
-  
-  IF p_edadFin IS NULL THEN
-    c_edadFin := 100;
-  ELSE
-    c_edadFin:= p_edadFin;
-  END IF;
-  
-    
- BEGIN
- OPEN  p_cRetVal FOR   
- 
-   
- 
-  SELECT P.IDEPOSTULANTE, P.FECCREACION,
-         (SELECT UBI.NOMBRE FROM UBIGEO UBI WHERE UBI.IDEUBIGEO = (SELECT UB.IDEUBIGEOPADRE 
-                                                                   FROM UBIGEO UB 
-                                                                   WHERE UB.IDEUBIGEO = (SELECT U.IDEUBIGEOPADRE 
-                                                                                         FROM UBIGEO U 
-                                                                                         WHERE U.IDEUBIGEO = P.IDEUBIGEO))) DEPARTAMENTO ,
-         (SELECT UB.NOMBRE FROM UBIGEO UB WHERE UB.IDEUBIGEO = (SELECT U.IDEUBIGEOPADRE 
-                                                                FROM UBIGEO U 
-                                                                WHERE U.IDEUBIGEO = P.IDEUBIGEO)) PROVINCIA ,
-         (SELECT U.NOMBRE FROM UBIGEO U WHERE U.IDEUBIGEO = P.IDEUBIGEO)DISTRITO, 
-         P.PRINOMBRE||' '||P.SEGNOMBRE||' '|| P.APEPATERNO||' '|| P.APEMATERNO NOMBREAPELLIDO, 
-         CASE WHEN TO_CHAR(P.TELMOVIL) IS NOT NULL THEN TO_CHAR(P.TELMOVIL) ELSE P.TELFIJO END TELEFONO , 
-         P.CORREO, EXP.NOMEMPRESA, 
-         CASE WHEN (EXP.TIPCARGOTRABAJO = 'XX')THEN EXP.NOMCARGOTRABAJO ELSE (SELECT DG.DESCRIPCION FROM DETALLE_GENERAL DG WHERE DG.IDEGENERAL = 24 AND DG.VALOR = EXP.TIPCARGOTRABAJO)END CARGO, 
-         TO_NUMBER(TRUNC(MONTHS_BETWEEN(SYSDATE,P.FECNACIMIENTO)/12)) EDAD,
-         (SELECT DG.DESCRIPCION FROM DETALLE_GENERAL DG WHERE DG.IDEGENERAL = 20 AND DG.VALOR= EP.TIPEDUCACION) TIPOESTUDIO,  
-         EP.TIPAREA,(SELECT DETG.DESCRIPCION FROM DETALLE_GENERAL DETG WHERE DETG.IDEGENERAL = 19 AND DETG.VALOR = EP.TIPAREA ) TIPOAREA,       
-         P.TIPSALARIO,(SELECT DT.DESCRIPCION FROM DETALLE_GENERAL DT WHERE DT.IDEGENERAL = 11 AND DT.VALOR = P.TIPSALARIO) RANGOSALARIO
-  FROM  UBIGEO U, EXP_POSTULANTE EXP, POSTULANTE P ,ESTUDIOS_POSTULANTE EP 
-  WHERE P.IDEUBIGEO = U.IDEUBIGEO 
-  AND  P.IDEPOSTULANTE = EXP.IDEPOSTULANTE
-  AND  EP.IDEPOSTULANTE = P.IDEPOSTULANTE;
- -- AND  (c_departamento = '' OR DEPARTAMENTO  = c_departamento)
- -- AND  (c_provincia = '' OR PROVINCIA = c_provincia)
- -- AND  (c_distrito = '' OR DISTRITO = c_distrito)
- -- AND  (c_areaEstudio = '' OR EP.TIPAREA = c_areaEstudio)
- -- AND  (c_rangoSalario = '' OR P.TIPSALARIO = c_rangoSalario);
- -- AND  (EDAD >= c_edadInicio)
- -- AND  (EDAD < c_edadFin+1)
---  AND  (NVL(p_fecDesde, NULL) IS NULL OR (TO_DATE(P.FECCREACION, 'DD/MM/YYYY') >=TO_DATE(p_fecDesde, 'DD/MM/YYYY')))
- -- AND  (NVL(p_fecHasta, NULL) IS NULL OR (TO_DATE(P.FECCREACION, 'DD/MM/YYYY') < TO_DATE(p_fecHasta, 'DD/MM/YYYY') + 1));
+      IF p_rangoSalario IS NULL THEN
+        c_rangoSalario := '0';
+      ELSE
+        c_rangoSalario := p_rangoSalario;
+      END IF;
+       
+      IF p_areaEstudio IS NULL THEN
+        c_areaEstudio := '0';
+      ELSE
+        c_areaEstudio := p_areaEstudio;
+      END IF;
+      
+      IF p_departamento IS NULL THEN
+        c_departamento := 0;
+      ELSE
+        c_departamento :=  p_departamento;                                                                                        
+      END IF;
+      
+      IF p_provincia IS NULL THEN
+        c_provincia := 0;
+      ELSE
+        c_provincia := p_provincia;
+      END IF;
+      
+      IF p_distrito IS NULL THEN
+        c_distrito := 0;
+      ELSE
+        c_distrito := p_distrito;
+      END IF;
+      
+      IF p_edadInicio IS NULL THEN
+        c_edadInicio := 0;
+      ELSE
+        c_edadInicio:= p_edadInicio;
+      END IF;
+      
+      IF p_edadFin IS NULL THEN
+        c_edadFin := 100;
+      ELSE
+        c_edadFin:= p_edadFin;
+      END IF;
+      
+        
+     BEGIN
+     OPEN  p_cRetVal FOR  
+     SELECT *
+     FROM ( 
+        SELECT  PBD.IDEPOSTULANTE,
+                TRUNC(PBD.FECCREACION) FECCREACION ,
+                PBD.DEPARTAMENTO,
+                PBD.PROVINCIA,
+                PBD.DISTRITO,
+                PBD.NOMBREAPELLIDO,
+                PBD.TELEFONO,
+                PBD.CORREO,
+                PBD.CARGO,
+                PBD.EDAD,
+                PBD.TIPOESTUDIO,
+                PBD.TIPOAREA,
+                PBD.RANGOSALARIO,
+                ROW_NUMBER()
+                OVER (PARTITION BY PBD.IDEPOSTULANTE
+                      ORDER BY PBD.TIPEDUCACION DESC ) AS ROWNUMBER
+         FROM (SELECT  P.IDEPOSTULANTE, P.FECCREACION, 
+                       UP.IDEDEPARTAMENTO , UP.DEPARTAMENTO, 
+                       UP.IDEPROVINCIA, UP.PROVINCIA,
+                       UP.IDEDISTRITO, UP.DISTRITO,
+                       P.PRINOMBRE||' '||P.SEGNOMBRE||' '|| P.APEPATERNO||' '|| P.APEMATERNO NOMBREAPELLIDO, 
+                       CASE WHEN TO_CHAR(P.TELMOVIL) IS NOT NULL THEN TO_CHAR(P.TELMOVIL) ELSE P.TELFIJO END TELEFONO , 
+                       P.CORREO, 
+                       CASE WHEN (EXP.TIPCARGOTRABAJO = 'XX')THEN EXP.NOMCARGOTRABAJO ELSE (SELECT DG.DESCRIPCION 
+                                                                                    FROM DETALLE_GENERAL DG 
+                                                                                    WHERE DG.IDEGENERAL = 24 AND DG.VALOR = EXP.TIPCARGOTRABAJO)END CARGO, 
+                       TO_NUMBER(TRUNC(MONTHS_BETWEEN(SYSDATE,P.FECNACIMIENTO)/12)) EDAD, EP.TIPEDUCACION,
+                       (SELECT DG.DESCRIPCION 
+                        FROM DETALLE_GENERAL DG 
+                        WHERE DG.IDEGENERAL = 20 AND DG.VALOR= EP.TIPEDUCACION) TIPOESTUDIO,  
+                        EP.TIPAREA,(SELECT DETG.DESCRIPCION FROM DETALLE_GENERAL DETG WHERE DETG.IDEGENERAL = 19 AND DETG.VALOR = EP.TIPAREA ) TIPOAREA,       
+                        P.TIPSALARIO,(SELECT DT.DESCRIPCION FROM DETALLE_GENERAL DT WHERE DT.IDEGENERAL = 11 AND DT.VALOR = P.TIPSALARIO) RANGOSALARIO
+               FROM  (SELECT DEP.IDEUBIGEO IDEDEPARTAMENTO, DEP.NOMBRE DEPARTAMENTO, PROV.IDEUBIGEO IDEPROVINCIA, PROV.NOMBRE PROVINCIA , DIST.IDEUBIGEO IDEDISTRITO, DIST.NOMBRE DISTRITO
+                      FROM UBIGEO PROV , ( SELECT * FROM UBIGEO U  WHERE U.IDEUBIGEOPADRE IS NULL) DEP , (SELECT * FROM UBIGEO UBI ) DIST
+                      WHERE PROV.IDEUBIGEOPADRE = DEP.IDEUBIGEO
+                      AND DIST.IDEUBIGEOPADRE = PROV.IDEUBIGEO) UP, 
+                      EXP_POSTULANTE EXP, 
+                      POSTULANTE P ,
+                      ESTUDIOS_POSTULANTE EP 
+               WHERE P.IDEPOSTULANTE = EXP.IDEPOSTULANTE
+               AND  EP.IDEPOSTULANTE = P.IDEPOSTULANTE
+               AND UP.IDEDISTRITO = P.IDEUBIGEO
+               AND P.IDEPOSTULANTE NOT IN (SELECT RP.IDEPOSTULANTE FROM RECLUTAMIENTO_PERSONA RP)
+               ORDER BY P.IDEPOSTULANTE , EP.TIPEDUCACION DESC ) PBD 
+       WHERE UPPER(PBD.CARGO) LIKE '%'||UPPER(c_nombreCargo)||'%'
+       AND  (c_departamento = 0 OR PBD.IDEDEPARTAMENTO  = c_departamento)
+       AND  (c_provincia = 0 OR PBD.IDEPROVINCIA = c_provincia)
+       AND  (c_distrito = 0 OR PBD.IDEDISTRITO = c_distrito)
+       AND  (c_areaEstudio = '0' OR PBD.TIPAREA = c_areaEstudio)
+       AND  (c_rangoSalario = '0' OR PBD.TIPSALARIO = c_rangoSalario)
+       AND  (PBD.EDAD >= c_edadInicio)
+       AND  (PBD.EDAD < c_edadFin+1)
+       AND ( NVL(p_fecDesde,NULL) IS NULL OR  PBD.FECCREACION >= TO_DATE(p_fecDesde, 'DD/MM/YYYY'))
+       AND ( NVL(p_fecHasta,NULL) IS NULL OR PBD.FECCREACION < TO_DATE(p_fecHasta, 'DD/MM/YYYY') +1)
+       )
+    WHERE ROWNUMBER = 1;
 
-EXCEPTION
-  WHEN OTHERS THEN
-  p_cRetVal:= NULL;
-END;
+    EXCEPTION
+      WHEN OTHERS THEN
+      p_cRetVal:= NULL;
+    END;
 
 END SP_REPORTE_POSTULANTESBD;
+
+/* ------------------------------------------------------------
+    Nombre      : FN_TOTAL_PUNTAJE_EXAMEN
+    Proposito   : funcion para calcular el tuntaje total de los examenes 
+                  de un postulante para determinada postulacion
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_TOTAL_PUNTAJE_EXAMEN(p_ideReclutaPersona IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE
+                                 )RETURN NUMBER 
+
+IS
+pjteTotal NUMBER;
+
+BEGIN
+  
+  SELECT SUM(RPE.NOTAFINAL) 
+  INTO pjteTotal
+  FROM RECLU_PERSO_EXAMEN RPE
+  WHERE RPE.IDERECLUTAPERSONA = p_ideReclutaPersona;
+
+  RETURN NVL(pjteTotal,0);
+  
+END FN_TOTAL_PUNTAJE_EXAMEN;
+
+
+
+/* ------------------------------------------------------------
+    Nombre      : SP_REPORTE_POST_POTENCIAL
+    Proposito   : obtiene la lista de los postulante potenciales 
+                  para determinado cargo
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      23/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_REPORTE_POST_POTENCIAL(p_ideCargo        IN CARGO.IDECARGO%TYPE,
+                                    p_areaEstudio     IN DETALLE_GENERAL.VALOR%TYPE,
+                                    p_rangoSalario    IN DETALLE_GENERAL.VALOR%TYPE,
+                                    p_ideSede         IN SEDE.IDESEDE%TYPE,                        
+                                    p_ideDependencia  IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                    p_ideDepartamento IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                    p_ideArea         IN AREA.IDEAREA%TYPE,
+                                    p_fecDesde        IN VARCHAR2,
+                                    p_fecHasta        IN VARCHAR2,
+                                    p_edadInicio      IN NUMBER,
+                                    p_edadFin         IN NUMBER,
+                                    p_cRetVal         OUT SYS_REFCURSOR )IS
+
+
+c_ideCargo      CARGO.NOMCARGO%TYPE;
+c_areaEstudio      DETALLE_GENERAL.VALOR%TYPE;
+c_rangoSalario     DETALLE_GENERAL.VALOR%TYPE;
+c_ideSede          SEDE.IDESEDE%TYPE;                        
+c_ideDependencia   DEPENDENCIA.IDEDEPENDENCIA%TYPE;
+c_ideDepartamento  DEPARTAMENTO.IDEDEPARTAMENTO%TYPE;
+c_ideArea          AREA.IDEAREA%TYPE;
+c_edadInicio       NUMBER;
+c_edadFin          NUMBER;
+          
+BEGIN
+      
+      IF p_ideCargo IS NULL THEN
+        c_ideCargo := 0;
+      ELSE
+        c_ideCargo := p_ideCargo;
+      END IF;
+      
+      IF p_rangoSalario IS NULL THEN
+        c_rangoSalario := '0';
+      ELSE
+        c_rangoSalario := p_rangoSalario;
+      END IF;
+       
+      IF p_areaEstudio IS NULL THEN
+        c_areaEstudio := '0';
+      ELSE
+        c_areaEstudio := p_areaEstudio;
+      END IF;
+      
+      IF ((p_ideSede IS NULL) OR (p_ideSede = 999)) THEN
+        c_ideSede := 0;
+      ELSE
+        c_ideSede :=  p_ideSede;                                                                                        
+      END IF;
+      
+      IF p_ideDependencia IS NULL THEN
+        c_ideDependencia := 0;
+      ELSE
+        c_ideDependencia :=  p_ideDependencia;                                                                                        
+      END IF;
+      
+      IF p_ideDepartamento IS NULL THEN
+        c_ideDepartamento := 0;
+      ELSE
+        c_ideDepartamento := p_ideDepartamento;
+      END IF;
+      
+      IF p_ideArea IS NULL THEN
+        c_ideArea := 0;
+      ELSE
+        c_ideArea := p_ideArea;
+      END IF;
+      
+      IF p_edadInicio IS NULL THEN
+        c_edadInicio := 0;
+      ELSE
+        c_edadInicio:= p_edadInicio;
+      END IF;
+      
+      IF p_edadFin IS NULL THEN
+        c_edadFin := 100;
+      ELSE
+        c_edadFin:= p_edadFin;
+      END IF;
+  
+  OPEN p_cRetVal FOR
+  SELECT *
+  FROM (                 
+        SELECT PP.IDERECLUTAPERSONA,
+               PP.IDEPOSTULANTE,
+               PP.FECPOTENCIAL,
+               (SELECT S.DESCRIPCION FROM SEDE S WHERE S.IDESEDE = PP.IDESEDE) AS NOMBRESEDE,
+               (SELECT D.NOMDEPENDENCIA 
+                FROM DEPENDENCIA D 
+                WHERE D.IDEDEPENDENCIA = PP.IDEDEPENDENCIA
+                AND D.IDESEDE = PP.IDESEDE
+                AND D.ESTACTIVO = 'A') AS NOMBREDEPENDENCIA,
+               (SELECT DE.NOMDEPARTAMENTO 
+                FROM DEPARTAMENTO DE 
+                WHERE DE.IDEDEPARTAMENTO = PP.IDEDEPARTAMENTO
+                AND DE.IDEDEPENDENCIA = PP.IDEDEPENDENCIA
+                AND DE.ESTACTIVO = 'A') AS NOMBREDEPARTAMENTO,
+               (SELECT A.NOMAREA 
+                FROM AREA A 
+                WHERE A.IDEAREA = PP.IDEAREA
+                AND A.IDEDEPARTAMENTO = PP.IDEDEPARTAMENTO
+                AND A.ESTACTIVO = 'A') AS NOMBREAREA,
+               PP.NOMBREPOSTULANTE,
+               PP.NOMBRECARGO,
+               PP.TELEFONO,
+               PP.CORREO,
+               PP.EDAD,
+               PP.TIPOEDUCACION,
+               PP.PTJECV,
+               FN_TOTAL_PUNTAJE_EXAMEN(PP.IDERECLUTAPERSONA) PTJESELECCION,
+               PP.TIPOAREA,
+               PP.RANGOSALARIO,
+               ROW_NUMBER()
+                      OVER (PARTITION BY PP.IDERECLUTAPERSONA
+                            ORDER BY PP.TIPEDUCACION DESC ) AS ROWNUMBER
+        FROM (SELECT RP.IDERECLUTAPERSONA,
+                     RP.INDPOTENCIAL,
+                     RP.FECPOTENCIAL,
+                     P.IDEPOSTULANTE,
+                     SOL.IDESEDE, 
+                     SOL.IDEDEPENDENCIA,
+                     SOL.IDEDEPARTAMENTO, 
+                     SOL.IDEAREA,
+                     P.PRINOMBRE||' '||P.SEGNOMBRE||' '||P.APEPATERNO||' '||P.APEMATERNO NOMBREPOSTULANTE,
+                     SOL.NOMBRECARGO,
+                     SOL.IDECARGO,
+                     CASE WHEN TO_CHAR(P.TELMOVIL) IS NOT NULL THEN TO_CHAR(P.TELMOVIL) ELSE P.TELFIJO END TELEFONO ,
+                     P.CORREO,
+                     TO_NUMBER(TRUNC(MONTHS_BETWEEN(SYSDATE,P.FECNACIMIENTO)/12)) EDAD,
+                     RP.PTOTOTAL,
+                     EP.TIPEDUCACION,
+                     (SELECT DT.DESCRIPCION FROM DETALLE_GENERAL DT WHERE DT.IDEGENERAL = 20 AND DT.VALOR = EP.TIPEDUCACION) TIPOEDUCACION,
+                     RP.PTOTOTAL PTJECV,
+                     EP.TIPAREA,
+                     (SELECT DT.DESCRIPCION FROM DETALLE_GENERAL DT WHERE DT.IDEGENERAL = 19 AND DT.VALOR = EP.TIPAREA) TIPOAREA,
+                     P.TIPSALARIO,
+                     (SELECT DT.DESCRIPCION FROM DETALLE_GENERAL DT WHERE DT.IDEGENERAL = 11 AND DT.VALOR = P.TIPSALARIO) RANGOSALARIO 
+             FROM  POSTULANTE P LEFT JOIN ESTUDIOS_POSTULANTE EP  ON P.IDEPOSTULANTE = EP.IDEPOSTULANTE , 
+                   RECLUTAMIENTO_PERSONA RP , 
+                   (SELECT *             
+                    FROM (SELECT SN.IDECARGO, SN.IDESEDE IDESEDE,SN.IDEDEPENDENCIA IDEDEPENDENCIA,SN.IDEDEPARTAMENTO IDEDEPARTAMENTO,
+                          SN.IDEAREA IDEAREA,SN.NOMBRE NOMBRECARGO,SN.IDESOLNUEVOCARGO IDESOL , '01' TIPSOL 
+                          FROM SOLNUEVO_CARGO SN) 
+                          UNION ALL
+                         (SELECT SR.IDECARGO, SR.IDESEDE IDESEDE,SR.IDEDEPENDENCIA IDEDEPENDENCIA,SR.IDEDEPARTAMENTO IDEDEPARTAMENTO,
+                          SR.IDEAREA IDEAREA, SR.NOMCARGO NOMBRECARGO, SR.IDESOLREQPERSONAL IDESOL,SR.TIPSOL 
+                          FROM SOLREQ_PERSONAL SR)) SOL 
+             WHERE RP.IDESOL = SOL.IDESOL
+             AND RP.TIPSOL = SOL.TIPSOL
+             AND P.IDEPOSTULANTE = RP.IDEPOSTULANTE
+             --AND RP.INDPOTENCIAL = 'S'
+             ORDER BY RP.IDERECLUTAPERSONA,EP.TIPEDUCACION DESC ) PP
+         WHERE -- PP.IDECARGO = c_ideCargo AND
+          (c_ideSede = 0 OR PP.IDESEDE  = c_ideSede)
+         AND  (c_ideDependencia = 0 OR PP.IDEDEPENDENCIA = c_ideDependencia)
+         AND  (c_ideDepartamento = 0 OR PP.IDEDEPARTAMENTO  = c_ideDepartamento)
+         AND  (c_ideArea = 0 OR PP.IDEAREA = c_ideArea)
+         AND  (c_areaEstudio = '0' OR PP.TIPAREA = c_areaEstudio)
+         AND  (c_rangoSalario = '0' OR PP.TIPSALARIO = c_rangoSalario)
+         AND  (PP.EDAD >= c_edadInicio)
+         AND  (PP.EDAD < c_edadFin+1)
+         AND ( NVL(p_fecDesde,NULL) IS NULL OR  PP.FECPOTENCIAL >= TO_DATE(p_fecDesde, 'DD/MM/YYYY'))
+         AND ( NVL(p_fecHasta,NULL) IS NULL OR PP.FECPOTENCIAL < TO_DATE(p_fecHasta, 'DD/MM/YYYY') +1))
+     WHERE ROWNUMBER = 1;
+
+END SP_REPORTE_POST_POTENCIAL;
+
+
+/* ------------------------------------------------------------
+    Nombre      : SP_CARGOS_SEDE
+    Proposito   : Procedimiento para listar los cargos de acuerdo 
+                  a la sede seleccionada o todas
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_CARGOS_SEDE(p_ideSede  IN SEDE.IDESEDE%TYPE,
+                         p_cRetVal  OUT SYS_REFCURSOR)IS
+
+c_ideSede SEDE.IDESEDE%TYPE;
+
+BEGIN
+
+  IF ((p_ideSede = 0) OR (p_ideSede = 999)) THEN
+    c_ideSede := 0;
+  ELSE
+    c_ideSede := p_ideSede;
+  END IF;
+  
+  OPEN p_cRetVal FOR
+  SELECT C.IDECARGO, C.NOMCARGO
+  FROM CARGO C
+  WHERE C.ESTACTIVO = 'A'
+  AND (c_ideSede = 0 OR C.IDESEDE = c_ideSede);
+  
+END SP_CARGOS_SEDE;
+
+
+/* ------------------------------------------------------------
+    Nombre      : FN_EXISTE_RESULTADO_EXAMEN
+    Proposito   : Funci?n para determinar si un examen tiene resultado
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      29/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+FUNCTION FN_EXISTE_RESULTADO_EXAMEN(p_ideReclutaExamen  IN RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE
+                                    ) RETURN VARCHAR IS
+
+
+ c_EstadoEvaluacion   RECLU_PERSO_EXAMEN.TIPESTEVALUACION%TYPE;
+ c_TipoExamen         RECLU_PERSO_EXAMEN.TIPEXAMEN%TYPE;
+BEGIN
+  
+  BEGIN
+  SELECT RE.TIPESTEVALUACION, RE.TIPEXAMEN
+  INTO c_EstadoEvaluacion,c_TipoExamen
+  FROM RECLU_PERSO_EXAMEN RE
+  WHERE RE.IDERECLUPERSOEXAMEN = p_ideReclutaExamen;
+
+  IF c_TipoExamen = P_TIPEXA_EXAMEN OR c_TipoExamen = P_TIPEXA_EVALUACION THEN
+    IF ((c_EstadoEvaluacion = P_ESTEXAMEN_EVALUADO )OR
+        (c_EstadoEvaluacion = P_ESTEXAMEN_APROBADO) OR
+        (c_EstadoEvaluacion = P_ESTEXAMEN_EVALUADO)) THEN
+        RETURN 'S';
+    ELSE
+        RETURN 'N';
+    END IF;
+  ELSE
+    RETURN 'N';
+  END IF;
+  
+  EXCEPTION
+    WHEN OTHERS THEN
+    RETURN 'N';
+  END;
+  
+END FN_EXISTE_RESULTADO_EXAMEN;
+
 
 
 END PR_REQUERIMIENTOS;

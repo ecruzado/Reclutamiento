@@ -381,7 +381,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
 
             objJson.Resultado = true;
-            objJson.Mensaje = "Finalizo la solicitud";
+            objJson.Mensaje = "Se finalizó exitosamente la solicitud de requerimiento";
             
             return Json(objJson);
         }

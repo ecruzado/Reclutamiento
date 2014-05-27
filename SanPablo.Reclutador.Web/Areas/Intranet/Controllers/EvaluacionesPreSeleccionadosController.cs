@@ -174,9 +174,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         [ValidarSesion]
-        public ActionResult ProgramarEvaluacion(string id, string responsable)
+        public ActionResult ProgramarEvaluacion(string id, string responsable, string idRecluPost, int idSol, string tipSol, string pagina, string ind)
         {
             EvaluacionesPreSeleccionadosViewModel modelEvaluacion = iniciarProgramarEvaluacion();
+
+            modelEvaluacion.idReclutaPost = idRecluPost;
+            modelEvaluacion.idSol = idSol;
+            modelEvaluacion.tipsol = tipSol;
+            modelEvaluacion.pagina = pagina;
+            modelEvaluacion.ind = ind;
+
             int idReclutamientoEvaluacion = Convert.ToInt32(id);
 
             var reclutamientoEvaluacionExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idReclutamientoEvaluacion);
@@ -340,6 +347,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     reclutaExamenEditar.ComentarioResultado = model.ReclutaPersonaExamen.ComentarioResultado;
                     reclutaExamenEditar.TipoEstadoEvaluacion = model.ReclutaPersonaExamen.TipoEstadoEvaluacion;
+                    reclutaExamenEditar.IdeUsuarioResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
                     reclutaExamenEditar.FechaModificacion = FechaModificacion;
                     reclutaExamenEditar.NotaFinal = model.ReclutaPersonaExamen.NotaFinal;
                     

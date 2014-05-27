@@ -18,13 +18,26 @@
             var id = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', id);
 
+            var idReclutaPost = $('#idReclutaPost').val();
+            var idSol = $("#IdeSolReqPersonal").val();
+            var tipSol = $("#tipsol").val();
+            var pagina = $("#pagina").val();
+            var indPagina = '@Indicador.Si';
+
+            
             var idReclutaExamen = rowData.IdeRecluPersoExam;
             var nombreResponsable = rowData.Responsable;
             if (idReclutaExamen != null && idReclutaExamen > 0) {
 
                 if ((rowData.TipoExamen != '01') && (rowData.TipoExamen != '04')) {
-                    var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable;
-                    window.location = url;
+                    
+                    if (rowData.PuntajeTotal == "") {
+                        var url = '@Url.Action("ProgramarEvaluacion", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idReclutaExamen + '&responsable=' + nombreResponsable+
+                                                                                                            '&idRecluPost=' + idReclutaPost + '&idSol=' + idSol + '&tipSol=' + tipSol + '&pagina=' + pagina + '&ind=' + indPagina;
+                       
+                        window.location = url;
+                    }
+                    else { MostrarMensaje('No puede reprogramar un exámen con puntaje', "MENSAJE");}
                 }
                 else { MostrarMensaje('No es necesaria la programación de la evaluacion', "MENSAJE");}
             } else {
@@ -292,6 +305,7 @@
                         @Html.TextBoxFor(model => model.IdeSolReqPersonal, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.tipsol, new { style = "display: none;" })  
                         @Html.TextBoxFor(model => model.usuarioSession, new { style = "display:none;" })
+                        @Html.TextBoxFor(model => model.idReclutaPost, new { style = "display:none;" })
                        
                         @Html.TextBoxFor(model => model.ReclutaPersona.IdeReclutaPersona, new { style = "display: none" })
                         @Html.TextBoxFor(model => model.PostulantePreSel.IdePostulante, new { style = "display: none" })

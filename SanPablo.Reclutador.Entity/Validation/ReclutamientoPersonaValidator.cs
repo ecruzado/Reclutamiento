@@ -12,11 +12,11 @@ namespace SanPablo.Reclutador.Entity.Validation
         {
             RuleFor(x => x.MotivoCierre)
                     .NotEmpty()
-                    .WithMessage("Ingresar el motivo de cierre de la solicitud");
+                    .WithMessage("Ingresar el motivo");
 
             RuleFor(x => x.Comentario)
                     .NotEmpty()
-                    .WithMessage("Ingrese un comenteatio");
+                    .WithMessage("Ingrese un comentario");
         
         }
     }

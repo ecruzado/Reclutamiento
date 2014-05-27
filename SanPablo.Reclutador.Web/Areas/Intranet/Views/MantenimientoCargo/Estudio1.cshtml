@@ -5,10 +5,6 @@
     Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 @section ScriptsCargo{  
-
-<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-
 <script type="text/javascript">
      $(document).ready(function () {
         $('#btnAgregarNivelAcademico').click(function () {
@@ -17,7 +13,7 @@
 
         $('#updateDialogNivelAcademico').dialog({
             autoOpen: false,
-            width: 450,
+            width: 600,
             resizable: false,
             modal: true,
             buttons: {
@@ -25,9 +21,6 @@
                     e.preventDefault();
                     var result = $('#nivelAcademicoForm').valid();
                     if (result) {
-
-                        //mensaje
-
                         $.post('@Url.Action("Edit", "NivelAcademicoCargo")',
                             $("#nivelAcademicoForm").serialize(),
                             function (respuesta) {
@@ -36,23 +29,18 @@
                                     $('#grdListNivelAcademico').trigger('reloadGrid');
                                 }
                                 else {
-                                   
                                     notificacionError(respuesta.Mensaje);
                                 }
                             }
                         );
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    //}
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-            },
-            open: function () {
-                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
-                $("#NivelAcademico_TipoEducacion+div span").html('');
             }
         });
 
@@ -84,17 +72,13 @@
                                 }
                             );
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    //}
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-            },
-            open: function () {
-                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
-                $("#CentroEstudio_TipoCentroEstudio+div span").html('');
             }
         });
 
@@ -103,7 +87,7 @@
              if (ideNivelAcademico != null) {
                  $("#spanMensaje5").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje5").dialog({
-                     title: 'Sistema de reclutamiento y selección de personal',
+                     title: 'SAN PABLO',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarNivelAcademico(ideNivelAcademico); $(this).dialog("close"); $('#grdListNivelAcademico').trigger('reloadGrid'); },
@@ -114,7 +98,14 @@
                  return false;
              }
              else {
-                 mostrarMensaje('Seleccionar un item a eliminar');
+                 $("#spanMensaje5").html('Seleccionar un item a eliminar');
+                 $("#divMensaje5").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
              }
          });
 
@@ -123,7 +114,7 @@
              if (ideCentroEstudio != null) {
                  $("#spanMensaje6").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje6").dialog({
-                     title: 'Sistema de reclutamiento y selección de personal',
+                     title: 'SAN PABLO',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarCentroEstudio(ideCentroEstudio); $(this).dialog("close"); $('#grdListCentroEstudio').trigger('reloadGrid'); },
@@ -134,7 +125,14 @@
                  return false;
              }
              else {
-                 mostrarMensaje('Seleccionar un item a eliminar');
+                 $("#spanMensaje6").html('Seleccionar un item a eliminar');
+                 $("#divMensaje6").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
              }
          });
 
@@ -144,7 +142,14 @@
                  mostrarEditarNivelAcademico(ideNivelAcademico);
              }
              else {
-                 mostrarMensaje('Seleccionar un item a editar');
+                 $("#spanMensaje5").html('Seleccionar un item a editar');
+                 $("#divMensaje5").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
              }
          });
 
@@ -154,7 +159,14 @@
                  mostrarEditarCentroEstudio(ideCentroEstudio);
              }
              else {
-                 mostrarMensaje('Seleccionar un item a editar');
+                 $("#spanMensaje6").html('Seleccionar un item a editar');
+                 $("#divMensaje6").dialog({
+                     title: 'SAN PABLO',
+                     modal: true,
+                     buttons: {
+                         "Ok": function () { $(this).dialog("close"); }
+                     }
+                 });
              }
          });
 
@@ -175,13 +187,13 @@
                     { name: 'AreaEstudio', index: 'AreaEstudio', align: 'left', editable: false, sortable: false },
                     { name: 'NivelAlcanzado', index: 'NivelAlcanzado', align: 'left', editable: false, sortable: false },
                     { name: 'CicloSemestre', index: 'CicloSemestre', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
             ],
             pager: jQuery('#grdPagerNivelAcademico'),
             sortname: 'IdeNivelAcademicoCargo',
             sortorder: 'desc',
             viewrecords: false,
-            //cellEdit: true,
+            cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -203,13 +215,13 @@
             colModel: [
                     { name: 'Tipo', Tipo: 'Codigo', align: 'center', editable: false, sortable: false },
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
-                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: false },
+                    { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
             ],
             pager: jQuery('#grdPagerCentroEstudio'),
             sortname: 'IdeCentroEstudioCargo',
             sortorder: 'desc',
             viewrecords: false,
-            //cellEdit: true,
+            cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -223,9 +235,6 @@
             }
         });
     });
-
-    
-
 
     function mostrarAgregarNivelAcademico() {
         var dialogDiv = $('#updateDialogNivelAcademico');
@@ -296,12 +305,12 @@
         <div class="grilla-opciones">
             <h6>Nivel Académico</h6>
             <div class="opciones">
-             @if (Accion.Editar == Model.Accion)
-             {
+                @if (Accion.Editar == Model.Accion)
+                {
                 <a id="btnAgregarNivelAcademico" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                 <a id="btnEditarNivelAcademico" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
                 <a id="btnEliminarNivelAcademico" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+                }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -315,12 +324,12 @@
         <div class="grilla-opciones">
             <h6>Centro Estudios</h6>
             <div class="opciones">
-             @if (Accion.Editar == Model.Accion)
-             {
+                @if (Accion.Editar == Model.Accion)
+                {
                 <a id="btnAgregarCentroEstudio" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                 <a id="btnEditarCentroEstudio" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
                 <a id="btnEliminarCentroEstudio" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+                }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -333,7 +342,7 @@
                                             
         <div class="formulario-accion">       
             <div class="opciones">
-            <a class="btn" href="@Url.Action("General", "MantenimientoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+            <a class="btn" href="#" onclick="irATab('B');"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
             <a class="btn btn-info"  href="@Url.Action("Experiencia", "MantenimientoCargo")" ><i class="icon-arrow-right icon-white"></i> Siguiente</a>
 
             </div>

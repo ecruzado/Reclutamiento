@@ -51,9 +51,9 @@
                    </div>
                 </td>
                 <td style="margin-top:5px;margin-right:10px; ">
-                   <span>Duracion </span> <h4 id="horaImprimir" style="display:inline-block" ></h4>     
+                   @*<span>Duracion </span>*@ <h4 id="horaImprimir" style="display:inline-block;width:100px;" ></h4>   
                 </td>
-                <td style="float:right;margin-top:10px;margin-right:10px; width: 430px;">
+                <td style="float:right;margin-top:10px;margin-right:10px; width: 220px;">
                     @Html.TextBoxFor(model => model.segundos, new { disabled = "disabled", style = "display:none;" })
                     @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "input-mini", style= "display:none;" })
                     <span>Inicio</span> 
@@ -138,7 +138,7 @@
             <div class="form-actions">
                 @if (Model.nroPregunta > 1)
                 {
-                    <a class="btn" id ="btnAnterior" onclick ="preguntaAnterior(@Model.nroPregunta)"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                    <a class="btn" id ="btnAnterior" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
                 } 
                 @if (Accion.Siguiente == Model.Accion)
                 {    
@@ -180,55 +180,78 @@
 
         SanPablo.Numeros('nroPregunta');
 
+        $(window).on('beforeunload', function () {
+
+            $(window).on('unload', function () {
+                cerrarPrueba();
+            });
+            return "¿Termino el examen?";
+        });
+
         $('.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close').remove();
 
         $('#btnBuscarPregunta').click(function () {
+            stopNavigate();
             guardarBuscarPregunta();
             //buscarPreguntaRef();
         });
 
 
-        $('#btnTerminarPrueba').on('mousedown', stopNavigate);
-
-        $('#btnTerminarPrueba').on('mouseleave', function () {
-            $(window).on('beforeunload', function () {
-                return 'Esta seguro de terminar la prueba?';
-            });
+        $('#btnAnterior').click(function () {
+            stopNavigate();
+            preguntaAnterior(@Model.nroPregunta);
         });
+        
+        $('#btnSiguiente').click(function () {
+            stopNavigate();
+        });
+
+        $('#btnAceptarId').click(function () { stopNavigate });
+
+        //$('#btnAceptarId').on('mousedown', stopNavigate);
+
+        //$('#btnAceptarId').on('mouseleave', function () {
+        //    $(window).on('beforeunload', function () {
+        //        return 'Esta seguro de terminar la prueba?';
+        //    });
+        //});
+
+        //$('#btnTerminarPrueba').on('mousedown', stopNavigate);
+
+        //$('#btnTerminarPrueba').on('mouseleave', function () {
+        //    console.log("hola q ase");
+        //    $(window).on('beforeunload', function () {
+        //        return 'Esta seguro de terminar la prueba?';
+        //    });
+        //});
 
         
-        $('#btnBuscarPregunta').on('mousedown', stopNavigate);
+        //$('#btnBuscarPregunta').on('mousedown', stopNavigate);
 
-        $('#btnBuscarPregunta').on('mouseleave', function () {
-            $(window).on('beforeunload', function () {
-                return 'Esta seguro de terminar la prueba?';
-            });
-        });
+        //$('#btnBuscarPregunta').on('mouseleave', function () {
+        //    $(window).on('beforeunload', function () {
+        //        return 'Esta seguro de terminar la prueba?';
+        //    });
+        //});
 
        
-        $('#btnAnterior').on('mousedown', stopNavigate);
+        //$('#btnAnterior').on('mousedown', stopNavigate);
 
-        $('#btnAnterior').on('mouseleave', function () {
-            $(window).on('beforeunload', function () {
-                return 'Esta seguro de terminar la prueba?';
-            });
-        });
+        //$('#btnAnterior').on('mouseleave', function () {
+        //    $(window).on('beforeunload', function () {
+        //        return 'Esta seguro de terminar la prueba?';
+        //    });
+        //});
 
-        $('#btnSiguiente').on('mousedown', stopNavigate);
+        //$('#btnSiguiente').on('mousedown', stopNavigate);
 
-        $('#btnSiguiente').on('mouseleave', function () {
-                $(window).on('beforeunload', function () {
-                    return 'Esta seguro de terminar la prueba?';
-                });
-            });
+        //$('#btnSiguiente').on('mouseleave', function () {
+        //        $(window).on('beforeunload', function () {
+        //            return 'Esta seguro de terminar la prueba?';
+        //        });
+        //    });
 
-        $(window).on('beforeunload', function () {
-            
-            $(window).on('unload', function () {
-                cerrarPrueba();
-            });
-            return "test";
-       });
+      
 
             //$(window).on('unload', function () {
             //   // cerrarPrueba();
@@ -236,6 +259,7 @@
             //});
 
         $('#btnTerminarPrueba').click(function () {
+            stopNavigate();
             verificarPreguntas();
                 
             });
@@ -250,9 +274,17 @@
                       $("#spnMensaje").html(respuesta.Mensaje);
                       $("#divMensaje").dialog({
                           title: 'CONFIRMACIÓN',
+                          resizable: false,
                           modal: true,
                           buttons: {
-                              "Aceptar": function () { cerrarPrueba(); $(this).dialog("close"); },
+                              "Aceptar":
+                                   {
+                                       text: "Aceptar",
+                                       id: "btnAceptarId",
+                                       click: function () {
+                                           cerrarPrueba(); $(this).dialog("close");
+                                       }
+                                   },//  function () { cerrarPrueba(); $(this).dialog("close"); },
                               "Cancelar": function () { $(this).dialog("close"); }
                           }
                       });
@@ -346,7 +378,8 @@
 
                   }
                   else {
-                      MostrarMensaje(respuesta.Mensaje,"MENSAJE");
+                      window.close();
+                      //MostrarMensaje(respuesta.Mensaje,"MENSAJE");
                   }
                }
         );

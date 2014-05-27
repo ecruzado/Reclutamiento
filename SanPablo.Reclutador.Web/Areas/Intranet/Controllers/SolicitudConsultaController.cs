@@ -206,7 +206,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Areas = new List<Area>();
             model.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            model.Cargos = new List<Cargo>(_solicitudAmpliacionPersonal.GetTipCargo(0));
+            model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSede(Convert.ToInt32(Session[ConstanteSesion.Sede])));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));

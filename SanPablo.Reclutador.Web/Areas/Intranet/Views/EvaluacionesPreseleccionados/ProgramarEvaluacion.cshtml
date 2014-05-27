@@ -33,14 +33,13 @@
 
             $('#updateDialogConfirmacion').dialog({
                 autoOpen: false,
-                width: 500,
+                width: 250,
                 resizable: false,
                 modal: true,
                 buttons: {
                     "Aceptar": function (e) {
                         e.preventDefault();
-                        var resul = $('#ProgramarEvaluacionForm').valid();
-                        if (resul) {
+                        if (validar()) {
                             $("#updateDialogConfirmacion").dialog("close");
                             $.blockUI({
                                 message: '<h1>Enviando...</h1>',
@@ -152,7 +151,7 @@
             var id = $('#id').val();
             var idRecluPost = $('#idReclutaPost').val();
             var idSol = $('#idSol').val();
-            var tipSol = $('#tipSol').val();
+            var tipSol = $('#tipsol').val();
             var pagina = $('#pagina').val();
             var indPagina = $('#ind').val();
 
@@ -178,27 +177,47 @@
         {
             var fecha = $('#ReclutaPersonaExamen_FechaEvaluacion').val();
             var hora = $('#ReclutaPersonaExamen_HoraEvaluacion').val();
+            
             var observacion = $('#ReclutaPersonaExamen_Observacion').val();
             var responsable = $('#nombreUsuario').val();
+            
+            var mensaje = false;
+            var cont = 0;
 
             if (fecha == "") {
                 mostrarMensError("Ingresar la fecha de evaluación", "msjErrorFecha");
+                mensaje= false;
             }
             else {
-                ocultarMsjError("msjErrorFecha");}
+                ocultarMsjError("msjErrorFecha");
+                cont = cont + 1;
+                
+            }
             if (hora == "") {
                 mostrarMensError("Ingresar Hora de evaluación", "msjErrorHora");
+                mensaje = false;
             }
             else {
                 ocultarMsjError("msjErrorHora");
+                cont = cont + 1;
             }
             if (responsable == "")
             {
                 mostrarMensError("Ingresar Hora de evaluación", "msjErrorResponsable")
+                mensaje = false;
             }
             else {
                 ocultarMsjError("msjErrorResponsable");
+                cont = cont + 1;
+            }
+
+            if (cont == 3)
+            {
                 return true;
+            }
+            else
+            {
+                return false;
             }
                 
 

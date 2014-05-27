@@ -29,6 +29,8 @@ namespace SanPablo.Reclutador.Web.Core
 
         public const string pagina = "pagina";
 
+        public const string copia = "copia";
+
         /// <summary>
         /// Guarda el identificador de la tabla general
         /// </summary>

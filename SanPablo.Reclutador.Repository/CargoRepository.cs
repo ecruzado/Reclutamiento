@@ -144,7 +144,7 @@
         /// <param name="IdeSolicitud"></param>
         /// <param name="IdeUSuarioCreacion"></param>
         /// <returns></returns>
-        public List<ListaSolicitudNuevoCargo> listaCargos(Cargo cargo, string estado, int ideSede)
+        public List<ListaSolicitudNuevoCargo> listaCargosMantenimiento(Cargo cargo, string estado, int ideSede)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
             try
@@ -156,11 +156,11 @@
                 IDataReader drCargos;
                 ListaSolicitudNuevoCargo objetoCargo;
                 List<ListaSolicitudNuevoCargo> listaCargo = new List<ListaSolicitudNuevoCargo>();
-                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_LISTA_CARGOS");
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_LISTA_CARGOS_MANT");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = lcon;
 
-                cmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = cargo.IdeCargo;
+                cmd.Parameters.Add("p_nCodCargo", OracleType.VarChar).Value = cargo.CodigoCargo;
                 cmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = cargo.IdeDependencia;
                 cmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = cargo.IdeDepartamento;
                 cmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = cargo.IdeArea;
@@ -177,19 +177,54 @@
                 {
                     objetoCargo = new ListaSolicitudNuevoCargo();
 
-                    objetoCargo.EstadoActivo = Convert.ToString(drCargos["ESTACTIVO"]);
-                    objetoCargo.IdeCargo = Convert.ToInt32(drCargos["IDECARGO"]);
-                    objetoCargo.CodigoCargo = Convert.ToString(drCargos["CODCARGO"]);
-                    objetoCargo.NombreCargo = Convert.ToString(drCargos["NOMCARGO"]);
-                    objetoCargo.DescripcionCargo = Convert.ToString(drCargos["DESCARGO"]);
-                    objetoCargo.IdeDependencia = Convert.ToInt32(drCargos["IDEDEPENDENCIA"]);
-                    objetoCargo.NombreDependencia = Convert.ToString(drCargos["NOMDEPENDENCIA"]);
-                    objetoCargo.IdeDepartamento = Convert.ToInt32(drCargos["IDEDEPARTAMENTO"]);
-                    objetoCargo.NombreDepartamento = Convert.ToString(drCargos["NOMDEPARTAMENTO"]);
-                    objetoCargo.IdeArea = Convert.ToInt32(drCargos["IDEAREA"]);
-                    objetoCargo.NombreArea = Convert.ToString(drCargos["NOMAREA"]);
-                    objetoCargo.version = Convert.ToInt32(drCargos["VERSION"]);
-
+                    if (drCargos["ESTACTIVO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.EstadoActivo = Convert.ToString(drCargos["ESTACTIVO"]);
+                    }
+                    if (drCargos["IDECARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.IdeCargo = Convert.ToInt32(drCargos["IDECARGO"]);
+                    }
+                    if (drCargos["CODCARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.CodigoCargo = Convert.ToString(drCargos["CODCARGO"]);
+                    }
+                    if (drCargos["NOMCARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.NombreCargo = Convert.ToString(drCargos["NOMCARGO"]);
+                    }
+                    if (drCargos["DESCARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.DescripcionCargo = Convert.ToString(drCargos["DESCARGO"]);
+                    }
+                    if (drCargos["IDEDEPENDENCIA"] != System.DBNull.Value)
+                    {
+                        objetoCargo.IdeDependencia = Convert.ToInt32(drCargos["IDEDEPENDENCIA"]);
+                    }
+                    if (drCargos["NOMDEPENDENCIA"] != System.DBNull.Value)
+                    {
+                        objetoCargo.NombreDependencia = Convert.ToString(drCargos["NOMDEPENDENCIA"]);
+                    }
+                    if (drCargos["IDEDEPARTAMENTO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.IdeDepartamento = Convert.ToInt32(drCargos["IDEDEPARTAMENTO"]);
+                    }
+                    if (drCargos["NOMDEPARTAMENTO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.NombreDepartamento = Convert.ToString(drCargos["NOMDEPARTAMENTO"]);
+                    }
+                    if (drCargos["IDEAREA"] != System.DBNull.Value)
+                    {
+                        objetoCargo.IdeArea = Convert.ToInt32(drCargos["IDEAREA"]);
+                    }
+                    if (drCargos["NOMAREA"] != System.DBNull.Value)
+                    {
+                        objetoCargo.NombreArea = Convert.ToString(drCargos["NOMAREA"]);
+                    }
+                    if (drCargos["VERSION"] != System.DBNull.Value)
+                    {
+                        objetoCargo.version = Convert.ToInt32(drCargos["VERSION"]);
+                    }
                     listaCargo.Add(objetoCargo);
                 }
                 drCargos.Close();
@@ -222,6 +257,63 @@
                 string etapaCargo = Convert.ToString(cmd.Parameters["p_cRetVal"].Value);
 
                 return etapaCargo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
+        /// <summary>
+        /// devuleve los cargo y sus codigos and id
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        public List<Cargo> listarCargosSedeCodigo(int ideSede)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                lcon.Open();
+                IDataReader drCargos;
+                Cargo objetoCargo;
+                List<Cargo> listaCargos = new List<Cargo>();
+
+                OracleCommand cmd = new OracleCommand("PR_REQUERIMIENTOS.SP_CARGOS_MANT");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = lcon;
+
+                cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = ideSede;
+                cmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                drCargos = (OracleDataReader)cmd.ExecuteReader();
+                objetoCargo = null;
+
+
+                while (drCargos.Read())
+                {
+                    objetoCargo = new Cargo();
+                    if (drCargos["CODCARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.CodigoCargo = drCargos["CODCARGO"].ToString();
+                    }
+                    if (drCargos["IDECARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.IdeCargo = Convert.ToInt32(drCargos["IDECARGO"]);
+                    }
+                    if (drCargos["NOMCARGO"] != System.DBNull.Value)
+                    {
+                        objetoCargo.NombreCargo = Convert.ToString(drCargos["NOMCARGO"]);
+                    }
+
+                    listaCargos.Add(objetoCargo);
+                }
+                drCargos.Close();
+                return listaCargos;
             }
             catch (Exception ex)
             {
