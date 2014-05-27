@@ -122,12 +122,23 @@
         {
             int ideUsuarioResp;
             LogSolicitudNuevoCargo logSolicitud = model.LogSolicitudNuevoCargo;
-
+            string AccionAprobacion;
+            string AccionRechazo;
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             List<String>  listSends = null;
             List<String> listCopys = null;
 
+            if (model.indPantalla==1)
+            {
+                AccionAprobacion = AccionEnvioEmail.AprobarPerfil;
+                AccionRechazo = AccionEnvioEmail.ObservarPerfil;
+            }
+            else
+            {
+                AccionAprobacion = AccionEnvioEmail.AprobarSolicitud;
+                AccionRechazo = AccionEnvioEmail.RechazarSolicitud;
+            }
 
             logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
@@ -141,10 +152,10 @@
 
             if (logSolicitud.Aprobado)
 	        {
-		       lista = listaEmail(Convert.ToInt32(solicitud.IdeSolicitudNuevoCargo), idRol, AccionEnvioEmail.AprobarSolicitud, idSede, TipoSolicitud.Nuevo);
+                lista = listaEmail(Convert.ToInt32(solicitud.IdeSolicitudNuevoCargo), idRol, AccionAprobacion, idSede, TipoSolicitud.Nuevo);
 	        }else
 	        {
-               lista = listaEmail(Convert.ToInt32(solicitud.IdeSolicitudNuevoCargo), idRol, AccionEnvioEmail.RechazarSolicitud, idSede, TipoSolicitud.Nuevo);
+                lista = listaEmail(Convert.ToInt32(solicitud.IdeSolicitudNuevoCargo), idRol, AccionRechazo, idSede, TipoSolicitud.Nuevo);
 	        }
             
             listSends = new List<String>();
@@ -238,8 +249,8 @@
                     }
                     
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
-                    
-                    if (enviarCorreo(model.LogSolicitudNuevoCargo, usuario, solicitud))
+
+                    if (enviarCorreoAll(model.LogSolicitudNuevoCargo, usuario, solicitud,listSends,listCopys))
                     {
                         
                         string menj = "El proceso de envío se realizó exitosamente";
@@ -284,6 +295,10 @@
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
+
+                    //indica que la pantalla es de perfil
+                    model.indPantalla = 1;
+
                     string resultado = aprobarRechazarNuevaSolicitud(model);
 
                     objJsonMessage.Mensaje = resultado;
@@ -305,6 +320,8 @@
 
         }
 
+
+        //realiza el envio de email
         public bool enviarCorreo(LogSolicitudNuevoCargo logSolicitud, Usuario usuario, SolicitudNuevoCargo solicitudNuevo)
         {
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
@@ -324,6 +341,36 @@
                 return false;
             }
         }
+
+        /// <summary>
+        /// Envia el correo a todos 
+        /// </summary>
+        /// <param name="logSolicitud"></param>
+        /// <param name="usuario"></param>
+        /// <param name="solicitudNuevo"></param>
+        /// <param name="Sends"></param>
+        /// <param name="Copys"></param>
+        /// <returns></returns>
+        public bool enviarCorreoAll(LogSolicitudNuevoCargo logSolicitud, Usuario usuario, SolicitudNuevoCargo solicitudNuevo,List<String> Sends,List<String> Copys)
+        {
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            SendMail enviar = new SendMail();
+            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
+            enviar.Sede = usuarioSession.SEDEDES;
+            enviar.Area = usuarioSession.AREADES;
+            try
+            {
+                enviar.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, solicitudNuevo.CodigoCargo, Sends, "Suceso",Copys);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
 
 
         /// <summary>

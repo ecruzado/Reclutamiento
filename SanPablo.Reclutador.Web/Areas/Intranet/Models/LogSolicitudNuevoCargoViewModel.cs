@@ -13,8 +13,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public LogSolicitudNuevoCargo LogSolicitudNuevoCargo { get; set; }
         //public Boolean Aprobado { get; set; }
         public string rechazadoObservado { get; set; }
-        
-        
+
+        public int indPantalla { get; set; }
        
         
     }
