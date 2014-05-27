@@ -213,7 +213,12 @@
             }
         }
         else {
-            strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            if (usuario == rowObject[8]) {
+                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            }
+            else {
+                strImg = '<img onclick="mostrarMensajeAlerta();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+            }
         }
         return strImg;
     }
@@ -228,6 +233,11 @@
         var archivo = 'application.gif';
         var strImg = '<a href="@Url.Action("ResultadoExamen1", "Operaciones")"><img src="' + imgPath + archivo + '" width="16" height="16" title="Ver Resultado" alt="Ver Resultado"></a>';
         return strImg;
+    }
+
+    function mostrarMensajeAlerta()
+    {
+        MostrarMensaje("No es usuario responsable de la accion","MENSAJE");
     }
 
    @* function existeResultado(ideExamen)

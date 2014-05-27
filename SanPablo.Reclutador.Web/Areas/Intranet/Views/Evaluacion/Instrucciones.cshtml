@@ -50,7 +50,8 @@
             <div style="margin-left:10px;margin-right:10px">
            
             @Html.TextBoxFor(model => model.Categoria.IDECATEGORIA, new { style = "display:none;" })
-            @Html.DisplayFor(model=>model.Categoria.INSTRUCCIONES)
+            @Html.Raw(Html.Encode(Model.Categoria.INSTRUCCIONES).Replace("\n", "<br />"))
+            @*@Html.DisplayFor(model=>model.Categoria.INSTRUCCIONES)*@
 
             </div>
             <div>&nbsp;</div>
@@ -59,7 +60,8 @@
                @if (Model.Categoria.TIPOEJEMPLO == TipoModo.Texto)
                {
                    <div>
-                       @Html.DisplayFor(model=>model.Categoria.TEXTOEJEMPLO)
+                       @Html.Raw(Html.Encode(Model.Categoria.TEXTOEJEMPLO).Replace("\n", "<br />"))
+                      @* @Html.DisplayFor(model=>model.Categoria.TEXTOEJEMPLO)*@
                    </div> 
                }
                 else

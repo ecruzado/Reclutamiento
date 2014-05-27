@@ -878,7 +878,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
              if (tipSol == TipoSolicitud.Nuevo)
              {
-                 if ((logNuevo.RolResponsable == idRol) && (logNuevo.UsuarioResponsable == idUsuarioSession))
+                 if ((logNuevo.RolSuceso == idRol) && (logNuevo.UsuarioSuceso == idUsuarioSession))
                  {
                      model.btnSeleccionar = "S";
                  }
@@ -889,7 +889,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              }
              else if ((tipSol == TipoSolicitud.Ampliacion) || (tipSol == TipoSolicitud.Remplazo))
              {
-                 if ((logReqCargo.RolResponsable == idRol) && (logReqCargo.UsResponsable == idUsuarioSession))
+                 if ((logReqCargo.RolSuceso == idRol) && (logReqCargo.UsrSuceso == idUsuarioSession))
                  {
                      model.btnSeleccionar = "S";
                  }
