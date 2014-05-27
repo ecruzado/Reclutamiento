@@ -323,9 +323,6 @@
                 if ((estadoSolicitud.TipoEtapa == Etapa.Aceptado)&&(Convert.ToInt32(estadoSolicitud.RolResponsable) == rolActual))
                 {
 
-                    
-                    
-                    
                     var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
                     solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
                     solicitudNuevoCargoEditar.FechaModificacion = FechaModificacion;
