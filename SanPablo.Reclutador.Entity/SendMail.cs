@@ -61,6 +61,64 @@
             catch (System.Net.Mail.SmtpException ex)
             {
                 //Aquí gestionamos los errores al intentar enviar el correo
+                var dato = 0;
+            }
+        }
+
+
+        /// <summary>
+        /// Enviar emial a todos
+        /// </summary>
+        /// <param name="destinatario"></param>
+        /// <param name="asunto"></param>
+        /// <param name="conCopia"></param>
+        /// <param name="cuerpo"></param>
+        public void EnviarMailAll(List<String> Sends,List<String> Copys, string asunto, string cuerpo)
+        {
+            System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
+            //destinatario
+
+            for (int i = 0; i < Sends.Count; i++)
+            {
+                mmsg.To.Add(Sends[i]);
+            }
+
+            for (int x = 0; x < Copys.Count; x++)
+            {
+                mmsg.To.Add(Copys[x]);
+            }
+
+            mmsg.Subject = asunto;
+            mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
+
+
+            //mmsg.Bcc.Add(conCopia); //Opcional
+
+            mmsg.Body = cuerpo;
+            mmsg.BodyEncoding = System.Text.Encoding.UTF8;
+            mmsg.IsBodyHtml = true; //Si no queremos que se envíe como HTML
+
+            mmsg.From = new System.Net.Mail.MailAddress("j.ccana@conastec.com.pe");
+
+            //Creamos un objeto de cliente de correo
+            System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
+
+            cliente.UseDefaultCredentials = true;
+            cliente.Credentials = new System.Net.NetworkCredential("j.ccana@conastec.com.pe", "jc6543");
+
+            cliente.Host = "gator3243.hostgator.com";
+
+            cliente.EnableSsl = false;
+
+            try
+            {
+
+                cliente.Send(mmsg);
+            }
+            catch (System.Net.Mail.SmtpException ex)
+            {
+                //Aquí gestionamos los errores al intentar enviar el correo
+                var dato = 0;
             }
         }
 
@@ -207,6 +265,39 @@
                                                    new List<string> { mail[0], Usuario, Rol, Area, Sede });
 
             EnviarMail(destinatario, mail[1], "", body);
+
+        }
+
+        /// <summary>
+        /// Envia correo a todos
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="etapa"></param>
+        /// <param name="responsable"></param>
+        /// <param name="tipoRequerimiento"></param>
+        /// <param name="observacion"></param>
+        /// <param name="cargo"></param>
+        /// <param name="codCargo"></param>
+        /// <param name="destinatario"></param>
+        /// <param name="suceso"></param>
+        public void EnviarCorreoVarios(string dir, string etapa, string responsable, string tipoRequerimiento, string observacion,
+                               string cargo, string codCargo, List<String> sends, string suceso,List<String> copy)
+        {
+
+
+            //Dar formato a textos
+            Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
+            Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
+            Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
+            Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
+
+
+            List<string> mail = cuerpoMail(etapa, tipoRequerimiento, responsable, observacion, suceso, cargo, codCargo);
+
+            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "usuario", "rol", "area", "sede" },
+                                                   new List<string> { mail[0], Usuario, Rol, Area, Sede });
+
+            EnviarMailAll(sends, copy,mail[1], body);
 
         }
 
