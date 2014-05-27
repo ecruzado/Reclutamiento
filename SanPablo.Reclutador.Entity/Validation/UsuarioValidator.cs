@@ -13,42 +13,47 @@ namespace SanPablo.Reclutador.Entity.Validation
         {
             RuleFor(x => x.DscApeMaterno)
                  .NotEmpty()
-                 .WithMessage("Ingresar apellido paterno");
+                 .WithMessage("Ingresar el apellido paterno");
             RuleFor(x => x.DscApeMaterno)
                 .Length(1, 25)
-                .WithMessage("Ingresar apellido paterno con menos de 25 caracteres");
+                .WithMessage("Máx. 25 caracteres");
 
             RuleFor(x => x.DscApePaterno)
                 .NotEmpty()
-                .WithMessage("Ingresar apellido materno");
+                .WithMessage("Ingresar el apellido materno");
             RuleFor(x => x.DscApePaterno)
                 .Length(1, 25)
-                .WithMessage("Ingresar apellido materno con menos de 25 caracteres");
+                .WithMessage("Máx. 25 caracteres");
 
             RuleFor(x => x.CodUsuario)
                  .NotEmpty()
-                 .WithMessage("Ingresar código de usuario");
+                 .WithMessage("Ingresar usuario");
             
             RuleFor(x => x.CodContrasena)
                  .NotEmpty()
                  .WithMessage("Ingresar contraseña");
             RuleFor(x => x.CodContrasena)
                 .Length(1, 10)
-                .WithMessage("Ingresar contraseña con menos de 10 caracteres");
+                .WithMessage("Máx. 10 caracteres");
 
             RuleFor(x => x.DscNombres)
                  .NotEmpty()
-                 .WithMessage("Ingresar nombre de usuario");
+                 .WithMessage("Ingresar el nombre");
             RuleFor(x => x.DscNombres)
                 .Length(1, 25)
-                .WithMessage("Ingresar nombre con menos de 25 caracteres");
+                .WithMessage("Máx. 25 caracteres");
 
           
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Ingrese email válido");
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .WithMessage("Ingresar el email");
+            RuleFor(x => x.Email)
+                .EmailAddress()
+                .WithMessage("Ingrese email válido");
 
             RuleFor(x => x.Telefono)
                  .NotEmpty()
-                 .WithMessage("Ingresar número de telefono");
+                 .WithMessage("Ingresar el telefono");
 
            
         }

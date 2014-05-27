@@ -5,6 +5,7 @@ create or replace package PR_INTRANET is
   --ESTADOS DE POSTULANTE
   P_PRESEL_AUTOMATC         CONSTANT VARCHAR2(2) := '02';
   P_PRESEL_MANUAL           CONSTANT VARCHAR2(2) := '03';
+  P_EN_EVALUACION           CONSTANT VARCHAR2(2) := '07';
   P_ESTCAT_PENDIENTE        CONSTANT VARCHAR2(2) := '01';
   P_ESTCAT_EVALUADO         CONSTANT VARCHAR2(2) := '02';
   --TIPO DE EXAMEN - TIPCRITERIO
@@ -144,6 +145,21 @@ create or replace package PR_INTRANET is
                               p_cUsrResponsable IN USUARIO.IDUSUARIO%TYPE,
                               p_nIdSede         IN NUMBER,
                               p_cRetVal         OUT CUR_CURSOR);
+                              
+  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                                    p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                                    p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                                    p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
+                                    p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                                    p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,
+                                    p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                                    p_cFecIni         IN varchar2,
+                                    p_cFeFin          IN varchar2,
+                                    p_cTipSol         IN varchar2,
+                                    p_nIdRoL          IN NUMBER,
+                                    p_nIdUsuario      IN NUMBER,
+                                    p_nIdSede         IN NUMBER,
+                                    p_cRetVal         OUT CUR_CURSOR);
 
   FUNCTION FN_ESTADO_SOLICITUD(p_idSolicitud   IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                p_tipoSolicitud IN VARCHAR2) RETURN VARCHAR2;
@@ -179,7 +195,20 @@ create or replace package PR_INTRANET is
                                    
  FUNCTION FN_OBTENER_NOMBRE_POST(p_idReclutaPersona    IN RECLUTAMIENTO_PERSONA.IDERECLUTAPERSONA%TYPE
                                   )RETURN VARCHAR2;
-
+                                  
+ PROCEDURE SP_CONOCIMIENTOS_PUBLICA(p_ideCargo    IN CARGO.IDECARGO%TYPE,
+                                    p_cRetVal     OUT SYS_REFCURSOR);
+                                    
+ PROCEDURE SP_CONO_SOLREQ_PUBLICA(p_ideSolReq    IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                           p_cRetVal     OUT SYS_REFCURSOR);
+                                           
+ PROCEDURE SP_LISTAR_USUARIOS(p_apePaterno    IN USUARIO.DSCAPEPATERNO%TYPE,
+                              p_apeMaterno    IN USUARIO.DSCAPEMATERNO%TYPE,
+                              p_nombres       IN USUARIO.DSCNOMBRES%TYPE,
+                              p_idRol         IN ROL.IDROL%TYPE,
+                              p_idSede        IN SEDE.IDESEDE%TYPE,
+                              p_retVal        OUT SYS_REFCURSOR);
+                                    
 end PR_INTRANET;
 /
 create or replace package body PR_INTRANET is
@@ -204,7 +233,7 @@ create or replace package body PR_INTRANET is
     BEGIN
       SELECT G.DESCRIPCION AS DESCRIPCION
         INTO cDato
-        FROM CHSPRP.DETALLE_GENERAL G
+        FROM DETALLE_GENERAL G
        WHERE G.IDEGENERAL = P_IDGENERAL
          AND G.VALOR = P_VALOR;
     EXCEPTION
@@ -264,48 +293,51 @@ create or replace package body PR_INTRANET is
   BEGIN
   
     OPEN p_cRetVal FOR
-      SELECT EX1.IDEEXAMEN,
-             EX1.IDESEDE,
-             EX1.NOMEXAMEN,
-             EX1.DESCEXAMEN,
-             S1.IDESUBCATEGORIA,
-             C1.IDECATEGORIA,
-             C1.NOMCATEGORIA,
-             C1.DESCCATEGORIA,
-             C1.TIPCATEGORIA,
-             C1.INSTRUCCIONES,
-             C1.TIPOEJEMPLO,
+      SELECT NVL(EX1.IDEEXAMEN,0) IDEEXAMEN,
+             NVL(EX1.IDESEDE,0) IDESEDE,
+             nvl(EX1.NOMEXAMEN,'') NOMEXAMEN,
+             nvl(EX1.DESCEXAMEN,'') DESCEXAMEN,
+             NVL(S1.IDESUBCATEGORIA,0) IDESUBCATEGORIA,
+             NVL(C1.IDECATEGORIA,0) IDECATEGORIA,
+             upper(nvl(C1.NOMCATEGORIA,'')) NOMCATEGORIA,
+             upper(nvl(C1.DESCCATEGORIA,'')) DESCCATEGORIA,
+             nvl (C1.TIPCATEGORIA,'') TIPCATEGORIA,
+             (SELECT D.DESCRIPCION FROM DETALLE_GENERAL D WHERE D.IDEGENERAL = 1
+              AND D.VALOR = C1.TIPCATEGORIA) DESTIPCATEGORIA,
+             
+             nvl(C1.INSTRUCCIONES,'') INSTRUCCIONES,
+             nvl(C1.TIPOEJEMPLO,'') TIPOEJEMPLO,
              C1.IMAGENEJEMPLO,
              C1.TEXTOEJEMPLO,
              S1.DESCSUBCATEGORIA,
-             S1.NOMSUBCATEGORIA,
-             A1.IDECRITERIO,
-             A1.IDEALTERNATIVA,
-             CR1.TIPMODO AS CODMOD,
+             nvl(S1.NOMSUBCATEGORIA,'') NOMSUBCATEGORIA,
+             NVL(A1.IDECRITERIO,0) IDECRITERIO,
+             NVL(A1.IDEALTERNATIVA,0) IDEALTERNATIVA,
+             NVL(CR1.TIPMODO,'') AS CODMOD,
              DECODE(CR1.TIPMODO, '01', 'TEXTO', '02', 'IMAGE') AS DESMODO,
-             CR1.TIPCRITERIO,
-             CR1.PREGUNTA,
+             NVL(CR1.TIPCRITERIO,'') TIPCRITERIO,
+             nvl(CR1.PREGUNTA,'') PREGUNTA,
              CR1.IMAGENCRIT,
              A1.IMAGE,
-             A1.ALTERNATIVA,
-             A1.ESTACTIVO,
-             s1.ordenimpresion as ORDENSUB,
-             CS1.PRIORIDAD AS ORDENCRIT,
+             NVL(A1.ALTERNATIVA,'') ALTERNATIVA,
+             NVL(A1.ESTACTIVO,'') ESTACTIVO,
+             NVL(s1.ordenimpresion,0) as ORDENSUB,
+             NVL(CS1.PRIORIDAD,0) AS ORDENCRIT,
              (SELECT NVL(SUM(S.TIEMPO), 0)
                 FROM SUBCATEGORIA S
                WHERE S.IDECATEGORIA = C1.IDECATEGORIA) AS TIEMPOCAT,
              PR_INTRANET.FN_DURACIONEXAMEN(ex1.ideexamen) AS TIMPOEXAMEN
-        FROM CHSPRP.CRITERIO         CR1,
+        FROM CRITERIO         CR1,
              ALTERNATIVA             A1,
              CRITERIO_X_SUBCATEGORIA CS1,
              SUBCATEGORIA            S1,
              CATEGORIA               C1,
              EXAMEN_X_CATEGORIA      EC1,
              Examen                  EX1
-       WHERE ex1.ideexamen = EC1.Ideexamen
+       WHERE/* ex1.ideexamen = EC1.Ideexamen
          and EC1.Idecategoria = c1.idecategoria
          and C1.IDECATEGORIA = S1.IDECATEGORIA
-         AND C1.TIPCATEGORIA = CR1.TIPCRITERIO
+         --AND C1.TIPCATEGORIA = CR1.TIPCRITERIO
          AND CS1.IDESUBCATEGORIA = S1.IDESUBCATEGORIA
          AND CR1.IDECRITERIO = CS1.IDECRITERIO
          AND A1.IDECRITERIO = CR1.IDECRITERIO
@@ -314,7 +346,19 @@ create or replace package body PR_INTRANET is
          AND CR1.ESTACTIVO = 'A'
          AND CS1.ESTREGISTRO = 'A'
          and ec1.estactivo = 'A'
-         and EX1.Estactivo = 'A'
+         and EX1.Estactivo = 'A'*/
+         ex1.ideexamen = EC1.Ideexamen(+)
+         and EC1.Idecategoria = c1.idecategoria(+)
+         and C1.IDECATEGORIA = S1.IDECATEGORIA(+)
+        
+         AND S1.IDESUBCATEGORIA = CS1.IDESUBCATEGORIA(+)
+         AND CS1.IDECRITERIO = CR1.IDECRITERIO(+)
+         AND CR1.IDECRITERIO = A1.IDECRITERIO(+)
+         AND C1.ESTACTIVO = 'A'
+         AND CR1.ESTACTIVO = 'A'
+         AND CS1.ESTREGISTRO = 'A'
+         AND EC1.ESTACTIVO = 'A'
+         AND EX1.ESTACTIVO = 'A'
          and ex1.ideexamen = P_NIDEXAMEN
        ORDER BY c1.idecategoria,
                 s1.ordenimpresion,
@@ -515,7 +559,7 @@ create or replace package body PR_INTRANET is
     c_contador number;
   
     CURSOR c_puntajes(p_idCargo CARGO.IDECARGO%TYPE) IS
-      SELECT EC.PUNTEXAMEN
+      SELECT EC.NOTAMINEXAMEN
         FROM EVALUACION_CARGO EC
        WHERE EC.IDECARGO = p_idCargo;
   
@@ -526,7 +570,7 @@ create or replace package body PR_INTRANET is
     BEGIN
       FOR REG_PUNTAJES IN c_puntajes(p_ideCargo) LOOP
         c_contador := c_contador + 1;
-        c_Suma     := c_Suma + REG_PUNTAJES.PUNTEXAMEN;
+        c_Suma     := c_Suma + REG_PUNTAJES.NOTAMINEXAMEN;
       END LOOP;
     
       IF (c_contador <> 0) THEN
@@ -582,7 +626,8 @@ create or replace package body PR_INTRANET is
            SN.NUMPOSICIONES,
            SN.IDEDEPENDENCIA,
            SN.IDEDEPARTAMENTO,
-           SN.TIPRANSALARIO
+           SN.TIPRANSALARIO,
+           NVL(SN.IDECARGO,0) 
       INTO nCodCargo,
            nNomCargo,
            nDescCargo,
@@ -590,38 +635,32 @@ create or replace package body PR_INTRANET is
            nNumPosic,
            nIdeDependencia,
            nIdeDepartamento,
-           nTipoRangoSal
+           nTipoRangoSal,
+           nIdeCargo
       FROM SOLNUEVO_CARGO SN
      WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
-  
-    SELECT COUNT(*) INTO nroCont FROM CARGO WHERE CODCARGO = nCodCargo;
-    IF (nroCont > 0) THEN
-      SELECT SN.IDECARGO
-        INTO nIdeCargo
-        FROM SOLNUEVO_CARGO SN
-       WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
-       
-    END IF;
-  
-    SELECT IDECARGO_SQ.NEXTVAL INTO nIdeCargo_sq FROM DUAL;
+     
   
     BEGIN
-      IF (nIdeCargo IS NULL) THEN
+      IF (nIdeCargo = 0) THEN
+        SELECT IDECARGO_SQ.NEXTVAL INTO nIdeCargo_sq FROM DUAL;
         INSERT INTO CARGO
           (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEAREA,NUMPOSICION,
-           ESTACTIVO,USRCREACION,FECCREACION,PUNTTOTPOSTUINTE,PUNTTOTEDAD,
+           ESTACTIVO,USRCREACION,FECCREACION,PUNTTOTEDAD,
            PUNTTOTSEXO,PUNTTOTSALARIO,PUNTTOTNIVELEST,PUNTTOTCENTROEST,
            PUNTTOTEXPLABORAL,PUNTTOTOFIMATI,PUNTTOTIDIOMA,PUNTTOTCONOGEN,
            PUNTTOTDISCAPA,PUNTTOTHORARIO,PUNTTOTUBIGEO,PUNTTOTEXAMEN,PUNTMINEXAMEN,
            IDEDEPENDENCIA,IDEDEPARTAMENTO,TIPRANGOSALARIO,VERSION)
         VALUES
           (nIdeCargo_sq,p_ideSede,nCodCargo,nNomCargo,nDescCargo,nIdeArea,nNumPosic,
-           'A',p_ideUsuario,SYSDATE,0,0,
+           'A',p_ideUsuario,SYSDATE,0,
            0, 0, 0, 0,
            0, 0, 0, 0,
            0, 0, 0, 0, 0,
            nIdeDependencia,nIdeDepartamento, nTipoRangoSal,1);
       
+        nIdeCargo := nIdeCargo_sq;
+        
         UPDATE SOLNUEVO_CARGO SN
            SET SN.IDECARGO = nIdeCargo_sq
          WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitud;
@@ -635,19 +674,20 @@ create or replace package body PR_INTRANET is
   
     OPEN p_cRetCursor FOR
       SELECT C.IDECARGO,
-             C.CODCARGO,
-             C.NOMCARGO,
-             C.DESCARGO,
+             UPPER(C.CODCARGO) CODCARGO,
+             UPPER(C.NOMCARGO) NOMCARGO,
+             UPPER(C.DESCARGO) DESCARGO,
              C.NUMPOSICION,
              AR.NOMAREA,
              D.NOMDEPARTAMENTO,
              DE.NOMDEPENDENCIA,
              nNumPosic NUMPOSIC
         FROM CARGO C, AREA AR, DEPARTAMENTO D, DEPENDENCIA DE
-       WHERE C.CODCARGO = nCodCargo
+       WHERE C.IDECARGO = nIdeCargo
          AND AR.IDEDEPARTAMENTO = D.IDEDEPARTAMENTO
          AND D.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
-         AND AR.IDEAREA = nIdeArea;
+         AND AR.IDEAREA = nIdeArea
+         and C.IDESEDE = p_ideSede;
   
   END SP_OBTENER_CARGO;
 
@@ -802,10 +842,10 @@ create or replace package body PR_INTRANET is
       SELECT NA.IDENIVELACADESOLREQ,
              (PR_INTRANET.FN_VALOR_GENERAL('TIPEDUCACION', NA.TIPEDUCACION)) TIPEDUCACION,
              (PR_INTRANET.FN_VALOR_GENERAL('TIPAREA', NA.TIPAREAESTUDIO)) AREAESTUDIO,
-             (PR_INTRANET.FN_VALOR_GENERAL('NIVELALCANZADO',
-                                           NA.TIPNIVELCANZADO)) NIVELALCANZADO,
-             NA.CICLOSEMESTRE,
-             NA.PUNTNIVESTUDIO
+             NVL((PR_INTRANET.FN_VALOR_GENERAL('NIVELALCANZADO',
+                                           NA.TIPNIVELCANZADO)),'') NIVELALCANZADO,
+             NVL(NA.CICLOSEMESTRE,0) CICLOSEMESTRE,
+             NVL(NA.PUNTNIVESTUDIO,0) PUNTNIVESTUDIO
         FROM NIVELACADEMICO_SOLREQ NA
        WHERE NA.ESTACTIVO = 'A'
          AND NA.IDESOLREQPERSONAL = p_ideSolicitud;
@@ -979,7 +1019,7 @@ create or replace package body PR_INTRANET is
     CURSOR cData IS
       SELECT DISTINCT UR.IDROL,
                       (SELECT R.DSCROL FROM ROL R WHERE R.IDROL = UR.IDROL) DSCROL
-        FROM CHSPRP.USUAROLSEDE UR
+        FROM USUAROLSEDE UR
        WHERE UR.IDUSUARIO = p_idUsuario;
   
   BEGIN
@@ -1023,7 +1063,7 @@ create or replace package body PR_INTRANET is
     CURSOR cData IS
       SELECT UR.Idesede,
              (SELECT R.DESCRIPCION FROM SEDE R WHERE R.Idesede = UR.Idesede) DSCSEDE
-        FROM CHSPRP.USUAROLSEDE UR
+        FROM USUAROLSEDE UR
        WHERE UR.IDUSUARIO = p_idUsuario;
   
   BEGIN
@@ -1071,7 +1111,7 @@ create or replace package body PR_INTRANET is
                       (SELECT TRIM(R.CODROL)
                          FROM ROL R
                         WHERE R.IDROL = U.IDROL) CODIGOROL
-        FROM CHSPRP.USUAROLSEDE U
+        FROM USUAROLSEDE U
        WHERE (p_nIdUsua = 0 OR U.IDUSUARIO = p_nIdUsua)
       
        order by U.IDROL;
@@ -1095,7 +1135,7 @@ create or replace package body PR_INTRANET is
   BEGIN
     OPEN p_cRetVal FOR
       SELECT E.DESCRIPCION, E.IDESEDE
-        FROM CHSPRP.USUAROLSEDE S, SEDE E
+        FROM USUAROLSEDE S, SEDE E
        WHERE S.IDESEDE = E.IDESEDE
          AND S.IDUSUARIO = p_nIdUsua
          AND S.IDROL = p_nIdRol
@@ -1221,13 +1261,20 @@ create or replace package body PR_INTRANET is
   BEGIN
   
     OPEN P_CRETVAL FOR
-      SELECT DISTINCT C.IDECARGO, C.NOMCARGO
+       SELECT DISTINCT C.IDECARGO, C.NOMCARGO
         FROM CARGO C
        WHERE C.ESTACTIVO = 'A'
-         AND (p_nIdCargo = 0 OR C.IDECARGO = p_nIdCargo)
+         AND NVL(C.VERSION,1) = (SELECT NVL(MAX(C1.VERSION),1) FROM CARGO C1 WHERE C1.ESTACTIVO='A'
+         AND C1.CODCARGO = C.CODCARGO
+         )
        ORDER BY C.NOMCARGO;
+
   
   END FN_GET_CARGO;
+
+
+  
+
 
   /* ------------------------------------------------------------
     Nombre      : FN_GET_LISTAREQ
@@ -1401,13 +1448,41 @@ create or replace package body PR_INTRANET is
                              p_nIdSede         IN NUMBER,
                              p_cRetVal         OUT CUR_CURSOR) IS
   
-    cCONSULTA VARCHAR2(2800) := NULL;
+    cCONSULTA VARCHAR2(4000) := NULL;
     cWhere    VARCHAR2(1000) := NULL;
     cQUERY    VARCHAR2(4000) := NULL;
   
   BEGIN
   
-    cCONSULTA := 'SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO, ' ||
+    cCONSULTA := 'SELECT SA.IDESOLREQPERSONAL,'
+               ||'SA.CODSOLREQPERSONAL,' 
+               ||'SA.IDECARGO,'
+               ||'SA.DESCARGO,'
+               ||'SA.IDEDEPENDENCIA,'
+               ||'SA.DESDEPENDENCIA,'
+               ||'SA.IDEDEPARTAMENTO,'
+               ||'SA.DESDEPARTAMENTO,'               
+               ||'SA.IDEAREA,'
+               ||'SA.DESAREA,'
+               ||'SA.NUMVACANTES,'
+               ||'SA.POSTULANTE,'
+               ||'SA.PRESELECCIONADOS,'
+               ||'SA.EVALUADOS, '
+               ||'SA.SELECCIONADOS , '
+               ||'SA.CONTRATADOS , '
+               ||'SA.ROL ,'
+               ||'SA.DESROL ,'
+               ||'SA.ESTADO ,'
+               ||'SA.TIPETAPA,'
+               ||'SA.FECPUBLICACION,'
+               ||'SA.FECCREACION,'
+               ||'SA.FECEXPIRACACION, '
+               ||'SA.ID_USUARIO_RESP, '
+               ||'SA.NOMPERSONREEMPLAZO,'
+               ||'SA.PUBLICADO, '
+               ||'SA.TIPSOL, '
+               ||'SA.DES_ETAPA '
+       ||'FROM (SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO, ' ||
                  ' S.NOMCARGO DESCARGO, ' ||
                  ' S.IDEDEPENDENCIA, ' || ' (SELECT D.NOMDEPENDENCIA ' ||
                  ' FROM DEPENDENCIA D ' ||
@@ -1444,6 +1519,12 @@ create or replace package body PR_INTRANET is
                      AND RP.TIPSOL = S.TIPSOL
                      AND RP.ESTPOSTULANTE =''08''
                      AND RP.ESTACTIVO=''A'') SELECCIONADOS , ' ||
+                     ' (SELECT COUNT(*) 
+                   FROM RECLUTAMIENTO_PERSONA RP
+                   WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                     AND RP.TIPSOL = S.TIPSOL
+                     AND RP.ESTPOSTULANTE =''09''
+                     AND RP.ESTACTIVO=''A'') CONTRATADOS , ' ||
                  ' L.ROLRESPONSABLE ROL , ' ||
                  ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROLRESPONSABLE ) DESROL, '
                 --|| ' S.ESTACTIVO, '
@@ -1464,59 +1545,59 @@ create or replace package body PR_INTRANET is
                  '  WHERE P.IDESOLREQPERSONAL=L.IDESOLREQPERSONAL) ' ||
                  '  AND ''' || p_cTipSol || ''' = S.TIPSOL ' ||
                  '  AND L.USRESPONSABLE  = ' || p_nIdUsuario ||
-                 '  AND L.ROLRESPONSABLE = ' || p_nIdRoL;
+                 '  AND L.ROLRESPONSABLE = ' || p_nIdRoL||') SA WHERE 1=1' ;
   
     IF p_nIdCargo > 0 THEN
     
-      cWhere := cWhere || ' AND  S.IDECARGO = ' || p_nIdCargo;
+      cWhere := cWhere || ' AND  SA.IDECARGO = ' || p_nIdCargo;
     
     END IF;
   
     IF p_nIdDependencia > 0 THEN
     
-      cWhere := cWhere || '  AND S.IDEDEPENDENCIA = ' || p_nIdDependencia;
+      cWhere := cWhere || '  AND SA.IDEDEPENDENCIA = ' || p_nIdDependencia;
     
     END IF;
   
     IF p_nIdDepartamento > 0 THEN
     
-      cWhere := cWhere || '  AND S.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
+      cWhere := cWhere || '  AND SA.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
     
     END IF;
   
     IF p_nIdArea > 0 THEN
     
-      cWhere := cWhere || ' AND S.IDEAREA = ' || p_nIdArea;
+      cWhere := cWhere || ' AND SA.IDEAREA = ' || p_nIdArea;
     
     END IF;
   
-    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa <> '' THEN
+    IF LENGTH(TRIM(p_cTipEtapa))>0 AND p_cTipEtapa!= '0' THEN
     
-      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = L.TIPETAPA ';
-    
-    END IF;
-  
-    IF p_cTipResp IS NOT NULL AND p_cTipResp <> '' THEN
-    
-      cWhere := cWhere || ' AND ''' || p_cTipResp || ''' = L.ROL ';
+      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SA.TIPETAPA ';
     
     END IF;
   
-    IF p_cEstado IS NOT NULL AND p_cEstado <> '' THEN
+    IF  LENGTH(TRIM(p_cTipResp))>0 AND  p_cTipResp!=0 THEN
     
-      cWhere := cWhere || ' AND ''' || p_cEstado || ''' = L.ESTACTIVO ';
+      cWhere := cWhere || ' AND ''' || p_cTipResp || ''' = SA.ROL ';
+    
+    END IF;
+  
+    IF  LENGTH(TRIM(p_cEstado))>0 AND p_cEstado !='0' THEN
+    
+      cWhere := cWhere || ' AND ''' || p_cEstado || ''' = SA.ESTADO ';
     
     END IF;
   
     IF LENGTH(rtrim(p_cFecIni)) > 0 AND LENGTH(rtrim(p_cFeFin)) > 0 THEN
     
-      cWhere := cWhere || ' AND s.FECCREACION >= to_date(''' || p_cFecIni ||
-                ''',''DD/MM/YYYY'')' || ' AND s.FECCREACION < to_date(''' ||
+      cWhere := cWhere || ' AND SA.FECCREACION >= to_date(''' || p_cFecIni ||
+                ''',''DD/MM/YYYY'')' || ' AND SA.FECCREACION < to_date(''' ||
                 p_cFeFin || ''',''DD/MM/YYYY'')+1';
     
     END IF;
   
-    cWhere := cWhere || ' ORDER BY S.IDESOLREQPERSONAL ';
+    cWhere := cWhere || ' ORDER BY SA.IDESOLREQPERSONAL DESC ';
   
     cQUERY := cCONSULTA || cWhere;
   
@@ -1554,124 +1635,144 @@ create or replace package body PR_INTRANET is
                               p_nIdSede         IN NUMBER,
                               p_cRetVal         OUT CUR_CURSOR) IS
   
-    cCONSULTA VARCHAR2(2000) := NULL;
+    cCONSULTA VARCHAR2(4000) := NULL;
     cWhere    VARCHAR2(1000) := NULL;
     cQUERY    VARCHAR2(4000) := NULL;
   
   BEGIN
-  /*'SELECT DISTINCT S.IDESOLNUEVOCARGO,S.CODCARGO,S.IDECARGO, C.NOMCARGO,  S.IDEDEPENDENCIA, '||
-                 '(SELECT D.NOMDEPENDENCIA  '||
-                 'FROM DEPENDENCIA D '||
-                 'WHERE D.IDEDEPENDENCIA = S.IDEDEPENDENCIA  AND D.IDESEDE=S.IDESEDE) DESDEPENDENCIA, '|| 
-                 'S.IDEDEPARTAMENTO, '||
-                 '(SELECT E.NOMDEPARTAMENTO '||   
-                 'FROM DEPARTAMENTO E '||  
-                 'WHERE E.IDEDEPARTAMENTO=S.IDEDEPARTAMENTO   AND E.IDEDEPENDENCIA = S.IDEDEPENDENCIA) DESDEPARTAMENTO, '||
-                 'S.IDEAREA, '|| 
-                 '(SELECT A.NOMAREA '||  
-                 'FROM AREA A  '||  
-                 'WHERE A.IDEAREA = S.IDEAREA  '|| 
-                 'AND A.IDEDEPARTAMENTO = S.IDEDEPARTAMENTO) DESAREA,  '||
-                 'nvl(C.NUMPOSICION,0) NUMPOSICION,  '||
-                 '(SELECT COUNT(*) '||
-                     'FROM RECLUTAMIENTO_PERSONA RP '||
-                       'WHERE RP.IDESOL = S.IDESOLNUEVOCARGO '||
-                       'AND RP.TIPSOL = ''01'' '||
-                       'AND RP.ESTACTIVO=''A'') POSTULANTES, '||
-                '(SELECT COUNT(*) '||
-                  ' FROM RECLUTAMIENTO_PERSONA RP '||
-                  ' WHERE RP.IDESOL = S.IDESOLNUEVOCARGO '||
-                    ' AND RP.TIPSOL = ''01'' '||
-                    ' AND RP.ESTPOSTULANTE =''02'' '||
-                    ' AND RP.ESTACTIVO=''A'') PRESELECCIONADOS, '||
-               ' 0 EVALUADOS,  0 SELECCIONADOS ,  L.ROLRESPONSABLE ROLRESP ,  '||
-               '(SELECT CODROL FROM ROL R WHERE R.FLGESTADO =''A'' '||  
-               'AND R.IDROL =L.ROLRESPONSABLE ) DESROL, '||
-               'PR_INTRANET.FN_ESTADO_SOLICITUD(S.IDESOLNUEVOCARGO,''01'') ESTADO, '||
-               ' L.TIPETAPA,  S.FECPUBLICACION,  S.FECCREACION,  S.FECEXPIRACION,  L.USRESPONSABLE ID_USUARIO_RESP, '||
-               ' (SELECT U.CODUSUARIO '||
-               ' FROM USUARIO U '||
-               ' WHERE U.IDUSUARIO = L.USRESPONSABLE AND ROWNUM<2) NOMPERSONREEMPLAZO, '||
-               ' DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO '||
-               ' FROM SOLNUEVO_CARGO S, CARGO C, LOGSOLNUEVO_CARGO L   '||
-               ' WHERE S.IDESOLNUEVOCARGO = L.IDESOLNUEVOCARGO  '||
-               ' AND S.IDECARGO = C.IDECARGO  '||
-               ' AND S.IDESEDE  = ' || p_nIdSede ||  
-               ' AND L.FECSUCESO =  (SELECT MAX(P.FECSUCESO) FROM LOGSOLNUEVO_CARGO P   WHERE P.IDESOLNUEVOCARGO =L.IDESOLNUEVOCARGO) '||   
-               ' AND L.ROLRESPONSABLE  = '|| p_cRolResp; */
-  
-    cCONSULTA := 'SELECT S.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(S.IDESOLNUEVOCARGO,''01'') ESTADO, '||
-                 'S.CODCARGO,NVL(S.IDECARGO,0) IDECARGO ,S.NOMBRE NOMCARGO,DE.IDEDEPENDENCIA, '||
-                 'DE.NOMDEPENDENCIA,DP.IDEDEPARTAMENTO ,DP.NOMDEPARTAMENTO, AR.IDEAREA,AR.NOMAREA, S.NUMPOSICIONES, '||
-                 '(SELECT COUNT(*) FROM RECLUTAMIENTO_PERSONA RP WHERE RP.IDESOL = S.IDESOLNUEVOCARGO AND RP.TIPSOL = ''01'' AND RP.ESTACTIVO=''A'') POSTULANTES, '||
-                 '(SELECT COUNT(*)  FROM RECLUTAMIENTO_PERSONA RP  WHERE RP.IDESOL = S.IDESOLNUEVOCARGO  AND RP.TIPSOL = ''01''  AND RP.ESTPOSTULANTE =''02''  AND RP.ESTACTIVO=''A'') PRESELECCIONADOS, '|| 
-                 '0 EVALUADOS,  0 SELECCIONADOS , S.FECCREACION,R.IDROL ,R.DSCROL , '||
-                 '(PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(S.IDESOLNUEVOCARGO,''N'')) NOMRESPONSABLE, LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL(''ETAPA'',LS.TIPETAPA)) TETAPA, '||
-                 '(SELECT C.VERSION FROM CARGO C WHERE C.IDECARGO = S.IDECARGO) VERSION, '||
-                 'DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO , '||
-                 ' S.FECPUBLICACION, S.FECCREACION,S.FECEXPIRACION,LS.USRESPONSABLE '||
-                 'FROM SOLNUEVO_CARGO S, AREA AR, DEPARTAMENTO DP, DEPENDENCIA DE , LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R ON (R.IDROL = LS.ROLRESPONSABLE) '||
-                 'WHERE S.IDEAREA = AR.IDEAREA '||
-                 'AND AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO '||
-                 'AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA '||
-                 'AND LS.IDESOLNUEVOCARGO = S.IDESOLNUEVOCARGO '||
-                 'AND LS.FECSUCESO = (SELECT MAX (FECSUCESO) FROM  LOGSOLNUEVO_CARGO LN '||
-                 'WHERE LN.IDESOLNUEVOCARGO = S.IDESOLNUEVOCARGO) '||
-                 'AND S.IDESEDE = '||p_nIdSede ||
-                 ' AND R.IDROL = '|| p_cRolResp ||
-                 ' AND LS.USRESPONSABLE = '||p_cUsrResponsable;
+
+   
+    cCONSULTA := 'SELECT SN.IDESOLNUEVOCARGO,'
+                         ||'SN.ESTADO,' 
+                         ||'SN.CODCARGO,'
+                         ||'SN.IDECARGO,'
+                         ||'SN.NOMCARGO,'
+                         ||'SN.IDEDEPENDENCIA,'
+                         ||'SN.NOMDEPENDENCIA,'
+                         ||'SN.IDEDEPARTAMENTO,'
+                         ||'SN.NOMDEPARTAMENTO,'
+                         ||'SN.IDEAREA,'
+                         ||'SN.NOMAREA,'
+                         ||'SN.NUMPOSICIONES,'
+                         ||'SN.POSTULANTES,'
+                         ||'SN.PRESELECCIONADOS,'
+                         ||'SN.EVALUADOS, '
+                         ||'SN.SELECCIONADOS , '
+                         ||'SN.CONTRATADOS , '
+                         ||'SN.FECHACREACION FECCREACION,'
+                         ||'SN.IDROL ,'
+                         ||'SN.DSCROL ,'
+                         ||'SN.NOMRESPONSABLE,'
+                         ||'SN.TETAPA,'
+                         ||'SN.VERSION,'
+                         ||'SN.PUBLICADO, '
+                         ||'SN.FECPUBLICACION, '
+                         ||'SN.FECEXPIRACION, '
+                         ||'SN.USRESPONSABLE '
+                 ||'FROM ( SELECT S.IDESOLNUEVOCARGO, '
+                           ||'PR_INTRANET.FN_ESTADO_SOLICITUD(S.IDESOLNUEVOCARGO,''01'') ESTADO, '
+                           ||'S.CODCARGO,'
+                           ||'NVL(S.IDECARGO,0) IDECARGO ,S.NOMBRE NOMCARGO, '
+                           ||'S.IDEDEPENDENCIA, '
+                           ||'(SELECT DE.NOMDEPENDENCIA FROM DEPENDENCIA DE WHERE DE.IDEDEPENDENCIA = S.IDEDEPENDENCIA AND DE.IDESEDE = S.IDESEDE AND DE.ESTACTIVO = ''A'') NOMDEPENDENCIA, '
+                           ||'S.IDEDEPARTAMENTO , '
+                           ||'(SELECT DP.NOMDEPARTAMENTO FROM DEPARTAMENTO DP WHERE DP.IDEDEPARTAMENTO = S.IDEDEPARTAMENTO AND DP.IDEDEPENDENCIA = S.IDEDEPENDENCIA AND DP.ESTACTIVO = ''A'') NOMDEPARTAMENTO, '
+                           ||'S.IDEAREA, '
+                           ||'(SELECT AR.NOMAREA FROM AREA AR WHERE AR.IDEAREA = S.IDEAREA AND AR.IDEDEPARTAMENTO = S.IDEDEPARTAMENTO AND AR.ESTACTIVO = ''A'') NOMAREA,'
+                           ||' S.NUMPOSICIONES, '||
+                           ' (SELECT COUNT(*) 
+                             FROM RECLUTAMIENTO_PERSONA RP
+                             WHERE RP.IDESOL = S.IDESOLNUEVOCARGO
+                             AND RP.TIPSOL = ''01''
+                             AND RP.ESTACTIVO=''A'') POSTULANTES, ' ||
+                             ' (SELECT COUNT(*) 
+                             FROM RECLUTAMIENTO_PERSONA RP
+                             WHERE RP.IDESOL = S.IDESOLNUEVOCARGO
+                             AND RP.TIPSOL = ''01''
+                             AND RP.ESTPOSTULANTE =''02''
+                             AND RP.ESTACTIVO=''A'') PRESELECCIONADOS, ' ||
+                             ' (SELECT COUNT(*) 
+                             FROM RECLUTAMIENTO_PERSONA RP
+                             WHERE RP.IDESOL = S.IDESOLNUEVOCARGO
+                             AND RP.TIPSOL = ''01''
+                             AND RP.ESTPOSTULANTE =''07''
+                             AND RP.ESTACTIVO=''A'') EVALUADOS, ' || 
+                             ' (SELECT COUNT(*) 
+                             FROM RECLUTAMIENTO_PERSONA RP
+                             WHERE RP.IDESOL = S.IDESOLNUEVOCARGO
+                              AND RP.TIPSOL = ''01''
+                              AND RP.ESTPOSTULANTE =''08''
+                              AND RP.ESTACTIVO=''A'') SELECCIONADOS , ' ||
+                              ' (SELECT COUNT(*) 
+                             FROM RECLUTAMIENTO_PERSONA RP
+                             WHERE RP.IDESOL = S.IDESOLNUEVOCARGO
+                              AND RP.TIPSOL = ''01''
+                              AND RP.ESTPOSTULANTE =''09''
+                              AND RP.ESTACTIVO=''A'') CONTRATADOS , ' ||
+                               'S.FECCREACION FECHACREACION,R.IDROL ,R.DSCROL , '||
+                               '(PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(S.IDESOLNUEVOCARGO,''N'')) NOMRESPONSABLE, LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL(''ETAPA'',LS.TIPETAPA)) TETAPA, '||
+                               '(SELECT C.VERSION FROM CARGO C WHERE C.IDECARGO = S.IDECARGO) VERSION, '||
+                               'DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO , '||
+                               ' S.FECPUBLICACION, S.FECCREACION,S.FECEXPIRACION,LS.USRESPONSABLE '||
+                               'FROM SOLNUEVO_CARGO S, LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R ON (R.IDROL = LS.ROLRESPONSABLE)  '||
+                               'WHERE LS.IDESOLNUEVOCARGO = S.IDESOLNUEVOCARGO '||
+                               'AND LS.FECSUCESO = (SELECT MAX (FECSUCESO) FROM  LOGSOLNUEVO_CARGO LN '||
+                               'WHERE LN.IDESOLNUEVOCARGO = S.IDESOLNUEVOCARGO) '||
+                               'AND S.IDESEDE = '||p_nIdSede ||
+                               ' AND R.IDROL = '|| p_cRolResp ||
+                               ' AND LS.USRESPONSABLE = '||p_cUsrResponsable ||') SN WHERE 1=1' ;
   
     IF p_nIdSolicitud > 0 THEN
     
-      cWhere := cWhere || ' AND  S.IDESOLNUEVOCARGO = ' || p_nIdSolicitud;
+      cWhere := cWhere || ' AND  SN.IDESOLNUEVOCARGO = ' || p_nIdSolicitud;
     
     END IF;
   
     IF p_nIdDependencia > 0 THEN
     
-      cWhere := cWhere || '  AND S.IDEDEPENDENCIA = ' || p_nIdDependencia;
+      cWhere := cWhere || '  AND SN.IDEDEPENDENCIA = ' || p_nIdDependencia;
     
     END IF;
   
     IF p_nIdDepartamento > 0 THEN
     
-      cWhere := cWhere || '  AND S.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
+      cWhere := cWhere || '  AND SN.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
     
     END IF;
   
     IF p_nIdArea > 0 THEN
     
-      cWhere := cWhere || ' AND S.IDEAREA = ' || p_nIdArea;
+      cWhere := cWhere || ' AND SN.IDEAREA = ' || p_nIdArea;
     
     END IF;
   
-    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa <> '' THEN
+    IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa <> '0' THEN
     
-      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = L.TIPETAPA ';
-    
-    END IF;
-  
-    IF p_cTipResp IS NOT NULL AND p_cTipResp <> '' THEN
-    
-      cWhere := cWhere || ' AND ''' || p_cTipResp || ''' = L.ROL ';
+      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SN.TIPETAPA ';
     
     END IF;
   
-    IF p_cEstado IS NOT NULL AND p_cEstado <> '' THEN
+    IF p_cTipResp IS NOT NULL AND p_cTipResp <> '0' THEN
     
-      cWhere := cWhere || ' AND ''' || p_cEstado || ''' = L.ESTACTIVO ';
+      cWhere := cWhere || ' AND ''' || p_cTipResp || ''' = SN.IDROL ';
+    
+    END IF;
+  
+    IF p_cEstado IS NOT NULL AND p_cEstado <> '0' THEN
+    
+      cWhere := cWhere || ' AND ''' || p_cEstado || ''' = SN.ESTADO ';
     
     END IF;
   
     IF LENGTH(rtrim(p_cFecIni)) > 0 AND LENGTH(rtrim(p_cFeFin)) > 0 THEN
     
-      cWhere := cWhere || ' AND s.FECCREACION >= to_date(''' || p_cFecIni ||
-                ''',''DD/MM/YYYY'')' || ' AND s.FECCREACION < to_date(''' ||
+      cWhere := cWhere || ' AND SN.FECCREACION >= to_date(''' || p_cFecIni ||
+                ''',''DD/MM/YYYY'')' || ' AND SN.FECCREACION < to_date(''' ||
                 p_cFeFin || ''',''DD/MM/YYYY'')+1';
     
     END IF;
   
-    cWhere := cWhere || ' ORDER BY S.IDESOLNUEVOCARGO  ';
+    cWhere := cWhere || ' ORDER BY SN.IDESOLNUEVOCARGO  ';
   
     cQUERY := cCONSULTA || cWhere;
   
@@ -1683,6 +1784,195 @@ create or replace package body PR_INTRANET is
     OPEN p_cRetVal FOR cQUERY;
   
   END FN_GET_LISTACARGO;
+  
+  /* ------------------------------------------------------------
+    Nombre      : SP_GET_LISTA_AMPLIACION
+    Proposito   : obtiene la lista de requerimiento de ampliacion de cargo
+                  
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      14/02/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+                                    p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                                    p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                                    p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
+                                    p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                                    p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,
+                                    p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                                    p_cFecIni         IN varchar2,
+                                    p_cFeFin          IN varchar2,
+                                    p_cTipSol         IN varchar2,
+                                    p_nIdRoL          IN NUMBER,
+                                    p_nIdUsuario      IN NUMBER,
+                                    p_nIdSede         IN NUMBER,
+                                    p_cRetVal         OUT CUR_CURSOR) IS
+  
+    cCONSULTA VARCHAR2(4000) := NULL;
+    cWhere    VARCHAR2(1000) := NULL;
+    cQUERY    VARCHAR2(4000) := NULL;
+  
+  BEGIN
+  
+    cCONSULTA := 'SELECT SA.IDESOLREQPERSONAL,'
+               ||'SA.CODSOLREQPERSONAL,' 
+               ||'SA.IDECARGO,'
+               ||'SA.DESCARGO,'
+               ||'SA.IDEDEPENDENCIA,'
+               ||'SA.DESDEPENDENCIA,'
+               ||'SA.IDEDEPARTAMENTO,'
+               ||'SA.DESDEPARTAMENTO,'               
+               ||'SA.IDEAREA,'
+               ||'SA.DESAREA,'
+               ||'SA.NUMVACANTES,'
+               ||'SA.POSTULANTE,'
+               ||'SA.PRESELECCIONADOS,'
+               ||'SA.EVALUADOS, '
+               ||'SA.SELECCIONADOS , '
+               ||'SA.CONTRATADOS , '
+               ||'SA.ROL ,'
+               ||'SA.DESROL ,'
+               ||'SA.ESTADO ,'
+               ||'SA.TIPETAPA,'
+               ||'SA.FECPUBLICACION,'
+               ||'SA.FECCREACION,'
+               ||'SA.FECEXPIRACACION, '
+               ||'SA.ID_USUARIO_RESP, '
+               ||'SA.PUBLICADO, '
+               ||'SA.NOMPERSONREEMPLAZO,'
+               ||'SA.TIPSOL, '
+               ||'SA.DES_ETAPA '
+     ||'FROM (SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO, ' ||
+                 ' S.NOMCARGO DESCARGO, ' ||
+                 ' S.IDEDEPENDENCIA, ' || ' (SELECT D.NOMDEPENDENCIA ' ||
+                 ' FROM DEPENDENCIA D ' ||
+                 ' WHERE D.IDEDEPENDENCIA = S.IDEDEPENDENCIA ' ||
+                 ' AND D.IDESEDE=S.IDESEDE) DESDEPENDENCIA, ' ||
+                 ' S.IDEDEPARTAMENTO, ' || ' (SELECT E.NOMDEPARTAMENTO  ' ||
+                 '  FROM DEPARTAMENTO E ' ||
+                 '  WHERE E.IDEDEPARTAMENTO=S.IDEDEPARTAMENTO ' ||
+                 '  AND E.IDEDEPENDENCIA = S.IDEDEPENDENCIA) DESDEPARTAMENTO, ' ||
+                 ' S.IDEAREA, ' || ' (SELECT A.NOMAREA ' ||
+                 '  FROM AREA A ' || '  WHERE A.IDEAREA = S.IDEAREA ' ||
+                 '  AND A.IDEDEPARTAMENTO = S.IDEDEPARTAMENTO) DESAREA, ' ||
+                 ' S.NUMVACANTES, ' ||
+                 ' (SELECT COUNT(*) 
+                     FROM RECLUTAMIENTO_PERSONA RP
+                     WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                       AND RP.TIPSOL = S.TIPSOL
+                       AND RP.ESTACTIVO=''A'') POSTULANTE, ' ||
+                 ' (SELECT COUNT(*) 
+                   FROM RECLUTAMIENTO_PERSONA RP
+                   WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                     AND RP.TIPSOL = S.TIPSOL
+                     AND RP.ESTPOSTULANTE =''02''
+                     AND RP.ESTACTIVO=''A'') PRESELECCIONADOS, ' ||
+                 ' (SELECT COUNT(*) 
+                   FROM RECLUTAMIENTO_PERSONA RP
+                   WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                     AND RP.TIPSOL = S.TIPSOL
+                     AND RP.ESTPOSTULANTE =''07''
+                     AND RP.ESTACTIVO=''A'') EVALUADOS, ' || 
+                 ' (SELECT COUNT(*) 
+                   FROM RECLUTAMIENTO_PERSONA RP
+                   WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                     AND RP.TIPSOL = S.TIPSOL
+                     AND RP.ESTPOSTULANTE =''08''
+                     AND RP.ESTACTIVO=''A'') SELECCIONADOS , ' ||
+                     ' (SELECT COUNT(*) 
+                   FROM RECLUTAMIENTO_PERSONA RP
+                   WHERE RP.IDESOL = S.IDESOLREQPERSONAL
+                     AND RP.TIPSOL = S.TIPSOL
+                     AND RP.ESTPOSTULANTE =''09''
+                     AND RP.ESTACTIVO=''A'') CONTRATADOS , ' ||
+                 ' L.ROLRESPONSABLE ROL , ' ||
+                 ' (select codRol from rol r where r.flgestado=''A'' and r.idrol =L.ROLRESPONSABLE ) DESROL, '
+                --|| ' S.ESTACTIVO, '
+                 ||
+                 'PR_INTRANET.FN_ESTADO_SOLICITUD(S.IDESOLREQPERSONAL,''R'') ESTADO,' ||
+                 ' L.TIPETAPA, ' || ' S.FECPUBLICACION, ' ||
+                 ' S.FECCREACION, ' || ' S.FECEXPIRACACION, ' ||
+                 ' L.USRESPONSABLE ID_USUARIO_RESP,' ||
+                 ' (SELECT U.CODUSUARIO FROM USUARIO U WHERE U.IDUSUARIO = L.USRESPONSABLE AND ROWNUM<2) NOMPERSONREEMPLAZO,' ||
+                 ' DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO, ' ||
+                 ' S.TIPSOL, ' ||
+                 ' (SELECT D.DESCRIPCION FROM DETALLE_GENERAL D WHERE D.IDEGENERAL=50
+                    AND D.VALOR = L.TIPETAPA) DES_ETAPA ' ||
+                 '  FROM SOLREQ_PERSONAL S,LOGSOLREQ_PERSONAL L ' ||
+                 '  WHERE S.IDESOLREQPERSONAL = L.IDESOLREQPERSONAL ' ||
+                 '  AND S.IDESEDE  = ' || p_nIdSede ||
+                 '  AND L.FECSUCESO =  (SELECT MAX(P.FECSUCESO) FROM LOGSOLREQ_PERSONAL P ' ||
+                 '  WHERE P.IDESOLREQPERSONAL=L.IDESOLREQPERSONAL) ' ||
+                 '  AND ''' || p_cTipSol || ''' = S.TIPSOL ' ||
+                 '  AND L.USRESPONSABLE  = ' || p_nIdUsuario ||
+                 '  AND L.ROLRESPONSABLE = ' || p_nIdRoL ||') SA WHERE 1=1' ;
+  
+    IF p_nIdCargo > 0 THEN
+    
+      cWhere := cWhere || ' AND  SA.IDECARGO = ' || p_nIdCargo;
+    
+    END IF;
+  
+    IF p_nIdDependencia > 0 THEN
+    
+      cWhere := cWhere || '  AND SA.IDEDEPENDENCIA = ' || p_nIdDependencia;
+    
+    END IF;
+  
+    IF p_nIdDepartamento > 0 THEN
+    
+      cWhere := cWhere || '  AND SA.IDEDEPARTAMENTO = ' || p_nIdDepartamento;
+    
+    END IF;
+  
+    IF p_nIdArea > 0 THEN
+    
+      cWhere := cWhere || ' AND SA.IDEAREA = ' || p_nIdArea;
+    
+    END IF;
+  
+    IF LENGTH(TRIM(p_cTipEtapa))>0 AND p_cTipEtapa!= '0' THEN
+    
+      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SA.TIPETAPA ';
+    
+    END IF;
+  
+    IF  LENGTH(TRIM(p_cTipResp))>0 AND  p_cTipResp!=0 THEN
+    
+      cWhere := cWhere || ' AND ''' || p_cTipResp || ''' = SA.ROL ';
+    
+    END IF;
+  
+    IF  LENGTH(TRIM(p_cEstado))>0 AND p_cEstado !='0' THEN
+    
+      cWhere := cWhere || ' AND ''' || p_cEstado || ''' = SA.ESTADO ';
+    
+    END IF;
+  
+    IF LENGTH(rtrim(p_cFecIni)) > 0 AND LENGTH(rtrim(p_cFeFin)) > 0 THEN
+    
+      cWhere := cWhere || ' AND SA.FECCREACION >= to_date(''' || p_cFecIni ||
+                ''',''DD/MM/YYYY'')' || ' AND SA.FECCREACION < to_date(''' ||
+                p_cFeFin || ''',''DD/MM/YYYY'')+1';
+    
+    END IF;
+  
+    cWhere := cWhere || ' ORDER BY SA.IDESOLREQPERSONAL DESC ';
+  
+    cQUERY := cCONSULTA || cWhere;
+  
+    DELETE FROM LOG_MENSAJE;
+  
+    INSERT INTO LOG_MENSAJE VALUES (cQUERY);
+    COMMIT;
+  
+    OPEN p_cRetVal FOR cQUERY;
+  
+  END SP_GET_LISTA_AMPLIACION;
+  
   /* ------------------------------------------------------------
     Nombre      : SP_ESTADO_SOLICITUD
     Proposito   : Obtiene el estado deacuerdo el tiempo 
@@ -1813,28 +2103,26 @@ create or replace package body PR_INTRANET is
   BEGIN
     DELETE T_EXAMCAT_TEMP;  
 
-    BEGIN
+   BEGIN
     FOR REG_EVALUACIONES IN cu_examenes(p_idReclutaPerso)LOOP  
-      --generar el id
-      SELECT IDERECLPERSOEXAMNCAT_SQ.NEXTVAL
-      INTO c_idReclutaPersExaCat
-      FROM DUAL;
-      --insertar los datos  
+      
       INSERT INTO RECL_PERS_EXAM_CAT
       (IDERECLPERSOEXAMNCAT,
        IDERECLUTAPERSONA,
        IDERECLUPERSOEXAMEN,
        IDEEXAMENXCATEGORIA,
        ESTADO,
+       ESTACTIVO,
        NOTAEXAMENCATEG,
        USRCREACION,
        FECCREACION)
       SELECT 
-       c_idReclutaPersExaCat,
+       IDERECLPERSOEXAMNCAT_SQ.NEXTVAL,
        p_idReclutaPerso,
        REG_EVALUACIONES.IDERECLUPERSOEXAMEN,
        EXCT.IDEEXAMENXCATEGORIA,
        P_ESTCAT_PENDIENTE,
+       'A',
        0,
        p_usuario,
        SYSDATE
@@ -1877,15 +2165,20 @@ create or replace package body PR_INTRANET is
     
     BEGIN
       OPEN p_cuRetVal FOR  
-      SELECT RE.IDERECLPERSOEXAMNCAT, RE.IDEEXAMENXCATEGORIA,              
-             EX.IDEEXAMEN, CA.IDECATEGORIA, EX.NOMEXAMEN,EX.DESCEXAMEN,CA.NOMCATEGORIA, CA.ORDENIMPRESION,
-             NVL(CA.TIEMPO,0) TIEMPO, RE.ESTADO 
-      FROM RECL_PERS_EXAM_CAT RE, EXAMEN EX, CATEGORIA CA , EXAMEN_X_CATEGORIA ECA
-      WHERE RE.IDEEXAMENXCATEGORIA = ECA.IDEEXAMENXCATEGORIA
-      AND EX.IDEEXAMEN = ECA.IDEEXAMEN
-      AND CA.IDECATEGORIA = ECA.IDECATEGORIA
-      AND EX.TIPEXAMEN = '01'
-      AND RE.IDERECLUTAPERSONA = p_idReclutaPerso;
+      SELECT *
+      FROM ( SELECT RE.IDERECLPERSOEXAMNCAT, RE.IDEEXAMENXCATEGORIA,              
+                    EX.IDEEXAMEN, CA.IDECATEGORIA, EX.NOMEXAMEN,EX.DESCEXAMEN,CA.NOMCATEGORIA, CA.ORDENIMPRESION,
+                    NVL(CA.TIEMPO,0) TIEMPO, RE.ESTADO,(CASE WHEN EX.TIPEXAMEN = P_TIPEXA_EXAMEN THEN 1 
+                                                            WHEN EX.TIPEXAMEN = P_TIPEXA_EVALUACION THEN 2
+                                                            ELSE 3
+                                                        END) ORDEN
+             FROM RECL_PERS_EXAM_CAT RE, EXAMEN EX, CATEGORIA CA , EXAMEN_X_CATEGORIA ECA
+             WHERE RE.IDEEXAMENXCATEGORIA = ECA.IDEEXAMENXCATEGORIA
+             AND EX.IDEEXAMEN = ECA.IDEEXAMEN
+             AND CA.IDECATEGORIA = ECA.IDECATEGORIA
+             AND ((EX.TIPEXAMEN = '01')OR(EX.TIPEXAMEN = '04'))
+             AND RE.IDERECLUTAPERSONA = p_idReclutaPerso) EC
+      ORDER BY EC.ORDEN;
         
     EXCEPTION
       WHEN OTHERS THEN
@@ -1954,7 +2247,8 @@ create or replace package body PR_INTRANET is
      WHERE RP.IDEPOSTULANTE = p_idePostulante
      AND RP.IDSEDE = p_ideSede
      AND ((RP.ESTPOSTULANTE = P_PRESEL_AUTOMATC) OR 
-          (RP.ESTPOSTULANTE = P_PRESEL_MANUAL));
+          (RP.ESTPOSTULANTE = P_PRESEL_MANUAL)OR
+          (RP.ESTPOSTULANTE = P_EN_EVALUACION));
       
    EXCEPTION
      WHEN OTHERS THEN
@@ -2094,6 +2388,200 @@ create or replace package body PR_INTRANET is
    RETURN c_nombreCompleto;
    
  END FN_OBTENER_NOMBRE_POST;
+ 
+  /* ------------------------------------------------------------
+    Nombre      : SP_CONOCIMIENTOS_PUBLICA
+    Proposito   : Obtiene descripcion de conocimientos del cargo para
+                  la publicaci?n
+    
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      08/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_CONOCIMIENTOS_PUBLICA(p_ideCargo    IN CARGO.IDECARGO%TYPE,
+                                    p_cRetVal     OUT SYS_REFCURSOR) IS
+
+ BEGIN 
+    
+   OPEN p_cRetVal FOR
+      SELECT CG.IDECONOGENCARGO, CASE WHEN (CG.TIPCONOFIMATICA IS NOT NULL) 
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL =  27
+                  AND DG.VALOR = CG.TIPCONOFIMATICA)
+            WHEN (CG.TIPIDIOMA IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 30
+                  AND DG.VALOR = CG.TIPIDIOMA)
+            WHEN (CG.TIPCONOGENERAL IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 32
+                  AND DG.VALOR = CG.TIPCONOGENERAL)
+           END AS TIPOCONO, 
+           
+           CASE WHEN (CG.TIPNOMOFIMATICA IS NOT NULL) 
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL =  28
+                  AND DG.VALOR = CG.TIPNOMOFIMATICA)
+            WHEN (CG.TIPCONOCIDIOMA IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 31
+                  AND DG.VALOR = CG.TIPCONOCIDIOMA)
+            WHEN (CG.TIPNOMCONOCGRALES IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 32
+                  AND DG.VALOR = CG.TIPNOMCONOCGRALES)
+            ELSE CG.NOMCONOCGRALES
+           END AS NOMBRE    
+      FROM CONOGENERAL_CARGO CG
+      WHERE CG.IDECARGO = p_ideCargo;
+   
+ END SP_CONOCIMIENTOS_PUBLICA;
+ 
+   /* ------------------------------------------------------------
+    Nombre      : SP_CONOCIMIENTOS_SOLREQ_PUBLICA
+    Proposito   : Obtiene descripcion de conocimientos del cargo para
+                  la publicaci?n
+    
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      08/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_CONO_SOLREQ_PUBLICA(p_ideSolReq    IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
+                                   p_cRetVal     OUT SYS_REFCURSOR) IS
+
+ BEGIN 
+    
+   OPEN p_cRetVal FOR
+      SELECT CG.IDECONOGENSOLREQ, CASE WHEN (CG.TIPCONOFIMATICA IS NOT NULL) 
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL =  27
+                  AND DG.VALOR = CG.TIPCONOFIMATICA)
+            WHEN (CG.TIPIDIOMA IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 30
+                  AND DG.VALOR = CG.TIPIDIOMA)
+            WHEN (CG.TIPCONOGENERAL IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 32
+                  AND DG.VALOR = CG.TIPCONOGENERAL)
+           END AS TIPOCONO, 
+           
+           CASE WHEN (CG.TIPNOMOFIMATICA IS NOT NULL) 
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL =  28
+                  AND DG.VALOR = CG.TIPNOMOFIMATICA)
+            WHEN (CG.TIPCONOCIDIOMA IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 31
+                  AND DG.VALOR = CG.TIPCONOCIDIOMA)
+            WHEN (CG.TIPNOMCONOCGRALES IS NOT NULL)
+            THEN (SELECT DG.DESCRIPCION 
+                  FROM DETALLE_GENERAL DG 
+                  WHERE DG.IDEGENERAL = 32
+                  AND DG.VALOR = CG.TIPNOMCONOCGRALES)
+            ELSE CG.NOMCONOCGRALES
+           END AS NOMBRE    
+      FROM CONOGENERAL_SOLREQ CG
+      WHERE CG.IDESOLREQPERSONAL = p_ideSolReq;
+   
+ END SP_CONO_SOLREQ_PUBLICA;
+ 
+     /* ------------------------------------------------------------
+    Nombre      : SP_LISTAR_USUARIOS
+    Proposito   : obtiene la lista de usuarios activos por sede
+    
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      15/05/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_LISTAR_USUARIOS(p_apePaterno    IN USUARIO.DSCAPEPATERNO%TYPE,
+                              p_apeMaterno    IN USUARIO.DSCAPEMATERNO%TYPE,
+                              p_nombres       IN USUARIO.DSCNOMBRES%TYPE,
+                              p_idRol         IN ROL.IDROL%TYPE,
+                              p_idSede        IN SEDE.IDESEDE%TYPE,
+                              p_retVal        OUT SYS_REFCURSOR) IS
+
+
+c_apePaterno    USUARIO.DSCAPEPATERNO%TYPE;
+c_apeMaterno    USUARIO.DSCAPEMATERNO%TYPE;
+c_nombres       USUARIO.DSCNOMBRES%TYPE;
+c_idRol         ROL.IDROL%TYPE;
+
+ BEGIN
+     
+   BEGIN 
+    
+     IF p_apePaterno IS NULL THEN
+        c_apePaterno := '';
+      ELSE
+        c_apePaterno := p_apePaterno;
+      END IF;
+      
+      IF p_apeMaterno IS NULL THEN
+         c_apeMaterno := '';
+      ELSE
+         c_apeMaterno:= p_apeMaterno;
+      END IF;
+      
+      IF p_nombres IS NULL THEN
+        c_nombres := '';
+      ELSE
+        c_nombres:= p_nombres;
+      END IF;
+      
+      IF p_idRol IS NULL THEN
+        c_idRol := '0';
+      ELSE
+        c_idRol:= p_idRol;
+      END IF;
+      
+      OPEN p_retVal FOR
+         SELECT U.IDUSUARIO, 
+                    U.DSCAPEPATERNO, 
+                    U.DSCAPEMATERNO, 
+                    U.DSCNOMBRES, 
+                    UR.IDROL , 
+                    (SELECT R.DSCROL 
+                     FROM ROL R 
+                     WHERE R.IDROL = UR.IDROL
+                     ) DSCROL
+             FROM USUARIO U , USUAROLSEDE UR 
+             WHERE U.IDUSUARIO = UR.IDUSUARIO
+             AND UR.IDESEDE = p_idSede
+             AND (c_apePaterno = '' OR U.DSCAPEPATERNO LIKE '%'||c_apePaterno||'%')
+             AND (c_apeMaterno = '' OR U.DSCAPEMATERNO LIKE '%'||c_apeMaterno||'%')
+             AND (c_nombres = '' OR U.DSCNOMBRES LIKE '%'||c_nombres||'%')             
+             AND (c_idRol = '0' OR UR.IDROL = c_idRol);
+     
+   EXCEPTION
+     WHEN OTHERS THEN
+      p_retVal:= NULL;
+   END;
+      
+          
+      
+   
+ END SP_LISTAR_USUARIOS;
 
 END PR_INTRANET;
 /

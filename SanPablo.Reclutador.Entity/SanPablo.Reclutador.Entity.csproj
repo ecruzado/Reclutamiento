@@ -153,6 +153,8 @@
     <Compile Include="Validation\ConocimientoGeneralPostulanteValidator.cs" />
     <Compile Include="Validation\CompetenciaCargoValidator.cs" />
     <Compile Include="Validation\CargoValidator.cs" />
+    <Compile Include="Validation\UsuarioRolSedeValidator.cs" />
+    <Compile Include="Validation\SedeNivelValidator.cs" />
     <Compile Include="Validation\ReclutamientoPersonaExamenValidator.cs" />
     <Compile Include="Validation\CvPostulanteValidator.cs" />
     <Compile Include="Validation\DetalleGeneralValidator.cs" />

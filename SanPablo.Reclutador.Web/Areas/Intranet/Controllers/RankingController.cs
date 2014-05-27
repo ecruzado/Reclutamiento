@@ -36,14 +36,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private ICvPostulanteRepository _cvPostulanteRepository;
         private IReclutamientoPersonaRepository _reclutamientoPersonaRepository;
         private IPostulanteRepository _postulanteRepository;
+        private ILogSolicitudNuevoCargoRepository _logSolNuevoRepository;
+        private ILogSolicitudRequerimientoRepository _logSolReqRepository;
         
 
         public RankingController(IDetalleGeneralRepository detalleGeneralRepository,
-                                         ISolReqPersonalRepository solReqPersonalRepository,
-                                         ICvPostulanteRepository cvPostulanteRepository,
-                                        IReclutamientoPersonaRepository reclutamientoPersonaRepository,
-                                        
-            IPostulanteRepository postulanteRepository
+                                 ISolReqPersonalRepository solReqPersonalRepository,
+                                 ICvPostulanteRepository cvPostulanteRepository,
+                                 IReclutamientoPersonaRepository reclutamientoPersonaRepository,
+                                 IPostulanteRepository postulanteRepository,
+                                 ILogSolicitudNuevoCargoRepository logSolNuevoRepository,
+                                 ILogSolicitudRequerimientoRepository logSolReqRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -51,7 +54,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _cvPostulanteRepository = cvPostulanteRepository;
             _reclutamientoPersonaRepository = reclutamientoPersonaRepository;
             _postulanteRepository = postulanteRepository;
-           
+            _logSolNuevoRepository = logSolNuevoRepository;
+            _logSolReqRepository = logSolReqRepository;
+
         }
 
         /// <summary>
@@ -776,10 +781,22 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
          {
              RankingViewModel model;
 
+             int idUsuarioSession = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
              model = new RankingViewModel();
              model.Solicitud = new SolReqPersonal();
              model.ReclutaPersonal = new ReclutamientoPersona();
 
+             LogSolicitudNuevoCargo logNuevo = new LogSolicitudNuevoCargo();
+             LogSolReqPersonal logReqCargo = new LogSolReqPersonal();
+        
+             if (tipSol == TipoSolicitud.Nuevo)
+             {
+                 logNuevo = _logSolNuevoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == id);
+             }
+             else
+             {
+                 logReqCargo = _logSolReqRepository.getFirthValue(x => x.IdeLogSolReqPersonal == id);
+             }
 
              model.Solicitud.IdeSolReqPersonal = id;
              model.Solicitud.Tipsol = tipSol;
@@ -818,7 +835,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              else if (Roles.Analista_Seleccion.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "S";
+                 model.btnSeleccionar = "N";
                  model.btnExcluir = "S";
                  model.btnContactado = "S";
                  model.btnContratar = "S";
@@ -827,7 +844,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              else if (Roles.Encargado_Seleccion.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "S";
+                 model.btnSeleccionar = "N";
                  model.btnExcluir = "S";
                  model.btnContactado = "S";
                  model.btnContratar = "S";
@@ -835,21 +852,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              }else if(Roles.Gerente_General_Adjunto.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "S";
                  model.btnContratar = "S";
                 
              }
              else if (Roles.Gerente.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "S";
                  model.btnContratar = "S";
 
              }
              else if (Roles.Jefe.Equals(idRol))
              {
                  model.btnEvaluaciones = "S";
-                 model.btnSeleccionar = "S";
                  model.btnContratar = "S";
 
              }
@@ -862,6 +876,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                  model.btnContratar = "N";
              }
 
+             if (tipSol == TipoSolicitud.Nuevo)
+             {
+                 if ((logNuevo.RolResponsable == idRol) && (logNuevo.UsuarioResponsable == idUsuarioSession))
+                 {
+                     model.btnSeleccionar = "S";
+                 }
+                 else
+                 {
+                     model.btnSeleccionar = "N";
+                 }
+             }
+             else if ((tipSol == TipoSolicitud.Ampliacion) || (tipSol == TipoSolicitud.Remplazo))
+             {
+                 if ((logReqCargo.RolResponsable == idRol) && (logReqCargo.UsResponsable == idUsuarioSession))
+                 {
+                     model.btnSeleccionar = "S";
+                 }
+                 else
+                 {
+                     model.btnSeleccionar = "N";
+                 }
+             }
 
              return View("PostulantesPreSeleccionados", model);
          }
