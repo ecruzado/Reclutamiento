@@ -532,7 +532,7 @@
                                         @Html.HiddenFor(model => model.DepartamentoSession.IdeDepartamento)*@
                                          @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                          {
-                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.nuevaSolicitud.Equals(Indicador.Si)))
+                                             if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                              {
                                                  @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudNuevoCargo.IdeDepartamento))
                                                  <div class="tex-error" style="font-size:12px;color:red"> 
@@ -580,7 +580,7 @@
                                     <div class="controles">
                                         @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                                         {
-                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Jefe)) || (Model.nuevaSolicitud.Equals(Indicador.Si)))
+                                            if ((Model.rolSession.Equals(@SanPablo.Reclutador.Entity.Roles.Gerente_General_Adjunto)) && (Model.nuevaSolicitud.Equals(Indicador.Si)))
                                             {
                                                 @Html.DropDownListFor(model => model.SolicitudNuevoCargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudNuevoCargo.IdeArea))
                                                 <div class="tex-error" style="font-size:12px;color:red"> 
