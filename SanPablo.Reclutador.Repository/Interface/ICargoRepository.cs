@@ -26,13 +26,20 @@ using System.Data;
         List<Cargo> listaCargosCompletos(int IdeSede);
 
         /// <summary>
+        /// Lista de cargos devuelve idecargo, codcargo, nomcargo
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+         List<Cargo> listarCargosSedeCodigo(int ideSede);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="cargo"></param>
         /// <param name="estado"></param>
         /// <param name="ideSede"></param>
         /// <returns></returns>
-        List<ListaSolicitudNuevoCargo> listaCargos(Cargo cargo, string estado, int ideSede);
+        List<ListaSolicitudNuevoCargo> listaCargosMantenimiento(Cargo cargo, string estado, int ideSede);
 
         /// <summary>
         /// Consultar la etapa del cargo

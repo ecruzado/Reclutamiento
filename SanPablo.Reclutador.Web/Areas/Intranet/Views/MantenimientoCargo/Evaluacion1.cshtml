@@ -5,10 +5,6 @@
     Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 @section ScriptsCargo{ 
-
-    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-
 <script type="text/javascript">
   $(document).ready(function () {
 
@@ -39,19 +35,14 @@
                             }
                         );
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    //}
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+                    }
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-          },
-          open: function () {
-              $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
-              $("#Evaluacion_IdeExamen+div span").html('');
-          }
-
+            }
       });
 
 
@@ -60,7 +51,7 @@
           if (ideEvaluacion != null) {
               $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
               $("#divMensaje").dialog({
-                  title: 'Sistema de reclutamiento y selección de personal',
+                  title: 'SAN PABLO',
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },
@@ -71,7 +62,14 @@
               return false;
           }
           else {
-              mostrarMensaje('Seleccionar un item a eliminar')
+              $("#spanMensaje").html('Seleccionar un item a eliminar');
+              $("#divMensaje").dialog({
+                  title: 'SAN PABLO',
+                  modal: true,
+                  buttons: {
+                      "Ok": function () { $(this).dialog("close"); }
+                  }
+              });
           }
       });
 
@@ -81,7 +79,14 @@
               mostrarEditarEvaluacion(ideEvaluacion);
           }
           else {
-              mostrarMensaje('Seleccionar un item a editar')
+              $("#spanMensaje").html('Seleccionar un item a editar');
+              $("#divMensaje").dialog({
+                  title: 'SAN PABLO',
+                  modal: true,
+                  buttons: {
+                      "Ok": function () { $(this).dialog("close"); }
+                  }
+              });
           }
       });
 
@@ -93,17 +98,19 @@
             url: '@Url.Action("ListaEvaluaciones", "EvaluacionCargo")',
                  datatype: 'json',
                  mtype: 'POST',
-                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima'],
+                 colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
                  colModel: [
                          { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                          { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
                          { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false },
+                         { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
+                         { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
                  ],
                  pager: jQuery('#grdPagerEvaluacion'),
                  sortname: 'TipoExamen',
                  sortorder: 'desc',
                  viewrecords: true,
-                 //cellEdit: true,
+                 cellEdit: true,
                  /*caption: 'Horario de Trabajo',*/
                  height: 200,
                  width: 898,
@@ -153,14 +160,14 @@
 {
     <div class="tab-pane" id="G">
             <div class="grilla-opciones">
-                <h6>Evaluaciones <span  class="text-error">*</span></h6>
+                <h6></h6>
                 <div class="opciones">
-                @if (Accion.Enviar == Model.Accion)
-                {
+                  @if (Accion.Editar == Model.Accion)
+                 {
                     <a id="btnAgregarEvaluacion" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                     <a id="btnEditarEvaluacion" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
                     <a id="btnEliminarEvaluacion" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                }
+                  }
                 </div>
                 <div style="clear:both"></div>
             </div>
@@ -174,7 +181,7 @@
                         
             <div class="formulario-accion">
                 <div class="opciones">
-                <a class="btn" href="@Url.Action("Discapacidad", "ManteniminetoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn" href="@Url.Action("Discapacidad", "MantenimientoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("ConfiguracionPerfil", "MantenimientoCargo")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
 
                 </div>

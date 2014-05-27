@@ -180,6 +180,7 @@
     {
         public const string Pendiente = "01";
         public const string Evaluado = "02";
+        public const string Finalizado = "03";
     }
     /// <summary>
     /// Notas referenciales

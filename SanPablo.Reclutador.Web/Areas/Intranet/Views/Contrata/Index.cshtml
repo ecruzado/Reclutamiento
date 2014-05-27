@@ -82,7 +82,7 @@
             $('#popupDialogObserv').dialog({
                 autoOpen: false,
                 width: 520,
-                height: 350,
+                //height: 350,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -98,11 +98,12 @@
             });
 
 
-            $("#spanDialogObserv").html("¿Desea guardar los cambios?")
+            $("#spanDialogObserv").html("¿Está seguro de finalizar la solicitud de requerimiento?")
             $('#dialogObserv').dialog({
                 autoOpen: false,
                 modal: true,
-                title: "Sistema de Reclutamiento Y Seleccion de Personal",
+                resizable: false,
+                title: "CONFIRMACIÓN",
                 buttons: {
                     "Aceptar": function () {
                         if ($("#frmPopuObserv").validate().form()) {
@@ -116,7 +117,7 @@
                                         $('#dialogObserv').dialog("close");
                                         $('#popupDialogObserv').dialog("close");
 
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                        mensajeRedirecciona(data.Mensaje, "INFORMATIVO");
                                     } else {
                                         MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                     }
@@ -260,7 +261,7 @@
                 }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
                         var dialogDiv = $('#popupDialogObserv');
 
@@ -277,6 +278,33 @@
             });
 
         }
+
+        function mensajeRedirecciona(mensaje, titulo) {
+            var tipSol = $('#Solicitud_Tipsol').val();
+
+            $("#spnMensaje").html(mensaje);
+            $("#divMensaje").dialog({
+                title: titulo,
+                modal: true,
+                resizable: false,
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog("close");
+                        if (tipSol == '01') { //nuevo
+                            SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                        }
+                        else {
+                            if (tipSol == '02') { //ampliacion
+                                SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
+                            }
+                            else { // reemplazo
+                                SanPablo.Redirecciona('@Url.Action("ListaReemplazo","SolicitudCargo")');
+                            }
+                        }
+                }
+            }
+        });
+    }
        
        
 
@@ -414,5 +442,5 @@
         </div>
     </div>
 </div>
-<div id="popupDialogObserv" title="Motivo de cierre de solicitud"></div>
+<div id="popupDialogObserv" title="Motivo de finalización de solicitud"></div>
 <div id="dialogObserv"><span id="spanDialogObserv"></span></div>

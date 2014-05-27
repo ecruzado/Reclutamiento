@@ -35,6 +35,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string btnVerEditar { get; set; }
         public string btnVerActivarDesc { get; set; }
 
+
+        public List<Edad> ListaEdad { get; set; }
+
+        public string indVisibilidad { get; set; }
+
         
     }
 }

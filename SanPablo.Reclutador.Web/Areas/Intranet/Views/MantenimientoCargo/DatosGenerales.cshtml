@@ -12,7 +12,7 @@
         <table >
             <tr class="formulario-fila">
                 <td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="selectError">Dependencia</label>
+                    <label class="control-label" for="selectError">Dependencia<span class="text-error">*</span></label>
                 </td>
                 <td class="controls">
                  @if (Accion.Editar == Model.Accion)
@@ -28,12 +28,12 @@
                  }   
                 </td>
                 <td class="colEtiqueta" style="width:150px;text-align:right">
-                    <label class="control-label" for="inputSuccess">Nombre Cargo</label>
+                    <label class="control-label" for="inputSuccess">Nombre<span class="text-error">*</span></label>
                 </td>
                 <td class="controls">
                     @if (Accion.Editar == Model.Accion)
                     {
-                        @Html.TextBoxFor(model => model.Cargo.NombreCargo)
+                        @Html.TextBoxFor(model => model.Cargo.NombreCargo, new {  maxlength = "50", onblur = "aMays(event, this)"})
                     }
                     else
                     {
@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="selectError">Departamento</label>
+                    <label class="control-label" for="selectError">Departamento<span class="text-error">*</span></label>
                 </td>
                 <td class="controls">
                     @if (Accion.Editar == Model.Accion)
@@ -59,12 +59,12 @@
                     }
                 </td>
                 <td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="inputSuccess">Descripcion Cargo</label>
+                    <label class="control-label" for="inputSuccess">Descripcion <span class="text-error">*</span></label>
                 </td>
                 <td class ="colImput">
                     @if (Accion.Editar == Model.Accion)
                     {
-                        @Html.TextBoxFor(model=>model.Cargo.DescripcionCargo)
+                        @Html.TextBoxFor(model => model.Cargo.DescripcionCargo, new {  maxlength = "100", onblur = "aMays(event, this)"})
                     }
                     else
                     {
@@ -74,7 +74,7 @@
             </tr>
             <tr class="formulario-fila">
                 <td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="selectError">Área</label>
+                    <label class="control-label" for="selectError">Área<span class="text-error">*</span></label>
                 </td>
                 <td class="controles">
                     @if (Accion.Editar == Model.Accion)
@@ -89,10 +89,10 @@
                         @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea), new { disabled = "disabled"})
                     }
                 </td>
-                <td class="colEtiqueta" style="width:130px;text-align:right">
+                @*<td class="colEtiqueta" style="width:130px;text-align:right">
                     <label class="control-label" for="inputSuccess">Núm. Posiciones</label>
-                </td>
-                <td class="colImput">
+                </td>*@
+                @*<td class="colImput">
                     @if (Accion.Editar == Model.Accion)
                     {
                         @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right"})
@@ -101,7 +101,7 @@
                     {
                         @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right", disabled = "disabled"})
                     }
-                </td>
+                </td>*@
             </tr>
         </table>
         <div class="formulario-accion">   
@@ -120,9 +120,13 @@
 
 
 @section ScriptsCargo{ 
-  
+  <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
   <script type="text/javascript">
     $(function () {
+
+        SanPablo.LetrasSpace('Cargo_NombreCargo');
+        SanPablo.LetrasSpace('Cargo_DescripcionCargo');
 
         //PERFIL PUESTO
         $('#btnGrabarDatosGenerales').click(function () {

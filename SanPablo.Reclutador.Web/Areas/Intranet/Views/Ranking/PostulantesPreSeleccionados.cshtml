@@ -235,8 +235,7 @@
 
            $('#popupDialogExclucion').dialog({
                 autoOpen: false,
-                width: 520,
-                height: 350,
+                width: 500,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -252,11 +251,12 @@
             });
 
 
-            $("#spandialogExclucion").html("¿Desea guardar los cambios?")
+            $("#spandialogExclucion").html("¿Está seguro de excluir al postulante?")
             $('#dialogExclucion').dialog({
                 autoOpen: false,
+                resizable: false,
                 modal: true,
-                title: "Sistema de Reclutamiento Y Seleccion de Personal",
+                title: "CONFIRMACION",
                 buttons: {
                     "Aceptar": function () {
                         if ($("#frmPopuExclucion").validate().form()) {
@@ -524,10 +524,10 @@
                 {
                 *@
                     
-                    @if (Visualicion.SI.Equals(Model.btnSeleccionar))
+                    @*@if (Visualicion.SI.Equals(Model.btnSeleccionar))
                     {
                     <a class="btn btn-info" id="btnSeleccionado" ><i class="icon-ok-circle icon-white"></i> Seleccionar</a>
-                    }
+                    }*@
 
                     @if (Visualicion.SI.Equals(Model.btnExcluir))
                     {

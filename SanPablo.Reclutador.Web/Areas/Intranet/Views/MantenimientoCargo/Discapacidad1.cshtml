@@ -5,9 +5,6 @@
     Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 @section ScriptsCargo{ 
-    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnAgregarDiscapacidad').click(function () {
@@ -16,7 +13,7 @@
 
         $('#updateDialogDiscapacidad').dialog({
             autoOpen: false,
-            width: 500,
+            width: 600,
             resizable: false,
             modal: true,
             buttons: {
@@ -37,17 +34,13 @@
                             }
                         );
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados sean válidos");
-                    //}
+                    else {
+                        notificacionError("ERROR: Verifique que los datos ingresados sean válidos");
+                    }
             },
             "Cancelar": function () {
                 $(this).dialog("close");
                 }
-            },
-            open: function () {
-                $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
-                $("#Discapacidad_TipoDiscapacidad+div span").html('');
             }
         });
 
@@ -56,18 +49,25 @@
             if (ideDiscapacidad != null) {
                 $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje11").dialog({
-                    title: 'Sistema de reclutamiento y selección de personal',
+                    title: 'SAN PABLO',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },
-                        "Cancelar": function () { $(this).dialog("close"); }
+                        "Cancel": function () { $(this).dialog("close"); }
                     }
                 });
 
                 return false;
             }
             else {
-                mostrarMensaje('Seleccionar un item a eliminar');
+                $("#spanMensaje11").html('Seleccionar un item a eliminar');
+                $("#divMensaje11").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
             }
         });
 
@@ -77,7 +77,14 @@
                 mostrarEditarDiscapacidad(ideDiscapacidad);
             }
             else {
-                mostrarMensaje('Seleccionar un item a editar');
+                $("#spanMensaje11").html('Seleccionar un item a editar');
+                $("#divMensaje11").dialog({
+                    title: 'SAN PABLO',
+                    modal: true,
+                    buttons: {
+                        "Ok": function () { $(this).dialog("close"); }
+                    }
+                });
             }
         });
 
@@ -98,7 +105,7 @@
             sortname: 'IdeDiscapacidadCargo',
             sortorder: 'desc',
             viewrecords: false,
-            //cellEdit: true,
+            cellEdit: true,
             height: 200,
             width: 898,
             rowNum: 0,
@@ -149,12 +156,12 @@
         <div class="grilla-opciones">
             <h6>Discapacidad</h6>
             <div class="opciones">
-             @if (Accion.Editar == Model.Accion)
-             {
-                <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-             }
+               @if (Accion.Editar == Model.Accion)
+               {
+                  <a id="btnAgregarDiscapacidad" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                  <a id="btnEditarDiscapacidad" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                  <a id="btnEliminarDiscapacidad" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+               }
             </div>
             <div style="clear:both"></div>
         </div>

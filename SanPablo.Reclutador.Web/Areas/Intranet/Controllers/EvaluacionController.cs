@@ -282,12 +282,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
 
             }
-            if (nroPreguntas > 0)
+            if (nroPreguntas > 1) // 1: la pregunta en la que esta siempre estara vacia al hacer la consulta
             {
-                objJson.Mensaje = "Tiene " + nroPreguntas + " preguntas no contestadas. \r\n ¿Esta seguro de terminar el examen?.";
-                
+                objJson.Mensaje = "Tiene " + (nroPreguntas - 1) + " preguntas no contestadas. \r\n ¿Esta seguro de terminar el examen?.";
+                objJson.Resultado = true;
             }
-            objJson.IdDato = nroPreguntas;
+            else
+            {
+                objJson.Mensaje = "¿Esta seguro de terminar el examen?.";
+                objJson.Resultado = true;
+            }
             return Json(objJson);
         }
 
@@ -317,7 +321,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
         }
 
-
+        [ValidarSesion]
         [HttpPost]
         public ActionResult Examen(EvaluarPostulanteViewModel model)
         {
@@ -484,7 +488,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     reclutaPersExaCat = _reclutamientoExamenCategoriaRepository.GetSingle(x => x.IdeReclutamientoPersonaExamenCategoria == IdeReclutamientoExamenCategoria);
                 }
-                if (reclutaPersExaCat.Estado == EstadoEvaluacion.Evaluado)
+                if (reclutaPersExaCat.Estado == EstadoCategoria.Evaluado)
                 {
                     //guardar la ultima respuesta
                     ReclutamientoPersonaCriterio reclutamientoCriterio;
@@ -515,6 +519,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         }
 
                     }
+                    reclutaPersExaCat.Estado = EstadoCategoria.Finalizado;
+                    reclutaPersExaCat.FechaModificacion = FechaModificacion;
+                    reclutaPersExaCat.UsuarioModificacion = usuario;
+                    _reclutamientoExamenCategoriaRepository.Update(reclutaPersExaCat);
                     _reclutamientoPersonaExamenRepository.calificacionExamen(IdeReclutamientoExamenCategoria, IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString());
                     objJson.Resultado = true;
                 }

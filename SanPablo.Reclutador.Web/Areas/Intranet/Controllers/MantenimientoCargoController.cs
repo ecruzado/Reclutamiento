@@ -57,14 +57,19 @@
         {
             int ideCargo = Convert.ToInt32(id);
             Cargo cargo = new Cargo();
+            
             var mantenimientoViewModel = inicializarCargo();
             mantenimientoViewModel.Accion = Accion.Consultar;
             try
             {
-                if (ideCargo != 0)
+               
+                if ((ideCargo != 0)&&(Convert.ToInt32(Session[ConstanteSesion.copia]) == 0))
                 {   
                     //primer ingreso al sistema
+                    Session[ConstanteSesion.copia] = 1;
+                    
                     int idNuevoCargo = _cargoRepository.mantenimientoCargo(ideCargo, Session[ConstanteSesion.UsuarioDes].ToString());
+                    
                     if (idNuevoCargo != 0)
                     {
                         cargo = _cargoRepository.GetSingle(x => x.IdeCargo == idNuevoCargo);
@@ -192,7 +197,7 @@
             var cargoViewModel = new MantenimientoCargoViewModel();
             cargoViewModel.Cargo = new Cargo();
 
-            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Sexo));
+            cargoViewModel.Sexos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSexos));
             cargoViewModel.Sexos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
             cargoViewModel.TiposRequerimientos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoRequerimiento));
@@ -220,15 +225,44 @@
         [ValidarSesion]
         public ActionResult General()
         {
-            var perfilViewModel = inicializarCargo();
+            var mantenimientoViewModel = inicializarCargo();
+            List<Edad> ListaEdad = new List<Edad>();
+            Edad rangoEdad;
+
             if (CargoPerfil != null)
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                actualizarDatosCargo(perfilViewModel, cargo);
-                perfilViewModel.Cargo = cargo;
+
+                //Se obtiene las edades
+                for (int i = 18; i < 71; i++)
+                {
+                    rangoEdad = new Edad();
+                    rangoEdad.IdEdad = i;
+                    rangoEdad.DesEdad = i.ToString();
+                    ListaEdad.Add(rangoEdad);
+                }
+                //Se guardan las edades
+                mantenimientoViewModel.ListaEdad = ListaEdad;
+
+                if (cargo != null)
+                {
+                    mantenimientoViewModel.Cargo.EdadInicio = cargo.EdadInicio;
+                    mantenimientoViewModel.Cargo.EdadFin = cargo.EdadFin;
+                }
+
+                //perfilViewModel.ListaEdad.Insert(0, new Edad { IdEdad = 0, DesEdad = "Seleccionar" });
+
+
+                mantenimientoViewModel.Cargo = cargo;
+                mantenimientoViewModel.Accion = ModoAccion;
+                //actualizarDatosCargo(perfilViewModel, cargo);
+                //actualizarAccion(perfilViewModel);
             }
-            return View(perfilViewModel);
+
+            return View(mantenimientoViewModel);
+           
         }
+
 
         /// <summary>
         /// Guradar los cambios de la pestaña generales
@@ -394,6 +428,16 @@
         {
             var cargoViewModel = new MantenimientoCargoViewModel();
 
+            var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+
+            int puntajeTotal = Convert.ToInt32(cargoActual.PuntajeTotalPostulanteInterno) + Convert.ToInt32(cargoActual.PuntajeEdad) + Convert.ToInt32(cargoActual.PuntajeSexo) +
+                              Convert.ToInt32(cargoActual.PuntajeSalario) + Convert.ToInt32(cargoActual.PuntajeTotalNivelEstudio) + Convert.ToInt32(cargoActual.PuntajeTotalCentroEstudio) +
+                              Convert.ToInt32(cargoActual.PuntajeTotalExperiencia) + Convert.ToInt32(cargoActual.PuntajeTotalOfimatica) + Convert.ToInt32(cargoActual.PuntajeTotalIdioma) +
+                              Convert.ToInt32(cargoActual.PuntajeTotalConocimientoGeneral) + Convert.ToInt32(cargoActual.PuntajeTotalDiscapacidad) + Convert.ToInt32(cargoActual.PuntajeTotalHorario) +
+                              Convert.ToInt32(cargoActual.PuntajeTotalUbigeo);
+
+            cargoViewModel.TotalMaximo = puntajeTotal;
+
             cargoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == Convert.ToInt32(Session[ConstanteSesion.Sede])));
             cargoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
 
@@ -403,8 +447,8 @@
             cargoViewModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
             cargoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            var cargoActual = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
-            cargoViewModel.TotalMaximo = 0;
+            
+            
             cargoViewModel.Cargo = cargoActual;
             return cargoViewModel;
         }
@@ -440,6 +484,8 @@
         [HttpPost]
         public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
         {
+            JsonMessage objJson = new JsonMessage();
+
             int IdeCargo = CargoPerfil.IdeCargo;
             var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var cargoViewModel = inicializarDatosCargo();
@@ -447,15 +493,9 @@
             try
             {
                 CargoValidator validation = new CargoValidator();
-                ValidationResult result = validation.Validate(cargo, "PuntajeMinimoPostulanteInterno", "PuntajeMinimoEdad", "PuntajeMinimoSexo", "PuntajeMinimoSalario",
-                                                              "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
-                                                              "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
+                ValidationResult result = validation.Validate(cargo, "PuntajeMinimoExamen", "PuntajeMin");
 
-                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
-                cargoEditar.FechaModificacion = FechaCreacion;
-                cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
-                cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
-                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
+
 
                 if (!result.IsValid)
                 {
@@ -464,19 +504,73 @@
                     return View(cargoViewModel);
                 }
 
-                _cargoRepository.Update(cargoEditar);
-                cargoViewModel.Cargo = cargoEditar;
-                actualizarDatosCargo(cargoViewModel, cargo);
+                cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+                cargoEditar.FechaModificacion = FechaCreacion;
+                cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+                cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
+                cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
 
-                return View(cargoViewModel);
+                _cargoRepository.Update(cargoEditar);
+
+                //cargoViewModel.Cargo = cargoEditar;
+                //actualizarDatosCargo(cargoViewModel, cargoEditar);
+                //actualizarAccion(cargoViewModel);
+                //return View(cargoViewModel);
+                objJson.Resultado = true;
+                return Json(objJson);
             }
             catch (Exception ex)
             {
-                cargoViewModel.Cargo = cargo;
-                return View(cargoViewModel);
+                
+                objJson.Mensaje = "ERROR:" + ex;
+                objJson.Resultado = false;
+                return Json(objJson);
             }
 
         }
+
+
+        //[ValidarSesion]
+        //[HttpPost]
+        //public ActionResult ConfiguracionPerfil([Bind(Prefix = "Cargo")]Cargo cargo)
+        //{
+        //    int IdeCargo = CargoPerfil.IdeCargo;
+        //    var cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
+        //    var cargoViewModel = inicializarDatosCargo();
+
+        //    try
+        //    {
+        //        CargoValidator validation = new CargoValidator();
+        //        ValidationResult result = validation.Validate(cargo, "PuntajeMinimoPostulanteInterno", "PuntajeMinimoEdad", "PuntajeMinimoSexo", "PuntajeMinimoSalario",
+        //                                                      "PuntajeMinimoNivelEstudio", "PuntajeMinimoCentroEstudio", "PuntajeMinimoExperiencia", "PuntajeMinimoOfimatica", "PuntajeMinimoIdioma", "PuntajeMinimoConocimientoGeneral",
+        //                                                      "PuntajeMinimoDiscapacidad", "PuntajeMinimoHorario", "PuntajeMinimoUbigeo", "PuntajeMinimoExamen");
+
+        //        cargoEditar.UsuarioModificacion = Convert.ToString(Session[ConstanteSesion.UsuarioDes]);
+        //        cargoEditar.FechaModificacion = FechaCreacion;
+        //        cargoEditar.PuntajeMinimoExamen = cargo.PuntajeMinimoExamen;
+        //        cargoEditar.CantidadPreseleccionados = cargo.CantidadPreseleccionados;
+        //        cargoEditar.PuntajeMinimoGeneral = cargo.PuntajeMinimoGeneral;
+
+        //        if (!result.IsValid)
+        //        {
+        //            cargoViewModel.Cargo = cargoEditar;
+        //            actualizarDatosCargo(cargoViewModel, cargo);
+        //            return View(cargoViewModel);
+        //        }
+
+        //        _cargoRepository.Update(cargoEditar);
+        //        cargoViewModel.Cargo = cargoEditar;
+        //        actualizarDatosCargo(cargoViewModel, cargo);
+
+        //        return View(cargoViewModel);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cargoViewModel.Cargo = cargo;
+        //        return View(cargoViewModel);
+        //    }
+
+        //}
 
         /// <summary>
         /// Inicializacion de la pestaña Evaluaciones
@@ -666,7 +760,7 @@
 
                 cargos = new Cargo();
 
-                cargos.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
+                cargos.CodigoCargo = (grid.rules[1].data == null ? "0" : grid.rules[1].data);
                 cargos.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
                 cargos.IdeArea = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
 
@@ -679,7 +773,7 @@
                 cargos.IdeDepartamento = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
                 Estado = (grid.rules[7].data == null ? "A" : grid.rules[7].data);
 
-                lista = _cargoRepository.listaCargos(cargos, Estado, Convert.ToInt32(Session[ConstanteSesion.Sede]));
+                lista = _cargoRepository.listaCargosMantenimiento(cargos, Estado, Convert.ToInt32(Session[ConstanteSesion.Sede]));
 
 
 
@@ -729,8 +823,8 @@
 
             var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             //modificar para filtrar unicamente los cargo cuyo proceso ha concluido
-            model.Cargos = new List<Cargo>(_cargoRepository.All());
-            model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSedeCodigo(Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            model.Cargos.Insert(0, new Cargo { CodigoCargo = "0", NombreCargo = "Seleccionar" });
 
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoRegistro));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });

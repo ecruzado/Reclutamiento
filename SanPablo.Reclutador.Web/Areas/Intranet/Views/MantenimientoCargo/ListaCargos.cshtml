@@ -13,9 +13,27 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('#fechaInicio').datepicker({ dateFormat: 'dd/mm/yy' });
-        $('#fechaFin').datepicker({ dateFormat: 'dd/mm/yy' });
 
+
+        $('#fechaInicio,#fechaFin').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            onSelect: function (date) {
+                $(this).valid();
+            }
+         });
+
+        $('#fechaInicio,#fechaFin').attr("readonly", "readonly");
+
+        //$('#fechaInicio').datepicker({ dateFormat: 'dd/mm/yy' });
+        //$('#fechaFin').datepicker({ dateFormat: 'dd/mm/yy' });
+
+        $('#btnLimpiarUsuario').click(function () {
+            location.reload();
+        });
+
+        
         $('#btnBuscarSolicitud').click(function () {
             $('#grdList').trigger('reloadGrid');
         });
@@ -80,6 +98,8 @@
 
         $("#spanMessageConfirmacion").html("¿Está seguro que desea realizar modificaciones al cargo?")
         $('#updateDialogConfirmacion').dialogo({
+            title:"CONFIRMACIÓN",
+            resizable:false,
             buttons: {
                 "Aceptar": function () {
                     var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -98,7 +118,7 @@
         });
 
 
-        jQuery("#grdList").jqGrid({
+        @* jQuery("#grdList").jqGrid({
             datatype: function (postdata) {
                 var migrilla = new Object();
                 migrilla.page = postdata.page;
@@ -110,7 +130,7 @@
                 migrilla.Rules = [
 
                     { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'idCargo', data: $("Select#Cargo_IdeCargo").val() },
+                    { field: 'codCargo', data: $("Select#Cargo_CodigoCargo").val() },
                     { field: 'ideDependencia', data: $("Select#Dependencias").val() },
                     { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
                     { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
@@ -147,20 +167,20 @@
                     }
                 });
             },
-            colNames: ['Estado','','', 'Codigo', 'Cargo','','Dependencia','', 'Departamento','','Area', 'Version'],
+            colNames: ['Estado','','', 'Código', 'Cargo','','Dependencia','', 'Departamento','','Área', 'Versión'],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                             { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
                             { name: 'IdeCargo', index: 'IdeCargo', align: 'left', hidden: true },
                             { name: 'Codigo', index: 'Codigo', align: 'center', width: 80 },
-                            { name: 'Cargo', index: 'Cargo', align: 'left' },
+                            { name: 'Cargo', index: 'Cargo', align: 'left', width: 180 },
                             { name: 'ideDependencia', index: 'Cargo', align: 'left', hidden: true },
-                            { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 160 },
+                            { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 161 },
                             { name: 'ideDepartamento', index: 'Cargo', align: 'left', hidden: true },
-                            { name: 'Departamento', index: 'Departamento', align: 'left', width: 160 },
+                            { name: 'Departamento', index: 'Departamento', align: 'left', width: 161 },
                             { name: 'ideArea', index: 'Cargo', align: 'left', hidden: true },
-                            { name: 'Area', index: 'Area', align: 'left', width: 160 },
-                            { name: 'Version', index: 'Posiciones', align: 'right', width: 60 }
+                            { name: 'Area', index: 'Area', align: 'left', width: 161 },
+                            { name: 'Version', index: 'Posiciones', align: 'right', width: 50 }
                            
                           
                     ],
@@ -181,6 +201,95 @@
 
                     postData: {
                     }, loadComplete: function (data) {
+                    }
+                });*@
+
+         jQuery("#grdList").jqGrid({
+            
+            colNames: ['Estado','','', 'Código', 'Cargo','','Dependencia','', 'Departamento','','Área', 'Versión'],
+                    colModel: [
+                            { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
+                            { name: 'EstadoActivo', index: 'EstadoActivo', align: 'center', width: 50, hidden: true },
+                            { name: 'IdeCargo', index: 'IdeCargo', align: 'left', hidden: true },
+                            { name: 'Codigo', index: 'Codigo', align: 'center', width: 80 },
+                            { name: 'Cargo', index: 'Cargo', align: 'left', width: 180 },
+                            { name: 'ideDependencia', index: 'Cargo', align: 'left', hidden: true },
+                            { name: 'Dependencia', index: 'Dependencia', align: 'left', width: 161 },
+                            { name: 'ideDepartamento', index: 'Cargo', align: 'left', hidden: true },
+                            { name: 'Departamento', index: 'Departamento', align: 'left', width: 161 },
+                            { name: 'ideArea', index: 'Cargo', align: 'left', hidden: true },
+                            { name: 'Area', index: 'Area', align: 'left', width: 161 },
+                            { name: 'Version', index: 'Posiciones', align: 'right', width: 50 }
+                           
+                          
+                    ],
+
+                    pager: jQuery('#grdPager'),
+                    rowNum: 10,
+                    rowList: [10, 30, 50],
+                    autowidth: true,
+                    rules: true,
+                    sortname: 'IdeSolicitudNuevoCargo',
+                    sortorder: 'desc',
+                    viewrecords: true,
+                    height: 350,
+                    cellsubmit: 'clientArray',
+                    hidegrid: false,
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    datatype: 'local',
+                    postData: {
+                    }, loadComplete: function (data) {
+                        jQuery("#grdList").jqGrid('setGridParam', {
+                            datatype: function (postdata) {
+                                var migrilla = new Object();
+                                migrilla.page = postdata.page;
+                                migrilla.rows = postdata.rows;
+                                migrilla.sidx = postdata.sidx;
+                                migrilla.sord = postdata.sord;
+                                migrilla._search = postdata.isSearch;
+                                migrilla.filters = postdata.filters;
+                                migrilla.Rules = [
+
+                                    { field: 'idSolicitud', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                                    { field: 'codCargo', data: $("Select#Cargo_CodigoCargo").val() },
+                                    { field: 'ideDependencia', data: $("Select#Dependencias").val() },
+                                    { field: 'ideDepartamento', data: $("Select#Departamentos").val() },
+                                    { field: 'ideArea', data: $("Select#SolicitudNuevoCargo_IdeArea").val() },
+                                    { field: 'responsable', data: $("Select#Responsables").val() },
+                                    { field: 'etapa', data: $("Select#Etapas").val() },
+                                    { field: 'estado', data: $("Select#Estados").val() },
+                                    { field: 'fechaInicial', data: $("#fechaInicio").val() },
+                                    { field: 'fechaFin', data: $("#fechaFin").val() }
+
+                                ];
+
+                                if (migrilla._search == true) {
+                                    migrilla.searchField = postdata.searchField;
+                                    migrilla.searchOper = postdata.searchOper;
+                                    migrilla.searchString = postdata.searchString;
+                                }
+
+                                var params = { grid: migrilla };
+
+                                $.ajax({
+                                    url: '@Url.Action("ListaSolicitudes", "MantenimientoCargo")',
+                                    type: 'post',
+                                    contentType: 'application/json; charset=utf-8',
+                                    data: JSON.stringify(params),
+                                    async: false,
+                                    success: function (data, st) {
+                                        if (st == 'success') {
+                                            var jq = $('#grdList')[0];
+                                            jq.addJSONData(data);
+                                        }
+                                    },
+                                    error: function (e) {
+                                        console.log(e);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
 
@@ -269,37 +378,6 @@
         });
     }
    
-    function HabilitarFormatter(cellvalue, options, rowObject) {
-        var imgPath = '@Url.Content("~/Content/images/")';
-        var archivo = 'enabled.png';
-        var title = "Habilitar";
-
-        if (rowObject[1] == "V") {
-            archivo = 'enabled.png';
-            var title = "Habilitar";
-
-        }
-        else {
-            if (rowObject[1] == "M") {
-                archivo = 'ekiga.png';
-                var title = "Habilitar";
-            }
-            else {
-                if (rowObject[1] == "R") {
-                    archivo = 'red.png';
-                    var title = "Habilitar";
-                }
-                else {
-                    if (rowObject[1] == "I") {
-                        archivo = 'enigma.png';
-                        var title = "Habilitar";
-                    }
-                }
-            }
-        }
-        var strImg = '<img src="' + imgPath + archivo + '" title="' + title + '" alt="' + title + '">';
-        return strImg;
-    }
 
     function estadoSolicitud(ideSolicitud, estado) {
         if (ideSolicitud != null) {
@@ -380,7 +458,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.Cargo.IdeCargo, new SelectList(Model.Cargos, "IdeCargo","NombreCargo",Model.Cargo.NombreCargo ))
+                                @Html.DropDownListFor(model => model.Cargo.CodigoCargo, new SelectList(Model.Cargos, "CodigoCargo","NombreCargo",Model.Cargo.NombreCargo ))
                             </div>
                         </div>
                     </td>
@@ -439,7 +517,7 @@
                 <tr class="formulario-accion offset9">
                     <td>
                     <a id="btnBuscarSolicitud"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                    <button id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+                    <a id ="btnLimpiarUsuario" type="reset" class="btn"><i class="icon-trash"></i> Limpiar</a>
                     </td>
                 </tr>
 

@@ -1,18 +1,18 @@
 ﻿@using SanPablo.Reclutador.Entity
 @model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
-       ViewBag.Title = "Mantenimiento Cargo";
-       Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
+    ViewBag.Title = "Mantenimiento Cargo";
+    Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 
 
-@using (Html.BeginForm("General", "MantenimientoCargo", FormMethod.Post, new { @id = "generalPerfilForm" }))
+@using (Html.BeginForm("General", "Perfil", FormMethod.Post, new { @id = "generalPerfilForm" }))
 {
 <!--General Inicio -->
     @Html.ValidationSummary(true)
     <div class="tab-pane" id="B">
         <form>
-            <div class="grilla-opciones" style="margin-top:0px;">
+            <div id="datosGeneral"  class="grilla-opciones" style="margin-top:0px;">
                 <h6>Datos generales</h6>
                 <div class="opciones">
                 </div>
@@ -31,7 +31,11 @@
                         <td></td>
                         <td>
                         </td>
-                        <td style="text-align:left">
+                         <td>
+                        </td>
+                         <td>
+                        </td>
+                        <td style="text-align:left" >
                             Ptje.
                         </td>
                         <td></td>
@@ -40,98 +44,114 @@
                     <tr>
                         <td></td>
                         <td style="width:180px;">
-                            <label class="control-label" for="input01">Postulante Interno</label>
+                            <label class="control-label" for="input01">Postulante Interno <span class="text-error">*</span></label>
                         </td>
                         <td>
-                        @if (Accion.Editar == Model.Accion)
+                        @if (Model.Accion.Equals(Accion.Consultar))
                         {
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini" })
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini", disabled = "disabled" }) 
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini", maxlength ="2" })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Cargo.PuntajeTotalPostulanteInterno)
                             </div>
                         }
-                        else
-                        {
-                                @Html.TextBoxFor(model => model.Cargo.PuntajeTotalPostulanteInterno, new { @class = "input-xxmini", disabled = "disabled" })
-                        }
                         </td>
                         <td></td>
-                        <td>
-                            <label class="control-label" for="input01">Rango Edad</label>
+                        <td colspan="2">
+                            <label class="control-label" for="input01">Rango Edad <span class="text-error">*</span></label>
                         </td>
-                        <td>
-                        
-                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" }) -  @Html.TextBoxFor(model => model.Cargo.EdadFin, new { @class = "input-xmini" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.EdadInicio)  @Html.ValidationMessageFor(model => model.Cargo.EdadFin)  
+                        <td colspan="2">
+                         @if (Model.Accion.Equals(Accion.Consultar))
+                         {
+                             @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini" , disabled = "disabled" }) <label style="width:10px;display:inline-block">-</label>
+                             @Html.TextBoxFor(model => model.Cargo.EdadFin, new {@class = "input-xmini", disabled = "disabled", style ="display:inline-block;" })
+                         }
+                         else
+                         {
+                             
+                             @*
+                            @Html.TextBoxFor(model => model.Cargo.EdadInicio, new { @class = "input-xmini", @maxlength ="2" ,data_val = "false" }) <label style="width:10px;display:inline-block">-</label>
+                            @Html.TextBoxFor(model => model.Cargo.EdadFin, new {  @class = "input-xmini", style ="display:inline-block", @maxlength ="2" , onblur="validarEdad();" ,data_val = "false"})
+                           *@
+                             
+                             @Html.DropDownListFor(model => model.Cargo.EdadInicio, new SelectList(Model.ListaEdad, "IdEdad", "DesEdad", Model.Cargo.EdadInicio), new { @style = "width: 80px; display:inline-block" })
+                             @Html.DropDownListFor(model => model.Cargo.EdadFin, new SelectList(Model.ListaEdad, "IdEdad", "IdEdad", Model.Cargo.EdadFin), new { @style = "width: 80px; display:inline-block" })
+                             
+                             
+                            <div id="msjErrorEdad" class="tex-error" style="font-size:12px;color:red; display:none;"> 
                             </div>
-
+                         }
                         </td>
                         <td style="width:80px">
-                        @if (Accion.Editar == Model.Accion)
-                        {
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" })
-                            @Html.CheckBoxFor(model =>model.Cargo.IndicadorEdadRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
-                            <div class="tex-error" style="font-size:12px;color:red"> 
-                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
-                            </div>
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini" , disabled = "disabled"})
-                            @Html.CheckBoxFor(model =>model.Cargo.IndicadorEdadRanking, new { @style = "display:inline-block", disabled = "disabled" }) <label style="display:inline-block">**</label>
-                        }
+                            @if (Model.Accion.Equals(Accion.Consultar))
+                            { 
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini", disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeEdad, new { @class = "input-xxmini", maxlength ="2" })
+                                @Html.CheckBoxFor(model =>model.Cargo.IndicadorEdadRanking, new { @style = "display:inline-block;margin-left: 5px;" }) <label style="display:inline-block">**</label>
+                                <div class="tex-error" style="font-size:12px;color:red"> 
+                                  @Html.ValidationMessageFor(model => model.Cargo.PuntajeEdad)
+                               </div>
+                            }
+                       
                        </td>
+                        
+                        
                     </tr>
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
-                            @if (Accion.Editar == Model.Accion)
+                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Sexo <span class="text-error">*</span></label> 
+                            @if (Model.Accion.Equals(Accion.Consultar))
+                            { 
+                                @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" , disabled = "disabled"})
+                            }
+                            else
                             {
                                 @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" })
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.Cargo.Sexo)
                                 </div>
                             }
-                            else
-                            {
-                                    @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block", disabled = "disabled" })
-                            }
                         </td>
                         <td style="width:80px" >
-                            @if (Accion.Editar == Model.Accion)
+                            @if (Model.Accion.Equals(Accion.Consultar))
                             {
-                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini" })
-                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block" }) <label style="display:inline-block">**</label>
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini", disabled="disabled" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block;margin-left: 5px;" , disabled = "disabled"}) <label style="display:inline-block">**</label>
+                            }
+                            else
+                            { 
+                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini", maxlength ="2" })
+                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block;margin-left: 5px;" }) <label style="display:inline-block">**</label>
                                 <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.Cargo.PuntajeSexo)
                                 </div>
                             }
-                            else
-                            {
-                                @Html.TextBoxFor(model => model.Cargo.PuntajeSexo, new { @class = "input-xxmini", disabled = "disabled" })
-                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSexoRanking, new { @style = "display:inline-block", disabled = "disabled" }) <label style="display:inline-block">**</label>
-                            }
                         </td>                                       
                         <td></td>
-                        <td> <label class="control-label" for="input01">Tipo de Requerimiento </label> </td> 
+                        <td colspan="3"> 
+                            <label class="control-label" for="input01">Tipo de Requerimiento<span class="text-error">*</span></label> </td> 
                         <td style="width:110px"> 
-                            @if (Accion.Editar == Model.Accion)
-                            {
-                                @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.Cargo.TipoRequerimiento)
-                                </div>
-                            }
-                            else
-                            {
-                                @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento), new { disabled="disabled"})                                        
-                            }
+                         @if (Model.Accion.Equals(Accion.Consultar))
+                         {
+                                @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento), new { disabled = "disabled" })                                         
+                         }
+                         else
+                         {
+                            @Html.DropDownListFor(model => model.Cargo.TipoRequerimiento, new SelectList(Model.TiposRequerimientos, "Valor", "Descripcion", Model.Cargo.TipoRequerimiento))                                        
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.TipoRequerimiento)
+                            </div>
+                         }
                         </td>
-                        <td>
-                        </td>
-                        <td></td>
+                       
+                       
                     </tr>
                     <tr>
                         <td></td>
@@ -147,34 +167,43 @@
                     <tr>
                         <td></td>
                         <td style =" width:450px" >
-                            <label style="width:170px; display:inline-block" class="control-label" for="input01">Rango Salarial Bruto (S/.) </label> 
-                            @if (Accion.Editar == Model.Accion)
+                            <label style="width:180px; display:inline-block" class="control-label" for="input01" >Rango Salarial Bruto (S/.) <span class="text-error">*</span></label> 
+                        @if (Model.Accion.Equals(Accion.Consultar))
+                        {
+                               @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })
+                        }
+                        else
+                        {
+                            if (Visualicion.SI.Equals(Model.indVisibilidad))
                             {
-                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
-                                </div>
+                              @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px" })
+                             
                             }
                             else
                             {
-                                @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled" })
-                            }
-                        </td>
-                        <td style="width:80px">
-                            @if (Accion.Editar == Model.Accion)
-                            {
-                                @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini" })
-                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block" })<label style="display:inline-block">**</label>
-                                <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.Cargo.PuntajeSalario)
-                                </div>
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini", disabled= "disabled" })
-                                @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block", disabled = "disabled" })<label style="display:inline-block">**</label>
+                              @Html.DropDownListFor(model => model.Cargo.TipoRangoSalarial, new SelectList(Model.RangoSalariales, "Valor", "Descripcion", Model.Cargo.TipoRangoSalarial), new { @style = "display:inline-block; width:170px", disabled = "disabled"  })
+                              
                             }
                             
+                        }
+                         <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.TipoRangoSalarial)
+                              </div>
+                        </td>
+                        <td style="width:80px">
+                        @if (Model.Accion.Equals(Accion.Consultar))
+                        {
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini", disabled = "disabled" })
+                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block;margin-left: 5px;" , disabled = "disabled" })<label style="display:inline-block">**</label>
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Cargo.PuntajeSalario, new { @class = "input-xxmini", maxlength ="2" })
+                            @Html.CheckBoxFor(model => model.Cargo.IndicadorSalarioRanking, new { @style = "display:inline-block;margin-left: 5px;" })<label style="display:inline-block">**</label>
+                            <div class="tex-error" style="font-size:12px;color:red"> 
+                                @Html.ValidationMessageFor(model => model.Cargo.PuntajeSalario)
+                            </div>
+                        }
                         </td>
                         <td></td>                                     
                         <td></td>
@@ -184,21 +213,21 @@
 
                     <tr>
                         <td></td>
-                        <td colspan="5"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
+                        <td colspan="10"><span style="font-size:9px;font-weight:bolder;">(**) Al seleccionar esta opción solo se tomarán en cuenta los que cumplan con el requisito para visualizarlo en el ranking de postulantes</span></td>
                     </tr>
                 </tbody>
 
             </table>
         </form>
         <div class="grilla-opciones">
-            <h6>Horario</h6>
+            <h6>Horario <span class="text-error">*</span></h6>
             <div class="opciones">
-                @if(Accion.Editar == Model.Accion)
-                {
-                    <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                }
+             @if (Accion.Editar == Model.Accion)
+             {
+                <a id="btnAgregarHorario" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarHorario" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarHorario" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+             }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -209,14 +238,14 @@
             </div>
         </div>
         <div class="grilla-opciones">
-            <h6>Ubigeo</h6>
+            <h6>Ubigeo <span class="text-error">*</span></h6>
             <div class="opciones">
-                @if(Accion.Editar == Model.Accion)
-                {
-                    <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
-                    <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
-                    <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
-                }
+             @if (Accion.Editar == Model.Accion)
+             {
+                <a id="btnAgregarUbigeo" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
+                <a id="btnEditarUbigeo" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
+                <a id="btnEliminarUbigeo" class="btn btn-small btn-info" title="Eliminar"><i class="icon-remove icon-white"></i></a>                                  
+             }
             </div>
             <div style="clear:both"></div>
         </div>
@@ -229,10 +258,11 @@
                                             
         <div class="formulario-accion">
             <div class="opciones">
-                @if(Accion.Editar == Model.Accion)
-                {
-                    <button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>
-                }
+             @if (Accion.Editar == Model.Accion)
+             {
+                <a id="btnGrabar"  class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                //<button id="btnGrabar" type="submit" class="btn btn-info"></button>
+             }
                 <a class="btn btn-info" href="@Url.Action("Index", "MantenimientoCargo")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("Estudio", "MantenimientoCargo")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
                 
@@ -246,16 +276,79 @@
     <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>
-
+<div id="divInfo"><span id="spanInfo"></span></div>
 <div id="updateDialogUbigeo" title="Ubigeo"></div>
    
 @section ScriptsCargo{   
+
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+   @*<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>*@
+
+
+    <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
  <script type="text/javascript">
-        $(document).ready(function () {
+
+     $(document).ready(function () {
+
+         //$('input[data-val=true]').on('blur', function () {
+         //    $(this).valid();
+         //});
+        
+        // $('#Cargo_EdadInicio').jStepper({ minValue: 18, maxValue: 99, minLength: 2 });
+        // $('#Cargo_EdadFin').jStepper({ minValue: 18, maxValue: 99, minLength: 2 });
+
+         SanPablo.Numeros("Cargo_PuntajeTotalPostulanteInterno");
+         SanPablo.Numeros("Cargo_PuntajeSexo");
+         SanPablo.Numeros("Cargo_EdadInicio");
+         SanPablo.Numeros("Cargo_EdadFin");
+         SanPablo.Numeros("Cargo_PuntajeEdad");
+         SanPablo.Numeros("Cargo_PuntajeSalario");
+
+        
+
+         $("#msjErrorEdad").hide();
 
             $('#btnAgregarHorario').click(function () {
                 mostrarAgregarHorario();
             });
+            
+
+            $('#btnGrabar').click(function () {
+
+                
+                   if ($("#generalPerfilForm").validate().form()) {
+
+                       if (validacion()) {
+
+                       
+                       $.ajax({
+                        type: "POST",
+                        data: $("#generalPerfilForm").serialize(),
+                        url: '@Url.Action("General", "Perfil", new { area = "Intranet"})',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }if (data.Resultado) {
+                                MostrarInfo(data.Mensaje,"Mensaje");
+                            }
+                        }
+                       });
+                       } else {
+                           validarEdad();
+                           $("#Cargo_Sexo").focus();
+                       }
+                   } else {
+                       $("#Cargo_Sexo").focus();
+                   }
+            
+            });
+
+            
+
 
 
             $('#updateDialogHorario').dialog({
@@ -281,14 +374,18 @@
                                 }
                             );
                         }
-                        else {
-                            notificacionError("Seleccionar un Horario");
+                        //else {
+                        //        notificacionError("Verficar los datos ingresados");
 
-                        }
+                        //}
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                    $("#Horario_TipoHorario+div span").html('');
                 }
             });
 
@@ -299,14 +396,7 @@
                     mostrarEditarHorario(ideHorario);
                 }
                 else {
-                    $("#spanMensaje").html('Seleccionar un item a editar');
-                    $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a editar');
                 }
             });
 
@@ -316,25 +406,18 @@
                 if (ideHorario != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
+                        title: 'Sistema de Reclutamiento y Selección de Personal',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarHorario(ideHorario); $(this).dialog("close"); $('#grdListHorario').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
                     return false;
                 }
                 else {
-                    $("#spanMensaje").html('Seleccionar un item a eliminar');
-                    $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a eliminar');
                 }
             });
 
@@ -346,7 +429,7 @@
 
             $('#updateDialogUbigeo').dialog({
                 autoOpen: false,
-                width: 500,
+                width: 440,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -367,13 +450,18 @@
                                     }
                                 );
                         }
-                        else {
-                            notificacionError("Ingresar todos los datos");
-                        }
+                        //else {
+                        //    notificacionError("Verficar los datos ingresados");
+                        //}
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
                     }
+                },
+                open: function () {
+                    $(".ui-dialog-buttonpane button:contains('Cancelar')").focus();
+                    $("#Ubigeo_IdeDepartamento+div span").html('');
+                    
                 }
             });
 
@@ -383,14 +471,7 @@
                     mostrarEditarUbigeo(ideUbigeo);
                 }
                 else {
-                    $("#spanMensaje").html('Seleccionar un item a editar');
-                    $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a editar');
                 }
             });
 
@@ -400,25 +481,18 @@
                 if (ideUbigeo != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
+                        title: 'Sistema de reclutamiento y selección de personal',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
                     return false;
                 }
                 else {
-                    $("#spanMensaje").html('Seleccionar un item a eliminar');
-                    $("#divMensaje").dialog({
-                        title: 'SAN PABLO',
-                        modal: true,
-                        buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
-                        }
-                    });
+                    mostrarMensaje('Seleccionar un item a eliminar');
                 }
             });
         });
@@ -538,6 +612,62 @@
             data: { ideUbigeo: id },
         });
     }
+
+
+     
+     function validarEdad()
+     {
+         var edadInicio = $("#Cargo_EdadInicio").val();
+         var edadFin = $("#Cargo_EdadFin").val();
+         
+         var msjError = document.getElementById("msjErrorEdad");
+         msjError.innerHTML = "";
+
+         if (edadFin < edadInicio) {
+             
+             msjError.innerHTML = "Verificar que el rango de edad sea correcto";
+             msjError.style.display = "block";
+         } else { msjError.style.display = "none"; }
+
+         if (edadInicio == null || edadInicio < 18) {
+             msjError.innerHTML = "Edad inicio mayor o igual a 18";
+             msjError.style.display = "block";
+         }
+
+         if (edadFin == null || edadFin < 18) {
+             msjError.innerHTML = "Edad Fin mayor o igual a 18";
+             msjError.style.display = "block";
+         }
+
+     }
+
+
+     function validacion() {
+         var edadInicio = $("#Cargo_EdadInicio").val();
+         var edadFin = $("#Cargo_EdadFin").val();
+
+         
+
+         if (edadFin < edadInicio) {
+
+             return false;
+         }  
+         if (edadInicio == null || edadInicio < 18) {
+             return false;
+         }
+
+         if (edadFin == null || edadFin < 18) {
+             return false;
+         }
+         return true;
+     }
+
+     function MostrarInfo(mensaje, titulo) {
+         Funciones.Alert("divInfo", "spanInfo", mensaje, titulo);
+     }
+
+
+     
 </script>
 
 }
