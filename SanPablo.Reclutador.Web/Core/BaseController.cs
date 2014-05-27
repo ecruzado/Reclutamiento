@@ -342,6 +342,17 @@ namespace SanPablo.Reclutador.Web.Core
         {
             get { return DateTime.Now; }
         }
+        protected string NombreCargoEval
+        {
+            get
+            {
+                return (string)System.Web.HttpContext.Current.Session[ConstanteSesion.NombreCargoEvaluacion];
+            }
+            set
+            {
+                System.Web.HttpContext.Current.Session.Add(ConstanteSesion.NombreCargoEvaluacion, value);
+            }
+        }
 
         protected int IdePostulantePreSeleccion
         {

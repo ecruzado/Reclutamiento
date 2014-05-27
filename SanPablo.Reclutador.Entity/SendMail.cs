@@ -314,8 +314,8 @@
 
 
             List<string> mail = new List<string>();
-            string cuerpoMail = "Luego de saludarlo(a), la presente es para comunicarle que se ha programado la entrevista "+entrevistaDesc+" a "+postulante+ " , para el cargo de "+cargo+
-                                ". Programado para el dia "+fecha+" a las "+hora+" horas. ";
+            string cuerpoMail = "Luego de saludarlo(a), la presente es para comunicarle que se ha programado la "+entrevistaDesc+" a "+postulante+ " , para el cargo de "+cargo+
+                                ",  para el dia "+fecha+" a las "+hora+" horas. ";
             string asuntoMail = "Programacion de entrevista para el cargo " + cargo;
 
             mail.Add(cuerpoMail);
