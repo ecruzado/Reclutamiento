@@ -213,9 +213,9 @@
                     }
                 case Etapa.Publicado:
                     {
-                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarles que respecto al Requerimiento de " + tipoRequerimiento + " de " + cargo +
-                                   " en la Sede " + Sede + " se realizó la publicación del Cargo solicitado";
-                        asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
+                        cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha publicado/finalizado el requerimiento del " + cargo +
+                                 " en la Bolsa de Oportunidades. ";
+                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Nro " + codCargo + " - Sede: " + Sede;
                         break;
                     }
 
@@ -286,11 +286,14 @@
 
 
             //Dar formato a textos
-            Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
-            Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
-            Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
-            Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
-
+            //Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
+            //Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
+            //Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
+            //Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
+            Usuario = Usuario;
+            Rol = Rol;
+            Area = Area;
+            Sede = Sede;
 
             List<string> mail = cuerpoMail(etapa, tipoRequerimiento, responsable, observacion, suceso, cargo, codCargo);
 
