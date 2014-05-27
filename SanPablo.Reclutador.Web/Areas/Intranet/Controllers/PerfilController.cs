@@ -489,10 +489,23 @@
             SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             var cargoEnviar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
             var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.CodigoCargo == cargoEnviar.CodigoCargo);
+            
+            List<String> listSends = null;
+            List<String> listCopys = null;
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
 
             var SedeSession = Session[ConstanteSesion.Sede];
+
+            System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(solicitud.IdeSolicitudNuevoCargo), idRol, AccionEnvioEmail.AceptarPerfil, idSede, TipoSolicitud.Nuevo);
+            listSends = new List<String>();
+            listSends = (List<String>)lista[0];
+
+            listCopys = new List<String>();
+            listCopys = (List<String>)lista[1];
+
 
             string SedeDescripcion = "-";
             if (SedeSession != null)
@@ -528,7 +541,7 @@
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = usuarioSession.AREADES;
 
-                        enviarMail.EnviarCorreo(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, usuarioResp.Email, "Suceso");
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends, "Suceso",listCopys);
 
                         objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
                         objJsonMessage.Resultado = true;
