@@ -1919,7 +1919,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 	        {
                 IndVerSalario = "N";
 	        }
-
+            System.Collections.ArrayList lista = new System.Collections.ArrayList();
 
             if (model!=null)
             {
@@ -1928,8 +1928,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (objSol!=null)
                 {
 
+                    if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                    {
+                       lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Ampliacion);
 
-                    System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Remplazo);
+                    }
+                    else
+                    {
+                       lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Remplazo);
+                    
+                    }
+
+                    
+                    
+                    
                     listSends = new List<String>();
                     listSends = (List<String>)lista[0];
 
