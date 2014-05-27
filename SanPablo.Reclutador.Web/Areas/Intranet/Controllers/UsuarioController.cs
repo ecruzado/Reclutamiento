@@ -240,7 +240,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario.TipUsuario = TipUsuario.Instranet;
 
                 _usuarioRepository.Add(model.Usuario);
-                jsonMessage.Mensaje = "Se registro el usuario";
+                jsonMessage.Mensaje = "Se registro el usuario satisfactoriamente";
                 jsonMessage.IdDato = objUsuario.IdUsuario;
                 jsonMessage.Resultado = true;
 

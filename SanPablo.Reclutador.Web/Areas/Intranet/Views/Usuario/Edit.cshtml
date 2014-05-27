@@ -19,6 +19,10 @@
 <script src="@Url.Content("~/Scripts/uploadify/jquery.uploadify.v2.1.4.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -253,7 +257,7 @@
         if (selr != null && selr > 0) {
             $('#confirmacion').dialog('open');
         } else {
-            MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un registro', "MENSAJE");
         }
 
     });
@@ -266,7 +270,7 @@
         if (selr != null && selr > 0) {
             $('#confirmacionSedeNivel').dialog('open');
         } else {
-            MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un registro', "MENSAJE");
         }
 
     });
@@ -279,7 +283,7 @@
         if (selr != null && selr > 0) {
             $('#confReqInical').dialog('open');
         } else {
-            MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un registro', "MENSAJE");
         }
 
     });
@@ -287,8 +291,9 @@
     $("#spanConfReqInical").html("¿Desea eliminar el registro?")
     $('#confReqInical').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
 
@@ -300,7 +305,7 @@
                 if (selr != null && selr > 0) {
                     EliminarTipReq(codUsu, tipReq);
                 } else {
-                    MostrarMensaje('Seleccione una tipo de requerimiento', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione una tipo de requerimiento', "MENSAJE");
                 }
                 $(this).dialog("close");
             },
@@ -314,8 +319,9 @@
     $("#spanConfirmacionSedeNivel").html("¿Desea eliminar el registro?")
     $('#confirmacionSedeNivel').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
 
@@ -339,6 +345,7 @@
     $("#spanConfirmacion").html("¿Desea eliminar el registro?")
     $('#confirmacion').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
         title: "Sistema de Reclutamiento Y Seleccion de Personal",
         buttons: {
@@ -368,7 +375,7 @@
         if (idUsu != null && idUsu > 0) {
             mostrarPopup(idUsu,0);
         } else {
-            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Ingrese un registro', "MENSAJE");
         }
 
     });
@@ -380,7 +387,7 @@
         if (idUsu != null && idUsu > 0) {
             mostrarPopupSede(idUsu, 0);
         } else {
-            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Ingrese un registro', "MENSAJE");
         }
 
     });
@@ -411,7 +418,9 @@
         modal: true,
         buttons: {
             "Grabar": function () {
-                $('#confSelc').dialog('open');
+                if ($("#frmPopupSedeRol").validate().form()) {
+                    $('#confSelc').dialog('open');
+                }
               
             },
             "Cancelar": function () {
@@ -422,14 +431,15 @@
 
     $('#popupDialogSede').dialog({
         autoOpen: false,
-        width: 520,
+        width: 480,
         height: 400,
         resizable: false,
         modal: true,
         buttons: {
             "Grabar": function () {
-                $('#confSede').dialog('open');
-
+                if ($("#frmPopupSede").validate().form()) {
+                    $('#confSede').dialog('open');
+                }
             },
             "Cancelar": function () {
                 $(this).dialog("close");
@@ -439,13 +449,15 @@
 
     $('#popupDialogSedeNivel').dialog({
         autoOpen: false,
-        width: 520,
-        height: 400,
+        width: 440,
+        //height: 400,
         resizable: false,
         modal: true,
         buttons: {
             "Grabar": function () {
-                $('#confSedeNivel').dialog('open');
+                if ($("#frmPopupSedeNivel").validate().form()) {
+                    $('#confSedeNivel').dialog('open');
+                }
 
             },
             "Cancelar": function () {
@@ -459,8 +471,9 @@
     $("#spanSedeNivel").html("¿Desea guardar los cambios?")
     $('#confSedeNivel').dialog({
         autoOpen: false,
+        resizable: false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                 if ($("#frmPopupSedeNivel").validate().form()) {
@@ -471,7 +484,7 @@
                         traditional: true,
                         success: function (data) {
                             if (data.Resultado) {
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                 $('#confSedeNivel').dialog("close");
                                 $('#popupDialogSedeNivel').dialog("close");
                                 $('#grdListaNivelSede').trigger('reloadGrid');
@@ -491,8 +504,9 @@
     $("#spanConfSede").html("¿Desea guardar los cambios?")
     $('#confSede').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                 if ($("#frmPopupSede").validate().form()) {
@@ -507,7 +521,7 @@
                         traditional: true,
                         success: function (data) {
                             if (data.Resultado) {
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                //MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                 $('#confSede').dialog("close");
                                 $('#popupDialogSede').dialog("close");
                                 $('#grdListaNivelSede').trigger('reloadGrid');
@@ -527,7 +541,8 @@
     $('#confSelc').dialog({
         autoOpen: false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        resizable:false,
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                 if ($("#frmPopupSedeRol").validate().form()) {
@@ -547,7 +562,7 @@
                         traditional: true,
                         success: function (data) {
                             if (data.Resultado) {
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                 $('#confSelc').dialog("close");
                                 $('#popupDialog').dialog("close");
                                 $('#grdListUsuario').trigger('reloadGrid');
@@ -582,7 +597,7 @@
               }
               else
               {
-                  MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                  MostrarMensaje(data.Mensaje, "MENSAJE");
               }
           }
         });
@@ -729,7 +744,7 @@
                         SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                     }
                     if (data.Resultado == false) {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
                     } else {
                         GrabaUsuario();
                     }
@@ -752,7 +767,7 @@
                     }
                     if (data.Resultado) {
                         $("#Usuario_IdUsuario").val(data.IdDato);
-                        information('divMensaje', 'spnMensaje', data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
+                        information('divMensaje', 'spnMensaje', data.Mensaje, "INFORMATIVO", data.IdDato);
                     }
                 }
             });
@@ -884,7 +899,7 @@
                 <tr>
                      <td class="colEtiqueta">
                          
-                         <label class="etiquetaFormulario">Usuario</label>
+                         <label class="etiquetaFormulario">Usuario<span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                     @Html.TextBoxFor(model => model.Usuario.IdUsuario, new { style = "display: none;" })   
@@ -905,7 +920,7 @@
                     <td style="width:40px;"></td>
                    
                     <td class="colEtiqueta">
-                            <label class="etiquetaFormulario">Contraseña</label>
+                            <label class="etiquetaFormulario">Contraseña<span class="text-error">*</span></label>
                     </td>
                      <td class="colInput">
                         
@@ -928,7 +943,7 @@
                  <tr>
 
                     <td class="colEtiqueta">
-                      <label class="etiquetaFormulario">Apellido Paterno</label>
+                      <label class="etiquetaFormulario">Apellido Paterno<span class="text-error">*</span></label>
                     </td>
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
@@ -948,7 +963,7 @@
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
-                    <label class="etiquetaFormulario">Apellido Materno</label>
+                    <label class="etiquetaFormulario">Apellido Materno<span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                         
@@ -972,7 +987,7 @@
                  <tr>
 
                     <td class="colEtiqueta">
-                      <label class="etiquetaFormulario">Nombres</label>
+                      <label class="etiquetaFormulario">Nombres<span class="text-error">*</span></label>
                     </td>
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))
@@ -990,7 +1005,7 @@
                     </td>
                     <td style="width:40px;"></td>
                     <td class="colEtiqueta">
-                    <label class="etiquetaFormulario">Email</label>
+                    <label class="etiquetaFormulario">Email<span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                         
@@ -1013,7 +1028,7 @@
                    <tr>
 
                     <td class="colEtiqueta">
-                      <label class="etiquetaFormulario">Telefono</label>
+                      <label class="etiquetaFormulario">Teléfono<span class="text-error">*</span></label>
                     </td>
                    <td class="colInput">
                        @if (Accion.Consultar.Equals(Model.Accion))

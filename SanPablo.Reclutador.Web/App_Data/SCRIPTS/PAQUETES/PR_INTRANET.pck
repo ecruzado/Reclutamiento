@@ -2280,6 +2280,9 @@ create or replace package body PR_INTRANET is
   c_ideReclutaCriterio_sq NUMBER;
   c_puntajeAlternativa    NUMBER;
   c_notaCategoria         NUMBER;
+  c_tipoExamen            EXAMEN.TIPEXAMEN%TYPE;
+  c_ideReclutaPersExamen  RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE;
+  
   BEGIN
      
      SELECT IDERECLUPERSOCRITERIO_SQ.NEXTVAL
@@ -2300,15 +2303,40 @@ create or replace package body PR_INTRANET is
      (IDERECLUPERSOALTERNATIVA,IDERECLUTAPERSONA,IDERECLUPERSOCRITERIO,IDEALTERNATIVA,USRCREACION,FECCREACION)
      VALUES (IDERECLUPERSOALTERNATIVA_SQ.NEXTVAL,p_ideReclutaPersona,c_ideReclutaCriterio_sq,p_ideAlternativa,p_usuarioCreacion,SYSDATE);
      
-     --Actualizar la nota por categoria
-     SELECT RC.NOTAEXAMENCATEG
-     INTO c_notaCategoria
-     FROM RECL_PERS_EXAM_CAT RC 
-     WHERE RC.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat FOR UPDATE;
-     UPDATE RECL_PERS_EXAM_CAT RCAT
-     SET RCAT.NOTAEXAMENCATEG = c_notaCategoria + c_puntajeAlternativa
-     WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;
+    --Actualizar la nota por categoria
      
+    SELECT REX.TIPEXAMEN
+    INTO c_tipoExamen
+    FROM RECLU_PERSO_EXAMEN REX
+    WHERE REX.IDERECLUPERSOEXAMEN = (SELECT RCAT.IDERECLUPERSOEXAMEN
+                                     FROM RECL_PERS_EXAM_CAT RCAT
+                                     WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat);
+     
+     IF (c_tipoExamen = P_TIPEXA_EXAMEN)THEN
+      
+       IF (c_puntajeAlternativa >0)THEN
+          c_puntajeAlternativa := 1;
+       END IF;
+        
+       SELECT RC.NOTAEXAMENCATEG
+       INTO c_notaCategoria
+       FROM RECL_PERS_EXAM_CAT RC 
+       WHERE RC.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat FOR UPDATE;
+       UPDATE RECL_PERS_EXAM_CAT RCAT
+       SET RCAT.NOTAEXAMENCATEG = c_notaCategoria +  c_puntajeAlternativa
+       WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;         
+     
+     ELSE
+     
+       SELECT RC.NOTAEXAMENCATEG
+       INTO c_notaCategoria
+       FROM RECL_PERS_EXAM_CAT RC 
+       WHERE RC.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat FOR UPDATE;
+       UPDATE RECL_PERS_EXAM_CAT RCAT
+       SET RCAT.NOTAEXAMENCATEG = c_notaCategoria + c_puntajeAlternativa
+       WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;
+       
+     END IF;
      COMMIT;
      p_RetVal:=1; 
       
