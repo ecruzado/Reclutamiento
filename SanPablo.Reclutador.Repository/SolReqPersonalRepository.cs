@@ -1813,5 +1813,135 @@ namespace SanPablo.Reclutador.Repository
              }
          }
 
+        /// <summary>
+        /// obtiene los emails
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public List<EmailSol> GetRolxEmial(EmailSol obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+                 IDataReader ldrEmailSol;
+                 EmailSol lobEmailSol;
+                 List<EmailSol> llstEmailSol;
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_ROLXEMAIL");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+
+                 lspcmd.Parameters.Add("p_cidsol", OracleType.Number).Value = obj.IdSol;
+                 lspcmd.Parameters.Add("p_cidrolsuceso", OracleType.VarChar).Value = obj.IdRolSuceso;
+                 lspcmd.Parameters.Add("p_ctipsol", OracleType.VarChar).Value = obj.TipSol;
+                 lspcmd.Parameters.Add("p_caccion", OracleType.VarChar).Value = obj.AccionBoton;
+                 lspcmd.Parameters.Add("p_cidsede", OracleType.Number).Value = obj.idSede;
+
+                 lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+                 ldrEmailSol = (OracleDataReader)lspcmd.ExecuteReader();
+                 lobEmailSol = null;
+                 llstEmailSol = new List<EmailSol>();
+
+                 
+
+                 while (ldrEmailSol.Read())
+                 {
+                     lobEmailSol = new EmailSol();
+
+
+                     if (ldrEmailSol["SENDTO"] != System.DBNull.Value)
+                     {
+                         lobEmailSol.RolSend = Convert.ToString(ldrEmailSol["SENDTO"]);
+
+                     }
+                     if (ldrEmailSol["COPYTO1"] != System.DBNull.Value)
+                     {
+                         lobEmailSol.RolCopy1 = Convert.ToString(ldrEmailSol["COPYTO1"]);
+
+                     }
+
+                     if (ldrEmailSol["COPYTO2"] != System.DBNull.Value)
+                     {
+                         lobEmailSol.RolCopy2 = Convert.ToString(ldrEmailSol["COPYTO2"]);
+
+                     }
+
+                     if (ldrEmailSol["COPYTO3"] != System.DBNull.Value)
+                     {
+                         lobEmailSol.RolCopy3 = Convert.ToString(ldrEmailSol["COPYTO3"]); 
+
+                     }
+                     
+                     llstEmailSol.Add(lobEmailSol);
+                 }
+                 ldrEmailSol.Close();
+                 return llstEmailSol;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
+
+        /// <summary>
+        /// obtiene la descripcion del correo electronico por la sede donde se ubica y el rol
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+         public List<EmailSol> GetEmialxSede(EmailSol obj)
+         {
+             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+             try
+             {
+                 IDataReader ldrEmailSol;
+                 EmailSol lobEmailSol;
+                 List<EmailSol> llstEmailSol;
+                 lcon.Open();
+                 OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_OBTIENE_EMAIL");
+                 lspcmd.CommandType = CommandType.StoredProcedure;
+                 lspcmd.Connection = lcon;
+
+                
+                 lspcmd.Parameters.Add("p_nidrol", OracleType.Int32).Value = obj.idRol;
+                 lspcmd.Parameters.Add("p_nidsede", OracleType.Int32).Value = obj.idSede;
+                 lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+
+                 ldrEmailSol = (OracleDataReader)lspcmd.ExecuteReader();
+                 lobEmailSol = null;
+                 llstEmailSol = new List<EmailSol>();
+
+
+
+                 while (ldrEmailSol.Read())
+                 {
+                     lobEmailSol = new EmailSol();
+
+
+                     if (ldrEmailSol["EMAIL"] != System.DBNull.Value)
+                     {
+                         lobEmailSol.Email = Convert.ToString(ldrEmailSol["EMAIL"]);
+
+                     }
+                     
+                     llstEmailSol.Add(lobEmailSol);
+                 }
+                 ldrEmailSol.Close();
+                 return llstEmailSol;
+             }
+             catch (Exception ex)
+             {
+                 throw new Exception(ex.Message);
+             }
+             finally
+             {
+                 lcon.Close();
+             }
+         }
+
     }
 }

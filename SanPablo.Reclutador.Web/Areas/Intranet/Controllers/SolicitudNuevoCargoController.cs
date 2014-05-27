@@ -28,6 +28,8 @@
         private IListaSolicitudNuevoCargoVistaRepository _listaSolicitudRepository;
         private IUsuarioRepository _usuarioRepository;
         private IRolRepository _rolRepository;
+        private ISolReqPersonalRepository _solReqPersonalRepository;
+        private ICargoRepository _cargoRepository;
 
       
         public SolicitudNuevoCargoController(ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
@@ -38,7 +40,10 @@
                                              IListaSolicitudNuevoCargoVistaRepository listaSolicitudRepository,
                                              ILogSolicitudNuevoCargoRepository logSolicitudNuevoCargoRepository,
                                              IUsuarioRepository usuarioRepository,
-                                             IRolRepository rolRepository)
+                                             IRolRepository rolRepository,
+            ISolReqPersonalRepository solReqPersonalRepository,
+            ICargoRepository cargoRepository
+            )
         {
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -49,6 +54,8 @@
             _usuarioRepository = usuarioRepository;
             _logSolicitudNuevoCargoRepository = logSolicitudNuevoCargoRepository;
             _rolRepository = rolRepository;
+            _solReqPersonalRepository = solReqPersonalRepository;
+            _cargoRepository = cargoRepository;
         }
 
 
@@ -363,6 +370,10 @@
             var enviarMail = new SendMail();
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             JsonMessage objJsonMessage = new JsonMessage();
+
+            List<String> listSends=null;
+            List<String> listCopys = null;
+
             int ideUsuarioResp =-1;
             try
             {
@@ -422,6 +433,19 @@
 
                     if ((logSolicitud.RolResponsable != null) && (logSolicitud.RolResponsable != 0))
                     {
+                        //Enviar solicitud nuevo cargo
+                       
+                        int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                        int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+
+                        System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(0), idRol, AccionEnvioEmail.EnviarSolicitud, idSede, TipoSolicitud.Nuevo);
+                        
+                        listSends = new List<String>();
+                        listSends = (List<String>)lista[0];
+
+                        listCopys = new List<String>();
+                        listCopys = (List<String>)lista[1];
+
 
                         ideUsuarioResp = _solicitudNuevoCargoRepository.insertarSolicitudNuevo(nuevaSolicitudCargo, logSolicitud, indArea);
                     }
@@ -438,7 +462,7 @@
                         Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
                         var SedeDesc = Session[ConstanteSesion.SedeDes];
 
-                        enviarMail.EnviarCorreo(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", null, nuevaSolicitudCargo.NombreCargo, nuevaSolicitudCargo.CodigoCargo, usuario.Email, "suceso");
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", null, nuevaSolicitudCargo.NombreCargo, nuevaSolicitudCargo.CodigoCargo, listSends, "suceso",listCopys);
 
                         objJsonMessage.Mensaje = "Solicitud enviada exitosamente";
                         objJsonMessage.Resultado = true;
@@ -718,7 +742,155 @@
                 return Json(objJsonMessage);
             }
         }
-        
-       
+
+        /// <summary>
+        /// obtiene la lista de Emails
+        /// </summary>
+        /// <param name="idSol">id de la solicitud</param>
+        /// <param name="idRolSuceso">id del rol de la persona logueada</param>
+        /// <param name="btnAccion">codigo de la accion del boton</param>
+        /// <param name="idSede">id de la sede de la solicitud</param>
+        /// <param name="TipoSol">tipo de solicitud</param>
+        /// <returns></returns>
+        public System.Collections.ArrayList listaEmail(int idSol, int idRolSuceso, string btnAccion, int idSede, string TipoSol)
+        {
+            EmailSol objEmailSol;
+            List<EmailSol> listaRolxEmail;
+            //List<EmailSol> listaEmialSend;
+            //List<EmailSol> listaEmialCopy;
+
+            List<String> listaSend;
+            List<String> listaCopy;
+            SolReqPersonal objSolReqPersonal;
+            System.Collections.ArrayList ListaEmailEnvio = new System.Collections.ArrayList();
+
+
+            objEmailSol = new EmailSol();
+            listaRolxEmail = new List<EmailSol>();
+
+            objEmailSol.IdSol = idSol;
+            objEmailSol.IdRolSuceso = idRolSuceso;
+            objEmailSol.TipSol = TipoSol;
+            objEmailSol.AccionBoton = btnAccion;
+            objEmailSol.idSede = idSede;
+
+            //obtiene los roles de para  el envio de correo
+            listaRolxEmail = _solReqPersonalRepository.GetRolxEmial(objEmailSol);
+            listaSend = new List<String>();
+            listaCopy = new List<String>();
+            Boolean ind = false;
+
+            string tipoReq = null;
+            if (listaRolxEmail != null)
+            {
+                if (listaRolxEmail.Count > 0)
+                {
+                    foreach (EmailSol item in listaRolxEmail)
+                    {
+                        //obtiene la lista de send
+                        ind = false;
+
+                        if (item.RolSend != null)
+                        {
+
+                            if (item.RolSend.Equals("**"))
+                            {
+                                if (TipoSolicitud.Nuevo.Equals(TipoSol))
+                                {
+                                    var objSolNuevo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol && x.EstadoActivo == IndicadorActivo.Activo);
+                                    var idCargo = objSolNuevo.IdeCargo;
+
+                                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == idCargo && x.EstadoActivo == IndicadorActivo.Activo);
+
+                                    tipoReq = objCargo.TipoRequerimiento;
+                                }
+                                else
+                                {
+                                    var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol && x.EstadoActivo == IndicadorActivo.Activo);
+                                    if (objSolReq != null)
+                                    {
+                                        tipoReq = objSolReq.TipoRequerimiento;
+                                    }
+
+
+                                }
+
+                                if (tipoReq != null)
+                                {
+                                    objSolReqPersonal = new SolReqPersonal();
+                                    objSolReqPersonal = _solReqPersonalRepository.GetResponsable("U", idSede, tipoReq);
+                                    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == objSolReqPersonal.idUsuarioResp && x.FlgEstado == IndicadorActivo.Activo);
+
+                                    ind = listaSend.Contains(objUsuario.Email);
+                                    if (!ind)
+                                    {
+                                        listaSend.Add(objUsuario.Email);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+
+                                ind = listaSend.Contains(item.RolSend);
+                                if (!ind)
+                                {
+                                    listaSend.Add(item.RolSend);
+                                }
+
+                            }
+
+
+
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy1);
+                        if (!ind)
+                        {
+                            if (item.RolCopy1 != null && item.RolCopy1 != "")
+                            {
+                                listaCopy.Add(item.RolCopy1);
+                            }
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy2);
+
+                        if (!ind)
+                        {
+                            if (item.RolCopy2 != null && item.RolCopy2 != "")
+                            {
+                                listaCopy.Add(item.RolCopy2);
+                            }
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy3);
+
+                        if (!ind)
+                        {
+                            if (item.RolCopy3 != null && item.RolCopy3 != "")
+                            {
+                                listaCopy.Add(item.RolCopy3);
+                            }
+                        }
+
+
+
+                        // obtiene la lista para las copias
+
+
+
+
+                    }
+                }
+            }
+
+            ListaEmailEnvio.Add(listaSend);
+            ListaEmailEnvio.Add(listaCopy);
+            return ListaEmailEnvio;
+
+        }
     }
 }

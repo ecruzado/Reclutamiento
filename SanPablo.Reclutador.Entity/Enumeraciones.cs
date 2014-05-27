@@ -138,6 +138,25 @@
 
 
     }
+
+    /// <summary>
+    /// botones que envia email
+    /// </summary>
+    public sealed class AccionEnvioEmail
+    {
+        public const string EnviarSolicitud = "01";
+        public const string AprobarSolicitud = "02";
+        public const string RechazarSolicitud = "03";
+        public const string EnviarPerfil = "04";
+        public const string AprobarPerfil = "05";
+        public const string ObservarPerfil = "06";
+        public const string AceptarPerfil = "07";
+        public const string Publicar = "08";
+        public const string GrabarProg = "09";
+        public const string Finalizar = "10";
+    }
+
+
     public sealed class TipoRequerimientos
     {
         public const string jefe_corporativo_administrativo = "01";

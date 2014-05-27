@@ -37,6 +37,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual int IdePostulante { get; set; }
         public virtual string IndicadorPostulante { get; set; }
 
+        public virtual List<String> listaSend { get; set; }
+        public virtual List<String> listaCopy { get; set; }
 
         public virtual int IdRol { get; set; }
         public virtual string Rol { get; set; }

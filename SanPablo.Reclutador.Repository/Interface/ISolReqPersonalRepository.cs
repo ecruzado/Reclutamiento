@@ -86,6 +86,10 @@ namespace SanPablo.Reclutador.Repository.Interface
         /// <returns></returns>
         LogSolReqPersonal responsablePublicacion(int ideSolicitud, int ideSede);
 
+
+        List<EmailSol> GetRolxEmial(EmailSol obj);
+        List<EmailSol> GetEmialxSede(EmailSol obj);
+
     }
 }
 
