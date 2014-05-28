@@ -105,6 +105,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model = new SolicitudRempCargoViewModel();
                 SedeNivel usuarioSede = new SedeNivel();
 
+                
+
                 var sede = Session[ConstanteSesion.Sede];
                 if (sede!=null)
                 {
@@ -112,6 +114,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                   model = InicializarListaReemplazo(Convert.ToInt32(sede));
                   model.SolReqPersonal = new SolReqPersonal();
 
+                  Cargo objCargo1 = new Cargo();
+
+                  objCargo1.IdeSede = Convert.ToInt32(sede);
+
+
+                  model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo1));
+                  model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
                   var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
                   int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
@@ -138,6 +147,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                       model.SolReqPersonal.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
                       model.SolReqPersonal.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
                       model.SolReqPersonal.IdeArea = usuarioSede.IDEAREA;
+
+                      Cargo objCargo = new Cargo();
+
+                      objCargo.IdeSede = Convert.ToInt32(sede);
+                      objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                      objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                      objCargo.IdeArea = usuarioSede.IDEAREA;
+
+                      model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                      model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+
                   }
 
 

@@ -10,6 +10,8 @@
     using System.IO;
     using System.Web.Http;
     using System.Web.Util;
+    using System.Collections.Generic;
+    using System.Configuration;
 
     public  class SendMail
     {
@@ -85,7 +87,7 @@
 
             for (int x = 0; x < Copys.Count; x++)
             {
-                mmsg.To.Add(Copys[x]);
+                mmsg.CC.Add(Copys[x]);
             }
 
             mmsg.Subject = asunto;
@@ -98,15 +100,23 @@
             mmsg.BodyEncoding = System.Text.Encoding.UTF8;
             mmsg.IsBodyHtml = true; //Si no queremos que se envíe como HTML
 
-            mmsg.From = new System.Net.Mail.MailAddress("j.ccana@conastec.com.pe");
+
+            string CorreoHost = ConfigurationManager.AppSettings["CorreoHost"];
+            string PassHost = ConfigurationManager.AppSettings["PassHost"];
+            string ClienteHost = ConfigurationManager.AppSettings["ClienteHost"];
+
+            //mmsg.From = new System.Net.Mail.MailAddress("j.ccana@conastec.com.pe");
+            mmsg.From = new System.Net.Mail.MailAddress(CorreoHost);
 
             //Creamos un objeto de cliente de correo
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
 
             cliente.UseDefaultCredentials = true;
-            cliente.Credentials = new System.Net.NetworkCredential("j.ccana@conastec.com.pe", "jc6543");
+            //cliente.Credentials = new System.Net.NetworkCredential(CorreoHost, "jc6543");
+            cliente.Credentials = new System.Net.NetworkCredential(CorreoHost, PassHost);
 
-            cliente.Host = "gator3243.hostgator.com";
+            //cliente.Host = "gator3243.hostgator.com";
+            cliente.Host = ClienteHost;
 
             cliente.EnableSsl = false;
 
