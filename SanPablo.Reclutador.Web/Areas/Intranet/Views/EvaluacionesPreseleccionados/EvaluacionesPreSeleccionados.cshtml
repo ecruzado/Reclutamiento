@@ -41,7 +41,7 @@
                 }
                 else { MostrarMensaje('No es necesaria la programación de la evaluacion', "MENSAJE");}
             } else {
-                MostrarMensaje('Seleccione un exámen a programar', "MENSAJE");
+                MostrarMensaje('Seleccione una evaluación a programar', "MENSAJE");
             }
 
         });
@@ -154,6 +154,7 @@
             modal: true,
             buttons: {
                 "Grabar": function (e) {
+                    
                     e.preventDefault();
                     var result = $('#PopupResultadoForm').valid();
                     if (result) {
@@ -168,10 +169,11 @@
                                         notificacionError(respuesta.Mensaje);
                                     }
                                 });
+                    
                     }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
-                    }
+                    //else {
+                    //    notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
+                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
@@ -209,7 +211,7 @@
                 strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
             else {
-                strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img onclick="mostrarMensajeAlerta();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
         }
         else {
@@ -217,7 +219,7 @@
                 strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
             else {
-                strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img onclick="mostrarMensajeAnalista();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
         }
         
@@ -236,9 +238,14 @@
         return strImg;
     }
 
+    function mostrarMensajeAnalista()
+    {
+        MostrarMensaje("Ud. no tiene permiso para esta acción", "MENSAJE");
+    }
+
     function mostrarMensajeAlerta()
     {
-        MostrarMensaje("No es usuario responsable de la accion","MENSAJE");
+        MostrarMensaje("Usted no es el usuario asignado como responsable de esta acción","MENSAJE");
     }
 
    @* function existeResultado(ideExamen)
@@ -261,29 +268,32 @@
     function mostraringresoocomentario(idReclutaPersoExam) {
         //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         //if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
-        $.ajax({
-            data: {
-                id: idReclutaPersoExam
-            },
-            type: "POST",
-            url: '@Url.Action("verificarProgramacion", "EvaluacionesPreSeleccionados")',
-            traditional: true,
-            success: function (data) {
-            if (data.Resultado) {
-                var dialogDiv = $('#updateDialog');
-                $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
-                dialogDiv.html(data);
-                $.validator.unobtrusive.parse($("#updateDialog"));
-                dialogDiv.dialog('open');
-                });
-            }
-            else {
-                MostrarMensaje(data.Mensaje,"MENSAJE");
-            }
-         }
-        });
+       
+            $.ajax({
+                data: {
+                    id: idReclutaPersoExam
+                },
+                type: "POST",
+                url: '@Url.Action("verificarProgramacion", "EvaluacionesPreSeleccionados")',
+                traditional: true,
+                success: function (data) {
+                    if (data.Resultado) {
+                        
+                            var dialogDiv = $('#updateDialog');
+                            $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
+                                dialogDiv.html(data);
+                                $.validator.unobtrusive.parse($("#updateDialog"));
+                                dialogDiv.dialog('open');
+                            });
+                        
+                    }
+                    else {
+                        MostrarMensaje(data.Mensaje, "MENSAJE");
+                    }
+                }
+            });
 
-
+        
             
         //}
     }

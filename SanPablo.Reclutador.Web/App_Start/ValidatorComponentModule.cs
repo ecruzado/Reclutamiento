@@ -155,6 +155,10 @@
                    .Keyed<IValidator>(typeof(IValidator<UsuarioRolSede>))
                    .As<IValidator>();
 
+            builder.RegisterType<ReclutamientoPersonaExamenValidator>()
+              .Keyed<IValidator>(typeof(IValidator<ReclutamientoPersonaExamen>))
+              .As<IValidator>();
+
 
         }
     }

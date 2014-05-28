@@ -28,6 +28,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
     using iTextSharp;
     using iTextSharp.text;
     using iTextSharp.text.pdf;
+    using System.Globalization;
 
 
     public class EvaluacionesPreSeleccionadosController : BaseController
@@ -179,6 +180,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             EvaluacionesPreSeleccionadosViewModel modelEvaluacion = iniciarProgramarEvaluacion();
 
+            // CultureInfo provider = CultureInfo.InvariantCulture;
+
             modelEvaluacion.idReclutaPost = idRecluPost;
             modelEvaluacion.idSol = idSol;
             modelEvaluacion.tipsol = tipSol;
@@ -189,6 +192,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             var reclutamientoEvaluacionExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idReclutamientoEvaluacion);
             modelEvaluacion.ReclutaPersonaExamen = reclutamientoEvaluacionExamen;
+            //modelEvaluacion.ReclutaPersonaExamen.FechaEvaluacion = DateTime.ParseExact(String.Format("{0:dd/MM/yyyy}", reclutamientoEvaluacionExamen.FechaEvaluacion), "d", provider);
 
             modelEvaluacion.nombreUsuario = responsable;
             
@@ -290,15 +294,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             try
             {
                 ReclutamientoPersonaExamenValidator validator = new ReclutamientoPersonaExamenValidator();
-                ValidationResult result = validator.Validate(model.ReclutaPersonaExamen, "ComentarioResultado", "TipoEstadoEvaluacion");
+                //ValidationResult result = validator.Validate(model.ReclutaPersonaExamen, "ComentarioResultado");
 
-                if (!ModelState.IsValid)
-                {
-                    modelResultado.ReclutaPersonaExamen = model.ReclutaPersonaExamen;
-                    return View("PopupResultado", modelResultado);
-                }
-                else
-                {
+                //if (!ModelState.IsValid)
+                //{
+                //    modelResultado.ReclutaPersonaExamen = model.ReclutaPersonaExamen;
+                //    return View("PopupResultado", modelResultado);
+                //}
+                //else
+                //{
                     var reclutaExamenEditar = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == model.ReclutaPersonaExamen.IdeReclutamientoPersonaExamen);
 
                     if (!string.IsNullOrEmpty(model.nombreTemporalArchivo))
@@ -363,7 +367,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
-                }
+            //    }
             }
             catch(Exception ex)
             {

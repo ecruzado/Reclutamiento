@@ -31,27 +31,28 @@
 
     $("#btnGuardarExamen").click(function () {
         //if ($("#frmCriterio").validate().form()) {
+        if ($('#frmExamenEdicion').valid()) {
 
-       
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("Edicion", "Examen")',
                 data: $("#frmExamenEdicion").serialize(),
-                        traditional: true,
-                        success: function (data) {
-                            if (data.redirecciona) {
-                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
-                            }
+                traditional: true,
+                success: function (data) {
+                    if (data.redirecciona) {
+                        SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
 
-                            if (data.Resultado) {
-                                information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato);
-                            }
-                            else{
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                            }
+                    if (data.Resultado) {
+                        information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO", data.IdDato);
+                    }
+                    else {
+                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    }
 
-                        }
-                });
+                }
+            });
+        }
               
     });
 
@@ -74,8 +75,9 @@
     $("#spanConfirmacion").html("¿Desea eliminar el registro?")
     $('#confirmacion').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                 var codigoExamen = $("#Examen_IdeExamen").val();
@@ -122,8 +124,9 @@
     $("#spanConfSelc").html("¿Desea agregar las categorías?")
     $('#confSelc').dialog({
         autoOpen: false,
+        resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                   $.ajax({
@@ -220,6 +223,7 @@
         var opt = {
             title: title,
             autoOpen: false,
+            resizable: false,
             modal: true,
             buttons: {
                 "Aceptar": function () {
@@ -284,7 +288,7 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "MENSAJE");
                 } else {
                     $('#grdListaCatxExamen').trigger('reloadGrid');
                 }
@@ -323,7 +327,7 @@
                     </td>
                     <td class="span5">
                        
-                            <label class="control-label" for="inputSuccess">Nombre</label>
+                            <label class="control-label" for="inputSuccess">Nombre<span class="text-error">*</span></label>
                             <div class="controles">
                                 
                                 @if (Accion.Consultar.Equals(Session["Accion"]))
@@ -332,7 +336,10 @@
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onblur="aMays(event, this)" })     
+                                    @Html.TextBoxFor(model => model.Examen.NomExamen, new { @class = "textoFormulario", @maxlength = "20",onblur="aMays(event, this)" }) 
+                                    <div class="text-error" style="font-size:12px;"> 
+                                        @Html.ValidationMessageFor(model => model.Examen.NomExamen)
+                                    </div>    
                                 }
 
                                 
@@ -343,7 +350,7 @@
                 <tr class="formulario-fila">
                     <td class="span5">
                         
-                            <label class="control-label" for="inputSuccess">Descripción</label>
+                            <label class="control-label" for="inputSuccess">Descripción<span class="text-error">*</span></label>
                             <div class="controles">
                                  @if (Accion.Consultar.Equals(Session["Accion"]))
                                  {
@@ -352,13 +359,16 @@
                                  else
                                  {
                                     @Html.TextBoxFor(model => model.Examen.DescExamen, new { @class = "textoFormulario", @maxlength = "150",onblur="aMays(event, this)" })  
+                                     <div class="text-error" style="font-size:12px;"> 
+                                        @Html.ValidationMessageFor(model => model.Examen.DescExamen)
+                                    </div> 
                                  }
                             </div>
                         
                     </td>
                     <td class="span5">
                       
-                            <label class="control-label" for="inputSuccess">Tipo</label>
+                            <label class="control-label" for="inputSuccess">Tipo<span class="text-error">*</span></label>
                             <div class="controles">
                                 
                                  @if (Accion.Consultar.Equals(Session["Accion"]))
@@ -368,6 +378,9 @@
                                  else
                                  {
                                      @Html.DropDownListFor(model => model.Examen.TipExamen, new SelectList(Model.TipoExamen, "Valor", "Descripcion", Model.Examen.TipExamen)) 
+                                     <div class="text-error" style="font-size:12px;"> 
+                                        @Html.ValidationMessageFor(model => model.Examen.TipExamen)
+                                    </div> 
                                  }
                                 
                             </div>

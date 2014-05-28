@@ -1338,6 +1338,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objCategoria.DESCCATEGORIA = (grid.rules[3].data == null ? "" : grid.rules[3].data).Trim();
                 }
 
+                if (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
+                {
+                    objCategoria.NOMCATEGORIA = (grid.rules[4].data == null ? "" : grid.rules[4].data).Trim();
+                }
+
                 objCategoria.IdeSede = (IdSede==null?0:IdSede);
                 
                 listaCategorias = _categoriaRepository.ObtenerCategorias(objCategoria);
