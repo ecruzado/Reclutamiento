@@ -21,6 +21,8 @@
 
         $("#spanActivarDesactivar").html("¿Desea Activar/Desactivar el registro?")
         $('#divActivarDesactivar').dialogo({
+            title: "CONFIRMACIÓN",
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -41,6 +43,8 @@
 
         $("#spanEliminar").html("¿Desea eliminar el registro?")
         $('#divEliminar').dialogo({
+            title: "CONFIRMACIÓN",
+            resizable: false,
             buttons: {
                 "Aceptar": function () {
                     var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
@@ -298,13 +302,23 @@
         
 
         $('#btnGetPDF').click(function () {
-            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
-            if (selr != null) {
 
-                window.open('@Url.Action("GetExamenPDF", "Examen")' + '/' + selr);
+            
+            var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
+            var rowData = jQuery('#grdList').jqGrid('getRowData', selr)
+
+            if (rowData != null) {
+
+                if ((rowData.Tipo == '01') || (rowData.Tipo == '04')) {
+
+                    window.open('@Url.Action("GetExamenPDF", "Examen")' + '/' + selr);
+                }
+                else {
+                    MostrarMensaje('Sólo puede visualizar los exámenes de tipo : Exámen y Evaluación', "MENSAJE");
+                }
 
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "MENSAJE");
             }
 
         });

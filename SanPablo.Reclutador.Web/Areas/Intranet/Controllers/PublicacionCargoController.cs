@@ -347,6 +347,8 @@
                     listCopys = new List<String>();
                     listCopys = (List<String>)lista[1];
 
+                    logSolicitud.Observacion = "";
+
                     _logSolicitudNuevoCargoRepository.solicitarAprobacion(logSolicitud, solicitudNuevoCargoEditar.IdeSede, solicitudNuevoCargoEditar.IdeArea, "NO");
 
 

@@ -524,12 +524,13 @@
                     logSolicitud.IdeSolicitudNuevoCargo = solicitud.IdeSolicitudNuevoCargo;
 
                     var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
-                    logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
-                    logSolicitud.UsuarioResponsable = logSolResponsable.UsuarioResponsable;
+                    logSolicitud.RolResponsable = logSolResponsable.RolResponsable == -1 ? 0 : logSolResponsable.RolResponsable;
+                    logSolicitud.UsuarioResponsable = logSolResponsable.UsuarioResponsable == -1 ? 0 : logSolResponsable.UsuarioResponsable;
 
                     logSolicitud.TipoEtapa = Etapa.Aceptado;
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    logSolicitud.Observacion = "";
 
                     int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, IndArea);
 
@@ -676,6 +677,7 @@
                         IndArea = "SI";
                     }
 
+                    logSolicitud.Observacion = "";
                     int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, IndArea);
 
                     if (ideUsuario != -1)
