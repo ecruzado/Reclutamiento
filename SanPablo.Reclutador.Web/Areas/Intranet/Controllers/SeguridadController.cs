@@ -287,7 +287,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (String.IsNullOrEmpty(codRol))
             {
-                objJsonMensaje.Mensaje = "Seleccione un roll";
+                objJsonMensaje.Mensaje = "Seleccione un rol";
                 return Json(objJsonMensaje);
             }
 

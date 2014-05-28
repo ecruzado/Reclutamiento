@@ -37,7 +37,7 @@
                 lspcmd.Parameters.Add("p_ctipcategoria", OracleType.VarChar).Value = (obj.TIPCATEGORIA==null?"":obj.TIPCATEGORIA);
                 lspcmd.Parameters.Add("p_cdescrip", OracleType.VarChar).Value = (obj.DESCCATEGORIA==null?"":obj.DESCCATEGORIA);
                 lspcmd.Parameters.Add("p_nidsede", OracleType.Number).Value = (obj.IdeSede==null?0:obj.IdeSede);
-                
+                lspcmd.Parameters.Add("p_cNombreCat", OracleType.VarChar).Value = (obj.NOMCATEGORIA == null ? "" : obj.NOMCATEGORIA);
                 lspcmd.Parameters.Add("p_crpta", OracleType.Cursor).Direction = ParameterDirection.Output;
                 drCategorias = (OracleDataReader)lspcmd.ExecuteReader();
                 objCategoria = null;

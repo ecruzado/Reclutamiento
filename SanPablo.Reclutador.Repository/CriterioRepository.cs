@@ -51,6 +51,7 @@
                 lspcmd.Parameters.Add("p_cpregunta", OracleType.VarChar).Value = obj.Pregunta;
                 lspcmd.Parameters.Add("p_ctipcriterio", OracleType.VarChar).Value = obj.TipoCriterio;
                 lspcmd.Parameters.Add("p_cestado", OracleType.VarChar).Value = obj.IndicadorActivo;
+                lspcmd.Parameters.Add("p_cTipoModo", OracleType.VarChar).Value = obj.TipoModo;
                 lspcmd.Parameters.Add("p_nIdSede", OracleType.Number).Value = obj.IdeSede;
                 
                 lspcmd.Parameters.Add("p_crpta", OracleType.Cursor).Direction = ParameterDirection.Output;

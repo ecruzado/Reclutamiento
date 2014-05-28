@@ -24,16 +24,36 @@
 
 
         $('#CvPostulanteEx_HoraCita').attr("readonly", "readonly");
+
+
+
+        var dateToday = new Date();
+
+        var dates = $('#CvPostulanteEx_Fechacita').datepicker({
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+            buttonImageOnly: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: dateToday,
+            onSelect: function (selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker");
+            }
+        });
+
+
         $('#CvPostulanteEx_Fechacita').attr("readonly", "readonly");
 
-        $('#CvPostulanteEx_Fechacita').datepicker({
+
+        @*$('#CvPostulanteEx_Fechacita').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
             buttonImageOnly: true,
             onSelect: function (date) {
                 $(this).valid();
         }
-        });
+        });*@
 
 
         $('#CvPostulanteEx_HoraCita').timepicker({
@@ -112,10 +132,10 @@
         </tr>    
          <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" >Telefono/Movil<span class="text-error">*</span></label>
+                <label class="etiquetaFormulario" >Teléfono/Movil<span class="text-error">*</span></label>
             </td>
             <td class="colInput;input-xxlarge">
-                  @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="10",onkeypress="return Funciones.isNumberKey(event)" })                      
+                  @Html.TextBoxFor(model => model.CvPostulanteEx.Telefono, new { @class = "textoFormulario" , maxlength="9",onkeypress="return Funciones.isNumberKey(event)" })                      
                <div class="tex-error" style="font-size:12px;color:red">    
                             @Html.ValidationMessageFor(model => model.CvPostulanteEx.Telefono)
                    </div>

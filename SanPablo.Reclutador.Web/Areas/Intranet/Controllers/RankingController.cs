@@ -649,7 +649,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reclutamientoPersonaRepository.Update(objReclutaPersona);
             
             objJson.Resultado = true;
-            objJson.Mensaje = "Se excluyo al postulante";
+            objJson.Mensaje = "Se excluyó al postulante";
 
             return Json(objJson);
 

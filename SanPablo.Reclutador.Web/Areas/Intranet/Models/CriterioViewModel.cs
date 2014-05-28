@@ -27,6 +27,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public virtual string imagen2 { get; set; }
         public virtual string MensajeVal{ get; set; }
 
+        public virtual List<DetalleGeneral> Modos { get; set; }
+
 
         //botones
 

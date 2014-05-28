@@ -17,6 +17,7 @@ namespace SanPablo.Reclutador.Mapping
             Map(x => x.IdeEvaluacion, "IDEEVALUACION");
             Map(x => x.TipoSolicitud, "TIPSOLICITUD");
             Map(x => x.IdeUsuarioResponsable, "IDUSUARESPONS");
+            Map(x => x.IndicadorEntrevistaFinal, "INDENTREVFINAL");
             Map(x => x.FechaEvaluacion, "FECEVALUACION");
             Map(x => x.HoraEvaluacion, "HORAEVALUACION");
             Map(x => x.Observacion, "OBSERVACION");

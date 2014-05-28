@@ -22,12 +22,20 @@ namespace SanPablo.Reclutador.Entity.Validation
             RuleFor(x => x.ApeMaterno)
                .NotEmpty()
                 .WithMessage("Ingresar apellido materno");
+            
             RuleFor(x => x.Dni)
               .NotEmpty()
-               .WithMessage("Ingresar dni");
+               .WithMessage("Ingresar DNI");
+            RuleFor(x => x.Dni)
+               .Length(8)
+               .WithMessage("Ingresar un DNI válido");
+
             RuleFor(x => x.Telefono)
               .NotEmpty()
-               .WithMessage("Ingresar telefono");
+               .WithMessage("Ingresar teléfono");
+            RuleFor(x => x.Telefono)
+              .Length(7,9)
+              .WithMessage("Ingresar un teléfono válido");
             //RuleFor(x => x.Fechacita)
             //  .NotEmpty()
             //   .WithMessage("Ingresar fecha de cita");

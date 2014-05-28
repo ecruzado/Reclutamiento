@@ -208,7 +208,7 @@
              if (idSol != null && idSol > 0) {
                  mostrarPopupCvPost(idSol, idpost, tipSol);
              } else {
-                 MostrarMensaje('Ingrese un registro', "MENSAJE");
+                 MostrarMensaje('Seleccione un registro', "MENSAJE");
              }
 
          });
@@ -328,7 +328,7 @@
                     }
                 });
             },
-                colNames: ['', '', '', 'Apellido Paterno', 'Apellido Materno', 'Nombres', 'DNI', 'Telefono/Movil', 'Fecha Cita', 'Hora Cita ', 'Citado', 'Asistio'],
+                colNames: ['', '', '', 'Apellido Paterno', 'Apellido Materno', 'Nombres', 'DNI', 'Telefono/Movil', 'Fecha Cita', 'Hora Cita ', 'Citado', 'Asistió'],
                 colModel: [
                         { name: 'IdCvPostulante', index: 'IdCvPostulante', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdSolicitud', index: 'IdSolicitud', align: 'left', editable: false, sortable: false, hidden: true },
@@ -731,7 +731,7 @@
 		            </td>
 		            <td class="span5">
 		   
-			            <label class="control-label" for="selectError">Area</label>
+			            <label class="control-label" for="selectError">Área</label>
 			            <div class="controles">
 				            @*<input type="text" class="input-medium" id="txtarea" disabled="disabled" value="Cuidados Intensivos">*@
                             @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 

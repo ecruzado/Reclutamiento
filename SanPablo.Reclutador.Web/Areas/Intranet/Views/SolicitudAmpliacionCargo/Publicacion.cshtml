@@ -584,11 +584,11 @@
                                 @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled" })
                                 @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox", disabled = "disabled", style = "display:inline-block;" })<Label style="display:inline-block; font-size:10pt" for="publicar">No Publicar</Label>  
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox", disabled = "disabled", style = "display:inline-block;" })<Label style="display:inline-block; font-size:10pt" for="publicar">Publicar</Label>  
                                 }
                                 else
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox" })<Label style="display:inline-block; font-size:10pt" for="publicar">No Publicar</Label> 
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox" })<Label style="display:inline-block; font-size:10pt" for="publicar">Publicar</Label> 
                                 }
                        <td class="controls">
                     </tr>

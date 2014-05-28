@@ -30,7 +30,9 @@
                 { field: 'tipCriterio', data: $("#Criterio_TipoCriterio").val() },
                 { field: 'tipMed', data: $("#Criterio_TipoMedicion").val() },
                 { field: 'pregunta', data: $("#Criterio_Pregunta").val() },
-                { field: 'estado', data: $("#Criterio_IndicadorActivo").val() }
+                { field: 'estado', data: $("#Criterio_IndicadorActivo").val() },
+                { field: 'modo', data: $("#Criterio_TipoModo").val() }
+                
             ];
 
             if (migrilla._search == true) {
@@ -175,12 +177,12 @@
                 @Html.TextBoxFor(model => model.Criterio.Pregunta, new { @class = "textoFormulario", data_val = "false" ,onblur="aMays(event, this)"})  
             </td>
             <td style="width:40px;"></td>
-           @* <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
+            <td class="colEtiqueta">
+                <label class="etiquetaFormulario" for="inputSuccess">Modo</label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Criterio.IndicadorActivo, new SelectList(Model.Estado, "Valor", "Descripcion", Model.Criterio.IndicadorActivo),new { data_val = "false" })
-	        </td>*@
+                @Html.DropDownListFor(model => model.Criterio.TipoModo, new SelectList(Model.Modos, "Valor", "Descripcion", Model.Criterio.TipoModo),new { data_val = "false" })
+	        </td>
         </tr>
 
          <tr >

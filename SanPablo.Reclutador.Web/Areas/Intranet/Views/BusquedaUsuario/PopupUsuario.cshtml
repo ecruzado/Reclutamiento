@@ -7,55 +7,23 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnBuscarUsuario').click(function () {
+            alert("Aqui");
             $('#grdListUsuario').trigger('reloadGrid');
         });
 
+        
+        $('#btnLimpiarUsuario').click(function () {
+           // location.reload();
+        });
+
+
+
         jQuery("#grdListUsuario").jqGrid({
-            datatype: function (postdata) {
-                var migrilla = new Object();
-                migrilla.page = postdata.page;
-                migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sidx;
-                migrilla.sord = postdata.sord;
-                migrilla._search = postdata.isSearch;
-                migrilla.filters = postdata.filters;
-                migrilla.Rules = [
-                    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                    { field: 'ApellidoPaterno', data: $("#Usuario_DscApePaterno").val() },
-                    { field: 'ApellidoMaterno', data: $("#Usuario_DscApePaterno").val() },
-                    { field: 'Nombres', data: $("#Usuario_DscNombres").val() },
-                    { field: 'idRol', data: $("#Usuario_IdRol").val() },
-                ];
-                if (migrilla._search == true) {
-                    migrilla.searchField = postdata.searchField;
-                    migrilla.searchOper = postdata.searchOper;
-                    migrilla.searchString = postdata.searchString;
-                }
-
-                var params = { grid: migrilla };
-
-                $.ajax({
-                    url: '@Url.Action("ListaUsuarios", "BusquedaUsuario", new { area = "Intranet" })',
-                    type: 'post',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(params),
-                    async: false,
-                    success: function (data, st) {
-                        if (st == 'success') {
-                            var jq = $('#grdListUsuario')[0];
-                            jq.addJSONData(data);
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
-            },
-            colNames: ['', 'Ape. Paterno','Ape. Materno','Nombres','','Rol'],
+            colNames: ['', 'Ape. Paterno', 'Ape. Materno', 'Nombres', '', 'Rol'],
             colModel: [
                     { name: 'IdUSuario', index: 'IdUSuario', align: 'left', hidden: true },
-                    { name: 'ApePaterno', index: 'ApePaterno', align: 'left',sortable: false, width: 150 },
-                    { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left',sortable: false, width: 150 },
+                    { name: 'ApePaterno', index: 'ApePaterno', align: 'left', sortable: false, width: 150 },
+                    { name: 'ApeMaterno', index: 'ApeMaterno', align: 'left', sortable: false, width: 150 },
                     { name: 'Nombres', index: 'Nombres', align: 'center', sortable: false, width: 150 },
                     { name: 'idRol', index: 'idRol', align: 'center', sortable: false, hidden: true },
                     { name: 'Rol', index: 'Rol', align: 'center', sortable: false, width: 200 }
@@ -69,19 +37,62 @@
             sortname: 'DscApePaterno',
             sortorder: 'desc',
             viewrecords: true,
-            width:680,
+            width: 680,
             height: 300,
             cellsubmit: 'clientArray',
             hidegrid: false,
             rownumbers: true,
             shrinkToFit: false,
             autowidth: true,
+            datatype: 'local',
             postData: {
             }, loadComplete: function (data) {
+                jQuery("#grdListUsuario").jqGrid('setGridParam', {
+                    datatype: function (postdata) {
+                        alert("Aqui grilla");
+                        var migrilla = new Object();
+                        migrilla.page = postdata.page;
+                        migrilla.rows = postdata.rows;
+                        migrilla.sidx = postdata.sidx;
+                        migrilla.sord = postdata.sord;
+                        migrilla._search = postdata.isSearch;
+                        migrilla.filters = postdata.filters;
+                        migrilla.Rules = [
+                            { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                            { field: 'ApellidoPaterno', data: $("#Usuario_DscApePaterno").val() },
+                            { field: 'ApellidoMaterno', data: $("#Usuario_DscApePaterno").val() },
+                            { field: 'Nombres', data: $("#Usuario_DscNombres").val() },
+                            { field: 'idRol', data: $("#Usuario_IdRol").val() },
+                        ];
+                        if (migrilla._search == true) {
+                            migrilla.searchField = postdata.searchField;
+                            migrilla.searchOper = postdata.searchOper;
+                            migrilla.searchString = postdata.searchString;
+                        }
+
+                        var params = { grid: migrilla };
+
+                        $.ajax({
+                            url: '@Url.Action("ListaUsuarios", "BusquedaUsuario", new { area = "Intranet" })',
+                            type: 'post',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(params),
+                            async: false,
+                            success: function (data, st) {
+                                if (st == 'success') {
+                                    var jq = $('#grdListUsuario')[0];
+                                    jq.addJSONData(data);
+                                }
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
             }
         });
     });
-
 
 </script>
 
@@ -127,7 +138,7 @@
      
       <div class="form-actions">
           <a class="btn btn-info" id="btnBuscarUsuario"><i class="icon-search icon-white"></i> Buscar</a>
-          <button type="reset" class="btn"><i class="icon-trash"></i> Limpiar</button>
+          <a class="btn" id="btnLimpiarUsuario"><i class="icon-trash"></i> Limpiar</a>
      </div>
     </form>
     <div class="tabla-datos" id="tbUsuarios">

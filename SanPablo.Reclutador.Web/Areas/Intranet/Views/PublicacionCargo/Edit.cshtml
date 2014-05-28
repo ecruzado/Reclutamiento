@@ -389,11 +389,11 @@
                             @Html.TextBoxFor(model => model.RangoSalario, new {@disabled = "disabled"})
                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
                             {
-                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block" , disabled="disabled"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label> 
+                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block" , disabled="disabled"}) <Label style="display:inline-block; font-size:10pt" for="publicar">Publicar</Label> 
                             }
                             else
                             { 
-                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> No Publicar</Label>
+                                @Html.CheckBoxFor(model => model.SolicitudCargo.RangoSalarioPublicar, new { @style="display:inline-block"}) <Label style="display:inline-block; font-size:10pt" for="publicar"> Publicar</Label>
                             }
                         </td>
                     </tr>

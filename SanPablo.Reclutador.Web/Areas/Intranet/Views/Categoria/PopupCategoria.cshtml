@@ -25,7 +25,8 @@
                        { field: 'idExamen', data: $("#Examen_IdeExamen").val() },
                        { field: 'tipCriterio', data: $("#Categoria_TipoCriterio").val() },
                        { field: 'estado', data: $("#Categoria_ESTACTIVO").val() },
-                       { field: 'descrip', data: $("#Categoria_DESCCATEGORIA").val() }
+                       { field: 'descrip', data: $("#Categoria_DESCCATEGORIA").val() },
+                       { field: 'nombre', data: $("#Categoria_NOMCATEGORIA").val() }
 
                 ];
 
@@ -124,19 +125,20 @@
                 @Html.TextBoxFor(model => model.Categoria.DESCCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onblur="aMays(event, this)"}) 
             </td>
         </tr>
-        @*<tr >
+        <tr >
             <td class="colEtiqueta">
-                <label class="etiquetaFormulario" for="inputSuccess">Estado</label>
+                <label class="etiquetaFormulario" for="inputSuccess">Nombre</label>
             </td>
             <td class="colInput">
-                @Html.DropDownListFor(model => model.Categoria.ESTACTIVO, new SelectList(Model.TipoEstado, "Valor", "Descripcion", Model.Categoria.ESTACTIVO),new { data_val = "false" })
+                @Html.TextBoxFor(model => model.Categoria.NOMCATEGORIA, new { @class = "textoFormulario", @maxlength = "150" , data_val = "false",onblur="aMays(event, this)"}) 
+           
             </td>
-        </tr>*@
+        </tr>
 
         <tr >
             <td class="opciones" style="text-align:right" colspan="6">
                 <a id="btnBuscarCategoria" class="btn btn-small btn-info"><i class="icon-search icon-white"></i> Buscar</a>
-                <a id="btnLimpiarCategoria" class="btn"><i class="icon-trash"></i> Limpiar</a>
+                <button type="reset" class="btn" id="btnLimpiarCategoria" ><i class="icon-trash"></i> Limpiar</button>
                  <div style="clear:both"></div>
             </td>
         </tr>
