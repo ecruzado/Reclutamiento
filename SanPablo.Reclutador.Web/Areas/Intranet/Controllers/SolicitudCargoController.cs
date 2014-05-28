@@ -841,7 +841,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (Etapa.Pendiente.Equals(EtapaSol))
             {
-                if (Roles.Encargado_Seleccion.Equals(idRolUsuario))
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario) || Roles.Analista_Seleccion.Equals(idRolUsuario))
                 {
                     model.Accion = Accion.Aprobar;
                 }    
