@@ -888,7 +888,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     PdfPTable table3 = new PdfPTable(3);
                     float[] ancho3 = new float[] { 10.0f,80.0f,10.0f };
+
                     table3.SetWidths(ancho3);
+                    //se agrega una celda vacia
+
+                    
 
                     // celda 1
                     PdfPCell CelltCategoria = new PdfPCell(new Phrase("CATEGORÍA: "+objPdfExamen.Nomcategoria, normal));
@@ -1041,7 +1045,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         CellLinea.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
                         CellLinea.Border = Rectangle.ALIGN_BOTTOM;
                         CellLinea.Colspan = 3;
-                        table4.AddCell(CellLinea); 
+                        table4.AddCell(CellLinea);
+
+                        PdfPCell CellLinea3 = new PdfPCell(new Phrase("xD", estiloBlanco));
+                        CellLinea3.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+                        CellLinea3.Border = Rectangle.NO_BORDER;
+                        CellLinea3.Colspan = 3;
+                        table4.AddCell(CellLinea3); 
 
 
                         PdfPCell CellNombSubcAtegoria = new PdfPCell(new Phrase("SUBCATEGORÍA: "+objSubCategoria.Nomsubcategoria, normal));

@@ -27,14 +27,16 @@
             'cancelImg': '@Url.Content("~/Scripts/uploadify/cancel.png")',
 
             'onError': function (a, b, c, d) {
+
                 if (d.status == 404)
-                    alert("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>");
+                    MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>", "MENSAJE");
                 else if (d.type === "HTTP")
-                    alert("error " + d.type + ": " + d.status);
+                    // MostrarMensaje("error " + d.type + ": " + d.status, "MENSAJE");
+                    MostrarMensaje("ERROR : Archivo demasiado grande. Limite de " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
                 else if (d.type === "File Size")
-                    alert(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB");
+                    MostrarMensaje(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
                 else
-                    alert("error " + d.type + ": " + d.text);
+                    MostrarMensaje("ERROR : " + d.type + ": " + d.text);
             },
             'onSelect': function (e, q, f) {
                 var estado = true;

@@ -176,12 +176,14 @@
                     case Etapa.Pendiente:
                         logSolicitud.TipoEtapa = Etapa.Validado;
                         logSolicitud.RolResponsable = Roles.Gerente_General_Adjunto;
+                        logSolicitud.UsuarioResponsable = 0;
                         rol = "Gerente General Adjunto";
                         break;
 
                     case Etapa.Validado:
                         logSolicitud.TipoEtapa = Etapa.Aprobado;
                         logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                        logSolicitud.UsuarioResponsable = 0;
                         rol = "Jefe Corporativo de Selección";
                         break;
 
@@ -190,6 +192,7 @@
                         {
                             logSolicitud.TipoEtapa = Etapa.Aprobacion_Perfil;
                             logSolicitud.RolResponsable = Roles.Encargado_Seleccion;
+                            logSolicitud.UsuarioResponsable = 0;
                             rol="Encargado de Selección";
                             break;
                         }
@@ -197,6 +200,7 @@
                         {
                             logSolicitud.TipoEtapa = Etapa.Observado;
                             logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
+                            logSolicitud.UsuarioResponsable = 0;
                             rol = "Jefe Corporativo de Selección";
                             break;
                         }
@@ -204,6 +208,7 @@
                         logSolicitud.TipoEtapa = Etapa.Aceptado;
                         var logSolResponsable = _solicitudNuevoCargoRepository.responsablePublicacion(solicitud.IdeSolicitudNuevoCargo, solicitud.IdeSede);
                         logSolicitud.RolResponsable = logSolResponsable.RolResponsable;
+                        logSolicitud.UsuarioResponsable = logSolResponsable.UsuarioResponsable;
                         break;
 
                     //case Etapa.Observado:
@@ -220,6 +225,11 @@
                     if (logSolicitud.TipoEtapa != Etapa.Observado)
                     {
                         logSolicitud.TipoEtapa = Etapa.Rechazado;
+
+                        if (logSolicitud.Observacion == null)
+                        {
+                            logSolicitud.Observacion = "";
+                        }
 
                         //Regresa la solicitud al solicitante en caso de rechazo
                         //var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);

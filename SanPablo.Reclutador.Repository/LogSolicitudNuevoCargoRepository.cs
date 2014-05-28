@@ -79,8 +79,10 @@
                 cmd.Parameters.Add("p_ideUsuarioSuceso", OracleType.Int32).Value = logSolicitud.UsuarioSuceso;
                 cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = logSolicitud.RolSuceso;
                 cmd.Parameters.Add("p_ideRolResponsable", OracleType.Int32).Value = logSolicitud.RolResponsable;
+                cmd.Parameters.Add("p_Observacion", OracleType.VarChar).Value = logSolicitud.Observacion;
                 cmd.Parameters.Add("p_indArea", OracleType.VarChar).Value = indArea;
                 cmd.Parameters.Add("p_etapa", OracleType.VarChar).Value = logSolicitud.TipoEtapa;
+                cmd.Parameters.Add("p_ideUsuarioRespPublic", OracleType.Number).Value = logSolicitud.UsuarioResponsable;
                 cmd.Parameters.Add("p_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
 
