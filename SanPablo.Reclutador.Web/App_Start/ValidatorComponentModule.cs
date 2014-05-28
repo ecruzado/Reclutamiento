@@ -146,7 +146,14 @@
             builder.RegisterType<ReclutamientoPersonaValidator>()
               .Keyed<IValidator>(typeof(IValidator<ReclutamientoPersona>))
               .As<IValidator>();
-            
+
+            builder.RegisterType<SedeNivelValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<SedeNivel>))
+                   .As<IValidator>();
+
+            builder.RegisterType<UsuarioRolSedeValidator>()
+                   .Keyed<IValidator>(typeof(IValidator<UsuarioRolSede>))
+                   .As<IValidator>();
 
 
         }

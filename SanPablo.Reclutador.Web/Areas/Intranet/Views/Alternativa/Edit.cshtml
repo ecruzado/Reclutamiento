@@ -24,7 +24,7 @@
                
               
 
-                 @Html.TextAreaFor(model => model.Alternativa.NombreAlternativa,  new { rows = 2, cols = 5, style = "margin: 0px 0px 10px; width: 250px; height: 70px;", maxlength = "255" ,onblur="aMays(event, this)"})  
+                 @Html.TextAreaFor(model => model.Alternativa.NombreAlternativa,  new { rows = 2, cols = 5, style = "margin: 0px 0px 10px; width: 250px; height: 70px;resize:none;", maxlength = "255" ,onblur="aMays(event, this)"})  
                  
             @*    <div class="tex-error" style="font-size:12px;color:red">    
                @Html.ValidationMessageFor(model => model.Alternativa.NombreAlternativa )

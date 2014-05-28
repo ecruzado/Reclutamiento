@@ -213,13 +213,14 @@
             }
         }
         else {
-            if (usuario == rowObject[8]) {
+            if (rowObject[4] == "04") {
                 strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
             else {
-                strImg = '<img onclick="mostrarMensajeAlerta();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
         }
+        
         return strImg;
     }
 

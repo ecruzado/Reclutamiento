@@ -155,7 +155,7 @@
                                 "1",
                                 item.IndicadorActivo,
                                 item.IndicadorActivo,
-                                (item.Pregunta==null?"":item.Pregunta),
+                                (item.Pregunta==null?"":item.Pregunta.Length > 70?item.Pregunta.Substring(0,70)+"...":item.Pregunta.ToString()),
                                 item.TipoMedicionDes,
                                 item.TipoMedicion,
                                 item.TipoCriterio,
@@ -739,6 +739,9 @@
             criterioViewModel.Estado.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
 
+            criterioViewModel.Modos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.Modo));
+            criterioViewModel.Modos.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
             return criterioViewModel;
         }
 
@@ -784,7 +787,8 @@
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)) ||
                     (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data)) ||
                     (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0") ||
-                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
+                    (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0") ||
+                    (!"".Equals(grid.rules[4].data) && grid.rules[4].data != null && grid.rules[4].data != "0")
                    )
                 {
 
@@ -825,6 +829,15 @@
                 else
                 {
                     objCriterio.IndicadorActivo = grid.rules[3].data;
+                }
+
+                if (grid.rules[4].data == null || grid.rules[4].data == "0")
+                {
+                    objCriterio.TipoModo = "";
+                }
+                else
+                {
+                    objCriterio.TipoModo = grid.rules[4].data;
                 }
 
                 }

@@ -40,17 +40,18 @@
                         url: '@Url.Action("Edit", "Criterio")',
                         data: $("#frmCriterio").serialize(),
                         traditional: true,
+                        resizable:false,
                         success: function (data) {
                             if (data.redirecciona) {
                                 SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                              }
 
                             if (data.Resultado) {
-                                information("divMensaje", "spnMensaje", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal", data.IdDato,data.Accion);
+                                information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO", data.IdDato,data.Accion);
                             }
                             if (!data.Resultado) {
                                 //notificacionExito(data.Mensaje);
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                MostrarMensaje(data.Mensaje, "ALERTA");
                             }
 
                         }
@@ -202,7 +203,7 @@
             if (codigoCriterio != null && codigoCriterio > 0) {
                 mostrarAgregarEstudios(0, codigoCriterio);
             } else {
-                MostrarMensaje('Ingrese un Criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Ingrese un Criterio', "ALERTA");
             }
             
         });
@@ -213,7 +214,7 @@
                 if (selr != null) {
                     mostrarAgregarEstudios(selr, codigoCriterio);
                 } else {
-                    MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione una Alternativa', "MENSAJE");
                 }
                 
         });
@@ -224,7 +225,7 @@
             if (selr != null) {
                 $('#confirmacion').dialog('open');
             } else {
-                MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione una Alternativa', "MENSAJE");
             }
 
         });
@@ -250,8 +251,9 @@
         $("#spanConfirmacion").html("¿Desea eliminar el registro?")
         $('#confirmacion').dialog({
             autoOpen: false,
+            resizable:false,
             modal: true,
-            title: "Confirmación",
+            title: "CONFIRMACIÓN",
             buttons: {
                 "Aceptar": function () {
                     var codigoCriterio = $("#Criterio_IdeCriterio").val();
@@ -259,7 +261,7 @@
                     if (selr != null) {
                         eliminarAlternativa(selr, codigoCriterio);
                     } else {
-                        MostrarMensaje('Seleccione una Alternativa', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione una Alternativa', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -467,6 +469,7 @@
         var opt = {
                 title: title,
                 autoOpen: false,
+                resizable:false,
                 modal: true,
                 buttons: {
                     "Aceptar": function () {
@@ -488,22 +491,22 @@
 
 
         if (tipCriterio == "0") {
-            MostrarMensaje('Seleccione un tipo de criterio', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un tipo de criterio', "ALERTA");
             return false;
         }
 
         if (tipMedicion == "0") {
-            MostrarMensaje('Seleccione un tipo de medición', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un tipo de medición', "ALERTA");
             return false;
         }
 
         if (tipModo == "0") {
-            MostrarMensaje('Seleccione un modo', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione un modo', "ALERTA");
             return false;
         }
 
         if (tipPregunta.length ==0) {
-            MostrarMensaje('Ingrese una pregunta', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Ingrese una pregunta', "ALERTA");
             return false;
         }
 
@@ -545,7 +548,7 @@
                     <td style="width:40px;"></td>
                    
                     <td class="span5">
-                            <label class="control-label">Medición</label>
+                            <label class="control-label">Medición <span class="text-error">*</span> </label>
                     <div class="controles">
                         @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                         {
@@ -564,7 +567,7 @@
                  <tr class="formulario-fila">
 
                     <td class="span5">
-                      <label  class="control-label">Tipo</label>
+                      <label  class="control-label">Tipo <span class="text-error">*</span> </label>
                    <div class="controles">
 
 
@@ -583,7 +586,7 @@
                        </td>
                     <td style="width:40px;"></td>
                     <td class="span5">
-                      <label class="control-label">Modo</label>
+                      <label class="control-label">Modo<span class="text-error">*</span> </label>
                    
                          <div class="controles">
                           
@@ -605,17 +608,17 @@
                 
                    <tr class="formulario-fila">
                        <td class="span5">
-                         <label class="control-label">Pregunta</label>
+                         <label class="control-label">Pregunta <span class="text-error">*</span> </label>
                       <div class="controles">
                            @if (@Accion.Consultar.Equals(Model.Criterio.IndPagina))
                            {
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;", maxlength = "2000" , @readonly = "readonly",onblur="aMays(event, this)"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;resize:none;", maxlength = "2000" , @readonly = "readonly",onblur="aMays(event, this)"})  
                              
                            }
                            else
                            {
                              
-                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
+                             @Html.TextAreaFor(model => model.Criterio.Pregunta,  new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 636px; height: 70px;resize:none;",   maxlength = "2000" ,onblur="aMays(event, this)"})  
                              
                            } 
                         

@@ -267,7 +267,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             objCategoria.IdeSede = IdSede;
                             _categoriaRepository.Update(objCategoria);
 
-                            mensaje = "Se actulizo la categoría correctamente";
+                            mensaje = "Se actualizó la categoría correctamente";
                             resultado = true;
                         }
                     }
