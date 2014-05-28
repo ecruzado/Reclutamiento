@@ -647,11 +647,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 resultadoExamen = _reclutamientoPersonaExamenRepository.ObtenerEvaluacionReportePdf(idRP, idRE);
             
                     // tipo de letra
-            Font normal = new Font(FontFactory.GetFont("Arial", 10, Font.NORMAL));
-            Font negrita = new Font(FontFactory.GetFont("Arial", 10, Font.BOLD));
-            Font subRayado = new Font(FontFactory.GetFont("Arial", 10, Font.UNDERLINE));
-            Font respuesta = new Font(FontFactory.GetFont("Arial", 10, Font.BOLDITALIC));
+            Font normal = new Font(FontFactory.GetFont("Arial", 9, Font.NORMAL));
+            Font negrita = new Font(FontFactory.GetFont("Arial", 9, Font.BOLD));
+            Font subRayado = new Font(FontFactory.GetFont("Arial", 9, Font.UNDERLINE));
             Font letraTitulo = new Font(FontFactory.GetFont("Arial", 12, Font.BOLD));
+            BaseFont bfTimes = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+            Font estiloBlanco = new Font(bfTimes, 9, Font.ITALIC, BaseColor.WHITE);
 
             // obtengo los datos de la cabecera
             if (resultadoExamen != null)
@@ -707,24 +708,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                  // se agrega la celda a la tabla
                 table1.AddCell(cellLibre);
 
-                //insertar cuadro
-                //cb.RoundRectangle(50f, 50f, 20f, 20f, 20f);
-                //cb.Stroke();
-         
-                //cb.MoveTo(118f, 520f);
-                //cb.LineTo(122f, 520f);
-                //cb.Stroke();
-                //cb.MoveTo(120f, 518f);
-                //cb.LineTo(120f, 522f);
-                //cb.Stroke();
-
-                //insertar
-                 //PdfPCell CellBlancoTitulo = new PdfPCell(new Phrase(""));
-                 //CellBlancoTitulo.HorizontalAlignment = Element.ALIGN_LEFT;
-                 //CellBlancoTitulo.Border = Rectangle.NO_BORDER;
-                 //// CellDuracion.Colspan = 3;
-                 //table1.AddCell(CellBlancoTitulo);
-                 //table1.AddCell(CellBlancoTitulo);
 
                 PdfPCell cellLibre2 = new PdfPCell(new Phrase(""));
                 // se alinea a la derecha
@@ -863,27 +846,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     //CelltCategoria.Colspan = 2;
                     table3.AddCell(CellTiempoCategoria);
                     
-                    //celda 2 de instrucciones
-                    //PdfPCell CelltituloInstruccion = new PdfPCell(new Phrase("NOTA CATEGORIA:",negrita));
-                    //CelltituloInstruccion.HorizontalAlignment = Element.ALIGN_LEFT;
-                    ////CelltituloInstruccion.Colspan = 3;
-                    //CelltituloInstruccion.Border = Rectangle.NO_BORDER;
-                    //table3.AddCell(CelltituloInstruccion);
-
-                    ////celda enblanco
-                    //PdfPCell CellBlanco2 = new PdfPCell(new Phrase("", normal));
-                    //CellBlanco2.Colspan = 3;
-                    //CellBlanco2.Border = Rectangle.NO_BORDER;
-                    //table3.AddCell(CellBlanco2);
-
-                    // celda 3
-                    //PdfPCell CellInstruccion = new PdfPCell(new Phrase(itemCategoria.NotaCategoria.ToString(), normal));
-                    //CellInstruccion.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
-                    //CellInstruccion.Border = Rectangle.NO_BORDER;
-                    //// se le indica que ocupe las 3 columnas
-                    ////CellInstruccion.Colspan = 2;
-                    //table3.AddCell(CellInstruccion);
-
                     table3.SpacingBefore = 10f;
                     //table3.SpacingAfter = 10f;
 
@@ -904,6 +866,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         PdfPTable table4 = new PdfPTable(3);
                         float[] ancho4 = new float[] { 25.0f, 60.0f, 20.0f };
                         table4.SetWidths(ancho4);
+
+
+                        PdfPCell CellSpaceBlanco = new PdfPCell(new Phrase("blanco", estiloBlanco));
+                        CellSpaceBlanco.HorizontalAlignment = Element.ALIGN_LEFT;
+                        CellSpaceBlanco.Colspan = 3;
+                        CellSpaceBlanco.Border = Rectangle.NO_BORDER;
+                        table4.AddCell(CellSpaceBlanco);
 
                         // se agregan las celdas a la tabla
                         PdfPCell CellSubcAtegoria = new PdfPCell(new Phrase("SUBCATEGORIA   : ", negrita));
@@ -932,16 +901,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         var listaCodCriterio = resultadoExamen.Criterios.Where(x => x.IdeSubCategoria == itemSubCategoria.IdeSubCategoria);
                         foreach (var itemCriterio in listaCodCriterio)
                         {
+
+                           
                              
                             PdfPTable table5 = new PdfPTable(3);
                             float[] ancho5 = new float[] { 15.0f, 80.0f, 10.0f };
                             table5.SetWidths(ancho5);
+
+
+                            PdfPCell CellSpace1 = new PdfPCell(new Phrase("blanco", estiloBlanco));
+                            CellSpace1.HorizontalAlignment = Element.ALIGN_LEFT;
+                            CellSpace1.Colspan = 3;
+                            CellSpace1.Border = Rectangle.NO_BORDER;
+                            table5.AddCell(CellSpace1);
+
                             PdfPCell CellPregunta = new PdfPCell(new Phrase("NRO. "+cont, negrita));
                             //CellPregunta.Colspan = 3;
                             CellPregunta.Border = Rectangle.NO_BORDER;
-                            
                             CellPregunta.SpaceCharRatio = 10f; //espacio de celda
-                            
                             table5.AddCell(CellPregunta);
                             
 

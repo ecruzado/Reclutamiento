@@ -409,24 +409,28 @@
                     logSolicitud.RolSuceso = RolSession;
 
                     string indArea = "NO";
-                    
+
+                    string rol = "";
                     
                     switch (RolSession)
                     {
                         case Roles.Jefe:
                             logSolicitud.RolResponsable = Roles.Gerente;
                             logSolicitud.TipoEtapa = Etapa.Pendiente;
+                            rol = "Gerente";
                             indArea = "SI";
                             break;
 
                         case Roles.Gerente:
                             logSolicitud.RolResponsable = Roles.Gerente_General_Adjunto;
+                            rol = "Gerente General Adjunto";
                             logSolicitud.TipoEtapa = Etapa.Validado;
                             break;
 
                         case Roles.Gerente_General_Adjunto:
                             logSolicitud.RolResponsable = Roles.Jefe_Corporativo_Seleccion;
                             logSolicitud.TipoEtapa = Etapa.Aprobado;
+                            rol = "Jefe Corporativo de Selección";
                             break;
 
                     }
@@ -464,7 +468,12 @@
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", null, nuevaSolicitudCargo.NombreCargo, nuevaSolicitudCargo.CodigoCargo, listSends, "suceso",listCopys);
 
-                        objJsonMessage.Mensaje = "Solicitud enviada exitosamente";
+                        string menj = "La solicitud enviada exitosamente";
+                        menj += Environment.NewLine;
+                        menj += "Derivada a " + rol + " , " + usuario.DscNombres + " " + usuario.DscApePaterno;
+                        objJsonMessage.Mensaje = menj;
+
+                        //objJsonMessage.Mensaje = "Solicitud enviada exitosamente";
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
                     }

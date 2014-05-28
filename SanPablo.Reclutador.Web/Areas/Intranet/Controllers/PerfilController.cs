@@ -25,14 +25,13 @@
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private IUsuarioRepository _usuarioRepository;
         private IConocimientoGeneralCargoRepository _conocimientoGeneralRepository;
-        //private IOfrecemosCargoRepository _ofrecemmosCargoRepository;
-        //private ICompetenciaCargoRepository _competenciaCargoRepository;
         private INivelAcademicoCargoRepository _nivelAcademicoRepository;
         private IHorarioCargoRepository _horarioCargoRepository;
         private IUbigeoCargoRepository _ubigeoCargoRepository;
         private IExperienciaCargoRepository _experienciaCargoRepository;
         private IEvaluacionCargoRepository _evaluacionCargoRepository;
         private ISolReqPersonalRepository _solReqPersonalRepository;
+        private IRolRepository _rolRepository;
 
        
         public PerfilController(ICargoRepository cargoRepository,
@@ -41,14 +40,13 @@
                                 ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
                                 IUsuarioRepository usuarioRepository,
                                 IConocimientoGeneralCargoRepository conocimientoGeneralRepository,
-                                //IOfrecemosCargoRepository ofrecemosCargoRepository,
-                                //ICompetenciaCargoRepository competenciaCargoRepository,
                                 INivelAcademicoCargoRepository nivelAcademicoRepository,
                                 IHorarioCargoRepository horarioCargoRepository,
                                 IUbigeoCargoRepository ubigeoCargoRepository,
                                 IExperienciaCargoRepository experienciaCargoRepository,
                                 IEvaluacionCargoRepository evaluacionCargoRepository,
-                                ISolReqPersonalRepository solReqPersonalRepository
+                                ISolReqPersonalRepository solReqPersonalRepository,
+                                IRolRepository rolRepository
                                 )
         {
             _cargoRepository = cargoRepository;
@@ -57,14 +55,13 @@
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _usuarioRepository = usuarioRepository;
             _conocimientoGeneralRepository = conocimientoGeneralRepository;
-            //_ofrecemmosCargoRepository = ofrecemosCargoRepository;
-            //_competenciaCargoRepository = competenciaCargoRepository;
             _nivelAcademicoRepository = nivelAcademicoRepository;
             _horarioCargoRepository = horarioCargoRepository;
             _ubigeoCargoRepository = ubigeoCargoRepository;
             _experienciaCargoRepository = experienciaCargoRepository;
             _evaluacionCargoRepository = evaluacionCargoRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
+            _rolRepository = rolRepository;
         }
 
         [ValidarSesion]
@@ -544,8 +541,15 @@
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends, "Suceso",listCopys);
 
-                        objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
+                        //objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
+                        Rol rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolicitud.RolResponsable);
+
+                        string menj = "Perfil aceptado exitosamente";
+                        menj += Environment.NewLine;
+                        menj += "Derivada a " + rolResponsable.DscRol + " , " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        objJsonMessage.Mensaje = menj;
                         objJsonMessage.Resultado = true;
+
                         return Json(objJsonMessage);
                     }
                     else
