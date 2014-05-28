@@ -841,7 +841,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (Etapa.Pendiente.Equals(EtapaSol))
             {
-                if (Roles.Encargado_Seleccion.Equals(idRolUsuario))
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario) || Roles.Analista_Seleccion.Equals(idRolUsuario))
                 {
                     model.Accion = Accion.Aprobar;
                 }    
@@ -1169,10 +1169,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.SolReqPersonal.idRolSuceso = idRol;
                         model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
                         model.SolReqPersonal.IdeCargo = objSol.IdeCargo;
+
+                        var objCargoRep = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo && x.EstadoActivo == IndicadorActivo.Activo);
                         
                         // Se obtiene el usaurio reponsable
-                        var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Seleccion
-                                                            && x.IdSede == Sede);
+                        //var ObjUsuarioResp = _usuarioRolSedeRepository.GetBy(x => x.IdRol == Roles.Encargado_Seleccion
+                        //                                    && x.IdSede == Sede);
+                        SolReqPersonal objSolReqPersonal = new SolReqPersonal();
+                        objSolReqPersonal = _solReqPersonalRepository.GetResponsable("U", Sede, objCargoRep.TipoRequerimiento);
+
+                        var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == objSolReqPersonal.idUsuarioResp && x.FlgEstado == IndicadorActivo.Activo);
+
 
 
                         // obtiene el los roles de los emails a los que se deben enviar correo
@@ -1187,25 +1194,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         
                         // se valida que exista y se toma al primer responsable
-                        if (ObjUsuarioResp != null)
+                        if (objSolReqPersonal != null)
                         {
-                            List<UsuarioRolSede> listaUsuarios = (List<UsuarioRolSede>)ObjUsuarioResp;
-                            UsuarioRolSede usuarioRolSede = (UsuarioRolSede)listaUsuarios[0];
-                            
-                            model.SolReqPersonal.idUsuarioResp = usuarioRolSede.IdUsuario;
-                            
-                            model.SolReqPersonal.IdRolResp = usuarioRolSede.IdRol;
+                            //List<UsuarioRolSede> listaUsuarios = (List<UsuarioRolSede>)ObjUsuarioResp;
+                            //UsuarioRolSede usuarioRolSede = (UsuarioRolSede)listaUsuarios[0];
 
-                            var objRol = _rolRepository.GetSingle(x => x.IdRol == usuarioRolSede.IdRol && x.FlgEstado==IndicadorActivo.Activo);
+                            model.SolReqPersonal.idUsuarioResp = objSolReqPersonal.idUsuarioResp;
 
-                            var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == usuarioRolSede.IdUsuario);
+                            model.SolReqPersonal.IdRolResp = objSolReqPersonal.IdRolResp;
 
-                            if (ObjUsuario!=null)
+                            var objRol = _rolRepository.GetSingle(x => x.IdRol == objSolReqPersonal.IdRolResp && x.FlgEstado == IndicadorActivo.Activo);
+
+                            //var ObjUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == usuarioRolSede.IdUsuario);
+
+                            if (objSolReqPersonal.idUsuarioResp != null)
                             {
                                 retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
-                                var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
-                                x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
-                                MensajeInformativo = "Se envío la solicitud de reemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
+                                var objUsuario1 = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
+                                                                              x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
+                                MensajeInformativo = "Se envío la solicitud de reemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario1.CodUsuario + " con rol: " + objRol.DscRol;
 
                             }
                             else
