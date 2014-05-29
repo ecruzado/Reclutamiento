@@ -958,6 +958,8 @@
         var solReqIdeCargo = $('#SolReqPersonal_Idecargo').val();
         var numVacante = $('#SolReqPersonal_NumVacantes').val();
 
+        var idCargo = $('#SolReqPersonal_IdeCargo').val();
+
         var countList = jQuery("#grdListReemplazosReq").jqGrid('getGridParam', 'records');
 
         var observ = $('#SolReqPersonal_Observacion').val();
@@ -977,10 +979,18 @@
             return false;
         }
 
+
+        if (idCargo==0) {
+            MostrarMensaje("Seleccione un cargo", "Mensaje");
+            return false;
+        }
+
         if (tipVacante == 0) {
             MostrarMensaje("Seleccione un tipo de vacante", "Mensaje");
             return false;
         }
+
+
 
         if (tipoPuesto == "0") {
             MostrarMensaje("Seleccione un tipo de puesto", "Mensaje");
@@ -997,6 +1007,12 @@
         }
         if (idArea == "0") {
             MostrarMensaje("Seleccione una area", "Mensaje");
+            return false;
+        }
+
+
+        if (numVacante.length > 0 && numVacante==0) {
+            MostrarMensaje("Ingrese un número de vacantes", "Mensaje");
             return false;
         }
 

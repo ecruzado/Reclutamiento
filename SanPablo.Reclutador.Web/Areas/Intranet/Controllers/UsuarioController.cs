@@ -104,7 +104,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objModel.btnNuevo = Visualicion.NO;
                 objModel.btnConsultar = Visualicion.SI;
-                objModel.btnEditar = Visualicion.NO;
+                objModel.btnEditar = Visualicion.SI;
                 objModel.btnEliminar = Visualicion.NO;
 
             }
@@ -116,7 +116,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objModel.btnNuevo = Visualicion.NO;
                 objModel.btnConsultar = Visualicion.SI;
-                objModel.btnEditar = Visualicion.NO;
+                objModel.btnEditar = Visualicion.SI;
                 objModel.btnEliminar = Visualicion.NO;
             }
             else

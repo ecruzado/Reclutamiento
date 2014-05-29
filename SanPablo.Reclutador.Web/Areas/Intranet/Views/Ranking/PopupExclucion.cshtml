@@ -27,7 +27,7 @@
             </td>
             <td class="colInput" >
                
-                @Html.TextAreaFor(model=>model.ReclutaPersonal.Comentario, new { @style = "width:300px;height:100px; resize:none;" ,maxlength="254",  @onblur = "aMays(event, this)" })
+                @Html.TextAreaFor(model=>model.ReclutaPersonal.Comentario, new { @style = "width:300px;height:100px; resize: none;" ,maxlength="255",  @onblur = "aMays(event, this)" })
                 <div style="font-size:11px;color:gray">Máx. 255 caracteres</div>
                 <div class="tex-error" style="font-size:12px;color:red">    
                     @Html.ValidationMessageFor(model => model.ReclutaPersonal.Comentario )
