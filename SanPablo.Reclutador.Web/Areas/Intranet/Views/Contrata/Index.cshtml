@@ -20,13 +20,54 @@
             
             $('#btnContratar').click(function () {
                 var selr = jQuery('#grdListSel').jqGrid('getGridParam', 'selrow');
+                var rowData = jQuery('#grdListSel').jqGrid('getRowData', selr);
+                var colEstado = rowData.EstPostulante;
+
+                var estadoCon = '@PostulanteEstado.CONTRATADO';
+
                 var numVacantes =$("#Solicitud_NumVacantes").val();
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
                 if (selr != null && selr > 0) {
-                    contPostulante(selr, numVacantes, idSol, tipSol);
+
+
+
+                    if (colEstado != estadoCon) {
+
+                    
+                    var selr = jQuery('#grdListSel').jqGrid('getGridParam', 'selrow');
+                    var numVacantes = $("#Solicitud_NumVacantes").val();
+                    var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                    var tipSol = $("#Solicitud_Tipsol").val();
+
+                    $.ajax({
+                        data: {
+                            id: selr,
+                            numVac: numVacantes,
+                            idSol: idSol,
+                            tipSol: tipSol
+
+                        },
+                        type: "POST",
+                        url: '@Url.Action("ValidaContrata", "Contrata")',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }
+                                if (data.Resultado) {
+                                    $('#dialogContratar').dialog('open');
+                                } else {
+                                    MostrarMensaje("Se excedio el número de vacantes", "ALERTA");
+                                }
+                            }
+                       });
+                    } else {
+                        MostrarMensaje('El postulante se encuentra contratado', "ALERTA");
+                    }
+
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
             });
 
@@ -73,7 +114,7 @@
                 if (selr != null && selr > 0) {
                     contactaPostulante(selr, indContacto);
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
 
             });
@@ -90,6 +131,31 @@
                         if ($("#frmPopuObserv").validate().form()) {
                             $('#dialogObserv').dialog('open');
                         }
+                    },
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
+            $("#spanDialogContratar").html("¿Está seguro de contratar al postulante?")
+            $('#dialogContratar').dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                title: "CONFIRMACIÓN",
+                buttons: {
+                    "Aceptar": function () {
+
+                        var selr = jQuery('#grdListSel').jqGrid('getGridParam', 'selrow');
+                        var numVacantes = $("#Solicitud_NumVacantes").val();
+                        var idSol = $("#Solicitud_IdeSolReqPersonal").val();
+                        var tipSol = $("#Solicitud_Tipsol").val();
+
+                        contPostulante(selr, numVacantes, idSol, tipSol);
+
+                        $('#dialogContratar').dialog("close");
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
@@ -119,7 +185,7 @@
 
                                         mensajeRedirecciona(data.Mensaje, "INFORMATIVO");
                                     } else {
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                        MostrarMensaje(data.Mensaje, "ALERTA");
                                     }
 
                                 }
@@ -184,10 +250,10 @@
                       { name: 'IdeCargo', index: 'IdeCargo', align: 'center', editable: false, sortable: false, width: 300, hidden: true },
                       { name: 'Apellidos', index: 'Apellidos', align: 'center', editable: false, sortable: false, width: 300 },
                       { name: 'Nombres', index: 'Nombres', align: 'center', editable: false, sortable: false, width: 300 },
-                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 150 },
-                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 150 },
+                      { name: 'FonoFijo', index: 'FonoFijo', align: 'center', editable: false, sortable: false, width: 120 },
+                      { name: 'FonoMovil', index: 'FonoMovil', align: 'center', editable: false, sortable: false, width: 120 },
                       { name: 'EstPostulante', index: 'EstPostulante', align: 'center', editable: false, sortable: false, hidden: true },
-                      { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 }
+                      { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 150 }
                       
               ],
 
@@ -232,9 +298,9 @@
                 }
                     if (data.Resultado) {
                         $('#grdListSel').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     }
                 }
             });
@@ -444,3 +510,4 @@
 </div>
 <div id="popupDialogObserv" title="Motivo de finalización de solicitud"></div>
 <div id="dialogObserv"><span id="spanDialogObserv"></span></div>
+<div id="dialogContratar"><span id="spanDialogContratar"></span></div>

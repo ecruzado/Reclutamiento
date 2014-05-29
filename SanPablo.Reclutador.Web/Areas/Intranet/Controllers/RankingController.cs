@@ -84,6 +84,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             // se incializa
             model.Solicitud.IdeSolReqPersonal = id;
             model.Solicitud.Tipsol = tipSol;
+            
 
             model.listaEstaPost =
             new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoPostulante));
@@ -144,6 +145,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.btnBuscar = "N";
                 model.btnAprobado = "N";
                 model.btnCvPreseleccion = "N";
+            }
+
+
+            if (Etapa.Finalizado.Equals(model.Solicitud.TipEtapa))
+            {
+                model.btnAgregar = "N";
+                model.btnEditar = "N";
+                model.btnEliminar = "N";
+                model.btnCitado = "N";
+                model.btnAsistio = "N";
+                model.btnBuscar = "N";
+                model.btnAprobado = "N";
+                model.btnCvPreseleccion = "S";
             }
 
             return View("Index",model);
@@ -898,6 +912,16 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                      model.btnSeleccionar = "N";
                  }
              }
+
+             if (Etapa.Finalizado.Equals(model.Solicitud.TipEtapa) )
+             {
+                 model.btnEvaluaciones = "S";
+                 model.btnSeleccionar = "N";
+                 model.btnExcluir = "N";
+                 model.btnContactado = "S";
+                 model.btnContratar = "N";
+             }
+
 
              return View("PostulantesPreSeleccionados", model);
          }

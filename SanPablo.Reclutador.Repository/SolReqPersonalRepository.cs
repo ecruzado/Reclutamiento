@@ -55,8 +55,19 @@ namespace SanPablo.Reclutador.Repository
                  while (ldrSolicitud.Read())
                  {
                      lobSolicitud = new SolReqPersonal();
+                     
+                     if (ldrSolicitud["TIPETAPA"] != System.DBNull.Value)
+                     {
+                         lobSolicitud.TipEtapa = Convert.ToString(ldrSolicitud["TIPETAPA"]);
+                     }
+
                      lobSolicitud.IdeCargo = Convert.ToInt32(ldrSolicitud["IDECARGO"]);
-                     lobSolicitud.nombreCargo = Convert.ToString(ldrSolicitud["NOMBRECARGO"]);
+
+                     if (ldrSolicitud["NOMBRECARGO"] != System.DBNull.Value)
+                     {
+                         lobSolicitud.nombreCargo = Convert.ToString(ldrSolicitud["NOMBRECARGO"]);
+                     }
+                     
                      lobSolicitud.IdeDependencia = Convert.ToInt32(ldrSolicitud["IDEDEPENDENCIA"]);
                      lobSolicitud.IdeDepartamento = Convert.ToInt32(ldrSolicitud["IDEDEPARTAMENTO"]);
                      lobSolicitud.IdeArea = Convert.ToInt32(ldrSolicitud["IDEAREA"]);

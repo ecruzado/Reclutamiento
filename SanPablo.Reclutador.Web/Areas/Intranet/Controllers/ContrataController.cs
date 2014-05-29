@@ -197,6 +197,57 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
         /// <summary>
+        /// Valida la contratacion
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="numVac"></param>
+        /// <param name="idSol"></param>
+        /// <param name="tipSol"></param>
+        /// <returns></returns>
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        [HttpPost]
+        public ActionResult ValidaContrata(int id, int numVac, int idSol, string tipSol)
+        {
+            JsonMessage objJson = new JsonMessage();
+            try
+            {
+                List<ReclutamientoPersona> lista = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == idSol
+                                                            && x.TipSol == tipSol
+                                                            && x.EstPostulante == PostulanteEstado.CONTRATADO);
+
+                if (lista!=null)
+                {
+                    if (numVac>lista.Count)
+                    {
+                        objJson.Resultado = true;
+
+                    }
+                    else
+                    {
+                        objJson.Resultado = false;
+                    }
+                }
+                else
+                {
+                    objJson.Resultado = false;
+                }
+                
+                
+            
+            }
+            catch (Exception)
+            {
+
+                objJson.Resultado = false;
+                objJson.Mensaje = "Error";
+            }
+            return Json(objJson);
+        
+        }
+
+
+
+        /// <summary>
         /// Realiza el cambio de estado a contratado validado por el numero de vacantes
         /// el numero de contrataciones no puede sobrepasar el numero de vacantes
         /// </summary>
