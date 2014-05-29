@@ -39,15 +39,17 @@ PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
                             p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
                             p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);
                             
-PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                          p_ideSede            IN SEDE.IDESEDE%TYPE,
-                          p_ideArea            IN AREA.IDEAREA%TYPE,
-                          p_ideUsuarioSuceso   IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
-                          p_ideRolSuceso       IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
-                          p_ideRolResponsable  IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
-                          p_indArea            IN VARCHAR2,
-                          p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
-                          p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);                         
+PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo     IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                          p_ideSede               IN SEDE.IDESEDE%TYPE,
+                          p_ideArea               IN AREA.IDEAREA%TYPE,
+                          p_ideUsuarioSuceso      IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
+                          p_ideRolSuceso          IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
+                          p_ideRolResponsable     IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
+                          p_Observacion           IN LOGSOLNUEVO_CARGO.OBSERVACION%TYPE,
+                          p_indArea               IN VARCHAR2,
+                          p_etapa                 IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
+                          p_ideUsuarioRespPublic  IN LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE,
+                          p_ideUsuarioResp        OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);                         
                           
 PROCEDURE SP_GET_CARGOS(p_idSede   IN SEDE.IDESEDE%TYPE,
                           p_cRetVal  OUT sys_refcursor);
@@ -293,7 +295,7 @@ BEGIN
      
   EXCEPTION
     WHEN OTHERS THEN  
-    p_ideUsuarioResp:= -1;
+   -- p_ideUsuarioResp:= -1;
     ROLLBACK;
   END;
    
@@ -310,21 +312,24 @@ END SP_INSERTAR_NUEVO;
       Fecha       Autor                Descripcion
       20/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo  IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
-                          p_ideSede            IN SEDE.IDESEDE%TYPE,
-                          p_ideArea            IN AREA.IDEAREA%TYPE,
-                          p_ideUsuarioSuceso   IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
-                          p_ideRolSuceso       IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
-                          p_ideRolResponsable  IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
-                          p_indArea            IN VARCHAR2,
-                          p_etapa              IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
-                          p_ideUsuarioResp     OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
+PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo     IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
+                          p_ideSede               IN SEDE.IDESEDE%TYPE,
+                          p_ideArea               IN AREA.IDEAREA%TYPE,
+                          p_ideUsuarioSuceso      IN LOGSOLNUEVO_CARGO.USRSUCESO%TYPE,
+                          p_ideRolSuceso          IN LOGSOLNUEVO_CARGO.ROLSUCESO%TYPE,
+                          p_ideRolResponsable     IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
+                          p_Observacion           IN LOGSOLNUEVO_CARGO.OBSERVACION%TYPE,
+                          p_indArea               IN VARCHAR2,
+                          p_etapa                 IN LOGSOLNUEVO_CARGO.TIPETAPA%TYPE, 
+                          p_ideUsuarioRespPublic  IN LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE,
+                          p_ideUsuarioResp        OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
                              
                         
 c_idLogSolicitud LOGSOLNUEVO_CARGO.IDELOGSOLNUEVOCARGO%TYPE;
 qWhere VARCHAR2(100);
 qQuery VARCHAR2(1000);
 c_idCargo CARGO.IDECARGO%TYPE;
+c_observacion LOGSOLNUEVO_CARGO.OBSERVACION%TYPE;
 
 BEGIN   
   
@@ -364,6 +369,10 @@ BEGIN
   
   END IF;
   
+  IF p_ideUsuarioRespPublic != 0 THEN
+    p_ideUsuarioResp := p_ideUsuarioRespPublic;
+  END IF;
+  
  BEGIN
     SELECT IDELOGSOLNUEVOCARGO_SQ.NEXTVAL
     INTO c_idLogSolicitud
@@ -375,9 +384,16 @@ BEGIN
     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
     
     IF (p_etapa = P_TIPETAPA_RECHAZADO)THEN
+    
+      IF p_Observacion IS NULL THEN
+         c_observacion:='';
+      ELSE
+        c_observacion:=p_Observacion;
+      END IF;
+      
       INSERT INTO LOGSOLNUEVO_CARGO
-      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,FECSUCESO,USRSUCESO,ROLSUCESO)
-      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
+      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,OBSERVACION ,FECSUCESO,USRSUCESO,ROLSUCESO)
+      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,c_observacion,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
    
       UPDATE SOLNUEVO_CARGO SN
       SET SN.TIPETAPA = p_etapa,

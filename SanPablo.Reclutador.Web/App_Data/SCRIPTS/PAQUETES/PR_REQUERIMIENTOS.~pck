@@ -143,15 +143,15 @@ PROCEDURE SP_LISTA_SOLNUEVO(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                             p_cFeFin          IN VARCHAR2,
                             p_cRetVal         OUT SYS_REFCURSOR);
                             
-PROCEDURE SP_LISTA_CARGOS(p_nIdCargo        IN CARGO.IDECARGO%TYPE,
-                          p_nIdDependencia  IN CARGO.Idedependencia%TYPE,
-                          p_nIdDepartamento IN CARGO.Idedepartamento%TYPE,
-                          p_nIdArea         IN CARGO.Idearea%TYPE,                        
-                          p_cFecIni         IN VARCHAR2,
-                          p_cFeFin          IN VARCHAR2,
-                          p_cEstado         IN CARGO.ESTACTIVO%TYPE,
-                          p_cideSede        IN CARGO.IDESEDE%TYPE,
-                          p_cRetCursor      OUT SYS_REFCURSOR);
+PROCEDURE SP_LISTA_CARGOS_MANT(p_nCodCargo        IN CARGO.CODCARGO%TYPE,
+                               p_nIdDependencia   IN CARGO.Idedependencia%TYPE,
+                               p_nIdDepartamento  IN CARGO.Idedepartamento%TYPE,
+                               p_nIdArea          IN CARGO.Idearea%TYPE,                        
+                               p_cFecIni          IN VARCHAR2,
+                               p_cFeFin           IN VARCHAR2,
+                               p_cEstado          IN CARGO.ESTACTIVO%TYPE,
+                               p_cideSede         IN CARGO.IDESEDE%TYPE,
+                               p_cRetCursor       OUT SYS_REFCURSOR);
                           
 PROCEDURE SP_CONSULTA_EDITAR_CARGO(p_ideCargo IN CARGO.IDECARGO%TYPE,
                                    p_cRetVal OUT VARCHAR2);
@@ -202,8 +202,14 @@ PROCEDURE SP_REPORTE_POST_POTENCIAL(p_ideCargo        IN CARGO.IDECARGO%TYPE,
                                     p_edadFin         IN NUMBER,
                                     p_cRetVal         OUT SYS_REFCURSOR);  
                                     
+                                    
+PROCEDURE SP_CARGOS_MANT(p_ideSede  IN SEDE.IDESEDE%TYPE,
+                         p_cRetVal  OUT SYS_REFCURSOR);
+                         
+                         
 PROCEDURE SP_CARGOS_SEDE(p_ideSede IN SEDE.IDESEDE%TYPE,
                          p_cRetVal  OUT SYS_REFCURSOR); 
+                         
                          
 FUNCTION FN_EXISTE_RESULTADO_EXAMEN(p_ideReclutaExamen  IN RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE
                                     ) RETURN VARCHAR;                        
@@ -828,10 +834,10 @@ BEGIN
    WHERE C.CODCARGO = (SELECT CAR.CODCARGO FROM CARGO CAR WHERE CAR.IDECARGO = p_ideCargo);
       
   INSERT INTO CARGO 
-  (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEAREA,NUMPOSICION,SEXO,INDSEXO,PUNTSEXO,EDADINICIO,EDADFIN,PUNTEDAD,INDEDAD, TIPRANGOSALARIO,PUNTSALARIO,TIPREQUERIMIENTO,OBJETIVOSCARGO,FUNCIONESCARGO,OBSERVACIONCARGO,PUNTTOTPOSTUINTE,
+  (IDECARGO,IDESEDE,CODCARGO,NOMCARGO,DESCARGO,IDEDEPENDENCIA,IDEDEPARTAMENTO, IDEAREA,NUMPOSICION,SEXO,INDSEXO,PUNTSEXO,EDADINICIO,EDADFIN,PUNTEDAD,INDEDAD, TIPRANGOSALARIO,PUNTSALARIO,TIPREQUERIMIENTO,OBJETIVOSCARGO,FUNCIONESCARGO,OBSERVACIONCARGO,PUNTTOTPOSTUINTE,
   PUNTTOTEDAD,PUNTTOTSEXO,PUNTTOTSALARIO,PUNTTOTNIVELEST,PUNTTOTCENTROEST,PUNTTOTEXPLABORAL,PUNTTOTOFIMATI,PUNTTOTIDIOMA,PUNTTOTCONOGEN,PUNTTOTDISCAPA,PUNTTOTHORARIO,PUNTTOTUBIGEO,PUNTTOTEXAMEN,PUNTMINEXAMEN,CANTPRESELEC,ESTACTIVO,
   USRCREACION,FECCREACION,TIPETAPA,PUNTMINGRAL,VERSION)
-  SELECT c_ideCargo_sq,C.IDESEDE,C.CODCARGO,C.NOMCARGO,C.DESCARGO, C.IDEAREA,C.NUMPOSICION,C.SEXO,C.INDSEXO,C.PUNTSEXO,C.EDADINICIO,C.EDADFIN,C.PUNTEDAD,C.INDEDAD,C.TIPRANGOSALARIO,C.PUNTSALARIO,C.TIPREQUERIMIENTO,C.OBJETIVOSCARGO,C.FUNCIONESCARGO,
+  SELECT c_ideCargo_sq,C.IDESEDE,C.CODCARGO,C.NOMCARGO,C.DESCARGO,C.IDEDEPENDENCIA, C.IDEDEPARTAMENTO, C.IDEAREA,C.NUMPOSICION,C.SEXO,C.INDSEXO,C.PUNTSEXO,C.EDADINICIO,C.EDADFIN,C.PUNTEDAD,C.INDEDAD,C.TIPRANGOSALARIO,C.PUNTSALARIO,C.TIPREQUERIMIENTO,C.OBJETIVOSCARGO,C.FUNCIONESCARGO,
   C.OBSERVACIONCARGO,C.PUNTTOTPOSTUINTE,C.PUNTTOTEDAD,C.PUNTTOTSEXO,C.PUNTTOTSALARIO,C.PUNTTOTNIVELEST,C.PUNTTOTCENTROEST,C.PUNTTOTEXPLABORAL,C.PUNTTOTOFIMATI,C.PUNTTOTIDIOMA,C.PUNTTOTCONOGEN,C.PUNTTOTDISCAPA,C.PUNTTOTHORARIO,C.PUNTTOTUBIGEO,
   C.PUNTTOTEXAMEN,C.PUNTMINEXAMEN,C.CANTPRESELEC,'A',p_usrCreacion,SYSDATE,C.TIPETAPA,C.PUNTMINGRAL, c_version 
   FROM CARGO C 
@@ -1620,7 +1626,7 @@ c_Consulta1:= 'SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.ID
 END SP_LISTA_SOLNUEVO;
 
 /* ------------------------------------------------------------
-    Nombre      : SP_LISTA_CARGOS
+    Nombre      : SP_LISTA_CARGOS_MANT
     Proposito   : obtiene la lista de los cargos existente
                   
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
@@ -1630,15 +1636,15 @@ END SP_LISTA_SOLNUEVO;
       Fecha       Autor                Descripcion
       18/03/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-PROCEDURE SP_LISTA_CARGOS(p_nIdCargo        IN CARGO.IDECARGO%TYPE,
-                          p_nIdDependencia  IN CARGO.Idedependencia%TYPE,
-                          p_nIdDepartamento IN CARGO.Idedepartamento%TYPE,
-                          p_nIdArea         IN CARGO.Idearea%TYPE,                        
-                          p_cFecIni         IN VARCHAR2,
-                          p_cFeFin          IN VARCHAR2,
-                          p_cEstado         IN CARGO.ESTACTIVO%TYPE,
-                          p_cideSede        IN CARGO.IDESEDE%TYPE,
-                          p_cRetCursor      OUT SYS_REFCURSOR)IS
+PROCEDURE SP_LISTA_CARGOS_MANT(p_nCodCargo        IN CARGO.CODCARGO%TYPE,
+                               p_nIdDependencia   IN CARGO.Idedependencia%TYPE,
+                               p_nIdDepartamento  IN CARGO.Idedepartamento%TYPE,
+                               p_nIdArea          IN CARGO.Idearea%TYPE,                        
+                               p_cFecIni          IN VARCHAR2,
+                               p_cFeFin           IN VARCHAR2,
+                               p_cEstado          IN CARGO.ESTACTIVO%TYPE,
+                               p_cideSede         IN CARGO.IDESEDE%TYPE,
+                               p_cRetCursor       OUT SYS_REFCURSOR)IS
           
 c_Consulta1 VARCHAR2(2000):=NULL;
 c_Where VARCHAR2(1000):=NULL;
@@ -1656,9 +1662,9 @@ c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,C.
             ||'WHERE C.IDESEDE = '''||p_cideSede||''' ';
 
             
-    IF p_nIdCargo > 0 THEN
+    IF ((p_nCodCargo != NULL)OR (p_nCodCargo != '0')) THEN
     
-      c_Where := c_Where || ' AND  C.IDECARGO = ' || p_nIdCargo;
+      c_Where := c_Where || ' AND  C.CODCARGO = '''||p_nCodCargo||''' ';
     
     END IF;
   
@@ -1694,7 +1700,7 @@ c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,C.
     
     END IF;
   
-    c_Where := c_Where || 'ORDER BY C.CODCARGO ';
+    c_Where := c_Where || ' ORDER BY C.VERSION DESC ';
   
     c_Query := c_Consulta1 || c_Where;
   
@@ -1706,7 +1712,7 @@ c_Consulta1:= 'SELECT C.ESTACTIVO,C.IDECARGO,C.CODCARGO,C.NOMCARGO,C.DESCARGO,C.
     OPEN p_cRetCursor FOR c_Query;
 
 
-END SP_LISTA_CARGOS;
+END SP_LISTA_CARGOS_MANT;
 
 /* ------------------------------------------------------------
     Nombre      : SP_CONSULTA_EDITAR_CARGO
@@ -1908,7 +1914,7 @@ c_puntajeTotal         NUMBER;
 c_nroTotalPreguntas    NUMBER;
 c_puntFinalExamen      NUMBER;
 
-
+c_estadoEvaluacion     VARCHAR2(2);
 
 
 BEGIN
@@ -1953,14 +1959,22 @@ BEGIN
      
     IF(c_tipoExamen = P_TIPEXA_EXAMEN) THEN --TIPO EXAMEN - de calificacion automatica
     
-       SELECT SUM(RPCAT.NROPREGUNTAS), SUM (RPCAT.NOTAEXAMENCATEG)
+     
+       --puntaje total cuenta las preguntas diferenctes  a cero, las toma como correctas                 
+       SELECT SUM(RPCAT.NROPREGUNTAS), SUM(RPCAT.NOTAEXAMENCATEG)
        INTO c_nroTotalPreguntas, c_puntajeTotal    
        FROM RECL_PERS_EXAM_CAT RPCAT
        WHERE RPCAT.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
        AND RPCAT.IDERECLUTAPERSONA = p_ideReclutaPersona;
        
        c_puntFinalExamen:= c_puntajeTotal*20/c_nroTotalPreguntas;
-
+        
+       IF (c_puntFinalExamen > 10) THEN
+        c_estadoEvaluacion := P_ESTEXAMEN_APROBADO;
+       ELSE
+        c_estadoEvaluacion := P_ESTEXAMEN_DESAPROBADO;
+       END IF; 
+        
        --Actualizar la nota del examen
        UPDATE RECLU_PERSO_EXAMEN RE
        SET RE.NOTAFINAL = c_puntFinalExamen,
@@ -1968,7 +1982,7 @@ BEGIN
            RE.FECMODIFICA=SYSDATE,
            RE.FECEVALUACION = SYSDATE,
            RE.HORAEVALUACION = SYSDATE,
-           RE.TIPESTEVALUACION = '03'
+           RE.TIPESTEVALUACION = c_estadoEvaluacion
        WHERE RE.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
        AND RE.IDERECLUTAPERSONA = p_ideReclutaPersona;
      
@@ -1979,7 +1993,7 @@ BEGIN
             RE.FECMODIFICA=SYSDATE,
             RE.FECEVALUACION = SYSDATE,
             RE.HORAEVALUACION = SYSDATE,
-            RE.TIPESTEVALUACION = '03'
+            RE.TIPESTEVALUACION = P_ESTEXAMEN_EVALUADO
           WHERE RE.IDERECLUPERSOEXAMEN = c_ideReclutaPersExamen
         AND RE.IDERECLUTAPERSONA = p_ideReclutaPersona;
       END IF;
@@ -2476,6 +2490,46 @@ BEGIN
 
 END SP_REPORTE_POST_POTENCIAL;
 
+/* ------------------------------------------------------------
+    Nombre      : SP_CARGOS_MANT
+    Proposito   : Procedimiento para listar los cargos de acuerdo 
+                  a la sede seleccionada o todas
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      24/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+PROCEDURE SP_CARGOS_MANT(p_ideSede  IN SEDE.IDESEDE%TYPE,
+                         p_cRetVal  OUT SYS_REFCURSOR)IS
+
+c_ideSede SEDE.IDESEDE%TYPE;
+
+BEGIN
+
+  IF ((p_ideSede = 0) OR (p_ideSede = 999)) THEN
+    c_ideSede := 0;
+  ELSE
+    c_ideSede := p_ideSede;
+  END IF;
+  
+  OPEN p_cRetVal FOR  
+    SELECT DISTINCT C.CODCARGO,C.IDECARGO,C.NOMCARGO
+    FROM CARGO C
+    WHERE 1=1
+    --WHERE C.ESTACTIVO = 'A'
+    AND NVL(C.VERSION, 1) =
+       (SELECT NVL(MAX(C1.VERSION), 1)
+        FROM CARGO C1
+        WHERE C1.ESTACTIVO = 'A'
+        AND C1.CODCARGO = C.CODCARGO)
+    AND (c_ideSede = 0 OR C.IDESEDE = c_ideSede)
+    ORDER BY C.NOMCARGO;
+  
+END SP_CARGOS_MANT;
+
+
 
 /* ------------------------------------------------------------
     Nombre      : SP_CARGOS_SEDE
@@ -2501,11 +2555,17 @@ BEGIN
     c_ideSede := p_ideSede;
   END IF;
   
-  OPEN p_cRetVal FOR
-  SELECT C.IDECARGO, C.NOMCARGO
-  FROM CARGO C
-  WHERE C.ESTACTIVO = 'A'
-  AND (c_ideSede = 0 OR C.IDESEDE = c_ideSede);
+  OPEN p_cRetVal FOR  
+    SELECT DISTINCT C.IDECARGO, C.NOMCARGO
+    FROM CARGO C
+    WHERE C.ESTACTIVO = 'A'
+    AND NVL(C.VERSION, 1) =
+       (SELECT NVL(MAX(C1.VERSION), 1)
+        FROM CARGO C1
+        WHERE C1.ESTACTIVO = 'A'
+        AND C1.CODCARGO = C.CODCARGO)
+    AND (c_ideSede = 0 OR C.IDESEDE = c_ideSede)
+    ORDER BY C.NOMCARGO;
   
 END SP_CARGOS_SEDE;
 
@@ -2537,7 +2597,7 @@ BEGIN
   IF c_TipoExamen = P_TIPEXA_EXAMEN OR c_TipoExamen = P_TIPEXA_EVALUACION THEN
     IF ((c_EstadoEvaluacion = P_ESTEXAMEN_EVALUADO )OR
         (c_EstadoEvaluacion = P_ESTEXAMEN_APROBADO) OR
-        (c_EstadoEvaluacion = P_ESTEXAMEN_EVALUADO)) THEN
+        (c_EstadoEvaluacion = P_ESTEXAMEN_DESAPROBADO)) THEN
         RETURN 'S';
     ELSE
         RETURN 'N';

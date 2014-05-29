@@ -30,11 +30,11 @@ create or replace package PR_INTRANET_ED is
   P_SOLOBSERVADO         CONSTANT VARCHAR2(2) := '07';
   P_SOLFINALIZADO        CONSTANT VARCHAR2(2) := '08';
   P_SOLRECHAZADO         CONSTANT VARCHAR2(2) := '09';
-  
+
   --NIVEL DE CONOCIMIENTO
-  P_NIVELBASICO         CONSTANT VARCHAR2(2) := '01';
-  P_NIVELINTERMEDIO     CONSTANT VARCHAR2(2) := '02';
-  P_NIVELAVANZADO       CONSTANT VARCHAR2(2) := '03';
+  P_NIVELBASICO     CONSTANT VARCHAR2(2) := '01';
+  P_NIVELINTERMEDIO CONSTANT VARCHAR2(2) := '02';
+  P_NIVELAVANZADO   CONSTANT VARCHAR2(2) := '03';
 
   FUNCTION FN_CANT_SOLICITUD_COLA(p_nIdSol     IN NUMBER,
                                   p_cTipSol    IN VARCHAR2,
@@ -114,7 +114,7 @@ create or replace package PR_INTRANET_ED is
                                  p_nRolUsario IN number,
                                  p_cRetVal    OUT NUMBER,
                                  P_cMensaje   OUT VARCHAR2
-
+                                 
                                  );
 
   PROCEDURE SP_OBTIENE_POTENCIALES(p_nIdSol     IN NUMBER,
@@ -368,23 +368,21 @@ create or replace package PR_INTRANET_ED is
                                 p_cTipMenu     IN VARCHAR2,
                                 p_cRpta        OUT cur_cursor);
 
- PROCEDURE SP_GET_CARGOXSEDE(p_nIdSede         IN NUMBER,
+  PROCEDURE SP_GET_CARGOXSEDE(p_nIdSede         IN NUMBER,
                               p_nIdDependencia  IN NUMBER,
                               p_nIdDepartamento IN NUMBER,
                               p_nIdArea         IN NUMBER,
                               p_cRetVal         OUT CUR_CURSOR);
-                              
-                              
-PROCEDURE SP_OBTIENE_ROLXEMAIL(p_cIdSol       IN NUMBER,
-                               p_cIdRolSuceso IN VARCHAR2,
-                               p_cTipSol      IN VARCHAR2,
-                               p_cAccion      IN VARCHAR2,
-                               p_cRetVal      OUT CUR_CURSOR) ;
-                           
-procedure SP_OBTIENE_EMAIL(p_nIdRol IN number,
-                           p_nIdSede IN number,
-                           p_cRetVal    OUT CUR_CURSOR
-                           );                                                         
+
+  PROCEDURE SP_OBTIENE_ROLXEMAIL(p_cIdSol       IN NUMBER,
+                                 p_cIdRolSuceso IN VARCHAR2,
+                                 p_cTipSol      IN VARCHAR2,
+                                 p_cAccion      IN VARCHAR2,
+                                 p_cRetVal      OUT CUR_CURSOR);
+
+  procedure SP_OBTIENE_EMAIL(p_nIdRol  IN number,
+                             p_nIdSede IN number,
+                             p_cRetVal OUT CUR_CURSOR);
 
 end PR_INTRANET_ED;
 /
@@ -393,10 +391,10 @@ create or replace package body PR_INTRANET_ED is
   /* ------------------------------------------------------------
     Nombre      : SP_ELIMINA_REEMPLAZO
     Proposito   : Obtiene la lista de cargos o el cargo por el id de cargo
-
+  
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :
-
+  
     Log de Cambios
       Fecha       Autor                Descripcion
       14/02/2014  Edward Llamoca       Creaci?n
@@ -406,25 +404,25 @@ create or replace package body PR_INTRANET_ED is
                                  p_idPersona   IN NUMBER,
                                  p_cRetVal     OUT NUMBER) IS
   BEGIN
-
+  
     delete from REEMPLAZOS r
      where r.idreemplazo = p_idReemplazo
        and r.idesolreqpersonal = p_idSolReq
        and r.IDPERSONA = p_idPersona;
-
+  
     COMMIT;
-
+  
     p_cRetVal := 1;
-
+  
   END SP_ELIMINA_REEMPLAZO;
 
   /* ------------------------------------------------------------
     Nombre      : SP_INSERTA_REEMPLAZO
     Proposito   : Obtiene la lista de cargos o el cargo por el id de cargo
-
+  
     Referencias : Sistema de Reclutamiento y Selecci?n de Personal
     Parametros  :
-
+  
     Log de Cambios
       Fecha       Autor                Descripcion
       14/02/2014  Edward Llamoca       Creaci?n
@@ -439,15 +437,15 @@ create or replace package body PR_INTRANET_ED is
                                  p_cRetVal             OUT NUMBER) IS
     nIdpersona   number(8);
     nIdReemplazo number(8);
-
+  
   BEGIN
     SELECT IDREEMPLAZO_SQ.nextval into nIdReemplazo FROM dual;
-
+  
     select nvl(max(r.IDPERSONA), 0) + 1
       into nIdpersona
       from REEMPLAZOS r
      where r.idesolreqpersonal = p_nIdeSolReqPersonal;
-
+  
     INSERT INTO REEMPLAZOS
       (IDESOLREQPERSONAL,
        IDREEMPLAZO,
@@ -468,20 +466,20 @@ create or replace package body PR_INTRANET_ED is
        TO_DATE(p_cFecFinReemplazo, 'DD/MM/YYYY'),
        p_cUsrCreacion,
        TO_DATE(p_cFecCreacion, 'DD/MM/YYYY'));
-
+  
     COMMIT;
-
+  
     p_cRetVal := 1;
-
+  
   END SP_INSERTA_REEMPLAZO;
 
   /* ------------------------------------------------------------
   Nombre      : SP_GET_REEMPLAZO
   Proposito   : Obtiene la lista de cargos o el cargo por el id de cargo
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -489,7 +487,7 @@ create or replace package body PR_INTRANET_ED is
   PROCEDURE SP_GET_REEMPLAZO(p_nIdeSolReqPersonal IN NUMBER,
                              p_cRetVal            OUT cur_cursor) IS
   BEGIN
-
+  
     OPEN p_cRetVal FOR
       SELECT IDREEMPLAZO,
              APEPATERNO,
@@ -503,16 +501,16 @@ create or replace package body PR_INTRANET_ED is
         FROM REEMPLAZOS R
        WHERE R.IDESOLREQPERSONAL = p_nIdeSolReqPersonal
        ORDER BY IDREEMPLAZO;
-
+  
   END SP_GET_REEMPLAZO;
 
   /* ------------------------------------------------------------
   Nombre      : SP_CREA_SOLREEMPLAZO
   Proposito   : crea Solicitud de reemplazo de cargo
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -537,11 +535,11 @@ create or replace package body PR_INTRANET_ED is
                                  p_idRolResp         IN NUMBER,
                                  p_cTipSol           IN VARCHAR2,
                                  p_cRetVal           OUT NUMBER) IS
-
+  
     nIDESOLREQPERSONAL     NUMBER(8);
     nCODSOLREQPERSONAL     NUMBER(8);
     nIDELOGSOLREQ_PERSONAL NUMBER(8);
-
+  
     CURSOR c_Reemplazo IS
       SELECT IDREEMPLAZO,
              APEPATERNO,
@@ -553,13 +551,13 @@ create or replace package body PR_INTRANET_ED is
              IDESOLREQPERSONAL
         FROM TEMP_REEMPLAZOS T
        where t.idtemp = p_cCodReemplazo;
-
+  
   BEGIN
-
+  
     SELECT SOLREQ_PERSONAL_SQ.nextval into nIDESOLREQPERSONAL FROM dual;
-
+  
     SELECT CODSOLREQPERSONAL_SQ.nextval into nCODSOLREQPERSONAL FROM dual;
-
+  
     BEGIN
       INSERT INTO SOLREQ_PERSONAL
         (IDESOLREQPERSONAL,
@@ -591,26 +589,26 @@ create or replace package body PR_INTRANET_ED is
          p_cTipSol,
          p_cDesUsuarioSuceso,
          sysdate);
-         --TO_DATE(p_cFechaSuceso, 'DD/MM/YYYY'));
+      --TO_DATE(p_cFechaSuceso, 'DD/MM/YYYY'));
       COMMIT;
-
+    
     EXCEPTION
       WHEN OTHERS THEN
         ROLLBACK;
         p_cRetVal := 0;
     END;
-
+  
     p_cRetVal := nCODSOLREQPERSONAL;
-
+  
   END SP_CREA_SOLREEMPLAZO;
 
   /* ------------------------------------------------------------
   Nombre      : SP_INSERT_LOG_SOLREQPERSONAL
   Proposito   : inserta en el log de solicitud de requerimiento de personal
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -623,15 +621,15 @@ create or replace package body PR_INTRANET_ED is
                                          p_nIdRolResp         IN LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,
                                          p_nIdResponble       IN LOGSOLREQ_PERSONAL.USRESPONSABLE%TYPE,
                                          p_observacion        IN VARCHAR2) IS
-
+  
     nIDELOGSOLREQ_PERSONAL NUMBER(8);
   BEGIN
-
+  
     BEGIN
       SELECT IDELOGSOLREQ_PERSONAL_SQ.nextval
         into nIDELOGSOLREQ_PERSONAL
         FROM dual;
-
+    
       INSERT INTO LOGSOLREQ_PERSONAL
         (IDELOGSOLREQ_PERSONAL,
          IDESOLREQPERSONAL,
@@ -652,22 +650,22 @@ create or replace package body PR_INTRANET_ED is
          SYSDATE,
          p_nIdUsuarioSuceco,
          p_nIdRolSuceso);
-
+    
       COMMIT;
     EXCEPTION
       WHEN OTHERS THEN
         ROLLBACK;
     END;
-
+  
   END SP_INSERT_LOG_SOLREQPERSONAL;
 
   /* ------------------------------------------------------------
   Nombre      : SP_ENVIA_SOL_REEMPLAZO
   Proposito   : Envia la solicitud para su aprobacion
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -683,26 +681,26 @@ create or replace package body PR_INTRANET_ED is
                                    p_idRolResp          IN NUMBER,
                                    p_nIdeCargo          IN NUMBER,
                                    p_cRetVal            OUT NUMBER) IS
-
+  
   BEGIN
-
+  
     BEGIN
-
+    
       UPDATE SOLREQ_PERSONAL S
          SET Tipetapa = p_cEtapa, ESTACTIVO = 'A'
        WHERE IDESOLREQPERSONAL = p_nIdeSolReqPersonal;
       COMMIT;
-
+    
     EXCEPTION
       WHEN OTHERS THEN
         ROLLBACK;
         p_cRetVal := 0;
     END;
-
+  
     PR_REQUERIMIENTOS.COPIA_CARGO(p_nIdeCargo,
                                   p_nIdeSolReqPersonal,
                                   p_cDesUsuarioSuceso);
-
+  
     sp_insert_log_solreqpersonal(p_nIdeSolReqPersonal,
                                  p_cEtapa,
                                  p_cFechaSuceso,
@@ -711,23 +709,23 @@ create or replace package body PR_INTRANET_ED is
                                  p_idRolResp,
                                  p_idUsuarioResp,
                                  NULL);
-
+  
     p_cRetVal := p_nIdeSolReqPersonal;
-
+  
   END SP_ENVIA_SOL_REEMPLAZO;
 
   /* ------------------------------------------------------------
   Nombre      : SP_ASIGNACION_REMPLAZO
   Proposito   : Asignacion de personal para el manejo de envio, aprobacion, publicacion
                 de una solicitud
-
+  
                 P : PENDIENTE
                 A : APROBADO
                 U : PUBLICADO
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -740,13 +738,13 @@ create or replace package body PR_INTRANET_ED is
                                    p_nIdRol          OUT NUMBER) IS
     nIdUsuario Number(8);
     nIdRol     Number(8);
-
+  
   BEGIN
-
+  
     IF p_cTipoDerivacion = 'U' THEN
-
+    
       BEGIN
-
+      
         SELECT Z.IDUSUARIO, Z.IDROL
           INTO nIdUsuario, nIdRol
           FROM USUAROLSEDE Z, USUARIOREQ X
@@ -756,19 +754,19 @@ create or replace package body PR_INTRANET_ED is
            AND Z.IDROL IN (8, 9)
            AND ROWNUM < 2
          ORDER BY Z.IDUSUARIO, Z.IDROL;
-
+      
       EXCEPTION
         WHEN OTHERS THEN
           nIdUsuario := 0;
           nIdRol     := 0;
-
+        
       END;
-
+    
       p_nIdUsuarioResp := nIdUsuario;
       p_nIdRol         := nIdRol;
-
+    
     END IF;
-
+  
   END SP_ASIGNACION_REMPLAZO;
 
   /* ------------------------------------------------------------
@@ -776,7 +774,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las oportunidades laborales
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -790,26 +788,26 @@ create or replace package body PR_INTRANET_ED is
                                    p_cRetVal      OUT cur_cursor) IS
     nIdCargo NUMBER(8);
     nIdSede  NUMBER(8);
-
+  
     mensaje VARCHAR2(1500);
   BEGIN
-
+  
     IF p_nIdCargo IS NULL THEN
       nIdCargo := 0;
     else
       nIdCargo := p_nIdCargo;
     END IF;
-
+  
     IF p_nIdSede IS NULL THEN
       nIdSede := 0;
     else
       nIdSede := p_nIdSede;
     END IF;
-
+  
     BEGIN
-
+    
       OPEN p_cRetVal FOR
-
+      
         select Z.TIPPUESTO,
                Z.DESPUESTO,
                Z.IDECARGO,
@@ -819,103 +817,105 @@ create or replace package body PR_INTRANET_ED is
                Z.NUMVACANTES,
                Z.FECINICIALMAX,
                Z.FECFINALMAX
-               FROM (
-        SELECT Y.TIPPUESTO,
-               Y.DESPUESTO,
-               Y.IDECARGO,
-               Y.IDESEDE,
-               Y.DESSEDE,
-               Y.NOMCARGO,
-               Y.NUMVACANTES,
-               Y.FECINICIALMAX,
-               Y.FECFINALMAX
-          FROM (SELECT X.TIPPUESTO,
-                       (SELECT D.DESCRIPCION
-                          FROM DETALLE_GENERAL D
-                         WHERE D.IDEGENERAL = 14
-                           AND D.VALOR = X.TIPPUESTO) DESPUESTO,
-                       X.IDECARGO,
-                       X.IDESEDE,
-                       (SELECT E.DESCRIPCION
-                          FROM SEDE E
-                         WHERE E.IDESEDE = X.IDESEDE
-                           AND E.ESTREGISTRO = 'A') DESSEDE,
-                       X.NOMCARGO,
-                       SUM(X.NUMVACANTES) NUMVACANTES,
-                       MIN(X.FECPUBLICACION) FECINICIALMAX,
-                       MAX(X.FECEXPIRACACION) FECFINALMAX
-                  FROM (SELECT S.TIPPUESTO,
-                               nvl(S.IDECARGO, 0) IDECARGO,
-                               S.IDESEDE,
-                               S.NOMCARGO NOMCARGO,
-                               S.NUMVACANTES,
-                               S.FECPUBLICACION,
-                               S.FECEXPIRACACION
-                          FROM SOLREQ_PERSONAL S
-                         WHERE 1 = 1
-                           AND S.TIPSOL IN ('03', '02')
-                           AND S.FECPUBLICACION IS NOT NULL
-                           AND S.TIPETAPA = '04'
-                           AND S.NOMCARGO IS NOT NULL
-                           AND S.TIPPUESTO IS NOT NULL
-                           AND S.ESTACTIVO = 'A'
-                           AND s.FECPUBLICACION IS NOT NULL
-                           and s.fecexpiracacion is not null
-                           AND (nvl(p_cTipPuesto, null) IS NULL OR
-                               S.TIPPUESTO = p_cTipPuesto)
-                           AND (nIdCargo = 0 OR S.IDECARGO = nIdCargo)
-                           AND (nIdSede = 0 OR S.IDESEDE = nIdSede)
-
-                        UNION ALL
-
-                        SELECT F.TIPPUESTO,
-                               F.IDECARGO,
-                               F.IDESEDE,
-                               F.NOMCARGO,
-                               F.NUMVACANTES,
-                               F.FECPUBLICACION,
-                               F.FECEXPIRACACION
-                          FROM (SELECT (SELECT H.TIPHORARIO
-                                          FROM HORARIO_CARGO H
-                                         WHERE H.IDECARGO = N.IDECARGO
-                                           AND H.PUNTHORARIO =
-                                               (SELECT MAX(G.PUNTHORARIO)
-                                                  FROM HORARIO_CARGO G
-                                                 WHERE G.IDECARGO = H.IDECARGO)) TIPPUESTO,
-                                       nvl(N.IDECARGO, 0) IDECARGO,
-                                       N.IDESEDE,
-                                       N.NOMBRE NOMCARGO,
-                                       N.NUMPOSICIONES NUMVACANTES,
-                                       N.FECPUBLICACION FECPUBLICACION,
-                                       N.FECEXPIRACION FECEXPIRACACION
-                                  FROM SOLNUEVO_CARGO N
+          FROM (SELECT Y.TIPPUESTO,
+                       Y.DESPUESTO,
+                       Y.IDECARGO,
+                       Y.IDESEDE,
+                       Y.DESSEDE,
+                       Y.NOMCARGO,
+                       Y.NUMVACANTES,
+                       Y.FECINICIALMAX,
+                       Y.FECFINALMAX
+                  FROM (SELECT X.TIPPUESTO,
+                               (SELECT D.DESCRIPCION
+                                  FROM DETALLE_GENERAL D
+                                 WHERE D.IDEGENERAL = 14
+                                   AND D.VALOR = X.TIPPUESTO) DESPUESTO,
+                               X.IDECARGO,
+                               X.IDESEDE,
+                               (SELECT E.DESCRIPCION
+                                  FROM SEDE E
+                                 WHERE E.IDESEDE = X.IDESEDE
+                                   AND E.ESTREGISTRO = 'A') DESSEDE,
+                               X.NOMCARGO,
+                               SUM(X.NUMVACANTES) NUMVACANTES,
+                               MIN(X.FECPUBLICACION) FECINICIALMAX,
+                               MAX(X.FECEXPIRACACION) FECFINALMAX
+                          FROM (SELECT S.TIPPUESTO,
+                                       nvl(S.IDECARGO, 0) IDECARGO,
+                                       S.IDESEDE,
+                                       S.NOMCARGO NOMCARGO,
+                                       S.NUMVACANTES,
+                                       S.FECPUBLICACION,
+                                       S.FECEXPIRACACION
+                                  FROM SOLREQ_PERSONAL S
                                  WHERE 1 = 1
-                                   AND N.FECPUBLICACION IS NOT NULL
-                                   AND N.FECEXPIRACION IS NOT NULL
-                                   AND N.NOMBRE IS NOT NULL
-                                   AND N.ESTACTIVO = 'A'
-                                   AND N.TIPETAPA = '04') F
-                         WHERE (nvl(p_cTipPuesto, null) IS NULL OR
-                               F.TIPPUESTO = p_cTipPuesto)
-                           AND (nIdCargo = 0 OR F.IDECARGO = nIdCargo)
-                           AND (nIdSede = 0 OR F.IDESEDE = nIdSede)
-
-                        ) X
-                 GROUP BY X.TIPPUESTO, X.IDECARGO, X.IDESEDE, X.NOMCARGO
-                 ) Y
-         WHERE (nvl(p_cFechaInicio, null) IS NULL OR
-               (Y.FECINICIALMAX >= TO_DATE(p_cFechaInicio, 'DD/MM/YYYY')))
-           AND (nvl(p_cFecFin, null) IS NULL OR
-               (Y.FECFINALMAX < TO_DATE(p_cFecFin, 'DD/MM/YYYY') + 1))
-        --ORDER BY Y.FECINICIALMAX DESC,Y.FECINICIALMAX DESC
-
-
-
-        ) Z ORDER BY FECINICIALMAX DESC,FECFINALMAX ASC;
-
-
+                                   AND S.TIPSOL IN ('03', '02')
+                                   AND S.FECPUBLICACION IS NOT NULL
+                                   AND S.TIPETAPA = '04'
+                                   AND S.NOMCARGO IS NOT NULL
+                                   AND S.TIPPUESTO IS NOT NULL
+                                   AND S.ESTACTIVO = 'A'
+                                   AND s.FECPUBLICACION IS NOT NULL
+                                   and s.fecexpiracacion is not null
+                                   AND (nvl(p_cTipPuesto, null) IS NULL OR
+                                       S.TIPPUESTO = p_cTipPuesto)
+                                   AND (nIdCargo = 0 OR S.IDECARGO = nIdCargo)
+                                   AND (nIdSede = 0 OR S.IDESEDE = nIdSede)
+                                
+                                UNION ALL
+                                
+                                SELECT F.TIPPUESTO,
+                                       F.IDECARGO,
+                                       F.IDESEDE,
+                                       F.NOMCARGO,
+                                       F.NUMVACANTES,
+                                       F.FECPUBLICACION,
+                                       F.FECEXPIRACACION
+                                  FROM (SELECT (SELECT H.TIPHORARIO
+                                                  FROM HORARIO_CARGO H
+                                                 WHERE H.IDECARGO = N.IDECARGO
+                                                   AND H.PUNTHORARIO =
+                                                       (SELECT MAX(G.PUNTHORARIO)
+                                                          FROM HORARIO_CARGO G
+                                                         WHERE G.IDECARGO =
+                                                               H.IDECARGO)) TIPPUESTO,
+                                               nvl(N.IDECARGO, 0) IDECARGO,
+                                               N.IDESEDE,
+                                               N.NOMBRE NOMCARGO,
+                                               N.NUMPOSICIONES NUMVACANTES,
+                                               N.FECPUBLICACION FECPUBLICACION,
+                                               N.FECEXPIRACION FECEXPIRACACION
+                                          FROM SOLNUEVO_CARGO N
+                                         WHERE 1 = 1
+                                           AND N.FECPUBLICACION IS NOT NULL
+                                           AND N.FECEXPIRACION IS NOT NULL
+                                           AND N.NOMBRE IS NOT NULL
+                                           AND N.ESTACTIVO = 'A'
+                                           AND N.TIPETAPA = '04') F
+                                 WHERE (nvl(p_cTipPuesto, null) IS NULL OR
+                                       F.TIPPUESTO = p_cTipPuesto)
+                                   AND (nIdCargo = 0 OR F.IDECARGO = nIdCargo)
+                                   AND (nIdSede = 0 OR F.IDESEDE = nIdSede)
+                                
+                                ) X
+                         GROUP BY X.TIPPUESTO,
+                                  X.IDECARGO,
+                                  X.IDESEDE,
+                                  X.NOMCARGO) Y
+                 WHERE (nvl(p_cFechaInicio, null) IS NULL OR
+                       (Y.FECINICIALMAX >=
+                       TO_DATE(p_cFechaInicio, 'DD/MM/YYYY')))
+                   AND (nvl(p_cFecFin, null) IS NULL OR
+                       (Y.FECFINALMAX <
+                       TO_DATE(p_cFecFin, 'DD/MM/YYYY') + 1))
+                --ORDER BY Y.FECINICIALMAX DESC,Y.FECINICIALMAX DESC
+                
+                ) Z
+         ORDER BY FECINICIALMAX DESC, FECFINALMAX ASC;
+    
     END;
-
+  
   END SP_OPORTUNIDAD_LABORAL;
 
   /* ------------------------------------------------------------
@@ -923,7 +923,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las oportunidades laborales
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -942,11 +942,11 @@ create or replace package body PR_INTRANET_ED is
                                            p_cNombreCargo OUT VARCHAR2,
                                            p_cFunciones   OUT VARCHAR2,
                                            p_cObcervacion OUT VARCHAR2) IS
-
+  
   BEGIN
-
+  
     BEGIN
-
+    
       SELECT NVL(N.IDESOLNUEVOCARGO, 0),
              (SELECT C.TIPRANGOSALARIO
                 FROM CARGO C
@@ -979,7 +979,7 @@ create or replace package body PR_INTRANET_ED is
                      (SELECT MAX(G.PUNTHORARIO)
                         FROM HORARIO_CARGO G
                        WHERE G.IDECARGO = p_nIdCargo))
-
+            
          AND N.FECPUBLICACION =
              (SELECT MAX(Y.FECPUBLICACION)
                 FROM SOLNUEVO_CARGO Y
@@ -998,7 +998,7 @@ create or replace package body PR_INTRANET_ED is
                              (SELECT MAX(G.PUNTHORARIO)
                                 FROM HORARIO_CARGO G
                                WHERE G.IDECARGO = p_nIdCargo))
-
+              
               )
          AND ROWNUM < 2;
     EXCEPTION
@@ -1010,7 +1010,7 @@ create or replace package body PR_INTRANET_ED is
         p_cNombreCargo := null;
         p_cFunciones   := null;
     END;
-
+  
     IF p_nIdSol = 0 THEN
       BEGIN
         SELECT S.IDESOLREQPERSONAL,
@@ -1056,7 +1056,7 @@ create or replace package body PR_INTRANET_ED is
           p_cFunciones   := null;
       END;
     END IF;
-
+  
     IF p_cCodRangoSal IS NOT NULL THEN
       BEGIN
         SELECT D.DESCRIPCION
@@ -1069,7 +1069,7 @@ create or replace package body PR_INTRANET_ED is
           p_cDesRangoSal := '';
       END;
     END IF;
-
+  
     IF p_nIdArea > 0 THEN
       BEGIN
         SELECT A.NOMAREA
@@ -1082,7 +1082,7 @@ create or replace package body PR_INTRANET_ED is
           p_cDesArea := '';
       END;
     END IF;
-
+  
     IF p_nIdSede > 0 THEN
       BEGIN
         SELECT trim(S.DESCRIPCION)
@@ -1095,7 +1095,7 @@ create or replace package body PR_INTRANET_ED is
           p_cSedeDes := '';
       END;
     END IF;
-
+  
   END SP_OBTIENE_MAX_SOL_GRUPO_CARGO;
 
   /* ------------------------------------------------------------
@@ -1107,7 +1107,7 @@ create or replace package body PR_INTRANET_ED is
                 1 faltan estudios
                 2 falta experiencias
                 3 falta conocimientos
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -1119,14 +1119,14 @@ create or replace package body PR_INTRANET_ED is
                                   p_nidsede      IN NUMBER,
                                   p_retorno      OUT NUMBER,
                                   p_Mensaje      OUT VARCHAR2) IS
-
+  
     nCountEstudio      number(8);
     nCountExperencia   number(8);
     nCountConocimiento number(8);
     cEtapa             varchar2(2);
     cMensaje           Varchar2(2000);
     cDescrip           detalle_general.descripcion%type;
-
+  
     CURSOR C_SOL IS
       SELECT RP.IDESOL, RP.TIPSOL
         FROM RECLUTAMIENTO_PERSONA RP
@@ -1134,11 +1134,11 @@ create or replace package body PR_INTRANET_ED is
          AND RP.IDECARGO = p_nidcargo
          AND RP.TIPPUESTO = p_ctippuesto
          AND RP.IDSEDE = p_nidsede;
-
+  
   BEGIN
-
+  
     p_retorno := 0;
-
+  
     BEGIN
       SELECT COUNT(*)
         INTO nCountEstudio
@@ -1148,7 +1148,7 @@ create or replace package body PR_INTRANET_ED is
       WHEN OTHERS THEN
         nCountEstudio := 0;
     END;
-
+  
     BEGIN
       SELECT COUNT(*)
         INTO nCountExperencia
@@ -1158,7 +1158,7 @@ create or replace package body PR_INTRANET_ED is
       WHEN OTHERS THEN
         nCountExperencia := 0;
     END;
-
+  
     BEGIN
       SELECT COUNT(*)
         INTO nCountConocimiento
@@ -1168,61 +1168,61 @@ create or replace package body PR_INTRANET_ED is
       WHEN OTHERS THEN
         nCountConocimiento := 0;
     END;
-
+  
     if nCountEstudio = 0 then
-
+    
       p_retorno := 1;
-
+    
       select d.descripcion
         into cDescrip
         from detalle_general d
        where d.idegeneral = 55
          and d.valor = '01';
-
+    
       IF LENGTH(TRIM(cMensaje)) > 0 THEN
         cMensaje := cMensaje || ', ' || cDescrip;
       ELSE
         cMensaje := cMensaje || ' ' || cDescrip;
       END IF;
-
+    
     end if;
-
+  
     if nCountExperencia = 0 then
-
+    
       p_retorno := 1;
-
+    
       select d.descripcion
         into cDescrip
         from detalle_general d
        where d.idegeneral = 55
          and d.valor = '02';
-
+    
       IF LENGTH(TRIM(cMensaje)) > 0 THEN
         cMensaje := cMensaje || ', ' || cDescrip;
       ELSE
         cMensaje := cMensaje || ' ' || cDescrip;
       END IF;
     end if;
-
+  
     if nCountConocimiento = 0 then
-
+    
       p_retorno := 1;
       select d.descripcion
         into cDescrip
         from detalle_general d
        where d.idegeneral = 55
          and d.valor = '03';
-
+    
       IF LENGTH(TRIM(cMensaje)) > 0 THEN
         cMensaje := cMensaje || ', ' || cDescrip;
       ELSE
         cMensaje := cMensaje || ' ' || cDescrip;
       END IF;
-
+    
     end if;
-
+  
     FOR C1 IN C_SOL LOOP
-
+    
       IF (C1.TIPSOL = '01') THEN
         SELECT SN.TIPETAPA
           INTO cEtapa
@@ -1234,25 +1234,25 @@ create or replace package body PR_INTRANET_ED is
           FROM Solreq_Personal SP
          WHERE SP.IDESOLREQPERSONAL = C1.IDESOL;
       END IF;
-
+    
       IF cEtapa <> '08' THEN
         p_retorno := 2;
-
+      
         select d.descripcion
           into cDescrip
           from detalle_general d
          where d.idegeneral = 55
            and d.valor = '04';
-
+      
         cMensaje := cDescrip;
-
+      
         EXIT;
       END IF;
-
+    
     END LOOP;
-
+  
     p_Mensaje := NVL(cMensaje, '');
-
+  
   END SP_VALIDA_POSTULACION;
 
   /* ------------------------------------------------------------
@@ -1260,7 +1260,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : proceso que realiza la postulacion
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -1271,7 +1271,7 @@ create or replace package body PR_INTRANET_ED is
                            p_cTipPuesto    IN VARCHAR2,
                            p_nIdCargo      IN NUMBER,
                            p_nIdSede       IN NUMBER) IS
-
+  
     CURSOR C_SOL IS
       SELECT IDSOLICITUD,
              TIPRANGOSALARIO,
@@ -1299,7 +1299,7 @@ create or replace package body PR_INTRANET_ED is
                                 FROM CARGO CA
                                WHERE CA.IDECARGO = N.IDECARGO
                                  AND ROWNUM < 2) CANTPRESELEC
-
+                      
                         FROM SOLNUEVO_CARGO N
                        WHERE N.FECPUBLICACION IS NOT NULL
                          AND N.FECEXPIRACION IS NOT NULL
@@ -1317,7 +1317,7 @@ create or replace package body PR_INTRANET_ED is
                                         FROM HORARIO_CARGO G
                                        WHERE G.IDECARGO = H.IDECARGO))
                       UNION ALL
-
+                      
                       SELECT S.IDESOLREQPERSONAL IDSOLICITUD,
                              S.TIPRANGOSALARIO TIPRANGOSALARIO,
                              S.IDEAREA,
@@ -1325,7 +1325,7 @@ create or replace package body PR_INTRANET_ED is
                              S.NOMCARGO,
                              S.FECPUBLICACION FECPUBLICACION,
                              S.CANTPRESELEC
-
+                      
                         FROM SOLREQ_PERSONAL S
                        WHERE S.TIPSOL IN ('02', '03')
                          AND S.FECPUBLICACION IS NOT NULL
@@ -1337,7 +1337,7 @@ create or replace package body PR_INTRANET_ED is
                WHERE 1 = 1
                ORDER BY X.TIPSOL, X.FECPUBLICACION) Y
        WHERE ROWNUM < 2;
-
+  
     /**********************datos generales*****************/
     --Datos de la solicitud de requerimiento
     CURSOR C_SOL_REQ(p_idSol in number) IS
@@ -1397,21 +1397,21 @@ create or replace package body PR_INTRANET_ED is
         FROM POSTULANTE P
        WHERE P.IDEPOSTULANTE = p_nIdPostulante;
     /**********************datos generales*****************/
-
+  
     /**********************Ubigeo*************************/
-
+  
     CURSOR C_UBIGEO_CARGO IS
       SELECT UC.IDEUBIGEO, UC.PUNTUBIGEO
         FROM UBIGEO_CARGO UC
        WHERE UC.IDECARGO = p_nIdCargo;
-
+  
     CURSOR C_UBIGEO_SOLREQ(p_idSol in number) IS
       SELECT US.IDEUBIGEO, US.PUNTUBIGEO
         FROM UBIGEO_SOLREQ US
        WHERE US.IDESOLREQPERSONAL = p_idSol;
-
+  
     /**********************Ubigeo*************************/
-
+  
     /**********************Conocimientos******************/
     -- concimiento del postulante
     CURSOR C_CONOCIMIENTOS_POSTULANTE IS
@@ -1423,15 +1423,20 @@ create or replace package body PR_INTRANET_ED is
              TIPNOMCONOCGRALES,
              TIPNIVELCONOCIMIENTO,
              INDCERTIFICACION,
-             (CASE WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN 1
-                  WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN 2
-                  WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
-                  ELSE 0
-             END ) NIVELCONO  --jccana 24/05/2014
+             (CASE
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
+                1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
+                2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
+                3
+               ELSE
+                0
+             END) NIVELCONO --jccana 24/05/2014
         FROM CONOGEN_POSTULANTE
        WHERE IDEPOSTULANTE = p_nIdPostulante
          AND ESTACTIVO = 'A';
-
+  
     -- conocimientos de cargo
     CURSOR C_CONOCIMIENTOS_CARGO IS
       SELECT TIPCONOFIMATICA,
@@ -1443,14 +1448,19 @@ create or replace package body PR_INTRANET_ED is
              TIPNIVELCONOCIMIENTO,
              INDCERTIFICACION,
              PUNTCONOCIMIENTO,
-             (CASE WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN 1
-                   WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN 2
-                   WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
-                   ELSE 0
-             END ) NIVELCONO  --jccana 24/05/2014
+             (CASE
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
+                1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
+                2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
+                3
+               ELSE
+                0
+             END) NIVELCONO --jccana 24/05/2014
         FROM CONOGENERAL_CARGO A
        WHERE A.IDECARGO = p_nIdCargo;
-
+  
     --conocimientos solicitud
     CURSOR C_CONOCIMIENTOS_SOL(p_idSol in number) IS
       SELECT TIPCONOFIMATICA,
@@ -1462,15 +1472,20 @@ create or replace package body PR_INTRANET_ED is
              TIPNIVELCONOCIMIENTO,
              INDCERTIFICACION,
              PUNTCONOCIMIENTO,
-             (CASE WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN 1
-                   WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN 2
-                   WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
-                   ELSE 0
-             END ) NIVELCONO  --jccana 24/05/2014
+             (CASE
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
+                1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
+                2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
+                3
+               ELSE
+                0
+             END) NIVELCONO --jccana 24/05/2014
         FROM CONOGENERAL_SOLREQ A
        WHERE A.IDESOLREQPERSONAL = p_idSol;
     /**********************Conocimientos******************/
-
+  
     /**********************Nivel Academico*****************/
     --nivel academieco del cargo
     CURSOR C_NIVELACADEMICO_CARGO IS
@@ -1481,7 +1496,7 @@ create or replace package body PR_INTRANET_ED is
         FROM NIVELACADEMICO_CARGO N
        WHERE N.IDECARGO = p_nIdCargo
          AND N.ESTACTIVO = 'A';
-
+  
     -- nivel academivo del postulante
     CURSOR C_NIVELACADEMICO_POSTULANTE IS
       SELECT P.TIPEDUCACION       EDUCACION,
@@ -1492,7 +1507,7 @@ create or replace package body PR_INTRANET_ED is
         FROM ESTUDIOS_POSTULANTE P
        WHERE P.IDEPOSTULANTE = p_nIdPostulante
          AND P.ESTACTIVO = 'A';
-
+  
     --nivel academico de la solcitud
     CURSOR C_NIVELACADEMICO_SOL(p_idSol IN NUMBER) IS
       SELECT S.TIPEDUCACION    EDUCACION,
@@ -1503,41 +1518,47 @@ create or replace package body PR_INTRANET_ED is
        WHERE S.IDESOLREQPERSONAL = p_idSol
          AND S.ESTACTIVO = 'A';
     /**********************Nivel Academico*****************/
-
+  
     /**********************Centro Estudios*****************/
-
+  
     CURSOR C_CENTROEST_CARGO IS
       SELECT CE.TIPCENESTU     TIPINSTITUCION,
              CE.TIPNOMCENESTU  CODINSTITUCION,
              CE.PUNTACENTROEST PUNTAJE
         FROM CENTROEST_CARGO CE
        WHERE CE.IDECARGO = p_nIdCargo;
-
+  
     CURSOR C_CENTROEST_SOLREQ(p_idSol IN NUMBER) IS
       SELECT S.TIPCENESTU     TIPINSTITUCION,
              S.TIPNOMCENESTU  CODINSTITUCION,
              S.PUNTACENTROEST PUNTAJE
         FROM CENTROEST_SOLREQ S
        WHERE S.IDESOLREQPERSONAL = p_idSol;
-
+  
     /**********************Centro Estudios*****************/
-
+  
     /**********************Experiencia*********************/
     CURSOR C_EXP_POSTULANTE IS
-    SELECT EP.TIPCARGOTRABAJO,SUM(TIEMPOEXP) TIMETOT
-    FROM (
-      SELECT TIPCARGOTRABAJO, FECTRABINICIO, FECTRABFIN, INDTRABACTUALMENTE,
-            (CASE WHEN 'S' = INDTRABACTUALMENTE then months_between(sysdate, FECTRABINICIO)
-                  ELSE  months_between(FECTRABFIN,FECTRABINICIO) END) TIEMPOEXP 
-        FROM EXP_POSTULANTE E
-       WHERE E.IDEPOSTULANTE = p_nIdPostulante) EP
-    GROUP BY EP.TIPCARGOTRABAJO;
-
+      SELECT EP.TIPCARGOTRABAJO, SUM(TIEMPOEXP) TIMETOT
+        FROM (SELECT TIPCARGOTRABAJO,
+                     FECTRABINICIO,
+                     FECTRABFIN,
+                     INDTRABACTUALMENTE,
+                     (CASE
+                       WHEN 'S' = INDTRABACTUALMENTE then
+                        months_between(sysdate, FECTRABINICIO)
+                       ELSE
+                        months_between(FECTRABFIN, FECTRABINICIO)
+                     END) TIEMPOEXP
+                FROM EXP_POSTULANTE E
+               WHERE E.IDEPOSTULANTE = p_nIdPostulante) EP
+       GROUP BY EP.TIPCARGOTRABAJO;
+  
     CURSOR C_EXPERIENCIA_CARGO IS
       SELECT TIPEXPLABORAL, CANTANHOEXP, CANTMESESEXP, PUNTEXPERIENCIA
         FROM EXPERIENCIA_CARGO EC
        WHERE EC.IDECARGO = p_nIdCargo;
-
+  
     CURSOR C_EXPERIENCIA_SOL(p_idSol IN NUMBER) IS
       SELECT ES.TIPEXPLABORAL,
              ES.CANTANHOEXP,
@@ -1546,30 +1567,30 @@ create or replace package body PR_INTRANET_ED is
         FROM EXPERIENCIA_SOLREQ ES
        WHERE ES.IDEEXPSOLREQ = p_idSol
          AND ES.ESTACTIVO = 'A';
-
+  
     /**********************Experiencia*********************/
-
+  
     /**********************Discapacidad***********************/
     CURSOR C_DISCAPACIDAD_CARGO IS
       SELECT DC.TIPDISCAPA TIPO, DC.PUNTDISCAPA PUNTAJE
         FROM DISCAPACIDAD_CARGO DC
        WHERE DC.IDECARGO = p_nIdCargo
          AND DC.ESTACTIVO = 'A';
-
+  
     CURSOR C_DISCAPACIDAD_POSTULANTE IS
       SELECT DP.TIPODISCAPACIDAD TIPO
         FROM DISCAPACIDAD_POSTULANTE DP
        WHERE DP.IDEPOSTULANTE = p_nIdPostulante
          AND DP.ESTACTIVO = 'A';
-
+  
     CURSOR C_DISCAPACIDAD_SOLREQ(p_idSol IN NUMBER) IS
       SELECT DS.TIPDISCAPA TIPO, DS.PUNTDISCAPA PUNTAJE
         FROM DISCAPACIDAD_SOLREQ DS
        WHERE DS.IDESOLREQPERSONAL = p_idSol
          AND DS.ESTACTIVO = 'A';
-
+  
     /**********************Discapacidad***********************/
-
+  
     cIdSol            number;
     nCont             number;
     cTipCargoTrabajo  varchar2(3);
@@ -1589,14 +1610,14 @@ create or replace package body PR_INTRANET_ED is
     cCodCargo         CARGO.CODCARGO%TYPE;
     p_IndPostulacion  VARCHAR2(1);
     cEtapaPost        RECLUTAMIENTO_PERSONA.ESTPOSTULANTE%TYPE;
-
+  
     errPostNoApto EXCEPTION;
   BEGIN
-
+  
     BEGIN
       nCont := 0;
       FOR C1 IN C_SOL LOOP
-
+      
         BEGIN
           SELECT COUNT(*)
             INTO nCantPreseleMin
@@ -1608,9 +1629,9 @@ create or replace package body PR_INTRANET_ED is
           WHEN OTHERS THEN
             nCantPreseleMin := 0;
         END;
-
+      
         nCantPreseleSol := c1.cantpreselec;
-
+      
         BEGIN
           SELECT C.CODCARGO
             INTO cCodCargo
@@ -1620,7 +1641,7 @@ create or replace package body PR_INTRANET_ED is
           WHEN OTHERS THEN
             cCodCargo := NULL;
         END;
-
+      
         --nuevo cargo
         IF C1.TIPSOL = '01' THEN
           cTipSol := C1.TIPSOL;
@@ -1636,10 +1657,10 @@ create or replace package body PR_INTRANET_ED is
                 nCont := nCont + C13.PUNTUBIGEO;
               END IF;
             END LOOP;
-
+          
             FOR C2 IN C_CARGO LOOP
               --realiza las validacion y obtiene los puntajes
-
+            
               --valida el sexo
               IF C2.INDSEXO = 'S' THEN
                 IF C2.SEXO = C3.SEXO OR C2.SEXO = 'A' THEN
@@ -1653,9 +1674,9 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_SEXO;
                 END IF;
               END IF;
-
+            
               --valida el rango de edad
-
+            
               IF C2.INDEDAD = 'S' THEN
                 IF C2.EDAD_INICIO <= C3.EDAD AND C2.EDAD_FIN >= C3.EDAD THEN
                   nCont := nCont + C2.PUNT_EDAD;
@@ -1668,7 +1689,7 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_EDAD;
                 END IF;
               END IF;
-
+            
               -- valida el rango salarial
               IF C2.INDSALARIO = 'S' THEN
                 IF C2.TIP_RANGO_SAL = C3.RANGO_SALARIO THEN
@@ -1682,10 +1703,10 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_RANGO_SAL;
                 END IF;
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
           --3 tab
           --valida horario
           BEGIN
@@ -1698,15 +1719,15 @@ create or replace package body PR_INTRANET_ED is
             WHEN OTHERS THEN
               nPuntajeHorario := 0;
           END;
-
+        
           IF nvl(nPuntajeHorario, 0) > 0 THEN
             nCont := nCont + nPuntajeHorario;
           END IF;
-
+        
           --valida nivel academico
           FOR C8 IN C_NIVELACADEMICO_POSTULANTE LOOP
             FOR C9 IN C_NIVELACADEMICO_CARGO LOOP
-
+            
               IF C8.NIVELCANZADO = C9.NIVELCANZADO AND C8.AREA = C9.AREA THEN
                 nCont := nCont + C9.PUNTAJE;
               END IF;
@@ -1719,91 +1740,94 @@ create or replace package body PR_INTRANET_ED is
               END IF;
             END LOOP;
           END LOOP;
-
+        
           -- valida experencia 4 tab
           FOR C6 IN C_EXP_POSTULANTE LOOP
             FOR C7 IN C_EXPERIENCIA_CARGO LOOP
-
+            
               IF C6.TIPCARGOTRABAJO = C7.TIPEXPLABORAL THEN
                 /*IF 'S' = C6.INDTRABACTUALMENTE then
                   nNumMesesPos := months_between(sysdate, C6.FECTRABINICIO);
                 ELSE
                   nNumMesesPos := months_between(C6.FECTRABFIN,
                                                  C6.FECTRABINICIO);
-
-                END IF;*/
-
-                --nNumMesesCargo := (C7.CANTANHOEXP / 12);
-                nNumMesesCargo := (C7.CANTANHOEXP * 12);  --jccana 24/05/2014
-                nNumMesesCargo := C7.CANTMESESEXP + nNumMesesCargo;
                 
+                END IF;*/
+              
+                --nNumMesesCargo := (C7.CANTANHOEXP / 12);
+                nNumMesesCargo := (C7.CANTANHOEXP * 12); --jccana 24/05/2014
+                nNumMesesCargo := C7.CANTMESESEXP + nNumMesesCargo;
+              
                 --IF nNumMesesPos >= nNumMesesCargo THEN
                 IF C6.TIMETOT >= nNumMesesCargo THEN
                   nCont := nCont + C7.PUNTEXPERIENCIA;
                 END IF;
-
+              
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
           --valida conocimientos 5 tab
           /* FOR C4 IN C_CONOCIMIENTOS_POSTULANTE LOOP
             FOR C5 IN C_CONOCIMIENTOS_CARGO LOOP
-
+          
               IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
               IF C4.TIPIDIOMA = C5.TIPIDIOMA THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
               IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL  THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
             END LOOP;
           END LOOP;*/
-          
+        
           --jccana 24/05/2014 
-          
+        
           FOR C4 IN C_CONOCIMIENTOS_POSTULANTE LOOP
             FOR C5 IN C_CONOCIMIENTOS_CARGO LOOP
-
-              IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA AND C4.TIPNOMOFIMATICA = C5.TIPNOMOFIMATICA THEN
-                IF C4.NIVELCONO >= C5.NIVELCONO THEN
-                   nCont := nCont + C5.PUNTCONOCIMIENTO;
-                END IF;
-              END IF;
-
-              IF C4.TIPIDIOMA = C5.TIPIDIOMA AND C4.TIPCONOCIDIOMA = C5.TIPCONOCIDIOMA THEN
-                IF C4.NIVELCONO >= C5.NIVELCONO THEN
-                   nCont := nCont + C5.PUNTCONOCIMIENTO;
-                END IF;
-              END IF;
-
-              IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL  AND C4.TIPNOMCONOCGRALES = C5.TIPNOMCONOCGRALES  THEN
+            
+              IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA AND
+                 C4.TIPNOMOFIMATICA = C5.TIPNOMOFIMATICA THEN
                 IF C4.NIVELCONO >= C5.NIVELCONO THEN
                   nCont := nCont + C5.PUNTCONOCIMIENTO;
                 END IF;
               END IF;
-
+            
+              IF C4.TIPIDIOMA = C5.TIPIDIOMA AND
+                 C4.TIPCONOCIDIOMA = C5.TIPCONOCIDIOMA THEN
+                IF C4.NIVELCONO >= C5.NIVELCONO THEN
+                  nCont := nCont + C5.PUNTCONOCIMIENTO;
+                END IF;
+              END IF;
+            
+              IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL AND
+                 C4.TIPNOMCONOCGRALES = C5.TIPNOMCONOCGRALES THEN
+                IF C4.NIVELCONO >= C5.NIVELCONO THEN
+                  nCont := nCont + C5.PUNTCONOCIMIENTO;
+                END IF;
+              END IF;
+            
             END LOOP;
           END LOOP;
-          
+        
           --end jccana
           --valida discapacidad
           FOR C11 IN C_DISCAPACIDAD_POSTULANTE LOOP
             FOR C22 IN C_DISCAPACIDAD_CARGO LOOP
-
+            
               IF C11.TIPO = C22.TIPO THEN
                 nCont := nCont + C22.PUNTAJE;
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
         ELSE
           --Si es solicitud de ampliacion o reemplazo
           cTipSol := C1.TIPSOL;
@@ -1818,18 +1842,18 @@ create or replace package body PR_INTRANET_ED is
             WHEN OTHERS THEN
               cCodCargo := NULL;
           END;
-
+        
           -- obtiene los datos del postulante
           FOR C3 IN C_POSTULANTE LOOP
             cTipHorario := c3.horario;
-
+          
             -- obtiene el puntaje del ubigeo
             FOR C13 IN C_UBIGEO_SOLREQ(cIdSol) LOOP
               IF C3.UBIGEO = C13.IDEUBIGEO THEN
                 nCont := nCont + C13.PUNTUBIGEO;
               END IF;
             END LOOP;
-
+          
             -- 2 tab
             --obtiene los de la solcitud de requerimiento
             FOR C2 IN C_SOL_REQ(cIdSol) LOOP
@@ -1847,9 +1871,9 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_SEXO;
                 END IF;
               END IF;
-
+            
               --valida el rango de edad
-
+            
               IF C2.INDEDAD = 'S' THEN
                 IF C2.EDAD_INICIO <= C3.EDAD AND C2.EDAD_FIN >= C3.EDAD THEN
                   nCont := nCont + C2.PUNT_EDAD;
@@ -1862,7 +1886,7 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_EDAD;
                 END IF;
               END IF;
-
+            
               -- valida el rango salarial
               IF C2.INDSALARIO = 'S' THEN
                 IF C2.TIP_RANGO_SAL = C3.RANGO_SALARIO THEN
@@ -1876,10 +1900,10 @@ create or replace package body PR_INTRANET_ED is
                   nCont := nCont + C2.PUNT_RANGO_SAL;
                 END IF;
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
           --3 tab
           --valida horario
           BEGIN
@@ -1892,15 +1916,15 @@ create or replace package body PR_INTRANET_ED is
             WHEN OTHERS THEN
               nPuntajeHorario := 0;
           END;
-
+        
           IF nvl(nPuntajeHorario, 0) > 0 THEN
             nCont := nCont + nPuntajeHorario;
           END IF;
-
+        
           --valida nivel academico
           FOR C8 IN C_NIVELACADEMICO_POSTULANTE LOOP
             FOR C9 IN C_NIVELACADEMICO_SOL(cIdSol) LOOP
-
+            
               IF C8.NIVELCANZADO = C9.NIVELCANZADO AND C8.AREA = C9.AREA THEN
                 nCont := nCont + C9.PUNTAJE;
               END IF;
@@ -1913,98 +1937,101 @@ create or replace package body PR_INTRANET_ED is
               END IF;
             END LOOP;
           END LOOP;
-
+        
           -- valida experencia 4 tab
           FOR C6 IN C_EXP_POSTULANTE LOOP
             FOR C7 IN C_EXPERIENCIA_SOL(cIdSol) LOOP
-
+            
               IF C6.TIPCARGOTRABAJO = C7.TIPEXPLABORAL THEN
                 /*IF 'S' = C6.INDTRABACTUALMENTE then
                   nNumMesesPos := months_between(sysdate, C6.FECTRABINICIO);
                 ELSE
                   nNumMesesPos := months_between(C6.FECTRABFIN,
                                                  C6.FECTRABINICIO);
-
+                
                 END IF;*/
-
+              
                 --nNumMesesCargo := (C7.CANTANHOEXP / 12);--JCCANA
-                nNumMesesCargo := (C7.CANTANHOEXP * 12);  
+                nNumMesesCargo := (C7.CANTANHOEXP * 12);
                 nNumMesesCargo := C7.CANTMESESEXP + nNumMesesCargo;
-
+              
                 --IF nNumMesesPos >= nNumMesesCargo THEN --jccana
                 IF C6.TIMETOT >= nNumMesesCargo THEN
                   nCont := nCont + C7.PUNTEXPERIENCIA;
                 END IF;
-
+              
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
           --valida conocimientos 5 tab
-         /* FOR C4 IN C_CONOCIMIENTOS_POSTULANTE LOOP
+          /* FOR C4 IN C_CONOCIMIENTOS_POSTULANTE LOOP
             FOR C5 IN C_CONOCIMIENTOS_SOL(cIdSol) LOOP
-
+          
               IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
               IF C4.TIPIDIOMA = C5.TIPIDIOMA THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
               IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL THEN
                 nCont := nCont + C5.PUNTCONOCIMIENTO;
               END IF;
-
+          
             END LOOP;
           END LOOP;*/
-          
+        
           --jccana 24/05/2014
           FOR C4 IN C_CONOCIMIENTOS_POSTULANTE LOOP
             FOR C5 IN C_CONOCIMIENTOS_CARGO LOOP
-
-              IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA AND C4.TIPNOMOFIMATICA = C5.TIPNOMOFIMATICA THEN
-                IF C4.NIVELCONO >= C5.NIVELCONO THEN
-                   nCont := nCont + C5.PUNTCONOCIMIENTO;
-                END IF;
-              END IF;
-
-              IF C4.TIPIDIOMA = C5.TIPIDIOMA AND C4.TIPCONOCIDIOMA = C5.TIPCONOCIDIOMA THEN
-                IF C4.NIVELCONO >= C5.NIVELCONO THEN
-                   nCont := nCont + C5.PUNTCONOCIMIENTO;
-                END IF;
-              END IF;
-
-              IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL  AND C4.TIPNOMCONOCGRALES = C5.TIPNOMCONOCGRALES  THEN
+            
+              IF C4.TIPCONOFIMATICA = C5.TIPCONOFIMATICA AND
+                 C4.TIPNOMOFIMATICA = C5.TIPNOMOFIMATICA THEN
                 IF C4.NIVELCONO >= C5.NIVELCONO THEN
                   nCont := nCont + C5.PUNTCONOCIMIENTO;
                 END IF;
               END IF;
-
+            
+              IF C4.TIPIDIOMA = C5.TIPIDIOMA AND
+                 C4.TIPCONOCIDIOMA = C5.TIPCONOCIDIOMA THEN
+                IF C4.NIVELCONO >= C5.NIVELCONO THEN
+                  nCont := nCont + C5.PUNTCONOCIMIENTO;
+                END IF;
+              END IF;
+            
+              IF C4.TIPCONOCGENERALES = C5.TIPCONOGENERAL AND
+                 C4.TIPNOMCONOCGRALES = C5.TIPNOMCONOCGRALES THEN
+                IF C4.NIVELCONO >= C5.NIVELCONO THEN
+                  nCont := nCont + C5.PUNTCONOCIMIENTO;
+                END IF;
+              END IF;
+            
             END LOOP;
           END LOOP;
-          
+        
           --end jccana
           --valida discapacidad
           FOR C11 IN C_DISCAPACIDAD_POSTULANTE LOOP
             FOR C22 IN C_DISCAPACIDAD_SOLREQ(cIdSol) LOOP
-
+            
               IF C11.TIPO = C22.TIPO THEN
                 nCont := nCont + C22.PUNTAJE;
               END IF;
-
+            
             END LOOP;
           END LOOP;
-
+        
         END IF;
-
+      
       END LOOP;
-
+    
       nTotal := nCont;
-
+    
       IF cTipSol = '01' THEN
-
+      
         BEGIN
           SELECT NVL(C.PUNTMINGRAL, 0) PUNTMIN
             INTO nPuntMin
@@ -2014,9 +2041,9 @@ create or replace package body PR_INTRANET_ED is
           WHEN OTHERS THEN
             nPuntMin := 0;
         END;
-
+      
       ELSE
-
+      
         BEGIN
           SELECT NVL(sr.PUNTMINGRAL, 0) PUNTMIN
             INTO nPuntMin
@@ -2026,25 +2053,26 @@ create or replace package body PR_INTRANET_ED is
           WHEN OTHERS THEN
             nPuntMin := 0;
         END;
-
+      
       END IF;
-
+    
       IF nTotal >= nPuntMin THEN
         --INSERTA CON ESTADO PRESELECCIONADO
-
+      
         --IF nCantPreseleSol >= nCantPreseleMin THEN
-        IF nCantPreseleSol > nCantPreseleMin THEN --jccana
+        IF nCantPreseleSol > nCantPreseleMin THEN
+          --jccana
         
           PR_INTRANET_ED.SP_VALIDA_SELECCION(p_nIdPostulante,
                                              p_nIdSede,
                                              p_IndPostulacion);
-
+        
           IF 'S' = p_IndPostulacion THEN
             cEtapaPost := P_POSTNO_PRESELECCIONADO;
           ELSE
             cEtapaPost := P_POSTPRESELEC_AUTOMATICO;
           END IF;
-
+        
           INSERT INTO RECLUTAMIENTO_PERSONA
             (IDERECLUTAPERSONA,
              IDEPOSTULANTE,
@@ -2073,7 +2101,7 @@ create or replace package body PR_INTRANET_ED is
              cCodCargo);
           COMMIT;
         ELSE
-
+        
           INSERT INTO RECLUTAMIENTO_PERSONA
             (IDERECLUTAPERSONA,
              IDEPOSTULANTE,
@@ -2102,10 +2130,10 @@ create or replace package body PR_INTRANET_ED is
              cCodCargo);
           COMMIT;
         END IF;
-
+      
       ELSE
         --INSERTA CON ESTADO NO_PRESELECCIONADO
-
+      
         INSERT INTO RECLUTAMIENTO_PERSONA
           (IDERECLUTAPERSONA,
            IDEPOSTULANTE,
@@ -2134,7 +2162,7 @@ create or replace package body PR_INTRANET_ED is
            cCodCargo);
         COMMIT;
       END IF;
-
+    
     EXCEPTION
       WHEN errPostNoApto THEN
         INSERT INTO RECLUTAMIENTO_PERSONA
@@ -2165,7 +2193,7 @@ create or replace package body PR_INTRANET_ED is
            cCodCargo);
         commit;
     END;
-
+  
   END SP_POSTULACION;
 
   /* ------------------------------------------------------------
@@ -2180,11 +2208,11 @@ create or replace package body PR_INTRANET_ED is
 
   PROCEDURE SP_MIS_POSTULACIONES(p_nIdPostulante IN NUMBER,
                                  p_cRetVal       OUT cur_cursor) IS
-
+  
   BEGIN
-
+  
     OPEN p_cRetVal FOR
-
+    
       SELECT X.IDSEDE,
              X.DESSEDE,
              X.IDESOL,
@@ -2196,7 +2224,7 @@ create or replace package body PR_INTRANET_ED is
              X.NOMBRE,
              X.FECEXPIRACION
         FROM (
-
+              
               SELECT RP.Idsede,
                       (SELECT SD.DESCRIPCION
                          FROM SEDE SD
@@ -2229,11 +2257,11 @@ create or replace package body PR_INTRANET_ED is
                 FROM RECLUTAMIENTO_PERSONA RP
                WHERE RP.ESTACTIVO = 'A'
                  AND RP.IDEPOSTULANTE = p_nIdPostulante
-                -- group by RP.Idsede,RP.FECCREACION
-                 ) X
+              -- group by RP.Idsede,RP.FECCREACION
+              ) X
        WHERE X.FECEXPIRACION IS NOT NULL
        ORDER BY X.FECHAPOSTULACION DESC;
-
+  
   END SP_MIS_POSTULACIONES;
 
   /* ------------------------------------------------------------
@@ -2250,9 +2278,9 @@ create or replace package body PR_INTRANET_ED is
                                  p_cTipSol IN VARCHAR2,
                                  p_cRetVal OUT cur_cursor) IS
   BEGIN
-
+  
     IF p_cTipSol = '01' THEN
-
+    
       OPEN p_cRetVal FOR
         SELECT SC.IDECARGO IDECARGO,
                SC.CODCARGO CODCARGO,
@@ -2263,7 +2291,7 @@ create or replace package body PR_INTRANET_ED is
                SC.IDEDEPARTAMENTO IDEDEPARTAMENTO,
                SC.IDEAREA IDEAREA,
                SC.IDESEDE IDESEDE,
-
+               
                (SELECT S.DESCRIPCION
                   FROM SEDE S
                  WHERE S.IDESEDE = SC.IDESEDE
@@ -2292,7 +2320,7 @@ create or replace package body PR_INTRANET_ED is
                        (SELECT MAX(G.PUNTHORARIO)
                           FROM HORARIO_CARGO G
                          WHERE G.IDECARGO = H.IDECARGO)) TIPPUESTO
-
+        
           FROM SOLNUEVO_CARGO SC
          WHERE SC.Idesolnuevocargo = p_nIdSol
            AND SC.ESTACTIVO = 'A';
@@ -2332,7 +2360,7 @@ create or replace package body PR_INTRANET_ED is
           FROM SOLREQ_PERSONAL SR
          WHERE SR.IDESOLREQPERSONAL = p_nIdSol
            AND SR.ESTACTIVO = 'A';
-
+    
     END IF;
   END SP_OBTIENE_DATOS_SOL;
 
@@ -2355,7 +2383,7 @@ create or replace package body PR_INTRANET_ED is
                                            p_cRetVal     OUT cur_cursor) IS
     cEstado varchar2(2);
   BEGIN
-
+  
     OPEN p_cRetVal FOR
       SELECT NVL(R.IDEPOSTULANTE, 0) IDEPOSTULANTE,
              NVL(R.IDERECLUTAPERSONA, 0) IDERECLUTAPERSONA,
@@ -2373,7 +2401,7 @@ create or replace package body PR_INTRANET_ED is
              NVL(R.EVALUACION, 0) EVALUACION,
              NVL(R.PTOTOTAL, 0) PTOTOTAL,
              NVL(R.COMENTARIO, '') COMENTARIO,
-
+             
              R.TIPPUESTO,
              R.IDSEDE,
              UPPER(P.APEPATERNO || ' ' || P.APEMATERNO) AS APELLIDOS,
@@ -2406,7 +2434,7 @@ create or replace package body PR_INTRANET_ED is
          AND (p_nombre IS NULL OR
              UPPER(P.PRINOMBRE) LIKE '%' || UPPER(p_nombre) || '%')
        ORDER BY R.ESTPOSTULANTE;
-
+  
   END;
 
   /* ------------------------------------------------------------
@@ -2421,15 +2449,15 @@ create or replace package body PR_INTRANET_ED is
 
   PROCEDURE SP_CAMBIA_ESTADO_POST(p_nIdRegistro    IN NUMBER,
                                   p_cCodEstadoPost IN VARCHAR2) IS
-
+  
   BEGIN
-
+  
     UPDATE RECLUTAMIENTO_PERSONA r
        SET ESTPOSTULANTE = p_cCodEstadoPost
      WHERE IDERECLUTAPERSONA = p_nIdRegistro
        AND ESTACTIVO = 'A';
     COMMIT;
-
+  
   END SP_CAMBIA_ESTADO_POST;
 
   /* ------------------------------------------------------------
@@ -2447,9 +2475,9 @@ create or replace package body PR_INTRANET_ED is
                                    p_cRetVal OUT cur_cursor) IS
     cEstado varchar2(2);
   BEGIN
-
+  
     OPEN p_cRetVal FOR
-
+    
       SELECT X.IDEPOSTULANTE,
              X.IDERECLUTAPERSONA,
              X.IDESOL,
@@ -2461,7 +2489,7 @@ create or replace package body PR_INTRANET_ED is
              X.DESESTADOPOSTULANTE,
              X.INDCONTACTADO,
              X.EVALUACION,
-
+             
              PR_INTRANET_ED.FN_OBTIENE_PROMEDIO(X.IDERECLUTAPERSONA,
                                                 X.PUNTMIN,
                                                 X.PROMEDIOEXAMEN,
@@ -2502,7 +2530,7 @@ create or replace package body PR_INTRANET_ED is
                          AND D.VALOR = R.ESTPOSTULANTE) DESESTADOPOSTULANTE,
                      R.INDCONTACTADO,
                      NVL(R.EVALUACION, 0) EVALUACION,
-
+                     
                      NVL(R.COMENTARIO, '') COMENTARIO,
                      R.TIPPUESTO,
                      R.IDSEDE,
@@ -2534,9 +2562,9 @@ create or replace package body PR_INTRANET_ED is
                  AND TIPSOL = p_cTipSol
                  AND R.ESTACTIVO = 'A'
                  AND R.ESTPOSTULANTE IN ('03', '02', '07', '08', '09', '10')
-
+              
                ORDER BY R.ESTPOSTULANTE) X;
-
+  
   END SP_POSTULANTE_PRESELEC;
 
   /* ------------------------------------------------------------
@@ -2553,13 +2581,13 @@ create or replace package body PR_INTRANET_ED is
                                p_nPomedioAnt       IN NUMBER,
                                p_cEstadoPost       IN Reclutamiento_Persona.Estpostulante%type)
     RETURN NUMBER IS
-
+  
     nPromedio     number;
     cIndAprobado  varchar2(1);
     nCantEvalReal NUMBER;
     nCantEvalConf NUMBER;
   BEGIN
-
+  
     IF p_cEstadoPost != P_POSTPOSTULANTE_POTENCIAL THEN
       BEGIN
         SELECT R.EVALUACION,
@@ -2579,9 +2607,9 @@ create or replace package body PR_INTRANET_ED is
           nCantEvalReal := 0;
           nCantEvalConf := -1;
       END;
-
+    
       -- promedio a la fecha
-
+    
       BEGIN
         SELECT (X.NOTA / X.TOTAL)
           INTO nPromedio
@@ -2593,11 +2621,11 @@ create or replace package body PR_INTRANET_ED is
         WHEN OTHERS THEN
           nPromedio := -1;
       END;
-
+    
       RETURN nvl(nPromedio, 0);
-
+    
     ELSE
-
+    
       IF nPromedio > p_nPuntaje THEN
         BEGIN
           SELECT ((R.NOTAFINAL + p_nPomedioAnt) / 2)
@@ -2613,10 +2641,10 @@ create or replace package body PR_INTRANET_ED is
       ELSE
         nPromedio := 0;
       END IF;
-
+    
       RETURN nvl(nPromedio, 0);
     END IF;
-
+  
   END FN_OBTIENE_PROMEDIO;
 
   /* ------------------------------------------------------------
@@ -2633,16 +2661,16 @@ create or replace package body PR_INTRANET_ED is
                                 p_nPromedio         IN NUMBER,
                                 p_cEstadoPost       IN RECLUTAMIENTO_PERSONA.ESTPOSTULANTE%TYPE)
     RETURN VARCHAR2 IS
-
+  
     nPromedio     number;
     cIndAprobado  varchar2(1);
     nCantEvalReal NUMBER;
     nCantEvalConf NUMBER;
     nNotaFinal    NUMBER;
   BEGIN
-
+  
     IF p_cEstadoPost != P_POSTPOSTULANTE_POTENCIAL THEN
-
+    
       BEGIN
         SELECT R.EVALUACION,
                DECODE(R.TIPSOL,
@@ -2661,9 +2689,9 @@ create or replace package body PR_INTRANET_ED is
           nCantEvalReal := 0;
           nCantEvalConf := -1;
       END;
-
+    
       IF nCantEvalReal = nCantEvalConf THEN
-
+      
         BEGIN
           SELECT (X.NOTA / X.TOTAL)
             INTO nPromedio
@@ -2672,12 +2700,12 @@ create or replace package body PR_INTRANET_ED is
                     FROM RECLU_PERSO_EXAMEN R
                    WHERE R.IDERECLUTAPERSONA = p_nIdReclutaPersona
                      AND R.TIPESTEVALUACION IN ('04', '05')) X;
-
+        
         EXCEPTION
           WHEN OTHERS THEN
             nPromedio := -1;
         END;
-
+      
       ELSE
         RETURN nvl(cIndAprobado, 'N');
       END IF;
@@ -2695,15 +2723,15 @@ create or replace package body PR_INTRANET_ED is
           nPromedio := 0;
       END;
     END IF;
-
+  
     IF nPromedio > p_nPuntaje THEN
       cIndAprobado := 'S';
     ELSE
       cIndAprobado := 'N';
     END IF;
-
+  
     RETURN nvl(cIndAprobado, 'N');
-
+  
   END FN_OBTIENE_IND_APROB;
 
   /* ------------------------------------------------------------
@@ -2721,9 +2749,9 @@ create or replace package body PR_INTRANET_ED is
                                         p_cRetVal OUT cur_cursor) IS
     cEstado varchar2(2);
   BEGIN
-
+  
     OPEN p_cRetVal FOR
-
+    
       SELECT X.IDEPOSTULANTE,
              X.IDERECLUTAPERSONA,
              X.IDESOL,
@@ -2735,7 +2763,7 @@ create or replace package body PR_INTRANET_ED is
              X.DESESTADOPOSTULANTE,
              X.INDCONTACTADO,
              X.EVALUACION,
-
+             
              PR_INTRANET_ED.FN_OBTIENE_PROMEDIO(X.IDERECLUTAPERSONA,
                                                 X.PUNTMIN,
                                                 X.PROMEDIOEXAMEN,
@@ -2762,7 +2790,7 @@ create or replace package body PR_INTRANET_ED is
                                                  X.PUNTMIN,
                                                  X.PROMEDIOEXAMEN,
                                                  X.ESTPOSTULANTE) INDAPROB
-
+      
         FROM (SELECT NVL(R.IDEPOSTULANTE, 0) IDEPOSTULANTE,
                      NVL(R.IDERECLUTAPERSONA, 0) IDERECLUTAPERSONA,
                      NVL(R.IDESOL, 0) IDESOL,
@@ -2777,7 +2805,7 @@ create or replace package body PR_INTRANET_ED is
                          AND D.VALOR = R.ESTPOSTULANTE) DESESTADOPOSTULANTE,
                      R.INDCONTACTADO,
                      NVL(R.EVALUACION, 0) EVALUACION,
-
+                     
                      NVL(R.COMENTARIO, '') COMENTARIO,
                      R.TIPPUESTO,
                      R.IDSEDE,
@@ -2809,9 +2837,9 @@ create or replace package body PR_INTRANET_ED is
                  AND TIPSOL = p_cTipSol
                  AND R.ESTACTIVO = 'A'
                  AND R.ESTPOSTULANTE IN ('08', '09')
-
+              
                ORDER BY R.ESTPOSTULANTE) X;
-
+  
   END SP_POSTULANTE_SELECCIONADOS;
 
   /* ------------------------------------------------------------
@@ -2835,7 +2863,7 @@ create or replace package body PR_INTRANET_ED is
                                      p_nIdRolSuceso IN NUMBER) IS
     --obtiene las solicitudes en cola
     nPromediActual number;
-
+  
     CURSOR C_SOL IS
       SELECT IDSOLICITUD,
              TIPRANGOSALARIO,
@@ -2881,7 +2909,7 @@ create or replace package body PR_INTRANET_ED is
                                         FROM HORARIO_CARGO G
                                        WHERE G.IDECARGO = H.IDECARGO))
                       UNION ALL
-
+                      
                       SELECT S.IDESOLREQPERSONAL IDSOLICITUD,
                              S.TIPRANGOSALARIO TIPRANGOSALARIO,
                              S.IDEAREA,
@@ -2901,7 +2929,7 @@ create or replace package body PR_INTRANET_ED is
                WHERE 1 = 1
                ORDER BY X.TIPSOL, X.FECPUBLICACION) Y
        WHERE ROWNUM < 2;
-
+  
     --obtiene los postulantes de una solicitud
     CURSOR C_RECLUTA_PERSONA IS
       SELECT R.IDERECLUTAPERSONA,
@@ -2925,7 +2953,7 @@ create or replace package body PR_INTRANET_ED is
          AND R.ESTPOSTULANTE NOT IN (P_POSTCONTRATADO, P_POSTEXCLUIDO,
               P_POSTNO_APTO, P_POSTFINALIZADO)
          AND R.ESTACTIVO = 'A';
-
+  
     --obtiene los examenes del postulantes
     CURSOR C_RECLU_PERSO_EXAMEN(p_nIdeReclutaPersona IN RECLU_PERSO_EXAMEN.IDERECLUTAPERSONA%TYPE) IS
       SELECT RPE.IDERECLUTAPERSONA,
@@ -2942,7 +2970,7 @@ create or replace package body PR_INTRANET_ED is
         FROM RECLU_PERSO_EXAMEN RPE
        WHERE RPE.Idereclutapersona = p_nIdeReclutaPersona
        order by rpe.fecmodifica desc;
-
+  
     nIdeReclutaPersona       NUMBER;
     nIdeReclutaPersonaExamen NUMBER;
     nPuntMin                 NUMBER;
@@ -2950,12 +2978,12 @@ create or replace package body PR_INTRANET_ED is
     nContSol                 NUMBER;
     nIdEvaluacion            NUMBER;
     cTipEtapa                SOLNUEVO_CARGO.TIPETAPA%TYPE;
-
+  
     cIndPotencial varchar2(1);
   BEGIN
-
+  
     IF P_TIPSOLNUEVO = p_cTipSol THEN
-
+    
       SELECT TIPETAPA
         INTO cTipEtapa
         FROM SOLNUEVO_CARGO SN
@@ -2963,18 +2991,18 @@ create or replace package body PR_INTRANET_ED is
          AND SN.IDECARGO = p_nIdCargo
          AND SN.ESTACTIVO = 'A';
     ELSE
-
+    
       SELECT TIPETAPA
         INTO cTipEtapa
         FROM SOLREQ_PERSONAL SR
        WHERE SR.IDESOLREQPERSONAL = p_nIdSol
          AND SR.IDECARGO = p_nIdCargo
          AND SR.ESTACTIVO = 'A';
-
+    
     END IF;
-
+  
     IF cTipEtapa <> P_SOLFINALIZADO THEN
-
+    
       nContSol := pr_intranet_ed.FN_CANT_SOLICITUD_COLA(p_nIdSol,
                                                         p_cTipSol,
                                                         p_cTipPuesto,
@@ -2982,35 +3010,35 @@ create or replace package body PR_INTRANET_ED is
                                                         p_nIdCargo);
       -- si no hay cola
       IF nContSol = 0 THEN
-
+      
         FOR C2 IN C_RECLUTA_PERSONA LOOP
           IF C2.ESTPOSTULANTE = P_POSTSELECCIONADO OR
              C2.ESTPOSTULANTE = P_POSTPOSTULANTE_POTENCIAL THEN
-
+          
             --actualiza el estado del postulante a potencial
             SELECT R.INDPOTENCIAL
               INTO cIndPotencial
               FROM RECLUTAMIENTO_PERSONA R
              WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
-
+          
             IF cIndPotencial = 'S' THEN
               NULL;
             ELSE
-
+            
               UPDATE RECLUTAMIENTO_PERSONA R
                  SET R.INDPOTENCIAL = 'S', R.FECPOTENCIAL = SYSDATE
                WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
-
+            
             END IF;
-
+          
             UPDATE RECLUTAMIENTO_PERSONA R
                SET R.ESTPOSTULANTE = P_POSTPOSTULANTE_POTENCIAL
              WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
-
+          
             COMMIT;
-
+          
           END IF;
-
+        
           -- se obtiene le puntaje promedio min
           BEGIN
             SELECT NVL(DECODE(R.TIPSOL,
@@ -3031,7 +3059,7 @@ create or replace package body PR_INTRANET_ED is
             WHEN OTHERS THEN
               nPuntMin := 0;
           END;
-
+        
           cIndAprobado := PR_INTRANET_ED.FN_OBTIENE_IND_APROB(C2.IDERECLUTAPERSONA,
                                                               nPuntMin,
                                                               C2.PROMEDIOEXAMEN,
@@ -3039,22 +3067,22 @@ create or replace package body PR_INTRANET_ED is
           --si estan aprobados se actualiza a postulante potencial
           IF C2.ESTPOSTULANTE = P_POSTEN_EVALUACION THEN
             IF cIndAprobado = 'S' THEN
-
+            
               SELECT R.INDPOTENCIAL
                 INTO cIndPotencial
                 FROM RECLUTAMIENTO_PERSONA R
                WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
-
+            
               IF cIndPotencial = 'S' THEN
                 NULL;
               ELSE
-
+              
                 UPDATE RECLUTAMIENTO_PERSONA R
                    SET R.INDPOTENCIAL = 'S', R.FECPOTENCIAL = SYSDATE
                  WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
-
+              
               END IF;
-
+            
               UPDATE RECLUTAMIENTO_PERSONA R
                  SET R.ESTPOSTULANTE = P_POSTPOSTULANTE_POTENCIAL
               -- R.INDPOTENCIAL  = 'S',
@@ -3063,15 +3091,15 @@ create or replace package body PR_INTRANET_ED is
               COMMIT;
               -- si estan desaprobados se finaliza al postulante
             ELSE
-
+            
               UPDATE RECLUTAMIENTO_PERSONA R
                  SET R.ESTPOSTULANTE = P_POSTFINALIZADO
                WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
               COMMIT;
-
+            
             END IF;
           END IF;
-
+        
           IF P_POSTPRESELEC_AUTOMATICO = C2.ESTPOSTULANTE OR
              P_POSTPRESELEC_MANUAL = C2.ESTPOSTULANTE OR
              P_POSTNO_PRESELECCIONADO = C2.ESTPOSTULANTE OR
@@ -3081,16 +3109,16 @@ create or replace package body PR_INTRANET_ED is
                SET R.ESTPOSTULANTE = P_POSTFINALIZADO
              WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
             COMMIT;
-
+          
           END IF;
-
+        
         END LOOP;
-
+      
       ELSE
-
+      
         -- si hay solicitudes en cola se obtiene la siguiente que esta publicada
         FOR C1 IN C_SOL LOOP
-
+        
           -- se obtiene el id de evaluacion
           IF C1.Tipsol = P_TIPSOLNUEVO THEN
             BEGIN
@@ -3102,7 +3130,7 @@ create or replace package body PR_INTRANET_ED is
               WHEN OTHERS THEN
                 nIdEvaluacion := 0;
             END;
-
+          
           ELSE
             BEGIN
               SELECT DISTINCT ES.IDEEVALUACIONSOLREQ
@@ -3113,11 +3141,11 @@ create or replace package body PR_INTRANET_ED is
               WHEN OTHERS THEN
                 nIdEvaluacion := 0;
             END;
-
+          
           END IF;
-
+        
           FOR C2 IN C_RECLUTA_PERSONA LOOP
-
+          
             IF C2.ESTPOSTULANTE = P_POSTSELECCIONADO OR
                C2.ESTPOSTULANTE = P_POSTPOSTULANTE_POTENCIAL THEN
               --migra los datos del postulante asociado a una solicitud
@@ -3137,20 +3165,20 @@ create or replace package body PR_INTRANET_ED is
                                                         C2.Promedioexamen,
                                                         'C',
                                                         nIdeReclutaPersona);
-
+            
               --finaliza los postulante en la solicitud actual
               UPDATE RECLUTAMIENTO_PERSONA R
                  SET R.ESTPOSTULANTE = P_POSTFINALIZADO
                WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
               COMMIT;
-
+            
               --migra los examenes del postulante
               --Debe tener un id de evaluacion para poder migrar
               IF nIdEvaluacion > 0 THEN
                 FOR C3 IN C_RECLU_PERSO_EXAMEN(C2.IDERECLUTAPERSONA) LOOP
-
+                
                   -- se migra las evaluaciones a la solicitud siguiente
-
+                
                   PR_INTRANET_ED.SP_INSERTA_RECLUTA_EXAMEM(nIdeReclutaPersona,
                                                            nIdEvaluacion,
                                                            C1.TIPSOL,
@@ -3163,12 +3191,12 @@ create or replace package body PR_INTRANET_ED is
                                                            C3.TIPESTEVALUACION,
                                                            C3.OBSERVACION,
                                                            nIdeReclutaPersonaExamen);
-
+                
                 END LOOP;
               END IF;
-
+            
             END IF;
-
+          
             --obtiene a los postulantes aprobados
             BEGIN
               SELECT NVL(DECODE(R.TIPSOL,
@@ -3199,7 +3227,7 @@ create or replace package body PR_INTRANET_ED is
             --si estan aprobados migran a la siguiente solicitud
             IF C2.ESTPOSTULANTE = P_POSTEN_EVALUACION THEN
               IF cIndAprobado = 'S' THEN
-
+              
                 BEGIN
                   SELECT H.PROMEDIOEXAMEN
                     INTO nPromediActual
@@ -3225,7 +3253,7 @@ create or replace package body PR_INTRANET_ED is
                                                           nPromediActual,
                                                           'C',
                                                           nIdeReclutaPersona);
-
+              
                 --finaliza los postulantes aprobados en la solciitud actual
                 BEGIN
                   UPDATE RECLUTAMIENTO_PERSONA R
@@ -3233,10 +3261,10 @@ create or replace package body PR_INTRANET_ED is
                    WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
                   COMMIT;
                 END;
-
+              
                 IF nIdEvaluacion > 0 THEN
                   FOR C3 IN C_RECLU_PERSO_EXAMEN(C2.IDERECLUTAPERSONA) LOOP
-
+                  
                     PR_INTRANET_ED.SP_INSERTA_RECLUTA_EXAMEM(nIdeReclutaPersona,
                                                              nIdEvaluacion,
                                                              C1.TIPSOL,
@@ -3249,25 +3277,25 @@ create or replace package body PR_INTRANET_ED is
                                                              C3.TIPESTEVALUACION,
                                                              C3.OBSERVACION,
                                                              nIdeReclutaPersonaExamen);
-
+                  
                   END LOOP;
                 END IF;
                 -- si estan desaprobados se finaliza al postulante
               ELSE
-
+              
                 UPDATE RECLUTAMIENTO_PERSONA R
                    SET R.ESTPOSTULANTE = P_POSTFINALIZADO
                  WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
                 COMMIT;
-
+              
               END IF;
             END IF;
-
+          
             -- si esta preseleccionado o no preseleccionado pasan con sus mismos datos
             IF P_POSTPRESELEC_AUTOMATICO = C2.ESTPOSTULANTE OR
                P_POSTPRESELEC_MANUAL = C2.ESTPOSTULANTE OR
                P_POSTNO_PRESELECCIONADO = C2.ESTPOSTULANTE THEN
-
+            
               PR_INTRANET_ED.SP_INSERTA_RECLUTA_PERSONA(C2.IDEPOSTULANTE,
                                                         C1.IDSOLICITUD,
                                                         C1.TIPSOL,
@@ -3284,17 +3312,17 @@ create or replace package body PR_INTRANET_ED is
                                                         C2.PROMEDIOEXAMEN,
                                                         'C',
                                                         nIdeReclutaPersona);
-
+            
               BEGIN
                 UPDATE RECLUTAMIENTO_PERSONA R
                    SET R.ESTPOSTULANTE = P_POSTFINALIZADO
                  WHERE R.IDERECLUTAPERSONA = C2.IDERECLUTAPERSONA;
                 COMMIT;
               END;
-
+            
               IF nIdEvaluacion > 0 THEN
                 FOR C3 IN C_RECLU_PERSO_EXAMEN(C2.IDERECLUTAPERSONA) LOOP
-
+                
                   PR_INTRANET_ED.SP_INSERTA_RECLUTA_EXAMEM(nIdeReclutaPersona,
                                                            nIdEvaluacion,
                                                            C1.TIPSOL,
@@ -3307,16 +3335,16 @@ create or replace package body PR_INTRANET_ED is
                                                            C3.TIPESTEVALUACION,
                                                            C3.OBSERVACION,
                                                            nIdeReclutaPersonaExamen);
-
+                
                 END LOOP;
               END IF;
             END IF;
-
+          
           END LOOP;
-
+        
         END LOOP;
       END IF;
-
+    
       --Finaliza la solicitud Actual
       IF P_TIPSOLNUEVO = p_cTipSol THEN
         UPDATE SOLNUEVO_CARGO
@@ -3325,7 +3353,7 @@ create or replace package body PR_INTRANET_ED is
            AND IDESOLNUEVOCARGO = p_nIdSol
            AND IDECARGO = p_nIdCargo;
         COMMIT;
-
+      
         PR_INTRANET_ED.SP_INSERT_LOG_SOLNUEVO_CARGO(p_nIdSol,
                                                     P_SOLFINALIZADO,
                                                     TO_CHAR(SYSDATE,
@@ -3335,7 +3363,7 @@ create or replace package body PR_INTRANET_ED is
                                                     p_nIdRolResp,
                                                     p_nIdResp,
                                                     NULL);
-
+      
       ELSE
         UPDATE SOLREQ_PERSONAL
            SET TIPETAPA = P_SOLFINALIZADO
@@ -3344,7 +3372,7 @@ create or replace package body PR_INTRANET_ED is
            AND IDECARGO = p_nIdCargo
            AND TIPSOL = p_cTipSol;
         COMMIT;
-
+      
         pr_intranet_ed.sp_insert_log_solreqpersonal(p_nIdSol,
                                                     P_SOLFINALIZADO,
                                                     TO_CHAR(SYSDATE,
@@ -3354,9 +3382,9 @@ create or replace package body PR_INTRANET_ED is
                                                     p_nIdRolResp,
                                                     p_nIdResp,
                                                     NULL);
-
+      
       END IF;
-
+    
     END IF;
   END SP_FINALIZA_CONTRATACION;
 
@@ -3387,19 +3415,19 @@ create or replace package body PR_INTRANET_ED is
                                        p_cPromedioEx        IN RECLUTAMIENTO_PERSONA.PROMEDIOEXAMEN%TYPE,
                                        p_cIndProceso        IN RECLUTAMIENTO_PERSONA.INDPROCESO%TYPE,
                                        p_nIdeReclutaPersona OUT NUMBER) IS
-
+  
     nIdeReclutaPersona NUMBER;
     cIndPotencial      VARCHAR2(1);
   BEGIN
-
+  
     BEGIN
       SELECT IDERECLUTAPERSONA_SQ.NEXTVAL
         INTO nIdeReclutaPersona
         FROM DUAL;
     END;
-
+  
     BEGIN
-
+    
       INSERT INTO RECLUTAMIENTO_PERSONA
         (IDERECLUTAPERSONA,
          IDEPOSTULANTE,
@@ -3442,29 +3470,29 @@ create or replace package body PR_INTRANET_ED is
          p_cIndProceso);
     END;
     COMMIT;
-
+  
     IF p_cEstadoPost = P_POSTPOSTULANTE_POTENCIAL THEN
-
+    
       SELECT R.INDPOTENCIAL
         INTO cIndPotencial
         FROM RECLUTAMIENTO_PERSONA R
        WHERE R.IDERECLUTAPERSONA = nIdeReclutaPersona;
-
+    
       IF cIndPotencial = 'S' THEN
         NULL;
       ELSE
-
+      
         UPDATE RECLUTAMIENTO_PERSONA R
            SET R.INDPOTENCIAL = 'S', R.FECPOTENCIAL = SYSDATE
          WHERE R.IDERECLUTAPERSONA = nIdeReclutaPersona;
-
+      
       END IF;
-
+    
     END IF;
     COMMIT;
-
+  
     p_nIdeReclutaPersona := nIdeReclutaPersona;
-
+  
   END SP_INSERTA_RECLUTA_PERSONA;
 
   /* ------------------------------------------------------------
@@ -3490,19 +3518,19 @@ create or replace package body PR_INTRANET_ED is
                                       p_cTIPESTEVALUACION      IN RECLU_PERSO_EXAMEN.TIPESTEVALUACION%TYPE,
                                       p_cOBSERVACION           IN RECLU_PERSO_EXAMEN.OBSERVACION%TYPE,
                                       p_nIdeReclutaPersoExamen OUT number) IS
-
+  
     nIdeReclutaPersoExamen number;
-
+  
   BEGIN
-
+  
     BEGIN
       SELECT IDERECLUPERSOEXAMEN_SQ.NEXTVAL
         INTO nIdeReclutaPersoExamen
         FROM DUAL;
     END;
-
+  
     BEGIN
-
+    
       INSERT INTO RECLU_PERSO_EXAMEN
         (IDERECLUPERSOEXAMEN,
          IDERECLUTAPERSONA,
@@ -3531,12 +3559,12 @@ create or replace package body PR_INTRANET_ED is
          p_cTIPESTEVALUACION,
          p_cOBSERVACION,
          SYSDATE);
-
+    
     END;
     COMMIT;
-
+  
     p_nIdeReclutaPersoExamen := nIdeReclutaPersoExamen;
-
+  
   END SP_INSERTA_RECLUTA_EXAMEM;
 
   /* ------------------------------------------------------------
@@ -3554,7 +3582,7 @@ create or replace package body PR_INTRANET_ED is
                                    p_cTipPuesto IN VARCHAR2,
                                    p_nIdSede    IN NUMBER,
                                    p_nIdCargo   IN NUMBER) IS
-
+  
     --obtiene los examenes del postulantes
     CURSOR C_RECLU_PERSO_EXAMEN(p_nIdeReclutaPersona IN RECLU_PERSO_EXAMEN.IDERECLUTAPERSONA%TYPE) IS
       SELECT RPE.IDERECLUTAPERSONA,
@@ -3572,7 +3600,7 @@ create or replace package body PR_INTRANET_ED is
        WHERE RPE.Idereclutapersona = p_nIdeReclutaPersona
          AND RPE.INDENTREVFINAL <> 'S'
        order by RPE.Fecmodifica desc;
-
+  
     --obtiene los datos del recluta
     CURSOR C_RECLUTAMIENTO_PERSONA(p_cCodCargo cargo.codcargo%type) IS
       SELECT IDERECLUTAPERSONA,
@@ -3596,7 +3624,7 @@ create or replace package body PR_INTRANET_ED is
          AND RP.ESTACTIVO = 'A'
          AND RP.ESTPOSTULANTE = P_POSTPOSTULANTE_POTENCIAL
          AND RP.IDSEDE = p_nIdSede;
-
+  
     nIdeReclutaPersona       NUMBER;
     nIdeReclutaPersonaExamen NUMBER;
     nIdeReclutaExamenMax     NUMBER;
@@ -3611,17 +3639,17 @@ create or replace package body PR_INTRANET_ED is
     nVersionActual           NUMBER;
     nVersionAnterior         NUMBER;
     nContSol                 NUMBER;
-
+  
   BEGIN
     BEGIN
-
+    
       -- obtiene si hay solicitudes publicadas
       nContSol := FN_CANT_SOLICITUD_COLA(p_nIdSol,
                                          p_cTipSol,
                                          p_cTipPuesto,
                                          p_nIdSede,
                                          p_nIdCargo);
-
+    
       IF nvl(nContSol, 0) = 0 THEN
         -- codigo de cargo actual
         BEGIN
@@ -3657,29 +3685,29 @@ create or replace package body PR_INTRANET_ED is
               nIdEvaluacion := 0;
           END;
         END IF;
-
+      
         -- obtiene los postulantes
         FOR C1 IN C_RECLUTAMIENTO_PERSONA(cCodCargoActual) LOOP
           --valida el numero de meses
           nNumMeses := months_between(SYSDATE, C1.FECMODIFICA);
-
+        
           SELECT TO_NUMBER(NVL(D.VALOR, 0))
             INTO nNumMesesConf
             FROM DETALLE_GENERAL D
            WHERE D.IDEGENERAL = 53
              AND D.ESTACTIVO = 'A';
-
+        
           IF nNumMeses > nNumMesesConf then
-
+          
             --finalizo al postulante porque ya paso el periodo de espera configurado
             UPDATE Reclutamiento_Persona RP
                SET RP.ESTPOSTULANTE = P_POSTFINALIZADO
              WHERE RP.IDERECLUTAPERSONA = C1.IDERECLUTAPERSONA;
             COMMIT;
-
+          
             ---CONTINUE;
           ELSE
-
+          
             -- codigo de cargo anterior
             BEGIN
               SELECT C.CODCARGO, C.VERSION
@@ -3691,9 +3719,9 @@ create or replace package body PR_INTRANET_ED is
                 cCodCargoAnterior := NULL;
                 nVersionAnterior  := -1;
             END;
-
+          
             --migra al postulante potencial a la nueva solicitud
-
+          
             PR_INTRANET_ED.SP_INSERTA_RECLUTA_PERSONA(c1.idepostulante,
                                                       p_nIdSol,
                                                       p_cTipSol,
@@ -3710,7 +3738,7 @@ create or replace package body PR_INTRANET_ED is
                                                       c1.PROMEDIOEXAMEN,
                                                       'N',
                                                       nIdeReclutaPersona);
-
+          
             BEGIN
               -- se finaliza en la solicitud que lo contenia anteriormente
               UPDATE RECLUTAMIENTO_PERSONA R
@@ -3719,12 +3747,12 @@ create or replace package body PR_INTRANET_ED is
               COMMIT;
             END;
             -- si las versiones son iguales
-
+          
             IF nIdEvaluacion > 0 then
               IF nVersionAnterior = nVersionActual THEN
                 -- se migra las evaluaciones porque contiene el mismo numero de evaluaciones
                 FOR C2 IN C_RECLU_PERSO_EXAMEN(C1.IDERECLUTAPERSONA) LOOP
-
+                
                   PR_INTRANET_ED.SP_INSERTA_RECLUTA_EXAMEM(nIdeReclutaPersona,
                                                            nIdEvaluacion,
                                                            p_cTipSol,
@@ -3737,7 +3765,7 @@ create or replace package body PR_INTRANET_ED is
                                                            C2.TIPESTEVALUACION,
                                                            C2.OBSERVACION,
                                                            nIdeReclutaPersonaExamen);
-
+                
                 END LOOP;
               END IF;
             END IF;
@@ -3764,7 +3792,7 @@ create or replace package body PR_INTRANET_ED is
                                   p_nIdCargo   IN NUMBER) RETURN NUMBER IS
     nContSol NUMBER;
   BEGIN
-
+  
     BEGIN
       SELECT COUNT(*)
         INTO nContSol
@@ -3798,7 +3826,7 @@ create or replace package body PR_INTRANET_ED is
                                 FROM HORARIO_CARGO G
                                WHERE G.IDECARGO = H.IDECARGO))
               UNION ALL
-
+              
               SELECT S.IDESOLREQPERSONAL IDSOLICITUD,
                      S.TIPRANGOSALARIO TIPRANGOSALARIO,
                      S.IDEAREA,
@@ -3819,9 +3847,9 @@ create or replace package body PR_INTRANET_ED is
       when others then
         nContSol := 0;
     END;
-
+  
     return nvl(nContSol, 0);
-
+  
   END FN_CANT_SOLICITUD_COLA;
 
   /* ------------------------------------------------------------
@@ -3840,10 +3868,10 @@ create or replace package body PR_INTRANET_ED is
                                     p_nIdCargo   IN NUMBER,
                                     p_nVancantes IN NUMBER,
                                     p_cRpta      OUT varchar2) IS
-
+  
     cNumContratados NUMBER;
   BEGIN
-
+  
     BEGIN
       SELECT COUNT(*)
         INTO cNumContratados
@@ -3859,13 +3887,13 @@ create or replace package body PR_INTRANET_ED is
       WHEN OTHERS THEN
         cNumContratados := 0;
     END;
-
+  
     IF cNumContratados = p_nVancantes THEN
       p_cRpta := 'S';
     ELSE
       p_cRpta := 'N';
     END IF;
-
+  
   END SP_VALIDA_FIN_SOLICITUD;
 
   /* ------------------------------------------------------------
@@ -3877,7 +3905,7 @@ create or replace package body PR_INTRANET_ED is
                 p_nIdSede id de la sede
                 p_cRpta devuelve S si esta preseleccionado o contratado
                                  N no esta preseleccionado ni aprobado
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -3885,7 +3913,7 @@ create or replace package body PR_INTRANET_ED is
   PROCEDURE SP_VALIDA_SELECCION(p_nIdPostulante IN NUMBER,
                                 p_nIdSede       IN NUMBER,
                                 p_cRpta         OUT VARCHAR2) IS
-
+  
     nPostCargo number;
   BEGIN
     --valida que el postulante no este preseleccionado, contratado
@@ -3899,18 +3927,18 @@ create or replace package body PR_INTRANET_ED is
          AND R.ESTPOSTULANTE IN
              (P_POSTPRESELEC_AUTOMATICO, P_POSTPRESELEC_MANUAL,
               P_POSTCONTRATADO, P_POSTNO_APTO, P_POSTEN_EVALUACION);
-
+    
     EXCEPTION
       WHEN OTHERS THEN
         nPostCargo := 0;
     END;
-
+  
     IF nPostCargo > 0 THEN
       p_cRpta := 'S';
     ELSE
       p_cRpta := 'N';
     END IF;
-
+  
   END SP_VALIDA_SELECCION;
 
   /* ------------------------------------------------------------
@@ -3921,7 +3949,7 @@ create or replace package body PR_INTRANET_ED is
   Parametros  : p_nIdPostulante id del postulante
                 p_nIdSede id de la sede
                 p_cRpta devuelve las postulaciones del postulante
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -3929,7 +3957,7 @@ create or replace package body PR_INTRANET_ED is
   FUNCTION FN_OBTIENE_POSTULACIONES(p_nIdPostulante IN NUMBER,
                                     p_nIdSede       IN NUMBER)
     RETURN VARCHAR2 IS
-
+  
     CUrsor C_LISTA_POSTULACIONES IS
       SELECT UPPER(DECODE(R.TIPSOL,
                           '01',
@@ -3947,36 +3975,36 @@ create or replace package body PR_INTRANET_ED is
        WHERE R.IDEPOSTULANTE = p_nIdPostulante
          AND R.IDSEDE = p_nIdSede
          AND R.ESTACTIVO = 'A';
-
+  
     cDescripcion VARCHAR2(2000);
     nCont        NUMBER;
-
+  
   BEGIN
-
+  
     nCont := 1;
-
+  
     FOR C1 IN C_LISTA_POSTULACIONES LOOP
       IF nCont = 1 THEN
         cDescripcion := cDescripcion || C1.POSTULACIONES;
       ELSE
         cDescripcion := cDescripcion || ', ' || C1.POSTULACIONES;
       END IF;
-
+    
       nCont := nCont + 1;
-
+    
     END LOOP;
-
+  
     return NVL(cDescripcion, '');
-
+  
   END FN_OBTIENE_POSTULACIONES;
 
   /* ------------------------------------------------------------
   Nombre      : SP_INSERT_LOG_SOLNUEVO_CARGO
   Proposito   : inserta en el log de solicitud cargo
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -3989,15 +4017,15 @@ create or replace package body PR_INTRANET_ED is
                                          p_nIdRolResp       IN LOGSOLNUEVO_CARGO.ROLRESPONSABLE%TYPE,
                                          p_nIdResponble     IN LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE,
                                          p_observacion      IN VARCHAR2) IS
-
+  
     nIDELOGSOLNUEVOCARGO NUMBER(8);
   BEGIN
-
+  
     BEGIN
       SELECT IDELOGSOLNUEVOCARGO_SQ.nextval
         into nIDELOGSOLNUEVOCARGO
         FROM dual;
-
+    
       INSERT INTO LOGSOLNUEVO_CARGO
         (IDELOGSOLNUEVOCARGO,
          IDESOLNUEVOCARGO,
@@ -4018,28 +4046,28 @@ create or replace package body PR_INTRANET_ED is
          SYSDATE,
          p_nIdUsuarioSuceco,
          p_nIdRolSuceso);
-
+    
       COMMIT;
     EXCEPTION
       WHEN OTHERS THEN
         ROLLBACK;
     END;
-
+  
   END SP_INSERT_LOG_SOLNUEVO_CARGO;
 
   /* ------------------------------------------------------------
   Nombre      : SP_MIGRA_CONTRATADOS
   Proposito   : Migra los controtados
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_MIGRA_CONTRATADOS IS
-
+  
     --obtiene los postulantes contratados
     CURSOR C_RECLUTAMIENTO_PERSONA IS
       SELECT R.IDERECLUTAPERSONA,
@@ -4067,7 +4095,7 @@ create or replace package body PR_INTRANET_ED is
          AND R.ESTPOSTULANTE = P_POSTCONTRATADO
          AND R.ESTACTIVO = 'A'
        ORDER BY R.IDSEDE, R.TIPPUESTO, R.CODCARGO;
-
+  
     --obtiene los datos del postulante
     CURSOR C_POSTULANTE(p_idPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEPOSTULANTE,
@@ -4115,7 +4143,7 @@ create or replace package body PR_INTRANET_ED is
         FROM POSTULANTE P
        WHERE P.IDEPOSTULANTE = p_idPostulante
          AND P.ESTACTIVO = 'A';
-
+  
     --obtiene los conocimientos del postulante
     CURSOR C_CONOGEN_POSTULANTE(p_idPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEPOSTULANTE,
@@ -4135,7 +4163,7 @@ create or replace package body PR_INTRANET_ED is
         FROM CONOGEN_POSTULANTE CP
        WHERE CP.IDEPOSTULANTE = p_idPostulante
          AND CP.ESTACTIVO = 'A';
-
+  
     --obtiene los parientes del postulante
     CURSOR C_PARIENTES_POSTULANTE(p_nIdPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEPOSTULANTE,
@@ -4148,9 +4176,9 @@ create or replace package body PR_INTRANET_ED is
         FROM PARIENTES_POSTULANTE P
        WHERE P.IDEPOSTULANTE = p_nIdPostulante
          AND P.ESTACTIVO = 'A';
-
+  
     --obtiene las experiencias laborales
-
+  
     CURSOR C_EXP_POSTULANTE(p_nIdPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEPOSTULANTE,
              NOMEMPRESA,
@@ -4172,9 +4200,9 @@ create or replace package body PR_INTRANET_ED is
         FROM EXP_POSTULANTE
        WHERE IDEPOSTULANTE = p_nIdPostulante
          AND ESTACTIVO = 'A';
-
+  
     --obtiene los estudios del postulante
-
+  
     CURSOR C_ESTUDIOS_POSTULANTE(p_nIdPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEPOSTULANTE,
              TIPTIPOINSTITUCION,
@@ -4190,7 +4218,7 @@ create or replace package body PR_INTRANET_ED is
         FROM ESTUDIOS_POSTULANTE E
        WHERE E.ESTACTIVO = 'A'
          AND E.IDEPOSTULANTE = p_nIdPostulante;
-
+  
     --obtiene las discapacidades del postulante
     CURSOR C_DISCAPACIDAD_POSTULANTE(p_nIdPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT IDEDISCAPACIDADPOSTULANTE,
@@ -4201,7 +4229,7 @@ create or replace package body PR_INTRANET_ED is
         FROM DISCAPACIDAD_POSTULANTE D
        WHERE D.IDEPOSTULANTE = p_nIdPostulante
          AND D.ESTACTIVO = 'A';
-
+  
     -- obtiene los examenes del postulante ordenados por fecha
     CURSOR C_RECLU_PERSO_EXAMEN(p_nIdPostulante POSTULANTE.IDEPOSTULANTE%TYPE) IS
       SELECT TIPESTEVALUACION,
@@ -4224,9 +4252,9 @@ create or replace package body PR_INTRANET_ED is
                 FROM RECLUTAMIENTO_PERSONA RP
                WHERE RP.IDEPOSTULANTE = p_nIdPostulante)
          AND ER.TIPESTEVALUACION IN ('04', '05')
-
+      
        ORDER BY ER.FECMODIFICA ASC;
-
+  
     nIdePpostulante_Mig NUMBER(8);
     nExiste             NUMBER(8);
     dFecha              date;
@@ -4236,10 +4264,10 @@ create or replace package body PR_INTRANET_ED is
     err_msg             varchar2(250);
     cDato               number;
   BEGIN
-
+  
     FOR C1 IN C_RECLUTAMIENTO_PERSONA LOOP
       BEGIN
-
+      
         BEGIN
           SELECT 1
             INTO nExiste
@@ -4253,18 +4281,18 @@ create or replace package body PR_INTRANET_ED is
         IF nExiste > 0 THEN
           --continue;
           cDato := 0;
-
+        
         ELSE
-
+        
           BEGIN
             SELECT IDEPOSTULANTE_MIG_SQ.NEXTVAL
               INTO nIdePpostulante_Mig
               FROM DUAL;
           END;
-
+        
           cUsuario := SUBSTR(user, 0, 15);
           dFecha   := sysdate;
-
+        
           INSERT INTO RECLUTAMIENTO_PERSONA_MIG
             (IDERECLUTAPERSONA,
              IDEPOSTULANTE,
@@ -4303,10 +4331,10 @@ create or replace package body PR_INTRANET_ED is
              C1.CODCARGO,
              C1.PROMEDIOEXAMEN,
              nIdePpostulante_Mig);
-
+        
           --Inserta datos del postulante
           cMensaje := 'cursor C_CONOGEN_POSTULANTE';
-
+        
           BEGIN
             SELECT 1
               INTO nExiste
@@ -4316,11 +4344,11 @@ create or replace package body PR_INTRANET_ED is
             WHEN OTHERS THEN
               nExiste := 0;
           END;
-
+        
           IF NVL(nExiste, 0) = 0 THEN
-
+          
             FOR C2 in C_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+            
               INSERT INTO POSTULANTE_MIG
                 (IDEPOSTULANTEMIG,
                  IDEPOSTULANTE,
@@ -4413,32 +4441,32 @@ create or replace package body PR_INTRANET_ED is
                  C2.ESTACTIVO,
                  cUsuario,
                  dFecha);
-
+            
             END LOOP;
           ELSE
             -- se eliminan todos los registros del postulante
             DELETE FROM CONOGEN_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             DELETE FROM PARIENTES_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             DELETE FROM EXP_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             DELETE FROM EXP_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             DELETE FROM ESTUDIOS_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             DELETE FROM DISCAPACIDAD_POSTULANTE_MIG
              WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+          
             COMMIT;
-
+          
             FOR C9 in C_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+            
               UPDATE POSTULANTE_MIG
                  SET TIPDOCUMENTO     = C9.TIPDOCUMENTO,
                      NUMDOCUMENTO     = C9.NUMDOCUMENTO,
@@ -4484,17 +4512,17 @@ create or replace package body PR_INTRANET_ED is
                      USRMODIFICACION  = cUsuario,
                      FECMODIFICACION  = dFecha
                WHERE IDEPOSTULANTE = C1.IDEPOSTULANTE;
-
+            
             END LOOP;
           END IF;
           -- Inserta conocimiento del postulante
           cMensaje := 'cursor C_CONOGEN_POSTULANTE';
-
+        
           FOR C3 IN C_CONOGEN_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+          
             INSERT INTO CONOGEN_POSTULANTE_MIG
               (IDECONOGENPOSTULANTE_MIG,
-
+               
                IDEPOSTULANTE,
                TIPCONOFIMATICA,
                TIPNOMOFIMATICA,
@@ -4509,7 +4537,7 @@ create or replace package body PR_INTRANET_ED is
                FECCREACION)
             VALUES
               (IDECONOGENPOSTULANTE_MIG_SQ.NEXTVAL,
-
+               
                C3.IDEPOSTULANTE,
                C3.TIPCONOFIMATICA,
                C3.TIPNOMOFIMATICA,
@@ -4522,17 +4550,17 @@ create or replace package body PR_INTRANET_ED is
                C3.ESTACTIVO,
                cUsuario,
                dFecha);
-
+          
           END LOOP;
-
+        
           --inserta los datos de los parientes
           cMensaje := 'cursor C_PARIENTES_POSTULANTE';
-
+        
           FOR C4 IN C_PARIENTES_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+          
             INSERT INTO PARIENTES_POSTULANTE_MIG
               (IDEPARIENTESPOSTULANTEMIG,
-
+               
                IDEPOSTULANTE,
                APEMATERNO,
                APEPATERNO,
@@ -4544,7 +4572,7 @@ create or replace package body PR_INTRANET_ED is
                FECCREACION)
             VALUES
               (IDEPARIENTESPOSTULANTEMIG_SQ.NEXTVAL,
-
+               
                C4.IDEPOSTULANTE,
                C4.APEMATERNO,
                C4.APEPATERNO,
@@ -4554,17 +4582,17 @@ create or replace package body PR_INTRANET_ED is
                C4.ESTACTIVO,
                cUsuario,
                dFecha);
-
+          
           END LOOP;
-
+        
           --inserta las experiencias del postulante
           cMensaje := 'cursor C_EXP_POSTULANTE';
-
+        
           FOR C5 IN C_EXP_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+          
             INSERT INTO EXP_POSTULANTE_MIG
               (IDEEXPPOSTULANTEMIG,
-
+               
                IDEPOSTULANTE,
                NOMEMPRESA,
                TIPCARGOTRABAJO,
@@ -4586,7 +4614,7 @@ create or replace package body PR_INTRANET_ED is
                FUNCIONESDESEMP)
             VALUES
               (IDEEXPPOSTULANTEMIG_SQ.NEXTVAL,
-
+               
                C5.IDEPOSTULANTE,
                C5.NOMEMPRESA,
                C5.TIPCARGOTRABAJO,
@@ -4606,17 +4634,17 @@ create or replace package body PR_INTRANET_ED is
                cUsuario,
                dFecha,
                C5.FUNCIONESDESEMP);
-
+          
           END LOOP;
-
+        
           --Inserta estudios del postulante
           cMensaje := 'cursor C_ESTUDIOS_POSTULANTE';
-
+        
           FOR C6 IN C_ESTUDIOS_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+          
             INSERT INTO ESTUDIOS_POSTULANTE_MIG
               (IDEESTUDIOSPOSTULANTEMIG,
-
+               
                IDEPOSTULANTE,
                TIPTIPOINSTITUCION,
                TIPNOMINSTITUCION,
@@ -4632,7 +4660,7 @@ create or replace package body PR_INTRANET_ED is
                FECCREACION)
             VALUES
               (IDEESTUDIOSPOSTULANTEMIG_SQ.NEXTVAL,
-
+               
                C6.IDEPOSTULANTE,
                C6.TIPTIPOINSTITUCION,
                C6.TIPNOMINSTITUCION,
@@ -4646,17 +4674,17 @@ create or replace package body PR_INTRANET_ED is
                C6.ESTACTIVO,
                cUsuario,
                dFecha);
-
+          
           END LOOP;
-
+        
           --Inserta discapacidades del postulante
           cMensaje := 'cursor C_DISCAPACIDAD_POSTULANTE';
-
+        
           FOR C7 IN C_DISCAPACIDAD_POSTULANTE(C1.IDEPOSTULANTE) LOOP
-
+          
             INSERT INTO DISCAPACIDAD_POSTULANTE_MIG
               (IDEDISCAPACIDADPOSTMIG,
-
+               
                IDEPOSTULANTE,
                TIPODISCAPACIDAD,
                DESDISCAPACIDAD,
@@ -4665,19 +4693,19 @@ create or replace package body PR_INTRANET_ED is
                FECCREACION)
             VALUES
               (IDEDISCAPACIDADPOSTMIG_SQ.NEXTVAL,
-
+               
                C7.IDEPOSTULANTE,
                C7.TIPODISCAPACIDAD,
                C7.DESDISCAPACIDAD,
                C7.ESTACTIVO,
                cUsuario,
                dFecha);
-
+          
           END LOOP;
-
+        
           FOR C8 IN C_RECLU_PERSO_EXAMEN(C1.IDEPOSTULANTE) LOOP
             nExiste := 0;
-
+          
             BEGIN
               SELECT 1
                 INTO nExiste
@@ -4687,12 +4715,12 @@ create or replace package body PR_INTRANET_ED is
               WHEN OTHERS THEN
                 nExiste := 0;
             END;
-
+          
             IF nExiste = 1 THEN
               cDato := 0;
               --continue
             ELSE
-
+            
               INSERT INTO RECLU_PERSO_EXAMEN_MIG
                 (IDERECLUPERSOEXAMIG,
                  IDERECLUPERSOEXAMEN,
@@ -4733,15 +4761,15 @@ create or replace package body PR_INTRANET_ED is
           END LOOP;
           COMMIT;
         END IF;
-
+      
       EXCEPTION
         WHEN OTHERS THEN
-
+        
           err_code := SQLCODE;
           err_msg  := SUBSTR(SQLERRM, 1, 200);
-
+        
           cMensaje := cMensaje || ' - ' || err_code || ' - ' || err_msg;
-
+        
           INSERT INTO LOG_MIG_CONTRATADOS
             (IDLOGMIGCONT,
              IDE_MIG,
@@ -4760,14 +4788,14 @@ create or replace package body PR_INTRANET_ED is
              C1.TIPPUESTO,
              C1.IDERECLUTAPERSONA,
              cMensaje);
-
+        
           COMMIT;
-
+        
         --CONTINUE;
       END;
-
+    
     END LOOP;
-
+  
   END SP_MIGRA_CONTRATADOS;
 
   /* ------------------------------------------------------------
@@ -4776,32 +4804,32 @@ create or replace package body PR_INTRANET_ED is
                 departamento  3
                 provincia  2
                 distrito   1
-
+  
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   FUNCTION FN_OBTIENE_DESUBIGEO(p_nIdUbigeo IN postulante.ideubigeo%type,
                                 p_nInd      IN NUMBER) RETURN VARCHAR2 IS
-
+  
     CURSOR C_UBIGEO_PADRE(p_nIdUbigeoPadre ubigeo.ideubigeopadre%type) IS
       SELECT IDEUBIGEO, IDEUBIGEOPADRE, NOMBRE
         FROM UBIGEO U
        WHERE U.Ideubigeopadre = p_nIdUbigeoPadre;
-
+  
     cDistrito     ubigeo.nombre%type;
     cProvincia    ubigeo.nombre%type;
     cDepartamento ubigeo.nombre%type;
-
+  
     nIdUbigeo       ubigeo.ideubigeo%type;
     nIdeUbigeoPadre ubigeo.ideubigeopadre%type;
     cNombre         ubigeo.nombre%type;
-
+  
   BEGIN
-
+  
     BEGIN
       BEGIN
         SELECT IDEUBIGEO, IDEUBIGEOPADRE, NOMBRE
@@ -4815,7 +4843,7 @@ create or replace package body PR_INTRANET_ED is
           cNombre         := NULL;
       END;
       cDistrito := cNombre;
-
+    
       IF nIdeUbigeoPadre > 0 THEN
         BEGIN
           SELECT IDEUBIGEO, IDEUBIGEOPADRE, NOMBRE
@@ -4829,7 +4857,7 @@ create or replace package body PR_INTRANET_ED is
             cNombre         := NULL;
         END;
         cProvincia := cNombre;
-
+      
         IF nIdeUbigeoPadre > 0 THEN
           BEGIN
             SELECT IDEUBIGEO, IDEUBIGEOPADRE, NOMBRE
@@ -4844,9 +4872,9 @@ create or replace package body PR_INTRANET_ED is
           END;
         END IF;
         cDepartamento := cNombre;
-
+      
       END IF;
-
+    
       IF p_nInd = 1 THEN
         RETURN UPPER(cDistrito);
       END IF;
@@ -4856,16 +4884,16 @@ create or replace package body PR_INTRANET_ED is
       IF p_nInd = 3 THEN
         RETURN UPPER(cDepartamento);
       END IF;
-
+    
       IF p_nInd IS NULL THEN
         RETURN NULL;
       END IF;
     EXCEPTION
       WHEN OTHERS THEN
         RETURN NULL;
-
+      
     END;
-
+  
   END FN_OBTIENE_DESUBIGEO;
 
   /* ------------------------------------------------------------
@@ -4873,18 +4901,18 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene los datos del postulante para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_POSTULANTE(p_nIdPostulante IN postulante.idepostulante%type,
                              p_Rpta          OUT cur_cursor)
-
+  
    IS
-
+  
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT P.TIPDOCUMENTO CODTIPDOCUMENTO,
              (SELECT D.DESCRIPCION
@@ -4942,7 +4970,7 @@ create or replace package body PR_INTRANET_ED is
              P.LOTE,
              P.ETAPA,
              P.FOTOPOSTULANTE,
-
+             
              (SELECT D.DESCRIPCION
                 FROM DETALLE_GENERAL D
                WHERE D.IDEGENERAL = 11
@@ -4979,18 +5007,19 @@ create or replace package body PR_INTRANET_ED is
                                     'DD/MM/RRRR')) / 365,
                            0))) || ' )' EDAD,
              upper(DECODE(P.FECNACIMIENTO,
-                    NULL,
-                    '',
-                    TO_CHAR(P.FECNACIMIENTO, 'DD')) || ' de ' ||
-             PR_INTRANET_ED.FN_DES_MES(DECODE(P.FECNACIMIENTO,
-                                              NULL,
-                                              0,
-                                              TO_CHAR(P.FECNACIMIENTO, 'MM')),
-                                       1) || ' de ' ||
-             DECODE(P.FECNACIMIENTO,
-                    NULL,
-                    '',
-                    TO_CHAR(P.FECNACIMIENTO, 'YYYY'))) DESEDAD,
+                          NULL,
+                          '',
+                          TO_CHAR(P.FECNACIMIENTO, 'DD')) || ' de ' ||
+                   PR_INTRANET_ED.FN_DES_MES(DECODE(P.FECNACIMIENTO,
+                                                    NULL,
+                                                    0,
+                                                    TO_CHAR(P.FECNACIMIENTO,
+                                                            'MM')),
+                                             1) || ' de ' ||
+                   DECODE(P.FECNACIMIENTO,
+                          NULL,
+                          '',
+                          TO_CHAR(P.FECNACIMIENTO, 'YYYY'))) DESEDAD,
              UPPER(P.PRINOMBRE || ' ' || P.APEPATERNO || ' ' ||
                    P.APEMATERNO) NOMBRECOMPLETO,
              p.idepostulante,
@@ -5018,40 +5047,43 @@ create or replace package body PR_INTRANET_ED is
              PR_INTRANET_ED.FN_OBTIENE_DESUBIGEO(P.IDEUBIGEO, 1) || ', ' ||
              PR_INTRANET_ED.FN_OBTIENE_DESUBIGEO(P.IDEUBIGEO, 3) ||
              ', PERU') DESDIR,
-
-             decode(to_char(P.fecmodificacion,'DD/MM/YYYY'),'01/01/0001',(upper(DECODE(P.Feccreacion,
-                    NULL,
-                    '',
-                    TO_CHAR(P.Feccreacion, 'DD')) || ' de ' ||
-             PR_INTRANET_ED.FN_DES_MES(DECODE(P.Feccreacion,
-                                              NULL,
-                                              0,
-                                              TO_CHAR(P.Feccreacion, 'MM')),
-                                       1) || ' de ' ||
-             DECODE(P.Feccreacion,
-                    NULL,
-                    '',
-                    TO_CHAR(P.Feccreacion, 'YYYY')))),
-
-             (upper(DECODE(P.fecmodificacion,
-                    NULL,
-                    '',
-                    TO_CHAR(P.fecmodificacion, 'DD')) || ' de ' ||
-             PR_INTRANET_ED.FN_DES_MES(DECODE(P.fecmodificacion,
-                                              NULL,
-                                              0,
-                                              TO_CHAR(P.fecmodificacion, 'MM')),
-                                       1) || ' de ' ||
-             DECODE(P.fecmodificacion,
-                    NULL,
-                    '',
-                    TO_CHAR(P.fecmodificacion, 'YYYY'))))) MODIFICACION
-
-
+             
+             decode(to_char(P.fecmodificacion, 'DD/MM/YYYY'),
+                    '01/01/0001',
+                    (upper(DECODE(P.Feccreacion,
+                                  NULL,
+                                  '',
+                                  TO_CHAR(P.Feccreacion, 'DD')) || ' de ' ||
+                           PR_INTRANET_ED.FN_DES_MES(DECODE(P.Feccreacion,
+                                                            NULL,
+                                                            0,
+                                                            TO_CHAR(P.Feccreacion,
+                                                                    'MM')),
+                                                     1) || ' de ' ||
+                           DECODE(P.Feccreacion,
+                                  NULL,
+                                  '',
+                                  TO_CHAR(P.Feccreacion, 'YYYY')))),
+                    
+                    (upper(DECODE(P.fecmodificacion,
+                                  NULL,
+                                  '',
+                                  TO_CHAR(P.fecmodificacion, 'DD')) ||
+                           ' de ' || PR_INTRANET_ED.FN_DES_MES(DECODE(P.fecmodificacion,
+                                                                      NULL,
+                                                                      0,
+                                                                      TO_CHAR(P.fecmodificacion,
+                                                                              'MM')),
+                                                               1) || ' de ' ||
+                           DECODE(P.fecmodificacion,
+                                  NULL,
+                                  '',
+                                  TO_CHAR(P.fecmodificacion, 'YYYY'))))) MODIFICACION
+      
         FROM POSTULANTE P
        WHERE P.IDEPOSTULANTE = p_nIdPostulante
          AND P.ESTACTIVO = 'A';
-
+  
   END SP_CV_POSTULANTE;
 
   /* ------------------------------------------------------------
@@ -5059,24 +5091,26 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene el nivel academico para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_NIVEL_ACADEMICO(p_nIdPostulante IN postulante.idepostulante%type,
                                   p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT E.IDEESTUDIOSPOSTULANTE,
-             (decode(E.TIPNOMINSTITUCION,'XX',E.NOMINSTITUCION,(SELECT DG.DESCRIPCION
-                FROM DETALLE_GENERAL DG
-               WHERE DG.IDEGENERAL = 17
-                 AND DG.VALOR = E.TIPNOMINSTITUCION))
-                 ) INSTITUCION,
+             (decode(E.TIPNOMINSTITUCION,
+                     'XX',
+                     E.NOMINSTITUCION,
+                     (SELECT DG.DESCRIPCION
+                        FROM DETALLE_GENERAL DG
+                       WHERE DG.IDEGENERAL = 17
+                         AND DG.VALOR = E.TIPNOMINSTITUCION))) INSTITUCION,
              (SELECT DG.DESCRIPCION
                 FROM DETALLE_GENERAL DG
                WHERE DG.IDEGENERAL = 19
@@ -5107,10 +5141,10 @@ create or replace package body PR_INTRANET_ED is
                             'S',
                             TO_CHAR(SYSDATE, 'YYYY'),
                             TO_CHAR(e.FECESTUDIOFIN, 'YYYY')))) FECESTUDIO
-
+      
         FROM ESTUDIOS_POSTULANTE E
        WHERE IDEPOSTULANTE = p_nIdPostulante;
-
+  
   END SP_CV_NIVEL_ACADEMICO;
 
   /* ------------------------------------------------------------
@@ -5118,30 +5152,30 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las experiencias para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_EXPERIENCIA(p_nIdPostulante IN postulante.idepostulante%type,
                               p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT
-
+      
        EX.IDEEXPPOSTULANTE,
        EX.NOMEMPRESA,
        EX.TIEMPOSERVICIO,
        (decode(trim(EX.TIPCARGOTRABAJO),
-                      'XX',
-                      EX.NOMCARGOTRABAJO,
-                      (select DG.DESCRIPCION
-                         FROM DETALLE_GENERAL DG
-                        WHERE DG.IDEGENERAL = 24
-                          AND DG.VALOR = EX.TIPCARGOTRABAJO)))CARGO,
+               'XX',
+               EX.NOMCARGOTRABAJO,
+               (select DG.DESCRIPCION
+                  FROM DETALLE_GENERAL DG
+                 WHERE DG.IDEGENERAL = 24
+                   AND DG.VALOR = EX.TIPCARGOTRABAJO))) CARGO,
        (PR_INTRANET_ED.FN_DES_MES(TO_CHAR(ex.fectrabinicio, 'MM'), 2) || ' ' ||
        TO_CHAR(ex.fectrabinicio, 'YYYY')) || ' - ' ||
        decode(ex.indtrabactualmente,
@@ -5156,7 +5190,7 @@ create or replace package body PR_INTRANET_ED is
                       'S',
                       TO_CHAR(SYSDATE, 'YYYY'),
                       TO_CHAR(ex.fectrabfin, 'YYYY')))) FECTRABAJO,
-
+       
        EX.FUNCIONESDESEMP FUCNIONES,
        (select DG.DESCRIPCION
           FROM DETALLE_GENERAL DG
@@ -5171,10 +5205,10 @@ create or replace package body PR_INTRANET_ED is
            AND DG.VALOR = EX.TIPCARGOTRABAJOREF) CARGOREFERENTE,
        TO_CHAR(EX.NUMTELEFMOVILREF) FONOREFERENTE,
        EX.CORREOREFERENTE
-
+      
         FROM EXP_POSTULANTE EX
        WHERE EX.IDEPOSTULANTE = p_nIdPostulante;
-
+  
   END SP_CV_EXPERIENCIA;
 
   /* ------------------------------------------------------------
@@ -5182,19 +5216,19 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene los conocimientos de ofimatica
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_CONOFIMATICA(p_nIdPostulante IN postulante.idepostulante%type,
                                p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
-
+    
       SELECT IDECONOGENPOSTULANTE,
              TIPO,
              DESCRIPCION,
@@ -5241,7 +5275,7 @@ create or replace package body PR_INTRANET_ED is
                WHERE C.IDEPOSTULANTE = p_nIdPostulante
                  AND C.TIPCONOCGENERALES IS NOT NULL) X
        ORDER BY X.IDECONOGENPOSTULANTE;
-
+  
   END SP_CV_CONOFIMATICA;
 
   /* ------------------------------------------------------------
@@ -5249,17 +5283,17 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene los idiomas para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_CONIDIOMA(p_nIdPostulante IN postulante.idepostulante%type,
                             p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT C.IDECONOGENPOSTULANTE,
              (select DG.DESCRIPCION
@@ -5278,7 +5312,7 @@ create or replace package body PR_INTRANET_ED is
         FROM CONOGEN_POSTULANTE C
        WHERE C.IDEPOSTULANTE = p_nIdPostulante
          AND C.TIPIDIOMA IS NOT NULL;
-
+  
   END SP_CV_CONIDIOMA;
 
   /* ------------------------------------------------------------
@@ -5286,17 +5320,17 @@ create or replace package body PR_INTRANET_ED is
   Proposito   :obtiene los conocmientos para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_OTROSCONOCIMIENTOS(p_nIdPostulante IN postulante.idepostulante%type,
                                      p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT C.IDECONOGENPOSTULANTE,
              C.TIPCONOCGENERALES,
@@ -5306,7 +5340,7 @@ create or replace package body PR_INTRANET_ED is
         FROM CONOGEN_POSTULANTE C
        WHERE C.IDEPOSTULANTE = p_nIdPostulante
          AND C.TIPCONOCGENERALES IS NOT NULL;
-
+  
   END SP_CV_OTROSCONOCIMIENTOS;
 
   /* ------------------------------------------------------------
@@ -5314,17 +5348,17 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene los parientes para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_PARIENTES(p_nIdPostulante IN postulante.idepostulante%type,
                             p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT PP.APEPATERNO,
              PP.APEMATERNO,
@@ -5336,7 +5370,7 @@ create or replace package body PR_INTRANET_ED is
              PP.FECNACIMIENTO
         FROM PARIENTES_POSTULANTE PP
        WHERE PP.IDEPOSTULANTE = p_nIdPostulante;
-
+  
   END SP_CV_PARIENTES;
 
   /* ------------------------------------------------------------
@@ -5344,17 +5378,17 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las discapacidades para el reporte
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_CV_DISCAPACIDAD(p_nIdPostulante IN postulante.idepostulante%type,
                                p_Rpta          OUT cur_cursor)
-
+  
    IS
   BEGIN
-
+  
     OPEN p_Rpta FOR
       SELECT (SELECT DG.DESCRIPCION
                 FROM DETALLE_GENERAL DG
@@ -5363,7 +5397,7 @@ create or replace package body PR_INTRANET_ED is
              D.DESDISCAPACIDAD
         FROM DISCAPACIDAD_POSTULANTE D
        WHERE D.IDEPOSTULANTE = p_nIdPostulante;
-
+  
   END SP_CV_DISCAPACIDAD;
 
   /* ------------------------------------------------------------
@@ -5372,7 +5406,7 @@ create or replace package body PR_INTRANET_ED is
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :    1 completo
                    2 abreviado
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5380,11 +5414,11 @@ create or replace package body PR_INTRANET_ED is
   FUNCTION FN_DES_MES(p_nMes NUMBER, p_nInFormato NUMBER) RETURN VARCHAR2 IS
     p_cDesMes varchar2(1000);
   BEGIN
-
+  
     BEGIN
-
+    
       p_cDesMes := NULL;
-
+    
       IF p_nMes = 1 THEN
         p_cDesMes := 'enero';
       END IF;
@@ -5421,15 +5455,15 @@ create or replace package body PR_INTRANET_ED is
       IF p_nMes = 12 THEN
         p_cDesMes := 'diciembre';
       END IF;
-
+    
       IF p_nInFormato = 2 THEN
         p_cDesMes := SUBSTR(p_cDesMes, 0, 3);
       END IF;
-
+    
       RETURN NVL(p_cDesMes, '');
-
+    
     END;
-
+  
   END FN_DES_MES;
 
   /* ------------------------------------------------------------
@@ -5439,7 +5473,7 @@ create or replace package body PR_INTRANET_ED is
                 (total-1)/total
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5451,17 +5485,17 @@ create or replace package body PR_INTRANET_ED is
                                  p_cEstado      IN Criterio.Estactivo%type,
                                  p_nIdSede      IN Criterio.Idesede%type,
                                  p_cRpta        OUT cur_cursor) IS
-
+  
     nIdSede number;
   BEGIN
-
+  
     IF p_nIdSede IS NULL THEN
-
+    
       nIdSede := 0;
     ELSE
       nIdSede := p_nIdSede;
     END IF;
-
+  
     OPEN p_cRpta FOR
       SELECT IDECRITERIO,
              TIPMEDICION,
@@ -5492,10 +5526,10 @@ create or replace package body PR_INTRANET_ED is
          AND (p_cTipCriterio IS NULL OR c.tipcriterio = p_cTipCriterio)
          AND (p_cEstado IS NULL OR c.estactivo = p_cEstado)
          AND (nIdSede = 0 OR c.idesede = nIdSede)
-
+            
          AND C.ESTACTIVO = 'A'
        ORDER BY C.IDECRITERIO, C.ESTACTIVO;
-
+  
   END FN_OBTIENE_CRITERIOS;
 
   /* ------------------------------------------------------------
@@ -5503,7 +5537,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las opciones del menu
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5514,9 +5548,9 @@ create or replace package body PR_INTRANET_ED is
                                 p_cEstado      IN VARCHAR2,
                                 p_cTipMenu     IN VARCHAR2,
                                 p_cRpta        OUT cur_cursor) IS
-
+  
   BEGIN
-
+  
     OPEN p_cRpta FOR
       select FLGHABILITADO,
              IDOPCIONPADRE,
@@ -5535,7 +5569,7 @@ create or replace package body PR_INTRANET_ED is
          and (p_cTipMenu IS NULL OR op.tipmenu = p_cTipMenu)
          and op.idopcion is not null
          AND OP.FLGHABILITADO = 'A';
-
+  
   END FN_OBTIENE_OPCIONES;
 
   /* ------------------------------------------------------------
@@ -5543,16 +5577,16 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene las opciones del menu
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
   PROCEDURE SP_OBTIENE_CARGOS_PUBLICADOS(p_nIdSede IN NUMBER,
                                          p_cRpta   OUT cur_cursor) IS
-
+  
   BEGIN
-
+  
     OPEN p_cRpta FOR
       SELECT X.IDECARGO, UPPER(NVL(X.NOMCARGO, '')) NOMCARGO
         FROM (SELECT NVL(S.IDECARGO, 0) IDECARGO, S.NOMCARGO NOMCARGO
@@ -5579,7 +5613,7 @@ create or replace package body PR_INTRANET_ED is
        where X.IDECARGO > 0
        group by X.IDECARGO, X.NOMCARGO
        order by X.IDECARGO;
-
+  
   END SP_OBTIENE_CARGOS_PUBLICADOS;
 
   /* ------------------------------------------------------------
@@ -5587,7 +5621,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene el tiempo total de los examenes
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5597,7 +5631,7 @@ create or replace package body PR_INTRANET_ED is
     RETURN NUMBER IS
     nTotal number;
   BEGIN
-
+  
     BEGIN
       SELECT SUM(X.TIEMPO) TIEMPOTOTAL
         INTO nTotal
@@ -5615,9 +5649,9 @@ create or replace package body PR_INTRANET_ED is
       WHEN OTHERS THEN
         nTotal := 0;
     END;
-
+  
     RETURN nTotal;
-
+  
   END FN_OBTIENE_TIEMPO_TOTAL;
 
   /* ------------------------------------------------------------
@@ -5625,7 +5659,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene el analista reponsable
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5633,9 +5667,9 @@ create or replace package body PR_INTRANET_ED is
 
   PROCEDURE SP_OBTIENE_ANALISTA_RESP(p_nIdSede IN SEDE.IDESEDE%TYPE,
                                      p_cRpta   OUT cur_cursor) IS
-
+  
   BEGIN
-
+  
     OPEN p_cRpta FOR
       SELECT DISTINCT Z.IDUSUARIO,
                       (SELECT CODUSUARIO
@@ -5647,7 +5681,7 @@ create or replace package body PR_INTRANET_ED is
          AND (p_nIdSede IS NULL OR Z.IDESEDE = p_nIdSede)
          AND Z.IDROL IN (8, 9)
        ORDER BY Z.IDUSUARIO;
-
+  
   END SP_OBTIENE_ANALISTA_RESP;
 
   /* ------------------------------------------------------------
@@ -5655,7 +5689,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene el analista reponsable
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -5671,7 +5705,7 @@ create or replace package body PR_INTRANET_ED is
                                          p_cMotivoReemp    IN NUMBER,
                                          p_cSede           IN NUMBER,
                                          p_cRpta           OUT cur_cursor) IS
-
+  
     nIdResponsable  number(8);
     nIdDependencia  number(8);
     nIdDepartamento number(8);
@@ -5679,29 +5713,29 @@ create or replace package body PR_INTRANET_ED is
     nMotivoReemp    number(8);
     nSede           number(8);
     nContVacantes   number(8);
-
+  
   BEGIN
-
+  
     delete from TEMP_REP_SELECCION;
-
+  
     IF p_cSede IS NULL THEN
       nSede := 0;
     ELSE
       nSede := p_cSede;
     END IF;
-
+  
     IF p_nIdResponsable IS NULL THEN
       nIdResponsable := 0;
     ELSE
       nIdResponsable := p_nIdResponsable;
     END IF;
-
+  
     IF p_nIdDependencia IS NULL THEN
       nIdDependencia := 0;
     ELSE
       nIdDependencia := p_nIdDependencia;
     END IF;
-
+  
     IF p_nIdDepartamento IS NULL THEN
       nIdDepartamento := 0;
     ELSE
@@ -5712,15 +5746,15 @@ create or replace package body PR_INTRANET_ED is
     ELSE
       nIdArea := p_nIdArea;
     END IF;
-
+  
     IF p_cMotivoReemp IS NULL THEN
       nMotivoReemp := 0;
     ELSE
       nMotivoReemp := p_cMotivoReemp;
     END IF;
-
+  
     FOR C1 IN (
-
+               
                SELECT X.IDSOL,
                        X.JEFE,
                        ROUND(X.DIAS) DIAS,
@@ -5795,7 +5829,7 @@ create or replace package body PR_INTRANET_ED is
                                 where d.idegeneral = 48
                                   and d.valor = X.tipvacante)) MOTIVOREEMPLAZO,
                        '' NUMDOCUMENTO
-
+               
                  FROM (SELECT (SELECT US.DSCAPEPATERNO || ' ' ||
                                        US.DSCAPEMATERNO || ' ' || US.DSCNOMBRES
                                   FROM USUARIO US
@@ -5849,7 +5883,7 @@ create or replace package body PR_INTRANET_ED is
                                                                 FROM LOGSOLREQ_PERSONAL LG2
                                                                WHERE LG2.IDESOLREQPERSONAL =
                                                                      LO4.IDESOLREQPERSONAL)))))) DIAS,
-
+                               
                                SP.IDESOLREQPERSONAL IDSOL,
                                SP.IDECARGO IDCARGO,
                                SP.NOMCARGO NOMBRE_CARGO,
@@ -5866,19 +5900,19 @@ create or replace package body PR_INTRANET_ED is
                                SP.TIPSOL,
                                SP.TIPETAPA,
                                SP.MOTIVOCIERRE,
-
+                               
                                (SELECT MAX(LSP1.FECSUCESO)
                                   FROM LOGSOLREQ_PERSONAL LSP1
                                  WHERE LSP1.IDESOLREQPERSONAL =
                                        SP.IDESOLREQPERSONAL
                                    AND LSP1.TIPETAPA = '04') FECCREACION,
-
+                               
                                TO_CHAR((SELECT MAX(LSP1.FECSUCESO)
                                          FROM LOGSOLREQ_PERSONAL LSP1
                                         WHERE LSP1.IDESOLREQPERSONAL =
                                               SP.IDESOLREQPERSONAL),
                                        'DD/MM/YYYY') FECSUCESO,
-
+                               
                                (SELECT LSP01.USRSUCESO
                                   FROM LOGSOLREQ_PERSONAL LSP01
                                  WHERE LSP01.FECSUCESO =
@@ -5887,7 +5921,7 @@ create or replace package body PR_INTRANET_ED is
                                          WHERE LSP1.IDESOLREQPERSONAL =
                                                SP.IDESOLREQPERSONAL)) USRSUCESO,
                                SP.TIPPUESTO
-
+                        
                           FROM SOLREQ_PERSONAL SP
                          WHERE SP.TIPETAPA IN ('04', '08')
                            AND SP.ESTACTIVO = 'A'
@@ -5971,7 +6005,7 @@ create or replace package body PR_INTRANET_ED is
                                         WHERE LNC1.IDESOLNUEVOCARGO =
                                               SC.IDESOLNUEVOCARGO),
                                        'DD/MM/YYYY') FECSUCESO,
-
+                               
                                (SELECT LC1.USRSUCESO
                                   FROM LOGSOLNUEVO_CARGO LC1
                                  WHERE LC1.FECSUCESO =
@@ -5986,11 +6020,11 @@ create or replace package body PR_INTRANET_ED is
                                        (SELECT MAX(G.PUNTHORARIO)
                                           FROM HORARIO_CARGO G
                                          WHERE G.IDECARGO = H.IDECARGO)) TIPPUESTO
-
+                        
                           FROM SOLNUEVO_CARGO SC
                          WHERE SC.TIPETAPA IN ('04', '08')
                            AND SC.ESTACTIVO = 'A'
-
+                        
                         ) X
                 WHERE (nvl(p_cFecDesde, null) IS NULL OR
                       (TO_DATE(X.FECSUCESO, 'DD/MM/YYYY') >=
@@ -6009,13 +6043,13 @@ create or replace package body PR_INTRANET_ED is
                   AND (nMotivoReemp = 0 OR X.TIPVACANTE = nMotivoReemp)
                   AND (nSede = 0 OR X.IDESEDE = nSede)
                 ORDER BY X.FECCREACION)
-
+    
      LOOP
-
+    
       nContVacantes := C1.NUMVACANTES;
-
+    
       FOR i IN 1 .. C1.NUMVACANTES LOOP
-
+      
         INSERT INTO TEMP_REP_SELECCION
           (ANALISTA_RESP,
            CARGO,
@@ -6145,14 +6179,14 @@ create or replace package body PR_INTRANET_ED is
                                                 c1.tippuesto,
                                                 i,
                                                 8));
-
+      
       END LOOP;
-
+    
     END LOOP;
-
+  
     OPEN p_cRpta FOR
       SELECT * FROM TEMP_REP_SELECCION;
-
+  
   END SP_OBTIENE_REPORTE_SELECCION;
 
   /* ------------------------------------------------------------
@@ -6183,7 +6217,7 @@ create or replace package body PR_INTRANET_ED is
     cFecReemplazo   varchar2(50);
     cINGRESA        varchar2(2000);
     cFechaContrata  varchar2(50);
-
+  
     CURSOR C_POST_CONTRATADOS IS
       select rp.idereclutapersona, rp.idepostulante, rp.fecmodifica
         from reclutamiento_persona rp
@@ -6193,11 +6227,11 @@ create or replace package body PR_INTRANET_ED is
          and rp.idecargo = p_cIdCargo
          and rp.tippuesto = p_cTipPuesto
          and rp.estpostulante = P_POSTCONTRATADO;
-
+  
     nFila          number(8);
     nFilaReemplazo NUMBER(8);
   BEGIN
-
+  
     nFila          := 0;
     nFilaReemplazo := 0;
     FOR C1 IN C_POST_CONTRATADOS LOOP
@@ -6219,7 +6253,7 @@ create or replace package body PR_INTRANET_ED is
         IF p_nCampo = 2 THEN
           cObsEntrevista := PR_INTRANET_ED.FN_OBTIENE_OBSERVACION(2,
                                                                   C1.IDERECLUTAPERSONA);
-
+        
           return nvl(cObsEntrevista, '');
         END IF;
         --Telefono fijo y cel
@@ -6230,12 +6264,12 @@ create or replace package body PR_INTRANET_ED is
             FROM POSTULANTE P
            WHERE P.IDEPOSTULANTE = C1.IDEPOSTULANTE
              and rownum = 1;
-
+        
           return nvl(cFono, '');
         END IF;
         -- Persona que ingresa
         IF p_nCampo = 4 THEN
-
+        
           SELECT NVL((P.APEPATERNO || ' ' || P.APEMATERNO || ' ' ||
                      P.PRINOMBRE),
                      '')
@@ -6243,7 +6277,7 @@ create or replace package body PR_INTRANET_ED is
             FROM POSTULANTE P
            WHERE P.IDEPOSTULANTE = C1.IDEPOSTULANTE
              and rownum = 1;
-
+        
           return nvl(cPerIngresa, '');
         END IF;
         -- nombre de la persona a la que se reemplaza
@@ -6253,7 +6287,7 @@ create or replace package body PR_INTRANET_ED is
             FOR C2 IN (select *
                          from reemplazos r
                         where r.idesolreqpersonal = p_cIdsol) LOOP
-
+            
               nFilaReemplazo := nFilaReemplazo + 1;
               IF p_nPosicion = nFilaReemplazo THEN
                 cReemplaza := (NVL(C2.APEPATERNO, '') || ' ' ||
@@ -6271,7 +6305,7 @@ create or replace package body PR_INTRANET_ED is
             FROM POSTULANTE P
            WHERE P.IDEPOSTULANTE = c1.IDEPOSTULANTE
              and rownum = 1;
-
+        
           return nvl(cNumDoc, '');
         END IF;
         -- fecha de inicio y fin de reemplazo
@@ -6289,28 +6323,28 @@ create or replace package body PR_INTRANET_ED is
                                       TO_CHAR(R.FECFINREEMPLAZO, 'DD/MM/YYYY'))) FECREEMPLAZO
                          from reemplazos r
                         where r.idesolreqpersonal = p_cIdsol) LOOP
-
+            
               nFilaReemplazo := nFilaReemplazo + 1;
               IF p_nPosicion = nFilaReemplazo THEN
-
+              
                 cFecReemplazo := C3.FECREEMPLAZO;
                 return nvl(cFecReemplazo, '');
               END IF;
             END LOOP;
           END IF;
         END IF;
-
+      
         IF p_nCampo = 8 THEN
           cFechaContrata := TO_CHAR(c1.FECMODIFICA, 'DD/MM/YYYY');
           return nvl(cFechaContrata, '');
         END IF;
-
+      
       END IF;
-
+    
     END LOOP;
-
+  
     return '';
-
+  
   END FN_OBTIENE_DATOS_POST;
 
   /* ------------------------------------------------------------
@@ -6326,30 +6360,30 @@ create or replace package body PR_INTRANET_ED is
   ------------------------------------------------------------ */
   FUNCTION FN_OBTIENE_OBSERVACION(p_nIndObs       IN NUMBER,
                                   p_nIdReclutaPer IN NUMBER) RETURN VARCHAR2 IS
-
+  
     -- obtiene las obsevaciones del psicologo
     CURSOR C_PSICOLOGO(p_nIdRecluta reclutamiento_persona.idereclutapersona%type) IS
       SELECT R.OBSERVACION, R.USRMODIFICA
         FROM RECLU_PERSO_EXAMEN R
        WHERE R.TIPEXAMEN = '04'
          AND R.IDERECLUTAPERSONA = p_nIdRecluta;
-
+  
     --obtiene las observaviones de la entrevista
     CURSOR C_ENTREVISTA(p_nIdRecluta reclutamiento_persona.idereclutapersona%type) IS
       SELECT R.OBSERVACION, R.USRMODIFICA
         FROM RECLU_PERSO_EXAMEN R
        WHERE R.TIPEXAMEN = '02'
          AND R.IDERECLUTAPERSONA = p_nIdRecluta;
-
+  
     contObs    number;
     cResultado varchar2(3000);
   BEGIN
-
+  
     contObs := 1;
     IF p_nIndObs = 1 THEN
-
+    
       FOR C1 IN C_PSICOLOGO(p_nIdReclutaPer) LOOP
-
+      
         IF contObs = 1 THEN
           cResultado := cResultado || ' ' ||
                         (C1.USRMODIFICA || ': ' || C1.OBSERVACION);
@@ -6357,17 +6391,17 @@ create or replace package body PR_INTRANET_ED is
           cResultado := cResultado || '/ ' ||
                         (C1.USRMODIFICA || ': ' || C1.OBSERVACION);
         END IF;
-
+      
         contObs := contObs + 1;
-
+      
       END LOOP;
-
+    
     END IF;
-
+  
     IF p_nIndObs = 2 THEN
-
+    
       FOR C2 IN C_ENTREVISTA(p_nIdReclutaPer) LOOP
-
+      
         IF contObs = 1 THEN
           cResultado := cResultado || ' ' ||
                         (C2.USRMODIFICA || ': ' || C2.OBSERVACION);
@@ -6375,15 +6409,15 @@ create or replace package body PR_INTRANET_ED is
           cResultado := cResultado || '/ ' ||
                         (C2.USRMODIFICA || ': ' || C2.OBSERVACION);
         END IF;
-
+      
         contObs := contObs + 1;
-
+      
       END LOOP;
-
+    
     END IF;
-
+  
     RETURN NVL(TRIM(SUBSTR(cResultado, 0, 3000)), '');
-
+  
   END;
 
   /* ------------------------------------------------------------
@@ -6403,10 +6437,10 @@ create or replace package body PR_INTRANET_ED is
                                   p_nIdEncargado IN NUMBER,
                                   p_nIdSede      IN NUMBER,
                                   p_curRpta      OUT cur_cursor) IS
-
+  
   BEGIN
     OPEN p_curRpta FOR
-
+    
       SELECT NVL((SELECT S.DESCRIPCION
                    FROM SEDE S
                   WHERE S.IDESEDE = p_nIdSede
@@ -6430,7 +6464,7 @@ create or replace package body PR_INTRANET_ED is
                        Y.NO_CUBIERTO + Y.CUBIERTO),
                        0)) TOTAL
         FROM (
-
+              
               SELECT DISTINCT X.USRSUCESO,
                                (NVL(PR_INTRANET_ED.FN_SALDO_FECHA(X.USRSUCESO,
                                                                   p_cFecInicio,
@@ -6461,7 +6495,7 @@ create or replace package body PR_INTRANET_ED is
                                                                        p_cFecInicio,
                                                                        p_cFecFin,
                                                                        p_nIdSede)) CUBIERTO
-
+              
                 FROM (SELECT DISTINCT LO.USRSUCESO
                          FROM SOLREQ_PERSONAL SP, LOGSOLREQ_PERSONAL LO
                         WHERE LO.IDESOLREQPERSONAL = SP.IDESOLREQPERSONAL
@@ -6505,7 +6539,7 @@ create or replace package body PR_INTRANET_ED is
                                        'DD/MM/YYYY') <
                               TO_DATE(p_cFecFin, 'DD/MM/YYYY') + 1)
                         GROUP BY LN.USRSUCESO, LN.TIPETAPA) X) Y;
-
+  
   END SP_REPORTE_RESUMEN_RQ;
 
   /* ------------------------------------------------------------
@@ -6523,7 +6557,7 @@ create or replace package body PR_INTRANET_ED is
   FUNCTION FN_SALDO_FECHA(p_nIdUsuario IN NUMBER,
                           p_cFecInicio IN VARCHAR2,
                           p_nIdSede    IN NUMBER) RETURN VARCHAR2 IS
-
+  
     nSaldoTotal number(8);
     nFechaSaldo varchar2(20);
   BEGIN
@@ -6531,7 +6565,7 @@ create or replace package body PR_INTRANET_ED is
     nFechaSaldo := TO_CHAR(ADD_MONTHS(TO_DATE(p_cFecInicio, 'DD/MM/YYYY'),
                                       -6),
                            'DD/MM/YYYY');
-
+  
     BEGIN
       -- se calcula el numero de vacantes para solicitudes publicadas
       SELECT SUM(X.FALTANTES)
@@ -6542,7 +6576,7 @@ create or replace package body PR_INTRANET_ED is
                             WHERE R.IDESOL = S.IDESOLREQPERSONAL
                               AND R.ESTPOSTULANTE = '09'
                               and r.idsede = s.idesede))) FALTANTES
-
+              
                 FROM SOLREQ_PERSONAL S, LOGSOLREQ_PERSONAL LO
                WHERE S.IDESOLREQPERSONAL = LO.IDESOLREQPERSONAL
                  AND S.ESTACTIVO = 'A'
@@ -6569,7 +6603,7 @@ create or replace package body PR_INTRANET_ED is
                             WHERE R.IDESOL = SN.IDESOLNUEVOCARGO
                               AND R.ESTPOSTULANTE = '09'
                               and r.idsede = sn.idesede))) FALTANTES
-
+              
                 FROM SOLNUEVO_CARGO SN, LOGSOLNUEVO_CARGO LN
                WHERE SN.IDESOLNUEVOCARGO = LN.IDESOLNUEVOCARGO
                  AND SN.ESTACTIVO = 'A'
@@ -6589,11 +6623,11 @@ create or replace package body PR_INTRANET_ED is
                      TO_DATE(TO_CHAR(LN.fecsuceso, 'DD/MM/YYYY'),
                               'DD/MM/YYYY') <
                      TO_DATE(p_cFecInicio, 'DD/MM/YYYY') + 1)) X;
-
+    
     END;
-
+  
     RETURN nvl(nSaldoTotal, 0);
-
+  
   END FN_SALDO_FECHA;
 
   /* ------------------------------------------------------------
@@ -6602,7 +6636,7 @@ create or replace package body PR_INTRANET_ED is
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :  p_nIdUsuario id de Usuario
                  p_cFecInicio Fecha inicial para tormar la referencia de la fecha
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -6613,7 +6647,7 @@ create or replace package body PR_INTRANET_ED is
                                p_cFecFin    varchar2,
                                p_cIdSede    Number) RETURN NUMBER IS
     nTotal number(8);
-
+  
   BEGIN
     -- reemplazo
     IF p_IndEtapa = 3 THEN
@@ -6651,7 +6685,7 @@ create or replace package body PR_INTRANET_ED is
              TO_DATE(TO_CHAR(LOG.fecsuceso, 'DD/MM/YYYY'), 'DD/MM/YYYY') <
              TO_DATE(p_cFecFin, 'DD/MM/YYYY') + 1);
     END IF;
-
+  
     --nuevo
     IF p_IndEtapa = 1 THEN
       SELECT SUM(SN.NUMPOSICIONES) TOTAL
@@ -6669,9 +6703,9 @@ create or replace package body PR_INTRANET_ED is
              TO_DATE(TO_CHAR(LN.fecsuceso, 'DD/MM/YYYY'), 'DD/MM/YYYY') <
              TO_DATE(p_cFecFin, 'DD/MM/YYYY') + 1);
     END IF;
-
+  
     RETURN nvl(nTotal, 0);
-
+  
   END FN_OBTIENE_VACANTES;
 
   /* ------------------------------------------------------------
@@ -6679,7 +6713,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene la cantidad de vacantes cubiertas de las solictudes
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -6689,11 +6723,11 @@ create or replace package body PR_INTRANET_ED is
                                    p_cFecInicio varchar2,
                                    p_cFecFin    varchar2,
                                    p_cIdSede    Number) RETURN NUMBER IS
-
+  
     nCubierto   number(8);
     nNoCubierto number(8);
   BEGIN
-
+  
     --cubiertos
     BEGIN
       SELECT SUM(X.NO_CUBIERTO) NO_CUBIERTO, SUM(X.CUBIERTO) CUBIERTO
@@ -6716,7 +6750,7 @@ create or replace package body PR_INTRANET_ED is
                  AND LOG.TIPETAPA = SOL.TIPETAPA
                  AND SOL.IDESEDE = P_CIDSEDE
                  AND SOL.TIPETAPA = '08'
-
+                    
                  AND (NVL(p_cFecInicio, NULL) IS NULL OR
                      TO_DATE(TO_CHAR(log.fecsuceso, 'DD/MM/YYYY'),
                               'DD/MM/YYYY') >=
@@ -6744,7 +6778,7 @@ create or replace package body PR_INTRANET_ED is
                  AND LN.USRSUCESO = p_nIdUsuario
                  AND SN.IDESEDE = P_CIDSEDE
                  AND SN.TIPETAPA = '08'
-
+                    
                  AND (NVL(p_cFecInicio, NULL) IS NULL OR
                      TO_DATE(TO_CHAR(ln.fecsuceso, 'DD/MM/YYYY'),
                               'DD/MM/YYYY') >=
@@ -6766,7 +6800,7 @@ create or replace package body PR_INTRANET_ED is
         RETURN 0;
       END IF;
     END IF;
-
+  
     -- devuelve los cubiertos
     IF p_indCub = 2 THEN
       IF nCubierto > 0 THEN
@@ -6775,7 +6809,7 @@ create or replace package body PR_INTRANET_ED is
         RETURN 0;
       END IF;
     END IF;
-
+  
   END FN_OBTIENE_VACANTES_FIN;
 
   /* ------------------------------------------------------------
@@ -6783,7 +6817,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : Elimina una solicitud que no fue trabajada
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -6793,13 +6827,13 @@ create or replace package body PR_INTRANET_ED is
   begin
     execute immediate 'select ' || p_nombre || '.nextval from dual'
       INTO res;
-
+  
     execute immediate 'alter sequence ' || p_nombre || ' increment by -' || res ||
                       ' minvalue 0';
-
+  
     execute immediate 'select ' || p_nombre || '.nextval from dual'
       INTO res;
-
+  
     execute immediate 'alter sequence ' || p_nombre ||
                       ' increment by 1 minvalue 0';
   end;
@@ -6809,7 +6843,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : Elimina una solicitud que no fue trabajada
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -6823,33 +6857,33 @@ create or replace package body PR_INTRANET_ED is
     nContSol    NUMBER;
     cDesUsuario usuario.codusuario%type;
     cRolUsuario rol.dscrol%type;
-
+  
   BEGIN
-
+  
     IF p_cTipSol <> '01' THEN
-
+    
       SELECT COUNT(*)
         INTO nContSol
         FROM LOGSOLREQ_PERSONAL LP
        WHERE LP.IDESOLREQPERSONAL = p_nIdSol;
-
+    
     ELSE
-
+    
       SELECT COUNT(*)
         INTO nContSol
         FROM LOGSOLNUEVO_CARGO LN
        WHERE LN.IDESOLNUEVOCARGO = p_nIdSol;
-
+    
     END IF;
-
+  
     IF nContSol = 1 THEN
-
+    
       IF p_cTipSol <> '01' THEN
-
+      
         UPDATE SOLREQ_PERSONAL S
            SET S.ESTACTIVO = 'I'
          WHERE S.IDESOLREQPERSONAL = p_nIdSol;
-
+      
         pr_intranet_ed.sp_insert_log_solreqpersonal(p_nIdSol,
                                                     '09',
                                                     sysdate,
@@ -6858,13 +6892,13 @@ create or replace package body PR_INTRANET_ED is
                                                     0,
                                                     0,
                                                     '');
-
+      
       ELSE
-
+      
         UPDATE SOLNUEVO_CARGO N
            SET N.ESTACTIVO = 'I'
          WHERE N.IDESOLNUEVOCARGO = p_nIdSol;
-
+      
         pr_intranet_ed.sp_insert_log_solnuevo_cargo(p_nIdSol,
                                                     '09',
                                                     sysdate,
@@ -6873,18 +6907,18 @@ create or replace package body PR_INTRANET_ED is
                                                     0,
                                                     0,
                                                     '');
-
+      
       END IF;
-
+    
       COMMIT;
-
+    
       p_cRetVal  := 1;
       P_cMensaje := 'Se elimino la solicitud';
-
+    
     ELSE
-
+    
       IF p_cTipSol <> '01' THEN
-
+      
         --REQ AMPLIACION Y REEMPLAZO
         BEGIN
           SELECT (SELECT U.CODUSUARIO
@@ -6908,24 +6942,24 @@ create or replace package body PR_INTRANET_ED is
             cDesUsuario := '';
             cRolUsuario := '';
         END;
-
+      
         IF LENGTH(TRIM(cDesUsuario)) > 0 THEN
-
+        
           IF p_cTipSol = '02' THEN
             P_cMensaje := 'La solicitud de ampliacion no se puede eliminar, se encuentra asignada al usuario: ' ||
                           cDesUsuario || ' con rol: ' || cRolUsuario;
           END IF;
-
+        
           IF p_cTipSol = '03' THEN
             P_cMensaje := 'La solicitud de reemplazo no se puede eliminar, se encuentra asignada al usuario: ' ||
                           cDesUsuario || ' con rol: ' || cRolUsuario;
           END IF;
-
+        
         END IF;
-
+      
       ELSE
         --REQ NUEVO CARGO
-
+      
         BEGIN
           SELECT (SELECT U.CODUSUARIO
                     FROM USUARIO U
@@ -6948,18 +6982,18 @@ create or replace package body PR_INTRANET_ED is
             cDesUsuario := '';
             cRolUsuario := '';
         END;
-
+      
         IF cDesUsuario != '' THEN
           P_cMensaje := 'La solicitud de nuevo cargo no se puede eliminar, se encuentra asignada al usuario: ' ||
                         cDesUsuario || ' con rol: ' || cRolUsuario;
         END IF;
-
+      
       END IF;
-
+    
       p_cRetVal := 0;
-
+    
     END IF;
-
+  
   END SP_ELIMINA_SOLICITUD;
 
   /* ------------------------------------------------------------
@@ -6967,7 +7001,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene la lista de usuarios
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -6980,24 +7014,24 @@ create or replace package body PR_INTRANET_ED is
                                 p_cDesApePat  IN VARCHAR2,
                                 p_cDesApeMat  IN VARCHAR2,
                                 p_cRpta       OUT cur_cursor) IS
-
+  
     nIdRol  NUMBER;
     nIdSede NUMBER;
-
+  
   BEGIN
-
+  
     IF p_nIdRol IS NULL THEN
       nIdRol := 0;
     ELSE
       nIdRol := p_nIdRol;
     END IF;
-
+  
     IF p_nIdSede IS NULL THEN
       nIdSede := 0;
     ELSE
       nIdSede := p_nIdSede;
     END IF;
-
+  
     BEGIN
       OPEN p_cRpta FOR
         SELECT DISTINCT V.FLGESTADO,
@@ -7024,7 +7058,7 @@ create or replace package body PR_INTRANET_ED is
                '%' || UPPER(p_cDesApeMat) || '%')
          ORDER BY V.IDUSUARIO DESC;
     END;
-
+  
   END SP_OBTIENE_USUARIOS;
 
   /* ------------------------------------------------------------
@@ -7033,7 +7067,7 @@ create or replace package body PR_INTRANET_ED is
                 de una sede
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -7043,17 +7077,17 @@ create or replace package body PR_INTRANET_ED is
                                   p_cDescrip      IN VARCHAR2,
                                   p_nIdSede       IN CATEGORIA.IDESEDE%TYPE,
                                   p_cRpta         OUT cur_cursor) IS
-
+  
     nIdSede number;
   BEGIN
-
+  
     IF p_nIdSede IS NULL THEN
-
+    
       nIdSede := 0;
     ELSE
       nIdSede := p_nIdSede;
     END IF;
-
+  
     OPEN p_cRpta FOR
       SELECT CA.ESTACTIVO,
              CA.IDECATEGORIA,
@@ -7073,7 +7107,7 @@ create or replace package body PR_INTRANET_ED is
          AND (nIdSede = 0 OR CA.IDESEDE = nIdSede)
          AND CA.ESTACTIVO = 'A'
        ORDER BY ca.idecategoria, ca.estactivo;
-
+  
   END SP_OBTIENE_CATEGORIAS;
 
   /* ------------------------------------------------------------
@@ -7081,7 +7115,7 @@ create or replace package body PR_INTRANET_ED is
   Proposito   : obtiene cargo por la sede, dependencia, departamento,area
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
@@ -7091,26 +7125,26 @@ create or replace package body PR_INTRANET_ED is
                               p_nIdDepartamento IN NUMBER,
                               p_nIdArea         IN NUMBER,
                               p_cRetVal         OUT CUR_CURSOR) IS
-
+  
     nIdSede         number(8);
     nIdDependencia  number(8);
     nIdDepartamento number(8);
     nIdArea         number(8);
-
+  
   BEGIN
-
+  
     IF p_nIdSede IS NULL THEN
       nIdSede := 0;
     ELSE
       nIdSede := p_nIdSede;
     END IF;
-
+  
     IF p_nIdDependencia IS NULL THEN
       nIdDependencia := 0;
     ELSE
       nIdDependencia := p_nIdDependencia;
     END IF;
-
+  
     IF p_nIdDepartamento IS NULL THEN
       nIdDepartamento := 0;
     ELSE
@@ -7121,7 +7155,7 @@ create or replace package body PR_INTRANET_ED is
     ELSE
       nIdArea := p_nIdArea;
     END IF;
-
+  
     OPEN P_CRETVAL FOR
       SELECT DISTINCT C.IDECARGO, C.NOMCARGO
         FROM CARGO C
@@ -7136,124 +7170,123 @@ create or replace package body PR_INTRANET_ED is
          AND (nIdDepartamento = 0 OR C.IDEDEPARTAMENTO = nIdDepartamento)
          AND (nIdArea = 0 OR C.IDEAREA = nIdArea)
        ORDER BY C.NOMCARGO;
-
+  
   END SP_GET_CARGOXSEDE;
 
- /* ------------------------------------------------------------
+  /* ------------------------------------------------------------
   Nombre      : SP_OBTIENE_ROLXEMAIL
   Proposito   : obtiene los id de los usaurios de envio y copia de correos
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
 
-PROCEDURE SP_OBTIENE_ROLXEMAIL(p_cIdSol       IN NUMBER,
-                               p_cIdRolSuceso IN VARCHAR2,
-                               p_cTipSol      IN VARCHAR2,
-                               p_cAccion      IN VARCHAR2,
-                               p_cRetVal      OUT CUR_CURSOR) IS
-
-  cIdCreador number;
-  cTipEtapa  varchar2(10);
-
-BEGIN
-
-  IF p_cTipSol = 'N' THEN
+  PROCEDURE SP_OBTIENE_ROLXEMAIL(p_cIdSol       IN NUMBER,
+                                 p_cIdRolSuceso IN VARCHAR2,
+                                 p_cTipSol      IN VARCHAR2,
+                                 p_cAccion      IN VARCHAR2,
+                                 p_cRetVal      OUT CUR_CURSOR) IS
   
-    BEGIN
-      select sn.tipetapa
-        into cTipEtapa
-        from solnuevo_cargo sn
-       where sn.idesolnuevocargo = p_cIdSol;
-    EXCEPTION
-      when others then
-        cTipEtapa := null;
-    END;
+    cIdCreador number;
+    cTipEtapa  varchar2(10);
   
-    BEGIN
-      SELECT NVL(L.ROLSUCESO, 0)
-        INTO cIdCreador
-        FROM LOGSOLNUEVO_CARGO L
-       WHERE L.IDESOLNUEVOCARGO = p_cIdSol
-         AND L.IDELOGSOLNUEVOCARGO =
-             (SELECT MIN(L1.IDELOGSOLNUEVOCARGO)
-                FROM LOGSOLNUEVO_CARGO L1
-               WHERE L1.IDESOLNUEVOCARGO = L.IDESOLNUEVOCARGO);
-    EXCEPTION
-      WHEN OTHERS THEN
-        cIdCreador := 0;
-    END;
-  ELSE
+  BEGIN
   
-    BEGIN
-      select sr.Tipetapa
-        into cTipEtapa
-        from solreq_personal sr
-       where sr.idesolreqpersonal = p_cIdSol;
-    EXCEPTION
-      when others then
-        cTipEtapa := null;
-    END;
+    IF p_cTipSol = '01' THEN
+      --se obtiene la etapa antes de que se actualice la solicitud
+      BEGIN
+        select sn.tipetapa
+          into cTipEtapa
+          from solnuevo_cargo sn
+         where sn.idesolnuevocargo = p_cIdSol;
+      EXCEPTION
+        when others then
+          cTipEtapa := null;
+      END;
+      --se obtiene el id del creador
+      BEGIN
+        SELECT NVL(L.ROLSUCESO, 0)
+          INTO cIdCreador
+          FROM LOGSOLNUEVO_CARGO L
+         WHERE L.IDESOLNUEVOCARGO = p_cIdSol
+           AND L.IDELOGSOLNUEVOCARGO =
+               (SELECT MIN(L1.IDELOGSOLNUEVOCARGO)
+                  FROM LOGSOLNUEVO_CARGO L1
+                 WHERE L1.IDESOLNUEVOCARGO = L.IDESOLNUEVOCARGO);
+      EXCEPTION
+        WHEN OTHERS THEN
+          cIdCreador := 0;
+      END;
+    ELSE
+      --se obtiene la etapa antes de que se actualice la solicitud
+      BEGIN
+        select sr.Tipetapa
+          into cTipEtapa
+          from solreq_personal sr
+         where sr.idesolreqpersonal = p_cIdSol;
+      EXCEPTION
+        when others then
+          cTipEtapa := null;
+      END;
+      --se obtiene el id del creador
+      BEGIN
+        SELECT NVL(Lq.Rolsuceso, 0)
+          INTO cIdCreador
+          FROM LOGSOLREQ_PERSONAL Lq
+         WHERE Lq.IDESOLREQPERSONAL = p_cIdSol
+           AND Lq.Idelogsolreq_Personal =
+               (SELECT MIN(Lq1.Idelogsolreq_Personal)
+                  FROM LOGSOLREQ_PERSONAL Lq1
+                 WHERE Lq1.Idesolreqpersonal = lq.idesolreqpersonal);
+      EXCEPTION
+        WHEN OTHERS THEN
+          cIdCreador := 0;
+      END;
+    END IF;
   
-    BEGIN
-      SELECT NVL(Lq.Rolsuceso, 0)
-        INTO cIdCreador
-        FROM LOGSOLREQ_PERSONAL Lq
-       WHERE Lq.IDESOLREQPERSONAL = p_cIdSol
-         AND Lq.Idelogsolreq_Personal =
-             (SELECT MIN(Lq1.Idelogsolreq_Personal)
-                FROM LOGSOLREQ_PERSONAL Lq1
-               WHERE Lq1.Idesolreqpersonal = lq.idesolreqpersonal);
-    EXCEPTION
-      WHEN OTHERS THEN
-        cIdCreador := 0;
-    END;
-  END IF;
+    OPEN P_CRETVAL FOR
+      SELECT SENDTO, COPYTO1, COPYTO2, COPYTO3
+        FROM CONFIG_EMAIL C
+       WHERE (cIdCreador = 0 OR C.IDCREADOR = cIdCreador)
+         and (p_cIdRolSuceso IS NULL OR C.IDSUCESO = p_cIdRolSuceso)
+         and (p_cTipSol IS NULL OR C.TIPSOL = p_cTipSol)
+         and (cTipEtapa IS NULL OR C.TIPETAPA = cTipEtapa)
+         and (p_cAccion IS NULL OR C.ACCION = p_cAccion)
+         and C.ESTACTIVO = 'A';
+  
+  END SP_OBTIENE_ROLXEMAIL;
 
-  OPEN P_CRETVAL FOR
-    SELECT SENDTO, COPYTO1, COPYTO2, COPYTO3
-      FROM CONFIG_EMAIL C
-     WHERE (cIdCreador = 0 OR C.IDCREADOR = cIdCreador)
-       and (p_cIdRolSuceso IS NULL OR C.IDSUCESO = p_cIdRolSuceso)
-       and (p_cTipSol IS NULL OR C.TIPSOL = p_cTipSol)
-       and (cTipEtapa IS NULL OR C.TIPETAPA = cTipEtapa)
-       and (p_cAccion IS NULL OR C.ACCION = p_cAccion)
-       and C.ESTACTIVO = 'A';
-
-END SP_OBTIENE_ROLXEMAIL;
-
-/* ------------------------------------------------------------
+  /* ------------------------------------------------------------
   Nombre      : SP_OBTIENE_EMAIL
   Proposito   : obtiene los email por rol y sede
   Referencias : Sistema de Reclutamiento y Selecci?n de Personal
   Parametros  :
-
+  
   Log de Cambios
     Fecha       Autor                Descripcion
     14/02/2014  Edward Llamoca       Creaci?n
   ------------------------------------------------------------ */
+
+  PROCEDURE SP_OBTIENE_EMAIL(p_nIdRol  IN number,
+                             p_nIdSede IN number,
+                             p_cRetVal OUT CUR_CURSOR) IS
   
-PROCEDURE SP_OBTIENE_EMAIL(p_nIdRol  IN number,
-                           p_nIdSede IN number,
-                           p_cRetVal OUT CUR_CURSOR) IS
+  BEGIN
+  
+    OPEN P_CRETVAL FOR
+      SELECT trim(nvl((SELECT U.EMAIL
+                        FROM USUARIO U
+                       WHERE U.IDUSUARIO = E.IDUSUARIO),
+                      '')) EMAIL
+        FROM USUAROLSEDE E
+       WHERE IDROL = p_nIdRol
+         AND E.IDESEDE = p_nIdSede
+       GROUP BY E.IDUSUARIO;
+  
+  END SP_OBTIENE_EMAIL;
 
-BEGIN
-
-  OPEN P_CRETVAL FOR
-    SELECT (SELECT U.EMAIL FROM USUARIO U WHERE U.IDUSUARIO = E.IDUSUARIO) EMAIL
-      FROM USUAROLSEDE E
-     WHERE IDROL = p_nIdRol
-       AND E.IDESEDE = p_nIdSede
-     GROUP BY E.IDUSUARIO;
-
-END SP_OBTIENE_EMAIL;
-
-
-
-
-
-END PR_INTRANET_ED;
+END PR_INTRANET_ED;    
 /
