@@ -34,6 +34,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IPostulanteRepository _postulanteRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private IReemplazoRepository _reemplazoRepository;
+        private ICargoRepository _cargoRepository;
+        private IUsuarioRepository _usuarioRepository;
 
 
 
@@ -43,7 +45,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                         IReclutamientoPersonaRepository reclutamientoPersonaRepository,
             IPostulanteRepository postulanteRepository,
             ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
-            IReemplazoRepository reemplazoRepository
+            IReemplazoRepository reemplazoRepository,
+            ICargoRepository cargoRepository,
+            IUsuarioRepository usuarioRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -53,6 +57,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _postulanteRepository = postulanteRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _reemplazoRepository = reemplazoRepository;
+            _cargoRepository = cargoRepository;
+            _usuarioRepository = usuarioRepository;
         }
         
         /// <summary>
@@ -275,6 +281,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJson = new JsonMessage();
             string rpta = null;
 
+            List<String> listSends = null;
+            List<String> listCopys = null;
+            string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+            
+            Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
             ReclutamientoPersona objReCluta = new ReclutamientoPersona();
 
             objReCluta.IdeSol = idSol;
@@ -289,7 +301,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objReCluta.idSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
             objReCluta.idRolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
+
             rpta = _reclutamientoPersonaRepository.validaFinSolicitud(objReCluta);
+
+            System.Collections.ArrayList lista = new System.Collections.ArrayList();
+
+            if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
+            {
+                var objSolNuevo1 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol);
+                lista = listaEmail(Convert.ToInt32(objSolNuevo1.IdeSolicitudNuevoCargo), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Nuevo);
+            }
+            else
+            {
+                var objSolReq1 = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol);
+
+                if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
+                {
+                    lista = listaEmail(Convert.ToInt32(objSolReq1.IdeSolReqPersonal), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Remplazo);
+                }
+
+                if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
+                {
+                    lista = listaEmail(Convert.ToInt32(objSolReq1.IdeSolReqPersonal), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Ampliacion);
+                }
+
+            }
+
+            listSends = new List<String>();
+            listSends = (List<String>)lista[0];
+
+            listCopys = new List<String>();
+            listCopys = (List<String>)lista[1];
+
 
             if (Indicador.Si.Equals(rpta))
             {
@@ -297,6 +340,33 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objJson.Resultado = true;
                 objJson.Mensaje = "Finalizo la solicitud";
+
+
+                if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
+                {
+                    var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, objSolNuevo2.CodigoCargo, listSends, listCopys);
+
+                }
+                else
+                {
+                    var objSolReq2 = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol);
+
+                    if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
+                    {
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+
+                    }
+
+                    if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
+                    {
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+
+                    }
+
+                }
+
+
             }
             else
             {
@@ -346,6 +416,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             JsonMessage objJson = new JsonMessage();
             ReclutamientoPersona objReCluta = new ReclutamientoPersona();
+            List<String> listSends = null;
+                List<String> listCopys = null;
+                string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+             Int32 idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+             Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
 
             objReCluta.IdeSol = model.ReclutaPersonal.IdeSol;
             objReCluta.TipSol = model.ReclutaPersonal.TipSol;
@@ -356,6 +431,38 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             //actualiza el motivo de cierre
             objReCluta.MotivoCierre = model.ReclutaPersonal.MotivoCierre;
+
+
+            System.Collections.ArrayList lista = new System.Collections.ArrayList();
+
+            if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
+            {
+                var objSolNuevo1 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.ReclutaPersonal.IdeSol);
+                lista = listaEmail(Convert.ToInt32(objSolNuevo1.IdeSolicitudNuevoCargo), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Nuevo);
+            }
+            else
+            {
+                var objSolReq1 = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == model.ReclutaPersonal.IdeSol);
+
+                if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
+	            {
+                    lista = listaEmail(Convert.ToInt32(objSolReq1.IdeSolReqPersonal), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Remplazo);
+	            }
+
+                if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
+	            {
+                    lista = listaEmail(Convert.ToInt32(objSolReq1.IdeSolReqPersonal), idRol, AccionEnvioEmail.Finalizar, idSede, TipoSolicitud.Ampliacion);
+	            }
+
+            }
+
+            
+            listSends = new List<String>();
+            listSends = (List<String>)lista[0];
+
+            listCopys = new List<String>();
+            listCopys = (List<String>)lista[1];
+
 
             if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
             {
@@ -380,12 +487,216 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
 
+            if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
+            {
+                var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.ReclutaPersonal.IdeSol);
+                bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, objSolNuevo2.CodigoCargo, listSends, listCopys);
+
+            }
+            else
+            {
+                var objSolReq2 = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == model.ReclutaPersonal.IdeSol);
+
+                if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
+                {
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+
+                }
+
+                if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
+                {
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+
+                }
+
+            }
+
+
             objJson.Resultado = true;
             objJson.Mensaje = "Se finalizó exitosamente la solicitud de requerimiento";
             
             return Json(objJson);
         }
 
+        /// <summary>
+        /// obtiene la lista de Emails
+        /// </summary>
+        /// <param name="idSol">id de la solicitud</param>
+        /// <param name="idRolSuceso">id del rol de la persona logueada</param>
+        /// <param name="btnAccion">codigo de la accion del boton</param>
+        /// <param name="idSede">id de la sede de la solicitud</param>
+        /// <param name="TipoSol">tipo de solicitud</param>
+        /// <returns></returns>
+        public System.Collections.ArrayList listaEmail(int idSol, int idRolSuceso, string btnAccion, int idSede, string TipoSol)
+        {
+            EmailSol objEmailSol;
+            List<EmailSol> listaRolxEmail;
+            //List<EmailSol> listaEmialSend;
+            //List<EmailSol> listaEmialCopy;
+
+            List<String> listaSend;
+            List<String> listaCopy;
+            SolReqPersonal objSolReqPersonal;
+            System.Collections.ArrayList ListaEmailEnvio = new System.Collections.ArrayList();
+
+
+            objEmailSol = new EmailSol();
+            listaRolxEmail = new List<EmailSol>();
+
+            objEmailSol.IdSol = idSol;
+            objEmailSol.IdRolSuceso = idRolSuceso;
+            objEmailSol.TipSol = TipoSol;
+            objEmailSol.AccionBoton = btnAccion;
+            objEmailSol.idSede = idSede;
+
+            //obtiene los roles de para  el envio de correo
+            listaRolxEmail = _solReqPersonalRepository.GetRolxEmial(objEmailSol);
+            listaSend = new List<String>();
+            listaCopy = new List<String>();
+            Boolean ind = false;
+
+            string tipoReq = null;
+            if (listaRolxEmail != null)
+            {
+                if (listaRolxEmail.Count > 0)
+                {
+                    foreach (EmailSol item in listaRolxEmail)
+                    {
+                        //obtiene la lista de send
+                        ind = false;
+
+                        if (item.RolSend != null)
+                        {
+
+                            if (item.RolSend.Equals("**"))
+                            {
+                                if (TipoSolicitud.Nuevo.Equals(TipoSol))
+                                {
+                                    var objSolNuevo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol && x.EstadoActivo == IndicadorActivo.Activo);
+                                    var idCargo = objSolNuevo.IdeCargo;
+
+                                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == idCargo && x.EstadoActivo == IndicadorActivo.Activo);
+
+                                    tipoReq = objCargo.TipoRequerimiento;
+                                }
+                                else
+                                {
+                                    var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == idSol && x.EstadoActivo == IndicadorActivo.Activo);
+                                    if (objSolReq != null)
+                                    {
+                                        tipoReq = objSolReq.TipoRequerimiento;
+                                    }
+
+
+                                }
+
+                                if (tipoReq != null)
+                                {
+                                    objSolReqPersonal = new SolReqPersonal();
+                                    objSolReqPersonal = _solReqPersonalRepository.GetResponsable("U", idSede, tipoReq);
+                                    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == objSolReqPersonal.idUsuarioResp && x.FlgEstado == IndicadorActivo.Activo);
+
+                                    ind = listaSend.Contains(objUsuario.Email);
+                                    if (!ind)
+                                    {
+                                        listaSend.Add(objUsuario.Email);
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+
+                                ind = listaSend.Contains(item.RolSend);
+                                if (!ind)
+                                {
+                                    listaSend.Add(item.RolSend);
+                                }
+
+                            }
+
+
+
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy1);
+                        if (!ind)
+                        {
+                            if (item.RolCopy1 != null && item.RolCopy1 != "")
+                            {
+                                listaCopy.Add(item.RolCopy1);
+                            }
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy2);
+
+                        if (!ind)
+                        {
+                            if (item.RolCopy2 != null && item.RolCopy2 != "")
+                            {
+                                listaCopy.Add(item.RolCopy2);
+                            }
+                        }
+
+                        ind = false;
+                        ind = listaCopy.Contains(item.RolCopy3);
+
+                        if (!ind)
+                        {
+                            if (item.RolCopy3 != null && item.RolCopy3 != "")
+                            {
+                                listaCopy.Add(item.RolCopy3);
+                            }
+                        }
+
+                        // obtiene la lista para las copias
+
+                    }
+                }
+            }
+
+            ListaEmailEnvio.Add(listaSend);
+            ListaEmailEnvio.Add(listaCopy);
+            return ListaEmailEnvio;
+
+        }
+
+
+        /// <summary>
+        /// envia correo electronico a los responsables de la solicitud de requerimiento de personal
+        /// </summary>
+        /// <param name="usuarioDestinatario"></param>
+        /// <param name="rolResponsable"></param>
+        /// <param name="etapa"></param>
+        /// <param name="observacion"></param>
+        /// <param name="cargoDescripcion"></param>
+        /// <param name="codCargo"></param>
+        /// <returns></returns>
+        public bool EnviarCorreo(string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo, List<String> Sends, List<String> Copys)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            try
+            {
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+
+            }
+
+        }
 
     }
 }
