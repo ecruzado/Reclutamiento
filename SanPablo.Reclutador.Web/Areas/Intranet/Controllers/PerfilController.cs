@@ -671,7 +671,7 @@
                     var logSolicitudInicial = _logSolicitudNuevoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
                     
                     logSolicitud.RolResponsable = logSolicitudInicial.RolSuceso;
-                    logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioResponsable;
+                    logSolicitud.UsuarioResponsable = logSolicitudInicial.UsuarioSuceso;
                     logSolicitud.TipoEtapa = Etapa.Generacion_Perfil;
                     logSolicitud.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     logSolicitud.UsuarioSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
