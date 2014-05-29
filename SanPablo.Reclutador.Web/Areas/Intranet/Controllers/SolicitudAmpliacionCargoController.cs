@@ -34,6 +34,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IOfrecemosRequerimientoRepository _ofrecemosReqRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private ISolReqPersonalRepository _solReqPersonalRepository;
+        private IRolRepository _rolRepository;
         
 
         public SolicitudAmpliacionCargoController(IDetalleGeneralRepository detalleGeneralRepository,
@@ -51,7 +52,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                   ICompetenciaRequerimientoRepository competenciaReqRepository,
                                                   IOfrecemosRequerimientoRepository ofrecemosReqRepository,
                                                   ISolReqPersonalRepository solReqPersonalRepository,
-                                                  ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
+                                                  ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
+                                                  IRolRepository rolRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -70,6 +72,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _ofrecemosReqRepository = ofrecemosReqRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
+            _rolRepository = rolRepository;
         }
         
         
@@ -176,6 +179,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var rolResponsable = 0;
                     var etapaInicio = "";
                     string indicadorArea = "NO";
+                    string rol = "";
                     /// 
                     ///enviar dependiendo el usuario que registra la solicitud
                     /// 
@@ -184,17 +188,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         case Roles.Jefe:
                             rolResponsable = Roles.Gerente;
                             etapaInicio = Etapa.Pendiente;
+                            rol = "Gerente";
                             indicadorArea = "SI";
                             break;
 
                         case Roles.Gerente:
                             rolResponsable = Roles.Gerente_General_Adjunto;
                             etapaInicio = Etapa.Validado;
+                            rol = "Gerente General Adjunto";
                             break;
 
                         case Roles.Gerente_General_Adjunto:
                             rolResponsable = Roles.Encargado_Seleccion;
                             etapaInicio = Etapa.Aprobado;
+                            rol = "Encargado de Selección";
                             break;
                     }
 
@@ -216,11 +223,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             
                             bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo,listSends,listCopys);
                             string msj = "";
+                            string msjRspta = "";
                             if (!flag)
                             {
                                 msj = "Falló envio de correo";
                             }
-                            objJsonMessage.Mensaje = "Solicitud enviada correctamente " + msj;
+                            msjRspta = "Solicitud enviada exitosamente. ";
+                            msjRspta += "Derivada a " + rol + " " + usuarioResponsable.DscNombres + " " + usuarioResponsable.DscApePaterno;
+                            objJsonMessage.Mensaje = msjRspta +" "+ msj;
                             objJsonMessage.Resultado = true;
                             return Json(objJsonMessage);
                         }
@@ -721,6 +731,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var SedeSession = Session[ConstanteSesion.Sede];
             string SedeDescripcion = "-";
 
+            string msjFinal = "";
+
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -771,6 +783,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (ideUsuario != -1)
                     {
+                        var rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolResponsable.RolResponsable);
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
                         enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
@@ -779,7 +792,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliacion Cargo", "", solicitud.nombreCargo, solicitud.CodSolReqPersonal, listSends, "Suceso",listCopys);
 
-                        objJsonMessage.Mensaje = "Solicictud de ampliación aceptado para su publicación";
+                        msjFinal = "Solicitud de ampliación enviado exitosamente. ";
+                        msjFinal += "Derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        objJsonMessage.Mensaje = msjFinal;
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
                     }

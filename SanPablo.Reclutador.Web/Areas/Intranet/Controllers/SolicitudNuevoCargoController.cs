@@ -468,7 +468,7 @@
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", null, nuevaSolicitudCargo.NombreCargo, nuevaSolicitudCargo.CodigoCargo, listSends, "suceso",listCopys);
 
-                        string menj = "La solicitud enviada exitosamente";
+                        string menj = "La solicitud enviada exitosamente. ";
                         menj += Environment.NewLine;
                         menj += "Derivada a " + rol + " , " + usuario.DscNombres + " " + usuario.DscApePaterno;
                         objJsonMessage.Mensaje = menj;

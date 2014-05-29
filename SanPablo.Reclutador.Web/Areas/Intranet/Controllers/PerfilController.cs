@@ -681,6 +681,8 @@
                         IndArea = "SI";
                     }
 
+                    var rolResponsable = _rolRepository.GetSingle(x => x.IdRol == logSolicitud.RolResponsable);
+
                     logSolicitud.Observacion = "";
                     int ideUsuario = _logSolicitudNuevoRepository.solicitarAprobacion(logSolicitud, solicitud.IdeSede, solicitud.IdeArea, IndArea);
 
@@ -694,7 +696,10 @@
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Generacion_Perfil, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends,"Suceso",listCopys);
 
-                        objJsonMessage.Mensaje = "Perfil enviado para su aprobación";
+                        
+                        string menj = "Perfil enviado para su aprobación. ";
+                        menj += "Solicitud derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        objJsonMessage.Mensaje = menj;
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
                     }

@@ -18,6 +18,8 @@ namespace SanPablo.Reclutador.Web.Core
         public const string IdeReclutaPersona = "IdeReclutaPersona";
         public const string ListaCriterios = "ListaCriterios";
 
+        public const string IdUsuario = "IdUsuario";
+
         public const string NombreCargoEvaluacion = "NombreCargoEvaluacion";
 
         public const string HoraInicioEvaluacion = "HoraInicioEvaluacion";
