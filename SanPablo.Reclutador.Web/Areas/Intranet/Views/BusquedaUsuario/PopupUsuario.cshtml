@@ -7,13 +7,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnBuscarUsuario').click(function () {
-            alert("Aqui");
             $('#grdListUsuario').trigger('reloadGrid');
         });
 
         
         $('#btnLimpiarUsuario').click(function () {
-           // location.reload();
+            location.reload();
         });
 
 
@@ -49,7 +48,6 @@
             }, loadComplete: function (data) {
                 jQuery("#grdListUsuario").jqGrid('setGridParam', {
                     datatype: function (postdata) {
-                        alert("Aqui grilla");
                         var migrilla = new Object();
                         migrilla.page = postdata.page;
                         migrilla.rows = postdata.rows;

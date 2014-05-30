@@ -809,7 +809,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              }
              else
              {
-                 logReqCargo = _logSolReqRepository.getFirthValue(x => x.IdeLogSolReqPersonal == id);
+                 logReqCargo = _logSolReqRepository.getFirthValue(x => x.IdeSolReqPersonal == id);
              }
 
              model.Solicitud.IdeSolReqPersonal = id;

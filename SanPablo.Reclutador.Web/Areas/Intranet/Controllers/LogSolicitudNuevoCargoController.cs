@@ -252,21 +252,30 @@
 
                 if (ideUsuarioResp != -1)
                 {
-                    if (!logSolicitud.Aprobado)
-                    {
-                        var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
-                        ideUsuarioResp = logSolicitudInicial.UsuarioResponsable;
-                    }
+                    //if (!logSolicitud.Aprobado)
+                    //{
+                    //    var logSolicitudInicial = _logSolicitudNuevoCargoRepository.getFirthValue(x => x.IdeSolicitudNuevoCargo == solicitud.IdeSolicitudNuevoCargo);
+                    //    ideUsuarioResp = logSolicitudInicial.UsuarioSuceso;
+                    //}
                     
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
 
                     if (enviarCorreoAll(model.LogSolicitudNuevoCargo, usuario, solicitud,listSends,listCopys))
                     {
+                        string menj = "";
+                        if ((!logSolicitud.Aprobado)&&(logSolicitud.TipoEtapa != Etapa.Observado))
+                        {
+                            menj = "El proceso se realizó exitosamente";
+                        }
+                        else
+                        {
+                            menj = "El proceso de envío se realizó exitosamente";
+                            menj += Environment.NewLine;
+                            menj += "Solicitud derivada a " + rol + " " + usuario.DscNombres + " " + usuario.DscApePaterno;
+
+                        }
                         
-                        string menj = "El proceso de envío se realizó exitosamente";
-                               menj += Environment.NewLine;
-                               menj += "Solicitud derivada a " + rol +" "+usuario.DscNombres+" "+usuario.DscApePaterno;
-                            return menj;
+                       return menj;
                     }
                     else
                     {

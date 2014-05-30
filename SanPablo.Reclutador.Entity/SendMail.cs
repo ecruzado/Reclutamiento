@@ -249,8 +249,8 @@
                 case Etapa.Aceptado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que el requerimiento de " + tipoRequerimiento + " de " + cargo +
-                                   " en la Sede " + Sede + " requiere de su aceptación para continuar el procedimiento.";
-                        asunto = "Aceptación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                                   " en la Sede " + Sede + " y se requiere la publicación en la web.";
+                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
                         break;
                     }
 

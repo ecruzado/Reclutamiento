@@ -46,7 +46,7 @@ namespace SanPablo.Reclutador.Repository
                 lspcmd.ExecuteNonQuery();
 
                 int resultado = Convert.ToInt32(lspcmd.Parameters[lspcmd.Parameters.IndexOf("p_RetVal")].Value);
-                if (resultado == 0)
+                if (resultado == -1)
                 { return false; }
                 else
                     return true;

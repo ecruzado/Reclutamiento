@@ -34,6 +34,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IOfrecemosRequerimientoRepository _ofrecemosReqRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private ISolReqPersonalRepository _solReqPersonalRepository;
+        private IRolRepository _rolRepository;
         
 
         public SolicitudAmpliacionCargoController(IDetalleGeneralRepository detalleGeneralRepository,
@@ -51,7 +52,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                                   ICompetenciaRequerimientoRepository competenciaReqRepository,
                                                   IOfrecemosRequerimientoRepository ofrecemosReqRepository,
                                                   ISolReqPersonalRepository solReqPersonalRepository,
-                                                  ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository
+                                                  ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
+                                                  IRolRepository rolRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -70,6 +72,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _ofrecemosReqRepository = ofrecemosReqRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
+            _rolRepository = rolRepository;
         }
         
         
@@ -176,6 +179,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var rolResponsable = 0;
                     var etapaInicio = "";
                     string indicadorArea = "NO";
+                    string rol = "";
                     /// 
                     ///enviar dependiendo el usuario que registra la solicitud
                     /// 
@@ -184,17 +188,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         case Roles.Jefe:
                             rolResponsable = Roles.Gerente;
                             etapaInicio = Etapa.Pendiente;
+                            rol = "Gerente";
                             indicadorArea = "SI";
                             break;
 
                         case Roles.Gerente:
                             rolResponsable = Roles.Gerente_General_Adjunto;
                             etapaInicio = Etapa.Validado;
+                            rol = "Gerente General Adjunto";
                             break;
 
                         case Roles.Gerente_General_Adjunto:
                             rolResponsable = Roles.Encargado_Seleccion;
                             etapaInicio = Etapa.Aprobado;
+                            rol = "Encargado de Selección";
                             break;
                     }
 
@@ -216,11 +223,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                             
                             bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo,listSends,listCopys);
                             string msj = "";
+                            string msjRspta = "";
                             if (!flag)
                             {
                                 msj = "Falló envio de correo";
                             }
-                            objJsonMessage.Mensaje = "Solicitud enviada correctamente " + msj;
+                            msjRspta = "Solicitud enviada exitosamente. ";
+                            msjRspta += "Derivada a " + rol + " " + usuarioResponsable.DscNombres + " " + usuarioResponsable.DscApePaterno;
+                            objJsonMessage.Mensaje = msjRspta +" "+ msj;
                             objJsonMessage.Resultado = true;
                             return Json(objJsonMessage);
                         }
@@ -721,6 +731,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var SedeSession = Session[ConstanteSesion.Sede];
             string SedeDescripcion = "-";
 
+            string msjFinal = "";
+
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
@@ -771,6 +783,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (ideUsuario != -1)
                     {
+                        var rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolResponsable.RolResponsable);
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
                         enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
@@ -779,7 +792,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliación de Cargo", "", solicitud.nombreCargo, solicitud.CodCargo, listSends, "Suceso",listCopys);
 
-                        objJsonMessage.Mensaje = "Solicictud de ampliación aceptado para su publicación";
+                        msjFinal = "Solicitud de ampliación enviado exitosamente. ";
+                        msjFinal += "Derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        objJsonMessage.Mensaje = msjFinal;
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);
                     }
@@ -1985,6 +2000,149 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Realiza la publicacion de la solicitud de reemplazo de personal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ValidarSesion]
+        public ActionResult PublicaSolReqPersonal(SolicitudRempCargoViewModel model)
+        {
+            JsonMessage objJson = new JsonMessage();
+            var verSalario = model.verSalario;
+            string IndVerSalario;
+
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+            List<String> listSends = null;
+            List<String> listCopys = null;
+
+
+            if (verSalario)
+            {
+                IndVerSalario = "S";
+            }
+            else
+            {
+                IndVerSalario = "N";
+            }
+            System.Collections.ArrayList lista = new System.Collections.ArrayList();
+
+            if (model != null)
+            {
+
+                var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
+                if (objSol != null)
+                {
+
+                    if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                    {
+                        lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Ampliacion);
+
+                    }
+                    else
+                    {
+                        lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Remplazo);
+
+                    }
+
+
+                    listSends = new List<String>();
+                    listSends = (List<String>)lista[0];
+
+                    listCopys = new List<String>();
+                    listCopys = (List<String>)lista[1];
+
+
+                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+                    objSol.FechaModificacion = FechaSistema;
+                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                    objSol.TipEtapa = Etapa.Publicado;
+                    objSol.IndicadorSalario = IndVerSalario;
+                    objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
+
+
+                    ReclutamientoPersona objRecluta = new ReclutamientoPersona();
+
+                    objRecluta.IdeSol = Convert.ToInt32(objSol.IdeSolReqPersonal);
+
+                    //se obtiene el tipo de solicitud para saber si es una ampliacion o un reemplazo
+                    objRecluta.TipSol = objSol.TipoSolicitud;
+
+                    objRecluta.TipPuesto = objSol.TipPuesto;
+                    objRecluta.IdSede = objSol.IdeSede;
+                    objRecluta.IdeCargo = objSol.IdeCargo;
+                    //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
+                    _solReqPersonalRepository.verificaPotenciales(objRecluta);
+
+                    //se atualiza la solicitud;
+                    _solReqPersonalRepository.Update(objSol);
+
+                    model.LogSolReqPersonal = new LogSolReqPersonal();
+                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
+                    model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
+                    //rol del responsable el que publica es el reponsable de trabajar la solicitud
+                    model.LogSolReqPersonal.UsResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                    model.LogSolReqPersonal.RolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+
+                    _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+                    var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+                    //bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", "Reemplazo de cargo", objSol.CodSolReqPersonal);
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo, listSends, listCopys);
+
+                    objJson.Resultado = true;
+                    objJson.Mensaje = "Se publicó la Solicitud exitosamente";
+
+
+
+                }
+            }
+            else
+            {
+                objJson.Resultado = false;
+                objJson.Mensaje = "No se puede realizar la publicación de la solicitud";
+            }
+
+
+
+            return Json(objJson);
+        }
+
+
+        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo, List<String> Sends, List<String> Copys)
+        {
+            JsonMessage objJsonMessage = new JsonMessage();
+            var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            try
+            {
+                SendMail enviarMail = new SendMail();
+                enviarMail.Area = usuarioSession.AREADES;
+                enviarMail.Sede = usuarioSession.SEDEDES;
+                enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
+                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                // enviarMail.EnviarCorreo(dir, etapa, rolResponsable, tipoRq,"",cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+
+                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                return false;
+
+            }
+
+        }
 
         #endregion
 

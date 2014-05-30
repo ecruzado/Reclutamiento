@@ -57,7 +57,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Solicitud enviada exitosamente", "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
                             }
                             else {
                                 $.unblockUI();
@@ -490,7 +490,7 @@
                          function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                mensajeRedirecciona("Solicitud aceptada exitosamente", "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
                             }
                             else {
                                 MostrarMensaje(respuesta.Mensaje, "MENSAJE");
@@ -662,7 +662,7 @@
                  $.unblockUI();
                  if (respuesta.Resultado) {
                      $('#updateDialogAprobacion').dialog("close");
-                     mensajeRedirecciona("El proceso de envío se realizó exitosamente", "MENSAJE");
+                     mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
                  }
                  else {
                      MostrarMensaje(respuesta.Mensaje,"MENSAJE");

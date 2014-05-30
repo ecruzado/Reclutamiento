@@ -234,7 +234,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Solicitud aceptada exitosamente","MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje,"MENSAJE");
                             }
                             else {
                                 $.unblockUI();
@@ -274,7 +274,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Solicitud enviada exitosamente","MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje,"MENSAJE");
                             }
                             else {
                                 $.unblockUI();

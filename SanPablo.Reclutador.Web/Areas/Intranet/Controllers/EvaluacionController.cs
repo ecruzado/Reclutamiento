@@ -519,10 +519,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         }
 
                     }
-                    reclutaPersExaCat.Estado = EstadoCategoria.Finalizado;
-                    reclutaPersExaCat.FechaModificacion = FechaModificacion;
-                    reclutaPersExaCat.UsuarioModificacion = usuario;
-                    _reclutamientoExamenCategoriaRepository.Update(reclutaPersExaCat);
+
+                    var reclutaPersExaCatResul = _reclutamientoExamenCategoriaRepository.GetSingle(x => x.IdeReclutamientoPersonaExamenCategoria == IdeReclutamientoExamenCategoria);
+
+                    reclutaPersExaCatResul.Estado = EstadoCategoria.Finalizado;
+                    reclutaPersExaCatResul.FechaModificacion = FechaModificacion;
+                    reclutaPersExaCatResul.UsuarioModificacion = usuario;
+                    _reclutamientoExamenCategoriaRepository.Update(reclutaPersExaCatResul);
                     _reclutamientoPersonaExamenRepository.calificacionExamen(IdeReclutamientoExamenCategoria, IdeReclutaPersona, Session[ConstanteSesion.UsuarioDes].ToString());
                     objJson.Resultado = true;
                 }

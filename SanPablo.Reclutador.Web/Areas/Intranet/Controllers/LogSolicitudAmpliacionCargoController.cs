@@ -24,6 +24,8 @@
         private ICargoRepository _cargoRepository;
         private ISolicitudNuevoCargoRepository _solicitudNuevoCargoRepository;
         private ISolReqPersonalRepository _solReqPersonalRepository;
+        private IRolRepository _rolRepository;
+
 
 
         public LogSolicitudAmpliacionCargoController(ISolReqPersonalRepository solicitudAmpliacionCargoRepository,
@@ -31,7 +33,8 @@
                                                      IUsuarioRepository usuarioRepository,
                                                      ICargoRepository cargoRepository,
                                                      ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
-                                                     ISolReqPersonalRepository solReqPersonalRepository
+                                                     ISolReqPersonalRepository solReqPersonalRepository,
+                                                     IRolRepository rolRepository
             
             )
         {
@@ -41,6 +44,7 @@
             _cargoRepository = cargoRepository;
             _solicitudNuevoCargoRepository = solicitudNuevoCargoRepository;
             _solReqPersonalRepository = solReqPersonalRepository;
+            _rolRepository = rolRepository;
         }
 
         #region LOGSOLICITUD AMPLIACION CARGO
@@ -64,6 +68,7 @@
                 int RolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                 int ideSolicitud = Convert.ToInt32(model.SolicitudRequerimiento.IdeSolReqPersonal);
                 LogSolReqPersonal estadoSolicitud = _logSolicitudAmpliacionRepository.estadoSolicitud(ideSolicitud);
+                var msjFinal = "";
                 if (model.LogSolicitudAmpliacion.TipEtapa != "-1")
                 {
                     if (RolSession == Convert.ToInt32(estadoSolicitud.RolResponsable))
@@ -77,7 +82,25 @@
 
                         if (aprobarRechazarSolicitud(model)) 
                         {
-                            objJsonMessage.Mensaje = "Enviado Correctamente";
+                            if (model.Aprobado)
+                            {
+                                var rol = _rolRepository.GetSingle(x=>x.IdRol == model.LogSolicitudAmpliacion.RolResponsable);
+                                int idUsuarioResp = Convert.ToInt32(Session[ConstanteSesion.IdUsuario]);
+                                msjFinal = "Solicitud enviada exitosamente.";
+                                msjFinal += "Derivado a " + rol.DscRol + " ";
+
+                                if(idUsuarioResp != 0)
+                                {
+                                    var usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResp);
+                                    msjFinal += usuario.DscNombres +" "+usuario.DscApeMaterno;
+                                }
+                               
+                            }
+                            else
+                            {
+                                msjFinal = "Proceso registrado exitosamente. ";
+                            }
+                            objJsonMessage.Mensaje = msjFinal;
                             objJsonMessage.Resultado = true;
                             return Json(objJsonMessage);
                         }
@@ -190,6 +213,8 @@
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             
             int ideUsuarioResp;
+
+            string msj = "";
             
             string indicadorArea="NO";
             System.Collections.ArrayList lista = new System.Collections.ArrayList();
@@ -234,7 +259,7 @@
                 int IdeSolicitud = model.LogSolicitudAmpliacion.IdeSolReqPersonal;
 
                 ideUsuarioResp = _logSolicitudAmpliacionRepository.solicitarAprobacion(model.LogSolicitudAmpliacion, (Int32)model.SolicitudRequerimiento.IdeSolReqPersonal, model.SolicitudRequerimiento.IdeSede, model.SolicitudRequerimiento.IdeArea, indicadorArea);
-
+                Session[ConstanteSesion.IdUsuario] = ideUsuarioResp;
                 if (ideUsuarioResp != -1)
                 {
                     Usuario usuario = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuarioResp);
@@ -249,11 +274,11 @@
                     //enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, usuario.Email, "UN SUCESSO");
                     enviar.EnviarCorreoVarios(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, listSends, "UN SUCESSO",listCopys);
 
-
                     return true;
                 }
                 else
                 {
+                    //msj = "ERROR: No se pudo completar la acción intente de nuevo";
                     return false;
                 }
 

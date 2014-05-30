@@ -104,7 +104,7 @@
                             if (respuesta.Resultado) {
                                 $.unblockUI();
                                 //actualizarCodigo(codigo);
-                                mensajeRedirecciona("Solicitud enviada exitosamente", "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
                                 
                             }
                             else {
