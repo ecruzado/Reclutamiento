@@ -78,7 +78,7 @@
         });
 
 
-        $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
+        @*$('select#SolicitudRequerimiento_IdeDependencia').change(function () {
             var ideDependencia = $(this).val();
             $("select#SolicitudRequerimiento_IdeArea").empty();
             $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
@@ -114,8 +114,99 @@
             );
             }
         });
-    })
+    })*@
 
+
+
+        $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
+            var ideDependencia = $(this).val();
+            $("select#SolicitudRequerimiento_IdeArea").empty();
+            $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+
+            $("select#SolicitudRequerimiento_IdeCargo").empty();
+            $("select#SolicitudRequerimiento_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaDepartamentos", "SolicitudCargo", new { area = "Intranet"})',
+                data: { ideDependencia: ideDependencia },
+                success: function (respuesta) {
+
+                    $("select#SolicitudRequerimiento_IdeCargo").empty();
+                    $("select#SolicitudRequerimiento_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
+                    $("select#SolicitudRequerimiento_IdeDepartamento").empty();
+                    $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='"
+                        + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
+                    }
+                );
+                }
+            });
+         })
+
+        $('select#SolicitudRequerimiento_IdeDepartamento').change(function () {
+            var ideDepartamento = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaAreas","SolicitudCargo",new { area = "Intranet"})',
+                data: { ideDepartamento: ideDepartamento },
+                success: function (respuesta) {
+
+                    $("select#SolicitudRequerimiento_IdeCargo").empty();
+                    $("select#SolicitudRequerimiento_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
+                    $("select#SolicitudRequerimiento_IdeArea").empty();
+                    $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudRequerimiento_IdeArea").append("<option value='"
+                        + item.IdeArea + "'>" + item.NombreArea + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+
+
+        $('select#SolicitudRequerimiento_IdeArea').change(function () {
+            var idArea = $(this).val();
+            var idDependencia = $("#SolicitudRequerimiento_IdeDependencia").val();
+            var idDepartamento = $("#SolicitudRequerimiento_IdeDepartamento").val();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaCargoxSede","SolicitudCargo",new { area = "Intranet"})',
+                data: {
+                    idArea: idArea,
+                    idDependencia: idDependencia,
+                    idDepartamento: idDepartamento
+                },
+                success: function (respuesta) {
+                    $("select#SolicitudRequerimiento_IdeCargo").empty();
+                    $("select#SolicitudRequerimiento_IdeCargo").append("<option value='0'> Seleccionar </option>");
+                    $.each(respuesta, function (i, item) {
+                        $("select#SolicitudRequerimiento_IdeCargo").append("<option value='"
+                        + item.IdeCargo + "'>" + item.NombreCargo + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
+
+
+
+
+
+
+
+        /////////////////////////////////
         jQuery("#grdListCompetencias").jqGrid({
             url: '@Url.Action("ListarCompetencias", "SolicitudAmpliacionCargo")',
               datatype: 'json',
