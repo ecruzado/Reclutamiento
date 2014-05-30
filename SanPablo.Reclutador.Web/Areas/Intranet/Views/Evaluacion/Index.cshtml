@@ -60,7 +60,12 @@
             }
         }
         else {
-            return '<a class="btn btn-link" style="text-decoration: underline" href="#">Terminado</a>'
+            if (rowObject[7] == "02") {
+                return '<a class="btn btn-link" style="text-decoration: underline" href="#">En evaluación</a>'
+            }
+            else {
+                return '<a class="btn btn-link" style="text-decoration: underline" href="#">Terminado</a>'
+            }
         }
 
     }

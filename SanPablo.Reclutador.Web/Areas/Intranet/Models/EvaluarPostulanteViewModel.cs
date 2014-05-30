@@ -38,6 +38,8 @@
 
         public int idReclutaPersoExamenCat { get; set; }
 
+        public string indicadorMensaje { get; set; }
+
 
     }
 }
