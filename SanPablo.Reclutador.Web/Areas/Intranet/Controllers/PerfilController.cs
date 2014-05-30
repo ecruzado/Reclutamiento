@@ -546,7 +546,7 @@
 
                         string menj = "Perfil aceptado exitosamente";
                         menj += Environment.NewLine;
-                        menj += "Derivada a " + rolResponsable.DscRol + " , " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        menj += "Solicitud derivada al " + rolResponsable.DscRol + " , " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
                         objJsonMessage.Mensaje = menj;
                         objJsonMessage.Resultado = true;
 
@@ -699,7 +699,7 @@
 
                         string menj = "El proceso de envío se realizó exitosamente. ";
                         menj += Environment.NewLine;
-                        menj += "Solicitud derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
+                        menj += "Solicitud derivada al " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
                         objJsonMessage.Mensaje = menj;
                         objJsonMessage.Resultado = true;
                         return Json(objJsonMessage);

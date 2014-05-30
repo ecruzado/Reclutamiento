@@ -206,7 +206,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario = new Usuario();
 
                 objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == Convert.ToInt32(model.Usuario.IdUsuario));
-                objUsuario.DscApeMaterno = model.Usuario.DscApePaterno;
+                objUsuario.DscApeMaterno = model.Usuario.DscApeMaterno;
                 objUsuario.DscApePaterno = model.Usuario.DscApePaterno;
                 objUsuario.DscNombres = model.Usuario.DscNombres;
                 objUsuario.CodUsuario = model.Usuario.CodUsuario;
