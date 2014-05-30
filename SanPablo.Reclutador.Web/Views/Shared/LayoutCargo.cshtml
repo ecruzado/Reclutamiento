@@ -238,7 +238,7 @@
                             }
                             else {
                                 $.unblockUI();
-                                mostrarMensaje(respuesta.Mensaje);
+                                MostrarMensaje(respuesta.Mensaje,"MENSAJE");
                             }
                         });
                 },
@@ -274,11 +274,11 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona(respuesta.Mensaje,"MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje,"INFORMATIVO");
                             }
                             else {
                                 $.unblockUI();
-                                mostrarMensaje(respuesta.Mensaje);
+                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                             }
                         });
                 },
@@ -289,18 +289,18 @@
         });
     });
 
-    function mostrarMensaje(msj)
-    {
+    //function mostrarMensaje(msj)
+    //{
         
-        $("#spnMensaje").html(msj);
-        $("#divMensaje").dialog({
-            title: 'MENSAJE',
-            modal: true,
-            buttons: {
-                "Ok": function () { $(this).dialog("close"); }
-            }
-        });
-    }
+    //    $("#spnMensaje").html(msj);
+    //    $("#divMensaje").dialog({
+    //        title: 'MENSAJE',
+    //        modal: true,
+    //        buttons: {
+    //            "Ok": function () { $(this).dialog("close"); }
+    //        }
+    //    });
+    //}
 
     function mostrarConfirmaAceptar() {
         var dialogDiv = $('#updateDialogAceptar');
@@ -320,7 +320,7 @@
                     dialogDiv.dialog('open');
                 }
                 else {
-                    mostrarMensaje("Debe completar el perfil con los datos obligatorios");
+                    MostrarMensaje("Debe completar el perfil con los datos obligatorios","MENSAJE");
                 }
             }
         });
@@ -382,7 +382,7 @@
             modal: true,
             resizable: false,
             buttons: {
-                "Ok": function () {
+                "Aceptar": function () {
                     $(this).dialog("close");
                     SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
                 }

@@ -1513,8 +1513,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             //model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
 
-            model.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
-            model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSedeCodigo(objCargo.IdeSede));
+            model.Cargos.Insert(0, new Cargo { CodigoCargo = "0", NombreCargo = "Seleccionar" });
 
             //model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
             //model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
@@ -1546,7 +1546,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     solicitudRequerimiento = new SolReqPersonal();
 
-                    solicitudRequerimiento.IdeCargo = (grid.rules[1].data == null ? 0 : Convert.ToInt32(grid.rules[1].data));
+                    solicitudRequerimiento.CodCargo = (grid.rules[1].data == null ? "0" : grid.rules[1].data);
                     solicitudRequerimiento.IdeDependencia = (grid.rules[2].data == null ? 0 : Convert.ToInt32(grid.rules[2].data));
                     solicitudRequerimiento.IdeArea = (grid.rules[3].data == null ? 0 : Convert.ToInt32(grid.rules[3].data));
                     solicitudRequerimiento.TipResponsable = (grid.rules[4].data == null ? "" : grid.rules[4].data);

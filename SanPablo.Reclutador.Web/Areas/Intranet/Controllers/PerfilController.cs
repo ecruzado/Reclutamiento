@@ -696,8 +696,9 @@
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Generacion_Perfil, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends,"Suceso",listCopys);
 
-                        
-                        string menj = "Perfil enviado para su aprobación. ";
+
+                        string menj = "El proceso de envío se realizó exitosamente. ";
+                        menj += Environment.NewLine;
                         menj += "Solicitud derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
                         objJsonMessage.Mensaje = menj;
                         objJsonMessage.Resultado = true;

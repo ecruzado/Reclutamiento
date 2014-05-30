@@ -512,7 +512,7 @@ namespace SanPablo.Reclutador.Repository
                  OracleCommand lspcmd = new OracleCommand("PR_INTRANET.SP_GET_LISTA_AMPLIACION");
                  lspcmd.CommandType = CommandType.StoredProcedure;
                  lspcmd.Connection = lcon;
-                 lspcmd.Parameters.Add("p_nIdCargo", OracleType.Int32).Value = obj.IdeCargo;
+                 lspcmd.Parameters.Add("p_nCodCargo", OracleType.VarChar).Value = obj.CodCargo;
                  lspcmd.Parameters.Add("p_nIdDependencia", OracleType.Int32).Value = obj.IdeDependencia;
                  lspcmd.Parameters.Add("p_nIdDepartamento", OracleType.Int32).Value = obj.IdeDepartamento;
                  lspcmd.Parameters.Add("p_nIdArea", OracleType.Int32).Value = obj.IdeArea;

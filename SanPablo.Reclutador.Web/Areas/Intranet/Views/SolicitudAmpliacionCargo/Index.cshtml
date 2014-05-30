@@ -178,7 +178,7 @@
             migrilla.Rules = [
 
                 { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
+                { field: 'codCargo', data: $("#SolicitudRequerimiento_CodCargo").val() },
                 { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
                 { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
                 { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
@@ -278,14 +278,14 @@
 
             if (fechaInicial.length > 0) {
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "MENSAJE");
                     return false;
                 }
             }
 
             if (fechaFinal.length > 0) {
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "MENSAJE");
                     return false;
                 }
             }
@@ -346,7 +346,7 @@
                        
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo),new {  data_val = "false"})
+                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.CodCargo, new SelectList(Model.Cargos, "CodigoCargo", "NombreCargo", Model.SolicitudRequerimiento.CodCargo),new {  data_val = "false"})
                             </div>
                     </td>
                     <td class="span5" style="width:500px">

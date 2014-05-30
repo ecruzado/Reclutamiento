@@ -104,7 +104,7 @@
                             if (respuesta.Resultado) {
                                 $.unblockUI();
                                 //actualizarCodigo(codigo);
-                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                                 
                             }
                             else {
@@ -279,12 +279,12 @@
                      if (respuesta.Resultado) {
 
                          $.unblockUI();
-                         mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
+                         mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                          //notificacionExito();
                      }
                      else {
                          $.unblockUI();
-                         MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                         MostrarMensaje(respuesta.Mensaje, "MENSAJE");
                          // notificacionError(respuesta.Mensaje);
                      }
                  }

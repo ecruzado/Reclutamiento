@@ -195,14 +195,23 @@ using System.Web.Mvc;
 
                 //No mostrar las tablas generales criticas
 
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 1)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 3)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 51)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 4)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 4)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 42)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 46)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 47)));
-                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 51)));
-                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 3)));
-                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 4)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 49)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 50)));
-                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 51)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 52)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 54)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 56)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 57)));
 
                 var generic = Listar(_generalRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);

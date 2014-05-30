@@ -319,11 +319,12 @@
         var countdown = document.getElementById("horaImprimir");
         setInterval(function () {
             var seconds_left = totalSegundos;
-
-            //if (totalSegundos < 300)
-            //{
-            //    MostrarMensaje("")
-            //}
+            var ind = $('#indicadorMensaje').val();
+            if ((totalSegundos < 300) && (totalSegundos > 270) && (ind == 'N'))
+            {
+                MostrarMensaje("Te faltan 5 mín para terminar la prueba", "ALERTA");
+                $('#indicadorMensaje').val('S');
+            }
 
             if (totalSegundos <= 0)
             {
