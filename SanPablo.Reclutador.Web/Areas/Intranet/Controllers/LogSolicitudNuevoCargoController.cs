@@ -271,7 +271,7 @@
                         {
                             menj = "El proceso de envío se realizó exitosamente";
                             menj += Environment.NewLine;
-                            menj += "Solicitud derivada a " + rol + " " + usuario.DscNombres + " " + usuario.DscApePaterno;
+                            menj += "Solicitud derivada al " + rol + " " + usuario.DscNombres + " " + usuario.DscApePaterno;
 
                         }
                         
