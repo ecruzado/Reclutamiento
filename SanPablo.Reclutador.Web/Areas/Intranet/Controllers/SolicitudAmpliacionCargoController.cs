@@ -109,6 +109,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudModel.TotalMaxino = puntajeTotal;
                 solicitudModel.nuevaSolicitud = Indicador.No;
 
+               
                 //var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == solicitud.IdeDepartamento);
                 //var area = _areaRepository.GetSingle(x => x.IdeArea == solicitud.IdeArea);
 
@@ -137,6 +138,85 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudModel.SolicitudRequerimiento = solicitudAmpliacion;
                 solicitudModel.nuevaSolicitud = Indicador.Si;
             }
+
+
+            //actualiza el cargo segun el usuario 
+
+            var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
+            var idSede = Session[ConstanteSesion.Sede];
+            Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            SedeNivel usuarioSede;
+
+
+            if (objUsuarioSede != null)
+            {
+                usuarioSede = new SedeNivel();
+                usuarioSede = (SedeNivel)objUsuarioSede;
+
+                //incializa
+               
+                if (idRol == Roles.Gerente || idRol == Roles.Jefe)
+                {
+                    solicitudModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                        && x.IdeSede == usuarioSede.IDESEDE
+                                                                        && x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                        ));
+
+
+                    solicitudModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                                              && x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                    solicitudModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.IdeArea == usuarioSede.IDEAREA
+                                                                              && x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+                    Cargo objCargo = new Cargo();
+
+                    objCargo.IdeSede = Convert.ToInt32(idSede);
+                    objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                    objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                    objCargo.IdeArea = usuarioSede.IDEAREA;
+
+                    solicitudModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    solicitudModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+                }
+
+
+                if (Roles.Gerente_General_Adjunto.Equals(idRol))
+                {
+
+                    solicitudModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                    solicitudModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+                    solicitudModel.SolicitudRequerimiento.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                    solicitudModel.SolicitudRequerimiento.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                    solicitudModel.SolicitudRequerimiento.IdeArea = usuarioSede.IDEAREA;
+
+
+                    Cargo objCargo = new Cargo();
+
+                    objCargo.IdeSede = Convert.ToInt32(idSede);
+                    objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                    objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                    objCargo.IdeArea = usuarioSede.IDEAREA;
+
+                    solicitudModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    solicitudModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+                }
+
+            }
+
+            // fin de actualizacion
+
+
+
             return View(solicitudModel);
         }
 

@@ -12,8 +12,17 @@
 
         
         $('#btnLimpiarUsuario').click(function () {
-            //location.reload();
-            opener.location.reload();
+            
+
+            $('#Usuario_DscNombres').val("");
+            $('#Usuario_DscApePaterno').val("");
+            $('#Usuario_DscApeMaterno').val("");
+            $('#Usuario_IdRol').val("0");
+            
+            
+            
+            $('#grdListUsuario').jqGrid('clearGridData');
+            
         });
 
 
@@ -59,7 +68,7 @@
                         migrilla.Rules = [
                             { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
                             { field: 'ApellidoPaterno', data: $("#Usuario_DscApePaterno").val() },
-                            { field: 'ApellidoMaterno', data: $("#Usuario_DscApePaterno").val() },
+                            { field: 'ApellidoMaterno', data: $("#Usuario_DscApeMaterno").val() },
                             { field: 'Nombres', data: $("#Usuario_DscNombres").val() },
                             { field: 'idRol', data: $("#Usuario_IdRol").val() },
                         ];
@@ -114,7 +123,7 @@
                 <label class="etiquetaFormulario" >Apellido Materno</label>
             </td>
             <td class="colInput;input-xxlarge">
-                   @Html.TextBoxFor(model => model.Usuario.DscApePaterno, new { @class = "textoFormulario" , maxlength="100" , @onblur = "aMays(event, this)"})                      
+                   @Html.TextBoxFor(model => model.Usuario.DscApeMaterno, new { @class = "textoFormulario" , maxlength="100" , @onblur = "aMays(event, this)"})                      
             </td>
         </tr>
         <tr >

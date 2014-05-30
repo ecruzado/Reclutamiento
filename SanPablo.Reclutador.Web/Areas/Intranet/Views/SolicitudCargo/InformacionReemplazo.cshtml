@@ -25,11 +25,22 @@
             var ideDependencia = $(this).val();
             $("select#SolReqPersonal_IdeArea").empty();
             $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
+
+            $("select#SolReqPersonal_IdeCargo").empty();
+            $("select#SolReqPersonal_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("listaDepartamentos", "SolicitudCargo", new { area = "Intranet"})',
                 data: { ideDependencia: ideDependencia },
                 success: function (respuesta) {
+
+
+                    $("select#SolReqPersonal_IdeCargo").empty();
+                    $("select#SolReqPersonal_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
+
                     $("select#SolReqPersonal_IdeDepartamento").empty();
                     $("select#SolReqPersonal_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
@@ -48,6 +59,11 @@
                 url: '@Url.Action("listaAreas","SolicitudCargo",new { area = "Intranet"})',
                 data: { ideDepartamento: ideDepartamento },
                 success: function (respuesta) {
+
+
+                    $("select#SolReqPersonal_IdeCargo").empty();
+                    $("select#SolReqPersonal_IdeCargo").append("<option value='0'> Seleccionar </option>");
+
                     $("select#SolReqPersonal_IdeArea").empty();
                     $("select#SolReqPersonal_IdeArea").append("<option value='0'> Seleccionar </option>");
                     $.each(respuesta, function (i, item) {
