@@ -293,7 +293,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (Convert.ToInt32(codRol) == 0)
             {
-                objJsonMensaje.Mensaje = "Seleccione un roll";
+                objJsonMensaje.Mensaje = "Seleccione un rol";
                 return Json(objJsonMensaje);
             }
 

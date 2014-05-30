@@ -57,7 +57,7 @@
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area = "Intranet" })',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
                 traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
@@ -535,7 +535,7 @@
             buttons: {
                 "Ok": function () {
                     $(this).dialog("close");
-                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
                 }
             }
         });
