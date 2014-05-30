@@ -293,7 +293,7 @@
                     }
                 });
             },
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Area', 'Num. Vacantes', 'Postulantes.', 'Pre Seleccionados', 'Evaluados', 'Seleccionados', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', '', 'Etapa'],
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.', 'Cont.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', '', '', 'Etapa'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
@@ -302,17 +302,19 @@
                 { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
                 { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
                 { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
-                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300, sortable: false },
+                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 280, sortable: false },
                 { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true, sortable: false },
-                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300, sortable: false },
+                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 280, sortable: false },
                 { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true, sortable: false },
-                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300, sortable: false },
+                { name: 'Area_des', index: 'Area_des', align: 'left', width: 250, sortable: false },
 
-                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 100, sortable: false },
-                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 100, sortable: false },
-                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 120, sortable: false },
-                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 100, sortable: false },
-                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 100, sortable: false },
+                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 60, sortable: false },
+                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 60, sortable: false },
+                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 60, sortable: false },
+                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'left', width: 60, sortable: false },
+                
+                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'left', width: 60, sortable: false },
+                  { name: 'CantContratados', index: 'CantContratados', align: 'right', width: 60, sortable: false },
                 { name: 'Feccreacion', index: 'Feccreacion', align: 'left', width: 90, sortable: false },
                 { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'left', width: 90, sortable: false },
                 { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true, sortable: false },
