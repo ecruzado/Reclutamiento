@@ -157,7 +157,6 @@
         {
             string cuerpo = "";
             string asunto = "";
-
             switch (tipo)
             {
                 case Etapa.Pendiente:
@@ -185,13 +184,24 @@
                             asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
                             break;
                         }
-                        else
+
+                        if (tipoRequerimiento == TipoRequerimientoEmail.Reemplazo)
+                        {
+                            cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Aprobado el requerimiento de " + tipoRequerimiento + " de " + cargo +
+                                " en la Sede " + Sede + " y se requiere que proceda con la publicación para continuar con el procedimiento.";
+                            asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                            break;
+                        }
+
+                        if (tipoRequerimiento == TipoRequerimientoEmail.Nuevo)
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                             " requerimiento de " + tipoRequerimiento + " en la Sede " + Sede + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
                             asunto = "Elaboración de Perfil de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
                             break;
                         }
+
+                        break;
                     }
 
                 case Etapa.Generacion_Perfil:
@@ -333,7 +343,7 @@
             List<string> mail = new List<string>();
             string cuerpoMail = "Luego de saludarlo(a), la presente es para comunicarle que se ha programado la "+entrevistaDesc+" a "+postulante+ " , para el cargo de "+cargo+
                                 ",  para el dia "+fecha+" a las "+hora+" horas. ";
-            string asuntoMail = "Programacion de entrevista para el cargo " + cargo;
+            string asuntoMail = "Programación de entrevista para el cargo " + cargo;
 
             mail.Add(cuerpoMail);
             mail.Add(asuntoMail);

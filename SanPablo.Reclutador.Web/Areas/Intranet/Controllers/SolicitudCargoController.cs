@@ -1278,7 +1278,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
 
-               bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", objSolicitud.nombreCargo, objSolicitud.CodCargo, listaSends, listaCopys);
+               bool flag = EnviarCorreo(desRol, Etapa.Pendiente, "Reemplazo", objSolicitud.nombreCargo, objSolicitud.CodCargo, listaSends, listaCopys,"");
 
                 
                 objJson.Resultado = true;
@@ -1492,16 +1492,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
                     string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
 
-                    System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.AprobarSolicitud, sede, TipoSolicitud.Remplazo);
-                    listSends = new List<String>();
-                    listSends = (List<String>)lista[0];
-
-                    listCopys = new List<String>();
-                    listCopys = (List<String>)lista[1];
+                    
 
                     model.LogSolReqPersonal.FecSuceso = FechaSistema;
                     if (aprobacion)
                     {
+
+                        System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.AprobarSolicitud, sede, TipoSolicitud.Remplazo);
+                        listSends = new List<String>();
+                        listSends = (List<String>)lista[0];
+
+                        listCopys = new List<String>();
+                        listCopys = (List<String>)lista[1];
+                        
+                        
                         model.LogSolReqPersonal.TipEtapa = Etapa.Aprobado;
                         model.LogSolReqPersonal.Observacion = "";
 
@@ -1526,9 +1530,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                             var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsResponsable);
 
-                            
-
-                            bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo,listSends,listCopys);
+                            bool flag = EnviarCorreo(desRol, Etapa.Aprobado, "Reemplazo", objSol.nombreCargo, objSol.CodCargo, listSends, listCopys,"");
 
 
                             retorno = 1;
@@ -1543,11 +1545,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
                     else
                     {
+
+
+                        System.Collections.ArrayList lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.RechazarSolicitud, sede, TipoSolicitud.Remplazo);
+                        listSends = new List<String>();
+                        listSends = (List<String>)lista[0];
+
+                        listCopys = new List<String>();
+                        listCopys = (List<String>)lista[1];
+                        
+                        
                         model.LogSolReqPersonal.TipEtapa = Etapa.Rechazado;
 
                         objSol.TipEtapa = Etapa.Rechazado;
                         objSol.FechaModificacion = FechaSistema;
                         objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+
+                        bool flag = EnviarCorreo(desRol, Etapa.Rechazado, "Reemplazo", objSol.nombreCargo, objSol.CodCargo, listSends, listCopys, model.LogSolReqPersonal.Observacion);
+
 
                         _solReqPersonalRepository.Update(objSol);
 
@@ -1595,7 +1610,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="cargoDescripcion"></param>
         /// <param name="codCargo"></param>
         /// <returns></returns>
-        public bool EnviarCorreo(Usuario usuarioDestinatario, string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo,List<String> Sends,List<String> Copys)
+        public bool EnviarCorreo(string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo,List<String> Sends,List<String> Copys,string motivo)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
@@ -1610,7 +1625,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                // enviarMail.EnviarCorreo(dir, etapa, rolResponsable, tipoRq,"",cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
 
-                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
+                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, motivo, cargoDescripcion, codCargo, Sends, "suceso", Copys);
                 return true;
             }
             catch (Exception Ex)
@@ -2012,7 +2027,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
                     //bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", "Reemplazo de cargo", objSol.CodSolReqPersonal);
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Pendiente, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo,listSends,listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Reemplazo", objSol.nombreCargo, objSol.CodCargo, listSends, listCopys, "");
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";

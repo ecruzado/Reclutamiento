@@ -667,7 +667,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                 enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                enviarMail.EnviarCorreo(dir,etapa, rolResponsable,"Ampliación de cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+                enviarMail.EnviarCorreo(dir, etapa, rolResponsable, "Ampliación de Cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
                 
                return true;
             }
@@ -702,7 +702,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                 enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, "Ampliación de cargo", observacion, cargoDescripcion, codCargo, Sends, "suceso",Copys);
+                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, "Ampliación de Cargo", observacion, cargoDescripcion, codCargo, Sends, "suceso", Copys);
 
                 return true;
             }
@@ -790,7 +790,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = usuarioSession.AREADES;
 
-                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliacion Cargo", "", solicitud.nombreCargo, solicitud.CodSolReqPersonal, listSends, "Suceso",listCopys);
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliación de Cargo", "", solicitud.nombreCargo, solicitud.CodCargo, listSends, "Suceso",listCopys);
 
                         msjFinal = "Solicitud de ampliación enviado exitosamente. ";
                         msjFinal += "Derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
@@ -1501,7 +1501,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
             }
 
-            model.Cargos = new List<Cargo>(_cargoRepository.listaCargosCompletos(idSede));
+
+            Cargo objCargo = new Cargo();
+
+            objCargo.IdeSede = Convert.ToInt32(idSede);
+            //objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+            //objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+            //objCargo.IdeArea = usuarioSede.IDEAREA;
+
+            //model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+            //model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+
+            model.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
             model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
 
             //model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
