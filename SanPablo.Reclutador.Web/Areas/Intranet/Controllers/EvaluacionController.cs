@@ -95,7 +95,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 if (IdeReclutaPersona != 0)
                 {
-
+                    
                     examenesPost = new DatosExamenPorCategoria();
 
                     int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
@@ -240,6 +240,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ListaCriterioEval = null;
             if (idCategoria != 0)
             {
+                modelExamen.indicadorMensaje = Indicador.No;
+
                 ListaCriterioEval = _criterioRepository.ObtenerCriteriosPorCategoria(idCategoria);
 
                 //ACTUALIZAR EXAMEN POR CATEGORIA
@@ -327,7 +329,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
 
             var modelExamen = inicializarExamen();
-            
+
+            modelExamen.indicadorMensaje = model.indicadorMensaje;
+
             modelExamen.nroPregunta = PreguntaActual;
 
             for (int i = model.nroPregunta; i < ListaCriterioEval.criterios.Count; i++)
@@ -384,7 +388,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             PreguntaActual = numeracion + 1;
             modelExamen.Categoria.TIEMPO = TiempoEvaluacion;
             modelExamen.Inicio = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion);
-            modelExamen.Fin = String.Format("{0:HH:mm:ss F}", HoraInicioEvaluacion.AddMinutes(TiempoEvaluacion));
+            modelExamen.Fin = String.Format("{0:HH:mm:ss}", HoraInicioEvaluacion.AddMinutes(TiempoEvaluacion));
 
             TimeSpan tiempoRestante = (HoraInicioEvaluacion.AddMinutes(TiempoEvaluacion) - DateTime.Now);
            
