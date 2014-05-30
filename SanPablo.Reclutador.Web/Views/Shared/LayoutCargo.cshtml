@@ -137,7 +137,9 @@
     <span id="spanMensajeAlert"></span>
 </div>  
 
- 
+ <div id="divMensajePerfil">
+    <span id="spanMensajePerfil"></span>
+</div>  
       
 
 @section Scripts{ 
@@ -320,7 +322,7 @@
                     dialogDiv.dialog('open');
                 }
                 else {
-                    MostrarMensaje("Debe completar el perfil con los datos obligatorios","MENSAJE");
+                    MostrarMensajeAlert("Debe completar el perfil con los datos obligatorios", "MENSAJE");
                 }
             }
         });
@@ -385,6 +387,20 @@
                 "Aceptar": function () {
                     $(this).dialog("close");
                     SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
+                }
+            }
+        });
+    }
+
+    function MostrarMensajeAlert(mensaje, titulo) {
+        $("#divMensajePerfil").html(mensaje);
+        $("#divMensajePerfil").dialog({
+            title: titulo,
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
                 }
             }
         });

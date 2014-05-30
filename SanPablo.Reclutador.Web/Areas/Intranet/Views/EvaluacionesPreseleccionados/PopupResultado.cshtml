@@ -34,9 +34,9 @@
                     // MostrarMensaje("error " + d.type + ": " + d.status, "MENSAJE");
                     MostrarMensaje("ERROR : Archivo demasiado grande. Limite de " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
                 else if (d.type === "File Size")
-                    MostrarMensaje(c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
+                    MostrarMensaje("ERROR: Archivo demasiado grande. Limite de "+c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
                 else
-                    MostrarMensaje("ERROR : " + d.type + ": " + d.text);
+                    MostrarMensaje("ERROR : " + d.type + ": " + d.text+ ". Verifique el archivo.");
             },
             'onSelect': function (e, q, f) {
                 var estado = true;
