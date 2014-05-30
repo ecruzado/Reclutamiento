@@ -324,6 +324,7 @@
     {
         public const string Ampliacion = "Ampliación de Cargo";
         public const string Nuevo = "Nuevo Cargo";
+        public const string Reemplazo = "Reemplazo";
     }
 
 }

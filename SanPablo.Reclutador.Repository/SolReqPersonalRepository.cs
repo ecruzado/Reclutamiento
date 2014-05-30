@@ -77,7 +77,7 @@ namespace SanPablo.Reclutador.Repository
                      lobSolicitud.Departamento_des = Convert.ToString(ldrSolicitud["NOMBDEPARTAMENTO"]);
                      lobSolicitud.Area_des = Convert.ToString(ldrSolicitud["NOMBAREA"]);
                      lobSolicitud.DesEstado = Convert.ToString(ldrSolicitud["DESESTADO"]);
-                     lobSolicitud.CodSolReqPersonal = Convert.ToString(ldrSolicitud["CODCARGO"]);
+                     lobSolicitud.CodSolReqPersonal = Convert.ToString(ldrSolicitud["IDESOL"]);
                      lobSolicitud.NumVacantes = Convert.ToInt32(ldrSolicitud["NUMVACANTE"]);
                      lobSolicitud.Tipsol = (ldrSolicitud["TIPSOL"]==null?"":Convert.ToString(ldrSolicitud["TIPSOL"]));
                      lobSolicitud.TipPuesto = (ldrSolicitud["TIPPUESTO"] == null ? "" : Convert.ToString(ldrSolicitud["TIPPUESTO"]));

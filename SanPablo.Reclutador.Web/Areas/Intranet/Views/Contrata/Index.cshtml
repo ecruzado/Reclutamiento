@@ -172,6 +172,24 @@
                 title: "CONFIRMACIÓN",
                 buttons: {
                     "Aceptar": function () {
+
+                        $.blockUI({
+                            message: '<h1>Finalizando Solicitud...</h1>',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }
+                        });
+
+                        $('#dialogObserv').dialog("close");
+                        $('#popupDialogObserv').dialog("close");
+                        
+
                         if ($("#frmPopuObserv").validate().form()) {
                             $.ajax({
                                 type: "POST",
@@ -179,6 +197,7 @@
                                 url: '@Url.Action("FinalizaSolicitudObs", "Contrata", new { area = "Intranet" })',
                                 traditional: true,
                                 success: function (data) {
+                                    $.unblockUI();
                                     if (data.Resultado) {
                                         $('#dialogObserv').dialog("close");
                                         $('#popupDialogObserv').dialog("close");
@@ -309,6 +328,22 @@
        
         function finalizaSol(idSol, tipSol, tipPuesto, idSede, idCargo, numVac) {
 
+
+
+            $.blockUI({
+                message: '<h1>Finalizando Solicitud...</h1>',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .5,
+                    color: '#fff'
+                }
+            });
+
+
             $.ajax({
                 data: {
                     idSol: idSol,
@@ -322,13 +357,17 @@
                 url: '@Url.Action("FinalizaSol", "Contrata")',
                 traditional: true,
                 success: function (data) {
-                if (data.redirecciona) {
-                    sanpablo.redirecciona('@Url.Action("login", "seguridad")');
-                }
+
+                    if (data.redirecciona) {
+                        $.unblockUI();
+                        sanpablo.redirecciona('@Url.Action("login", "seguridad")');
+                    }
                     if (data.Resultado) {
+                        $.unblockUI();
                         $('#grdListSel').trigger('reloadGrid');
                         MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
+                        $.unblockUI();
                         var dialogDiv = $('#popupDialogObserv');
 
                         $.get('@Url.Action("popupObserv", "Contrata", new { area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&tipPuesto=" + tipPuesto + "&idSede=" + idSede + "&idCargo=" + idCargo, function (data) {
