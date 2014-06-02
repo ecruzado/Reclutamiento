@@ -383,13 +383,16 @@ BEGIN
     FROM SOLNUEVO_CARGO SN
     WHERE SN.IDESOLNUEVOCARGO = p_ideSolicitudNuevo;
     
-    IF (p_etapa = P_TIPETAPA_RECHAZADO)THEN
-    
-      IF p_Observacion IS NULL THEN
+    IF p_Observacion IS NULL THEN
          c_observacion:='';
       ELSE
         c_observacion:=p_Observacion;
       END IF;
+      
+    
+    IF (p_etapa = P_TIPETAPA_RECHAZADO)THEN
+    
+      
       
       INSERT INTO LOGSOLNUEVO_CARGO
       (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,OBSERVACION ,FECSUCESO,USRSUCESO,ROLSUCESO)
@@ -402,8 +405,8 @@ BEGIN
     ELSE
     
       INSERT INTO LOGSOLNUEVO_CARGO
-      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
-      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
+      (IDELOGSOLNUEVOCARGO,IDESOLNUEVOCARGO,TIPETAPA,OBSERVACION,ROLRESPONSABLE, USRESPONSABLE,FECSUCESO,USRSUCESO,ROLSUCESO)
+      VALUES (c_idLogSolicitud,p_ideSolicitudNuevo,p_etapa,c_observacion, p_ideRolResponsable,p_ideUsuarioResp,SYSDATE,p_ideUsuarioSuceso,p_ideRolSuceso);
 
       UPDATE SOLNUEVO_CARGO SN
       SET SN.TIPETAPA = p_etapa
@@ -1889,7 +1892,8 @@ BEGIN
                                                                       FROM EVALUACION_SOLREQ ES 
                                                                       WHERE ES.IDEEVALUACIONSOLREQ = IDEEVALUACION))) IDEEXAMEN,
                                                                       RE.IDEEVALUACION
-                                                                      FROM RECLU_PERSO_EXAMEN RE) EXAM 
+                                                                      FROM RECLU_PERSO_EXAMEN RE
+                                                                      WHERE RE.IDERECLUTAPERSONA = p_ideReclutPost) EXAM 
                WHERE EXAM.IDEEXAMEN = EX.IDEEXAMEN
                AND EXAM.IDEEVALUACION = RPE.IDEEVALUACION
                AND EX.IDESEDE = c_ideSede
@@ -1963,8 +1967,10 @@ BEGIN
      FROM RECLUTAMIENTO_PERSONA RPE 
      WHERE RPE.IDERECLUTAPERSONA = p_ideReclutaPersona FOR UPDATE;
      UPDATE RECLUTAMIENTO_PERSONA RP
-     SET RP.EVALUACION = c_nroEvaluaciones +1
+     SET RP.EVALUACION = c_nroEvaluaciones +1,
+         RP.INDPROCESO = NULL  ---INDICADOR PROCESO EN NULL --nose para que- preguntar a ELLAMOCA
      WHERE RP.IDERECLUTAPERSONA = p_ideReclutaPersona;
+     
      
      --Sumar los puntajes para el calculo de la 
      --nota final solo si el examen es de tipo examen
@@ -2067,6 +2073,7 @@ BEGIN
            RPE.NOTAFINAL, UPPER(PR_INTRANET.FN_OBTENER_NOMBRE_POST(p_ideReclutaPersona)) NOMBPOSTULANTE
     FROM RECLU_PERSO_EXAMEN RPE, EXAMEN EX
     WHERE RPE.IDEEXAMEN = EX.IDEEXAMEN
+    AND EX.IDESEDE = c_ideSede --Id sede
     AND RPE.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
     AND RPE.IDERECLUTAPERSONA = p_ideReclutaPersona;    
   

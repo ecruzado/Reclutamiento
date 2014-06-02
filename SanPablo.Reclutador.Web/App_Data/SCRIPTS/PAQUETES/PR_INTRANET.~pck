@@ -146,7 +146,7 @@ create or replace package PR_INTRANET is
                               p_nIdSede         IN NUMBER,
                               p_cRetVal         OUT CUR_CURSOR);
                               
-  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
+  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nCodCargo        IN SOLREQ_PERSONAL.CODCARGO%TYPE,
                                     p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
                                     p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
                                     p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
@@ -1796,20 +1796,20 @@ create or replace package body PR_INTRANET is
       Fecha       Autor                Descripcion
       14/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
-  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
-                                    p_nIdDependencia  IN SOLREQ_PERSONAL.Idedependencia%TYPE,
-                                    p_nIdDepartamento IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
-                                    p_nIdArea         in SOLREQ_PERSONAL.Idearea%TYPE,
-                                    p_cTipEtapa       IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
-                                    p_cTipResp        in LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,
-                                    p_cEstado         IN SOLREQ_PERSONAL.Estactivo%TYPE,
-                                    p_cFecIni         IN varchar2,
-                                    p_cFeFin          IN varchar2,
-                                    p_cTipSol         IN varchar2,
-                                    p_nIdRoL          IN NUMBER,
-                                    p_nIdUsuario      IN NUMBER,
-                                    p_nIdSede         IN NUMBER,
-                                    p_cRetVal         OUT CUR_CURSOR) IS
+  PROCEDURE SP_GET_LISTA_AMPLIACION(p_nCodCargo        IN SOLREQ_PERSONAL.CODCARGO%TYPE,
+                                    p_nIdDependencia   IN SOLREQ_PERSONAL.Idedependencia%TYPE,
+                                    p_nIdDepartamento  IN SOLREQ_PERSONAL.Idedepartamento%TYPE,
+                                    p_nIdArea          IN SOLREQ_PERSONAL.Idearea%TYPE,
+                                    p_cTipEtapa        IN LOGSOLREQ_PERSONAL.Tipetapa%TYPE,
+                                    p_cTipResp         IN LOGSOLREQ_PERSONAL.ROLRESPONSABLE%TYPE,
+                                    p_cEstado          IN SOLREQ_PERSONAL.Estactivo%TYPE,
+                                    p_cFecIni          IN varchar2,
+                                    p_cFeFin           IN varchar2,
+                                    p_cTipSol          IN varchar2,
+                                    p_nIdRoL           IN NUMBER,
+                                    p_nIdUsuario       IN NUMBER,
+                                    p_nIdSede          IN NUMBER,
+                                    p_cRetVal          OUT CUR_CURSOR) IS
   
     cCONSULTA VARCHAR2(4000) := NULL;
     cWhere    VARCHAR2(1000) := NULL;
@@ -1820,6 +1820,7 @@ create or replace package body PR_INTRANET is
     cCONSULTA := 'SELECT SA.IDESOLREQPERSONAL,'
                ||'SA.CODSOLREQPERSONAL,' 
                ||'SA.IDECARGO,'
+               ||'SA.CODCARGO,'
                ||'SA.DESCARGO,'
                ||'SA.IDEDEPENDENCIA,'
                ||'SA.DESDEPENDENCIA,'
@@ -1845,7 +1846,7 @@ create or replace package body PR_INTRANET is
                ||'SA.NOMPERSONREEMPLAZO,'
                ||'SA.TIPSOL, '
                ||'SA.DES_ETAPA '
-     ||'FROM (SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO, ' ||
+     ||'FROM (SELECT DISTINCT S.IDESOLREQPERSONAL,S.CODSOLREQPERSONAL,S.IDECARGO,S.CODCARGO, ' ||
                  ' S.NOMCARGO DESCARGO, ' ||
                  ' S.IDEDEPENDENCIA, ' || ' (SELECT D.NOMDEPENDENCIA ' ||
                  ' FROM DEPENDENCIA D ' ||
@@ -1910,9 +1911,9 @@ create or replace package body PR_INTRANET is
                  '  AND L.USRESPONSABLE  = ' || p_nIdUsuario ||
                  '  AND L.ROLRESPONSABLE = ' || p_nIdRoL ||') SA WHERE 1=1' ;
   
-    IF p_nIdCargo > 0 THEN
+    IF p_nCodCargo != '0' THEN
     
-      cWhere := cWhere || ' AND  SA.IDECARGO = ' || p_nIdCargo;
+      cWhere := cWhere || ' AND  SA.CODCARGO = ''' || p_nCodCargo ||'''';
     
     END IF;
   
@@ -2280,6 +2281,10 @@ create or replace package body PR_INTRANET is
   c_ideReclutaCriterio_sq NUMBER;
   c_puntajeAlternativa    NUMBER;
   c_notaCategoria         NUMBER;
+  c_tipoExamen            EXAMEN.TIPEXAMEN%TYPE;
+  c_ideReclutaPersExamen  RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE;
+  c_notaTotal             number;
+  
   BEGIN
      
      SELECT IDERECLUPERSOCRITERIO_SQ.NEXTVAL
@@ -2292,6 +2297,7 @@ create or replace package body PR_INTRANET is
      WHERE AL.IDEALTERNATIVA = p_ideAlternativa;
      
    BEGIN 
+      
      INSERT INTO RECLU_PERSO_CRITERIO 
      (IDERECLUPERSOCRITERIO,IDERECLUTAPERSONA,IDECRITERIOXSUBCATEGORIA,IDERECLPERSOEXAMNCAT,INDRESPUESTA,PUNTTOTAL,USRCREACION,FECCREACION)
      VALUES (c_ideReclutaCriterio_sq,p_ideReclutaPersona,p_ideCriterioSubCat,p_ideReclPersExaCat,'S',c_puntajeAlternativa,p_usuarioCreacion, SYSDATE);
@@ -2300,22 +2306,41 @@ create or replace package body PR_INTRANET is
      (IDERECLUPERSOALTERNATIVA,IDERECLUTAPERSONA,IDERECLUPERSOCRITERIO,IDEALTERNATIVA,USRCREACION,FECCREACION)
      VALUES (IDERECLUPERSOALTERNATIVA_SQ.NEXTVAL,p_ideReclutaPersona,c_ideReclutaCriterio_sq,p_ideAlternativa,p_usuarioCreacion,SYSDATE);
      
-     --Actualizar la nota por categoria
-     SELECT RC.NOTAEXAMENCATEG
-     INTO c_notaCategoria
-     FROM RECL_PERS_EXAM_CAT RC 
-     WHERE RC.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat FOR UPDATE;
-     UPDATE RECL_PERS_EXAM_CAT RCAT
-     SET RCAT.NOTAEXAMENCATEG = c_notaCategoria + c_puntajeAlternativa
-     WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;
+    --Actualizar la nota por categoria
+     
+    SELECT REX.TIPEXAMEN
+    INTO c_tipoExamen
+    FROM RECLU_PERSO_EXAMEN REX
+    WHERE REX.IDERECLUPERSOEXAMEN = (SELECT RCAT.IDERECLUPERSOEXAMEN
+                                     FROM RECL_PERS_EXAM_CAT RCAT
+                                     WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat);
+     
+     IF (c_tipoExamen = P_TIPEXA_EXAMEN)THEN
+      
+       IF (c_puntajeAlternativa >0)THEN
+          c_puntajeAlternativa := 1;
+       END IF;
+       
+      END IF;
+     
+      SELECT RC.NOTAEXAMENCATEG
+      INTO c_notaCategoria
+      FROM RECL_PERS_EXAM_CAT RC 
+      WHERE RC.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;
+      
+      c_notaTotal:= c_notaCategoria +  c_puntajeAlternativa;
+      
+      UPDATE RECL_PERS_EXAM_CAT RCAT
+      SET RCAT.NOTAEXAMENCATEG = c_notaTotal
+      WHERE RCAT.IDERECLPERSOEXAMNCAT = p_ideReclPersExaCat;  
      
      COMMIT;
-     p_RetVal:=1; 
+     p_RetVal:= c_notaTotal; 
       
    EXCEPTION
      WHEN OTHERS THEN
      ROLLBACK;
-     p_RetVal:=0;
+     p_RetVal:=-1;
 
    END;
       

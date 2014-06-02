@@ -154,7 +154,7 @@
             //cargoViewModel.Cargo = new Cargo();
             ubigeoCargoViewModel.Ubigeo = new UbigeoCargo();
 
-            ubigeoCargoViewModel.Departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
+            ubigeoCargoViewModel.Departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null).OrderBy(x=>x.Nombre));
             ubigeoCargoViewModel.Departamentos.Insert(0, new Ubigeo { IdeUbigeo = 0, Nombre = "Seleccionar" });
 
             ubigeoCargoViewModel.Provincias = new List<Ubigeo>();
@@ -171,7 +171,7 @@
         {
             ActionResult result = null;
 
-            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
+            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre).OrderBy(x => x.Nombre));
             result = Json(listaResultado);
             return result;
         }

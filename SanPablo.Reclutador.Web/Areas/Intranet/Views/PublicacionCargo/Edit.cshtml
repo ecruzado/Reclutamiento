@@ -66,7 +66,7 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona("Requerimiento Publicado exitosamente", "MENSAJE");
+                                mensajeRedirecciona("Requerimiento Publicado exitosamente", "INFORMATIVO");
 
                             }
                             else {
@@ -273,7 +273,7 @@
             title: 'MENSAJE',
             modal: true,
             buttons: {
-                "Ok": function () { $(this).dialog("close"); }
+                "Aceptar": function () { $(this).dialog("close"); }
             }
         });
     }
@@ -331,7 +331,7 @@
             resizable:false,
             modal: true,
             buttons: {
-                "Ok": function () {
+                "Aceptar": function () {
                     $(this).dialog("close");
                     SanPablo.Redirecciona('@Url.Action("Index","SolicitudNuevoCargo")');
                 }
@@ -400,7 +400,7 @@
 
 
                     <tr class="formulario-fila">
-                        <td class="control-label" >Fecha de Publicación</td>
+                        <td class="control-label" >Fecha Publicación</td>
                         <td class="controls">
                             @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
                             @*<div class="tex-error" style="font-size:12px;color:red"> 
@@ -408,7 +408,7 @@
                             </div>*@
                         </td>
                         <td>&nbsp;</td>
-                        <td class="control-label" >Fecha de Expiracion</td>
+                        <td class="control-label" >Fecha Expiración</td>
                         <td class="controls">
                             @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
                             @*<div class="tex-error" style="font-size:12px;color:red"> 
@@ -480,37 +480,44 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Competencias</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListCompetencias">
-                                    </table>
-                                    <div id="grdPagerCompetencias">
+
+                        @if(Indicador.Si.Equals(Model.visualizarCompetencias))
+                        {
+                            <tr class="formulario-fila">
+                                <td class="span5">
+                                <label class="control-label" for="input01">Competencias</label>
+                                 <div class="controls">
+                                    <div style="width: 100%">                                        
+                                        <div>
+                                            <table id="grdListCompetencias">
+                                            </table>
+                                            <div id="grdPagerCompetencias">
+                                            </div>
+                                        </div>                                         
                                     </div>
-                                </div>                                         
-                            </div>
-                         </div>
-                       </td>
-                    </tr>
-                        <tr><td>&nbsp;</td></tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Ofrecemos</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListOfrecemos">
-                                    </table>
-                                    <div id="grdPagerOfrecemos">
+                                 </div>
+                               </td>
+                            </tr>
+                        }
+                        @if(Indicador.Si.Equals(Model.visualizarOfrecemos))
+                        {
+                                <tr><td>&nbsp;</td></tr>
+                            <tr class="formulario-fila">
+                                <td class="span5">
+                                <label class="control-label" for="input01">Ofrecemos</label>
+                                 <div class="controls">
+                                    <div style="width: 100%">                                        
+                                        <div>
+                                            <table id="grdListOfrecemos">
+                                            </table>
+                                            <div id="grdPagerOfrecemos">
+                                            </div>
+                                        </div>                                         
                                     </div>
-                                </div>                                         
-                            </div>
-                         </div>
-                        </td>
-                    </tr>
+                                 </div>
+                                </td>
+                            </tr>
+                        }
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">

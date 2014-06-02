@@ -4,9 +4,15 @@
     Layout = "";
 }
 
+<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        SanPablo.Alfanumerico('TablaSubDetalle_Valor');
+        SanPablo.AlfanumericoSpace('TablaSubDetalle_Descripcion');
 
         $('#TablaSubDetalle_IndActivo').val('');
 
@@ -26,7 +32,7 @@
                 guardarDatos(valor, descripcion);
             }
             else {
-                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un item', "MENSAJE");
             }
         });
 
@@ -36,7 +42,7 @@
             if (selr != null) {
                 activarDesactivar(rowData.Valor, rowData.Descripcion);
             } else {
-                MostrarMensaje('Seleccione un item', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un item', "MENSAJE");
             }
         });
 
@@ -77,11 +83,11 @@
                     }
                 });
             },
-            colNames: ['Valor', 'Descripcion', 'Estado'],
+            colNames: ['Valor', 'Descripción', 'Estado'],
             colModel: [
-                    { name: 'Valor', index: 'Valor', align: 'center', hidden: false, width: 100 },
-                    { name: 'Descripcion', index: 'Descripcion', align: 'center', sortable: false, width: 250 },
-                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 100 },
+                    { name: 'Valor', index: 'Valor', align: 'left', sortable: false, hidden: false, width: 70 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'lefts', sortable: false, width: 350 },
+                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 80 },
 
             ],
             pager: jQuery('#grdPagerSubDetalle'),
@@ -112,7 +118,7 @@
                 function (respuesta) {
                     if (respuesta.Resultado) {
                         $('#grdListSubDetalle').trigger('reloadGrid');
-                        notificacionExito(respuesta.Mensaje);
+                        //notificacionExito(respuesta.Mensaje);
                         limpiarCampos();
                     }
                     else {
@@ -189,7 +195,7 @@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Valor <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.TablaSubDetalle.Valor)
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Valor,  new { onblur = "aMays(event, this)", maxlength = "50" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.TablaSubDetalle.Valor)
                 </div>
@@ -198,10 +204,10 @@
         <tr>
 
             <td class="colEtiqueta">
-                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripcion <span class="text-error">*</span></label>
+                <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Descripción <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.TablaSubDetalle.Descripcion)
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Descripcion, new { onblur = "aMays(event, this)", maxlength = "100" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.TablaSubDetalle.Descripcion)
                 </div>
@@ -225,8 +231,8 @@
         <div class="grilla-opciones">
             <div class="opciones">
                 <a id="btnNuevoSubDetalle" class="btn btn-info" ><i class="icon-plus icon-white"></i> Nuevo</a> 
-                <a id="btnGuardarSubDetalle" class="btn btn-info" ><i class="icon-edit icon-white"></i> Guardar</a>
-                <a id="btnEliminarSubDetalle" class="btn btn-info" ><i class="icon-remove icon-white"></i> Act/Desc</a>
+                <a id="btnGuardarSubDetalle" class="btn btn-info" ><i class="icon-edit icon-white"></i> Grabar</a>
+                <a id="btnEliminarSubDetalle" class="btn btn-info" ><i class="icon-remove icon-white"></i> Activar/Desactivar</a>
             </div>
             <div style="clear:both"></div>
         
