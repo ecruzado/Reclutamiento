@@ -1357,13 +1357,32 @@ BEGIN
             AND RP.TIPSOL = '01'
             AND RP.ESTPOSTULANTE ='09'
             AND RP.ESTACTIVO='A') CONTRATADOS , 
-         SN.FECCREACION,
+         
+         
+         (SELECT C.FECSUCESO
+                  FROM logsolnuevo_cargo C
+                   WHERE C.Idesolnuevocargo = SN.Idesolnuevocargo
+                    AND  C.Idelogsolnuevocargo =
+                           (SELECT MIN(H.Idelogsolnuevocargo)
+                                     FROM logsolnuevo_cargo H
+                                              WHERE H.Idesolnuevocargo = C.Idesolnuevocargo)
+                                                       ) FECCREACION,
          SN.FECCREACION CIERRE,
+         
+         
          NVL(R.IDROL,0), 
          NVL(R.DSCROL,'') ,
          (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SN.IDESOLNUEVOCARGO,'N')) NOMRESPONSABLE,
          SN.FECPUBLICACION,
-         SN.FECEXPIRACION,
+         --SN.FECEXPIRACION,
+         (SELECT C.Fecsuceso 
+                      FROM logsolnuevo_cargo C
+                       WHERE C.Tipetapa = '08'
+                       AND C.Idesolnuevocargo = SN.Idesolnuevocargo
+                       and rownum<2
+                        ) FECEXPIRACION,
+         
+         
          DECODE(SN.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, 
          LS.TIPETAPA,
          (PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LS.TIPETAPA)) TETAPA,
@@ -1434,13 +1453,32 @@ BEGIN
             AND RP.TIPSOL = '01'
             AND RP.ESTPOSTULANTE ='09'
             AND RP.ESTACTIVO='A') CONTRATADOS ,
-         SQ.FECCREACION, 
+         --SQ.FECCREACION, 
+         
+         (SELECT C.FECSUCESO
+                  FROM LOGSOLREQ_PERSONAL C
+                   WHERE C.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL
+                    AND  C.IDELOGSOLREQ_PERSONAL =
+                           (SELECT MIN(H.IDELOGSOLREQ_PERSONAL)
+                                     FROM LOGSOLREQ_PERSONAL H
+                                              WHERE H.IDESOLREQPERSONAL = C.IDESOLREQPERSONAL)
+                                                       ) FECCREACION,
+         
+         
          SQ.FECCREACION CIERRE ,
          NVL(R.IDROL,0), 
          NVL(R.DSCROL,'') ,
          (PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(SQ.IDESOLREQPERSONAL,'O')) NOMRESPONSABLE,
          SQ.FECPUBLICACION,
-         SQ.FECEXPIRACACION,
+        -- SQ.FECEXPIRACACION,
+        
+        (SELECT C.FECSUCESO 
+                      FROM LOGSOLREQ_PERSONAL C
+                       WHERE C.TIPETAPA = '08'
+                       AND C.IDESOLREQPERSONAL = SQ.IDESOLREQPERSONAL
+                       and rownum<2
+                        ) FECEXPIRACACION,
+        
          DECODE(SQ.FECPUBLICACION,NULL,'NO','SI') PUBLICADO, 
          LQ.TIPETAPA,
          (PR_INTRANET.FN_VALOR_GENERAL('ETAPA',LQ.TIPETAPA)) TETAPA,
@@ -1464,7 +1502,7 @@ BEGIN
    
    IF p_cCodSolicitud IS NOT NULL THEN
         
-      c_Where := c_Where || '  AND S.CODIGO = ''' ||p_cCodSolicitud||''' ' ;
+      c_Where := c_Where || '  AND S.CODIGO LIKE ''%'||p_cCodSolicitud||'%'' ' ;
         
     END IF;
    
@@ -1634,10 +1672,10 @@ c_Consulta1:= 'SELECT SN.IDESOLNUEVOCARGO, PR_INTRANET.FN_ESTADO_SOLICITUD(SN.ID
   
     c_Query := c_Consulta1 || c_Where;
   
-    DELETE FROM LOG_MENSAJE;
+    /*DELETE FROM LOG_MENSAJE;
   
     INSERT INTO LOG_MENSAJE VALUES (c_Query);
-    COMMIT;
+    COMMIT;*/
   
     OPEN p_cRetVal FOR c_Query;
 
@@ -2073,7 +2111,6 @@ BEGIN
            RPE.NOTAFINAL, UPPER(PR_INTRANET.FN_OBTENER_NOMBRE_POST(p_ideReclutaPersona)) NOMBPOSTULANTE
     FROM RECLU_PERSO_EXAMEN RPE, EXAMEN EX
     WHERE RPE.IDEEXAMEN = EX.IDEEXAMEN
-    AND EX.IDESEDE = c_ideSede --Id sede
     AND RPE.IDERECLUPERSOEXAMEN = p_iderecluPersExamen
     AND RPE.IDERECLUTAPERSONA = p_ideReclutaPersona;    
   
@@ -2496,9 +2533,9 @@ BEGIN
              WHERE RP.IDESOL = SOL.IDESOL
              AND RP.TIPSOL = SOL.TIPSOL
              AND P.IDEPOSTULANTE = RP.IDEPOSTULANTE
-             --AND RP.INDPOTENCIAL = 'S'
+             AND RP.INDPOTENCIAL = 'S'
              ORDER BY RP.IDERECLUTAPERSONA,EP.TIPEDUCACION DESC ) PP
-         WHERE -- PP.IDECARGO = c_ideCargo AND
+         WHERE PP.IDECARGO = c_ideCargo AND
           (c_ideSede = 0 OR PP.IDESEDE  = c_ideSede)
          AND  (c_ideDependencia = 0 OR PP.IDEDEPENDENCIA = c_ideDependencia)
          AND  (c_ideDepartamento = 0 OR PP.IDEDEPARTAMENTO  = c_ideDepartamento)

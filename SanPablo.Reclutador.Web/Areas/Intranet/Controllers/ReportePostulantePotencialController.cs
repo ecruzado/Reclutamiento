@@ -146,7 +146,8 @@
             var reporteModel = new ReportePostulantesPotencialesViewModel();
             reporteModel.PostulantePotencial = new ReportePostulantePotencial();
 
-            reporteModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            var IdeSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+            reporteModel.Cargos = new List<Cargo>(_cargoRepository.listarCargosSede(IdeSede));
             reporteModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "SELECCIONAR" });
 
             //CARGAR AREAS DE ESTUDIO
