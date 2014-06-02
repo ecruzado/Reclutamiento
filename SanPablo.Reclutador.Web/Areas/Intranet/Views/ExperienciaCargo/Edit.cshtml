@@ -45,18 +45,18 @@
     </table>
     <table>
         
-        <tr>
+        @*<tr>
             <td></td>
             
             <td class="colEtiqueta">
-                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">Años <span class="text-error">*</span></label>
+                <label  class="etiquetaFormulario" for="setipoInstitucion">Años </label>
             </td>
             <td class="colEtiqueta">
-                <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">Meses <span class="text-error">*</span></label>
+                <label  class="etiquetaFormulario" for="setipoInstitucion">Meses </label>
             </td>
             <td></td>
             <td></td>
-        </tr>
+        </tr>*@
         
         <tr>
             <td class="colEtiqueta">
@@ -64,17 +64,21 @@
             </td>
             
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.Experiencia.CantidadAnhosExperiencia, new {@class="input-mini" ,  maxlength="2" })
+                @Html.TextBoxFor(model => model.Experiencia.CantidadAnhosExperiencia, new {@class="input-xxmini" ,  maxlength="2" })
+                 <label style="display:inline-block" class="etiquetaFormulario" for="setipoInstitucion">Años </label>
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.Experiencia.CantidadAnhosExperiencia)
                 </div>
             </td>
+
+            <td style="width:20px"></td>
             @*<td class="colEtiqueta">
                 <label style="width:60px" class="etiquetaFormulario" for="setipoInstitucion">AÑOS <span class="text-error">*</span></label>
             </td>*@
            
             <td class="colInput">
-                 @Html.TextBoxFor(model => model.Experiencia.CantidadMesesExperiencia, new {@class="input-mini",  maxlength="2" })
+                 @Html.TextBoxFor(model => model.Experiencia.CantidadMesesExperiencia, new {@class="input-xxmini",  maxlength="2" })
+                 <label  style="display:inline-block" class="etiquetaFormulario" for="setipoInstitucion">Meses </label>
                 <div class="tex-error" style="font-size:12px;color:red"> 
                  @Html.ValidationMessageFor(model => model.Experiencia.CantidadMesesExperiencia)
                 </div>

@@ -187,7 +187,8 @@ using System.Web.Mvc;
                     }
                     if (!"".Equals(grid.rules[2].data) && grid.rules[2].data != null && grid.rules[2].data != "0")
                     {
-                        where.Add(Expression.Like("Descripcion", '%' + grid.rules[2].data + '%'));
+                        var descripcion = grid.rules[2].data.Trim();
+                        where.Add(Expression.Like("Descripcion", '%' + descripcion + '%'));
                     }
                     
                 }
@@ -204,12 +205,14 @@ using System.Web.Mvc;
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 46)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 47)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 29)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 43)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 49)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 50)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 51)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 52)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 54)));
+                where.Add(Expression.Not(Expression.Eq("IdeGeneral", 55)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 56)));
                 where.Add(Expression.Not(Expression.Eq("IdeGeneral", 57)));
 
@@ -470,19 +473,20 @@ using System.Web.Mvc;
                     if (detalleEditar.EstadoActivo == IndicadorActivo.Activo)
                     {
                         detalleEditar.EstadoActivo = IndicadorActivo.Inactivo;
+                        objJsonMessage.Mensaje = "El registro se desactivó exitosamente";
                     }
                     else
                     {
                         detalleEditar.EstadoActivo = IndicadorActivo.Activo;
+                        objJsonMessage.Mensaje = "El registro se activó exitosamente";
                     }
                     _detalleGeneralRepository.Update(detalleEditar);
-                    objJsonMessage.Mensaje = "El registro se Activo/Desactivo exitosamente";
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
                 }
                 else
                 {
-                    objJsonMessage.Mensaje = "Error: intente de nuevo";
+                    objJsonMessage.Mensaje = "ERROR: intente de nuevo";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

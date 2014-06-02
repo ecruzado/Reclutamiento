@@ -149,7 +149,8 @@
             //reporteModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
 
             Cargo objCargo = new Cargo();
-
+            //int ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+            //objCargo.IdeSede = ideSede;
             reporteModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
 
             reporteModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "SELECCIONAR" });

@@ -470,7 +470,7 @@
 
                         string menj = "El proceso de envío se realizó exitosamente. ";
                         menj += Environment.NewLine;
-                        menj += "Solicitud derivada al " + rol + " , " + usuario.DscNombres + " " + usuario.DscApePaterno;
+                        menj += "Solicitud derivada al " + rol + ", " + usuario.DscNombres + " " + usuario.DscApePaterno;
                         objJsonMessage.Mensaje = menj;
 
                         //objJsonMessage.Mensaje = "Solicitud enviada exitosamente";
@@ -694,14 +694,14 @@
                     }
                     else
                     {
-                        objJsonMessage.Mensaje = "No tiene pendiente ninguna Acción";
+                        objJsonMessage.Mensaje = "No tiene pendiente ninguna acción";
                         objJsonMessage.Resultado = false;
                         return Json(objJsonMessage);
                     }
                 }
                 else  
                 {
-                    objJsonMessage.Mensaje = "La solicitud no tiene aun definido un perfil, le recomendamos que ubique la solicitud en el Menú de Consulta de Requerimientos para conocer en que etapa se encuentra";
+                    objJsonMessage.Mensaje = "La solicitud aún no tiene definido un perfil, le recomendamos que ubique la solicitud en el Menú de Consulta de Requerimientos para conocer en que etapa se encuentra.";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
                 }

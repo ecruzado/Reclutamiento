@@ -304,12 +304,12 @@
 
                             @*window.location = '@Url.Action("Index", "", new { id = "-id"})'.replace("-id", ideSolicitud);*@
                         }
-                        else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva", "Sistema de reclutamiento y selección de personal"); }
-                    } else { MostrarMensaje(data.Mensaje, "Sistema de reclutamietno y selección de personal"); }
+                        else { MostrarMensaje("No puede editar el Perfil de una solicitud inactiva", "MENSAJE"); }
+                    } else { MostrarMensaje(data.Mensaje, "ALERTA"); }
                 }
             });
         }
-        else { MostrarMensaje("Seleccione la solicitud asociada al perfil", "Sistema de reclutamiento y selección de personal");}
+        else { MostrarMensaje("Seleccione la solicitud asociada al perfil", "MENSAJE");}
     }
 
     function RadioFormatter(cellvalue, options, rowObject) {

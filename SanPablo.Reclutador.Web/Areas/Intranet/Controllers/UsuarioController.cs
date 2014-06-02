@@ -218,7 +218,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 _usuarioRepository.Update(objUsuario);
                 jsonMessage.IdDato = objUsuario.IdUsuario;
-                jsonMessage.Mensaje = "Se actualizo el usuario";
+                jsonMessage.Mensaje = "Se actualizó el usuario";
                 jsonMessage.Resultado = true;
 
 
@@ -240,7 +240,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario.TipUsuario = TipUsuario.Instranet;
 
                 _usuarioRepository.Add(model.Usuario);
-                jsonMessage.Mensaje = "Se registro el usuario satisfactoriamente";
+                jsonMessage.Mensaje = "Se registró el usuario satisfactoriamente";
                 jsonMessage.IdDato = objUsuario.IdUsuario;
                 jsonMessage.Resultado = true;
 

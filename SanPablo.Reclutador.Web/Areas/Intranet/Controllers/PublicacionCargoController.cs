@@ -282,6 +282,21 @@
                 publicacionViewModel.btnPublicar = Visualicion.SI;
             }
 
+            //visualizar competencias
+            var contadorCompetencias = _competenciaCargoRepository.CountByExpress(x=>x.Cargo.IdeCargo == IdeCargo);
+
+            if (contadorCompetencias >0)
+            {
+                publicacionViewModel.visualizarCompetencias = Indicador.Si;
+            }
+            //visualizar ofrecemos
+
+            var contadorOfrecemos = _ofrecemosCargoRepository.CountByExpress(x=>x.Cargo.IdeCargo == IdeCargo);
+            if(contadorOfrecemos >0)
+            {
+                publicacionViewModel.visualizarOfrecemos = Indicador.Si;
+            }
+           
             return View(publicacionViewModel);
         }
 
@@ -452,6 +467,10 @@
 
             publicacionNuevoViewModel.Cargo = new Cargo();
             publicacionNuevoViewModel.SolicitudCargo = new SolicitudNuevoCargo();
+
+            publicacionNuevoViewModel.visualizarCompetencias = Indicador.No;
+            publicacionNuevoViewModel.visualizarDiscapacidad = Indicador.No;
+            publicacionNuevoViewModel.visualizarOfrecemos = Indicador.No;
 
             var area = _areaRepository.GetSingle(x => x.IdeArea == cargo.IdeArea);
             if (area != null)

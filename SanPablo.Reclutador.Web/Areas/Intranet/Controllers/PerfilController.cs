@@ -544,7 +544,7 @@
                         //objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
                         Rol rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolicitud.RolResponsable);
 
-                        string menj = "Perfil aceptado exitosamente";
+                        string menj = "El proceso de envío se realizó exitosamente. ";
                         menj += Environment.NewLine;
                         menj += "Solicitud derivada al " + rolResponsable.DscRol + " , " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
                         objJsonMessage.Mensaje = menj;
