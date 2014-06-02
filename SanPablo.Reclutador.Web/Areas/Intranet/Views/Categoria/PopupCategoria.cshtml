@@ -10,6 +10,12 @@
         $('#grdListaCategoriaPopup').trigger('reloadGrid');
     });
 
+    $('#btnLimpiarCategoria').click(function () {
+       
+        $('#grdListaCategoriaPopup').jqGrid('clearGridData');
+    });
+    
+
     $(document).ready(function () {
 
         jQuery("#grdListaCategoriaPopup").jqGrid({
