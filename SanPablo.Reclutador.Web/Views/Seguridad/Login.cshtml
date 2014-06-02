@@ -146,7 +146,7 @@
             });
 
             if ($.browser.msie) {
-                MostrarMensaje("Para una mejor experiencia de usuario y mejor rendimiento del sistema, se recomienda usar los navegadores Mozilla Firefox y Chrome.", "Mensaje");
+                MostrarMensaje("Para una mejor experiencia de usuario y mejor rendimiento del sistema, se recomienda usar los navegadores Mozilla Firefox y Chrome.", "ALERTA");
             }
 
             $("#lnkRegistrarUsuario").click(function (e) {
@@ -211,11 +211,11 @@
                                     $.unblockUI();
                                    
                                     
-                                    validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet",data.Mensaje,"Mensaje");
+                                    validaUsuarioEx("divMensajeExtranet", "spnMensajeExtranet", data.Mensaje, "ALERTA");
                                 } else {
                                     $.unblockUI();
                                    
-                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                    MostrarMensaje(data.Mensaje, "ALERTA");
                                 }
                             }
                         });
@@ -265,13 +265,13 @@
                                     $.unblockUI();
                                     // $('#DialogRestablePass').dialog("close");
                                     // $('#PopupDialogRestablePass').dialog("close");
-                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                    MostrarMensaje(data.Mensaje, "ALERTA");
                                 } else {
                                     $.unblockUI();
                                     // $('#DialogRestablePass').dialog("close");
                                     //  $('#PopupDialogRestablePass').dialog("close");
 
-                                    MostrarMensaje(data.Mensaje, "Mensaje");
+                                    MostrarMensaje(data.Mensaje, "ALERTA");
                                 }
                             }
                         });

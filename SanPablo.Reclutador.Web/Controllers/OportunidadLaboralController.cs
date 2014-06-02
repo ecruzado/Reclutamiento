@@ -193,7 +193,9 @@ namespace SanPablo.Reclutador.Web.Controllers
            
             model.oportunidadLaboral = new OportunidadLaboral();
             model.oportunidadLaboral.IdeSede = 0;
+            
             model.listaOportunidadLaboral = new List<OportunidadLaboral>(_postulanteRepository.GetCargosPublicados(model.oportunidadLaboral));
+            
             //model.listaOportunidadLaboral = new List<OportunidadLaboral>();
             model.listaOportunidadLaboral.Insert(0, new OportunidadLaboral { IdeCargo = 0, NombreCargo = "Seleccionar" });
 

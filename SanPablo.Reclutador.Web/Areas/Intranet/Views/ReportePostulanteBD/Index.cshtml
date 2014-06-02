@@ -28,6 +28,11 @@
            window.open('@Url.Action("ObtenerReportePDF", "ReportePostulanteBD")');
         });
 
+        $('#btnLimpiar').click(function () {
+            $('#grdListPostulantesBD').jqGrid('clearGridData');
+        });
+
+
 
         $('#btnPDF').hide();
         $('#btnEXCEL').hide();
@@ -46,7 +51,7 @@
                         $('#btnPDF').hide();
                         $('#btnEXCEL').hide();
 
-                        MostrarMensaje('No hay resultados de busqueda', "Sistema de Reclutamiento y Selección de Personal");
+                        MostrarMensaje('No se encontrarón coincidencias, ingrese otros valores', "ALERTA");
                     }
                     else {
                         $('#btnPDF').show();
@@ -56,7 +61,7 @@
             }
             else
             {
-                MostrarMensaje('Ingresar un Cargo a buscar', "Sistema de Reclutamiento y Seleccion de Personal");
+                MostrarMensaje('Ingresar un Cargo a buscar', "ALERTA");
             }
            
         });
@@ -337,7 +342,7 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError">Busqueda rápida<span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError" style="width:145px;text-align:left">Busqueda rápida<span class="text-error">*</span></label>
                             <div class="controles">
                                 @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onblur="aMays(event, this)"})
                             </div>
@@ -345,7 +350,7 @@
                     </td>
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Departamento</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Departamento</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.Departamentos, new SelectList(Model.Departamentos, "IdeUbigeo", "Nombre", Model.Departamentos))
                             </div>
@@ -357,7 +362,7 @@
                <tr class="formulario-fila">
                     <td class="span5" style="width:420px">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Area de Estudios</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Área de Estudios</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.AreasEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.AreasEstudio))
                             </div>
@@ -366,7 +371,7 @@
 
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Provincia</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Provincia</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.Provincias, new SelectList(Model.Provincias, "IdeUbigeo", "Nombre", Model.Provincias))
                             </div>
@@ -379,7 +384,7 @@
                <tr class="formulario-fila">
                     <td class="span5" style="width:420px">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Rango Salarial</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
                             </div>
@@ -388,7 +393,7 @@
 
                      <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Distrito</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Distrito</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.Distritos, new SelectList(Model.Distritos, "IdeUbigeo", "Nombre", Model.Distritos))
                             </div>
@@ -400,44 +405,49 @@
                    <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess" style="width:180px;text-align:left">Fecha de registro de CV <span class="text-error">*</span></label>
-                            <div class="controles">
-                                
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Fecha registro CV <span class="text-error">*</span></label>
+                            <div class="controles" style="width: 290px">
+                                <input type="text" class="input-small"  id="Registro_Desde" name="Registro.Desde" placeholder=" Desde" >
+                                 <input type="text" class="input-small"  id="Registro_Hasta" name="Registro.Hasta" placeholder=" Hasta">
                             </div>
+
+
+                           
+
                         </div>
                     </td>
+                       <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Rango Edad </label>
+                            <div class="controles" style="width: 300px" >
+                                @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })
+                                &nbsp;a&nbsp;
+                                 @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})  
+                            </div>
+                            
+                        </div>
+                    </td> 
                     </tr>
 
                     <tr class="formulario-fila">
-                    <td class="span5">
+                    @*<td class="span5">
                         <div class="" >
                             <label class="control-label" for="inputSuccess" ></label>
                             <div class="controles" style="width: 300px">
-                                <input type="text" class="input-small"  id="Registro_Desde" name="Registro.Desde" placeholder=" Desde" >
-
-                                <span></span>
-                                <input type="text" class="input-small"  id="Registro_Hasta" name="Registro.Hasta" placeholder=" Hasta">
+                                
                             </div>
                         </div>
-                    </td>
-                      <td class="" style ="width:140px">
-                        <div class="" style="width:90px">
-                            <label class="control-label" for="inputSuccess" >Rango Edad </label>
-                            <div class ="controles" >
-                                @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
-                            </div>
-                            
-                        </div>
-                    </td> 
-                        <td class="" style="width:100px">
+                    </td>*@
+                     
+                       @* <td class="" style="width:100px">
                         <div class="">
                             <label class="control-label" for="inputSuccess" style="width:90px">  a  </label>
                             <div class =" controles" >
-                                @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
+                               
                             </div>
                             
                         </div>
-                    </td> 
+                    </td> *@
 
                 </tr>
 
@@ -462,10 +472,10 @@
                  <asp:Textbox runat="Server" id="txt1" />
    
             </fieldset>*@
-             <div class="" style="margin-left:20px;">
+             @*<div class="" style="margin-left:20px;">
                 <h5 >Resultado</h5>
              
-             </div>
+             </div>*@
             <div class="grilla-opciones">
                 <div class="opciones">
 

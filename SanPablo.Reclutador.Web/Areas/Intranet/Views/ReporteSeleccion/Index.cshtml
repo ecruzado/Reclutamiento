@@ -34,6 +34,11 @@
         });
 
 
+        $('#btnLimpiar').click(function () {
+            $('#grdListContratados').jqGrid('clearGridData');
+        });
+
+
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
         $('#btnPDF').hide();
@@ -52,7 +57,7 @@
                     $('#btnPDF').hide();
                     $('#btnExcel').hide();
 
-                    MostrarMensaje('No se encontraron registros', "Mensaje");
+                    MostrarMensaje('No se encontraron registros', "ALERTA");
                 }
 
                 $('#btnPDF').show();
@@ -152,29 +157,30 @@
 
         jQuery("#grdListContratados").jqGrid({
             colNames: [
-                  'IdeSolReqpersonal',
-                  'ESTADO DEL PROCESO',
-                  'FECHA DE REQUERIMIENTO',
-                  'SEDE',
-                  'DEPENDENCIA',
-                  'DEPARTAMENTO',
-                  'AREA',
-                  'PUESTO',
-                  'JEFE',
-                  'TIPO DE REQUERIMIENTO ',
-                  'REEMPAZA A',
-                  'F. CESE o REEMPLAZO',
-                  'MOTIVO DE REEMPLAZO',
-                  'ANALISTA RESPONSABLE',
-                  'P. INGRESA (APELLIDOS Y NOMBRE)',
-                  'FECHA DE CONTRATACIÓN',
-                  'TIEMPO ESPERA (DIAS)',
-                  'DNI',
-                  'CEL. / FIJO',
-                  'OBSERVACIONES DEL PSICOLOGO',
-                  'OBSERVACIONES DE LA ENTREVISTA',
-                  'FECSUCESO',
-                  'MOTIVO DE FINALIZACIÓN DEL REQ.'
+                  '',
+                  'Estado del proceso',
+                  'Fecha de requerimiento',
+                  'Sede',
+                  'Dependencia',
+                  'Departamento',
+                  'Área',
+                  'Puesto',
+                  'Jefe',
+                  'Tipo de requerimiento ',
+                  'Reemplaza A',
+                  'F. Cese O Reemplazo',
+                  'Motivo De Reemplazo',
+                  'Analista Responsable',
+                  'P. Ingresa (Apellidos y nombre)',
+                  'Fecha De Contratación',
+                  'Tiempo Espera (Días)',
+                  'Dni',
+                  'Cel. / Fijo',
+                  'Observaciones Del Psicólogo',
+                  'Observaciones De La Entrevista',
+                  'Fec. Suceso',
+                  'Motivo De Finalización Del Req.'
+
             ],
             colModel: [
                     { name: 'IdeSolReqpersonal', index: 'IdeSolReqpersonal', align: 'center', hidden: true, sortable: false },
@@ -307,18 +313,18 @@
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
            
-            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "ALERTA");
             return false;
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 180) {
-            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 180 días', "Mensaje");
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 180 días', "ALERTA");
             return false;
         }
 

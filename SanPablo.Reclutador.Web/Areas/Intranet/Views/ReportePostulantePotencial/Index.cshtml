@@ -2,7 +2,7 @@
 @using SanPablo.Reclutador.Entity
 
 @{
-    ViewBag.Title = "Reporte de Postulantes BD";
+    ViewBag.Title = "Reporte de Postulantes Potenciales";
 }
 @section Head{
 
@@ -29,6 +29,13 @@
            window.open('@Url.Action("ObtenerReportePDF", "ReportePostulantePotencial")');
         });
 
+        $('#btnLimpiar').click(function () {
+            $('#grdListPostulantesPotenciales').jqGrid('clearGridData');
+        });
+
+
+        $('#grid1').jqGrid('clearGridData');
+
 
         $('#btnPDF').hide();
         $('#btnEXCEL').hide();
@@ -47,7 +54,7 @@
                         $('#btnPDF').hide();
                         $('#btnEXCEL').hide();
 
-                        MostrarMensaje('No hay resultados de busqueda', "Sistema de Reclutamiento y Selección de Personal");
+                        MostrarMensaje('No se encotraron coincidencias, ingrese otros valores', "ALERTA");
                     }
                     else {
                         $('#btnPDF').show();
@@ -58,7 +65,7 @@
             }
             else
             {
-                MostrarMensaje('Ingresar un Cargo a buscar', "Sistema de Reclutamiento y Seleccion de Persona");
+                MostrarMensaje('Ingresar un Cargo a buscar', "ALERTA");
             }
            
         });
@@ -194,8 +201,8 @@
                     }
                 });
             },
-            colNames: ['IdeReclutaPersona','Fecha de registro como Post. Potenc.','Sede','Dependencia','Departamento','Área','Nombres y Apellidos','Cargo','Telefono Móvil / Casa','Email','Edad',
-                       'Punt. de CV','Ptj. de Selección','Área de Estudios','Rango Salarial', 'CV'],
+            colNames: ['','Fecha de registro como Post. Potenc.','Sede','Dependencia','Departamento','Área','Nombres y Apellidos','Cargo','Telefono Móvil / Casa','Email','Edad',
+                       'Punt. CV','Ptj. Selec','Área de Estudios','Rango Salarial', 'CV'],
             colModel: [
                     { name: 'IdeReclutaPersona', index: 'IdePostulante', align: 'center', hidden: true, sortable: false },
                     { name: 'FechaRegistro', index: 'FechaRegistro', align: 'center', hidden: false, sortable: true },
@@ -227,7 +234,7 @@
             hidegrid: false,
             rownumbers: true,
             shrinkToFit: false,
-
+            //datatype: 'local',
             postData: {
             }, loadComplete: function (data) {
             }
@@ -298,18 +305,18 @@
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
 
-            MostrarMensaje('Las fechas son obligatorias', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "ALERTA");
             return false;
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 180) {
-            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 6 meses', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 6 meses', "ALERTA");
             return false;
         }
 
@@ -329,7 +336,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Reporte de Postulantes de BD</h5>
+                <h5>Reporte de Postulantes Potenciales</h5>
             </div>
            
                <table class="formulario-busqueda">
@@ -337,7 +344,7 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError">Cargo <span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError" style="width:145px;text-align:left">Cargo <span class="text-error">*</span></label>
                             <div class="controles">
                                @Html.DropDownListFor(model => model.PostulantePotencial.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.PostulantePotencial.IdeCargo))
                             </div>
@@ -345,7 +352,7 @@
                     </td>
                     <td class="span5" style="width:420px">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Area de Estudios</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Área de Estudios</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.AreasEstudio, new SelectList(Model.AreasEstudio, "Valor", "Descripcion", Model.AreasEstudio))
                             </div>
@@ -360,7 +367,7 @@
                    <tr class="formulario-fila">
                     <td class="span5" style="width:420px">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Sede</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Sede</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.PostulantePotencial.IdeSede, new SelectList(Model.Sedes, "CodigoSede", "DescripcionSede", Model.PostulantePotencial.IdeSede))
                             </div>
@@ -369,7 +376,7 @@
 
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Rango Salarial</label>
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Rango Salarial</label>
                             <div class="controles">
                                 @Html.DropDownListFor(model => model.RangosSalariales, new SelectList(Model.RangosSalariales, "Valor", "Descripcion", Model.RangosSalariales))
                             </div>
@@ -379,7 +386,7 @@
                 </tr>
 
                  <tr class="formulario-fila">
-                   <td class="" style ="width:140px">
+                  @* <td class="" style ="width:140px">
                         <div class="" style="width:90px">
                             <label class="control-label" for="inputSuccess" >Rango Edad </label>
                             <div class ="controles" >
@@ -397,13 +404,41 @@
                     </td>
                      <td style="width:100px">
                          &nbsp;
-                     </td> 
+                     </td> *@
+
+                      <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Fecha registro CV <span class="text-error">*</span></label>
+                            <div class="controles" style="width: 290px">
+                                <input type="text" class="input-small"  id="Registro_Desde" name="Registro.Desde" placeholder=" Desde" >
+
+                                 <input type="text" class="input-small"  id="Registro_Hasta" name="Registro.Hasta" placeholder=" Hasta">
+                            </div>
+
+
+                           
+
+                        </div>
+                    </td>
+
+                     <td class="span5">
+                        <div class="">
+                            <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Rango Edad </label>
+                            <div class="controles" style="width: 300px" >
+                                @Html.TextBoxFor(model => model.PostulantePotencial.EdadInicio, new {@class = "input-xmini",maxlength="2" })
+                                &nbsp;a&nbsp;
+                                 @Html.TextBoxFor(model => model.PostulantePotencial.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})  
+                            </div>
+                            
+                        </div>
+                    </td> 
+
                      
 
                 </tr> 
 
 
-                   <tr class="formulario-fila">
+                 @*  <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
                             <label class="control-label" for="inputSuccess" style="width:300px;text-align:left">Fecha de registro como postulante potencial <span class="text-error">*</span></label>
@@ -425,7 +460,7 @@
                             </div>
                         </div>
                     </td>
-                </tr>
+                </tr>*@
                 <tr class="formulario-accion offset9">
                     <td>
                     <a id="btnBuscarPostulantes"  class="btn btn-info"><i class="icon-search icon-white"></i> Buscar</a>
@@ -442,10 +477,10 @@
             </table>
            
 
-             <div class="" >
+            @* <div class="" >
                 <h5>Resultado</h5>
              
-             </div>
+             </div>*@
             <div class="grilla-opciones">
                 <div class="opciones">
                     @*@if(Visualicion.SI.Equals(Model.btnVerReporte))

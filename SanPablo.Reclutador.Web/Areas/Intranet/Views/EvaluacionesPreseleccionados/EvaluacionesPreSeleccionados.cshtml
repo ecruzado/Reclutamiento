@@ -37,11 +37,11 @@
                        
                         window.location = url;
                     }
-                    else { MostrarMensaje('No puede reprogramar un exámen con puntaje', "MENSAJE");}
+                    else { MostrarMensaje('No puede reprogramar un exámen con puntaje', "ALERTA"); }
                 }
-                else { MostrarMensaje('No es necesaria la programación de la evaluacion', "MENSAJE");}
+                else { MostrarMensaje('No es necesaria la programación de la evaluacion', "ALERTA"); }
             } else {
-                MostrarMensaje('Seleccione una evaluación a programar', "MENSAJE");
+                MostrarMensaje('Seleccione una evaluación a programar', "ALERTA");
             }
 
         });
@@ -59,7 +59,7 @@
                 window.location = url;
 
             } else {
-                MostrarMensaje('Seleccione una solicitud', "MENSAJE");
+                MostrarMensaje('Seleccione una solicitud', "ALERTA");
             }
         });
 
@@ -240,12 +240,12 @@
 
     function mostrarMensajeAnalista()
     {
-        MostrarMensaje("Ud. no tiene permiso para esta acción", "MENSAJE");
+        MostrarMensaje("Ud. no tiene permiso para esta acción", "ALERTA");
     }
 
     function mostrarMensajeAlerta()
     {
-        MostrarMensaje("Usted no es el usuario asignado como responsable de esta acción","MENSAJE");
+        MostrarMensaje("Usted no es el usuario asignado como responsable de esta acción", "ALERTA");
     }
 
    @* function existeResultado(ideExamen)
@@ -288,7 +288,7 @@
                         
                     }
                     else {
-                        MostrarMensaje(data.Mensaje, "MENSAJE");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     }
                 }
             });

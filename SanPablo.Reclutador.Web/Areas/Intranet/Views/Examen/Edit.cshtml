@@ -288,7 +288,7 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "MENSAJE");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
                     $('#grdListaCatxExamen').trigger('reloadGrid');
                 }

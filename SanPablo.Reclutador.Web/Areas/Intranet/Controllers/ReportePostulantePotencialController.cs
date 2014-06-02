@@ -146,7 +146,12 @@
             var reporteModel = new ReportePostulantesPotencialesViewModel();
             reporteModel.PostulantePotencial = new ReportePostulantePotencial();
 
-            reporteModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+            //reporteModel.Cargos = new List<Cargo>(_cargoRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo));
+
+            Cargo objCargo = new Cargo();
+
+            reporteModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+
             reporteModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "SELECCIONAR" });
 
             //CARGAR AREAS DE ESTUDIO
@@ -187,7 +192,14 @@
             ActionResult result = null;
             var listaResultado = new List<Cargo>();
 
-                listaResultado = _cargoRepository.listarCargosSede(ideSede);
+            Cargo objCargo = new Cargo();
+
+            objCargo.IdeSede = Convert.ToInt32(ideSede);
+
+
+            listaResultado = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+
+                //listaResultado = _cargoRepository.listarCargosSede(ideSede);
             
             result = Json(listaResultado);
             
@@ -278,6 +290,16 @@
                 string sede = Convert.ToString(Session[ConstanteSesion.SedeDes]);
                 string fechaInicio="";
                 string fechaFin = "";
+
+
+                var objCargo  = _cargoRepository.GetSingle(x => x.IdeCargo == postulanteReporte.IdeCargo);
+
+                if (objCargo!=null)
+                {
+                    postulanteReporte.Cargo = objCargo.NombreCargo;
+                }
+
+
 
                 if ((postulanteReporte.FechaDesde != null) && (postulanteReporte.FechaHasta != null))
                 {
