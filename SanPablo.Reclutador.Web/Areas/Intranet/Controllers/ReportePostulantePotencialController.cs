@@ -89,9 +89,9 @@
                 postulantePotencial.IdeDependencia = (grid.rules[4].data == null ? 0 : Convert.ToInt32(grid.rules[4].data));
                 postulantePotencial.IdeDepartamento = (grid.rules[5].data == null ? 0 : Convert.ToInt32(grid.rules[5].data));
                 postulantePotencial.IdeArea = (grid.rules[6].data == null ? 0 : Convert.ToInt32(grid.rules[6].data));
-                
-                postulantePotencial.EdadInicio = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[8].data));
-                postulantePotencial.EdadFin = (grid.rules[8].data == null ? 100 : Convert.ToInt32(grid.rules[9].data));
+
+                postulantePotencial.EdadInicio = (grid.rules[7].data == null ? 0 : Convert.ToInt32(grid.rules[7].data) == 0 ? 0 : Convert.ToInt32(grid.rules[7].data));
+                postulantePotencial.EdadFin = (grid.rules[8].data == null ? 100 : Convert.ToInt32(grid.rules[8].data) == 0 ? 100 : Convert.ToInt32(grid.rules[8].data));
 
                 if (grid.rules[9].data != null && grid.rules[10].data != null)
                 {
@@ -173,6 +173,20 @@
             reporteModel.RangosSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             reporteModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONAR" });
 
+            List<Edad> ListaEdad = new List<Edad>();
+            Edad rangoEdad;
+
+            //Se obtiene las edades
+            for (int i = 18; i < 71; i++)
+            {
+                rangoEdad = new Edad();
+                rangoEdad.IdEdad = i;
+                rangoEdad.DesEdad = i.ToString();
+                ListaEdad.Add(rangoEdad);
+            }
+            ListaEdad.Insert(0,new Edad { IdEdad = 0, DesEdad = "TODAS" });
+            reporteModel.ListaEdadInicio = ListaEdad;
+            reporteModel.ListaEdadFin = ListaEdad;
 
             return reporteModel;
         }
@@ -256,6 +270,32 @@
             return result;
         }
 
+        /// <summary>
+        /// lista de departamentos
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaEdadGenerar(int edadInicio)
+        {
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
+
+            List<Edad> ListaEdad = new List<Edad>();
+            Edad rangoEdad;
+
+            //Se obtiene las edades
+            for (int i = edadInicio; i < 71; i++)
+            {
+                rangoEdad = new Edad();
+                rangoEdad.IdEdad = i;
+                rangoEdad.DesEdad = i.ToString();
+                ListaEdad.Add(rangoEdad);
+            }
+
+            result = Json(ListaEdad);
+            return result;
+        }
 
 
         /// <summary>

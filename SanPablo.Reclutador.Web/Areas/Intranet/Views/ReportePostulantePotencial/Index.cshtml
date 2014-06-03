@@ -144,6 +144,24 @@
             });
         })
 
+        
+        $('select#PostulantePotencial_EdadInicio').change(function () {
+            var edadInicio = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("listaEdadGenerar","ReportePostulantePotencial",new { area = "Intranet"})',
+                data: { edadInicio: edadInicio },
+                success: function (respuesta) {
+                    $("select#PostulantePotencial_EdadFin").empty();
+                    $.each(respuesta, function (i, item) {
+                        $("select#PostulantePotencial_EdadFin").append("<option value='"
+                        + item.IdEdad + "'>" + item.DesEdad + "</option>");
+                    }
+                );
+                }
+            });
+        })
+
 
         jQuery("#grdListPostulantesPotenciales").jqGrid({
             datatype: function (postdata) {
@@ -194,8 +212,8 @@
                     }
                 });
             },
-            colNames: ['IdeReclutaPersona','Fecha de registro como Post. Potenc.','Sede','Dependencia','Departamento','Área','Nombres y Apellidos','Cargo','Telefono Móvil / Casa','Email','Edad',
-                       'Punt. de CV','Ptj. de Selección','Área de Estudios','Rango Salarial', 'CV'],
+            colNames: ['IdeReclutaPersona','Fecha de registro como Post. Potenc.','Sede','Dependencia','Departamento','Área','Nombres y Apellidos','Cargo','Cel/Fijo','Email','Edad',
+                       'Ptje. CV','Ptje. Selec','Área de Estudios','Rango Salarial', 'CV'],
             colModel: [
                     { name: 'IdeReclutaPersona', index: 'IdePostulante', align: 'center', hidden: true, sortable: false },
                     { name: 'FechaRegistro', index: 'FechaRegistro', align: 'center', hidden: false, sortable: true },
@@ -205,14 +223,14 @@
                     { name: 'Area', index: 'Distrito', align: 'center', hidden: false, sortable: false },
                     { name: 'NombresApellidos', index: 'NombresApellidos', align: 'center', hidden: false, sortable: false },
                     { name: 'NombreCargo', index: 'NombreCargo', align: 'center', hidden: false, sortable: false },
-                    { name: 'MovilFijo', index: 'MovilFijo', align: 'center', hidden: false, sortable: false },
+                    { name: 'MovilFijo', index: 'MovilFijo', align: 'center', hidden: false, sortable: false, width: 100 },
                     { name: 'Email', index: 'Email', align: 'center', hidden: false, sortable: false },
-                    { name: 'Edad', index: 'Edad', align: 'center', hidden: false, sortable: false },
-                    { name: 'PuntajeCV', index: 'PuntajeCV', align: 'center', hidden: false, sortable: false },
-                    { name: 'PuntajeSeleccion', index: 'PuntajeSeleccion', align: 'center', hidden: false, sortable: false },
+                    { name: 'Edad', index: 'Edad', align: 'center', hidden: false, sortable: false, width:60 },
+                    { name: 'PuntajeCV', index: 'PuntajeCV', align: 'center', hidden: false, sortable: false, width: 60 },
+                    { name: 'PuntajeSeleccion', index: 'PuntajeSeleccion', align: 'center', hidden: false, sortable: false, width: 60 },
                     { name: 'AreaEstudios', index: 'AreaEstudios', align: 'center', hidden: false, sortable: false },
                     { name: 'RangoSalarial', index: 'RangoSalarial', align: 'center', hidden: false, sortable: false },
-                    { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: false, sortable: false, formatter: ImprimirFormatter }
+                    { name: 'IdePostulante', index: 'IdePostulante', align: 'center', hidden: false, sortable: false, formatter: ImprimirFormatter,  width: 50 }
             ],
             pager: jQuery('#grdPagerListPostulantesPotenciales'),
             rowNum: 10,
@@ -383,15 +401,17 @@
                         <div class="" style="width:90px">
                             <label class="control-label" for="inputSuccess" >Rango Edad </label>
                             <div class ="controles" >
-                                @Html.TextBoxFor(model => model.PostulantePotencial.EdadInicio, new {@class = "input-xmini",maxlength="2" })  
+                             @Html.DropDownListFor(model => model.PostulantePotencial.EdadInicio, new SelectList(Model.ListaEdadInicio, "IdEdad", "DesEdad", Model.PostulantePotencial.EdadInicio), new { @style = "width: 90px; display:inline-block" })
+                                @*@Html.TextBoxFor(model => model.PostulantePotencial.EdadInicio, new {@class = "input-xmini",maxlength="2" })*@  
                             </div>
                         </div>
                     </td>  
-                      <td class="" style="width:100px">
+                      <td class="" style="width:110px">
                         <div class="">
                             <label class="control-label" for="inputSuccess" style="width:90px">  a  </label>
                             <div class =" controles" >
-                                @Html.TextBoxFor(model => model.PostulantePotencial.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})
+                                 @Html.DropDownListFor(model => model.PostulantePotencial.EdadFin, new SelectList(Model.ListaEdadFin, "IdEdad", "DesEdad", Model.PostulantePotencial.EdadFin), new { @style = "width: 90px; display:inline-block" })
+                                @*@Html.TextBoxFor(model => model.PostulantePotencial.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})*@
                             </div>
                         </div>
                     </td>
