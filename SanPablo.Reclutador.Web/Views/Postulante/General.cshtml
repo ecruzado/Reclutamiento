@@ -106,7 +106,7 @@
                         break;
                     default:
                         //MotoTravel.ShowAlert('', "extensión no válida");
-                        MostrarMensaje("Extención no válida, subir imagen en los siguientes formatos .jpg, .jpeg, .png", "Sistema de reclutamiento y seleccion de personal");
+                        MostrarMensaje("Extención no válida, subir imagen en los siguientes formatos .jpg, .jpeg, .png", "ALERTA");
                         $("#fileInput").uploadifyCancel(q);
                         $("#fileInput").uploadifyClearQueue();
                         estado = false;
@@ -287,7 +287,7 @@
                 success: function (respuesta) {
                     if (!respuesta) {
 
-                        MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe comunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "Sistema de reclutamiento y selección de personal");
+                        MostrarMensaje("El nro de DNI se encuentra registrado. Ud. debe comunicarse con el Administrador del Sistema al Correo abc@sanpablo.com ó al Teléfono 555-5555", "ALERTA");
                         $('#Postulante_NumeroDocumento').val('');
                     }
                     else { msjError.style.display = "none"; }

@@ -240,10 +240,10 @@
                         if (data.Resultado) {
                             $('#dialogconfirm1').dialog("close");
                             $('#grdListOportunidadLaboral').trigger('reloadGrid');
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "INFORMATIVO");
                         } else {
                             $('#dialogconfirm1').dialog("close");
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "ALERTA");
                         }
                     }
              });
