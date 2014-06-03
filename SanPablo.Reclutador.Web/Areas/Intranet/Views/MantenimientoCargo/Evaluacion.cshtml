@@ -60,7 +60,7 @@
           if (ideEvaluacion != null) {
               $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
               $("#divMensaje").dialog({
-                  title: 'Sistema de reclutamiento y selección de personal',
+                  title: 'CONFIRMACIÓN',
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },

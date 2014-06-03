@@ -544,7 +544,7 @@
                 if (id != null && id > 0) {
                     mostrarPopuprAprobacion(id);
                 } else {
-                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Genere una Solicitud', "ALERTA");
                 }
             }
 
@@ -563,7 +563,7 @@
                     window.location = url;
                     //window.location = '@Url.Action("Publica", "SolicitudCargo", new { id = ""})' + '/' + id;
                 } else {
-                    MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Genere una Solicitud', "ALERTA");
                 }
             }
 
@@ -578,7 +578,7 @@
             if (id != null && id > 0) {
                 mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo);
             } else {
-                MostrarMensaje('Genere una Solicitud', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Genere una Solicitud', "ALERTA");
             }
 
 
@@ -599,7 +599,7 @@
             if (selr != null) {
                 mostrarPopuprReemplazo(id, tipReemplazo, idReemplazo);
             } else {
-                MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un registro', "ALERTA");
             }
 
 
@@ -614,7 +614,7 @@
                 $('#divEliminar').dialog('open');
 
             } else {
-                MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un registro', "ALERTA");
             }
 
         });
@@ -632,7 +632,7 @@
                     if (selr != null) {
                         EliminarReemplazo(selr, idReq, idPersona);
                     } else {
-                        MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione un usuario', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -663,7 +663,7 @@
                     if (dato) {
                         $('#DialogAprobReem').dialog('open');
                     } else {
-                        MostrarMensaje('Ingrese una observación', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Ingrese una observación', "ALERTA");
                     }
 
                 },
@@ -682,7 +682,7 @@
         $('#DialogAprobReem').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "CONFIRMACIÓN",
             resizable: false,
             buttons: {
                 "Aceptar": function () {
@@ -722,7 +722,7 @@
                                 //$('#DialogAprobReem').dialog('close');
                                 //$('#popupDialogAprobReem').dialog('close');
 
-                                MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                MensajeInformacion("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "INFORMATIVO");
                             }
                         }
                     });
@@ -932,7 +932,7 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == true) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                     $('#grdListReemplazosReq').trigger('reloadGrid');
                 }
             }

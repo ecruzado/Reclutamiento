@@ -27,7 +27,7 @@
             if (selr != null) {
                 window.location = '@Url.Action("Edicion", "Rol")' + '/' + selr;
             } else {
-                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un rol', "ALERTA");
             }
         });
 
@@ -38,7 +38,7 @@
                 window.location = '@Url.Action("Consulta", "Rol")' + '/' + selr;
 
             } else {
-                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un rol', "ALERTA");
             }
 
          });
@@ -51,7 +51,7 @@
                 $('#divEliminar').dialog('open');
 
             } else {
-                MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un rol', "ALERTA");
             }
 
         });
@@ -68,7 +68,7 @@
                     if (selr != null) {
                         EliminarRol(selr, rowData);
                     } else {
-                        MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione un rol', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -172,7 +172,7 @@
                  }
 
                 if (data.Resultado) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                     $('#grdListRol').trigger('reloadGrid');
                 }
             }

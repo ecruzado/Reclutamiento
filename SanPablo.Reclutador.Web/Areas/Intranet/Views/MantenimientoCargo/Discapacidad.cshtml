@@ -56,7 +56,7 @@
             if (ideDiscapacidad != null) {
                 $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje11").dialog({
-                    title: 'Sistema de reclutamiento y selección de personal',
+                    title: 'CONFIRMACIÓN',
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },

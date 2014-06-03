@@ -329,7 +329,7 @@
             success: function (data) {
                 if (data.Resultado) {
                     $("#SolicitudNuevoCargo_CodigoCargo").val("");
-                    MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal");
+                    MostrarMensaje(data.Mensaje, "INFORMATIVO");
                 } 
             }
         });
@@ -356,7 +356,7 @@
                     if (data.Resultado) {
                         $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val(data.Mensaje);
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de reclutamiento y selección de personal");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     }
                 }
         });

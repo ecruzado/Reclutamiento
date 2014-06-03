@@ -103,7 +103,7 @@
              if (ideNivelAcademico != null) {
                  $("#spanMensaje5").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje5").dialog({
-                     title: 'Sistema de reclutamiento y selección de personal',
+                     title: 'CONFIRMACIÓN',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarNivelAcademico(ideNivelAcademico); $(this).dialog("close"); $('#grdListNivelAcademico').trigger('reloadGrid'); },
@@ -123,7 +123,7 @@
              if (ideCentroEstudio != null) {
                  $("#spanMensaje6").html('¿Está seguro que desea eliminar el registro?.');
                  $("#divMensaje6").dialog({
-                     title: 'Sistema de reclutamiento y selección de personal',
+                     title: 'CONFIRMACIÓN',
                      modal: true,
                      buttons: {
                          "Eliminar": function () { eliminarCentroEstudio(ideCentroEstudio); $(this).dialog("close"); $('#grdListCentroEstudio').trigger('reloadGrid'); },

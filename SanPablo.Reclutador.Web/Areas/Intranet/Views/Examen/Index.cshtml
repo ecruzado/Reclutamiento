@@ -31,7 +31,7 @@
                     if (selr != null) {
                         ActivarDesactivarExamen(selr,estado);
                     } else {
-                        MostrarMensaje('Seleccione un Examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione un Examen', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -53,7 +53,7 @@
                     if (selr != null) {
                         EliminarExamen(selr, estado);
                     } else {
-                        MostrarMensaje('Seleccione un Examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione un Examen', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -228,7 +228,7 @@
             if (selr != null) {
                 window.location = '@Url.Action("Nuevo", "Examen")';
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "ALERTA");
             }
 
         });
@@ -248,7 +248,7 @@
                 $('#divActivarDesactivar').dialog('open');
                
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "ALERTA");
             }
 
         });
@@ -264,7 +264,7 @@
             if (selr != null) {
 
                 if ("I"==indEstado) {
-                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('El registro se encuentra desactivado', "ALERTA");
                 } else {
                     $('#divEliminar').dialog('open');
                 }
@@ -272,7 +272,7 @@
                
 
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "ALERTA");
             }
 
         });
@@ -287,13 +287,13 @@
             if (selr != null) {
 
                 if ("I" == indEstado) {
-                    MostrarMensaje('El registro se encuentra desactivado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('El registro se encuentra desactivado', "ALERTA");
                 } else {
                     window.location = '@Url.Action("Edicion", "Examen", new { area = "Intranet", id = "" })' + '/' + selr;
                 }
 
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "ALERTA");
             }
 
          });
@@ -332,7 +332,7 @@
                 window.location = '@Url.Action("Consulta", "Examen")' + '/' + selr;
 
             } else {
-                MostrarMensaje('Seleccione un examen', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione un examen', "ALERTA");
             }
 
         });
@@ -374,9 +374,9 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                     $('#grdList').trigger('reloadGrid');
                 }
             }
@@ -395,9 +395,9 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                     $('#grdList').trigger('reloadGrid');
                 }
             }
