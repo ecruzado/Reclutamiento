@@ -240,10 +240,10 @@
                         function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                MostrarMensaje("Requerimiento Actualizado exitosamente", "Sistema de reclutamiento y selección de personal");
+                                MostrarMensaje("Requerimiento Actualizado exitosamente", "INFORMATIVO");
                             }
                             else {
-                                MostrarMensaje(respuesta.Mensaje, "Sistema de reclutamiento y selección de personal");
+                                MostrarMensaje(respuesta.Mensaje, "ALERTA");
                             }
                         });
                 },
@@ -364,7 +364,7 @@
                     <table style="margin-left:50px;" >
                     <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
-                        <td class="control-label" >Area</td>
+                        <td class="control-label" >Área</td>
                         <td class="controls">
                             @Html.HiddenFor(model=>model.SolicitudCargo.IdeArea)
                             @Html.TextBoxFor(model => model.Area, new { @disabled = "disabled" })

@@ -242,18 +242,18 @@
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
 
-            MostrarMensaje('Las fechas son obligatorias', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "ALERTA");
             return false;
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 90) {
-            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 3 meses', "Sistema de Reclutamiento y Seleccion de Persona");
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 3 meses', "ALERTA");
             return false;
         }
 

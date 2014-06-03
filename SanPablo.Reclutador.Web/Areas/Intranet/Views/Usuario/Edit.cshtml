@@ -213,7 +213,7 @@
             }
         });
     },
-    colNames: ['Estado','', '', '', '','','','','Sede','Depencia','Departamento','Area'],
+    colNames: ['Estado','', '', '', '','','','','Sede','Dependencia','Departamento','Area'],
     colModel: [
 				 
              { name: 'ESTADO', index: 'ESTADO', align: 'left', sortable: false, editable: false, hidden: true },
@@ -330,7 +330,7 @@
                 if (selr != null && selr > 0) {
                     EliminarRolSedeNivel(selr);
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
                 $(this).dialog("close");
             },
@@ -347,7 +347,7 @@
         autoOpen: false,
         resizable:false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
               
@@ -356,7 +356,7 @@
                 if (selr != null && selr > 0) {
                     EliminarRolSede(selr);
                 } else {
-                    MostrarMensaje('Seleccione un rol', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un rol', "ALERTA");
                 }
                 $(this).dialog("close");
             },
@@ -635,7 +635,7 @@
     $('#tipoReq').dialog({
         autoOpen: false,
         modal: true,
-        title: "Sistema de Reclutamiento Y Seleccion de Personal",
+        title: "CONFIRMACIÓN",
         buttons: {
             "Aceptar": function () {
                 if ($("#frmTipoReq").validate().form()) {
@@ -650,7 +650,7 @@
                             success: function (data) {
                                 if (data.Resultado) {
 
-                                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                    MostrarMensaje(data.Mensaje, "ALERTA");
                                     $('#tipoReq').dialog('close');
                                     $('#popupDialogTipReq').dialog('close');
                                     $('#grdListaTipoReqInicial').trigger('reloadGrid');
@@ -814,7 +814,7 @@
                         SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                     }
                     if (data.Resultado == false) {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
                         $('#grdListUsuario').trigger('reloadGrid');
                     }
@@ -838,7 +838,7 @@
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                     }
                     if (data.Resultado == false) {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
                         $('#grdListaNivelSede').trigger('reloadGrid');
                     }
@@ -865,7 +865,7 @@
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                 }
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "INFORMATIVO");
                 } else {
                     $('#grdListaTipoReqInicial').trigger('reloadGrid');
                 }

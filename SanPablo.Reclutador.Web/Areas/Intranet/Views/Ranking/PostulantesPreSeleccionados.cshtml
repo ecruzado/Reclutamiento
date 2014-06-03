@@ -35,7 +35,7 @@
                         window.location = url;
                     
              } else {
-                 MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                 MostrarMensaje('Seleccione un registro', "ALERTA");
              }
 
             });
@@ -59,7 +59,7 @@
                     var url = '@Url.Action("Index", "EvaluacionesPreSeleccionados", new { id = "", area = "Intranet" })?id=' + idPost + "&idRecluPost=" + idReclu + '&idSol=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;
                     window.location = url;
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
 
                
@@ -80,7 +80,7 @@
                 if (idPost != null && idPost > 0) {
                     mostrarPopupExclucion(idSol, idPost, tipSol);
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
 
             });
@@ -99,11 +99,11 @@
                     if ("S" == IndAprobacion) {
                         seleccionaPost(selr,promedio);
                     } else {
-                        MostrarMensaje('El postulante no se encuentra aprobado', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('El postulante no se encuentra aprobado', "ALERTA");
                     }
 
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
             });
 
@@ -132,7 +132,7 @@
                 if (selr != null && selr > 0) {
                     contactaPostulante(selr, indContacto);
                 } else {
-                    MostrarMensaje('Seleccione un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione un registro', "ALERTA");
                 }
 
             });
@@ -273,7 +273,7 @@
 
 			            MostrarMensaje(data.Mensaje, "INFORMATIVO");
 		            } else {
-			            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+		                MostrarMensaje(data.Mensaje, "ALERTA");
 		            }
 
 	            }
@@ -367,9 +367,9 @@
                 }
                     if (data.Resultado) {
                         $('#grdListEvaluacion').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     }
                 }
             });
@@ -445,7 +445,7 @@
                 <tr class="formulario-fila">
                      <td class="span5">
 		   
-			            <label class="control-label" for="selectError">Area</label>
+			            <label class="control-label" for="selectError">Área</label>
 			            <div class="controles">
 				           
                             @Html.TextBoxFor(model => model.Solicitud.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
