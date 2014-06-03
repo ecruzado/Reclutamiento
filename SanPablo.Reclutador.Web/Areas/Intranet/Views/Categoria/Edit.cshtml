@@ -561,6 +561,39 @@
             $("#verImagen").hide();
         }
 
+
+        var tipoCategoria = '@Session[ConstanteSesion.TipoCategoria]';
+
+        if (tipoCategoria == "01") {
+
+                $("#divInstrucciones").show();
+                $("#Categoria_INSTRUCCIONES").show();
+                $("#lblInstrucciones").show();
+
+                $("#Categoria_TIPOEJEMPLO").show();
+                $("#lblTipoEjemplo").show();
+
+
+            }
+        else if (tipoCategoria == "02") {
+                $("#divInstrucciones").hide();
+                $("#Categoria_INSTRUCCIONES").hide();
+                $("#lblInstrucciones").hide();
+
+                $("#Categoria_TIPOEJEMPLO").hide();
+                $("#lblTipoEjemplo").hide();
+
+            }
+            else {
+                $("#divInstrucciones").show();
+                $("#Categoria_INSTRUCCIONES").show();
+                $("#lblInstrucciones").show();
+
+                $("#Categoria_TIPOEJEMPLO").show();
+                $("#lblTipoEjemplo").show();
+            }
+       
+
        
 
         $("#Categoria_TIPOEJEMPLO").change(function () {
@@ -571,12 +604,15 @@
                 $("#Categoria_TEXTOEJEMPLO").show();
                 $("#maxTextoEjemplo").show();
                 $("#nombreImagen").hide();
+               // $("#Categoria_INSTRUCCIONES").show();
                 $("#selecImagen").hide();
                 $("#verImagen").hide();
             }
             else if (vvalor == "02") {
                 $("#ejemplo").show();
                 $("#Categoria_TEXTOEJEMPLO").hide();
+               // $("#Categoria_INSTRUCCIONES").hide();
+                
                 $("#maxTextoEjemplo").hide();
                 $("#nombreImagen").show();
                 $("#selecImagen").show();
@@ -584,6 +620,7 @@
             }
             else {
                 $("#ejemplo").hide();
+               // $("#Categoria_INSTRUCCIONES").show();
                 $("#Categoria_TEXTOEJEMPLO").hide();
                 $("#maxTextoEjemplo").hide();
                 $("#nombreImagen").hide();
@@ -593,7 +630,39 @@
         });
 
 
-       
+        $("#Categoria_TIPCATEGORIA").change(function () {
+            var vvalor = $(this).val();
+
+            if (vvalor == "01") {
+                
+                $("#divInstrucciones").show();
+                $("#Categoria_INSTRUCCIONES").show();
+                $("#lblInstrucciones").show();
+
+                $("#Categoria_TIPOEJEMPLO").show();
+                $("#lblTipoEjemplo").show();
+                
+               
+            }
+            else if (vvalor == "02") {
+                $("#divInstrucciones").hide();
+                $("#Categoria_INSTRUCCIONES").hide();
+                $("#lblInstrucciones").hide();
+
+                $("#Categoria_TIPOEJEMPLO").hide();
+                $("#lblTipoEjemplo").hide();
+               
+            }
+            else {
+                $("#divInstrucciones").show();
+                $("#Categoria_INSTRUCCIONES").show();
+                $("#lblInstrucciones").show();
+               
+                $("#Categoria_TIPOEJEMPLO").show();
+                $("#lblTipoEjemplo").show();
+            }
+        });
+
 
 
 
@@ -1295,7 +1364,7 @@
                               @Html.TextAreaFor(model => model.Categoria.INSTRUCCIONES, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", @readonly = "readonly", onblur = "aMays(event, this)" }) 
                                 //<span>Máx. 255 caracteres</span>
                             }
-                            <div><span style="font-size:11px;color:gray">Máx. 255 caracteres</span></div>
+                            <div id="divInstrucciones"><span style="font-size:11px;color:gray">Máx. 255 caracteres</span></div>
                             <div class="tex-error" style="font-size:12px;color:red">  
                              @Html.ValidationMessageFor(model => model.Categoria.INSTRUCCIONES)
                              </div>
@@ -1305,10 +1374,15 @@
                 
                 </tr>
                 <tr class="formulario-fila">
-                  
+                  <td class="span5">
+                            <label class="control-label" for="inputSuccess">Duración(Min)</label>
+                            <div class="controles">
+                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5", @readonly = "readonly", onkeypress = "return Funciones.isNumberKey(event)" })  
+                            </div>
+                    </td>
                      <td class="span5">
                         
-                            <label class="control-label" for="inputSuccess">Tipo Ejemplo </label>
+                            <label class="control-label" for="inputSuccess" id="lblTipoEjemplo">Tipo Ejemplo </label>
                             <div class="controles">
                                
                                  @if (!Accion.Consultar.Equals(Session["AccionCategoria"]))
@@ -1325,12 +1399,7 @@
                             </div>
                         
                     </td>
-                     <td class="span5">
-                            <label class="control-label" for="inputSuccess">Duración(Min)</label>
-                            <div class="controles">
-                                @Html.TextBoxFor(model => model.Categoria.TIEMPO, new { @class = "textoFormulario", @maxlength = "5", @readonly = "readonly", onkeypress = "return Funciones.isNumberKey(event)" })  
-                            </div>
-                    </td>
+                     
                     
                 </tr>
                     <tr class="formulario-fila">

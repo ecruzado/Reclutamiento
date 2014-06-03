@@ -43,15 +43,20 @@
             mmsg.BodyEncoding = System.Text.Encoding.UTF8;
             mmsg.IsBodyHtml = true; //Si no queremos que se envíe como HTML
 
-            mmsg.From = new System.Net.Mail.MailAddress("j.ccana@conastec.com.pe");
+
+            string CorreoHost = ConfigurationManager.AppSettings["CorreoHost"];
+            string PassHost = ConfigurationManager.AppSettings["PassHost"];
+            string ClienteHost = ConfigurationManager.AppSettings["ClienteHost"];
+
+            mmsg.From = new System.Net.Mail.MailAddress(CorreoHost);
 
             //Creamos un objeto de cliente de correo
             System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
 
             cliente.UseDefaultCredentials = true;
-            cliente.Credentials = new System.Net.NetworkCredential("j.ccana@conastec.com.pe", "jc6543");
+            cliente.Credentials = new System.Net.NetworkCredential(CorreoHost, PassHost);
 
-            cliente.Host = "gator3243.hostgator.com";
+            cliente.Host = ClienteHost;
 
             cliente.EnableSsl = false;
 
@@ -164,7 +169,7 @@
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                                  "requerimiento de " + tipoRequerimiento + " de " + cargo + " en la Sede " + Sede + " y se requiere de su Aprobación o Rechazo" +
                                  " para continuar con el procedimiento.";
-                        asunto = "Aprobación/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Aprobación/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Validado:
@@ -172,7 +177,7 @@
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                                  "requerimiento de " + tipoRequerimiento + " de " + cargo + " en la Sede " + Sede + " y se requiere de su Aprobación o Rechazo" +
                                  " para continuar con el procedimiento.";
-                        asunto = "Aprobación/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Aprobación/Rechazo de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Aprobado:
@@ -181,7 +186,7 @@
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Aprobado el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                      " en la Sede " + Sede + " y se requiere de su Aceptación.";
-                            asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                            asunto = "Pendiente de aceptación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                             break;
                         }
 
@@ -189,7 +194,7 @@
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Aprobado el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                 " en la Sede " + Sede + " y se requiere que proceda con la publicación para continuar con el procedimiento.";
-                            asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                            asunto = "Pendiente de publicación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                             break;
                         }
 
@@ -197,7 +202,7 @@
                         {
                             cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha solicitado un " +
                             " requerimiento de " + tipoRequerimiento + " en la Sede " + Sede + " y se requiere la elaboración del Perfil para continuar con el procedimiento.";
-                            asunto = "Elaboración de Perfil de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                            asunto = "Elaboración de Perfil de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                             break;
                         }
 
@@ -208,49 +213,49 @@
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha elaborado el perfil para el requerimiento de "
                                   + tipoRequerimiento + " en la Sede " + Sede + " y se requiere de su Aprobación/Observación como solicitante para continuar con el procedimiento.";
-                        asunto = "Aprobación/Observación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Aprobación/Observación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Aprobacion_Perfil:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Aprobado el perfil para el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " y se requiere de su aceptación.";
-                        asunto = "Aceptación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Aceptación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Observado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Observado el perfil de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " por el motivo: " + Observacion;
-                        asunto = "Observación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Observación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Rechazado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Rechazado el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " por el motivo: " + Observacion;
-                        asunto = "Rechazo de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Rechazo de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Publicado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha publicado el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                  " en la Bolsa de Oportunidades.";
-                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Finalizado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que se ha Finalizado el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                  " en la Bolsa de Oportunidades.";
-                        asunto = "Finalización de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Finalización de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
                 case Etapa.Aceptado:
                     {
                         cuerpo = "Luego de saludarlo(a), la presente es para comunicarle que el requerimiento de " + tipoRequerimiento + " de " + cargo +
                                    " en la Sede " + Sede + " y se requiere la publicación en la web.";
-                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Cargo " + codCargo + " - Sede: " + Sede;
+                        asunto = "Publicación de " + tipoRequerimiento + " de " + cargo + " - Código " + codCargo + " - Sede: " + Sede;
                         break;
                     }
 

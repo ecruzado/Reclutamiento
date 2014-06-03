@@ -26,7 +26,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public int IdUsuario { get; set; }
         public int IdRolUsuario { get; set; }
         public string IndSede { get; set; }
-
+        public string CampoSede { get; set; }
+        public string CampoRol { get; set; }
+        
 
         //accesos de los botones
         /// <summary>

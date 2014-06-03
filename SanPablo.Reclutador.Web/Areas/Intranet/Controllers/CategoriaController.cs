@@ -59,7 +59,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             CategoriaViewModel objCategoriaView = new CategoriaViewModel();
             objCategoriaView = InicializarCategoriaIndex();
 
-
+            
+            Session[ConstanteSesion.TipoCategoria]="";
+            
             //botonera
 
             int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
@@ -852,6 +854,24 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     Session["Tipo"] = 1;
                 }
+                
+                //tipo de cartegoria
+
+                if ("01".Equals(model.Categoria.TIPCATEGORIA))
+                {
+                    Session[ConstanteSesion.TipoCategoria] = model.Categoria.TIPCATEGORIA;
+                    //model.Categoria.TEXTOEJEMPLO = objCategoria.TEXTOEJEMPLO;
+                }
+                else if ("02".Equals(model.Categoria.TIPCATEGORIA))
+                {
+                    Session[ConstanteSesion.TipoCategoria] = model.Categoria.TIPCATEGORIA;
+                    //model.Categoria.IMAGENEJEMPLO = objCategoria.IMAGENEJEMPLO;
+                }
+                else
+                {
+                    Session["Tipo"] = "";
+                }
+
 
                 return View("Edit", model);
 

@@ -411,13 +411,21 @@
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
             SendMail enviar = new SendMail();
-            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            //enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+            var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+            if (objUsuario != null)
+            {
+                enviar.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+            }
+
             enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
             enviar.Sede = usuarioSession.SEDEDES;
             enviar.Area = usuarioSession.AREADES;
             try
             {
-                enviar.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, solicitudNuevo.CodigoCargo, Sends, "Suceso", Copys);
+                enviar.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, ""+solicitudNuevo.IdeCargo, Sends, "Suceso", Copys);
                 return true;
             }
             catch (Exception)
