@@ -32,11 +32,8 @@
             $('#grdListPostulantesBD').jqGrid('clearGridData');
         });
 
-        
-
         $('#btnPDF').hide();
         $('#btnEXCEL').hide();
-
 
         $('#btnBuscarPostulantes').click(function () {
             var nombreCargo = $('#Solicitud_nombreCargo').val();
@@ -45,8 +42,6 @@
 
             if (nombreCargo.length > 0)
             {
-
-
                 if (edadInicio>0) {
                     if (edadInicio > edadFin && edadFin!=0) {
                         MostrarMensaje('La edad Inicial debe ser menor a la edad final', "ALERTA");
@@ -54,14 +49,12 @@
                     }
                 }
 
-
                 if (edadFin > 0) {
                     if (edadInicio > edadFin && edadFin != 0 && edadInicio!=0) {
                         MostrarMensaje('La edad Inicial debe ser menor a la edad final', "ALERTA");
                         return;
                     }
                 }
-
 
                 if (validarFecha()) {
                     $('#grdListPostulantesBD').trigger('reloadGrid');
