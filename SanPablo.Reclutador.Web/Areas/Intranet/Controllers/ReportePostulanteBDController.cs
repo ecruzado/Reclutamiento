@@ -64,6 +64,13 @@
 
             reporteModel = Inicializar();
 
+            
+
+
+
+
+
+
             reporteModel.btnVerReporte = Indicador.No;
 
             return View("Index", reporteModel);
@@ -172,6 +179,19 @@
             reporteModel.RangosSalariales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
             reporteModel.RangosSalariales.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONAR" });
 
+            Edad rangoEdad;
+            List<Edad> lista = new List<Edad>();
+
+            for (int i = 18; i < 71; i++)
+            {
+                rangoEdad = new Edad();
+                rangoEdad.IdEdad = i;
+                rangoEdad.DesEdad = i.ToString();
+                lista.Add(rangoEdad);
+            }
+
+            reporteModel.listaEdad = lista;
+            reporteModel.listaEdad.Insert(0, new Edad { IdEdad = 0, DesEdad = "TODAS" });
 
             return reporteModel;
         }

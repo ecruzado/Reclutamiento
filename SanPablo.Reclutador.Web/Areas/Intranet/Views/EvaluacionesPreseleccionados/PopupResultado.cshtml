@@ -29,12 +29,12 @@
             'onError': function (a, b, c, d) {
 
                 if (d.status == 404)
-                    MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>", "MENSAJE");
+                    MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>", "ALERTA");
                 else if (d.type === "HTTP")
                     // MostrarMensaje("error " + d.type + ": " + d.status, "MENSAJE");
-                    MostrarMensaje("ERROR : Archivo demasiado grande. Limite de " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
+                    MostrarMensaje("ERROR : Archivo demasiado grande. Limite de " + Math.round(d.info / (1024 * 1024)) + "MB", "ALERTA");
                 else if (d.type === "File Size")
-                    MostrarMensaje("ERROR: Archivo demasiado grande. Limite de "+c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB", "MENSAJE");
+                    MostrarMensaje("ERROR: Archivo demasiado grande. Limite de " + c.name + " " + d.type + " Limit: " + Math.round(d.info / (1024 * 1024)) + "MB", "ALERTA");
                 else
                     MostrarMensaje("ERROR : " + d.type + ": " + d.text+ ". Verifique el archivo.");
             },

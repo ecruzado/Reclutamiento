@@ -80,7 +80,7 @@
         </div>
         <br />
         <div class="alert alert-info" style="font-size:15px">
-            Sistema de Reclutamiento y Seleccion de Personal
+            Sistema de Reclutamiento y Selecci&oacute;n de Personal
         </div>
         <label style="font-weight:bold;font-size:13px;">Usuario</label>
         @Html.TextBoxFor(model => model.IndSede,  new { style = "display: none;" })  
@@ -172,7 +172,7 @@
                            window.location = '@Url.Action("GetMenu", "Seguridad", new { id = "",  area = "Intranet"})' + '/' + data.IdDato;
                         } else {
                            
-                            MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            MostrarMensaje(data.Mensaje, "ALERTA");
                             
                         }
 

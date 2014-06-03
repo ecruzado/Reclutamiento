@@ -34,6 +34,11 @@
         });
 
 
+        $('#btnLimpiar').click(function () {
+            $('#grdListResumen').jqGrid('clearGridData');
+        });
+
+
         $('#ReporteSol_FechaInicio,#ReporteSol_FechaFin').attr("readonly", "readonly");
 
         $('#btnPDF').hide();
@@ -48,7 +53,7 @@
 
                 var count = $("#grdListResumen").getGridParam("reccount");
                 if (count==0) {
-                    MostrarMensaje('No se encontraron registros', "Mensaje");
+                    MostrarMensaje('No se encontraron registros', "ALERTA");
                     $('#btnPDF').hide();
                     $('#btnExcel').hide();
                 }
@@ -90,14 +95,14 @@
         jQuery("#grdListResumen").jqGrid({
             colNames: [
                 '',
-                'PROFESIONAL',
-                'SALDO A LA FECHA',
-                'REQUERIMIENTOS DE NUEVO CARGO',
-                'REQUERIMIENTOS DE REEMPLAZO',
-                'REQUERIMIENTOS DE AMPLIACIÓN',
-                'REQUERIMIENTOS FINALIZADOS A NIVEL PARCIAL O TOTAL',
-                'PUESTOS CUBIERTOS',
-                'NUEVO SALDO A LA FECHA'
+                'Profesional',
+                'Saldo a la fecha',
+                'Req. Nuevo cargo',
+                'Req. Reemplazo',
+                'Req. Ampliación',
+                'Req. Finalizados Parcial o Total',
+                'Puestos cubiertos',
+                'Nuevo saldo a la fecha'
             ],
             colModel: [
 
@@ -178,92 +183,7 @@
             }
          });
 
-        @*jQuery("#grdListResumen").jqGrid({
-            datatype: function (postdata) {
-                var migrilla = new Object();
-                migrilla.page = postdata.page;
-                migrilla.rows = postdata.rows;
-                migrilla.sidx = postdata.sidx;
-                migrilla.sord = postdata.sord;
-                migrilla._search = postdata.isSearch;
-                migrilla.filters = postdata.filters;
-                migrilla.Rules = [
-                       { field: 'cDesde', data: $("#ReporteSol_FechaInicio").val() },
-                       { field: 'cHasta', data: $("#ReporteSol_FechaFin").val() },
-                       { field: 'cSede', data: $("#ReporteSol_idSede").val() },
-                       { field: 'cAnalista', data: $("#ReporteSol_idAnalistaResp").val() },
-                       { field: 'cIndBusqueda', data: $("#indBusqueda").val() }
-                       
-                ];
-
-                if (migrilla._search == true) {
-                    migrilla.searchField = postdata.searchField;
-                    migrilla.searchOper = postdata.searchOper;
-                    migrilla.searchString = postdata.searchString;
-                }
-
-                var params = { grid: migrilla };
-
-                $.ajax({
-                    url: '@Url.Action("ListResumen", "ReporteResumeRQ")',
-                    type: 'post',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(params),
-                    async: false,
-                    success: function (data, st) {
-                        if (st == 'success') {
-                            var jq = $('#grdListResumen')[0];
-                            jq.addJSONData(data);
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
-            },
-            colNames: [
-                '',
-                'PROFESIONAL',
-                'SALDO A LA FECHA',
-                'REQUERIMIENTOS DE NUEVO CARGO',
-                'REQUERIMIENTOS DE REEMPLAZO',
-                'REQUERIMIENTOS DE AMPLIACIÓN',
-                'REQUERIMIENTOS FINALIZADOS A NIVEL PARCIAL O TOTAL',
-                'PUESTOS CUBIERTOS',
-                'NUEVO SALDO A LA FECHA'
-            ],
-            colModel: [
-
-                    { name: 'idAnalistaResp', index: 'idAnalistaResp', align: 'center', hidden: true, sortable: false },
-                    { name: 'AnalistaResp', index: 'AnalistaResp', align: 'center', hidden: false, sortable: false },
-                    { name: 'Saldo', index: 'Saldo', align: 'center', hidden: false, sortable: false },
-                    { name: 'CantVacPubNuevo', index: 'CantVacPubNuevo', align: 'center', hidden: false, sortable: false },
-                    { name: 'CantVacPubReemplazo', index: 'CantVacPubReemplazo', align: 'center', hidden: false, sortable: false },
-                    { name: 'CantVacPubAmpliacion', index: 'CantVacPubAmpliacion', align: 'center', hidden: false, sortable: false },
-                    { name: 'CantVacFinalNo', index: 'CantVacFinalNo', align: 'center', hidden: false, sortable: false },
-                    { name: 'CantVacFinalSi', index: 'CantVacFinalSi', align: 'center', hidden: false, sortable: false },
-                    { name: 'Total', index: 'Total', align: 'center', hidden: false, sortable: false }
-                    
-            ],
-            pager: jQuery('#grdPagerListResumen'),
-            rowNum: 10,
-            rowList: [10, 30, 50],
-            autowidth: true,
-            rules: true,
-            sortname: 'idAnalistaResp',
-            sortorder: 'desc',
-            viewrecords: true,
-            height: 350,
-            cellsubmit: 'clientArray',
-            hidegrid: false,
-            rownumbers: true,
-            shrinkToFit: false,
-
-            postData: {
-            }, loadComplete: function (data) {
-
-            }
-        });*@
+       
 
 
         var grid = $("#grdListResumen"), headerRow, rowHight, resizeSpanHeight;
@@ -297,24 +217,24 @@
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
            
-            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "ALERTA");
             return false;
         }
 
         dif = Funciones.diasEntreFechas(fechaInicial, fechaFinal);
         if (dif >= 30) {
-            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 30 días', "Mensaje");
+            MostrarMensaje('La diferencia entre fechas no puede ser mayor a 30 días', "ALERTA");
             return false;
         }
 
 
         if (sede=="0") {
-            MostrarMensaje('Seleccione una sede', "Mensaje");
+            MostrarMensaje('Seleccione una sede', "ALERTA");
             return false;
         }
 
@@ -335,7 +255,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Resume de requerimientos</h5>
+                <h5>Resumen de Requerimientos</h5>
             </div>
             @Html.TextBoxFor(model => model.indBusqueda, new { style = "display: none;" })
 
@@ -344,16 +264,16 @@
                     
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="selectError">Periodo<span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError" style="width:120px;text-align:left">Periodo<span class="text-error">*</span></label>
                             <div class="controles">
                                 <input type="text" class="input-small"  id="ReporteSol_FechaInicio" name="ReporteSol.FechaInicio" placeholder=" Inicial" >
                                 <input type="text" class="input-small"  id="ReporteSol_FechaFin" name="ReporteSol.FechaFin" placeholder=" Final">
                             </div>
                         </div>
                     </td>
-                     <td class="span5">
+                     <td class="span5" >
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Sede<span class="text-error">*</span></label>
+                            <label class="control-label" for="inputSuccess" style="width:120px;">Sede<span class="text-error">*</span></label>
                             <div class="controles">
                                 
                                 @if (Visualicion.SI.Equals(Model.CampoSede))
@@ -374,7 +294,7 @@
                 <tr class="formulario-fila">
                     <td class="span5">
                         <div class="">
-                            <label class="control-label" for="inputSuccess">Analista Responsable</label>
+                            <label class="control-label" for="inputSuccess" style="width:120px;text-align:left">Analista Responsable</label>
                             <div class="controles">
                                 
                                 @if (Visualicion.SI.Equals(Model.CampoAnalistaSeleccion))

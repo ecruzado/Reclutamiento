@@ -60,9 +60,9 @@
                         SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                 }*@
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Selección de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Selección de Personal");
+                    MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     $('#grdListBusquedaReemplazo').trigger('reloadGrid');
                 }
             }
@@ -99,7 +99,7 @@
                         window.location = url;
 
                     } else {
-                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "Sistema de Reclutamiento Y Selección de Personal");
+                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "ALERTA");
                     }
 
                    },
@@ -111,7 +111,7 @@
 
 
              } else {
-                 MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
+                 MostrarMensaje('Seleccione una solicitud', "ALERTA");
              }
 
       });
@@ -139,7 +139,7 @@
                              window.location = url;
 
                     } else {
-                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "Sistema de Reclutamiento Y Selección de Personal");
+                        MostrarMensaje('La solicitud debe encontrarse publicada o finalizada', "ALERTA");
                     }
 
                     },
@@ -151,7 +151,7 @@
            
 
         } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
+            MostrarMensaje('Seleccione una solicitud', "ALERTA");
         }
 
     }); 
@@ -174,7 +174,7 @@
                         window.location = url;
 
                     } else {
-                        MostrarMensaje('La solicitud debe encontrarse activa', "Sistema de Reclutamiento Y Selección de Personal");
+                        MostrarMensaje('La solicitud debe encontrarse activa', "ALERTA");
                     }
 
                 },
@@ -192,7 +192,7 @@
 
             
         } else {
-            MostrarMensaje('Seleccione una solicitud', "Sistema de Reclutamiento Y Selección de Personal");
+            MostrarMensaje('Seleccione una solicitud', "ALERTA");
         }
 
      });

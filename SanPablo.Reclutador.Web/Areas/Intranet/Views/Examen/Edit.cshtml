@@ -23,7 +23,7 @@
         if (codigoExamen != null && codigoExamen > 0) {
             mostrarCategoria(codigoExamen);
         } else {
-            MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Ingrese un registro', "ALERTA");
         }
 
     });
@@ -47,7 +47,7 @@
                         information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO", data.IdDato);
                     }
                     else {
-                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje(data.Mensaje, "ALERTA");
                     }
 
                 }
@@ -65,7 +65,7 @@
         if (codigoCategoria != null && codigoCategoria > 0) {
             $('#confirmacion').dialog('open');
         } else {
-            MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+            MostrarMensaje('Seleccione una categoria', "ALERTA");
         }
 
     });
@@ -89,7 +89,7 @@
                 if (codigoCategoria != null && codigoCategoria > 0) {
                     EliminarCategoria(codigoExamen, codigoCategoria);
                 } else {
-                    MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje('Seleccione una categoria', "ALERTA");
                 }
                 $(this).dialog("close");
             },
@@ -288,7 +288,7 @@
             traditional: true,
             success: function (data) {
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "MENSAJE");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
                     $('#grdListaCatxExamen').trigger('reloadGrid');
                 }

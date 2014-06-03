@@ -93,7 +93,7 @@
                     if (rowData.CodigoCrit != null && selsub != null) {
                         EliminarCritxSub(selsub, rowData.CodigoCrit);
                     } else {
-                        MostrarMensaje('Seleccione una subCategoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione una subCategoria', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -919,7 +919,7 @@
                             }
                             if (!data.Resultado) {
                                 //notificacionExito(data.Mensaje);
-                                MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                MostrarMensaje(data.Mensaje, "ALERTA");
                             }
 
                         }

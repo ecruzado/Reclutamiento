@@ -1326,6 +1326,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objCategoria = new Categoria();
 
+                
+
                 int IdSede = (Session[ConstanteSesion.Sede] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Sede]));
                 
                 if (!"".Equals(grid.rules[1].data) && !"0".Equals(grid.rules[1].data))

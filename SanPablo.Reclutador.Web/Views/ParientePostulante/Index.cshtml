@@ -93,7 +93,7 @@
                 else {
                     $("#spanMensaje").html('Seleccione un item a editar.');
                     $("#divMensaje").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'ALERTA',
                         modal: true,
                         buttons: {
                             "OK": function () { $(this).dialog("close"); }
@@ -109,7 +109,7 @@
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
 
                     $("#divMensaje").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'CONFIRMACIÓN',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
@@ -121,7 +121,7 @@
                 else {
                     $("#spanMensaje").html('Seleccione un item a eliminar.');
                     $("#divMensaje").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'ALERTA',
                         modal: true,
                         buttons: {
                             "OK": function () { $(this).dialog("close"); }

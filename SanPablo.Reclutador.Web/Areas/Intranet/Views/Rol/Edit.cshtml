@@ -101,7 +101,7 @@
             if (codRol != null && codRol > 0) {
                 mostrarOpciones(codRol);
             } else {
-                MostrarMensaje('Ingrese un registro', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Ingrese un registro', "ALERTA");
             }
 
         });
@@ -113,7 +113,7 @@
             if (selr != null && selr > 0) {
                 $('#confirmacion').dialog('open');
             } else {
-                MostrarMensaje('Seleccione una opción', "Sistema de Reclutamiento Y Seleccion de Personal");
+                MostrarMensaje('Seleccione una opción', "ALERTA");
             }
 
         });
@@ -123,7 +123,7 @@
         $('#confirmacion').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "CONFIRMACIÓN",
             buttons: {
                 "Aceptar": function () {
                     var codRol = $("#rol_IdRol").val();
@@ -135,7 +135,7 @@
                     if (codOpcion != null && codOpcion > 0) {
                         EliminarOpcion(codRol, codOpcion);
                     } else {
-                        MostrarMensaje('Seleccione una categoria', "Sistema de Reclutamiento Y Seleccion de Personal");
+                        MostrarMensaje('Seleccione una categoria', "ALERTA");
                     }
                     $(this).dialog("close");
                 },
@@ -161,7 +161,7 @@
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                  }
                 if (data.Resultado == false) {
-                    MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                    MostrarMensaje(data.Mensaje, "ALERTA");
                 } else {
                     $('#grdListOpciones').trigger('reloadGrid');
                 }
@@ -175,7 +175,7 @@
         $('#confSelc').dialog({
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
+            title: "CONFIRMACIÓN",
             buttons: {
                 "Aceptar": function () {
                     $.ajax({

@@ -59,7 +59,7 @@
                 if (ideOfimatica != null) {
                     $("#spanMensaje7").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje7").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'CONFIRMACIÓN',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOfimatica(ideOfimatica); $(this).dialog("close"); $('#grdListOfimatica').trigger('reloadGrid'); },
@@ -131,7 +131,7 @@
                 if (ideIdioma != null) {
                     $("#spanMensaje8").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje8").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'CONFIRMACIÓN',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarIdioma(ideIdioma); $(this).dialog("close"); $('#grdListIdioma').trigger('reloadGrid'); },
@@ -203,7 +203,7 @@
                 if (ideOtrosConocimientos != null) {
                     $("#spanMensaje9").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje9").dialog({
-                        title: 'Sistema de Reclutamiento y Selección de Personal',
+                        title: 'CONFIRMACIÓN',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOtrosConocimientos(ideOtrosConocimientos); $(this).dialog("close"); $('#grdListOtrosConocimientos').trigger('reloadGrid'); },

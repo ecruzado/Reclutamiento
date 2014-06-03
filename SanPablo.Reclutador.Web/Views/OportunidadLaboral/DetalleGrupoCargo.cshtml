@@ -83,7 +83,7 @@
             //width: 780,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            rownumbers: true,
+            //rownumbers: true,
             shrinkToFit: false,
 
             postData: {
@@ -159,7 +159,7 @@
            // width: 780,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            rownumbers: true,
+            //rownumbers: true,
             shrinkToFit: false,
 
             postData: {
@@ -232,7 +232,7 @@
              //width: 780,
              cellsubmit: 'clientArray',
              hidegrid: false,
-             rownumbers: true,
+            //rownumbers: true,
              shrinkToFit: false,
 
              postData: {
@@ -303,7 +303,7 @@
             //width: 780,
             cellsubmit: 'clientArray',
             hidegrid: false,
-            rownumbers: true,
+            //rownumbers: true,
             shrinkToFit: false,
 
             postData: {
@@ -376,7 +376,7 @@
             // width: 780,
              cellsubmit: 'clientArray',
              hidegrid: false,
-             rownumbers: true,
+            //rownumbers: true,
              shrinkToFit: false,
 
              postData: {
@@ -447,7 +447,7 @@
               //width: 780,
               cellsubmit: 'clientArray',
               hidegrid: false,
-              rownumbers: true,
+            //rownumbers: true,
               shrinkToFit: false,
 
               postData: {
@@ -518,7 +518,7 @@
              //width: 780,
              cellsubmit: 'clientArray',
              hidegrid: false,
-             rownumbers: true,
+             //rownumbers: true,
              shrinkToFit: false,
 
              postData: {
@@ -599,15 +599,14 @@
 
                     <tr class="formulario-fila">
                         
-                        @if (Indicador.Si.Equals(Model.solReqPersonal.IndVerSalario))
-                        {
-                           <td class="span5">
-                                <label class="control-label" for="selectError">Rango salarial</label>
-                                <div class="controles">
-                                   @Html.TextBoxFor(model => model.solReqPersonal.TipoRangoSalarioDes, new { @class = "textoFormulario" ,disabled ="disabled" })  
-                                </div>
-                            </td>     
-                        }
+                       
+                        <td class="span5">
+                            <label class="control-label" for="selectError">Tipo de horario</label>
+                            <div class="controles">
+                               @Html.TextBoxFor(model => model.oportunidadLaboral.TipoHorarioDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            </div>
+                        </td>
+
                        
                          <td class="span5">
                             <label class="control-label" for="inputSuccess">Vacantes</label>
@@ -636,12 +635,15 @@
 
 
                    <tr class="formulario-fila">
-                        <td class="span5">
-                            <label class="control-label" for="selectError">Tipo de horario</label>
-                            <div class="controles">
-                               @Html.TextBoxFor(model => model.oportunidadLaboral.TipoHorarioDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
-                            </div>
-                        </td>
+                         @if (Indicador.Si.Equals(Model.solReqPersonal.IndVerSalario))
+                        {
+                           <td class="span5">
+                                <label class="control-label" for="selectError">Rango salarial</label>
+                                <div class="controles">
+                                   @Html.TextBoxFor(model => model.solReqPersonal.TipoRangoSalarioDes, new { @class = "textoFormulario" ,disabled ="disabled" })  
+                                </div>
+                            </td>     
+                        }
 
                     </tr>
 
@@ -655,7 +657,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Funciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.solReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:780px; height:100px"})
+                            @Html.TextAreaFor(model=>model.solReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:780px; height:100px;resize:none"})
                          </div>
                        </td>
                     </tr>
@@ -789,7 +791,7 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:780px;height:100px" ,maxlength="254",@disabled="disabled"})
+                            @Html.TextAreaFor(model=>model.solReqPersonal.ObservacionPublica, new { @style = "width:780px;height:100px;resize:none" ,maxlength="254",@disabled="disabled"})
                          </div>
                         </td>
                     </tr>   

@@ -251,7 +251,7 @@
                 $('#CambioPass').dialog({
                     autoOpen: false,
                     modal: true,
-                    title: "Sistema de Reclutamiento Y Seleccion de Personal",
+                    title: "CONFIRMACIÓN",
                     buttons: {
                         "Aceptar": function () {
                             $.ajax({
@@ -267,7 +267,7 @@
                                         SanPablo.Redirecciona('@Url.Action("Login", "Seguridad",new { area = "Intranet" })');
                                     } else {
                                         $('#confSelc').dialog("close");
-                                        MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                                        MostrarMensaje(data.Mensaje, "ALERTA");
                                     }
                                  }
                           });

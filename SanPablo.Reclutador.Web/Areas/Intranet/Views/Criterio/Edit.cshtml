@@ -132,15 +132,15 @@
 
                     'onError': function (a, b, c, d) {
                         if (d.status == 404)
-                            MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>","Alerta");
+                            MostrarMensaje("Could not find upload script. Use a path relative to: " + "<?= getcwd() ?>", "ALERTA");
                         else if (d.type === "HTTP")
                             // MostrarMensaje("error " + d.type + ": " + d.status);
                             MostrarMensaje('Los tipos de archivos permitidos son: jpeg, jpg, gif, bmp y png favor de verificar el tipo de archivo', "Alerta");
                         else if (d.type === "File Size")
-                            MostrarMensaje(c.name + " " + d.type + " Limite: " + Math.round(d.info / (1024 * 1024)) + "MB", "Alerta");
+                            MostrarMensaje(c.name + " " + d.type + " Limite: " + Math.round(d.info / (1024 * 1024)) + "MB", "ALERTA");
                         else
                             //alert("error " + d.type + ": " + d.text);
-                            MostrarMensaje('No se puede subir el archivo, ingrese otro tipo de archivo', "Alerta");
+                            MostrarMensaje('No se puede subir el archivo, ingrese otro tipo de archivo', "ALERTA");
                     },
                     'onSelect': function (e, q, f) {
                         var estado = true;
@@ -214,7 +214,7 @@
                 if (selr != null) {
                     mostrarAgregarEstudios(selr, codigoCriterio);
                 } else {
-                    MostrarMensaje('Seleccione una Alternativa', "MENSAJE");
+                    MostrarMensaje('Seleccione una Alternativa', "ALERTA");
                 }
                 
         });
@@ -225,7 +225,7 @@
             if (selr != null) {
                 $('#confirmacion').dialog('open');
             } else {
-                MostrarMensaje('Seleccione una Alternativa', "MENSAJE");
+                MostrarMensaje('Seleccione una Alternativa', "ALERTA");
             }
 
         });

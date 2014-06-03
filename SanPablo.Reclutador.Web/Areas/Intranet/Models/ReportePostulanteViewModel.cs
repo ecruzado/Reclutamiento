@@ -45,5 +45,8 @@
 
         public string btnVerReporte { get; set; }
 
+
+        public List<Edad> listaEdad { get; set; }
+
     }
 }
