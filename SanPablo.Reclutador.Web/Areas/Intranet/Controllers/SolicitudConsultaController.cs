@@ -259,7 +259,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudRequerimiento.TipEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
                 solicitudRequerimiento.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
                 solicitudRequerimiento.TipoSolicitud = (grid.rules[10].data == "0"? "" : grid.rules[10].data);
-                solicitudRequerimiento.CodSolReqPersonal = (grid.rules[11].data == null ? "" : grid.rules[11].data);
+                //solicitudRequerimiento.CodSolReqPersonal = (grid.rules[11].data == null ? "" : grid.rules[11].data);
+                solicitudRequerimiento.IdeSolReqPersonal = (grid.rules[11].data == null ? 0 : Convert.ToInt32(grid.rules[11].data));
 
                 lista = _listaSolicitudes.ListaSolicitudesRequerimientos(solicitudRequerimiento);
 

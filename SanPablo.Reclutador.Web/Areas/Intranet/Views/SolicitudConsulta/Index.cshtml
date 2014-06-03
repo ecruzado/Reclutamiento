@@ -176,12 +176,12 @@
 
     jQuery("#grdList").jqGrid({
        
-        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
+        colNames: ['Estado', '', 'Código', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
-                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
-                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
+                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', sortable: false, width: 50 },
+                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, hidden: true, sortable: false },
                 { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
                 { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
                 { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
@@ -246,7 +246,8 @@
                     { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
                     { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() },
                     { field: 'tipSol', data: $("#SolicitudRequerimiento_TipoSolicitud").val() },
-                    { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
+                   // { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
+                    { field: 'idSolicitud', data: $("#SolicitudRequerimiento_IdeSolReqPersonal").val() }
                 
 
                 ];
@@ -481,7 +482,8 @@
                    <td class="span5">
                             <label class="control-label" for="inputSuccess">Codigo Solicitud</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })
+                                @*@Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })*@
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })
                             </div>
                     </td>
                 </tr>
