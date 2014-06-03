@@ -175,103 +175,106 @@
 
 
     jQuery("#grdList").jqGrid({
-        datatype: function (postdata) {
-            var migrilla = new Object();
-            migrilla.page = postdata.page;
-            migrilla.rows = postdata.rows;
-            migrilla.sidx = postdata.sidx;
-            migrilla.sord = postdata.sord;
-            migrilla._search = postdata.isSearch;
-            migrilla.filters = postdata.filters;
-            migrilla.Rules = [
+       
+        colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
+        colModel: [
+                { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
+                { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
+                { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
+                { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
+                { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
+                { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
+                { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
+                { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300, sortable: false },
+                { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true, sortable: false },
+                { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300, sortable: false },
+                { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true, sortable: false },
+                { name: 'Area_des', index: 'Area_des', align: 'left', width: 300, sortable: false },
+                { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 50, sortable: false },
+                { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 50, sortable: false },
+                { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 50, sortable: false },
+                { name: 'CantEvaluados', index: 'CantEvaluados', align: 'right', width: 50, sortable: false },
+                { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'right', width: 50, sortable: false },
+                { name: 'CantContratados', index: 'CantContratados', align: 'right', width: 50, sortable: false },
+                { name: 'Feccreacion', index: 'Feccreacion', align: 'center', width: 120, sortable: false },
+                { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'center', width: 120, sortable: false },
+                { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true, sortable: false },
+                { name: 'DesRol', index: 'DesRol', align: 'left', width: 200, sortable: false },
+                { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300, sortable: false },
+                { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 100, sortable: false },
+                { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50, hidden: true, sortable: false },
+                { name: 'Etapa', index: 'Etapa', align: 'center', width: 100, sortable: false },
+                { name: 'TipoSol', index: 'TipoSol', align: 'center', width: 50, hidden: true, sortable: false },
+                { name: 'TipoSolicitud', index: 'TipSolicitud', align: 'center', width: 100, sortable: false }
+        ],
+        pager: jQuery('#grdPager'),
+        rowNum: 10,
+        //rowList: [10, 30, 50],
+        autowidth: true,
+        rules: true,
+        sortname: 'IdeSolReqPersonal',
+        sortorder: 'desc',
+        viewrecords: true,
+        height: 250,
+        cellsubmit: 'clientArray',
+        hidegrid: false,
+        rownumbers: true,
+        shrinkToFit: false,
+        datatype: 'local',
+        postData: {
+        },
+        loadComplete: function (data) {
+            jQuery("#grdList").jqGrid('setGridParam', {
+            datatype: function (postdata) {
+                var migrilla = new Object();
+                migrilla.page = postdata.page;
+                migrilla.rows = postdata.rows;
+                migrilla.sidx = postdata.sidx;
+                migrilla.sord = postdata.sord;
+                migrilla._search = postdata.isSearch;
+                migrilla.filters = postdata.filters;
+                migrilla.Rules = [
 
-                { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
-                { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
-                { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
-                { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
-                { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
-                { field: 'fecInicio', data: $("#SolicitudRequerimiento_FechaInicioBus").val() },
-                { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
-                { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
-                { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
-                { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() },
-                { field: 'tipSol', data: $("#SolicitudRequerimiento_TipoSolicitud").val() },
-                { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
+                    { field: 'idUsuario', data: jQuery('#grdList').jqGrid('getGridParam', 'selrow') },
+                    { field: 'idCargo', data: $("#SolicitudRequerimiento_IdeCargo").val() },
+                    { field: 'idDependencia', data: $("#SolicitudRequerimiento_IdeDependencia").val() },
+                    { field: 'idArea', data: $("#SolicitudRequerimiento_IdeArea").val() },
+                    { field: 'tipResp', data: $("#SolicitudRequerimiento_TipResponsable").val() },
+                    { field: 'fecInicio', data: $("#SolicitudRequerimiento_FechaInicioBus").val() },
+                    { field: 'fecFin', data: $("#SolicitudRequerimiento_FechaFinBus").val() },
+                    { field: 'idDepartamento', data: $("#SolicitudRequerimiento_IdeDepartamento").val() },
+                    { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
+                    { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() },
+                    { field: 'tipSol', data: $("#SolicitudRequerimiento_TipoSolicitud").val() },
+                    { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
                 
 
-            ];
-            if (migrilla._search == true) {
-                migrilla.searchField = postdata.searchField;
-                migrilla.searchOper = postdata.searchOper;
-                migrilla.searchString = postdata.searchString;
-            }
-            var params = { grid: migrilla };
-
-            $.ajax({
-                url: '@Url.Action("ListBusqueda", "SolicitudConsulta", new { area="Intranet"})',
-                type: 'post',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(params),
-                async: false,
-                success: function (data, st) {
-                    if (st == 'success') {
-                        var jq = $('#grdList')[0];
-                        jq.addJSONData(data);
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
+                ];
+                if (migrilla._search == true) {
+                    migrilla.searchField = postdata.searchField;
+                    migrilla.searchOper = postdata.searchOper;
+                    migrilla.searchString = postdata.searchString;
                 }
-            });
-        },
-     colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
-     colModel: [
-             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
-             { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
-             { name: 'IdeSolReqPersonal', index: 'IdeSolReqPersonal', align: 'left', hidden: true, sortable: false },
-             { name: 'CodSolReqPersonal', index: 'CodSolReqPersonal', align: 'left', width: 100, sortable: false },
-             { name: 'Idecargo', index: 'Idecargo', align: 'left', hidden: true, sortable: false },
-             { name: 'DesCargo', index: 'DesCargo', align: 'left', width: 250, sortable: false },
-             { name: 'IdeDependencia', index: 'IdeDependencia', align: 'left', hidden: true, sortable: false },
-             { name: 'Dependencia_des', index: 'Dependencia_des', align: 'left', width: 300, sortable: false },
-             { name: 'IdeDepartamento', index: 'IdeDepartamento', align: 'left', hidden: true, sortable: false },
-             { name: 'Departamento_des', index: 'Departamento_des', align: 'left', width: 300, sortable: false },
-             { name: 'IdeArea', index: 'IdeArea', align: 'right', hidden: true, sortable: false },
-             { name: 'Area_des', index: 'Area_des', align: 'left', width: 300, sortable: false },
-             { name: 'NumVacantes', index: 'NumVacantes', align: 'right', width: 50, sortable: false },
-             { name: 'CantPostulante', index: 'CantPostulante', align: 'right', width: 50, sortable: false },
-             { name: 'CantPreSelec', index: 'CantPreSelec', align: 'right', width: 50, sortable: false },
-             { name: 'CantEvaluados', index: 'CantEvaluados', align: 'right', width: 50, sortable: false },
-             { name: 'CantSeleccionados', index: 'CantSeleccionados', align: 'right', width: 50, sortable: false },
-             { name: 'CantContratados', index: 'CantContratados', align: 'right', width: 50, sortable: false },
-             { name: 'Feccreacion', index: 'Feccreacion', align: 'center', width: 120, sortable: false },
-             { name: 'FecExpiracacion', index: 'FecExpiracacion', align: 'center', width: 120, sortable: false },
-             { name: 'IdRol', index: 'IdRol', align: 'left', hidden: true, sortable: false },
-             { name: 'DesRol', index: 'DesRol', align: 'left', width: 200, sortable: false },
-             { name: 'NomPersonReemplazo', index: 'NomPersonReemplazo', align: 'left', width: 300, sortable: false },
-             { name: 'FlagPublicado', index: 'FlagPublicado', align: 'center', width: 100, sortable: false },
-             { name: 'TipEtapa', index: 'TipEtapa', align: 'center', width: 50, hidden: true, sortable: false },
-             { name: 'Etapa', index: 'Etapa', align: 'center', width: 100, sortable: false },
-             { name: 'TipoSol', index: 'TipoSol', align: 'center', width: 50, hidden: true, sortable: false },
-             { name: 'TipoSolicitud', index: 'TipSolicitud', align: 'center', width: 100, sortable: false }
-     ],
-     pager: jQuery('#grdPager'),
-     rowNum: 10,
-     //rowList: [10, 30, 50],
-     autowidth: true,
-     rules: true,
-     sortname: 'IdeSolReqPersonal',
-     sortorder: 'desc',
-     viewrecords: true,
-     height: 250,
-     cellsubmit: 'clientArray',
-     hidegrid: false,
-     rownumbers: true,
-     shrinkToFit: false,
+                var params = { grid: migrilla };
 
-     postData: {
-     },
-     loadComplete: function (data) {
+                $.ajax({
+                    url: '@Url.Action("ListBusqueda", "SolicitudConsulta", new { area="Intranet"})',
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(params),
+                    async: false,
+                    success: function (data, st) {
+                        if (st == 'success') {
+                            var jq = $('#grdList')[0];
+                            jq.addJSONData(data);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        });
      }
  });
 

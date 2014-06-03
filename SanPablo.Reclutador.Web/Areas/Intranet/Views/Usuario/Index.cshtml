@@ -24,12 +24,17 @@
         
         $('#btnEditar').click(function () {
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
-          
-            if (selr != null) {
-                window.location = '@Url.Action("Edit", "Usuario", new { id = "" })' + '/' + selr;
-             } else {
-                 MostrarMensaje('Seleccione un usuario', "ALERTA");
-             }
+            var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
+            if (rowData.FLGESTADO == 'A') {
+                if (selr != null) {
+                    window.location = '@Url.Action("Edit", "Usuario", new { id = "" })' + '/' + selr;
+                } else {
+                    MostrarMensaje('Seleccione un usuario', "ALERTA");
+                }
+            }
+            else {
+                MostrarMensaje('No puede editar un registro desactivado.', "ALERTA");
+            }
 
 
 

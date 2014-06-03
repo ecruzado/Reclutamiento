@@ -475,6 +475,28 @@
                 }
             });
 
+
+
+         //edades
+            $('select#Cargo_EdadInicio').change(function () {
+                var edadInicio = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("listaEdadGenerar","Perfil",new { area = "Intranet"})',
+                data: { edadInicio: edadInicio },
+                success: function (respuesta) {
+                    $("select#Cargo_EdadFin").empty();
+                    $.each(respuesta, function (i, item) {
+                        $("select#Cargo_EdadFin").append("<option value='"
+                        + item.IdEdad + "'>" + item.DesEdad + "</option>");
+                    }
+                );
+                }
+            });
+         })
+
+
+
             // btn Eliminar
             $('#btnEliminarUbigeo').click(function () {
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
