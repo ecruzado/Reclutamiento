@@ -243,7 +243,7 @@
                 solicitudNuevoCargoViewModel.nuevaSolicitud = Indicador.No;
                 var solNuevoCargo = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 solicitudNuevoCargoViewModel.SolicitudNuevoCargo = solNuevoCargo;
-                actualizarDatosAreas(solicitudNuevoCargoViewModel, solNuevoCargo.IdeArea);
+                actualizarDatosAreas(solicitudNuevoCargoViewModel, solNuevoCargo);
                 if ((solNuevoCargo.TipoEtapa == Etapa.Pendiente)||(solNuevoCargo.TipoEtapa==Etapa.Validado))
                 {
                     solicitudNuevoCargoViewModel.Accion = Accion.Aprobar;
@@ -609,16 +609,24 @@
             result = Json(listaResultado);
             return result;
         }
-        public void actualizarDatosAreas(SolicitudNuevoCargoViewModel model, int ideArea)
+        public void actualizarDatosAreas(SolicitudNuevoCargoViewModel model, SolicitudNuevoCargo solNuevo)
         {
-            List<string> datosArea = _solicitudNuevoCargoRepository.obtenerDatosArea(ideArea);
 
-            if (datosArea.Count != 0)
+            if ((solNuevo != null)&&(solNuevo.IdeArea!=null)&&(solNuevo.IdeDepartamento != null)&&(solNuevo.IdeDependencia != null))
             {
-                model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
-                model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
-                model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
-            }
+                model.Areas.Add(_areaRepository.GetSingle(x => x.IdeArea == solNuevo.IdeArea));
+                model.Departamentos.Add(_departamentoRepository.GetSingle(x => x.IdeDepartamento == solNuevo.IdeDepartamento));
+                model.Dependencias.Add(_dependenciaRepository.GetSingle(x => x.IdeDependencia == solNuevo.IdeDependencia && x.IdeSede == solNuevo.IdeSede));
+            } 
+            
+            //List<string> datosArea = _solicitudNuevoCargoRepository.obtenerDatosArea(solNuevo);
+
+            //if (datosArea.Count != 0)
+            //{
+            //    model.Areas.Add(new Area { IdeArea = Convert.ToInt32(datosArea[0]), NombreArea = datosArea[1] });
+            //    model.Departamentos.Add(new Departamento { IdeDepartamento = Convert.ToInt32(datosArea[2]), NombreDepartamento = datosArea[3] });
+            //    model.Dependencias.Add(new Dependencia { IdeDependencia = Convert.ToInt32(datosArea[4]), NombreDependencia = datosArea[5] });
+            //}
             
         }
 

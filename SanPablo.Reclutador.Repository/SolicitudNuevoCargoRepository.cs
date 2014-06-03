@@ -15,48 +15,51 @@
         {
         }
 
-        public List<string> obtenerDatosArea(int ideArea)
-        {
-            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
-            try
-            {
-                lcon.Open();
-                OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_CONSULTAR_DATOS_AREA");
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Connection = lcon;
+        //public List<string> obtenerDatosArea(SolicitudNuevoCargo solNuevo)
+        //{
+        //    OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+        //    try
+        //    {
+        //        lcon.Open();
+        //        OracleCommand cmd = new OracleCommand("PR_INTRANET.SP_CONSULTAR_DATOS_AREA");
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Connection = lcon;
 
-                cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = ideArea;
-                cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
-                cmd.ExecuteNonQuery();
+        //        cmd.Parameters.Add("p_ideArea", OracleType.Int32).Value = solNuevo.IdeArea;
+        //        cmd.Parameters.Add("p_ideDepartamento", OracleType.Int32).Value = solNuevo.IdeDepartamento;
+        //        cmd.Parameters.Add("p_ideDependencia", OracleType.Int32).Value = solNuevo.IdeDependencia;
+        //        cmd.Parameters.Add("p_ideSede", OracleType.Int32).Value = solNuevo.IdeSede;
+        //        cmd.Parameters.Add("p_cRetCursor", OracleType.Cursor).Direction = ParameterDirection.Output;
+        //        cmd.ExecuteNonQuery();
 
-                List<string> datos;
-                using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
-                {
-                    datos = new List<string>(6);
+        //        List<string> datos;
+        //        using (IDataReader lector = (OracleDataReader)cmd.ExecuteReader())
+        //        {
+        //            datos = new List<string>(6);
 
-                    if (lector.Read())
-                    {
-                        datos.Add(Convert.ToString(lector["IDEAREA"]));
-                        datos.Add(Convert.ToString(lector["NOMAREA"]));
-                        datos.Add(Convert.ToString(lector["IDEDEPARTAMENTO"]));
-                        datos.Add(Convert.ToString(lector["NOMDEPARTAMENTO"]));
-                        datos.Add(Convert.ToString(lector["IDEDEPENDENCIA"]));
-                        datos.Add(Convert.ToString(lector["NOMDEPENDENCIA"]));
+        //            if (lector.Read())
+        //            {
+        //                datos.Add(Convert.ToString(lector["IDEAREA"]));
+        //                datos.Add(Convert.ToString(lector["NOMAREA"]));
+        //                datos.Add(Convert.ToString(lector["IDEDEPARTAMENTO"]));
+        //                datos.Add(Convert.ToString(lector["NOMDEPARTAMENTO"]));
+        //                datos.Add(Convert.ToString(lector["IDEDEPENDENCIA"]));
+        //                datos.Add(Convert.ToString(lector["NOMDEPENDENCIA"]));
 
 
-                    }
-                }
-                return datos;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                lcon.Close();
-            }
-        }
+        //            }
+        //        }
+        //        return datos;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        lcon.Close();
+        //    }
+        //}
         public bool verificarCodCodigo(string codigoCargo, int ideSede)
         {
 

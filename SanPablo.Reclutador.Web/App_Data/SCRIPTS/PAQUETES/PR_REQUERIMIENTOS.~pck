@@ -1502,7 +1502,7 @@ BEGIN
    
    IF p_cCodSolicitud IS NOT NULL THEN
         
-      c_Where := c_Where || '  AND S.CODIGO = ''%'||p_cCodSolicitud||'%'' ' ;
+      c_Where := c_Where || '  AND S.CODIGO LIKE ''%'||p_cCodSolicitud||'%'' ' ;
         
     END IF;
    
