@@ -32,7 +32,7 @@
             $('#grdListPostulantesBD').jqGrid('clearGridData');
         });
 
-
+        
 
         $('#btnPDF').hide();
         $('#btnEXCEL').hide();
@@ -40,9 +40,29 @@
 
         $('#btnBuscarPostulantes').click(function () {
             var nombreCargo = $('#Solicitud_nombreCargo').val();
+            var edadInicio = $('#EdadInicio').val();
+            var edadFin = $('#EdadFin').val();
 
             if (nombreCargo.length > 0)
             {
+
+
+                if (edadInicio>0) {
+                    if (edadInicio > edadFin && edadFin!=0) {
+                        MostrarMensaje('La edad Inicial debe ser menor a la edad final', "ALERTA");
+                        return;
+                    }
+                }
+
+
+                if (edadFin > 0) {
+                    if (edadInicio > edadFin && edadFin != 0 && edadInicio!=0) {
+                        MostrarMensaje('La edad Inicial debe ser menor a la edad final', "ALERTA");
+                        return;
+                    }
+                }
+
+
                 if (validarFecha()) {
                     $('#grdListPostulantesBD').trigger('reloadGrid');
 
@@ -420,9 +440,13 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess" style="width:145px;text-align:left">Rango Edad </label>
                             <div class="controles" style="width: 300px" >
-                                @Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })
+                                @Html.DropDownListFor(model => model.EdadInicio, new SelectList(Model.listaEdad, "IdEdad", "DesEdad", Model.EdadInicio),new {maxlength="2" , style="width:100px;"})
                                 &nbsp;a&nbsp;
-                                 @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})  
+                                @Html.DropDownListFor(model => model.EdadFin, new SelectList(Model.listaEdad, "IdEdad", "DesEdad", Model.EdadFin),new {maxlength="2" ,style="width:100px;"})
+                                
+                                @*@Html.TextBoxFor(model => model.EdadInicio, new {@class = "input-xmini",maxlength="2" })
+                                
+                                 @Html.TextBoxFor(model => model.EdadFin, new { @class = "input-xmini", style="display:inline-block",maxlength="2"})  *@
                             </div>
                             
                         </div>
