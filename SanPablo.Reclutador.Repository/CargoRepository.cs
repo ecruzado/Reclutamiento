@@ -367,5 +367,50 @@
                 lcon.Close();
             }
         }
+
+
+
+        public List<Cargo> GetCargoxSede(Cargo obj)
+        {
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+
+                IDataReader ldrCargo;
+                Cargo lobCargo;
+                List<Cargo> llstCargo;
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_REQUERIMIENTOS.SP_GET_CARGOXSEDE");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+                lspcmd.Parameters.Add("p_nidsede", OracleType.Int32).Value = (obj.IdeSede == null ? 0 : obj.IdeSede);
+                lspcmd.Parameters.Add("p_niddependencia", OracleType.Int32).Value = (obj.IdeDependencia == null ? 0 : obj.IdeDependencia);
+                lspcmd.Parameters.Add("p_niddepartamento", OracleType.Int32).Value = (obj.IdeDepartamento == null ? 0 : obj.IdeDepartamento);
+                lspcmd.Parameters.Add("p_nidarea", OracleType.Int32).Value = (obj.IdeArea == null ? 0 : obj.IdeArea);
+                lspcmd.Parameters.Add("p_cretval", OracleType.Cursor).Direction = ParameterDirection.Output;
+                ldrCargo = (OracleDataReader)lspcmd.ExecuteReader();
+                lobCargo = null;
+                llstCargo = new List<Cargo>();
+
+
+                while (ldrCargo.Read())
+                {
+                    lobCargo = new Cargo();
+                    lobCargo.IdeCargo = Convert.ToInt32(ldrCargo["IDECARGO"]);
+                    lobCargo.NombreCargo = Convert.ToString(ldrCargo["NOMCARGO"]);
+                    llstCargo.Add(lobCargo);
+                }
+                ldrCargo.Close();
+                return llstCargo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
     }
 }

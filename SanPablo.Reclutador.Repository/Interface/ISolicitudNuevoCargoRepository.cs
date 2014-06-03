@@ -11,7 +11,7 @@
         /// </summary>
         /// <param name="ideArea"></param>
         /// <returns></returns>
-        List<string> obtenerDatosArea(int ideArea);
+        // List<string> obtenerDatosArea(SolicitudNuevoCargo solNuevo);
 
         /// <summary>
         /// Verificar si el codigo de cargo ya existe en la sede

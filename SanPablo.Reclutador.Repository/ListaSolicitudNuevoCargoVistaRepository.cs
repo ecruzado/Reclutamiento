@@ -45,7 +45,8 @@
                 lspcmd.Parameters.Add("p_cFecIni", OracleType.VarChar).Value = cFechaIncial;
                 lspcmd.Parameters.Add("p_cFeFin", OracleType.VarChar).Value = cFechaFinal;
                 lspcmd.Parameters.Add("p_cTipoSolicitud", OracleType.VarChar).Value = busqueda.TipoSolicitud;
-                lspcmd.Parameters.Add("p_cCodSolicitud", OracleType.VarChar).Value = busqueda.CodSolReqPersonal;
+                //lspcmd.Parameters.Add("p_cCodSolicitud", OracleType.VarChar).Value = busqueda.CodSolReqPersonal;
+                lspcmd.Parameters.Add("p_cIdSolicitud", OracleType.Int32).Value = busqueda.IdeSolReqPersonal;
                 lspcmd.Parameters.Add("p_cRetVal", OracleType.Cursor).Direction = ParameterDirection.Output;
 
                 drSolicitudConsulta = (OracleDataReader)lspcmd.ExecuteReader();

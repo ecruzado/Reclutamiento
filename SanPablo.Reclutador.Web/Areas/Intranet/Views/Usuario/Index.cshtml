@@ -24,8 +24,9 @@
         
         $('#btnEditar').click(function () {
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
-          
-            if (selr != null) {
+            var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
+            if (rowData.FLGESTADO == 'A') {
+                if (selr != null) {
 
                 var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
                 var codEstado = rowData.FLGESTADO;
@@ -38,8 +39,12 @@
                 }
 
              } else {
-                 MostrarMensaje('Seleccione un usuario', "ALERTA");
-             }
+                    MostrarMensaje('Seleccione un usuario', "ALERTA");
+                }
+            }
+            else {
+                MostrarMensaje('No puede editar un registro desactivado.', "ALERTA");
+            }
 
 
 

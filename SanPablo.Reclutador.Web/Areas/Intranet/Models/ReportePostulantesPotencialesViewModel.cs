@@ -33,5 +33,9 @@
 
         public string btnVerReporte { get; set; }
 
+        public List<Edad> ListaEdadInicio { get; set; }
+
+        public List<Edad> ListaEdadFin { get; set; }
+
     }
 }

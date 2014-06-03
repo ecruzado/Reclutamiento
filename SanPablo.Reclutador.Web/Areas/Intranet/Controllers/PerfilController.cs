@@ -291,6 +291,36 @@
             return cargoViewModel;
         }
 
+
+
+        /// <summary>
+        /// lista de departamentos
+        /// </summary>
+        /// <param name="ideDependencia"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult listaEdadGenerar(int edadInicio)
+        {
+            ActionResult result = null;
+            Dependencia objDepencia = new Dependencia();
+
+            List<Edad> ListaEdad = new List<Edad>();
+            Edad rangoEdad;
+
+            //Se obtiene las edades
+            for (int i = edadInicio; i < 71; i++)
+            {
+                rangoEdad = new Edad();
+                rangoEdad.IdEdad = i;
+                rangoEdad.DesEdad = i.ToString();
+                ListaEdad.Add(rangoEdad);
+            }
+
+            result = Json(ListaEdad);
+            return result;
+        }
+
+
         [ValidarSesion]
         public ActionResult Estudio()
         {
