@@ -391,12 +391,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objJson.Resultado = true;
                 objJson.Mensaje = "Finalizo la solicitud";
-
+                string plantilla = Server.MapPath(@"~/TemplateEmail/EnviarSolicitudFinalizada.htm");
 
                 if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
                 {
                     var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol);
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, ""+idSol, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, "" + idSol, listSends, listCopys, "",plantilla);
 
                 }
                 else
@@ -405,13 +405,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
                     {
-                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys);
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys, "", plantilla);
 
                     }
 
                     if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
                     {
-                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys);
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys, "", plantilla);
 
                     }
 
@@ -538,10 +538,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             _reclutamientoPersonaRepository.FinalizaContratacion(objReCluta);
 
+            string plantilla = Server.MapPath(@"~/TemplateEmail/EnviarSolicitudFinalizada.htm");
+            string comentario = model.ReclutaPersonal.MotivoCierre;
+
+
+
             if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
             {
                 var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.ReclutaPersonal.IdeSol);
-                bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys);
+                bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys, comentario, plantilla);
 
             }
             else
@@ -550,13 +555,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
                 {
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, ""+model.ReclutaPersonal.IdeSol, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys, comentario, plantilla);
 
                 }
 
                 if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
                 {
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys, comentario, plantilla);
 
                 }
 
@@ -725,11 +730,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         /// <param name="cargoDescripcion"></param>
         /// <param name="codCargo"></param>
         /// <returns></returns>
-        public bool EnviarCorreo(string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo, List<String> Sends, List<String> Copys)
+        public bool EnviarCorreo(string rolResponsable, string etapa, string tipoRq, string cargoDescripcion, string codCargo, List<String> Sends, List<String> Copys, string comentario, string plantilla)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             var usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-            var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
+            //var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitudFinalizada.htm");
+
+            var dir = plantilla;
+
             try
             {
                 SendMail enviarMail = new SendMail();
@@ -745,7 +753,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;    
                 }
                 
-                enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
+                enviarMail.EnviarCorreoFinal(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys,comentario);
                 return true;
             }
             catch (Exception Ex)

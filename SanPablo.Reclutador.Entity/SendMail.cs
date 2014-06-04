@@ -336,6 +336,55 @@
 
         }
 
+        /// <summary>
+        /// envia correo de finalizacion de solitud
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="etapa"></param>
+        /// <param name="responsable"></param>
+        /// <param name="tipoRequerimiento"></param>
+        /// <param name="observacion"></param>
+        /// <param name="cargo"></param>
+        /// <param name="codCargo"></param>
+        /// <param name="sends"></param>
+        /// <param name="suceso"></param>
+        /// <param name="copy"></param>
+        /// <param name="comentario"></param>
+        public void EnviarCorreoFinal(string dir, string etapa, string responsable, string tipoRequerimiento, string observacion,
+                              string cargo, string codCargo, List<String> sends, string suceso, List<String> copy,string comentario)
+        {
+
+
+            //Dar formato a textos
+            //Usuario = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Usuario.ToLower());
+            //Rol = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Rol.ToLower());
+            //Area = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Area.ToLower());
+            //Sede = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Sede.ToLower());
+            Usuario = Usuario;
+            Rol = Rol;
+            Area = Area;
+            Sede = Sede;
+
+            List<string> mail = cuerpoMail(etapa, tipoRequerimiento, responsable, observacion, suceso, cargo, codCargo);
+
+            string body = ObtenerCuerpoCorreo(dir, new List<string> { "cuerpo", "coment","usuario", "rol", "area", "sede" },
+                                                   new List<string> { mail[0], comentario,Usuario, Rol, Area, Sede });
+
+            EnviarMailAll(sends, copy, mail[1], body);
+
+        }
+
+
+        /// <summary>
+        /// envia correo de programacion
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="destinatario"></param>
+        /// <param name="entrevistaDesc"></param>
+        /// <param name="fecha"></param>
+        /// <param name="hora"></param>
+        /// <param name="postulante"></param>
+        /// <param name="cargo"></param>
         public void enviarCorreoProgramacion(string dir, string destinatario, string entrevistaDesc, string fecha, string hora, string postulante, string cargo)
         {
             //Dar formato a textos

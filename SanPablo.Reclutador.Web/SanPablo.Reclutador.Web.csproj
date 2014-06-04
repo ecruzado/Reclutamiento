@@ -529,6 +529,7 @@
     <Content Include="Scripts\ui.datepicker-es.js" />
     <Content Include="TemplateEmail\Bienvenido.htm" />
     <Content Include="TemplateEmail\EnviarSolicitud.htm" />
+    <Content Include="TemplateEmail\EnviarSolicitudFinalizada.htm" />
     <Content Include="TemplateEmail\noborrar.txt" />
     <Content Include="TemplateEmail\RestablecerPassword.htm" />
     <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
