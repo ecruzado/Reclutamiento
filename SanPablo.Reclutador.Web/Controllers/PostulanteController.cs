@@ -451,19 +451,32 @@
         }
 
         [HttpPost]
-        public ActionResult validarFechaNacimiento(DateTime date)
+        public ActionResult validarFechaNacimiento(string date)
         {
-            ActionResult result = null;
-
-            bool valido = false;
-            DateTime fechaValida = DateTime.Now.AddYears(-18);
-
-            if (date < fechaValida)
+            JsonMessage objJsonMessage = new JsonMessage();
+            try
             {
-                valido = true;
-                
+                DateTime fecha = Convert.ToDateTime(date);
+
+                DateTime fechaValida = DateTime.Now.AddYears(-18);
+
+                if (fecha < fechaValida)
+                {
+                    objJsonMessage.Resultado = true;
+                }
+                else
+                {
+                    objJsonMessage.Mensaje = "Debes ser mayor de edad";
+                    objJsonMessage.Resultado = false;
+                }
+                return Json(objJsonMessage);
             }
-            return result = Json(valido);
+            catch (Exception)
+            {
+                objJsonMessage.Mensaje = "Fecha no válida";
+                objJsonMessage.Resultado = false;
+                return Json(objJsonMessage);
+            }
             
         }
 

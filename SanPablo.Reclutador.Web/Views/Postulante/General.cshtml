@@ -20,6 +20,31 @@
 
     $(document).ready(function () {
 
+        var dates = $('#Postulante_FechaNacimiento').datepicker({
+            dateFormat: 'dd/mm/yy',
+            showOn: "button",
+            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+                buttonImageOnly: true,
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                //minDate: dateToday,
+                onSelect: function (selectedDate) {
+                   // if ($(this).valid()) {
+                        validarFechaNacimiento();
+                    //}
+                    //var option = this.id == "from" ? "minDate" : "maxDate",
+                    //    instance = $(this).data("datepicker");
+                }
+        });
+        $('#Postulante_FechaNacimiento').attr("readonly", "readonly");
+
+        var fecha = $('#Postulante_FechaNacimiento').val();
+        if (fecha != null) {
+            $('#Postulante_FechaNacimiento').val(fecha.substring(0, 10));
+        }
+
+
 
         // reconstruye la imagen para IE
         
@@ -258,9 +283,9 @@
                 url: '@Url.Action("validarFechaNacimiento","Postulante")',
                 data: { date: fecha },
                 success: function (respuesta) {
-                    if (!respuesta) {
+                    if (!respuesta.Resultado) {
                         var msjError = document.getElementById('errorFechaNacimiento');
-                        msjError.innerHTML = "  Debes ser mayor de edad";
+                        msjError.innerHTML = respuesta.Mensaje;
                         msjError.style.display = "block";
                         $('#Postulante_FechaNacimiento').val('');
 
@@ -329,33 +354,43 @@
         var nroMovil = $("#Postulante_TelefonoMovil").val();
         var nroFijo = $("#Postulante_TelefonoFijo").val();
         var msjError = document.getElementById('msjValidador');
+        var msjFechaNac = document.getElementById('errorFechaNacimiento');
         var result1 = $('#generalForm').valid();
-        if ((nroMovil == "") && (nroFijo == "")) {
-            msjError.innerHTML ="Debe ingresar un nro de contacto: movil y/o fijo";
-            msjError.style.display= "block";
-
+        var fechaNac = $('#Postulante_FechaNacimiento').val();
+        if ((fechaNac == "") || (fechaNac == null))
+        {
+            msjFechaNac.innerHTML = "Ingresar fecha de nacimiento";
+            msjFechaNac.style.display = "block";
         }
-        else {
-            msjError.style.display ="none";
-            var result = $('#generalForm').valid();
-            if (result) {
-                $.post('@Url.Action("General", "Postulante")',
-                         $("#generalForm").serialize(),
-                        function (respuesta) {
-                            if (respuesta.Resultado) {
-                                window.location = '@Url.Action("Index", "EstudioPostulante")';
+        else
+        {
+            if ((nroMovil == "") && (nroFijo == "")) {
+                msjError.innerHTML = "Debe ingresar un nro de contacto: movil y/o fijo";
+                msjError.style.display = "block";
+
+            }
+            else {
+                msjError.style.display = "none";
+                var result = $('#generalForm').valid();
+                if (result) {
+                    $.post('@Url.Action("General", "Postulante")',
+                             $("#generalForm").serialize(),
+                            function (respuesta) {
+                                if (respuesta.Resultado) {
+                                    window.location = '@Url.Action("Index", "EstudioPostulante")';
 
                                 }
-                            else {
-                                var mensj = document.getElementById("mensajeError");
-                                if (respuesta.Mensaje != null)
-                                { mensj.innerHTML = respuesta.Mensaje; }
-                                mensj.style.display = "block";
+                                else {
+                                    var mensj = document.getElementById("mensajeError");
+                                    if (respuesta.Mensaje != null)
+                                    { mensj.innerHTML = respuesta.Mensaje; }
+                                    mensj.style.display = "block";
                                 }
-                        });
-          }
+                            });
+                }
 
-      }
+            }
+        }
     }
     
     $('input[data-val=true]').on('blur', function () {
@@ -431,10 +466,11 @@
                               <input type="file" name="image" id="image" />
                                  @Html.TextBoxFor(model => model.nombreTemporalArchivo, new { style = "display:none" })
                               </div>
-
+                             <div class="tex-error" style="font-size:11px;color:gray"> Archivos válidos:jpeg,jpg,png</div>
                            @*  @Html.TextBoxFor(model => model.FotoPostulante, new { type = "file", accept = "image/*" , @class = "custom-file-input"})*@
                                   
                         </td>
+                       
                     </tr>
                     <tr>
                         <td class="colEtiqueta">
@@ -507,10 +543,11 @@
                             <label class="etiquetaFormulario" for="dtpfechanacimiento">Fecha de nacimiento <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
-                            @Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" , maxlength="10" })
-                            <div class="tex-error" style="font-size:12px;color:red"> 
+                            @*@Html.EditorFor(model => model.Postulante.FechaNacimiento, new { @class = "textoFormulario", onblur = "validarFechaNacimiento();" , maxlength="10" })*@
+                            @Html.TextBoxFor(model => model.Postulante.FechaNacimiento)
+                           @* <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.Postulante.FechaNacimiento)
-                            </div>
+                            </div>*@
                             <div  id="errorFechaNacimiento" class="tex-error" style="font-size:12px;color:red; display:none;" > 
                             </div>
                         </td>
