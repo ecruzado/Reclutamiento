@@ -314,6 +314,10 @@
                             solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
                         }
 
+                    
+
+
+
                     }
                     else
                     {
@@ -349,6 +353,20 @@
                         solicitudNuevoViewModel.Areas = new List<Area>();
                         solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
                     }
+
+
+                if (Roles.Analista_Seleccion.Equals(rolSession))
+                {
+                    solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "10") || (x.Valor == "04") || (x.Valor == "08"))));
+                    solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                }
+
+                if (Roles.Encargado_Seleccion.Equals(rolSession))
+                {
+                    solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "06") || (x.Valor == "10") || (x.Valor == "04") || (x.Valor == "08"))));
+                    solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                }
+
                 }
 
 

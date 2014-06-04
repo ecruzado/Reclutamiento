@@ -1621,6 +1621,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
             }
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            if (Roles.Analista_Seleccion.Equals(idRol))
+            {
+                model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "10") || (x.Valor == "04") || (x.Valor == "08"))));
+                model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            }
+
+            if (Roles.Encargado_Seleccion.Equals(idRol))
+            {
+                model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "03") || (x.Valor == "10") || (x.Valor == "04") || (x.Valor == "08"))));
+                model.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+            }
 
 
             Cargo objCargo = new Cargo();
