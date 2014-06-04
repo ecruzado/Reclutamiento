@@ -181,8 +181,10 @@
              </section>
             </div>
         </div>
-        <div id="PopupDialog" title="Cambiar Contrase&ntilde;a"></div>
-        <div id="CambioPass"><span id="spanCambioPass"></span></div>
+        <div id="popupDialog" title="Cambiar Contrase&ntilde;a"></div>
+        
+        <div id="cambioPass"><span id="spanCambioPass"></span></div>
+        
         <div id="divMensaje">
             <span id="spnMensaje"></span>
             <span id="spanMensaje"></span>
@@ -228,7 +230,7 @@
                 });
 
 
-                $('#PopupDialog').dialog({
+                $('#popupDialog').dialog({
                     autoOpen: false,
                     width: 500,
                     height: 300,
@@ -237,7 +239,7 @@
                     buttons: {
                         "Grabar": function () {
                             if ($("#frmPopupPass").validate().form()) {
-                                $('#spanCambioPass').dialog('open');
+                                $('#cambioPass').dialog('open');
                             }
                         },
                         "Cancelar": function () {
@@ -248,7 +250,7 @@
 
 
                 $("#spanCambioPass").html("¿Desea cambiar la Contraseña?")
-                $('#CambioPass').dialog({
+                $('#cambioPass').dialog({
                     autoOpen: false,
                     modal: true,
                     title: "CONFIRMACIÓN",
@@ -356,10 +358,10 @@
 
             function ResetPass() {
                 
-                var dialogDiv = $('#PopupDialog');
+                var dialogDiv = $('#popupDialog');
                 $.get('@Url.Action("InicializaPopup", "Usuario",new { area = "Intranet" })', function (data) {
                     dialogDiv.html(data);
-                    $.validator.unobtrusive.parse($("#PopupDialog"));
+                    $.validator.unobtrusive.parse($("#popupDialog"));
                     dialogDiv.dialog('open');
                 });
                 return false;
