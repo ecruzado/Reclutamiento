@@ -711,7 +711,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                             cell = new string[]
                             {
                                 item.DescripcionExperiencia,
-                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
+                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S) y " +item.CantidadMesesExperiencia.ToString() + " MES(ES)" 
                             }
                         }).ToArray();
 
@@ -734,7 +734,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                             cell = new string[]
                             {
                                 item.DescripcionExperiencia,
-                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S)",
+                                item.CantidadAnhosExperiencia.ToString() + " AÑO(S) y " +item.CantidadMesesExperiencia.ToString() + " MES(ES)" 
                             }
                         }).ToArray();
 
