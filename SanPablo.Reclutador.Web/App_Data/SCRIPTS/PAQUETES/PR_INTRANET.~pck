@@ -1704,11 +1704,24 @@ create or replace package body PR_INTRANET is
                               AND RP.TIPSOL = ''01''
                               AND RP.ESTPOSTULANTE =''09''
                               AND RP.ESTACTIVO=''A'') CONTRATADOS , ' ||
-                               'S.FECCREACION FECHACREACION,R.IDROL ,R.DSCROL , '||
+                              '(SELECT C.FECSUCESO
+                                FROM logsolnuevo_cargo C
+                                 WHERE C.Idesolnuevocargo = S.Idesolnuevocargo
+                                  AND  C.Idelogsolnuevocargo =
+                                         (SELECT MIN(H.Idelogsolnuevocargo)
+                                                   FROM logsolnuevo_cargo H
+                                                   WHERE H.Idesolnuevocargo = C.Idesolnuevocargo)
+                                      ) FECHACREACION,R.IDROL ,R.DSCROL , '||
                                '(PR_REQUERIMIENTOS.FN_NOMRESPONS_SOL(S.IDESOLNUEVOCARGO,''N'')) NOMRESPONSABLE, LS.TIPETAPA,(PR_INTRANET.FN_VALOR_GENERAL(''ETAPA'',LS.TIPETAPA)) TETAPA, '||
                                '(SELECT C.VERSION FROM CARGO C WHERE C.IDECARGO = S.IDECARGO) VERSION, '||
                                'DECODE(S.FECPUBLICACION,NULL,''NO'',''SI'') PUBLICADO , '||
-                               ' S.FECPUBLICACION, S.FECCREACION,S.FECEXPIRACION,LS.USRESPONSABLE '||
+                               ' S.FECPUBLICACION, S.FECCREACION,
+                               (SELECT C.Fecsuceso 
+                                FROM logsolnuevo_cargo C
+                                 WHERE C.Tipetapa = ''08''
+                                 AND C.Idesolnuevocargo = S.Idesolnuevocargo
+                                 and rownum<2
+                                  ) FECEXPIRACION,LS.USRESPONSABLE '||
                                'FROM SOLNUEVO_CARGO S, LOGSOLNUEVO_CARGO LS LEFT JOIN ROL R ON (R.IDROL = LS.ROLRESPONSABLE)  '||
                                'WHERE LS.IDESOLNUEVOCARGO = S.IDESOLNUEVOCARGO '||
                                'AND LS.FECSUCESO = (SELECT MAX (FECSUCESO) FROM  LOGSOLNUEVO_CARGO LN '||
@@ -1767,7 +1780,7 @@ create or replace package body PR_INTRANET is
     
     END IF;
   
-    cWhere := cWhere || ' ORDER BY SN.IDESOLNUEVOCARGO  ';
+    cWhere := cWhere || ' ORDER BY SN.TETAPA DESC, SN.IDESOLNUEVOCARGO  ';
   
     cQUERY := cCONSULTA || cWhere;
   

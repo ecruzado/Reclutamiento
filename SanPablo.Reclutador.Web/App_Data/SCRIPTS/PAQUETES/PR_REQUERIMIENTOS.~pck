@@ -214,7 +214,13 @@ PROCEDURE SP_CARGOS_SEDE(p_ideSede IN SEDE.IDESEDE%TYPE,
                          
                          
 FUNCTION FN_EXISTE_RESULTADO_EXAMEN(p_ideReclutaExamen  IN RECLU_PERSO_EXAMEN.IDERECLUPERSOEXAMEN%TYPE
-                                    ) RETURN VARCHAR;                        
+                                    ) RETURN VARCHAR;  
+                                    
+ PROCEDURE SP_GET_CARGOXSEDE(p_nIdSede         IN NUMBER,
+                              p_nIdDependencia  IN NUMBER,
+                              p_nIdDepartamento IN NUMBER,
+                              p_nIdArea         IN NUMBER,
+                              p_cRetVal         OUT SYS_REFCURSOR);                      
 
 END PR_REQUERIMIENTOS;
 /
@@ -582,8 +588,8 @@ cCount NUMBER;
 BEGIN
   SELECT COUNT(SN.CODCARGO) INTO cCount
   FROM SOLNUEVO_CARGO SN   
-  WHERE UPPER(SN.CODCARGO) = UPPER(p_codCargo)
-  AND   SN.IDESEDE = p_idSede;
+  WHERE UPPER(SN.CODCARGO) = UPPER(p_codCargo);
+  --AND   SN.IDESEDE = p_idSede;
 
   RETURN NVL(cCount,0);
   
@@ -2266,7 +2272,7 @@ BEGIN
         c_edadInicio:= p_edadInicio;
       END IF;
       
-      IF p_edadFin IS NULL THEN
+      IF p_edadFin IS NULL or p_edadFin=0 THEN
         c_edadFin := 100;
       ELSE
         c_edadFin:= p_edadFin;
@@ -2673,6 +2679,69 @@ BEGIN
   
 END FN_EXISTE_RESULTADO_EXAMEN;
 
+/* ------------------------------------------------------------
+    Nombre      : SP_GET_CARGOXSEDE
+    Proposito   : Funci?n para determinar si un examen tiene resultado
+    Referencias : Sistema de Reclutamiento y Selecci?n de Personal
+    Parametros  :               
+                                  
+    Log de Cambios
+      Fecha       Autor                Descripcion
+      29/04/2014  Jaqueline Ccana       Creaci?n    
+  ------------------------------------------------------------ */
+  PROCEDURE SP_GET_CARGOXSEDE(p_nIdSede         IN NUMBER,
+                              p_nIdDependencia  IN NUMBER,
+                              p_nIdDepartamento IN NUMBER,
+                              p_nIdArea         IN NUMBER,
+                              p_cRetVal         OUT SYS_REFCURSOR) IS
+  
+    nIdSede         number(8);
+    nIdDependencia  number(8);
+    nIdDepartamento number(8);
+    nIdArea         number(8);
+  
+  BEGIN
+  
+    IF p_nIdSede IS NULL THEN
+      nIdSede := 0;
+    ELSE
+      nIdSede := p_nIdSede;
+    END IF;
+  
+    IF p_nIdDependencia IS NULL THEN
+      nIdDependencia := 0;
+    ELSE
+      nIdDependencia := p_nIdDependencia;
+    END IF;
+  
+    IF p_nIdDepartamento IS NULL THEN
+      nIdDepartamento := 0;
+    ELSE
+      nIdDepartamento := p_nIdDepartamento;
+    END IF;
+    IF p_nIdArea IS NULL THEN
+      nIdArea := 0;
+    ELSE
+      nIdArea := p_nIdArea;
+    END IF;
+  
+    OPEN P_CRETVAL FOR
+      SELECT DISTINCT C.IDECARGO, C.NOMCARGO
+        FROM CARGO C
+       WHERE C.ESTACTIVO = 'A'
+         AND NVL(C.VERSION, 1) =
+             (SELECT NVL(MAX(C1.VERSION), 1)
+                FROM CARGO C1
+               WHERE C1.ESTACTIVO = 'A'
+                 AND C1.CODCARGO = C.CODCARGO)
+         AND (nIdSede = 0 OR C.IDESEDE = nIdSede)
+         AND (nIdDependencia = 0 OR C.IDEDEPENDENCIA = nIdDependencia)
+         AND (nIdDepartamento = 0 OR C.IDEDEPARTAMENTO = nIdDepartamento)
+         AND (nIdArea = 0 OR C.IDEAREA = nIdArea)
+         AND C.TIPETAPA IN ('08','06','04','10')
+       ORDER BY C.NOMCARGO asc;
+  
+  END SP_GET_CARGOXSEDE;
 
 
 END PR_REQUERIMIENTOS;
