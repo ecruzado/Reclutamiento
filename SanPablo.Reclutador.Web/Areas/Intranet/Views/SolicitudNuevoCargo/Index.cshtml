@@ -144,12 +144,12 @@
                     }
                 });
             },
-            colNames: ['Estado', '', '', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre-Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
+            colNames: ['Estado', '', 'Código', '', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre-Sel.', 'Eval.', 'Selec.', 'Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom. Responsable', 'Publicado', 'Etapa', ''],
                     colModel: [
                             { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                             { name: 'EstadoActivo', index: 'EstadoActivo', sortable: false, align: 'center', width: 50, hidden: true },
-                            { name: 'IdeSolicitudNuevo', index: 'IdeSolicitudNuevo', sortable: false, align: 'center', hidden: true },
-                            { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, width: 100 },
+                            { name: 'IdeSolicitudNuevo', index: 'IdeSolicitudNuevo', sortable: false, align: 'center', width: 100 },
+                            { name: 'Codigo', index: 'Codigo', align: 'center', sortable: false, hidden: true },
                             { name: 'IdCargo', index: 'IdCargo', align: 'left', sortable: false, hidden: true },
                             { name: 'Cargo', index: 'Cargo', align: 'left', sortable: false, width: 200 },
                             { name: 'ideDependencia', index: 'Cargo', align: 'left', sortable: false, hidden: true },
