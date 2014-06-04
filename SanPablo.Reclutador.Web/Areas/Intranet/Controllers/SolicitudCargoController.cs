@@ -1226,7 +1226,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 retorno = _solReqPersonalRepository.EnviaSolicitud(model.SolReqPersonal);
                                 var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.SolReqPersonal.idUsuarioResp &&
                                 x.TipUsuario == TipUsuario.Instranet && x.FlgEstado == IndicadorActivo.Activo);
-                                MensajeInformativo = "Se envío la solicitud de reemplazo con código: " + model.SolReqPersonal.CodSolReqPersonal + " al usuario: " + objUsuario.CodUsuario + " con rol: " + objRol.DscRol;
+                                MensajeInformativo = "El proceso de envío se realizo exitosamente. La solicitud ha sido derivada al " + objRol.DscRol+ ", "+objUsuario.DscNombres+" "+objUsuario.DscApePaterno;
 
                             }
                             else
@@ -1540,7 +1540,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         if (retorno>0)
                         {
                             objJson.Resultado = true;
-                            mensaje = "Se acepto la Solicitud de reemplazo: " + model.SolReqPersonal.CodSolReqPersonal + " , se envió la solicitud al usuario:" + objUsuario.CodUsuario + " con rol:" + objRol.DscRol;
+                            mensaje = "El proceso de envío se realizo exitosamente. La solicitud ha sido derivada al" + objRol.DscRol + ", " + objUsuario.DscNombres + " " + objUsuario.DscApePaterno;
                         }
                     }
                     else
@@ -2009,6 +2009,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objRecluta.TipPuesto = objSol.TipPuesto;
                     objRecluta.IdSede = objSol.IdeSede;
                     objRecluta.IdeCargo = objSol.IdeCargo;
+
+                    
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
                     //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
                     _solReqPersonalRepository.verificaPotenciales(objRecluta);
 
@@ -2031,9 +2035,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
-                    
-                    bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Reemplazo", objSol.nombreCargo,""+ model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
+                    if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                    {
+                        bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Ampliación", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
 
+                    }
+                    else
+                    {
+                        bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Reemplazo", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
+
+                    }
+                    
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publico la Solicitud";
 

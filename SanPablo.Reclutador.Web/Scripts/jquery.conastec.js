@@ -69,7 +69,7 @@
         var defecto = {
             autoOpen: false,
             modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal"
+            title: "INFORMATIVO"
         };
         var opciones = $.extend(defecto, opciones);
         this.dialog(opciones);

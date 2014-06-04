@@ -1249,10 +1249,12 @@ namespace SanPablo.Reclutador.Repository
          /// <summary>
          /// inserta la solicitud de Ampliacion de Cargo
          /// </summary>
-         public int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolResponsable, string indArea )
+         public SolReqPersonal insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolResponsable, string indArea)
          {
              OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
 
+
+             SolReqPersonal objSol = new SolReqPersonal();
              try
              {
                  lcon.Open();
@@ -1275,9 +1277,17 @@ namespace SanPablo.Reclutador.Repository
                  cmd.Parameters.Add("p_responsableSig", OracleType.Int32).Value = idRolResponsable;
                  cmd.Parameters.Add("p_tipoSolicitud", OracleType.VarChar).Value = solicitudAmpliacion.TipoSolicitud;
                  cmd.Parameters.Add("p_indicArea", OracleType.VarChar).Value = indArea;
-                 cmd.Parameters.Add("p_cRetVal", OracleType.Int32).Direction = ParameterDirection.Output;
+                 cmd.Parameters.Add("p_cRetVal", OracleType.Number).Direction = ParameterDirection.Output;
+                 cmd.Parameters.Add("p_nSol", OracleType.Number).Direction = ParameterDirection.Output;
+                 
+                 
                  cmd.ExecuteNonQuery();
-                 return Convert.ToInt32(cmd.Parameters["p_cRetVal"].Value);
+
+                 objSol.idUsuarioResp = Convert.ToInt32(cmd.Parameters["p_cRetVal"].Value);
+                 objSol.IdeSolReqPersonal = Convert.ToInt32(cmd.Parameters["p_nSol"].Value);
+
+
+                 return objSol;
 
              }
              catch (Exception ex)

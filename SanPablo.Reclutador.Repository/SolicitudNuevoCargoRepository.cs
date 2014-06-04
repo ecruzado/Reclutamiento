@@ -93,9 +93,12 @@
                 lcon.Close();
             }
         }
-        public Int32 insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea)
+
+        public SolicitudNuevoCargo insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea)
         {
             OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            
+            SolicitudNuevoCargo objSol = new SolicitudNuevoCargo();
 
             try
             {
@@ -123,9 +126,16 @@
                 cmd.Parameters.Add("p_indArea", OracleType.VarChar).Value = indArea;
                 cmd.Parameters.Add("p_usuarioCreacion", OracleType.VarChar).Value = solicitudNuevo.UsuarioCreacion;
                 cmd.Parameters.Add("p_etapa", OracleType.VarChar).Value = logSolicitudNuevo.TipoEtapa;
-                cmd.Parameters.Add("p_ideUsuarioResp", OracleType.Int32).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("p_ideUsuarioResp", OracleType.Number).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("p_ideSol", OracleType.Number).Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
-                return Convert.ToInt32(cmd.Parameters["p_ideUsuarioResp"].Value);
+                
+                objSol.IdeUsuarioResponsable= Convert.ToInt32(cmd.Parameters["p_ideUsuarioResp"].Value);
+                objSol.IdeSolicitudNuevoCargo = Convert.ToInt32(cmd.Parameters["p_ideSol"].Value);
+
+                return objSol;
+                    
+                    
 
             }
             catch (Exception ex)

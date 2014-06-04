@@ -28,7 +28,7 @@
         /// <param name="logSolicitudNuevo"></param>
         /// <param name="indArea"></param>
         /// <returns></returns>
-        Int32 insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea);
+        SolicitudNuevoCargo insertarSolicitudNuevo(SolicitudNuevoCargo solicitudNuevo, LogSolicitudNuevoCargo logSolicitudNuevo, string indArea);
 
 
         LogSolicitudNuevoCargo responsablePublicacion(int ideCargo, int ideSede);

@@ -845,7 +845,7 @@
                     <label>Estado</label>
                     @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSede, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
-                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { style = "display:none;" })
+                    @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { style = "display:none;" })
                     <button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>
                     @*@Html.TextBoxFor(model => model.SolicitudRequerimiento.EstadoActivo, new { @class = "btn btn-primary btn-small disabled", disabled = "disabled", @style ="width:60px" })*@
                 </div>            
@@ -857,7 +857,7 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { @class = "input-small", disabled = "disabled" })
+                                @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { @class = "input-small", @readonly = "readonly" })
                             </div>
                         </div>
                     </td>

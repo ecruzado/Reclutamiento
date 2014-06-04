@@ -76,7 +76,7 @@ namespace SanPablo.Reclutador.Repository.Interface
 
         List<EvaluacionRequerimiento> ListaEvaluacion(int ideSolicitudReqPersonal);
 
-        int insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolRespSgte, string indArea);
+        SolReqPersonal insertarSolicitudAmpliacion(SolReqPersonal solicitudAmpliacion, int ideUsuarioSuceso, int ideRolSuceso, string etapa, int idRolRespSgte, string indArea);
 
         /// <summary>
         /// DETERMINA EL USUARIO Y ROL RESPONSABLE DE LA PUBLICACION

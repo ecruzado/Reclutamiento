@@ -231,7 +231,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-            
+            SolReqPersonal obj = new SolReqPersonal();
 
             try
             {
@@ -293,16 +293,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     listCopys = new List<String>();
                     listCopys = (List<String>)lista[1];
 
-
+                    
 
                     if ((rolResponsable != 0) && (etapaInicio != ""))
                     {
-                        var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, indicadorArea);
-                        if (idUsuarioResponsable != -1)
-                        {
-                            var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
+                        obj = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, indicadorArea);
 
-                            bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, ""+solicitudAmpliacion.IdeCargo, listSends, listCopys);
+
+
+
+                        if (obj.idUsuarioResp != -1)
+                        {
+                            var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == obj.idUsuarioResp);
+
+                            bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, "" + obj.IdeSolReqPersonal, listSends, listCopys);
                             string msj = "";
                             string msjRspta = "";
                             if (!flag)
@@ -2191,6 +2195,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objRecluta.TipPuesto = objSol.TipPuesto;
                     objRecluta.IdSede = objSol.IdeSede;
                     objRecluta.IdeCargo = objSol.IdeCargo;
+
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
                     //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
                     _solReqPersonalRepository.verificaPotenciales(objRecluta);
 
@@ -2214,7 +2221,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
 
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", model.SolReqPersonal.nombreCargo, ""+model.SolReqPersonal.IdeSolReqPersonal, listSends, listCopys);
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Ampliación", objCargo.NombreCargo, "" + model.SolReqPersonal.IdeSolReqPersonal, listSends, listCopys);
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publicó la Solicitud exitosamente";

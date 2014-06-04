@@ -425,7 +425,7 @@
             enviar.Area = usuarioSession.AREADES;
             try
             {
-                enviar.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, ""+solicitudNuevo.IdeCargo, Sends, "Suceso", Copys);
+                enviar.EnviarCorreoVarios(dir.ToString(), logSolicitud.TipoEtapa, usuario.DscNombres, "Nuevo Cargo", logSolicitud.Observacion, solicitudNuevo.NombreCargo, ""+solicitudNuevo.IdeSolicitudNuevoCargo, Sends, "Suceso", Copys);
                 return true;
             }
             catch (Exception)
