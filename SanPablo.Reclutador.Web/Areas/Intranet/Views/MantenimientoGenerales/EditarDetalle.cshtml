@@ -195,7 +195,7 @@
                 <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Valor <span class="text-error">*</span></label>
             </td>
             <td class="colInput">
-                @Html.TextBoxFor(model => model.TablaSubDetalle.Valor,  new { onblur = "aMays(event, this)", maxlength = "50" })
+                @Html.TextBoxFor(model => model.TablaSubDetalle.Valor,  new { onblur = "aMays(event, this)", maxlength = "3" })
                 <div class="tex-error" style="font-size:12px;color:red"> 
                 @Html.ValidationMessageFor(model => model.TablaSubDetalle.Valor)
                 </div>

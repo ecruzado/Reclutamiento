@@ -365,7 +365,7 @@
             conocimientoPostulanteGeneralViewModel.TiposConocimientoOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             
-            conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica));
+            conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TiponombreOfimatica).OrderBy(x=>x.Descripcion));
             conocimientoPostulanteGeneralViewModel.TipoNombresOfimatica.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
@@ -482,11 +482,11 @@
 
             conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
-            conocimientoPostulanteGeneralViewModel.TipoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma));
+            conocimientoPostulanteGeneralViewModel.TipoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoIdioma).OrderBy(x=>x.Descripcion));
             conocimientoPostulanteGeneralViewModel.TipoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 
-            conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma));
+            conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoIdioma).OrderBy(x=>x.Descripcion));
             conocimientoPostulanteGeneralViewModel.TipoConocimientoIdiomas.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNivelesConocimiento = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNivelConocimiento));
@@ -590,7 +590,7 @@
             conocimientoPostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
             conocimientoPostulanteGeneralViewModel.ConocimientoGeneral = new ConocimientoGeneralPostulante();
 
-            conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral));
+            conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoConocimientoGral).OrderBy(x=>x.Descripcion));
             conocimientoPostulanteGeneralViewModel.TipoConocimientoGenerales.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             conocimientoPostulanteGeneralViewModel.TipoNombresConocimientosGrales = new List<DetalleGeneral>();
@@ -608,7 +608,7 @@
         {
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
-            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, tipoConocimiento));
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoConocimientoGral, tipoConocimiento).OrderBy(x=>x.Descripcion));
             listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTRO" });
             result = Json(listaResultado);
             return result;

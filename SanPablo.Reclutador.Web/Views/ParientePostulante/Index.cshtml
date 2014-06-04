@@ -94,9 +94,10 @@
                     $("#spanMensaje").html('Seleccione un item a editar.');
                     $("#divMensaje").dialog({
                         title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "OK": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -110,6 +111,7 @@
 
                     $("#divMensaje").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable: false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarPariente(idePariente); $(this).dialog("close"); location.reload(true) },
@@ -122,9 +124,10 @@
                     $("#spanMensaje").html('Seleccione un item a eliminar.');
                     $("#divMensaje").dialog({
                         title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "OK": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }

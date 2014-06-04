@@ -37,7 +37,8 @@ PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
                             p_indArea           IN VARCHAR2,
                             p_usuarioCreacion   IN SOLNUEVO_CARGO.USRCREACION%TYPE,
                             p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
-                            p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE);
+                            p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE,
+                            p_ideSol            OUT number);
                             
 PROCEDURE SP_INSERTAR_LOG(p_ideSolicitudNuevo     IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
                           p_ideSede               IN SEDE.IDESEDE%TYPE,
@@ -90,7 +91,9 @@ PROCEDURE SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%
                                 p_responsableSig   IN ROL.IDROL%TYPE,
                                 p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
                                 p_indicArea        IN VARCHAR2,
-                                p_cRetVal          OUT NUMBER); 
+                                p_cRetVal          OUT NUMBER,
+                                p_nSol             OUT NUMBER
+                                );
                                 
 PROCEDURE SP_RESPONSABLE_PUBLICACION(p_idSolicitudNuevo IN SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE,
                                      p_idSede           IN SEDE.IDESEDE%TYPE,
@@ -257,7 +260,10 @@ PROCEDURE SP_INSERTAR_NUEVO(p_ideSede           IN SEDE.IDESEDE%TYPE,
                             p_indArea           IN VARCHAR2,
                             p_usuarioCreacion   IN SOLNUEVO_CARGO.USRCREACION%TYPE,
                             p_etapa             IN DETALLE_GENERAL.VALOR%TYPE,
-                            p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE)IS
+                            p_ideUsuarioResp    OUT LOGSOLNUEVO_CARGO.USRESPONSABLE%TYPE,
+                            p_ideSol            OUT number
+                            
+                            )IS
                              
                         
 c_idesolCargo SOLNUEVO_CARGO.IDESOLNUEVOCARGO%TYPE;
@@ -287,6 +293,8 @@ BEGIN
   SELECT IDESOLNUEVOCARGO_SQ.NEXTVAL
   INTO c_idesolCargo
   FROM DUAL; 
+  
+  p_ideSol:=c_idesolCargo;
   
   BEGIN
     INSERT INTO SOLNUEVO_CARGO
@@ -978,7 +986,9 @@ PROCEDURE SP_INSERTAR_AMPLIACION(p_ideCargo         IN SOLREQ_PERSONAL.IDECARGO%
                                 p_responsableSig   IN ROL.IDROL%TYPE,
                                 p_tipoSolicitud    IN SOLREQ_PERSONAL.TIPSOL%TYPE,
                                 p_indicArea        IN VARCHAR2,
-                                p_cRetVal          OUT NUMBER) 
+                                p_cRetVal          OUT NUMBER,
+                                p_nSol             OUT NUMBER
+                                ) 
 
 IS
 c_ideLogSequency  LOGSOLREQ_PERSONAL.IDELOGSOLREQ_PERSONAL%TYPE;
@@ -1023,6 +1033,8 @@ BEGIN
     SELECT IDESOLAMPLIACION_SQ.NEXTVAL
     INTO c_codAmpliacion 
     FROM DUAL;
+    
+    p_nSol:=c_ideLogSequency;
     
    p_cRetVal := c_ideUsuarioResp;
   BEGIN 

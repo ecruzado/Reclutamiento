@@ -330,7 +330,7 @@
             url: '@Url.Action("IndicadorSession","Postulante")',
             success: function (respuesta) {
                 if (!respuesta.Resultado) {
-                    MostrarMensaje("Gracias por registrarse. Te recomentamos registrar tus datos en la sección mi CV","SAN PABLO");
+                    MostrarMensaje("Gracias por registrarse. Te recomentamos registrar tus datos en la sección mi CV","INFORMATIVO");
 
                 }
             }
@@ -342,7 +342,7 @@
         var nroFijo = $("#Postulante_TelefonoFijo").val();
         var msjError = document.getElementById('msjValidador');
         if ((nroMovil == "") && (nroFijo == "")) {
-            msjError.innerHTML = "Debe ingresar un nro de contancto: movil y/o fijo";
+            msjError.innerHTML = "Debe ingresar un nro de contancto: móvil y/o fijo";
             msjError.style.display = "block";
 
         }
@@ -365,7 +365,7 @@
         else
         {
             if ((nroMovil == "") && (nroFijo == "")) {
-                msjError.innerHTML = "Debe ingresar un nro de contacto: movil y/o fijo";
+                msjError.innerHTML = "Debe ingresar un nro de contacto: móvil y/o fijo";
                 msjError.style.display = "block";
 
             }

@@ -49,11 +49,12 @@
                 if (ideOfimatica != null) {
                     $("#spanMensaje7").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje7").dialog({
-                        title: 'SAN PABLO',
+                        title: 'CONFIRMACIÓN',
+                        resizable: false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOfimatica(ideOfimatica); $(this).dialog("close"); $('#grdListOfimatica').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
@@ -62,10 +63,11 @@
                 else {
                     $("#spanMensaje7").html('Seleccionar un item a eliminar');
                     $("#divMensaje7").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -79,10 +81,11 @@
                 else {
                     $("#spanMensaje7").html('Seleccionar un item a editar');
                     $("#divMensaje7").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -132,10 +135,11 @@
                     $("#spanMensaje8").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje8").dialog({
                         title: 'SAN PABLO',
+                        resizable: false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarIdioma(ideIdioma); $(this).dialog("close"); $('#grdListIdioma').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
@@ -144,10 +148,11 @@
                 else {
                     $("#spanMensaje8").html('Seleccionar un item a eliminar');
                     $("#divMensaje8").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -161,10 +166,11 @@
                 else {
                     $("#spanMensaje8").html('Seleccionar un item a editar');
                     $("#divMensaje8").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
+                        resizable: false,
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -213,11 +219,11 @@
                 if (ideOtrosConocimientos != null) {
                     $("#spanMensaje9").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje9").dialog({
-                        title: 'SAN PABLO',
+                        title: 'CONFIRMAR',
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOtrosConocimientos(ideOtrosConocimientos); $(this).dialog("close"); $('#grdListOtrosConocimientos').trigger('reloadGrid'); },
-                            "Cancel": function () { $(this).dialog("close"); }
+                            "Cancelar": function () { $(this).dialog("close"); }
                         }
                     });
 
@@ -226,10 +232,10 @@
                 else {
                     $("#spanMensaje9").html('Seleccionar un item a eliminar');
                     $("#divMensaje9").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }
@@ -243,10 +249,10 @@
                 else {
                     $("#spanMensaje9").html('Seleccionar un item a editar');
                     $("#divMensaje9").dialog({
-                        title: 'SAN PABLO',
+                        title: 'ALERTA',
                         modal: true,
                         buttons: {
-                            "Ok": function () { $(this).dialog("close"); }
+                            "Aceptar": function () { $(this).dialog("close"); }
                         }
                     });
                 }

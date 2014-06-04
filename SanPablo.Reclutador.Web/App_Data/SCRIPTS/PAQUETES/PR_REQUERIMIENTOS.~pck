@@ -131,7 +131,8 @@ PROCEDURE SP_LISTA_SOLGRAL(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                            p_cFecIni         IN VARCHAR2,
                            p_cFeFin          IN VARCHAR2,
                            p_cTipoSolicitud  IN VARCHAR2,
-                           p_cCodSolicitud   IN VARCHAR2,
+                          -- p_cCodSolicitud   IN VARCHAR2,
+                           p_cIdSolicitud   IN NUMBER,
                            p_cRetVal         OUT SYS_REFCURSOR);
 
 PROCEDURE SP_LISTA_SOLNUEVO(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
@@ -1297,7 +1298,8 @@ PROCEDURE SP_LISTA_SOLGRAL(p_nIdCargo        IN SOLREQ_PERSONAL.IDECARGO%TYPE,
                            p_cFecIni         IN VARCHAR2,
                            p_cFeFin          IN VARCHAR2,
                            p_cTipoSolicitud  IN VARCHAR2,
-                           p_cCodSolicitud   IN VARCHAR2,
+                          -- p_cCodSolicitud   IN VARCHAR2,
+                           p_cIdSolicitud   IN NUMBER,
                            p_cRetVal         OUT SYS_REFCURSOR)IS
           
 c_Consulta1 VARCHAR2(2000):=NULL;
@@ -1506,9 +1508,15 @@ BEGIN
     
     END IF;
    
-   IF p_cCodSolicitud IS NOT NULL THEN
+   /*IF p_cCodSolicitud IS NOT NULL THEN
         
       c_Where := c_Where || '  AND S.CODIGO LIKE ''%'||p_cCodSolicitud||'%'' ' ;
+        
+    END IF;*/
+    
+    IF p_cIdSolicitud != 0 THEN
+        
+      c_Where := c_Where || '  AND S.IDESOLICITUD LIKE ''%'||p_cIdSolicitud||'%'' ' ;
         
     END IF;
    
@@ -2366,7 +2374,7 @@ pjteTotal NUMBER;
 
 BEGIN
   
-  SELECT SUM(RPE.NOTAFINAL) 
+  SELECT AVG(RPE.NOTAFINAL) 
   INTO pjteTotal
   FROM RECLU_PERSO_EXAMEN RPE
   WHERE RPE.IDERECLUTAPERSONA = p_ideReclutaPersona;
@@ -2403,7 +2411,7 @@ PROCEDURE SP_REPORTE_POST_POTENCIAL(p_ideCargo        IN CARGO.IDECARGO%TYPE,
                                     p_cRetVal         OUT SYS_REFCURSOR )IS
 
 
-c_ideCargo      CARGO.NOMCARGO%TYPE;
+c_ideCargo         CARGO.NOMCARGO%TYPE;
 c_areaEstudio      DETALLE_GENERAL.VALOR%TYPE;
 c_rangoSalario     DETALLE_GENERAL.VALOR%TYPE;
 c_ideSede          SEDE.IDESEDE%TYPE;                        

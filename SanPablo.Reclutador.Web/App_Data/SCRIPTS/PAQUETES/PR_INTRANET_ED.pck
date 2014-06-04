@@ -1434,14 +1434,10 @@ create or replace package body PR_INTRANET_ED is
              TIPNIVELCONOCIMIENTO,
              INDCERTIFICACION,
              (CASE
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
-                1
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
-                2
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
-                3
-               ELSE
-                0
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN 1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN 2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
+               ELSE 0
              END) NIVELCONO --jccana 24/05/2014
         FROM CONOGEN_POSTULANTE
        WHERE IDEPOSTULANTE = p_nIdPostulante
@@ -1459,14 +1455,10 @@ create or replace package body PR_INTRANET_ED is
              INDCERTIFICACION,
              PUNTCONOCIMIENTO,
              (CASE
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
-                1
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
-                2
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
-                3
-               ELSE
-                0
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN  1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN  2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
+               ELSE 0
              END) NIVELCONO --jccana 24/05/2014
         FROM CONOGENERAL_CARGO A
        WHERE A.IDECARGO = p_nIdCargo;
@@ -1483,14 +1475,10 @@ create or replace package body PR_INTRANET_ED is
              INDCERTIFICACION,
              PUNTCONOCIMIENTO,
              (CASE
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN
-                1
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN
-                2
-               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN
-                3
-               ELSE
-                0
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELBASICO THEN 1
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELINTERMEDIO THEN 2
+               WHEN TIPNIVELCONOCIMIENTO = P_NIVELAVANZADO THEN 3
+               ELSE 0
              END) NIVELCONO --jccana 24/05/2014
         FROM CONOGENERAL_SOLREQ A
        WHERE A.IDESOLREQPERSONAL = p_idSol;
@@ -6820,7 +6808,7 @@ create or replace package body PR_INTRANET_ED is
     nFechaSaldo varchar2(20);
   BEGIN
     --obtiene la fecha hace 6 meses
-    nFechaSaldo := TO_CHAR(ADD_MONTHS(TO_DATE(p_cFecInicio, 'DD/MM/YYYY'),
+    nFechaSaldo := TO_CHAR(ADD_MONTHS(TO_DATE(p_cFecInicio, 'DD/MM/YYYY')-1,
                                       -6),
                            'DD/MM/YYYY');
   

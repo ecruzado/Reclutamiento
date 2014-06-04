@@ -168,8 +168,9 @@
               $("#spanDialogSession").html("¿Está seguro de cerrar la sesión?")
               $('#dialogSession').dialog({
                   autoOpen: false,
+                  resizable: false,
                   modal: true,
-                  title: "Mensaje",
+                  title: "CONFIRMACIÓN",
                   buttons: {
                       "Aceptar": function () {
                           window.location = '@Url.Action("Login", "Seguridad")';

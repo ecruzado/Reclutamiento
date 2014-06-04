@@ -183,7 +183,7 @@
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>();
             estudioPostulanteGeneralViewModel.TipoNombreInstituciones.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
            
-            estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
+            estudioPostulanteGeneralViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea).OrderBy(x=>x.Descripcion));
             estudioPostulanteGeneralViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
             estudioPostulanteGeneralViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEducacion));
@@ -216,7 +216,7 @@
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
 
-            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion,tipoInstituto));
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoInstitucion,tipoInstituto).OrderBy(x=>x.Descripcion));
             listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTROS" });
             result = Json(listaResultado);
             return result;
@@ -229,7 +229,7 @@
             ActionResult result = null;
             var listaResultado = new List<DetalleGeneral>();
 
-            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, tipoEducacion));
+            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTableReference(TipoTabla.TipoEducacion, tipoEducacion).OrderBy(x=>x.Descripcion));
             listaResultado.Add(new DetalleGeneral { Valor = "XX", Descripcion = "OTROS" });
 
             result = Json(listaResultado);

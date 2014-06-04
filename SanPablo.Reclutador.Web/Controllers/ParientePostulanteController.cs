@@ -162,7 +162,7 @@
 
             parientePostulanteGeneralViewModel.porcentaje = Convert.ToInt32(Session["Progreso"]);
 
-            parientePostulanteGeneralViewModel.TipoVinculos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVinculo));
+            parientePostulanteGeneralViewModel.TipoVinculos = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVinculo).OrderBy(x=>x.Descripcion));
             parientePostulanteGeneralViewModel.TipoVinculos.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "SELECCIONE" });
 
 

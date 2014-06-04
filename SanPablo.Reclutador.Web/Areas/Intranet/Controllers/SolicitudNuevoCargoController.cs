@@ -261,104 +261,106 @@
 
         public SolicitudNuevoCargoViewModel inicializarNuevaSolicitud()
         {
-            var solicitudNuevoViewModel = new SolicitudNuevoCargoViewModel();
-
-            var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-
-            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             
-            solicitudNuevoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
+                var solicitudNuevoViewModel = new SolicitudNuevoCargoViewModel();
 
-            solicitudNuevoViewModel.Cargos = new List<SolicitudNuevoCargo>(_solicitudNuevoCargoRepository.ListarCargos(
-                                             Convert.ToInt32(Session[ConstanteSesion.Sede]),Convert.ToInt32(Session[ConstanteSesion.Rol]),Convert.ToInt32(Session[ConstanteSesion.Usuario])));
-            solicitudNuevoViewModel.Cargos.Insert(0, new SolicitudNuevoCargo { IdeSolicitudNuevoCargo = 0,NombreCargo="Seleccionar"});
+                var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
-            var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-            if (usuarioSede != null)
-            {
-                if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente))
+                var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+                solicitudNuevoViewModel.SolicitudNuevoCargo = new SolicitudNuevoCargo();
+
+                solicitudNuevoViewModel.Cargos = new List<SolicitudNuevoCargo>(_solicitudNuevoCargoRepository.ListarCargos(
+                                                 Convert.ToInt32(Session[ConstanteSesion.Sede]), Convert.ToInt32(Session[ConstanteSesion.Rol]), Convert.ToInt32(Session[ConstanteSesion.Usuario])));
+                solicitudNuevoViewModel.Cargos.Insert(0, new SolicitudNuevoCargo { IdeSolicitudNuevoCargo = 0, NombreCargo = "Seleccionar" });
+
+                var usuarioSede = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
+                if (usuarioSede != null)
                 {
-                    var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
-                                                                         && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo);
-                    solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
-                    solicitudNuevoViewModel.Dependencias.Add(dependencia);
-
-                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDependencia = dependencia.IdeDependencia;
-
-                    var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
-                    solicitudNuevoViewModel.Departamentos = new List<Departamento>();
-                    solicitudNuevoViewModel.Departamentos.Add(departamento);
-
-                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDepartamento = departamento.IdeDepartamento;
-
-                    var area = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
-                    solicitudNuevoViewModel.Areas = new List<Area>();
-                    solicitudNuevoViewModel.Areas.Add(area);
-
-                    solicitudNuevoViewModel.SolicitudNuevoCargo.IdeArea = area.IdeArea;
-
-                    solicitudNuevoViewModel.Responsables = new List<Rol>();
-                    solicitudNuevoViewModel.Responsables.Add(_rolRepository.GetSingle(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol == rolSession));
-
-                    solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
-                    solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-                    if (rolSession == Roles.Jefe)
+                    if ((rolSession == Roles.Jefe) || (rolSession == Roles.Gerente))
                     {
-                        solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x=>x.General.IdeGeneral == 50 && x.Valor == "05" ));
-                    }
-                    if(rolSession == Roles.Gerente)
-                    {
-                        solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "01"))));
-                        solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-                    }
+                        var dependencia = _dependenciaRepository.GetSingle(x => x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                             && x.IdeSede == ideSede && x.EstadoActivo == IndicadorActivo.Activo);
+                        solicitudNuevoViewModel.Dependencias = new List<Dependencia>();
+                        solicitudNuevoViewModel.Dependencias.Add(dependencia);
 
-                }
-                else
-                {
+                        solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDependencia = dependencia.IdeDependencia;
 
-                    if (rolSession == Roles.Gerente_General_Adjunto)
-                    {
+                        var departamento = _departamentoRepository.GetSingle(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO);
+                        solicitudNuevoViewModel.Departamentos = new List<Departamento>();
+                        solicitudNuevoViewModel.Departamentos.Add(departamento);
+
+                        solicitudNuevoViewModel.SolicitudNuevoCargo.IdeDepartamento = departamento.IdeDepartamento;
+
+                        var area = _areaRepository.GetSingle(x => x.IdeArea == usuarioSede.IDEAREA);
+                        solicitudNuevoViewModel.Areas = new List<Area>();
+                        solicitudNuevoViewModel.Areas.Add(area);
+
+                        solicitudNuevoViewModel.SolicitudNuevoCargo.IdeArea = area.IdeArea;
+
                         solicitudNuevoViewModel.Responsables = new List<Rol>();
                         solicitudNuevoViewModel.Responsables.Add(_rolRepository.GetSingle(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol == rolSession));
 
-                        solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "02"))));
-                        solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                        solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
+                        solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+                        if (rolSession == Roles.Jefe)
+                        {
+                            solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && x.Valor == "05"));
+                        }
+                        if (rolSession == Roles.Gerente)
+                        {
+                            solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "01"))));
+                            solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                        }
+
                     }
                     else
                     {
-                        solicitudNuevoViewModel.Responsables = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol != Roles.Administrador_Sistema && x.IdRol != Roles.Consultor && x.IdRol != Roles.Postulante ));
-                        solicitudNuevoViewModel.Responsables.Insert(0, new Rol { IdRol = 0, DscRol = "Seleccionar" });
 
-                        solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
-                        solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                        if (rolSession == Roles.Gerente_General_Adjunto)
+                        {
+                            solicitudNuevoViewModel.Responsables = new List<Rol>();
+                            solicitudNuevoViewModel.Responsables.Add(_rolRepository.GetSingle(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol == rolSession));
+
+                            solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && ((x.Valor == "05") || (x.Valor == "02"))));
+                            solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                        }
+                        else
+                        {
+                            solicitudNuevoViewModel.Responsables = new List<Rol>(_rolRepository.GetBy(x => x.FlgEstado == IndicadorActivo.Activo && x.IdRol != Roles.Administrador_Sistema && x.IdRol != Roles.Consultor && x.IdRol != Roles.Postulante));
+                            solicitudNuevoViewModel.Responsables.Insert(0, new Rol { IdRol = 0, DscRol = "Seleccionar" });
+
+                            solicitudNuevoViewModel.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEtapa));
+                            solicitudNuevoViewModel.Etapas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+                        }
+
+                        solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
+                        solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+
+
+                        solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == ideSede));
+                        solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
+
+                        solicitudNuevoViewModel.Departamentos = new List<Departamento>();
+                        solicitudNuevoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+
+                        solicitudNuevoViewModel.Areas = new List<Area>();
+                        solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
                     }
-
-                    solicitudNuevoViewModel.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
-                    solicitudNuevoViewModel.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
-                    
-                    
-                    solicitudNuevoViewModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo && x.IdeSede == ideSede));
-                    solicitudNuevoViewModel.Dependencias.Insert(0, new Dependencia { IdeDependencia = 0, NombreDependencia = "Seleccionar" });
-
-                    solicitudNuevoViewModel.Departamentos = new List<Departamento>();
-                    solicitudNuevoViewModel.Departamentos.Insert(0, new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
-
-                    solicitudNuevoViewModel.Areas = new List<Area>();
-                    solicitudNuevoViewModel.Areas.Insert(0, new Area { IdeArea = 0, NombreArea = "Seleccionar" });
                 }
-            }
-           
 
-            //inicializar botonera
-            solicitudNuevoViewModel.btnVerRanking = Indicador.No;
-            solicitudNuevoViewModel.btnVerPreSeleccion = Indicador.No;
-            solicitudNuevoViewModel.btnVerPerfil = Indicador.No;
-            solicitudNuevoViewModel.btnVerNuevo = Indicador.No;
-            solicitudNuevoViewModel.btnVerRequerimiento = Indicador.No;
 
-            return solicitudNuevoViewModel;
+                //inicializar botonera
+                solicitudNuevoViewModel.btnVerRanking = Indicador.No;
+                solicitudNuevoViewModel.btnVerPreSeleccion = Indicador.No;
+                solicitudNuevoViewModel.btnVerPerfil = Indicador.No;
+                solicitudNuevoViewModel.btnVerNuevo = Indicador.No;
+                solicitudNuevoViewModel.btnVerRequerimiento = Indicador.No;
+
+                return solicitudNuevoViewModel;
+            
         }
 
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]

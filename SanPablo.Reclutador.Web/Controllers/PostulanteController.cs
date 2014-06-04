@@ -77,10 +77,10 @@
             postulanteGeneralViewModel.EstadosCiviles = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadoCivil));
             postulanteGeneralViewModel.EstadosCiviles.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
             
-            postulanteGeneralViewModel.TipoVias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVia));
+            postulanteGeneralViewModel.TipoVias = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoVia).OrderBy(x=>x.Descripcion));
             postulanteGeneralViewModel.TipoVias.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
-            postulanteGeneralViewModel.TipoZonas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoZona));
+            postulanteGeneralViewModel.TipoZonas = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoZona).OrderBy(x=>x.Descripcion));
             postulanteGeneralViewModel.TipoZonas.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "SELECCIONE" });
 
             postulanteGeneralViewModel.Paises = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeo == 2000));
@@ -198,23 +198,6 @@
 
                 }
 
-                //Guardar la foto del postulante
-                //if (model.FotoPostulante != null)
-                //{
-                //    using (Stream inputStream = model.FotoPostulante.InputStream)
-                //    {
-                //        MemoryStream memoryStream = inputStream as MemoryStream;
-                //        if (memoryStream == null)
-                //        {
-                //            memoryStream = new MemoryStream();
-                //            inputStream.CopyTo(memoryStream);
-                //        }
-                //        data = memoryStream.ToArray();
-                //        memoryStream.Dispose();
-                //    }
-                //    model.Postulante.FotoPostulante = data;
-                    
-                //}
                  if (!string.IsNullOrEmpty(model.nombreTemporalArchivo))
                     {
 
@@ -413,7 +396,7 @@
             bool valido = false;
 
             var PostulanteSession = new Postulante();
-            if (IdePostulante != null)
+            if ((IdePostulante != null)&&(IdePostulante != 0))
             {
                 PostulanteSession = _postulanteRepository.GetSingle(x => x.IdePostulante == IdePostulante);
             }
@@ -564,7 +547,7 @@
 
         public List<Ubigeo> cargarDepartamentos()
         {
-            var departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
+            var departamentos = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null).OrderBy(x=>x.Nombre));
             return departamentos;
             
         }
@@ -574,7 +557,7 @@
         {
              ActionResult result = null;
 
-             var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre));
+             var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == ideUbigeoPadre).OrderBy(x=>x.Nombre));
             result = Json(listaResultado);
             return result;
         }
@@ -584,7 +567,7 @@
         {
             ActionResult result = null;
 
-            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null));
+            var listaResultado = new List<Ubigeo>(_ubigeoRepository.GetBy(x => x.IdeUbigeoPadre == null).OrderBy(x=>x.Nombre));
             result = Json(listaResultado);
             return result;
         }
