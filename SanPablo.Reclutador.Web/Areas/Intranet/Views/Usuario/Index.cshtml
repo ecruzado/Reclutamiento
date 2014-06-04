@@ -27,8 +27,18 @@
             var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
             if (rowData.FLGESTADO == 'A') {
                 if (selr != null) {
+
+                var rowData = jQuery('#grdListUsuario').jqGrid('getRowData', selr);
+                var codEstado = rowData.FLGESTADO;
+                var indActivo = '@IndicadorActivo.Activo';
+
+                if (codEstado == indActivo) {
                     window.location = '@Url.Action("Edit", "Usuario", new { id = "" })' + '/' + selr;
                 } else {
+                    MostrarMensaje('El usuario debe encontrarse activo', "ALERTA");
+                }
+
+             } else {
                     MostrarMensaje('Seleccione un usuario', "ALERTA");
                 }
             }
@@ -358,7 +368,17 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Rol</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new { data_val = "false" }) 
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoRol))
+                                {
+                                    @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new { data_val = "false" }) 
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.UsuarioRolSede.IdRol, new SelectList(Model.TipRol, "IdRol", "CodRol", Model.UsuarioRolSede.IdRol), new { data_val = "false" ,@disabled="disabled"}) 
+                                }
+                                
+                                
                             </div>
                         </div>
                     </td>
@@ -368,7 +388,16 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Sede</label>
                             <div class="controles">
-                               @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new { data_val = "false" }) 
+                               
+                                @if (Visualicion.SI.Equals(Model.CampoSede))
+                                {
+                                  @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new { data_val = "false" })     
+                                }
+                                else
+                                {
+                                  @Html.DropDownListFor(model => model.UsuarioRolSede.IdSede, new SelectList(Model.TipSede, "CodigoSede", "DescripcionSede", Model.UsuarioRolSede.IdSede), new { data_val = "false" ,@disabled="disabled"})       
+                                }  
+                                
                             </div>
                         </div>
                     </td>

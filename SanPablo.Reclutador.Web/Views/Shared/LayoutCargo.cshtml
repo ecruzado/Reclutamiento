@@ -14,7 +14,8 @@
                 <div class="opciones">
                     <label>Estado</label>
                     @Html.HiddenFor(model=>model.Cargo.EstadoActivo)
-                    @Html.HiddenFor(model=>model.IdeSolicitud)
+                   @* @Html.HiddenFor(model=>model.IdeSolicitud)*@
+                    @Html.TextBoxFor(model => model.IdeSolicitud, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.EstadoRegistro, new {@class="btn btn-primary btn-small disabled" ,disabled="disabled" , style ="width:60px"})
                     @*<button class="btn btn-primary btn-small disabled" disabled="disabled">Activo</button>*@
@@ -28,7 +29,7 @@
                            <label class="control-label" for="inputSuccess">Código</label>
                         </td>
                         <td class="colInput">
-                            @Html.TextBoxFor(model => model.Cargo.IdeCargo, new { @disabled = "disabled"})
+                            @Html.TextBoxFor(model => model.IdeSolicitud, new { @disabled = "disabled"})
                         
                         </td>
                         <td class="colEtiqueta">

@@ -206,10 +206,19 @@
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
-            enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+            var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+            if (objUsuario != null)
+            {
+                enviar.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+            }
+
+            //enviar.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
             enviar.Rol = Session[ConstanteSesion.RolDes].ToString();
             enviar.Sede = Session[ConstanteSesion.SedeDes].ToString();
             enviar.Area = usuarioSession.AREADES;
+            
+            
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             
             int ideUsuarioResp;
@@ -270,9 +279,9 @@
                         SedeDescripcion = SedeDesc.ToString();
                     }
                     SolReqPersonal cargo = _solicitudAmpliacionCargoRepository.GetSingle(x => x.IdeSolReqPersonal == model.SolicitudRequerimiento.IdeSolReqPersonal);
-                    
-                    //enviar.EnviarCorreo(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, usuario.Email, "UN SUCESSO");
-                    enviar.EnviarCorreoVarios(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, cargo.CodSolReqPersonal, listSends, "UN SUCESSO",listCopys);
+
+
+                    enviar.EnviarCorreoVarios(dir.ToString(), model.LogSolicitudAmpliacion.TipEtapa, usuario.DscNombres, TipoRequerimientoEmail.Ampliacion, model.LogSolicitudAmpliacion.Observacion, cargo.nombreCargo, ""+model.SolicitudRequerimiento.IdeSolReqPersonal, listSends, "UN SUCESSO", listCopys);
 
                     return true;
                 }

@@ -390,7 +390,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 var responsable = _usuarioRepository.GetSingle(x => x.IdUsuario == reclutaExamen.IdeUsuarioResponsable);
 
                 SedeNivel datosSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes] ==null?"":Session[ConstanteSesion.UsuarioDes].ToString();
+                var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                if (objUsuario != null)
+                {
+                    enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                }
+                
+                //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes] ==null?"":Session[ConstanteSesion.UsuarioDes].ToString();
+                
                 enviarMail.Rol = Session[ConstanteSesion.RolDes]==null?"": Session[ConstanteSesion.RolDes].ToString();
                 enviarMail.Sede = datosSession.SEDEDES == null ? "" : datosSession.SEDEDES;
                 enviarMail.Area = datosSession.AREADES == null ? "" : datosSession.AREADES;

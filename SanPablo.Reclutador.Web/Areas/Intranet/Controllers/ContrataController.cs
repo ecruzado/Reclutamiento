@@ -396,7 +396,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
                 {
                     var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == idSol);
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, objSolNuevo2.CodigoCargo, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, ""+idSol, listSends, listCopys);
 
                 }
                 else
@@ -405,13 +405,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
                     {
-                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys);
 
                     }
 
                     if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
                     {
-                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+                        bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + idSol, listSends, listCopys);
 
                     }
 
@@ -541,7 +541,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             if (TipoSolicitud.Nuevo.Equals(objReCluta.TipSol))
             {
                 var objSolNuevo2 = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == model.ReclutaPersonal.IdeSol);
-                bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, objSolNuevo2.CodigoCargo, listSends, listCopys);
+                bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Nuevo", objSolNuevo2.NombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys);
 
             }
             else
@@ -550,13 +550,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 if (TipoSolicitud.Remplazo.Equals(objReCluta.TipSol))
                 {
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Reemplazo", objSolReq2.nombreCargo, ""+model.ReclutaPersonal.IdeSol, listSends, listCopys);
 
                 }
 
                 if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
                 {
-                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, objSolReq2.CodCargo, listSends, listCopys);
+                    bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys);
 
                 }
 
@@ -736,8 +736,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
+                var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+ 
+                //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                if (objUsuario!=null)
+                {
+                    enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;    
+                }
+                
                 enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
                 return true;
             }

@@ -95,7 +95,14 @@ namespace SanPablo.Reclutador.Web.Core
         /// hace referencia al objeto criterio cuando se consulta 
         /// </summary>
         public const string Criterio = "Criterio";
+
+
+        /// <summary>
+        /// tipo de categoria de categoria
+        /// </summary>
+        public const string TipoCategoria = "TipoCategoria";
         
+
 
     }
     public enum TipoDevolucionError 

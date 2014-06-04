@@ -901,6 +901,7 @@ namespace SanPablo.Reclutador.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidarSesion]
         public ActionResult validaPostulacion(int id,int idSede,string idTipPuesto) 
         {
 
@@ -909,8 +910,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             OportunidadLaboral objOportunidad;
             string Mensaje = "";
 
-            int retorno=0;
-
+            //int retorno=0;
 
             int idPostulante;
 
@@ -920,37 +920,49 @@ namespace SanPablo.Reclutador.Web.Controllers
                 usuario = (Usuario)objUsuario;
             }
 
-            idPostulante = usuario.IdePostulante;
-            if (idPostulante!=null && idPostulante>0)
+            var objUsuario2 = _usuarioRepository.GetSingle(x => x.IdUsuario == usuario.IdUsuario);
+
+            idPostulante = objUsuario2.IdePostulante;
+
+
+            if (idPostulante!=null )
             {
-
-                objOportunidad = new OportunidadLaboral();
-                objOportunidad.IdeCargo = id;
-                objOportunidad.IdPostulante = idPostulante;
-                objOportunidad.IdeSede = idSede;
-                objOportunidad.TipoHorario = idTipPuesto;
-
-                objOportunidad = _postulanteRepository.ValidaPostulacion(objOportunidad);
-
-                if (objOportunidad.retorno > 0)
+                if (idPostulante>0)
                 {
-                    if (objOportunidad.retorno== 1)
+                    objOportunidad = new OportunidadLaboral();
+                    objOportunidad.IdeCargo = id;
+                    objOportunidad.IdPostulante = idPostulante;
+                    objOportunidad.IdeSede = idSede;
+                    objOportunidad.TipoHorario = idTipPuesto;
+
+                    objOportunidad = _postulanteRepository.ValidaPostulacion(objOportunidad);
+
+                    if (objOportunidad.retorno > 0)
                     {
-                        Mensaje = "Para postular, es necesario que complete sus datos en la(s) pestaña(s): " + objOportunidad.mensaje;
+                        if (objOportunidad.retorno== 1)
+                        {
+                            Mensaje = "Para postular, es necesario que complete sus datos en la(s) pestaña(s): " + objOportunidad.mensaje;
                         
-                        ObjJson.Resultado = false;
-                        ObjJson.Mensaje = Mensaje;
-                        return Json(ObjJson);
+                            ObjJson.Resultado = false;
+                            ObjJson.Mensaje = Mensaje;
+                            return Json(ObjJson);
 
+                        }
+
+                        if (objOportunidad.retorno == 2)
+                        {
+                            ObjJson.Resultado = false;
+                            ObjJson.Mensaje = objOportunidad.mensaje;
+                            return Json(ObjJson);
+
+                        }
                     }
-
-                    if (objOportunidad.retorno == 2)
-                    {
-                        ObjJson.Resultado = false;
-                        ObjJson.Mensaje = objOportunidad.mensaje;
-                        return Json(ObjJson);
-
-                    }
+                }
+                else
+                {
+                    ObjJson.Resultado = false;
+                    ObjJson.Mensaje = "Debe registrase para postular";
+                    return Json(ObjJson);
                 }
                
             }

@@ -79,10 +79,28 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objModel = InicializarPopupSedeRol();
             objModel.Usuario = new Usuario();
             objModel.UsuarioRolSede = new UsuarioRolSede();
-            
+            objModel.CampoRol = Visualicion.SI;
+            objModel.CampoSede = Visualicion.SI;
             //Accesos a los botones
 
             int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
+
+            var idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+
+            if (idSede!=null)
+            {
+
+                if (idSede>0)
+                {
+                    objModel.UsuarioRolSede.IdSede = idSede;
+                    objModel.CampoSede = Visualicion.NO;
+                }
+                
+
+            }
+            
+
+
 
             if (Roles.Administrador_Sistema.Equals(idRol))
             {
@@ -107,6 +125,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objModel.btnEditar = Visualicion.SI;
                 objModel.btnEliminar = Visualicion.NO;
 
+                objModel.UsuarioRolSede.IdRol = Roles.Postulante;
+                objModel.CampoRol = Visualicion.NO;
+
             }
             else if (Roles.Analista_Seleccion.Equals(idRol))
             {
@@ -118,6 +139,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objModel.btnConsultar = Visualicion.SI;
                 objModel.btnEditar = Visualicion.SI;
                 objModel.btnEliminar = Visualicion.NO;
+                objModel.UsuarioRolSede.IdRol = Roles.Postulante;
+                objModel.CampoRol = Visualicion.NO;
             }
             else
             {
@@ -321,8 +344,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                        objJson.Resultado = false;
                    }
                 }
-
-               
 
             }
 

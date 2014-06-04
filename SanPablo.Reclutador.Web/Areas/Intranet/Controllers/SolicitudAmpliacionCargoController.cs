@@ -231,7 +231,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
             int idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
-            
+            SolReqPersonal obj = new SolReqPersonal();
 
             try
             {
@@ -293,16 +293,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     listCopys = new List<String>();
                     listCopys = (List<String>)lista[1];
 
-
+                    
 
                     if ((rolResponsable != 0) && (etapaInicio != ""))
                     {
-                        var idUsuarioResponsable = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, indicadorArea);
-                        if (idUsuarioResponsable != -1)
+                        obj = _solicitudAmpliacionPersonal.insertarSolicitudAmpliacion(solicitudAmpliacion, Convert.ToInt32(Session[ConstanteSesion.Usuario]), rolSuceso, etapaInicio, rolResponsable, indicadorArea);
+
+
+
+
+                        if (obj.idUsuarioResp != -1)
                         {
-                            var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == idUsuarioResponsable);
-                            
-                            bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, cargoSol.CodigoCargo,listSends,listCopys);
+                            var usuarioResponsable = _usuarioRepository.GetSingle(x => x.IdUsuario == obj.idUsuarioResp);
+
+                            bool flag = EnviarCorreoAll(usuarioResponsable, rolResponsable.ToString(), etapaInicio, "", cargoSol.NombreCargo, "" + obj.IdeSolReqPersonal, listSends, listCopys);
                             string msj = "";
                             string msjRspta = "";
                             if (!flag)
@@ -755,7 +759,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                if (objUsuario != null)
+                {
+                    enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                }
 
                 enviarMail.EnviarCorreo(dir, etapa, rolResponsable, "Ampliación de Cargo", observacion, cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
                 
@@ -790,7 +801,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                ///enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                if (objUsuario != null)
+                {
+                    enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                }
+
 
                 enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, "Ampliación de Cargo", observacion, cargoDescripcion, codCargo, Sends, "suceso", Copys);
 
@@ -874,13 +893,25 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     if (ideUsuario != -1)
                     {
                         var rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolResponsable.RolResponsable);
+                        
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
-                        enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        
+                        
+                        //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+
+                        var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                        if (objUsuario != null)
+                        {
+                            enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                        }
+
+                        
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = usuarioSession.AREADES;
 
-                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliación de Cargo", "", solicitud.nombreCargo, solicitud.CodCargo, listSends, "Suceso",listCopys);
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliación de Cargo", "", solicitud.nombreCargo, ""+solicitud.IdeSolReqPersonal, listSends, "Suceso", listCopys);
 
                         msjFinal = "Solicitud de ampliación enviado exitosamente. ";
                         msjFinal += "Derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
@@ -2164,6 +2195,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objRecluta.TipPuesto = objSol.TipPuesto;
                     objRecluta.IdSede = objSol.IdeSede;
                     objRecluta.IdeCargo = objSol.IdeCargo;
+
+                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
                     //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
                     _solReqPersonalRepository.verificaPotenciales(objRecluta);
 
@@ -2186,8 +2220,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
 
-                    //bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", "Reemplazo de cargo", objSol.CodSolReqPersonal);
-                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Reemplazo", model.SolReqPersonal.nombreCargo, model.SolReqPersonal.CodCargo, listSends, listCopys);
+
+                    bool flag = EnviarCorreo(objUsuario, desRol, Etapa.Publicado, "Ampliación", objCargo.NombreCargo, "" + model.SolReqPersonal.IdeSolReqPersonal, listSends, listCopys);
 
                     objJson.Resultado = true;
                     objJson.Mensaje = "Se publicó la Solicitud exitosamente";
@@ -2219,9 +2253,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                
+                //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
 
-                // enviarMail.EnviarCorreo(dir, etapa, rolResponsable, tipoRq,"",cargoDescripcion, codCargo, usuarioDestinatario.Email, "suceso");
+                var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                if (objUsuario != null)
+                {
+                    enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                }
 
                 enviarMail.EnviarCorreoVarios(dir, etapa, rolResponsable, tipoRq, "", cargoDescripcion, codCargo, Sends, "suceso", Copys);
                 return true;

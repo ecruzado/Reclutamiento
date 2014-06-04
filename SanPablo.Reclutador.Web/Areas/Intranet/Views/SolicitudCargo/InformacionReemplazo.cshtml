@@ -1096,7 +1096,7 @@
             success: function (data) {
                 if (data.Resultado) {
                     $.unblockUI();
-                    RedireccionaSol("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "Información");
+                    RedireccionaSol("divMensajeInfo", "spnMensajeInfo", data.Mensaje, "INFORMATIVO");
                 }
             }
         });
@@ -1204,8 +1204,8 @@
 {
     @Html.ValidationSummary(true)
 
-     @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
-
+     @Html.TextBoxFor(model => model.SolReqPersonal.CodSolReqPersonal, new { style = "display: none;" })
+    
     
                 <table class="formulario-busqueda">
                     <tr class="formulario-fila">
@@ -1213,7 +1213,7 @@
                            
                             <label class="control-label" for="inputSuccess">Requerimiento</label>
                             <div class="controles">    
-                                <input class="textoFormulario" id="SolReqPersonal_CodSolReqPersonal" name="SolReqPersonal.CodSolReqPersonal" readonly="readonly" type="text" value="@Model.SolReqPersonal.CodSolReqPersonal">
+                                <input class="textoFormulario" id="SolReqPersonal_IdeSolReqPersonal" name="SolReqPersonal.IdeSolReqPersonal" readonly="readonly" type="text" value="@Model.SolReqPersonal.IdeSolReqPersonal">
                             </div>
                             
                         </td>

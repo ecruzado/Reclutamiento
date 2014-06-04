@@ -564,12 +564,20 @@
                     if (ideUsuario != -1)
                     {
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
-                        enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        
+                       
+                        var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                        if (objUsuario != null)
+                        {
+                            enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                        }
+
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = usuarioSession.AREADES;
 
-                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends, "Suceso",listCopys);
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, ""+solicitud.IdeSolicitudNuevoCargo, listSends, "Suceso", listCopys);
 
                         //objJsonMessage.Mensaje = "Perfil aceptado para su publicación";
                         Rol rolResponsable = _rolRepository.GetSingle(x=>x.IdRol == logSolicitud.RolResponsable);
@@ -719,12 +727,20 @@
                     if (ideUsuario != -1)
                     {
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
-                        enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+                        
+
+                        var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
+
+                        if (objUsuario != null)
+                        {
+                            enviarMail.Usuario = objUsuario.DscNombres + " " + objUsuario.DscApePaterno + " " + objUsuario.DscApeMaterno;
+                        }
+
                         enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
                         enviarMail.Sede = SedeDescripcion;
                         enviarMail.Area = usuarioSession.AREADES;
 
-                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Generacion_Perfil, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, cargoEnviar.CodigoCargo, listSends,"Suceso",listCopys);
+                        enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Generacion_Perfil, usuarioResp.NombreUsuario, "Nuevo Cargo", "", cargoEnviar.NombreCargo, "" + solicitud.IdeSolicitudNuevoCargo, listSends, "Suceso", listCopys);
 
 
                         string menj = "El proceso de envío se realizó exitosamente. ";
