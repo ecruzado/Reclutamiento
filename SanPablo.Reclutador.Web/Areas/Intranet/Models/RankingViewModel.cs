@@ -20,7 +20,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string pagina { get; set; }
         public string indPagina { get; set; }
 
-
+        public string postulaciones { get; set; }
 
         #region
 

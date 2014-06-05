@@ -516,7 +516,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return Json(objJson);
         }
 
-        
+
+        /// <summary>
+        /// obtiene las postulaciones
+        /// </summary>
+        /// <param name="cpost"></param>
+        /// <returns></returns>
+        public ActionResult obtienePost(string cpost) 
+        { 
+            RankingViewModel model = new RankingViewModel();
+
+            model.postulaciones = cpost;
+
+            return View("PopupPostulacion",model);
+        }
 
 
         /// <summary>
@@ -669,6 +682,72 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
         }
 
+        
+
+
+        /// <summary>
+        /// lista de popup postulaciones
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ListaPopupPostulacion(GridTable grid)
+        {
+
+            //ReclutamientoPersona reclutamientoPersona;
+            List<Categoria> lista;
+            string cPostulacion;
+            try
+            {
+
+                //reclutamientoPersona = new ReclutamientoPersona();
+
+                cPostulacion = (grid.rules[0].data == null ? "" : Convert.ToString(grid.rules[0].data));
+                lista = new List<Categoria>();
+
+                Categoria objValor;
+
+                if (cPostulacion!=null)
+	            {
+
+                    string[] words = cPostulacion.Split(',');
+                    foreach (string word in words)
+                    {
+                        objValor = new Categoria();
+                        objValor.DESCCATEGORIA = word;
+                        lista.Add(objValor);
+                    }
+                    
+                }
+                else
+                {
+                    lista = new List<Categoria>();
+                }
+
+                
+
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = (item.DESCCATEGORIA.ToString()),
+                    cell = new string[]
+                            {
+                                item.DESCCATEGORIA==null?"":item.DESCCATEGORIA
+                               
+                            }
+                }).ToArray();
+
+                return Json(generic.Value);
+
+            }
+            catch (Exception ex)
+            {
+
+                return MensajeError();
+            }
+        }
 
 
         /// <summary>

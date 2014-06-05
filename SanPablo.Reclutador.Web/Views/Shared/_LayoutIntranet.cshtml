@@ -181,7 +181,7 @@
              </section>
             </div>
         </div>
-        <div id="popupDialog" title="Cambiar Contrase&ntilde;a"></div>
+        <div id="popupDialogPass" title="Cambiar Contrase&ntilde;a"></div>
         
         <div id="cambioPass"><span id="spanCambioPass"></span></div>
         
@@ -230,7 +230,7 @@
                 });
 
 
-                $('#popupDialog').dialog({
+                $('#popupDialogPass').dialog({
                     autoOpen: false,
                     width: 500,
                     height: 300,
@@ -358,10 +358,10 @@
 
             function ResetPass() {
                 
-                var dialogDiv = $('#popupDialog');
+                var dialogDiv = $('#popupDialogPass');
                 $.get('@Url.Action("InicializaPopup", "Usuario",new { area = "Intranet" })', function (data) {
                     dialogDiv.html(data);
-                    $.validator.unobtrusive.parse($("#popupDialog"));
+                    $.validator.unobtrusive.parse($("#popupDialogPass"));
                     dialogDiv.dialog('open');
                 });
                 return false;

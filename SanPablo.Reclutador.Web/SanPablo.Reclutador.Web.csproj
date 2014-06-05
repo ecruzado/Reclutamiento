@@ -560,6 +560,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
+    <Content Include="Areas\Intranet\Views\Ranking\PopupPostulacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
