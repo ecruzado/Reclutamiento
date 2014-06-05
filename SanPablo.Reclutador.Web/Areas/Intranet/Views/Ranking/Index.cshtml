@@ -367,6 +367,20 @@
 
 
 
+            $('#popupDialogPost').dialog({
+                autoOpen: false,
+                width: 440,
+                //height: 400,
+                resizable: false,
+                modal: true,
+                buttons: {
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+
             jQuery("#grdListRankingPost").jqGrid({
                 datatype: function (postdata) {
                     var migrilla = new Object();
@@ -430,7 +444,7 @@
                         { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                         { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, width: 300 },
                         { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
-                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 300 }
+                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 300 ,formatter: PostulacionFormatter}
 
                 ],
 
@@ -465,7 +479,27 @@
             return strImg;
         }
 
-        
+        function PostulacionFormatter(cellvalue, options, rowObject) {
+            var imgPath = '@Url.Content("~/Content/images/")';
+            var archivo = 'right_2.png';
+            var cpost = "'" + rowObject[12] + "'";
+
+            var strImg = '<img  onclick="confirmapostulacion(' + cpost + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Postulaciones" alt="Editar">';
+            return strImg;
+        }
+
+
+        function confirmapostulacion(cpost) {
+            var dialogDiv = $('#popupDialogPost');
+
+            $.get('@Url.Action("obtienePost", "Ranking", new { area = "Intranet"})?cpost=' + cpost, function (data) {
+
+            dialogDiv.html(data);
+            $.validator.unobtrusive.parse($("#popupDialogPost"));
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
 
 
         function CellCheckBox(cellvalue, options, rowObject) {
@@ -909,6 +943,7 @@
     </div>
 </div>
 
+<div id="popupDialogPost" title="Postulaciones"></div>
 <div id="popupDialogCv" title="Postulantes Externos"></div>
 <div id="confCv"><span id="spanConfCv"></span></div>
 <div id="confirmacionPos"><span id="spanConfirmacionPos"></span></div>
