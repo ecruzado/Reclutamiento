@@ -385,6 +385,7 @@
     <Content Include="Content\images\application.gif" />
     <Content Include="Content\images\Banner-Selección-03.png" />
     <Content Include="Content\images\black.png" />
+    <Content Include="Content\images\bookmark-new-7.png" />
     <Content Include="Content\images\calendario.png" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\enabled.png" />

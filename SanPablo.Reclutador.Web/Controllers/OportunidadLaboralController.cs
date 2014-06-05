@@ -1023,8 +1023,24 @@ namespace SanPablo.Reclutador.Web.Controllers
             List<OportunidadLaboral> lista = new List<OportunidadLaboral>();
             try
             {
-                int idPostulante = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+                //int idPostulante = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
 
+                var objUsuario = Session[ConstanteSesion.ObjUsuarioExtranet];
+
+                int idPostulante=0;
+                Usuario objUsuario2;
+                Usuario objUsuario3;
+                if (objUsuario!=null)
+                {
+                    objUsuario2 = new Usuario();
+                    objUsuario2 = (Usuario)objUsuario;
+                    
+                    objUsuario3 = new Usuario();
+                    objUsuario3 = _usuarioRepository.GetSingle(x => x.IdUsuario == objUsuario2.IdUsuario && x.TipUsuario==TipUsuario.Extranet);
+                    idPostulante = objUsuario3.IdePostulante;
+                }
+
+               
                 oportunidadLaboral = new OportunidadLaboral();
                 oportunidadLaboral.IdPostulante = idPostulante;
 
