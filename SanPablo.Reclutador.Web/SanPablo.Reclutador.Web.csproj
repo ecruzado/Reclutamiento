@@ -514,12 +514,6 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Puesto.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Publicacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudConsulta\Index.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\ConfiguracionPerfil1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Conocimientos1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Discapacidad1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Evaluacion1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia1.cshtml" />
     <Content Include="Scripts\html5shiv-printshiv.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
@@ -534,8 +528,6 @@
     <Content Include="TemplateEmail\RestablecerPassword.htm" />
     <Content Include="Views\Shared\LayoutMantenimientoCargo.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\ListaCargos.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index1.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\General1.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\DatosGenerales.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoGenerales\Edit.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupCvPostulante.cshtml" />

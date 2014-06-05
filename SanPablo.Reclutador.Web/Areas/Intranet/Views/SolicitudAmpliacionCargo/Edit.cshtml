@@ -57,17 +57,17 @@
                         function (respuesta) {
                             if (respuesta.Resultado) {
                                 $.unblockUI();
-                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                                MostrarMensaje(respuesta.Mensaje, "INFORMATIVO");
                             }
                         });
                     }
                     else {
                         $("#updateDialogConfirmacion").dialog("close");
-                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "MENSAJE");
+                        MostrarMensaje("ERROR: Verifique que los datos ingresados son correctos", "ALERTA");
                     }
 
                 },
@@ -581,10 +581,10 @@
                          function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
+                                mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                             }
                             else {
-                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                                MostrarMensaje(respuesta.Mensaje, "INFORMATIVO");
                             }
                         }
                     );
@@ -655,7 +655,7 @@
                     window.location = url;
                    
                 } else {
-                    MostrarMensaje('Genere una Solicitud', "MENSAJE");
+                    MostrarMensaje('Genere una Solicitud', "ALERTA");
                 }
             }
 
@@ -697,7 +697,7 @@
           modal: true,
           resizable: false,
           buttons: {
-              "Ok": function () {
+              "Aceptar": function () {
                   $(this).dialog("close");
                   SanPablo.Redirecciona('@Url.Action("Index", "SolicitudAmpliacionCargo")');
                 }
@@ -1141,7 +1141,7 @@
 }
 
 <div id="updateDialogAprobacion" title="Aprobación/Rechazo Solicitud" ></div>
-<div id="updateDialogConfirmacion" title="Confirmar Envio "><span> ¿Seguro que quiere enviar la solicitud de ampliación de cargo?</span></div>
+<div id="updateDialogConfirmacion" title="CONFIRMACIÓN "><span> ¿Seguro que quiere enviar la solicitud de ampliación de cargo?</span></div>
 <div id="updateDialogAceptar" title="CONFIRMACIÓN" ><p>¿Está seguro de aceptar la solicitud de ampliación de cargo?</p></div>
 @*<div id="divMensaje"><span id="spnMensaje"></span></div>*@
 

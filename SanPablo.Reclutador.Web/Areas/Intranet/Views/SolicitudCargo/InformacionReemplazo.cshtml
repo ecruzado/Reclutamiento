@@ -622,6 +622,7 @@
 
         $("#spanEliminar").html("¿Desea eliminar el registro?")
         $('#divEliminar').dialogo({
+            title:"CONFIRMACIÓN",
             resizable: false,
             buttons: {
                 "Aceptar": function () {
@@ -737,6 +738,7 @@
 
         $("#spanEnviar").html("¿Esta seguro que desea enviar esta solicitud de reemplazo de Cargo?")
         $('#divEnviar').dialogo({
+            title: "CONFIRMACIÓN",
             resizable: false,
             buttons: {
                 "Aceptar": function () {
@@ -834,12 +836,12 @@
 
 
             if (Nombres.trim().length==0) {
-                MostrarMensaje('Ingreser un nombre', "Mensaje");
+                MostrarMensaje('Ingreser un nombre', "ALERTA");
                 return false;
             }
 
             if (ApePaterno.trim().length == 0) {
-                MostrarMensaje('Ingreser un apellido', "Mensaje");
+                MostrarMensaje('Ingreser un apellido', "ALERTA");
                 return false;
             }
 
@@ -847,12 +849,12 @@
 
                 if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
 
-                    MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+                    MostrarMensaje('Las fechas son obligatorias', "ALERTA");
                     return false;
                 }
 
                 if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
-                    MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "Mensaje");
+                    MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "ALERTA");
                     return false;
                 }
 
@@ -860,7 +862,7 @@
 
 
                 if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "Mensaje");
+                    MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "ALERTA");
                     return false;
                 }
 
@@ -870,18 +872,18 @@
 
                 if ((fechaFinal.length == 0)) {
 
-                    MostrarMensaje('La fechas es obligatoria', "Mensaje");
+                    MostrarMensaje('La fechas es obligatoria', "ALERTA");
                     return false;
                 }
             }
 
             if (Nombres.length == 0) {
-                MostrarMensaje('Ingrese el Nombre', "Mensaje");
+                MostrarMensaje('Ingrese el Nombre', "ALERTA");
                 return false;
             }
 
             if (Nombres.length == 0) {
-                MostrarMensaje('Ingrese el apellido paterno', "Mensaje");
+                MostrarMensaje('Ingrese el apellido paterno', "ALERTA");
                 return false;
             }
 

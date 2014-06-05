@@ -357,7 +357,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             objCargo.IdeArea = (idArea == null ? 0 : Convert.ToInt32(idArea));
 
 
-            var listaCargoxSede = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+            //var listaCargoxSede = new List<Cargo>(_reemplazoRepository.GetCargoxSede(objCargo));
+            var listaCargoxSede = new List<Cargo>(_cargoRepository.GetCargoxSede(objCargo));
 
             result = Json(listaCargoxSede);
             return result;
@@ -600,7 +601,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objCargo.IdeDepartamento = UsuarioSede.IDEDEPARTAMENTO;
                     objCargo.IdeArea = UsuarioSede.IDEAREA;
 
-                    model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    model.listaTipCargo = new List<Cargo>(_cargoRepository.GetCargoxSede(objCargo));
                     model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
                 
                 }
@@ -628,7 +629,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objCargo.IdeDepartamento = UsuarioSede.IDEDEPARTAMENTO;
                     objCargo.IdeArea = UsuarioSede.IDEAREA;
 
-                    model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
+                    model.listaTipCargo = new List<Cargo>(_cargoRepository.listaCargosCompletos(objCargo.IdeSede));
                     model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
                 }
                 

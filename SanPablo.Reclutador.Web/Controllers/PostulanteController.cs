@@ -232,6 +232,9 @@
                     {
                         item.IdePostulante = IdePostulante;
                         item.IndicadorPostulante = Indicador.Si;
+                        item.DscApePaterno = model.Postulante.ApellidoPaterno;
+                        item.DscApeMaterno = model.Postulante.ApellidoMaterno;
+                        item.DscNombres = model.Postulante.PrimerNombre + " " + model.Postulante.SegundoNombre; 
                         _usuarioRepository.Update(item);
                     } 
 
@@ -274,15 +277,26 @@
                     postulanteEdit.ApellidoPaterno = postulante.ApellidoPaterno;
                     postulanteEdit.ApellidoMaterno = postulante.ApellidoMaterno;
 
-                    var ObUsuarioExtranet = Session[ConstanteSesion.ObjUsuarioExtranet] == null ? "" : Session[ConstanteSesion.ObjUsuarioExtranet];
+                    var ObUsuarioExtranet = Session[ConstanteSesion.ObjUsuarioExtranet];// == null ? "" : Session[ConstanteSesion.ObjUsuarioExtranet];
                     Usuario objUsuario;
                     string codUsuario = null;
-                    if (ObUsuarioExtranet != "")
+                    if (ObUsuarioExtranet != null)
                     {
                         objUsuario = new Usuario();
                         objUsuario = (Usuario)ObUsuarioExtranet;
 
                         codUsuario = objUsuario.CodUsuario;
+
+                        var usuario = _usuarioRepository.GetBy(x => x.CodUsuario == objUsuario.CodUsuario);
+
+                        foreach (Usuario item in usuario)
+                        {
+                            item.DscApePaterno = postulante.ApellidoPaterno;
+                            item.DscApeMaterno = postulante.ApellidoMaterno;
+                            item.DscNombres = postulante.PrimerNombre + " " + postulante.SegundoNombre;
+                            _usuarioRepository.Update(item);
+                        } 
+
                     }
 
 
