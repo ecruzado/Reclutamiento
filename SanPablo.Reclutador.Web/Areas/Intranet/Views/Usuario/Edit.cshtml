@@ -410,7 +410,7 @@
 
 
 
-    $('#popupDialog').dialog({
+    $('#popupDialogRol').dialog({
         autoOpen: false,
         width: 520,
         height: 400,
@@ -564,7 +564,7 @@
                             if (data.Resultado) {
                                // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
                                 $('#confSelc').dialog("close");
-                                $('#popupDialog').dialog("close");
+                                $('#popupDialogRol').dialog("close");
                                 $('#grdListUsuario').trigger('reloadGrid');
                             }
                         }
@@ -684,12 +684,12 @@
         }
 
     function mostrarPopup(idUsu, selr) {
-        var dialogDiv = $('#popupDialog');
+        var dialogDiv = $('#popupDialogRol');
 
         $.get('@Url.Action("PopupSedeRol", "Usuario", new { area = "Intranet"})?id=' + idUsu + "&idSel=" + selr, function (data) {
 
             dialogDiv.html(data);
-            $.validator.unobtrusive.parse($("#popupDialog"));
+            $.validator.unobtrusive.parse($("#popupDialogRol"));
             dialogDiv.dialog('open');
         });
         return false;
@@ -1122,7 +1122,7 @@
 <div id="confirmacionSedeNivel"><span id="spanConfirmacionSedeNivel"></span></div>
 <div id="confReqInical"><span id="spanConfReqInical"></span></div>
 <div id="confSedeNivel"><span id="spanSedeNivel"></span></div>
-<div id="popupDialog" title="Rol"></div>
+<div id="popupDialogRol" title="Rol"></div>
 <div id="popupDialogTipReq" title="Tipos de Requerimiento"></div>
 <div id="popupDialogSede" title="Sede"></div>
 <div id="popupDialogSedeNivel" title="Sede"></div>
