@@ -17,15 +17,15 @@
             $('#btnGrabar').click(function () {
                 var result = $('#configuracionPerfilForm').valid();
                 if (result) {
-                    $.post('@Url.Action("ConfiguracionPerfil", "MantenimientoCargo")',
+                    $.post('@Url.Action("ConfiguracionPerfil", "Perfil")',
                       $("#configuracionPerfilForm").serialize(),
                       function (respuesta) {
                           if (respuesta.Resultado) {
-                              MostrarMensaje("Datos guardados exitosamente", "MENSAJE");
+                              MostrarMensaje("Datos guardados exitosamente", "INFORMATIVO");
 
                           }
                           else {
-                              MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                              MostrarMensaje(respuesta.Mensaje, "ALERTA");
                           }
                       });
                 }
@@ -337,7 +337,7 @@
                                 <table border="0">
                                     <tr>
                                         <td class="td-label" style="width:130px;">
-                                            Postulantes Pre-Selec.
+                                            Post. Pre-Selec. <span class="text-error">*</span>
                                         </td>
                                         <td>
                                             @if (Model.Accion.Equals(Accion.Consultar))

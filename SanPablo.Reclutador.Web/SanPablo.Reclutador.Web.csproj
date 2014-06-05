@@ -555,8 +555,8 @@
     <Content Include="Areas\Intranet\Views\Seguridad\View1.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\ConfiguracionPerfil.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Conocimientos.cshtml" />
-    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Discapacidad.cshtml" />
+    <Content Include="Areas\Intranet\Views\MantenimientoCargo\Estudio.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />

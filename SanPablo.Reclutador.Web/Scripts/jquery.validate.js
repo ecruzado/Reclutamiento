@@ -1023,7 +1023,8 @@ $.extend($.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/date
 		date: function( value, element ) {
-			return this.optional(element) || !/Invalid|NaN/.test(new Date(value).toString());
+		    //return this.optional(element) || !/Invalid|NaN/.test(new Date(value).toString());
+		    return this.optional(element) || !/Invalid|NaN/.test($.datepicker.parseDate('dd/mm/yy',value).toString());
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO

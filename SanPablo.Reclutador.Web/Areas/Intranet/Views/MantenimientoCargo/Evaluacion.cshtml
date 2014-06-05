@@ -18,7 +18,7 @@
 
       $('#updateDialogEvaluacion').dialog({
           autoOpen: false,
-          width: 600,
+          width: 450,
           resizable: false,
           modal: true,
           buttons: {
@@ -155,7 +155,7 @@
             <div class="grilla-opciones">
                 <h6>Evaluaciones <span  class="text-error">*</span></h6>
                 <div class="opciones">
-                @if (Accion.Enviar == Model.Accion)
+                @if (Accion.Editar == Model.Accion)
                 {
                     <a id="btnAgregarEvaluacion" class="btn btn-small btn-info" title="Agregar"><i class="icon-plus icon-white"></i></a>  
                     <a id="btnEditarEvaluacion" class="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>
@@ -174,7 +174,7 @@
                         
             <div class="formulario-accion">
                 <div class="opciones">
-                <a class="btn" href="@Url.Action("Discapacidad", "ManteniminetoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
+                <a class="btn" href="@Url.Action("Discapacidad", "MantenimientoCargo")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 <a class="btn btn-info" href="@Url.Action("ConfiguracionPerfil", "MantenimientoCargo")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
 
                 </div>

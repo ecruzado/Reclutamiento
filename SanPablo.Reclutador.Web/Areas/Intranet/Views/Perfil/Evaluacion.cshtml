@@ -61,6 +61,7 @@
               $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
               $("#divMensaje").dialog({
                   title: 'CONFIRMACIÓN',
+                  resizable:false,
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },
@@ -71,7 +72,7 @@
               return false;
           }
           else {
-              mostrarMensaje('Seleccionar un item a eliminar')
+              MostrarMensaje('Seleccionar un item a eliminar','ALERTA')
           }
       });
 
@@ -81,7 +82,7 @@
               mostrarEditarEvaluacion(ideEvaluacion);
           }
           else {
-              mostrarMensaje('Seleccionar un item a editar')
+              MostrarMensaje('Seleccionar un item a editar','ALERTA')
           }
       });
 
@@ -184,6 +185,6 @@
 }
 
 <div id="updateDialogEvaluacion" title="Evaluación"></div>
-    <div id="divMensaje">
+    @*<div id="divMensaje">
         <span id="spanMensaje"></span>
-    </div>
+    </div>*@

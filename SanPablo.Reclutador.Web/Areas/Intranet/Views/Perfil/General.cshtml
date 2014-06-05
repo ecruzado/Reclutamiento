@@ -273,8 +273,8 @@
 }
   <!--General Fin-->
 <div id="updateDialogHorario" title="Horario"></div>
-    <div id="divMensaje">
-        <span id="spanMensaje"></span>
+    <div id="divMensajeConfirmar">
+        <span id="spanMensajeConfirmar"></span>
     </div>
 <div id="divInfo"><span id="spanInfo"></span></div>
 <div id="updateDialogUbigeo" title="Ubigeo"></div>
@@ -396,7 +396,7 @@
                     mostrarEditarHorario(ideHorario);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
 
@@ -404,8 +404,8 @@
             $('#btnEliminarHorario').click(function () {
                 var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
                 if (ideHorario != null) {
-                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                    $("#divMensaje").dialog({
+                    $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensajeConfirmar").dialog({
                         title: 'CONFIRMACIÓN',
                         modal: true,
                         buttons: {
@@ -417,7 +417,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
 
@@ -471,7 +471,7 @@
                     mostrarEditarUbigeo(ideUbigeo);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
 
@@ -501,9 +501,10 @@
             $('#btnEliminarUbigeo').click(function () {
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
                 if (ideUbigeo != null) {
-                    $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                    $("#divMensaje").dialog({
+                    $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
+                    $("#divMensajeConfirmar").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable:false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
@@ -514,7 +515,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
         });

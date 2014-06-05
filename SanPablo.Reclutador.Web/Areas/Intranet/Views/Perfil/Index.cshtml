@@ -109,8 +109,8 @@
 <!--PUESTO FIN -->
 
 <div id="updateDialog" title="Competencia"></div>
-    <div id="divMensaje">
-        <span id="spanMensaje"></span>
+    <div id="divMensajeConfirmar">
+        <span id="spanMensajeConfirmar"></span>
     </div>
 
 <div id="updateDialog2" title="Ofrecimiento"></div>
@@ -203,9 +203,10 @@
         $('#btnEliminarCompetencia').click(function () {
             var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
             if (ideCompetencia != null) {
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
+                $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensajeConfirmar").dialog({
                     title: 'CONFIRMACIÓN',
+                    resizable:false,
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
@@ -216,7 +217,7 @@
                 return false;
             }
             else {
-                mostrarMensaje('Seleccionar un item a eliminar');
+                MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
             }
         });
 
@@ -270,9 +271,10 @@
         $('#btnEliminarOfrecimiento').click(function () {
             var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
             if (ideOfrecimiento != null) {
-                $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-                $("#divMensaje").dialog({
+                $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
+                $("#divMensajeConfirmar").dialog({
                     title: 'CONFIRMACIÓN',
+                    resizable:false,
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },
@@ -283,7 +285,7 @@
                 return false;
             }
             else {
-                mostrarMensaje('Seleccionar un item a eliminar');
+                MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
             }
         });
 

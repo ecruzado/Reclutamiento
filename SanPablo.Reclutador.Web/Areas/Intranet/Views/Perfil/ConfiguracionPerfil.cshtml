@@ -21,11 +21,11 @@
                       $("#configuracionPerfilForm").serialize(),
                       function (respuesta) {
                           if (respuesta.Resultado) {
-                              MostrarMensaje("Datos guardados exitosamente", "CONFIRMACIÓN");
+                              MostrarMensaje("Datos guardados exitosamente", "INFORMATIVO");
 
                           }
                           else {
-                              MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                              MostrarMensaje(respuesta.Mensaje, "ALERTA");
                           }
                       });
                 }
