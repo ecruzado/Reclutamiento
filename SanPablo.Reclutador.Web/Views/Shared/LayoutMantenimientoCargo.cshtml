@@ -246,10 +246,11 @@
         
         $("#spanMensaje").html(msj);
         $("#divMensaje").dialog({
-            title: 'SAN PABLO',
+            title: 'ALERTA',
+            resizable:false,
             modal: true,
             buttons: {
-                "Ok": function () { $(this).dialog("close"); }
+                "Aceptar": function () { $(this).dialog("close"); }
             }
         });
     }

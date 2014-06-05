@@ -20,7 +20,7 @@
 
         $('#updateDialogExperiencia').dialog({
             autoOpen: false,
-            width: 600,
+            width: 460,
             resizable: false,
             modal: true,
             buttons: {
@@ -60,7 +60,7 @@
             if (ideExperiencia != null) {
                 $("#spanMensaje10").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje10").dialog({
-                    title: 'CONFIRMACIÓN',
+                    title: 'SAN PABLO',
                     modal: true,
                     resizable : false,
                     buttons: {
@@ -72,14 +72,8 @@
                 return false;
             }
             else {
-                $("#spanMensaje10").html('Seleccionar un item a eliminar');
-                $("#divMensaje10").dialog({
-                    title: 'ALERTA',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+               mostrarMensaje('Seleccionar un item a eliminar');
+               
             }
         });
 
@@ -89,14 +83,7 @@
                 mostrarEditarExperiencia(ideExperiencia);
             }
             else {
-                $("#spanMensaje10").html('Seleccionar un item a editar');
-                $("#divMensaje10").dialog({
-                    title: 'ALERTA',
-                    modal: true,
-                    buttons: {
-                        "Ok": function () { $(this).dialog("close"); }
-                    }
-                });
+                mostrarMensaje('Seleccionar un item a editar');
             }
         });
     });

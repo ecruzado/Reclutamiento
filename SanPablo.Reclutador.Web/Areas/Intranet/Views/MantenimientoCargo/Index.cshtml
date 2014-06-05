@@ -2,7 +2,7 @@
 @model SanPablo.Reclutador.Web.Areas.Intranet.Models.MantenimientoCargoViewModel
 @{
     ViewBag.Title = "Mantenimiento Cargo";
-    Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";   
+    Layout = "~/Views/Shared/LayoutMantenimientoCargo.cshtml";
 }
 
 
@@ -150,7 +150,7 @@
                             SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                          }
                         if (data.Resultado) {
-                            MostrarInfo(data.Mensaje, "Mensaje");
+                            MostrarInfo(data.Mensaje, "CONFIRMACIÓN");
                         }
                     }
                 });
@@ -206,6 +206,7 @@
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
                     title: 'CONFIRMACIÓN',
+                    resizable: false,
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarCompetencia(ideCompetencia); $(this).dialog("close"); $('#grdListCompetencias').trigger('reloadGrid'); },
@@ -273,6 +274,7 @@
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje").dialog({
                     title: 'CONFIRMACIÓN',
+                    resizable: false,
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarOfrecimiento(ideOfrecimiento); $(this).dialog("close"); $('#grdListOfrecemos').trigger('reloadGrid'); },

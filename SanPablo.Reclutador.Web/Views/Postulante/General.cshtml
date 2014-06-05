@@ -21,20 +21,16 @@
     $(document).ready(function () {
 
         var dates = $('#Postulante_FechaNacimiento').datepicker({
-            dateFormat: 'dd/mm/yy',
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
                 buttonImageOnly: true,
                 changeMonth: true,
                 changeYear: true,
+                yearRange: "-100:+0",
+                //reverseYearRange: false,
                 numberOfMonths: 1,
-                //minDate: dateToday,
                 onSelect: function (selectedDate) {
-                   // if ($(this).valid()) {
                         validarFechaNacimiento();
-                    //}
-                    //var option = this.id == "from" ? "minDate" : "maxDate",
-                    //    instance = $(this).data("datepicker");
                 }
         });
         $('#Postulante_FechaNacimiento').attr("readonly", "readonly");
@@ -76,7 +72,7 @@
         SanPablo.LetrasSpace('Postulante_ApellidoMaterno');
         SanPablo.LetrasSpace('Postulante_PrimerNombre');
         SanPablo.LetrasSpace('Postulante_SegundoNombre');
-        SanPablo.AlfanumericoSpace('Postulante_Observacion');
+        SanPablo.DatoEmpresa('Postulante_Observacion');
 
         SanPablo.Alfanumerico('Postulante_InteriorDireccion');
         SanPablo.Alfanumerico('Postulante_Manzana');

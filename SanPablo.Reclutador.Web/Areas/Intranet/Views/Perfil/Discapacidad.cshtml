@@ -57,6 +57,7 @@
                 $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
                 $("#divMensaje11").dialog({
                     title: 'CONFIRMACIÓN',
+                    resizable:false,
                     modal: true,
                     buttons: {
                         "Eliminar": function () { eliminarDiscapacidad(ideDiscapacidad); $(this).dialog("close"); $('#grdListDiscapacidad').trigger('reloadGrid'); },
@@ -67,7 +68,7 @@
                 return false;
             }
             else {
-                mostrarMensaje('Seleccionar un item a eliminar');
+                MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
             }
         });
 
@@ -77,7 +78,7 @@
                 mostrarEditarDiscapacidad(ideDiscapacidad);
             }
             else {
-                mostrarMensaje('Seleccionar un item a editar');
+                MostrarMensaje('Seleccionar un item a editar','ALERTA');
             }
         });
 

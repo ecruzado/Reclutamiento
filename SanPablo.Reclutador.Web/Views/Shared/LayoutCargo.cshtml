@@ -241,7 +241,7 @@
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(respuesta.Mensaje,"MENSAJE");
+                                MostrarMensaje(respuesta.Mensaje,"ALERTA");
                             }
                         });
                 },
@@ -281,7 +281,7 @@
                             }
                             else {
                                 $.unblockUI();
-                                MostrarMensaje(respuesta.Mensaje, "MENSAJE");
+                                MostrarMensaje(respuesta.Mensaje, "ALERTA");
                             }
                         });
                 },
@@ -323,7 +323,7 @@
                     dialogDiv.dialog('open');
                 }
                 else {
-                    MostrarMensajeAlert("Debe completar el perfil con los datos obligatorios", "MENSAJE");
+                    MostrarMensajeAlert("Debe completar el perfil con los datos obligatorios", "ALERTA");
                 }
             }
         });

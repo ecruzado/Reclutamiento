@@ -132,6 +132,7 @@
                     $("#spanMensaje8").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje8").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable:false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarIdioma(ideIdioma); $(this).dialog("close"); $('#grdListIdioma').trigger('reloadGrid'); },
@@ -152,7 +153,7 @@
                     mostrarEditarIdioma(ideIdioma);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
 
@@ -204,6 +205,7 @@
                     $("#spanMensaje9").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje9").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable:false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOtrosConocimientos(ideOtrosConocimientos); $(this).dialog("close"); $('#grdListOtrosConocimientos').trigger('reloadGrid'); },
@@ -214,7 +216,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
 
@@ -224,7 +226,7 @@
                     mostrarEditarOtrosConocimientos(ideOtrosConocimientos);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
         });

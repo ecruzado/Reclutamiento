@@ -273,9 +273,9 @@
 }
   <!--General Fin-->
 <div id="updateDialogHorario" title="Horario"></div>
-    <div id="divMensaje">
+    @*<div id="divMensaje">
         <span id="spanMensaje"></span>
-    </div>
+    </div>*@
 <div id="divInfo"><span id="spanInfo"></span></div>
 <div id="updateDialogUbigeo" title="Ubigeo"></div>
    
@@ -333,7 +333,7 @@
                             if (data.redirecciona) {
                                 SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                             }if (data.Resultado) {
-                                MostrarInfo(data.Mensaje, "ALERTA");
+                                MostrarInfo(data.Mensaje,"CONFIRMACIÓN");
                             }
                         }
                        });
@@ -353,7 +353,7 @@
 
             $('#updateDialogHorario').dialog({
                 autoOpen: false,
-                width: 600,
+                width: 450,
                 resizable: false,
                 modal: true,
                 buttons: {
@@ -374,10 +374,7 @@
                                 }
                             );
                         }
-                        //else {
-                        //        notificacionError("Verficar los datos ingresados");
-
-                        //}
+                        
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
@@ -396,7 +393,7 @@
                     mostrarEditarHorario(ideHorario);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
 
@@ -407,6 +404,7 @@
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable: false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarHorario(ideHorario); $(this).dialog("close"); $('#grdListHorario').trigger('reloadGrid'); },
@@ -417,7 +415,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
 
@@ -471,9 +469,31 @@
                     mostrarEditarUbigeo(ideUbigeo);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar','ALERTA');
                 }
             });
+
+
+
+         //edades
+            $('select#Cargo_EdadInicio').change(function () {
+                var edadInicio = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("listaEdadGenerar","Perfil",new { area = "Intranet"})',
+                data: { edadInicio: edadInicio },
+                success: function (respuesta) {
+                    $("select#Cargo_EdadFin").empty();
+                    $.each(respuesta, function (i, item) {
+                        $("select#Cargo_EdadFin").append("<option value='"
+                        + item.IdEdad + "'>" + item.DesEdad + "</option>");
+                    }
+                );
+                }
+            });
+         })
+
+
 
             // btn Eliminar
             $('#btnEliminarUbigeo').click(function () {
@@ -482,6 +502,7 @@
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable: false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarUbigeo(ideUbigeo); $(this).dialog("close"); $('#grdListUbigeo').trigger('reloadGrid'); },
@@ -492,7 +513,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
         });

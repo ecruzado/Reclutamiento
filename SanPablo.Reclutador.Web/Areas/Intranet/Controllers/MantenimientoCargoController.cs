@@ -143,13 +143,18 @@
             CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
             CargoPerfil.NumeroPosiciones = Convert.ToInt32(cargo.NumeroPosiciones);
 
-            var datosArea = _areaRepository.obtenerDatosArea(cargo.IdeArea);
-            CargoPerfil.IdeArea = Convert.ToInt32(datosArea[0]);
-            CargoPerfil.Area = datosArea[1];
-            CargoPerfil.IdeDepartamento = Convert.ToInt32(datosArea[2]);
-            CargoPerfil.Departamento = datosArea[3];
-            CargoPerfil.IdeDependencia = Convert.ToInt32(datosArea[4]);
-            CargoPerfil.Dependencia = datosArea[5];
+            //var datosArea = _areaRepository.obtenerDatosArea(cargo.IdeArea);
+            CargoPerfil.IdeArea = cargo.IdeArea;
+            var areaCargo = _areaRepository.GetSingle(x => x.IdeArea == cargo.IdeArea);
+            CargoPerfil.Area = areaCargo.NombreArea;
+            
+            CargoPerfil.IdeDepartamento = cargo.IdeDepartamento;
+            var departamentoCargo = _departamentoRepository.GetSingle(x => x.IdeDepartamento == cargo.IdeDepartamento);
+            CargoPerfil.Departamento = departamentoCargo.NombreDepartamento;
+            
+            CargoPerfil.IdeDependencia = cargo.IdeDependencia;
+            var dependenciaCargo = _dependenciaRepository.GetSingle(x => x.IdeDependencia == cargo.IdeDependencia && x.IdeSede == cargo.IdeSede);
+            CargoPerfil.Dependencia = dependenciaCargo.NombreDependencia;
             
         }
         /// <summary>
