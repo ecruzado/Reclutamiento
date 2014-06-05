@@ -87,17 +87,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             var idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
 
-            if (idSede!=null)
-            {
+            //if (idSede!=null)
+            //{
 
-                if (idSede>0)
-                {
-                    objModel.UsuarioRolSede.IdSede = idSede;
-                    objModel.CampoSede = Visualicion.NO;
-                }
+            //    if (idSede>0)
+            //    {
+            //        objModel.UsuarioRolSede.IdSede = idSede;
+            //        objModel.CampoSede = Visualicion.NO;
+            //    }
                 
 
-            }
+            //}
             
 
 
