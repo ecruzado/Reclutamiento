@@ -426,7 +426,7 @@
                         }
                     });
                 },
-                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje','Postulaciones previas'],
+                colNames: ['', '', '','','', 'Apellidos', 'Nombres','CV', '','Estado', 'Comentario', 'Puntaje','Post. Previas'],
                 colModel: [
                         { name: 'IdeReclutaPersona', index: 'IdeReclutaPersona', align: 'left', editable: false, sortable: false, hidden: true },
                         { name: 'IdePostulante', index: 'IdePostulante', align: 'left', editable: false, sortable: false, hidden: true },
@@ -444,7 +444,7 @@
                         { name: 'DesEstadoPostulante', index: 'DesEstadoPostulante', align: 'center', editable: false, sortable: false, width: 200 },
                         { name: 'Comentario', index: 'Comentario', align: 'center', sortable: false, width: 300 },
                         { name: 'PtoTotal', index: 'PtoTotal', align: 'center', sortable: false, width: 100 },
-                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 300 ,formatter: PostulacionFormatter}
+                        { name: 'PostulacionParalelo', index: 'PostulacionParalelo', align: 'center', sortable: false, width: 100 ,formatter: PostulacionFormatter}
 
                 ],
 
@@ -943,7 +943,7 @@
     </div>
 </div>
 
-<div id="popupDialogPost" title="Postulaciones"></div>
+<div id="popupDialogPost" title="Postulaciones previas"></div>
 <div id="popupDialogCv" title="Postulantes Externos"></div>
 <div id="confCv"><span id="spanConfCv"></span></div>
 <div id="confirmacionPos"><span id="spanConfirmacionPos"></span></div>
