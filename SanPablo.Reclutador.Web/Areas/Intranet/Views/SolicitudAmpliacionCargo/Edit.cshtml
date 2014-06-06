@@ -946,10 +946,18 @@
                             }
                             else
                             {
-                                 @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo))
-                                 <div class="tex-error" style="font-size:12px;color:red"> 
-                                    @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeCargo)
-                                 </div>
+                                if (Model.nuevaSolicitud.Equals(Indicador.Si))
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo))
+                                     <div class="tex-error" style="font-size:12px;color:red"> 
+                                        @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.IdeCargo)
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo), new { disabled = "disabled" })
+                                    
+                                }
                             }
                         </div>
                        </div>
