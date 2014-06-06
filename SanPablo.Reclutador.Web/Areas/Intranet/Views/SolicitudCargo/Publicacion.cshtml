@@ -445,25 +445,35 @@
 
         var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
 
+        var observacion = $("#SolReqPersonal_ObservacionPublica").val();
+
         var fechaInicial = $("#SolReqPersonal_FecPublicacion").val();
         var fechaFinal = $("#SolReqPersonal_FecExpiracacion").val();
 
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
 
-            MostrarMensaje('Las fechas son obligatorias', "Mensaje");
+            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
-            MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "Mensaje");
+            MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "ALERTA");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "Mensaje");
+            MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "ALERTA");
             return false;
         }
+
+        if (observacion == null || observacion.length==0) {
+            MostrarMensaje('Esta pendiente el campo observación', "ALERTA");
+            return false;
+        }
+
+        
+
 
         //var firstValue = fecInicial.split('-');
         //var secondValue = fecFinal.split('-');
@@ -755,7 +765,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Observaciones</label>
+                        <label class="control-label" for="input01">Observaciones<span class="text-error">*</span></label>
                          <div class="controls">
                              @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
