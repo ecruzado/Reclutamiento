@@ -955,7 +955,8 @@
                                 }
                                 else
                                 {
-                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo), new { disabled = "disabled" })
+                                    
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo), new { @readonly = "readonly" })
                                     
                                 }
                             }
