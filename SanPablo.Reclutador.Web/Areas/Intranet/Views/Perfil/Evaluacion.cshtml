@@ -58,14 +58,14 @@
       $('#btnEliminarEvaluacion').click(function () {
           var ideEvaluacion = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
           if (ideEvaluacion != null) {
-              $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
-              $("#divMensaje").dialog({
+              $("#spanMensajeConfirmacion").html('¿Está seguro que desea eliminar el registro?.');
+              $("#divMensajeConfirmacion").dialog({
                   title: 'CONFIRMACIÓN',
                   resizable:false,
                   modal: true,
                   buttons: {
                       "Eliminar": function () { eliminarEvaluacion(ideEvaluacion); $(this).dialog("close"); $('#grdListEvaluacion').trigger('reloadGrid'); },
-                      "Cancel": function () { $(this).dialog("close"); }
+                      "Cancelar": function () { $(this).dialog("close"); }
                   }
               });
 
@@ -185,6 +185,6 @@
 }
 
 <div id="updateDialogEvaluacion" title="Evaluación"></div>
-    @*<div id="divMensaje">
-        <span id="spanMensaje"></span>
-    </div>*@
+    <div id="divMensajeConfirmacion">
+        <span id="spanMensajeConfirmacion"></span>
+    </div>

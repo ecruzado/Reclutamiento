@@ -60,6 +60,7 @@
                     $("#spanMensaje7").html('¿Está seguro que desea eliminar el registro?.');
                     $("#divMensaje7").dialog({
                         title: 'CONFIRMACIÓN',
+                        resizable:false,
                         modal: true,
                         buttons: {
                             "Eliminar": function () { eliminarOfimatica(ideOfimatica); $(this).dialog("close"); $('#grdListOfimatica').trigger('reloadGrid'); },
@@ -70,7 +71,7 @@
                     return false;
                 }
                 else {
-                    alertMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
 
@@ -80,7 +81,7 @@
                     mostrarEditarOfimatica(ideOfimatica);
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a editar');
+                    MostrarMensaje('Seleccionar un item a editar', 'ALERTA');
                 }
             });
 
@@ -143,7 +144,7 @@
                     return false;
                 }
                 else {
-                    mostrarMensaje('Seleccionar un item a eliminar');
+                    MostrarMensaje('Seleccionar un item a eliminar','ALERTA');
                 }
             });
 
