@@ -176,7 +176,7 @@
 
     jQuery("#grdList").jqGrid({
        
-        colNames: ['Estado', '', 'Código', 'Código', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.','Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado','', 'Etapa','','Tipo Solicitud'],
+        colNames: ['Estado', '', 'Nro. Solicitud', 'Nro. Solicitud', '', 'Cargo', '', 'Dependencia', '', 'Departamento', '', 'Área', 'Vac.', 'Post.', 'Pre Sel.', 'Eval.', 'Selec.', 'Contr.', 'Inicio', 'Cierre', '', 'Responsable', 'Nom.Responsable', 'Publicado', '', 'Etapa', '', 'Tipo Solicitud'],
         colModel: [
                 { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatterSemaforo },
                 { name: 'TipEstado', index: 'TipEstado', align: 'center', width: 50, hidden: true, sortable: false },
@@ -480,7 +480,7 @@
                             </div>
                     </td>
                    <td class="span5">
-                            <label class="control-label" for="inputSuccess">Codigo Solicitud</label>
+                            <label class="control-label" for="inputSuccess">Número Solicitud</label>
                             <div class="controles">
                                 @*@Html.TextBoxFor(model => model.SolicitudRequerimiento.CodSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })*@
                                 @Html.TextBoxFor(model => model.SolicitudRequerimiento.IdeSolReqPersonal, new { maxlength="10",  @onblur = "aMays(event, this)" })

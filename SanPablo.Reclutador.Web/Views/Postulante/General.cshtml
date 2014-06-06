@@ -58,7 +58,7 @@
 
         //});
 
-        mostrarMensajeBienvenida();
+        //mostrarMensajeBienvenida();
 
         SanPablo.Numeros('Postulante_NumeroDireccion');
         SanPablo.Numeros('Postulante_NumeroDocumento');
@@ -318,7 +318,7 @@
         }
     }
 
-    function mostrarMensajeBienvenida()
+   @* function mostrarMensajeBienvenida()
     {
         $.ajax({
             type: "POST",
@@ -331,7 +331,7 @@
                 }
             }
         });
-    }
+    }*@
 
     function verificarNrosTelefonicos() {
         var nroMovil = $("#Postulante_TelefonoMovil").val();
