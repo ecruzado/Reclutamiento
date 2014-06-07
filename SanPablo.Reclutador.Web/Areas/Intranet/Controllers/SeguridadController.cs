@@ -313,8 +313,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
 
+            string password = Base64Encode(codPass.Trim());
+
             objUsuario = _usuarioRepository.GetSingle(x => x.CodUsuario == id.Trim()
-                                         && x.CodContrasena == codPass.Trim()
+                                         && x.CodContrasena == password
                                          && x.TipUsuario == TipUsuario.Instranet
                                          && x.FlgEstado == IndicadorActivo.Activo);
 
@@ -453,6 +455,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
              JsonMessage ObjJsonMessage;
              ObjJsonMessage = new JsonMessage();
              model.Usuario = new Usuario();
+             string passwordAnt;
+             string passwordNuevo;
 
              var codUsuario = Session[ConstanteSesion.Usuario];
 
@@ -463,9 +467,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                  if (model.Usuario != null)
                  {
-                     if (model.Password.PassAnterior.Equals(model.Usuario.CodContrasena))
+                     passwordAnt = Base64Encode(model.Password.PassAnterior.Trim());
+                     
+                     if (model.Usuario.CodContrasena.Equals(passwordAnt))
                      {
-                         model.Usuario.CodContrasena = model.Password.PassNuevo;
+
+                         passwordNuevo = Base64Encode(model.Password.PassNuevo);
+
+                         model.Usuario.CodContrasena = passwordNuevo;
                         _usuarioRepository.Update(model.Usuario);
                          ObjJsonMessage.Resultado = true;
                      }

@@ -1224,9 +1224,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
 
-
-
-
                      doc.Add(tableInicial);
 
 
