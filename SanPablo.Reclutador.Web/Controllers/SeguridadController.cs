@@ -86,7 +86,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             JsonMessage ObjJsonMessage = new JsonMessage();
             
             Usuario objUSaurioExtranet;
-            
+            string password;
             string codUsuario = (model.UsuarioExtranet.Usuario == null ? "" : model.UsuarioExtranet.Usuario);
             string PassUsuario = (model.UsuarioExtranet.Password==null?"":model.UsuarioExtranet.Password);
 
@@ -104,10 +104,10 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             }
 
-            
+            password = Base64Encode(PassUsuario);
 
             var ListaUsuario = (List<Usuario>)_usuarioRepository.GetBy(x => x.CodUsuario == codUsuario
-                                    && x.CodContrasena == PassUsuario
+                                    && x.CodContrasena == password
                                     && x.TipUsuario == TipUsuario.Extranet
                                     && x.FlgEstado == IndicadorActivo.Activo
                                     );
@@ -186,7 +186,7 @@ namespace SanPablo.Reclutador.Web.Controllers
 
 
                     usuario = model.UsuarioExtranet.Usuario;
-                    pass = model.UsuarioExtranet.Password;
+                    pass = Base64Encode(model.UsuarioExtranet.Password.Trim());
                     confPass = model.UsuarioExtranet.PasswordConfirma;
 
                     //var lista = _usuarioRepository.GetBy(x => x.CodUsuario == usuario
@@ -365,7 +365,7 @@ namespace SanPablo.Reclutador.Web.Controllers
 
                        listaValores.Add("¡Te damos la más cordial Bienvenida al sistema de Reclutamiento y Selección de Personal del Complejo Hospitalario San Pablo!<br />");
                        listaValores.Add(objUsuario.CodUsuario);
-                       listaValores.Add(objUsuario.CodContrasena);
+                       listaValores.Add(Base64Decode(objUsuario.CodContrasena.Trim()));
 
                        string retorno = envioEmail.ObtenerCuerpoCorreo(rutaHTML, listaParemetros, listaValores);
 

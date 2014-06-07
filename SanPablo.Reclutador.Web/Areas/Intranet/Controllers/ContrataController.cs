@@ -36,6 +36,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         private IReemplazoRepository _reemplazoRepository;
         private ICargoRepository _cargoRepository;
         private IUsuarioRepository _usuarioRepository;
+        private ISedeNivelRepository _sedeNivelRepository;
+        private IUsuarioRolSedeRepository _usuarioRolSedeRepository;
 
 
 
@@ -47,7 +49,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             ISolicitudNuevoCargoRepository solicitudNuevoCargoRepository,
             IReemplazoRepository reemplazoRepository,
             ICargoRepository cargoRepository,
-            IUsuarioRepository usuarioRepository
+            IUsuarioRepository usuarioRepository,
+            ISedeNivelRepository sedeNivelRepository,
+            IUsuarioRolSedeRepository usuarioRolSedeRepository
             )
         {
             _detalleGeneralRepository = detalleGeneralRepository;
@@ -59,6 +63,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             _reemplazoRepository = reemplazoRepository;
             _cargoRepository = cargoRepository;
             _usuarioRepository = usuarioRepository;
+            _sedeNivelRepository = sedeNivelRepository;
+            _usuarioRolSedeRepository = usuarioRolSedeRepository;
         }
         
         /// <summary>
@@ -418,6 +424,51 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
 
 
+
+                //actualiza estado de la solicitud
+
+                List<ReclutamientoPersona> listaReclutamiento = new List<ReclutamientoPersona>();
+
+                listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == idSol && x.TipSol == tipSol && x.TipPuesto == tipPuesto && x.IdSede == x.IdSede && x.IdeCargo == idCargo);
+
+                Usuario objUsuario;
+                SedeNivel objSedeNivel;
+                if (listaReclutamiento!=null)
+                {
+                    if (listaReclutamiento.Count>0)
+                    {
+                        foreach (ReclutamientoPersona item in listaReclutamiento)
+	                        {
+		                        objUsuario = new Usuario();
+                                
+                                
+                                var objUsuario2 = _usuarioRepository.GetSingle(x => x.IdePostulante == item.IdePostulante && x.TipUsuario == TipUsuario.Instranet);
+                                objUsuario2.FlgEstado = IndicadorActivo.Inactivo;
+
+                                _usuarioRepository.Update(objUsuario2);
+
+                                objSedeNivel = new SedeNivel();
+                                objSedeNivel.IDUSUARIO = objUsuario2.IdUsuario;
+
+                                var objSedeNivel2 = _sedeNivelRepository.GetBy(x => x.IDUSUARIO == objSedeNivel.IDUSUARIO);
+
+                                foreach (SedeNivel item2 in objSedeNivel2)
+                                {
+                                    _sedeNivelRepository.Remove(item2);
+                                }
+                                
+                                
+	                        }
+
+                        
+
+                    }
+                    
+                }
+
+
+
+
             }
             else
             {
@@ -562,6 +613,56 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 if (TipoSolicitud.Ampliacion.Equals(objReCluta.TipSol))
                 {
                     bool flag = EnviarCorreo(desRol, Etapa.Finalizado, "Ampliación", objSolReq2.nombreCargo, "" + model.ReclutaPersonal.IdeSol, listSends, listCopys, comentario, plantilla);
+
+                }
+
+            }
+
+            List<ReclutamientoPersona> listaReclutamiento = new List<ReclutamientoPersona>();
+
+            listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == objReCluta.IdeSol && x.TipSol == objReCluta.TipSol && x.TipPuesto == objReCluta.TipPuesto && x.IdSede == x.IdSede && x.IdeCargo == objReCluta.IdeCargo);
+
+            Usuario objUsuario;
+            SedeNivel objSedeNivel;
+            if (listaReclutamiento != null)
+            {
+                if (listaReclutamiento.Count > 0)
+                {
+                    foreach (ReclutamientoPersona item in listaReclutamiento)
+                    {
+                        objUsuario = new Usuario();
+
+
+                        var objUsuario2 = _usuarioRepository.GetSingle(x => x.IdePostulante == item.IdePostulante && x.TipUsuario == TipUsuario.Instranet);
+                        objUsuario2.FlgEstado = IndicadorActivo.Inactivo;
+
+                        _usuarioRepository.Update(objUsuario2);
+
+                        objSedeNivel = new SedeNivel();
+                        objSedeNivel.IDUSUARIO = objUsuario2.IdUsuario;
+
+                        var objSedeNivel2 = _sedeNivelRepository.GetBy(x => x.IDUSUARIO == objSedeNivel.IDUSUARIO);
+
+                        foreach (SedeNivel item2 in objSedeNivel2)
+                        {
+                            _sedeNivelRepository.Remove(item2);
+ 
+                        }
+
+                        
+                        var objSedeRolUsuario = _usuarioRolSedeRepository.GetBy(x => x.IdUsuario == objUsuario2.IdUsuario);
+
+                        foreach (UsuarioRolSede item3 in objSedeRolUsuario)
+                        {
+
+                            item3.IdSede = 0;
+
+                            _usuarioRolSedeRepository.Update(item3);
+                        }
+
+                    }
+
+
 
                 }
 

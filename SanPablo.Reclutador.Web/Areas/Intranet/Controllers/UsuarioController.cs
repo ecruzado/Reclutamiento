@@ -222,6 +222,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             Usuario objUsuario;
             JsonMessage jsonMessage = new JsonMessage();
+            string password;
 
             if (model.Usuario.IdUsuario!=null && model.Usuario.IdUsuario > 0)
             {
@@ -233,7 +234,15 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objUsuario.DscApePaterno = model.Usuario.DscApePaterno;
                 objUsuario.DscNombres = model.Usuario.DscNombres;
                 objUsuario.CodUsuario = model.Usuario.CodUsuario;
-                objUsuario.CodContrasena = model.Usuario.CodContrasena;
+
+
+                // password = model.Usuario.CodContrasena;
+
+                password = Base64Encode(model.Usuario.CodContrasena.Trim());
+
+                objUsuario.CodContrasena = password;
+                
+
                 objUsuario.Email = model.Usuario.Email;
                 objUsuario.Telefono = model.Usuario.Telefono;
                 objUsuario.UsrModificacion = UsuarioActual.NombreUsuario;
@@ -256,6 +265,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 objUsuario.UsrModificacion = UsuarioActual.NombreUsuario;
                 objUsuario.FecModifcacion = FechaCreacion;
+
+                //codifica la contrasenia
+                password = Base64Encode(model.Usuario.CodContrasena.Trim());
+                objUsuario.CodContrasena = password;
+
 
                 objUsuario.UsrCreacion = UsuarioActual.NombreUsuario;
 
