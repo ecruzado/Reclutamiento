@@ -46,8 +46,11 @@ create or replace package PR_INTRANET is
                              p_ideSede      IN SEDE.IDESEDE%TYPE,
                              p_cRetCursor   OUT SYS_REFCURSOR);
 
-  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea    IN AREA.IDEAREA%TYPE,
-                                    p_cRetCursor OUT SYS_REFCURSOR);
+  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
+                                    p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                    p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                    p_ideSede          IN SEDE.IDESEDE%TYPE,
+                                    p_cRetCursor       OUT SYS_REFCURSOR);
 
   PROCEDURE SP_OBTENER_COMPETENCIAREMP(p_ideSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                        p_cRetCursor   OUT SYS_REFCURSOR);
@@ -703,8 +706,11 @@ create or replace package body PR_INTRANET is
       14/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
 
-  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea    IN AREA.IDEAREA%TYPE,
-                                    p_cRetCursor OUT SYS_REFCURSOR) IS
+  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
+                                    p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
+                                    p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
+                                    p_ideSede          IN SEDE.IDESEDE%TYPE,
+                                    p_cRetCursor       OUT SYS_REFCURSOR) IS
   BEGIN
     OPEN p_cRetCursor FOR
       SELECT AR.IDEAREA,
@@ -713,7 +719,16 @@ create or replace package body PR_INTRANET is
              DE.NOMDEPENDENCIA,
              DP.IDEDEPARTAMENTO,
              DP.NOMDEPARTAMENTO
-        FROM AREA AR, DEPENDENCIA DE, DEPARTAMENTO DP
+        FROM (SELECT AR.IDEAREA, AR.NOMAREA,AR.IDEDEPARTAMENTO  
+              FROM AREA AR 
+              WHERE AR.IDEAREA = p_ideArea) AR, 
+             (SELECT DE.IDEDEPENDENCIA, DE.NOMDEPENDENCIA 
+              FROM  DEPENDENCIA DE
+              WHERE DE.IDEDEPENDENCIA = p_ideDependencia
+              AND DE.IDESEDE = p_ideSede)DE, 
+             (SELECT DP.IDEDEPARTAMENTO, DP.NOMDEPARTAMENTO, DP.IDEDEPENDENCIA 
+              FROM DEPARTAMENTO DP
+              WHERE DP.IDEDEPARTAMENTO = p_ideDepartamento) DP
        WHERE AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
          AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
          AND AR.IDEAREA = p_ideArea;
