@@ -180,15 +180,18 @@
             if (opcion == true) {
                 msj.style.display = "none";
                 $('#Experiencia_FechaFin').val('');
+                $('#Experiencia_TipoMotivoCese').val(0);
                 calcularTiempoServicio();
                 
                 $('#Experiencia_FechaFin').attr("readonly", true);
-                $('#Experiencia_TipoMotivoCese').attr("readonly", true);
+                $('#Experiencia_TipoMotivoCese').attr("disabled", "disabled");
+                //$('#Experiencia_TipoMotivoCese').attr("readonly", true);
             }
             else {
                 
-                $('#Experiencia_FechaFin').attr("readonly",false);
-                $('#Experiencia_TipoMotivoCese').attr("readonly",false);
+                $('#Experiencia_FechaFin').attr("readonly", false);
+                $('#Experiencia_TipoMotivoCese').removeAttr("disabled");
+                //$('#Experiencia_TipoMotivoCese').attr("readonly",false);
             }
         }
 
