@@ -403,6 +403,11 @@
 
         public ActionResult autoCompletarCargo(string query)
         {
+            if (query != null)
+            {
+                query = query.ToUpper();
+            }
+                
             var ideSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
             query = query.Replace(" ", "");
             if (query.Length > 1)
@@ -414,10 +419,11 @@
             var obj = _cargoRepository.GetBy(x => x.IdeSede == ideSede);
 
             var users = (from u in obj
-                         where u.NombreCargo.Contains(query)
-                         select u.NombreCargo).Distinct().ToArray();
+                            where u.NombreCargo.Contains(query)
+                            select u.NombreCargo).Distinct().ToArray();
             return Json(users, JsonRequestBehavior.AllowGet);
-        }
+      }
+
 
 
 

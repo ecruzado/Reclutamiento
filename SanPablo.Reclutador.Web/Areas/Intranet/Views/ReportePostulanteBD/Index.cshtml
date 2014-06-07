@@ -355,9 +355,9 @@
                     
                     <td class="span5" style="width:420px" >
                         <div class="">
-                            <label class="control-label" for="selectError" style="width:145px;text-align:left">Busqueda rápida<span class="text-error">*</span></label>
+                            <label class="control-label" for="selectError" style="width:145px;text-align:left">Cargo<span class="text-error">*</span></label>
                             <div class="controles">
-                                @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onblur="aMays(event, this)"})
+                                @Html.TextBoxFor(model => model.Solicitud.nombreCargo, new { onkeydown="aMays(event, this)"})
                             </div>
                         </div>
                     </td>

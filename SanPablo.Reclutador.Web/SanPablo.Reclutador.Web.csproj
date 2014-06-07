@@ -436,7 +436,6 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ProgramarEvaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen1.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen2.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen3.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen4.cshtml" />
