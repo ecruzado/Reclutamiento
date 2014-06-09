@@ -86,7 +86,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             JsonMessage ObjJsonMessage = new JsonMessage();
             
             Usuario objUSaurioExtranet;
-            string password;
+            string password = null;
             string codUsuario = (model.UsuarioExtranet.Usuario == null ? "" : model.UsuarioExtranet.Usuario);
             string PassUsuario = (model.UsuarioExtranet.Password==null?"":model.UsuarioExtranet.Password);
 
@@ -99,12 +99,17 @@ namespace SanPablo.Reclutador.Web.Controllers
                 {
                     Usuario usuario = (Usuario)objUsuario;
                     codUsuario = usuario.CodUsuario;
-                    PassUsuario = usuario.CodContrasena; 
+                    PassUsuario = usuario.CodContrasena;
+                    password = PassUsuario;
                 }
 
             }
+            else
+            {
+                password = Base64Encode(PassUsuario);
+            }
 
-            password = Base64Encode(PassUsuario);
+            
 
             var ListaUsuario = (List<Usuario>)_usuarioRepository.GetBy(x => x.CodUsuario == codUsuario
                                     && x.CodContrasena == password
