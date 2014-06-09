@@ -709,7 +709,9 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones</label>
                          <div class="controls">
-                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+
+                             @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur = "aMays(event, this)" })     
+                            @* @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
                                 @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px", disabled = "disabled" })
                              }
@@ -717,7 +719,7 @@
                              {
                                 @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur = "aMays(event, this)" })     
                                  <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>
-                             }
+                             }*@
                          </div>
                         </td>
                     </tr>   
