@@ -49,6 +49,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public int idRol { get; set; }
 
 
+        public string visualizarOfrecemos { get; set; }
+        public string visualizarCompetencias { get; set; }
+
         #region Botonera de busqueda
         /// <summary>
         /// boton ranking

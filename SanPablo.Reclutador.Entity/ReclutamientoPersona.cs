@@ -50,6 +50,8 @@ namespace SanPablo.Reclutador.Entity
         /// </summary>
         public virtual string IndContactado { get; set; }
 
+        public virtual string IndProceso { get; set; }
+
         /// <summary>
         /// referencia a indicador de contactado
         /// </summary>

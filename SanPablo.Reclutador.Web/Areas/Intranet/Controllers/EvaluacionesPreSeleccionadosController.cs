@@ -338,6 +338,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     {
                         var reclutamientoPersona = _reclutamientoPersonaRepository.GetSingle(x => x.IdeReclutaPersona == reclutaExamenEditar.IdeReclutamientoPersona);
                         reclutamientoPersona.Evaluacion = reclutamientoPersona.Evaluacion + 1;
+                        reclutamientoPersona.IndProceso = null;
                         _reclutamientoPersonaRepository.Update(reclutamientoPersona);
                     }
 
