@@ -658,7 +658,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     }
                     else
                     {
-                        model.btnVerPublicar = Visualicion.NO;
+                       // model.btnVerPublicar = Visualicion.NO;
+                        model.btnVerPublicar = Visualicion.SI;
                     }
                     model.btnVerPerfil = Visualicion.SI;
                     break;
@@ -1775,6 +1776,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.SolReqPersonal = new SolReqPersonal();
             model.visualizarCompetencias = Indicador.No;
             model.visualizarOfrecemos = Indicador.No;
+
+            model.editarFechaFinPublica = Indicador.Si;
+            model.editarFechaInicoPublica = Indicador.Si;
+            model.editarObservaciones = Indicador.Si;
             
             var ObjSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
 
@@ -1783,6 +1788,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
                 model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
                 model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+
+                model.SolReqPersonal = ObjSol;
 
                 var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
                                                         && x.IdeArea == ObjSol.IdeArea);
@@ -1833,6 +1840,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 model.btnPublicar = Visualicion.SI;
                 model.btnActualizar = Visualicion.NO;
+                if (ObjSol.FecPublicacion != null)
+                {
+                    model.editarFechaFinPublica = Indicador.Si;
+                    model.editarFechaInicoPublica = Indicador.No;
+                    model.editarObservaciones = Indicador.No;
+
+                }
             }
 
             model.Pagina = pagina;

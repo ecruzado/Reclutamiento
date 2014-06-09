@@ -898,6 +898,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 }
             }
 
+            if (Etapa.Publicado.Equals(EtapaSol))
+            {
+                if (Roles.Analista_Seleccion.Equals(idRolUsuario))
+                {
+                    model.Accion = Accion.Publicar;
+
+                    model.CampoVacante = Visualicion.NO;
+                    model.CampoPuesto = Visualicion.NO;
+                    model.CampoObservacion = Visualicion.NO;
+                }
+            }
                    
 
             return View("InformacionReemplazo", model);
@@ -1668,6 +1679,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             model.SolReqPersonal = new SolReqPersonal();
+            model.editarObservaciones = Indicador.Si;
+            model.editarFechaFinPublica = Indicador.Si;
+            model.editarFechaInicoPublica = Indicador.Si;
+
+            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            
             var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id && x.TipoSolicitud == TipoSolicitud.Remplazo);
 
             if (ObjSol!=null)
@@ -1675,6 +1692,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
                 model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
                 model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+                model.SolReqPersonal = ObjSol;
 
                 var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
                                                         && x.IdeArea == ObjSol.IdeArea);
@@ -1703,29 +1721,43 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 model.btnActualizar = Visualicion.SI;
                 model.btnPublicar = Visualicion.NO;
+                // si el usuario es el encargado de selección puede editar los datos
+
             }
             else
             {
+
                 model.btnPublicar = Visualicion.SI;
                 model.btnActualizar = Visualicion.NO;
-            }
 
+                if (ObjSol.FecPublicacion != null)
+                {
+                    model.editarFechaFinPublica = Indicador.Si;
+                    model.editarFechaInicoPublica = Indicador.No;
+                    model.editarObservaciones = Indicador.No;
+
+                }
+            }
             model.Pagina = pagina;
 
             return View("Publicacion",model);
         }
 
-        public ActionResult actualizarFechaExpiracion(string idSolicitud,string fechaExpiracion)
+        public ActionResult actualizarFechaExpiracion(string idSolicitud,string fechaExpiracion, string fechaPublicacion, string Observacion)
         {
             JsonMessage objJsonMessage = new JsonMessage();
             fechaExpiracion = String.Format("{0:dd/MM/yyyy}", fechaExpiracion);
             DateTime fecha = Convert.ToDateTime(fechaExpiracion);
+            fechaPublicacion = String.Format("{0:dd/MM/yyyy}", fechaPublicacion);
+            DateTime fechaPublica = Convert.ToDateTime(fechaPublicacion);
             try
             {
                 if ((idSolicitud != null)&&(idSolicitud != "0"))
                 {
                     var solicitud = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(idSolicitud));
                     solicitud.FecExpiracacion = fecha;
+                    solicitud.FecPublicacion = fechaPublica;
+                    solicitud.ObservacionPublica = Observacion;
                     _solReqPersonalRepository.Update(solicitud);
 
                     objJsonMessage.Mensaje = "Fecha de expiración , actualizada correctamente";
@@ -1982,91 +2014,99 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
 
                 var objSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(model.SolReqPersonal.IdeSolReqPersonal));
-                if (objSol!=null)
+
+                if (objSol != null)
                 {
-
-                    if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                    if (objSol.FecPublicacion != null)
                     {
-                       lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Ampliacion);
-
+                        objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                        _solReqPersonalRepository.Update(objSol);
+                        objJson.Resultado = true;
+                        objJson.Mensaje = "Se actualizó la solictud correctamente";
                     }
                     else
                     {
-                       lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Remplazo);
-                    
+                        if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                        {
+                            lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Ampliacion);
+
+                        }
+                        else
+                        {
+                            lista = listaEmail(Convert.ToInt32(objSol.IdeSolReqPersonal), idRol, AccionEnvioEmail.Publicar, idSede, TipoSolicitud.Remplazo);
+
+                        }
+
+
+
+
+                        listSends = new List<String>();
+                        listSends = (List<String>)lista[0];
+
+                        listCopys = new List<String>();
+                        listCopys = (List<String>)lista[1];
+
+
+                        objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
+                        objSol.FechaModificacion = FechaSistema;
+                        objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
+                        objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
+                        objSol.TipEtapa = Etapa.Publicado;
+                        objSol.IndicadorSalario = IndVerSalario;
+                        objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
+
+
+                        ReclutamientoPersona objRecluta = new ReclutamientoPersona();
+
+                        objRecluta.IdeSol = Convert.ToInt32(objSol.IdeSolReqPersonal);
+
+                        //se obtiene el tipo de solicitud para saber si es una ampliacion o un reemplazo
+                        objRecluta.TipSol = objSol.TipoSolicitud;
+
+                        objRecluta.TipPuesto = objSol.TipPuesto;
+                        objRecluta.IdSede = objSol.IdeSede;
+                        objRecluta.IdeCargo = objSol.IdeCargo;
+
+
+                        var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
+
+                        //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
+                        _solReqPersonalRepository.verificaPotenciales(objRecluta);
+
+                        //se atualiza la solicitud;
+                        _solReqPersonalRepository.Update(objSol);
+
+                        model.LogSolReqPersonal = new LogSolReqPersonal();
+                        model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
+                        model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                        model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+                        string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
+                        model.LogSolReqPersonal.FecSuceso = FechaSistema;
+                        model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
+                        //rol del responsable el que publica es el reponsable de trabajar la solicitud
+                        model.LogSolReqPersonal.UsResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
+                        model.LogSolReqPersonal.RolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+
+                        _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
+
+                        var objUsuario = _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
+
+                        if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
+                        {
+                            bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Ampliación", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
+
+                        }
+                        else
+                        {
+                            bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Reemplazo", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
+
+                        }
+
+                        objJson.Resultado = true;
+                        objJson.Mensaje = "Se publico la Solicitud";
+
                     }
-
-                    
-                    
-                    
-                    listSends = new List<String>();
-                    listSends = (List<String>)lista[0];
-
-                    listCopys = new List<String>();
-                    listCopys = (List<String>)lista[1];
-
-
-                    objSol.FecPublicacion = model.SolReqPersonal.FecPublicacion;
-                    objSol.FechaModificacion = FechaSistema;
-                    objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
-                    objSol.FecExpiracacion = model.SolReqPersonal.FecExpiracacion;
-                    objSol.TipEtapa = Etapa.Publicado;
-                    objSol.IndicadorSalario = IndVerSalario;
-                    objSol.ObservacionPublica = model.SolReqPersonal.ObservacionPublica;
-
-
-                    ReclutamientoPersona objRecluta = new ReclutamientoPersona();
-
-                    objRecluta.IdeSol = Convert.ToInt32(objSol.IdeSolReqPersonal);
-
-                    //se obtiene el tipo de solicitud para saber si es una ampliacion o un reemplazo
-                    objRecluta.TipSol = objSol.TipoSolicitud;
-
-                    objRecluta.TipPuesto = objSol.TipPuesto;
-                    objRecluta.IdSede = objSol.IdeSede;
-                    objRecluta.IdeCargo = objSol.IdeCargo;
-
-                    
-                    var objCargo = _cargoRepository.GetSingle(x => x.IdeCargo == objSol.IdeCargo);
-
-                    //Se asigna postulantes potenciales si hay antes de publicar una nueva solicitud
-                    _solReqPersonalRepository.verificaPotenciales(objRecluta);
-
-                    //se atualiza la solicitud;
-                    _solReqPersonalRepository.Update(objSol);
-
-                    model.LogSolReqPersonal = new LogSolReqPersonal();
-                    model.LogSolReqPersonal.IdeSolReqPersonal = (int)objSol.IdeSolReqPersonal;
-                    model.LogSolReqPersonal.UsrSuceso = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-                    model.LogSolReqPersonal.RolSuceso = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-                    string desRol = Convert.ToString(Session[ConstanteSesion.RolDes]);
-                    model.LogSolReqPersonal.FecSuceso = FechaSistema;
-                    model.LogSolReqPersonal.TipEtapa = Etapa.Publicado;
-                    //rol del responsable el que publica es el reponsable de trabajar la solicitud
-                    model.LogSolReqPersonal.UsResponsable = Convert.ToInt32(Session[ConstanteSesion.Usuario]);
-                    model.LogSolReqPersonal.RolResponsable = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-
-
-                    _solReqPersonalRepository.ActualizaLogSolReq(model.LogSolReqPersonal);
-
-                    var objUsuario =  _usuarioRepository.GetSingle(x => x.IdUsuario == model.LogSolReqPersonal.UsrSuceso);
-
-                    if (TipoSolicitud.Ampliacion.Equals(objSol.TipoSolicitud))
-                    {
-                        bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Ampliación", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
-
-                    }
-                    else
-                    {
-                        bool flag = EnviarCorreo(desRol, Etapa.Publicado, "Reemplazo", objCargo.NombreCargo, "" + model.LogSolReqPersonal.IdeSolReqPersonal, listSends, listCopys, "");
-
-                    }
-                    
-                    objJson.Resultado = true;
-                    objJson.Mensaje = "Se publico la Solicitud";
-
-                    
-
                 }
             }
             else

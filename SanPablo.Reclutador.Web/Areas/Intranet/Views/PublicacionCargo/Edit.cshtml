@@ -18,6 +18,16 @@
         
     $(document).ready(function () {
 
+        var fechaPublicacion = $('#SolicitudCargo_FechaPublicacion').val();
+        if (fechaPublicacion != null) {
+            $('#SolicitudCargo_FechaPublicacion').val(fechaPublicacion.substring(0, 10));
+        }
+
+        var fechaExpiracion = $('#SolicitudCargo_FechaExpiracion').val();
+        if (fechaExpiracion != null) {
+            $('#SolicitudCargo_FechaExpiracion').val(fechaExpiracion.substring(0, 10));
+        }
+
         var dateToday = new Date();
 
         var dates = $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').datepicker({
@@ -235,12 +245,17 @@
                         }
                     });
                     var fecha = $('#SolicitudCargo_FechaExpiracion').val();
+                    var fechaInico = $('#SolicitudCargo_FechaPublicacion').val();
+                    var observacion = $('#SolicitudCargo_ObservacionPublicacion').val();
                     $.post('@Url.Action("ActualizarFechaExpiracion", "PublicacionCargo")',
-                            {fechaExpiracion : fecha},
+                            {fechaExpiracion : fecha,
+                            Observacion:observacion,
+                            fechaInicio: fechaInico
+                            },
                         function (respuesta) {
                             $.unblockUI();
                             if (respuesta.Resultado) {
-                                MostrarMensaje("Requerimiento Actualizado exitosamente", "INFORMATIVO");
+                                mensajeRedireccionaPagina(respuesta.Mensaje, "INFORMATIVO");
                             }
                             else {
                                 MostrarMensaje(respuesta.Mensaje, "ALERTA");
@@ -338,7 +353,26 @@
             }
         });
     }
+    function mensajeRedireccionaPagina(mensaje, titulo) {
+        var pagina = $('#pagina').val();
 
+        $("#spnMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    if (pagina == "04") {
+                        window.location = '@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet"})';
+                    } else {
+                        window.location = '@Url.Action("Index", "SolicitudNuevoCargo", new { area = "Intranet"})';
+                    }
+                }
+            }
+        });
+    }
     $('textarea[data-val=true]').on('blur', function () {
         $(this).valid();
     });
@@ -402,19 +436,27 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha Publicación</td>
                         <td class="controls">
-                            @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                 @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaPublicacion)
-                            </div>*@
+                            @if(Indicador.Si.Equals(Model.editarFechaPublicacion))
+                            {
+                                @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación" })
+                            }
+                           
                         </td>
                         <td>&nbsp;</td>
                         <td class="control-label" >Fecha Expiración</td>
                         <td class="controls">
-                            @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
-                            @*<div class="tex-error" style="font-size:12px;color:red"> 
-                                     @Html.ValidationMessageFor(model => model.SolicitudCargo.FechaExpiracion)
-                            </div>*@
-                           
+                            @if(Indicador.Si.Equals(Model.editarFechaExpiracion))
+                            {
+                                @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            }
                         </td>
                     </tr>
 
@@ -523,17 +565,19 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones<span class="text-error">*</span> </label>
                          <div class="controls">
-                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.pagina))
+                            
+                             @if (Indicador.Si.Equals(Model.editarObservaciones))
                              { 
-                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px; resize:none;", onblur="aMays(event, this)", disabled="disabled"})
-                             }
-                             else
-                             {
-                                @Html.TextAreaFor(model => model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur = "aMays(event, this)", maxlength = "255" })
+                                 @Html.TextAreaFor(model => model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur = "aMays(event, this)", maxlength = "255" })
                                 <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
                                     </div>
+                                
+                             }
+                             else
+                             {
+                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px; resize:none;", onblur="aMays(event, this)", disabled="disabled"})
                              }
                          </div>
                         </td>

@@ -51,8 +51,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public string visualizarOfrecemos { get; set; }
         public string visualizarCompetencias { get; set; }
-        public string editarObservaciones { get; set; }
 
+        public string editarObservaciones { get; set; }
+        public string editarFechaInicoPublica { get; set; }
+        public string editarFechaFinPublica { get; set; }
         #region Botonera de busqueda
         /// <summary>
         /// boton ranking

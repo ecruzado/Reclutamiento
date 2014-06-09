@@ -18,9 +18,40 @@
         
     $(document).ready(function () {
 
-        var dateToday = new Date();
+        var fechaPublicacion = $('#SolReqPersonal_FecPublicacion').val();
+        if (fechaPublicacion != null) {
+            $('#SolReqPersonal_FecPublicacion').val(fechaPublicacion.substring(0, 10));
+        }
 
-        var dates = $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
+        var fechaExpiracion = $('#SolReqPersonal_FecExpiracacion').val();
+        if (fechaExpiracion != null) {
+            $('#SolReqPersonal_FecExpiracacion').val(fechaExpiracion.substring(0, 10));
+        }
+
+        var indicador = $('#editarFechaInicoPublica').val();
+
+        if (indicador == 'S') {
+            var dateToday = new Date();
+
+            var dates = $('#SolReqPersonal_FecPublicacion').datepicker({
+                showOn: "button",
+                buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+                buttonImageOnly: true,
+                //defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                minDate: dateToday,
+                onSelect: function (selectedDate) {
+                    var option = this.id == "from" ? "minDate" : "maxDate",
+                        instance = $(this).data("datepicker");
+                    //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                    //dates.not(this).datepicker("option", option, date);
+                }
+            });
+        }
+
+        
+        var dates = $('#SolReqPersonal_FecExpiracacion').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
             buttonImageOnly: true,
@@ -51,9 +82,11 @@
         $('#btnActualizar').click(function () {
             var fecha = $('#SolReqPersonal_FecExpiracacion').val();
             var id = $('#SolReqPersonal_IdeSolReqPersonal').val();
+            var fechaPublica = $('#SolReqPersonal_FecPublicacion').val();
+            var observacion = $('#SolReqPersonal_ObservacionPublica').val();
             if (validaPublicacion()) {
                 $.ajax({
-                    data: {fechaExpiracion:fecha,idSolicitud:id},
+                    data: { fechaExpiracion: fecha, idSolicitud: id, fechaPublicacion: fechaPublica, Observacion: observacion },
                     type: "POST",
                     url: '@Url.Action("actualizarFechaExpiracion", "SolicitudCargo", new { area="Intranet"})',
                 traditional: true,
@@ -634,14 +667,18 @@
                     <tr class="formulario-fila">
                         <td class="control-label">Fecha de publicaci&oacute;n</td>
                         <td class="controles">
+                           
+                                @Html.TextBoxFor(model => model.editarFechaInicoPublica, new { style = "display:none" })
                                 <input type="text" class="input-small"  id="SolReqPersonal_FecPublicacion" name="SolReqPersonal.FecPublicacion" placeholder="Publicaci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecPublicacion)" >
+                            
                         </td>
                         <td style="width:45px">&nbsp;</td>
                         
                         <td class="control-label" >Fecha de expiraci&oacute;n</td>
                         <td class="controles">
-                            @*@Html.EditorFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "textoFormulario" ,  maxlength="15", placeholder=" Inicial"})      *@
-                            <input type="text" class="input-small"  id="SolReqPersonal_FecExpiracacion" name="SolReqPersonal.FecExpiracacion" placeholder="Expiraci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecExpiracacion)" >
+                           
+                                <input type="text" class="input-small"  id="SolReqPersonal_FecExpiracacion" name="SolReqPersonal.FecExpiracacion" placeholder="Expiraci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecExpiracacion)" >
+                            
                         </td>
 
                     </tr>
@@ -768,15 +805,14 @@
                         <label class="control-label" for="input01">Observaciones<span class="text-error">*</span></label>
                          <div class="controls">
 
-                              @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
-                            @* @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                             @if(Model.editarObservaciones.Equals(Indicador.Si))
                              {
-                                 @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254", disabled = "disabled"})
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
-                             }*@
+                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254", disabled = "disabled"})   
+                             }
                              <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
 
                          </div>

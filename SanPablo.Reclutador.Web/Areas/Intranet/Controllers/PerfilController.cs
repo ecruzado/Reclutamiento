@@ -815,6 +815,20 @@
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
+                case Etapa.Publicado:
+                     perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerAprobar = Visualicion.NO;
+                    perfilViewModel.indVisibilidad = Visualicion.SI;
+                    perfilViewModel.btnVerAceptar = Visualicion.NO;
+                    if (Roles.Analista_Seleccion == rolSession)
+                    {
+                        perfilViewModel.btnVerPublicar = Visualicion.SI;
+                    }
+                    else
+                    {
+                        perfilViewModel.btnVerPublicar = Visualicion.NO;
+                    }
+                    break;
                 default:
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;

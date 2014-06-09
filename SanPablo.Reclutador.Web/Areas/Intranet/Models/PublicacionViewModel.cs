@@ -25,5 +25,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string visualizarCompetencias { get; set; }
         public string visualizarOfrecemos { get; set; }
         public string visualizarDiscapacidad { get; set; }
+
+        public string editarObservaciones { get; set; }
+        public string editarFechaPublicacion { get; set; }
+        public string editarFechaExpiracion { get; set; }
     }
 }

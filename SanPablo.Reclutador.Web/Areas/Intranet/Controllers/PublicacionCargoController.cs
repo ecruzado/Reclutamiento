@@ -253,9 +253,10 @@
         [AuthorizeUser]
         public ActionResult Edit(string id, string pagina)
         {
+            SolicitudNuevoCargo solicitud = new SolicitudNuevoCargo();
             if ((id != "0") && (id != null))
             {
-                var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
+                solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == Convert.ToInt32(id));
                 CargoPerfil = new DatosCargo();
                 CargoPerfil.IdeCargo = Convert.ToInt32(solicitud.IdeCargo);
             }
@@ -264,6 +265,9 @@
             var Cargo = _cargoRepository.GetSingle(x => x.IdeCargo == IdeCargo);
             var publicacionViewModel = inicializarPublicacion(Cargo);
             publicacionViewModel.pagina = pagina;
+            publicacionViewModel.editarFechaExpiracion = Indicador.Si;
+            publicacionViewModel.editarFechaPublicacion = Indicador.Si;
+            publicacionViewModel.editarObservaciones = Indicador.Si;
 
             if (Cargo != null)
             {
@@ -280,6 +284,14 @@
             {
                 publicacionViewModel.btnActualizar = Visualicion.NO;
                 publicacionViewModel.btnPublicar = Visualicion.SI;
+                //si las oslictud ya fue publicada
+                if (solicitud != null)
+                {
+                    if (solicitud.FechaPublicacion != null)
+                    {
+                        publicacionViewModel.editarFechaExpiracion = Indicador.Si;
+                    }
+                }
             }
 
             //visualizar competencias
@@ -391,10 +403,26 @@
                 }
                 else
                 {
-                    publicacionViewModel.SolicitudCargo = solicitudNuevoCargo;
-                    objJsonMessage.Mensaje = "ERROR: La solicitud no esta pendiente de publicacion";
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    if (estadoSolicitud.TipoEtapa == Etapa.Publicado)
+                    {
+                        var solicitudNuevoCargoEditar = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == solicitudNuevoCargo.IdeSolicitudNuevoCargo);
+                        solicitudNuevoCargoEditar.UsuarioModificacion = Session[ConstanteSesion.Usuario].ToString();
+                        solicitudNuevoCargoEditar.FechaModificacion = FechaModificacion;
+                        solicitudNuevoCargoEditar.FechaExpiracion = solicitudNuevoCargo.FechaExpiracion;
+
+                        _solicitudNuevoCargoRepository.Update(solicitudNuevoCargoEditar);
+
+                        objJsonMessage.Mensaje = "Fecha de expiración actualizada correctamente";
+                        objJsonMessage.Resultado = true;
+                        return Json(objJsonMessage);
+                    }
+                    else
+                    {
+                        publicacionViewModel.SolicitudCargo = solicitudNuevoCargo;
+                        objJsonMessage.Mensaje = "ERROR: La solicitud no esta pendiente de publicacion";
+                        objJsonMessage.Resultado = false;
+                        return Json(objJsonMessage);
+                    }
                 }
             }
             catch (Exception ex)
@@ -435,20 +463,24 @@
         }
 
         [HttpPost]
-        public ActionResult ActualizarFechaExpiracion(string fechaExpiracion)
+        public ActionResult ActualizarFechaExpiracion(string fechaExpiracion, string Observacion, string fechaInicio)
         { 
             JsonMessage objJsonMessage = new JsonMessage();
             fechaExpiracion = String.Format("{0:dd/MM/yyyy}", fechaExpiracion);
             DateTime fecha = Convert.ToDateTime(fechaExpiracion);
+            fechaInicio = String.Format("{0:dd/MM/yyyy}", fechaInicio);
+            DateTime fechaPublicacion = Convert.ToDateTime(fechaInicio);
             try
             {
                 if (CargoPerfil != null)
                 {
                     var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                     solicitud.FechaExpiracion = fecha;
+                    solicitud.FechaPublicacion = fechaPublicacion;
+                    solicitud.ObservacionPublicacion = Observacion;
                     _solicitudNuevoCargoRepository.Update(solicitud);
 
-                    objJsonMessage.Mensaje = "Fecha de expiración , actualizada correctamente";
+                    objJsonMessage.Mensaje = "Solicitud actualizada correctamente";
                     objJsonMessage.Resultado = true;
                     return Json(objJsonMessage);
                 }
