@@ -290,6 +290,8 @@
                     if (solicitud.FechaPublicacion != null)
                     {
                         publicacionViewModel.editarFechaExpiracion = Indicador.Si;
+                        publicacionViewModel.editarFechaPublicacion = Indicador.No;
+                        publicacionViewModel.editarObservaciones = Indicador.No;
                     }
                 }
             }
