@@ -1011,6 +1011,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJson = new JsonMessage();
             Int32 retorno=0;
             model.Reemplazo = new Reemplazo();
+            SolReqPersonal objSolReq;
 
             try
             {
@@ -1039,12 +1040,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     _solReqPersonalRepository.Update(objSol);
 
                     retorno = Convert.ToInt32(objSol.CodSolReqPersonal);
-                    
+
+                    objSolReq = new SolReqPersonal();
+                    objSolReq = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == retorno.ToString() && x.TipoSolicitud == TipoSolicitud.Remplazo);
+
+
                     if (retorno > 0)
                     {
                         objJson.Resultado = true;
                         objJson.Mensaje = "Se actualizo la Solicitud";
                         objJson.IdDato = retorno;
+
+                        objJson.IdSol = Convert.ToInt32(objSolReq.IdeSolReqPersonal);
                     }
 
                 }
@@ -1070,13 +1077,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
                     model.SolReqPersonal.TipEtapa = Etapa.Pendiente;
+
                     retorno = _solReqPersonalRepository.CreaSolicitudReemplazo(model.SolReqPersonal, model.Reemplazo);
+
+                    objSolReq = new SolReqPersonal();
+                    objSolReq = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == retorno.ToString() && x.TipoSolicitud == TipoSolicitud.Remplazo);
 
                     if (retorno > 0)
                     {
                         objJson.Resultado = true;
                         objJson.Mensaje = "Se generó la solicitud";
                         objJson.IdDato = retorno;
+                        objJson.IdSol = Convert.ToInt32(objSolReq.IdeSolReqPersonal);
                     }
                 }
                 
