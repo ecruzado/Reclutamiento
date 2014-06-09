@@ -57,17 +57,17 @@
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area = "Intranet" })',
                 traditional: true,
                     success: function (data) {
                         if (data.Resultado) {
                             $.unblockUI();
                             // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                            mensajeRedirecciona(data.Mensaje, "MENSAJE");
+                            mensajeRedirecciona(data.Mensaje, "INFORMATIVO");
                         }
                         else {
                             $.unblockUI();
-                            MostrarMensaje(data.mensaje, "MENSAJE");
+                            MostrarMensaje(data.mensaje, "ALERTA");
                         }
 
                     }
