@@ -767,14 +767,16 @@
                         <td class="span5">
                         <label class="control-label" for="input01">Observaciones<span class="text-error">*</span></label>
                          <div class="controls">
-                             @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+
+                              @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
+                            @* @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                              {
                                  @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254", disabled = "disabled"})
                              }
                              else
                              {
                                 @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
-                             }
+                             }*@
                              <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
 
                          </div>
