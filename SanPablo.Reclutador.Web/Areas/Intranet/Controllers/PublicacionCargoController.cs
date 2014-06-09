@@ -284,10 +284,12 @@
             {
                 publicacionViewModel.btnActualizar = Visualicion.NO;
                 publicacionViewModel.btnPublicar = Visualicion.SI;
-                //si las oslictud ya fue publicada
-                if (solicitud != null)
+                //si las solicitud ya fue publicada
+
+                var solictudPublica = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeSolicitudNuevoCargo == CargoPerfil.IdeSolicitud);
+                if (solictudPublica != null)
                 {
-                    if (solicitud.FechaPublicacion != null)
+                    if (solictudPublica.FechaPublicacion != null)
                     {
                         publicacionViewModel.editarFechaExpiracion = Indicador.Si;
                         publicacionViewModel.editarFechaPublicacion = Indicador.No;

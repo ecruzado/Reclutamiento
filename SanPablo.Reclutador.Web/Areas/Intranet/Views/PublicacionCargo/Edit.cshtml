@@ -586,7 +586,7 @@
                              }
                              else
                              {
-                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px; resize:none;", onblur="aMays(event, this)", disabled="disabled"})
+                                 @Html.TextAreaFor(model=>model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px; resize:none;", onblur="aMays(event, this)", @readonly="readonly"})
                              }
                          </div>
                         </td>
