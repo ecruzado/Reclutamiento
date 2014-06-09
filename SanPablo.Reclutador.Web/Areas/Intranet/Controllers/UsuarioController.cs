@@ -367,7 +367,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         
        
 
-
+        /// <summary>
+        /// ListaUsuarioRolSede
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ListaUsuarioRolSede(GridTable grid)
         {
@@ -1243,7 +1247,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                // int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
 
                 where.Add(Expression.Eq("EstadoRegistro", "A"));
-                
+
+
+                Int32 idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+                if (Roles.Encargado_Seleccion.Equals(idRol))
+                {
+                    where.Add(Expression.Eq("CodigoSede", idSede.ToString()));
+                }
+
+                if (Roles.Analista_Seleccion.Equals(idRol))
+                {
+                    where.Add(Expression.Eq("CodigoSede", idSede.ToString()));
+                }
+
 
                 var generic = Listar(_sedeRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
@@ -1284,10 +1302,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //where = DetachedCriteria.For<Sede>();
 
                 // int codReg = Convert.ToInt32(TipoTabla.TipoRequerimiento);
-
+                where = DetachedCriteria.For<SedeNivel>();
                 if ((!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data)))
                 {
-                    where = DetachedCriteria.For<SedeNivel>();
+                   
 
                     if (!"".Equals(grid.rules[0].data) && !"0".Equals(grid.rules[0].data))
                     {
@@ -1299,6 +1317,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 where.Add(Expression.Eq("FLGESTADO", "A"));
 
+
+                Int32 idSede = Convert.ToInt32(Session[ConstanteSesion.Sede]);
+                Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
+                if (Roles.Encargado_Seleccion.Equals(idRol))
+                {
+                    where.Add(Expression.Eq("IDESEDE", idSede));
+                }
+
+                if (Roles.Analista_Seleccion.Equals(idRol))
+                {
+                    where.Add(Expression.Eq("IDESEDE", idSede));
+                }
+                
 
                 var generic = Listar(_sedeNivelRepository,
                                      grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
