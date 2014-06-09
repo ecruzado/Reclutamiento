@@ -121,6 +121,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReporteModel.CampoAnalistaSeleccion = Visualicion.NO;
 
                 }
+                else if (Roles.Consultor.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    //objReporteModel.ReporteSol.idAnalistaResp = IdUsuario;
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+                else if (Roles.Gerente.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    //objReporteModel.ReporteSol.idAnalistaResp = IdUsuario;
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+                else if (Roles.Jefe.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    //objReporteModel.ReporteSol.idAnalistaResp = IdUsuario;
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+
                 else
                 {
                     objReporteModel.CampoSede = Visualicion.SI;
