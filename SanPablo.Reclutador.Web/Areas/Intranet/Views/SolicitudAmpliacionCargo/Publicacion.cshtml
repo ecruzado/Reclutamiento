@@ -666,37 +666,44 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Competencias</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListCompetencias">
-                                    </table>
-                                    <div id="grdPagerCompetencias">
-                                    </div>
-                                </div>                                         
-                            </div>
-                         </div>
-                       </td>
-                    </tr>
+
+                       @if(Model.visualizarCompetencias.Equals(Indicador.Si))
+                       {
+                        <tr class="formulario-fila">
+                            <td class="span5">
+                            <label class="control-label" for="input01">Competencias</label>
+                             <div class="controls">
+                                <div style="width: 100%">                                        
+                                    <div>
+                                        <table id="grdListCompetencias">
+                                        </table>
+                                        <div id="grdPagerCompetencias">
+                                        </div>
+                                    </div>                                         
+                                </div>
+                             </div>
+                           </td>
+                        </tr>
+                       }
+                       @if(Model.visualizarOfrecemos.Equals(Indicador.Si))
+                       {
                         <tr><td>&nbsp;</td></tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Ofrecemos</label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListOfrecemos">
-                                    </table>
-                                    <div id="grdPagerOfrecemos">
-                                    </div>
-                                </div>                                         
-                            </div>
-                         </div>
-                        </td>
-                    </tr>
+                        <tr class="formulario-fila">
+                            <td class="span5">
+                            <label class="control-label" for="input01">Ofrecemos</label>
+                             <div class="controls">
+                                <div style="width: 100%">                                        
+                                    <div>
+                                        <table id="grdListOfrecemos">
+                                        </table>
+                                        <div id="grdPagerOfrecemos">
+                                        </div>
+                                    </div>                                         
+                                </div>
+                             </div>
+                            </td>
+                        </tr>
+                       }
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">

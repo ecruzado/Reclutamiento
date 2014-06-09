@@ -1773,6 +1773,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             model.SolReqPersonal = new SolReqPersonal();
+            model.visualizarCompetencias = Indicador.No;
+            model.visualizarOfrecemos = Indicador.No;
             
             var ObjSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
 
@@ -1805,6 +1807,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 model.Pagina = pagina;
 
+            }
+
+            //visualizar competencias
+            var contadorCompetencias = _competenciaReqRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == ObjSol.IdeSolReqPersonal);
+
+            if (contadorCompetencias > 0)
+            {
+                model.visualizarCompetencias = Indicador.Si;
+            }
+            //visualizar ofrecemos
+
+            var contadorOfrecemos = _ofrecemosReqRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == ObjSol.IdeSolReqPersonal);
+            if (contadorOfrecemos > 0)
+            {
+                model.visualizarOfrecemos = Indicador.Si;
             }
 
             if (pagina == TipoSolicitud.ConsultaRequerimientos)
