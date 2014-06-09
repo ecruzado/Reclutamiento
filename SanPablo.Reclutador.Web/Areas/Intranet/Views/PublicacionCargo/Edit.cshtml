@@ -30,7 +30,27 @@
 
         var dateToday = new Date();
 
-        var dates = $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').datepicker({
+        var indicador = $('#editarFechaInicoPublica').val();
+
+        if (indicador == 'S') {
+
+            var dates = $('#SolicitudCargo_FechaPublicacion').datepicker({
+                showOn: "button",
+                buttonImage: '@Url.Content("~/Content/images/calendario.png")',
+                buttonImageOnly: true,
+                //defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                minDate: dateToday,
+                onSelect: function (selectedDate) {
+                    var option = this.id == "from" ? "minDate" : "maxDate",
+                        instance = $(this).data("datepicker");
+                    //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                    //dates.not(this).datepicker("option", option, date);
+                }
+            });
+        }
+        var dates = $('#SolicitudCargo_FechaExpiracion').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
             buttonImageOnly: true,
@@ -38,14 +58,13 @@
             changeMonth: true,
             numberOfMonths: 1,
             minDate: dateToday,
-            onSelect: function(selectedDate) {
+            onSelect: function (selectedDate) {
                 var option = this.id == "from" ? "minDate" : "maxDate",
                     instance = $(this).data("datepicker");
                 //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
                 //dates.not(this).datepicker("option", option, date);
             }
         });
-
 
         $('#SolicitudCargo_FechaPublicacion,#SolicitudCargo_FechaExpiracion').attr("readonly", "readonly");
 
@@ -436,27 +455,17 @@
                     <tr class="formulario-fila">
                         <td class="control-label" >Fecha Publicación</td>
                         <td class="controls">
-                            @if(Indicador.Si.Equals(Model.editarFechaPublicacion))
-                            {
-                                @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación" })
-                            }
+                            @Html.TextBoxFor(model => model.editarFechaPublicacion, new { style = "display:none" })
+                            @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
+                            
                            
                         </td>
                         <td>&nbsp;</td>
                         <td class="control-label" >Fecha Expiración</td>
                         <td class="controls">
-                            @if(Indicador.Si.Equals(Model.editarFechaExpiracion))
-                            {
-                                @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
-                            }
+                           
+                            @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            
                         </td>
                     </tr>
 

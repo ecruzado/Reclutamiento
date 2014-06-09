@@ -79,7 +79,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 int idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
                 if (idRol != 0)
                 {
-                    if ((idRol == Roles.Encargado_Seleccion) || (idRol == Roles.Analista_Seleccion))
+                    if (idRol == Roles.Encargado_Seleccion) 
                     {
                         model.btnActivarDesactivar = Visualicion.SI;
                     }
