@@ -112,7 +112,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             SedeNivel objSedeNivel = (SedeNivel)Session[Core.ConstanteSesion.UsuarioSede];
 
-           
+            objReporteModel.CampoDependencia = Visualicion.SI;
+            objReporteModel.CampoDepartamento = Visualicion.SI;
+            objReporteModel.CampoArea = Visualicion.SI;
 
             if (rolUsuario>0)
             {
@@ -145,6 +147,58 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
 
                 }
+                else if (Roles.Jefe.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    objReporteModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                      && x.IdeSede == SedeUSuario));
+                    objReporteModel.ReporteSol.idDependencia = objSedeNivel.IDEDEPENDENCIA;
+                    
+                    objReporteModel.ListaDepartamento = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == objSedeNivel.IDEDEPENDENCIA));
+                    objReporteModel.ListaDepartamento.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+                    objReporteModel.ReporteSol.idDepartamento = objSedeNivel.IDEDEPARTAMENTO;
+                    objReporteModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == objSedeNivel.IDEDEPARTAMENTO));
+                    objReporteModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+                    objReporteModel.ReporteSol.idArea = objSedeNivel.IDEAREA;
+
+                    objReporteModel.CampoDependencia = Visualicion.NO;
+                    objReporteModel.CampoDepartamento = Visualicion.NO;
+                    objReporteModel.CampoArea = Visualicion.NO;
+
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+                else if (Roles.Gerente.Equals(rolUsuario))
+                {
+                    objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    objReporteModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
+                                                                      && x.IdeSede == SedeUSuario));
+                    objReporteModel.ReporteSol.idDependencia = objSedeNivel.IDEDEPENDENCIA;
+
+                    objReporteModel.ListaDepartamento = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == objSedeNivel.IDEDEPENDENCIA));
+                    objReporteModel.ListaDepartamento.Add(new Departamento { IdeDepartamento = 0, NombreDepartamento = "Seleccionar" });
+                    objReporteModel.ReporteSol.idDepartamento = objSedeNivel.IDEDEPARTAMENTO;
+                    objReporteModel.ListaArea = new List<SanPablo.Reclutador.Entity.Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == objSedeNivel.IDEDEPARTAMENTO));
+                    objReporteModel.ListaArea.Add(new SanPablo.Reclutador.Entity.Area { IdeArea = 0, NombreArea = "Seleccionar" });
+
+                    objReporteModel.ReporteSol.idArea = objSedeNivel.IDEAREA;
+
+                    objReporteModel.CampoDependencia = Visualicion.NO;
+                    objReporteModel.CampoDepartamento = Visualicion.NO;
+                    objReporteModel.CampoArea = Visualicion.NO;
+
+
+                    objReporteModel.CampoSede = Visualicion.NO;
+                    objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+                }
+
+
+
+
                 else {
                     objReporteModel.CampoSede = Visualicion.SI;
                     objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;

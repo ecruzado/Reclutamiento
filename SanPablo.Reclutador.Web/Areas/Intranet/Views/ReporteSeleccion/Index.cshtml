@@ -369,7 +369,15 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Dependecia</label>
                             <div class="controles">
-                                  @Html.DropDownListFor(model => model.ReporteSol.idDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.ReporteSol.idDependencia))    
+                                  
+                                @if (Visualicion.SI.Equals(Model.CampoDependencia))
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.ReporteSol.idDependencia))    
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.ReporteSol.idDependencia),new { disabled="disabled"})    
+                                }
                              </div>
 
                         </div>
@@ -401,7 +409,18 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoDepartamento))
+                                {
                                 @Html.DropDownListFor(model => model.ReporteSol.idDepartamento, new SelectList(Model.ListaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.ReporteSol.idDepartamento))
+                                
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.ReporteSol.idDepartamento, new SelectList(Model.ListaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.ReporteSol.idDepartamento),new { disabled="disabled"})
+                                }
+                                
+                                
                             </div>
                         </div>
                     </td>  
@@ -423,7 +442,16 @@
                         <div class="">
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoArea))
+                                {
+                                
                                 @Html.DropDownListFor(model => model.ReporteSol.idArea, new SelectList(Model.ListaArea, "IdeArea", "NombreArea", Model.ReporteSol.idArea))
+                                }
+                                else
+                                {
+                                   @Html.DropDownListFor(model => model.ReporteSol.idArea, new SelectList(Model.ListaArea, "IdeArea", "NombreArea", Model.ReporteSol.idArea),new { disabled="disabled"}) 
+                                }
                             </div>
                         </div>
                     </td>  
