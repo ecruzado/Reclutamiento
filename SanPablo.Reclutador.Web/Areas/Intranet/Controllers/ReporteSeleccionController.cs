@@ -174,6 +174,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 else if (Roles.Gerente.Equals(rolUsuario))
                 {
                     objReporteModel.ReporteSol.idSede = SedeUSuario;
+                    
                     objReporteModel.listaDependencia = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
                                                                       && x.IdeSede == SedeUSuario));
                     objReporteModel.ReporteSol.idDependencia = objSedeNivel.IDEDEPENDENCIA;
@@ -193,6 +194,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     objReporteModel.CampoSede = Visualicion.NO;
                     objReporteModel.CampoAnalistaSeleccion = Visualicion.SI;
+
+
+
+
 
                 }
 
