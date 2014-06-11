@@ -377,11 +377,13 @@ Funciones = {
         //    }
         //});
         //$('#' + selectorDiv).dialog('open');
+       
         var opt = {
             //closeOnEscape: false,
             title: title,
             modal: true,
             resizable: false,
+
             buttons: {
                 "Aceptar": function () {
                     $(this).dialog("close");
