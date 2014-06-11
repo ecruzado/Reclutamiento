@@ -192,11 +192,37 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
                 objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
             }
+            else if (Roles.Gerente.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+            else if (Roles.Consultor.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+            else if (Roles.Jefe.Equals(rolUsuario))
+            {
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
+                objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
+            }
+
+
             else
             {
-                objModel.ListaAnalistaResp = new List<Usuario>();
+               
+                SolReqPersonal objSol = new SolReqPersonal();
+                objSol.IdeSede = SedeUSuario;
+                objModel.ListaAnalistaResp = new List<Usuario>(_usuarioRepository.GetAnalistaRespoanble(objSol));
                 objModel.ListaAnalistaResp.Add(new Usuario { IdUsuario = 0, NombreUsuario = "Seleccionar" });
-
+            
             }
 
 
