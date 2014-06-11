@@ -456,7 +456,7 @@ SanPablo = {
             width: mainWidth,
             modal: true,
             open: function () {
-                //$(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+                $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
                 $(this).parent().appendTo($('#aspnetForm'));
             }
         });
