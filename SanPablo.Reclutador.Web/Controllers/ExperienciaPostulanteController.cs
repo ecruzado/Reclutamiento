@@ -71,7 +71,8 @@
                                 item.IndicadorActualmenteTrabajo== "S"?"Actualmente": item.FechaFin,
                                 //item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
-                                item.TiempoDeServicio == null?"":item.TiempoDeServicio,
+                                item.TiempoDeServicio == null?"": item.IndicadorActualmenteTrabajo == "S"?
+                                     calcularTiempoExperiencia(Convert.ToDateTime(item.FechaInicio), DateTime.Now, Convert.ToInt32(item.IdeExperienciaPostulante)):item.TiempoDeServicio,//actualizar el tiempo de servicio
                                 item.DescripcionMotivoCese == null?"":item.DescripcionMotivoCese,
                                 item.NombreReferente ==null?"": item.NombreReferente.ToUpper(),
                                 item.NumeroMovilReferencia == null?"":item.NumeroMovilReferencia.ToString(),
@@ -207,6 +208,14 @@
                 fechaFin = DateTime.Now;
             }
 
+            string tiempoServicio = calcularTiempoExperiencia(fechaInicio, fechaFin,0);
+            
+            return result = Json(tiempoServicio);
+        }
+
+
+        public string calcularTiempoExperiencia(DateTime fechaInicio, DateTime fechaFin, int ideExperienciaPostulante)
+        {
             var days = fechaFin - fechaInicio;
 
             int anhos = days.Days / 365;
@@ -214,9 +223,18 @@
             int meses = resto / 30;
 
             string tiempoServicio = anhos.ToString() + " AÑO(S) Y " + meses.ToString() + " MES(ES)";
-            return result = Json(tiempoServicio);
+            if (ideExperienciaPostulante != 0)
+            {
+                var experienciaPostulante = _experienciaPostulanteRepository.GetSingle(x => x.IdeExperienciaPostulante == ideExperienciaPostulante);
+                if (tiempoServicio != experienciaPostulante.TiempoDeServicio)
+                {
+                    experienciaPostulante.TiempoDeServicio = tiempoServicio;
+                    experienciaPostulante.FechaModificacion = FechaModificacion;
+                    _experienciaPostulanteRepository.Update(experienciaPostulante);
+                }
+            }
+            return tiempoServicio;
         }
-
 
         /// <summary>
         /// valida experiencia del postulante

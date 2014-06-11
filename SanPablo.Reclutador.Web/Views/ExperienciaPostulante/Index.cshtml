@@ -87,15 +87,8 @@
                 buttons: {
                 "Grabar": function (e) {
                     e.preventDefault();
-                    var fechaFin = $('#Experiencia_FechaFin').val();
-                    var indActual = $('#indActuaTrabajando').is(":checked");
-                    if ((fechaFin == "") && (indActual == false)) {
-                        var msj = document.getElementById('msjErrorFecha');
-                        msj.innerHTML = "Indicar fecha fin";
-                        msj.style.display = "block";
-                    }
-                    else
-                        {
+                    if(validarExperiencia())
+                    {
                         var result = $('#experienciaPostulanteForm').valid();
                         if (result) {
                             $.post('@Url.Action("Edit", "ExperienciaPostulante")',
@@ -112,6 +105,7 @@
                             });
                         }
                     }
+                   
                 },
                 "Cancelar": function () {
                      $(this).dialog("close");
@@ -208,6 +202,35 @@
 
         function MostrarMensaje(mensaje, titulo) {
             Funciones.Alert("divMensajeExp", "spnMensajeExp", mensaje, titulo);
+        }
+
+        function validarExperiencia()
+        {
+
+            var fechaFin = $('#Experiencia_FechaFin').val();
+            var indActual = $('#indActuaTrabajando').is(":checked");
+            var motivoCese = $('#Experiencia_TipoMotivoCese').val();
+            var contador = 0;
+
+            if ((fechaFin == "") && (indActual == false)) {
+                var msj = document.getElementById('msjErrorFecha');
+                msj.innerHTML = "Indicar fecha fin";
+                msj.style.display = "block";
+                contador++;
+            }
+            if ((motivoCese == '00') && (indActual == false)) {
+                var msjOtro = document.getElementById('msjErrorMotivoCese');
+                msjOtro.innerHTML = "Seleccione el motivo cese";
+                msjOtro.style.display = "block";
+                contador++;
+            }
+
+            if (contador == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     </script>
 }

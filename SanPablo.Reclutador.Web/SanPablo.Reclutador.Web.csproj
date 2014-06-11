@@ -377,6 +377,7 @@
     <Content Include="Content\custom-theme\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\custom-theme\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\custom-theme\images\ui-icons_f6cf3b_256x240.png" />
+    <Content Include="Content\custom-theme\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\custom-theme\jquery-ui-1.10.3.custom.css" />
     <Content Include="Content\custom-theme\jquery-ui-1.9.2.custom.css" />
     <Content Include="Content\custom-theme\jquery.ui.1.10.0.ie.css" />

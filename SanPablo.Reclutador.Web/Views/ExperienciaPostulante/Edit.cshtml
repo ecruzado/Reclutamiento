@@ -48,32 +48,30 @@
             var mjs = document.getElementById('msjFechaInicio');
             var fechaInicio = $('#Experiencia_FechaInicio').val();
 
-            if ((parseInt(fechaInicio.substring(0, 2)) > 12) ||
-                (parseInt(fechaInicio.substring(0, 2)) < 0)) {
-                $('#Experiencia_FechaInicio').val("");
-                mjs.innerHTML = "Ingresar una fecha válida";
-                mjs.style.display = "block";
-            }
-            else { mjs.style.display = "none"; }
-
-            //fecActual = new Date();
-            //fechaInicio = "01/" + fechaInicio;
-            //var mes = (fecActual.getMonth() + 1);
-            //if (mes < 10) { mes = "0" + mes; }
-            //fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
-            
-            //if (Date.parse(fechaInicio) > Date.parse(fechaActual)) {
             var dFechaActual = new Date();
             var valores = fechaInicio.split('/');
             var dFechaInicio = new Date(valores[1], parseInt(valores[0]) - 1, dFechaActual.getDate());
-            if (dFechaInicio >= dFechaActual) {
 
-
+            if ((parseInt(fechaInicio.substring(0, 2)) > 12) ||
+                (parseInt(fechaInicio.substring(0, 2)) < 0) || (dFechaInicio >= dFechaActual)) {
                 $('#Experiencia_FechaInicio').val("");
                 mjs.innerHTML = "Ingresar una fecha válida";
                 mjs.style.display = "block";
             }
-            else { mjs.style.display = "none"; }
+            else {
+                mjs.style.display = "none";
+                calcularTiempoServicio();
+            }
+
+         
+           
+            //if (dFechaInicio >= dFechaActual) {
+
+            //    $('#Experiencia_FechaInicio').val("");
+            //    mjs.innerHTML = "Ingresar una fecha válida";
+            //    mjs.style.display = "block";
+            //}
+            //else { mjs.style.display = "none"; }
         }
 
         function fechaValidaFin() {
@@ -88,13 +86,7 @@
             }
             else { mjsFin.style.display = "none"; }
             
-            //fecActual = new Date();
-            //fechaFin = "01/" + fechaFin;
-            //var mes = (fecActual.getMonth() + 1);
-            //if (mes < 10) { mes = "0" + mes; }
-            //fechaActual = "01/" + mes + '/' + fecActual.getFullYear();
 
-            //if (Date.parse(fechaFin) > Date.parse(fechaActual)) {
             var dFechaActual = new Date();
             var valores = fechaFin.split('/');
             var dFechaInicio = new Date(valores[1], parseInt(valores[0]) - 1, dFechaActual.getDate());
@@ -173,12 +165,15 @@
             }
         }
 
+       
+
         function habilitarFecha(opcion)
         {
             var msj = document.getElementById('msjErrorFecha');
-
+            var msjMotivoCese = document.getElementById('msjErrorMotivoCese');
             if (opcion == true) {
                 msj.style.display = "none";
+                msjMotivoCese.style.display = "none";
                 $('#Experiencia_FechaFin').val('');
                 $('#Experiencia_TipoMotivoCese').val(0);
                 calcularTiempoServicio();
@@ -282,6 +277,7 @@
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TiempoDeServicio)
                 </div>
+               
             </td>
             <td class="colEtiqueta">
                 <label class="etiquetaFormulario" > Motivo de cese </label>
@@ -291,6 +287,7 @@
                 <div class="tex-error" style="font-size:12px;color:red"> 
                     @Html.ValidationMessageFor(model => model.Experiencia.TipoMotivoCese)
                 </div>
+                 <div id="msjErrorMotivoCese" style="font-size:12px;color:red;display:none;"></div>
             </td>
         </tr>
         </table>

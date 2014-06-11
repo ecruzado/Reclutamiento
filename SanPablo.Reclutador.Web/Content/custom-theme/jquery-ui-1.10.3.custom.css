@@ -41,7 +41,7 @@
 .ui-helper-clearfix:after {
 	content: "";
 	display: table;
-    color:white;
+   /*color: white;*/
 	border-collapse: collapse;
 }
 
@@ -1439,6 +1439,7 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-dialog .ui-dialog-title {
 	float: left;
+    /*color: #404040;*/
 	color: white;
 	font-weight: bold;
 	margin-top: 0px;
@@ -1457,6 +1458,7 @@ button.ui-button::-moz-focus-inner {
 	height: 18px;
 	font-size: 20px;
 	font-weight: bold;
+    background-image: url(images/ui-icons_ffffff_256x240.png);
 	line-height: 13.5px;
 	text-shadow: 0 1px 0 #ffffff;
 	filter:alpha(opacity=25);
@@ -1470,6 +1472,11 @@ button.ui-button::-moz-focus-inner {
 	-moz-box-shadow: none; /* Firefox 3.6 */
 	box-shadow: none;
 }
+/*inico*/
+.ui-widget-header .ui-icon {
+background-image: url(images/ui-icons_ffffff_256x240.png);
+}
+/*fin*/
 
 .ui-dialog .ui-dialog-titlebar-close span {
 	display: block;
