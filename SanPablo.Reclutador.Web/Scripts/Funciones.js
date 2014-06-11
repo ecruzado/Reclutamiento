@@ -458,7 +458,7 @@ Funciones = {
             title: 'Confirmación',
             modal: true,
             open: function (event, ui) {
-                $(".ui-dialog-titlebar-close").hide();
+                //$(".ui-dialog-titlebar-close").hide();
             },
             close: function () {
                 $('#' + selectorDiv).dialog('destroy');

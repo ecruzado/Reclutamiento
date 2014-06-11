@@ -85,7 +85,7 @@
             return dato.Descripcion;
         }
 
-        
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ViewResult Edit(string id)
         {
             var estudioGeneralViewModel = InicializarEstudio();
@@ -106,6 +106,7 @@
 
 
         [HttpPost]
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Edit([Bind(Prefix = "Estudio")]EstudioPostulante estudioPostulante)
         {
             var objetoUsuario = (Usuario)Session[ConstanteSesion.ObjUsuarioExtranet];
@@ -197,6 +198,7 @@
         
 
         [HttpPost]
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult eliminarEstudio(int ideEstudio)
         {
             ActionResult result = null;
