@@ -498,7 +498,6 @@
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Conocimientos.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Discapacidad.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Estudio.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Evaluacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Experiencia.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Puesto.cshtml" />
@@ -562,6 +561,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\General.cshtml" />
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupPostulacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Evaluacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />

@@ -914,7 +914,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                         enviarMail.EnviarCorreoVarios(dir.ToString(), Etapa.Aceptado, usuarioResp.NombreUsuario, "Ampliación de Cargo", "", solicitud.nombreCargo, ""+solicitud.IdeSolReqPersonal, listSends, "Suceso", listCopys);
 
-                        msjFinal = "Solicitud de ampliación enviado exitosamente. ";
+                        msjFinal = "El proceso de envío se realizó exitosamente. ";
                         msjFinal += "Derivada a " + rolResponsable.DscRol + " " + usuarioResp.DscNombres + " " + usuarioResp.DscApePaterno;
                         objJsonMessage.Mensaje = msjFinal;
                         objJsonMessage.Resultado = true;
@@ -1389,11 +1389,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         id = item.IdeEvaluacionRequerimiento.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionExamen,
-                                item.DescripcionTipoExamen,
-                                item.NotaMinimaExamen.ToString(),
-                                item.DescripcionAreaResponsable.ToString(),
-                                item.PuntajeExamen.ToString(),
+                                item.DescripcionExamen==null?"":item.DescripcionExamen,
+                                item.DescripcionTipoExamen== null?"":item.DescripcionTipoExamen,
+                                item.NotaMinimaExamen==null?"":item.NotaMinimaExamen.ToString(),
                             }
                     }).ToArray();
 
@@ -1960,7 +1958,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         id = item.IdeNivelAcademicoRequerimiento.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionAreaEstudio,
+                                item.DescripcionTipoEducacion == null?"":item.DescripcionTipoEducacion.ToString(),
+                                item.DescripcionAreaEstudio == null?"":item.DescripcionAreaEstudio.ToString(),
                             }
                     }).ToArray();
 

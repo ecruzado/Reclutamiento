@@ -247,10 +247,10 @@
                     }
                 });
             },
-            colNames: ['Descripci&oacuten'],
+            colNames: ['TipoEstudio','Descripci&oacuten'],
             colModel: [
-                    
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 760 }
+                    { name: 'TipoEstudio', index: 'TipoEstudio', align: 'left', editable: false, sortable: false, width: 380 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380 }
             ],
 
            // pager: jQuery('#grdPagerConocimientos'),
@@ -479,7 +479,13 @@
              },
              loadComplete: function (data) {
              }
-         });
+        });
+
+
+        //ocultar las cabeceras
+
+        $('.ui-jqgrid-hbox').hide();
+
 
     });
 
@@ -509,49 +515,6 @@
         return true;
 
     }
-
-    //function validaPublicacion() {
-
-    //    var fecInicial = $("#SolReqPersonal_FecPublicacion").val();
-    //    var fecFinal = $("#SolReqPersonal_FecExpiracacion").val();
-
-    //    var firstValue = fecInicial.split('-');
-    //    var secondValue = fecFinal.split('-');
-
-    //    if (firstValue == 0 && firstValue=="") {
-            
-    //        MostrarMensaje('Ingrese fecha de publicación', "MENSAJE");
-    //        return false;
-    //    }
-    //    if (secondValue == 0 && secondValue=="") {
-            
-    //        MostrarMensaje('Ingrese fecha de expiración', "MENSAJE");
-    //        return false;
-    //    }
-
-    //    var firstDate = new Date();
-    //    firstDate.setFullYear(firstValue[0], (firstValue[1] - 1), firstValue[2]);
-
-    //    var secondDate = new Date();
-    //    secondDate.setFullYear(secondValue[0], (secondValue[1] - 1), secondValue[2]);
-
-    //    if (firstDate > secondDate) {
-    //        MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experiración', "MENSAJE");
-    //        return false;
-    //    }
-
-    //    var observacion = $('#SolReqPersonal_ObservacionPublica').val();
-    //    if (observacion.length > 0) {
-    //        return true;
-    //    }
-    //    else {
-    //        MostrarMensaje('Debe ingresar una observación para la publicación', "MENSAJE");
-    //        return false;
-    //    }
-
-
-    //}
-
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -587,7 +550,7 @@
             title: titulo,
             modal: true,
             buttons: {
-                "Ok": function () {
+                "Aceptar": function () {
                     $(this).dialog("close");
                     SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
                 }
@@ -668,9 +631,20 @@
 
                    <table style="margin-left:50px;" >
                    <tr><td>&nbsp;</td></tr>
+                       
+                    <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01"><strong>Funciones</strong> </label>
+                         <div class="controls">
+                            @Html.TextAreaFor(model => model.SolReqPersonal.FuncionesCargo, new { @disabled = "disabled", @style = "width:800px; height:100px; resize:none;" })
+                         </div>
+                       </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                   
                    <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Estudios</label>
+                        <label class="control-label" for="input01"><strong>Estudios</strong> </label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -686,7 +660,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Conocimientos</label>
+                        <label class="control-label" for="input01"><strong>Conocimientos</strong> </label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -702,7 +676,7 @@
                     <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Experiencia</label>
+                        <label class="control-label" for="input01"><strong>Experiencia</strong> </label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -716,21 +690,13 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-                   <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Funciones</label>
-                         <div class="controls">
-                            @Html.TextAreaFor(model => model.SolReqPersonal.FuncionesCargo, new { @disabled = "disabled", @style = "width:800px; height:100px; resize:none;" })
-                         </div>
-                       </td>
-                    </tr>
-                        <tr><td>&nbsp;</td></tr>
+                   
 
                        @if(Model.visualizarCompetencias.Equals(Indicador.Si))
                        {
                         <tr class="formulario-fila">
                             <td class="span5">
-                            <label class="control-label" for="input01">Competencias</label>
+                            <label class="control-label" for="input01"><strong>Competencias</strong> </label>
                              <div class="controls">
                                 <div style="width: 100%">                                        
                                     <div>
@@ -749,7 +715,7 @@
                         <tr><td>&nbsp;</td></tr>
                         <tr class="formulario-fila">
                             <td class="span5">
-                            <label class="control-label" for="input01">Ofrecemos</label>
+                            <label class="control-label" for="input01"><strong>Ofrecemos</strong> </label>
                              <div class="controls">
                                 <div style="width: 100%">                                        
                                     <div>
@@ -766,7 +732,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Observaciones</label>
+                        <label class="control-label" for="input01"><strong>Observaciones</strong> </label>
                          <div class="controls">
 
                              @if (Indicador.Si.Equals(Model.editarObservaciones))

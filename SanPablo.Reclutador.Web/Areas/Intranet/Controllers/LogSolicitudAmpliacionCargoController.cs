@@ -86,7 +86,7 @@
                             {
                                 var rol = _rolRepository.GetSingle(x=>x.IdRol == model.LogSolicitudAmpliacion.RolResponsable);
                                 int idUsuarioResp = Convert.ToInt32(Session[ConstanteSesion.IdUsuario]);
-                                msjFinal = "Solicitud enviada exitosamente.";
+                                msjFinal = "El proceso de envío se realizó exitosamente.";
                                 msjFinal += "Derivado a " + rol.DscRol + " ";
 
                                 if(idUsuarioResp != 0)
@@ -106,7 +106,7 @@
                         }
                         else
                         {
-                            objJsonMessage.Mensaje = "ERROR: Ocurrio un error al intentar enviar la aprobación/rechazo, intente de nuevo";
+                            objJsonMessage.Mensaje = "ERROR: Ocurrio un error al intentar enviar la Aprobación/Rechazo, intente de nuevo";
                             objJsonMessage.Resultado = false;
                             return Json(objJsonMessage);
                         }

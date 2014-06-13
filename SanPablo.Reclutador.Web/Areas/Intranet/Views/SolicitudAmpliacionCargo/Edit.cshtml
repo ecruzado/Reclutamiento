@@ -753,10 +753,10 @@
                  $.unblockUI();
                  if (respuesta.Resultado) {
                      $('#updateDialogAprobacion').dialog("close");
-                     mensajeRedirecciona(respuesta.Mensaje, "MENSAJE");
+                     mensajeRedirecciona(respuesta.Mensaje, "INFORMATIVO");
                  }
                  else {
-                     MostrarMensaje(respuesta.Mensaje,"MENSAJE");
+                     MostrarMensaje(respuesta.Mensaje,"ALERTA");
                  }
              }
         );

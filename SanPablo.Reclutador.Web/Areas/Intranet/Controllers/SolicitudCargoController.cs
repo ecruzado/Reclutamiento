@@ -2116,7 +2116,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         }
 
                         objJson.Resultado = true;
-                        objJson.Mensaje = "Se publico la Solicitud";
+                        objJson.Mensaje = "Requerimiento publicado exitosamente";
 
                     }
                 }
