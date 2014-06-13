@@ -99,10 +99,16 @@
             });
 
             $('#btnAgregar').click(function () {
+
+                validaSes();
+
                 mostrarAgregarEstudios();
             });
 
             $('#btnEditar').click(function () {
+
+                validaSes();
+
                 var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideEstudio != null) {
                     mostrarEditarEstudios(ideEstudio);
@@ -122,6 +128,8 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
+                validaSes();
+
                 var ideEstudio = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideEstudio != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -170,8 +178,13 @@
 
         });
 
+
         function mostrarEditarEstudios(idEstudio) {
             var dialogDiv = $('#updateDialog');
+
+            validaSes();
+            
+
             $.get('@Url.Action("Edit", "EstudioPostulante")', {id : idEstudio},  function (data) {
                 dialogDiv.html(data);
                 $.validator.unobtrusive.parse($("#updateDialog"));
@@ -179,6 +192,9 @@
             });
             return false;
         }
+
+
+
 
         function eliminarEstudio(id) {
             $.ajax({
@@ -190,6 +206,8 @@
             }
 
         function mostrarAgregarEstudios() {
+
+
             var dialogDiv = $('#updateDialog');
             $.get('@Url.Action("Edit", "EstudioPostulante", new { id = "0"})' , function (data) {
                 dialogDiv.html(data);

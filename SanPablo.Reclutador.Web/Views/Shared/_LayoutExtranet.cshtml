@@ -138,6 +138,7 @@
         <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/grid.locale-es.js?V=0.01")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/Funciones.js?V=0.01")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.jqGrid.min.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/bootswatch.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/jquery.validate.js?V=0.01")" type="text/javascript"></script>
@@ -190,6 +191,24 @@
               tecla = (document.all) ? e.keyCode : e.which;
               elemento.value = elemento.value.toUpperCase();
           }
+
+
+         function validaSes() {
+
+             $.ajax({
+
+                 type: "POST",
+                 url: '@Url.Action("validaSesPopup", "Seguridad")',
+            traditional: true,
+            success: function (data) {
+                if (data.redirecciona) {
+                    SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                    }
+                }
+
+        });
+
+        }
 
 
          </script>

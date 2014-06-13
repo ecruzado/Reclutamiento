@@ -407,6 +407,30 @@ namespace SanPablo.Reclutador.Web.Controllers
         }
 
         /// <summary>
+        /// valida la sesion de los popup
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
+        public ActionResult validaSesPopup() {
+
+            JsonMessage objJsonMensaje = new JsonMessage();
+            bool resultado = false;
+            try
+            {
+               resultado = true;
+            }
+            catch (Exception)
+            {
+                resultado = false;
+            }
+            objJsonMensaje.Resultado = resultado;
+
+            return Json(objJsonMensaje);
+        }
+
+
+        /// <summary>
         /// obtiene los menus del Extranet
         /// </summary>
         /// <returns></returns>
