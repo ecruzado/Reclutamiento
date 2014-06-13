@@ -96,6 +96,28 @@ namespace SanPablo.Reclutador.Entity.Validation
             //    .LessThanOrEqualTo(x => x.PuntajeTotalPostulanteInterno)
             //    .WithMessage("No puede sobreparar el puntaje máx de Postulante interno");
 
+            //Datos de mantenimientos
+
+            RuleFor(x => x.NombreCargo)
+                .NotEmpty()
+                .WithMessage("Ingresar el nombre del cargo");
+
+            RuleFor(x => x.DescripcionCargo)
+                .NotEmpty()
+                .WithMessage("Ingresar el nombre del cargo");
+
+            RuleFor(x => x.IdeDependencia)
+               .NotEqual(0)
+               .WithMessage("Seleccione una dependencia");
+
+            RuleFor(x => x.IdeDepartamento)
+               .NotEqual(0)
+               .WithMessage("Seleccione Departamento");
+
+            RuleFor(x => x.IdeArea)
+               .NotEqual(0)
+               .WithMessage("Seleccione Área");
+
         }
 
     }

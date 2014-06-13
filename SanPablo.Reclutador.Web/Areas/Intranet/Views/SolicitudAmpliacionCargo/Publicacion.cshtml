@@ -538,11 +538,16 @@
 
     }
 
-    
-
     function RedireccionaBus() {
-        window.location = '@Url.Action("Index", "SolicitudAmpliacionCargo", new { area = "Intranet" })';
+        var pagina = $('#Pagina').val();
+
+        if (pagina == "04") {
+            window.location = '@Url.Action("Index", "SolicitudConsulta", new { area = "Intranet"})';
+        } else {
+            window.location = '@Url.Action("Index", "SolicitudAmpliacionCargo", new { area = "Intranet" })';
+        }
     }
+
 
     function mensajeRedirecciona(mensaje, titulo) {
         $("#spnMensaje").html(mensaje);

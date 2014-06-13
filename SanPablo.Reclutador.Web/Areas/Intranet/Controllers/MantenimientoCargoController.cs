@@ -62,8 +62,8 @@
             mantenimientoViewModel.Accion = Accion.Consultar;
             try
             {
-               
-                if ((ideCargo != 0)&&(Convert.ToInt32(Session[ConstanteSesion.copia]) == 0))
+                int nroCopia = Convert.ToInt32(Session[ConstanteSesion.copia]);
+                if ((ideCargo != 0) && (nroCopia == 0))
                 {   
                     //primer ingreso al sistema
                     Session[ConstanteSesion.copia] = 1;
@@ -625,12 +625,13 @@
         {
             var mantenimientoViewModel = inicializarListaMantenimiento();
             var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-
+            Session[ConstanteSesion.copia] = 0; 
             if (rolSession == Roles.Jefe_Corporativo_Seleccion)
             {
                 mantenimientoViewModel.btnVerConsultar = Indicador.Si;
                 mantenimientoViewModel.btnVerActivarDesc = Indicador.Si;
                 mantenimientoViewModel.btnVerEditar = Indicador.Si;
+
             }
             else
             {
@@ -858,30 +859,43 @@
         public ActionResult DatosGenerales([Bind(Prefix = "Cargo")]Cargo cargo)
         {
             JsonMessage objJsonMessage = new JsonMessage();
+            CargoValidator validator = new CargoValidator();
+            ValidationResult result = validator.Validate(cargo, "NombreCargo","DescripcionCargo", "IdeDependencia","IdeDepartamento","IdeArea");
+
             try
             {
-                Cargo cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
-                cargoEditar.NombreCargo = cargo.NombreCargo;
-                cargoEditar.DescripcionCargo = cargo.DescripcionCargo;
-                cargoEditar.NumeroPosiciones = cargo.NumeroPosiciones;
-                cargoEditar.IdeDependencia = cargo.IdeDependencia;
-                cargoEditar.IdeDepartamento = cargo.IdeDepartamento;
-                cargoEditar.IdeArea = cargo.IdeArea;
-                
-                _cargoRepository.Update(cargoEditar);
-                
-                //Actualizar los datos de session
-                CargoPerfil.NombreCargo = cargo.NombreCargo;
-                CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
-                CargoPerfil.NumeroPosiciones = Convert.ToInt32(cargo.NumeroPosiciones);
-                CargoPerfil.IdeArea = cargo.IdeArea;
-                CargoPerfil.IdeDepartamento = cargo.IdeDepartamento;
-                CargoPerfil.IdeDependencia = cargo.IdeDependencia;
+                if (!result.IsValid)
+                {
+                    var datosGeneralesViewModel = inicializarCargo();
+                    datosGeneralesViewModel.Cargo = cargo;
+                    return View(datosGeneralesViewModel);
+                    //}
+                }
+                else
+                {
+                    Cargo cargoEditar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+                    cargoEditar.NombreCargo = cargo.NombreCargo;
+                    cargoEditar.DescripcionCargo = cargo.DescripcionCargo;
+                    cargoEditar.NumeroPosiciones = cargo.NumeroPosiciones;
+                    cargoEditar.IdeDependencia = cargo.IdeDependencia;
+                    cargoEditar.IdeDepartamento = cargo.IdeDepartamento;
+                    cargoEditar.IdeArea = cargo.IdeArea;
+
+                    _cargoRepository.Update(cargoEditar);
+
+                    //Actualizar los datos de session
+                    CargoPerfil.NombreCargo = cargo.NombreCargo;
+                    CargoPerfil.DescripcionCargo = cargo.DescripcionCargo;
+                    CargoPerfil.NumeroPosiciones = Convert.ToInt32(cargo.NumeroPosiciones);
+                    CargoPerfil.IdeArea = cargo.IdeArea;
+                    CargoPerfil.IdeDepartamento = cargo.IdeDepartamento;
+                    CargoPerfil.IdeDependencia = cargo.IdeDependencia;
 
 
-                objJsonMessage.Mensaje = "Guardado exitosamente";
-                objJsonMessage.Resultado = true;
-                return Json(objJsonMessage);
+                    objJsonMessage.Mensaje = "Guardado exitosamente";
+                    objJsonMessage.Resultado = true;
+                    return Json(objJsonMessage);
+                }
             }
             catch (Exception ex)
             {

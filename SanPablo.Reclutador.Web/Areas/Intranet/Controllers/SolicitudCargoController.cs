@@ -1691,32 +1691,34 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             SolicitudRempCargoViewModel model;
             model = new SolicitudRempCargoViewModel();
             model.SolReqPersonal = new SolReqPersonal();
-            model.editarObservaciones = Indicador.Si;
+            model.visualizarCompetencias = Indicador.No;
+            model.visualizarOfrecemos = Indicador.No;
+
             model.editarFechaFinPublica = Indicador.Si;
             model.editarFechaInicoPublica = Indicador.Si;
+            model.editarObservaciones = Indicador.Si;
 
-            var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-            
-            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id && x.TipoSolicitud == TipoSolicitud.Remplazo);
+            var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
 
-            if (ObjSol!=null)
+            if (ObjSol != null)
             {
                 model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
                 model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
                 model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+
                 model.SolReqPersonal = ObjSol;
 
                 var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
                                                         && x.IdeArea == ObjSol.IdeArea);
-                
+
                 model.SolReqPersonal.Area_des = objArea.NombreArea;
 
                 int TipoPuesto = Convert.ToInt32(TipoCampo.TipoSalario);
 
-                var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto 
+                var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto
                                                                             && x.Valor == ObjSol.TipPuesto);
 
-                model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion==null?"":ObjDetalleGeneral.Descripcion;
+                model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion == null ? "" : ObjDetalleGeneral.Descripcion;
 
                 model.SolReqPersonal.NumVacantes = ObjSol.NumVacantes;
                 model.SolReqPersonal.FuncionesCargo = ObjSol.FuncionesCargo;
@@ -1725,23 +1727,36 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
                 model.listaRangoSalarial.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
-                model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario==null?"":ObjSol.TipoRangoSalario;
-                
+                model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario == null ? "" : ObjSol.TipoRangoSalario;
+
+                model.Pagina = pagina;
+
+            }
+
+            //visualizar competencias
+            var contadorCompetencias = _competenciaRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == ObjSol.IdeSolReqPersonal);
+
+            if (contadorCompetencias > 0)
+            {
+                model.visualizarCompetencias = Indicador.Si;
+            }
+            //visualizar ofrecemos
+
+            var contadorOfrecemos = _ofrecemosRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == ObjSol.IdeSolReqPersonal);
+            if (contadorOfrecemos > 0)
+            {
+                model.visualizarOfrecemos = Indicador.Si;
             }
 
             if (pagina == TipoSolicitud.ConsultaRequerimientos)
             {
                 model.btnActualizar = Visualicion.SI;
                 model.btnPublicar = Visualicion.NO;
-                // si el usuario es el encargado de selección puede editar los datos
-
             }
             else
             {
-
                 model.btnPublicar = Visualicion.SI;
                 model.btnActualizar = Visualicion.NO;
-
                 if (ObjSol.FecPublicacion != null)
                 {
                     model.editarFechaFinPublica = Indicador.Si;
@@ -1750,9 +1765,76 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
             }
+
             model.Pagina = pagina;
 
-            return View("Publicacion",model);
+            return View("Publicacion", model);
+
+            //SolicitudRempCargoViewModel model;
+            //model = new SolicitudRempCargoViewModel();
+            //model.SolReqPersonal = new SolReqPersonal();
+            //model.editarObservaciones = Indicador.Si;
+            //model.editarFechaFinPublica = Indicador.Si;
+            //model.editarFechaInicoPublica = Indicador.Si;
+
+            //var rolSession = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            
+            //var ObjSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == id && x.TipoSolicitud == TipoSolicitud.Remplazo);
+
+            //if (ObjSol!=null)
+            //{
+            //    model.SolReqPersonal.nombreCargo = ObjSol.nombreCargo;
+            //    model.SolReqPersonal.DesCargo = ObjSol.DesCargo;
+            //    model.SolReqPersonal.IdeSolReqPersonal = ObjSol.IdeSolReqPersonal;
+            //    model.SolReqPersonal = ObjSol;
+
+            //    var objArea = _areaRepository.GetSingle(x => x.Departamento.IdeDepartamento == ObjSol.IdeDepartamento
+            //                                            && x.IdeArea == ObjSol.IdeArea);
+                
+            //    model.SolReqPersonal.Area_des = objArea.NombreArea;
+
+            //    int TipoPuesto = Convert.ToInt32(TipoCampo.TipoSalario);
+
+            //    var ObjDetalleGeneral = _detalleGeneralRepository.GetSingle(x => x.IdeGeneral == TipoPuesto 
+            //                                                                && x.Valor == ObjSol.TipPuesto);
+
+            //    model.SolReqPersonal.TipPuestoDes = ObjDetalleGeneral.Descripcion==null?"":ObjDetalleGeneral.Descripcion;
+
+            //    model.SolReqPersonal.NumVacantes = ObjSol.NumVacantes;
+            //    model.SolReqPersonal.FuncionesCargo = ObjSol.FuncionesCargo;
+
+            //    model.listaRangoSalarial =
+            //        new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoSalario));
+            //    model.listaRangoSalarial.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
+
+            //    model.SolReqPersonal.TipoRangoSalario = ObjSol.TipoRangoSalario==null?"":ObjSol.TipoRangoSalario;
+                
+            //}
+
+            //if (pagina == TipoSolicitud.ConsultaRequerimientos)
+            //{
+            //    model.btnActualizar = Visualicion.SI;
+            //    model.btnPublicar = Visualicion.NO;
+            //    // si el usuario es el encargado de selección puede editar los datos
+
+            //}
+            //else
+            //{
+
+            //    model.btnPublicar = Visualicion.SI;
+            //    model.btnActualizar = Visualicion.NO;
+
+            //    if (ObjSol.FecPublicacion != null)
+            //    {
+            //        model.editarFechaFinPublica = Indicador.Si;
+            //        model.editarFechaInicoPublica = Indicador.No;
+            //        model.editarObservaciones = Indicador.No;
+
+            //    }
+            //}
+            //model.Pagina = pagina;
+
+            //return View("Publicacion",model);
         }
 
         public ActionResult actualizarFechaExpiracion(string idSolicitud,string fechaExpiracion, string fechaPublicacion, string Observacion)
@@ -1802,6 +1884,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
 
+            List<ConocimientoGeneralRequerimiento> lista = new List<ConocimientoGeneralRequerimiento>();
+
             try
             {
 
@@ -1809,28 +1893,60 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 grid.rows = (grid.rows == 0) ? 100 : grid.rows;
 
-                DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
-                where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
-               
 
-                var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+                lista = _ConocimientoGeneralRequerimientoRepository.listarConocimientosPublicacion(IdeSolReqPersonal);
 
-                generic.Value.rows = generic.List
-                    .Select(item => new Row
-                    {
-                        id = item.IdeConocimientoGeneralRequerimiento.ToString(),
-                        cell = new string[]
+                var generic = GetListar(lista,
+                                         grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString);
+
+                generic.Value.rows = generic.List.Select(item => new Row
+                {
+                    id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+                    cell = new string[]
                             {
-                                item.DescripcionConocimientoGeneral,
+                                item.DescripcionConocimientoGeneral==null?"":item.DescripcionConocimientoGeneral.ToString(),
+                                item.NombreConocimientoGeneral==null?"":item.NombreConocimientoGeneral.ToString(),
                             }
-                    }).ToArray();
+                }).ToArray();
 
                 return Json(generic.Value);
+
             }
             catch (Exception ex)
             {
                 return MensajeError("ERROR: " + ex.Message);
             }
+            //int IdeSolReqPersonal = (grid.rules[0].data == null ? 0 : Convert.ToInt32(grid.rules[0].data));
+
+            //try
+            //{
+
+            //    grid.page = (grid.page == 0) ? 1 : grid.page;
+
+            //    grid.rows = (grid.rows == 0) ? 100 : grid.rows;
+
+            //    DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+            //    where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
+               
+
+            //    var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
+
+            //    generic.Value.rows = generic.List
+            //        .Select(item => new Row
+            //        {
+            //            id = item.IdeConocimientoGeneralRequerimiento.ToString(),
+            //            cell = new string[]
+            //                {
+            //                    item.DescripcionConocimientoGeneral,
+            //                }
+            //        }).ToArray();
+
+            //    return Json(generic.Value);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return MensajeError("ERROR: " + ex.Message);
+            //}
         }
 
 
