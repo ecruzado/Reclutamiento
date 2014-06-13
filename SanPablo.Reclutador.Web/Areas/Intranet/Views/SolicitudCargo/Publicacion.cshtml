@@ -12,7 +12,6 @@
 
 <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
 
 <script type="text/javascript">
         
@@ -28,11 +27,11 @@
             $('#SolReqPersonal_FecExpiracacion').val(fechaExpiracion.substring(0, 10));
         }
 
+        var dateToday = new Date();
+        
         var indicador = $('#editarFechaInicoPublica').val();
 
         if (indicador == 'S') {
-            var dateToday = new Date();
-
             var dates = $('#SolReqPersonal_FecPublicacion').datepicker({
                 showOn: "button",
                 buttonImage: '@Url.Content("~/Content/images/calendario.png")',
@@ -50,35 +49,27 @@
             });
         }
 
-        
         var dates = $('#SolReqPersonal_FecExpiracacion').datepicker({
             showOn: "button",
             buttonImage: '@Url.Content("~/Content/images/calendario.png")',
-            buttonImageOnly: true,
+                buttonImageOnly: true,
             //defaultDate: "+1w",
-            changeMonth: true,
-            numberOfMonths: 1,
-            minDate: dateToday,
-            onSelect: function (selectedDate) {
-                var option = this.id == "from" ? "minDate" : "maxDate",
-                    instance = $(this).data("datepicker");
-                //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-                //dates.not(this).datepicker("option", option, date);
-            }
+                changeMonth: true,
+                numberOfMonths: 1,
+                minDate: dateToday,
+                onSelect: function (selectedDate) {
+                    var option = this.id == "from" ? "minDate" : "maxDate",
+                        instance = $(this).data("datepicker");
+                    //    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                    //dates.not(this).datepicker("option", option, date);
+                }
         });
+
+
 
         $('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').attr("readonly", "readonly");
 
-        @*$('#SolReqPersonal_FecPublicacion,#SolReqPersonal_FecExpiracacion').datepicker({
-            showOn: "button",
-            buttonImage: '@Url.Content("~/Content/images/calendario.png")',
-        buttonImageOnly: true,
-        onSelect: function (date) {
-            $(this).valid();
-        }
-         });*@
-
-
+        
         $('#btnActualizar').click(function () {
             var fecha = $('#SolReqPersonal_FecExpiracacion').val();
             var id = $('#SolReqPersonal_IdeSolReqPersonal').val();
@@ -89,33 +80,50 @@
                     data: { fechaExpiracion: fecha, idSolicitud: id, fechaPublicacion: fechaPublica, Observacion: observacion },
                     type: "POST",
                     url: '@Url.Action("actualizarFechaExpiracion", "SolicitudCargo", new { area="Intranet"})',
-                traditional: true,
-                success: function (data) {
-                    if (data.Resultado) {
-                        // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                        information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO");
+                    traditional: true,
+                    success: function (data) {
+                        if (data.Resultado) {
+                            // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
+                            information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO");
 
+                        }
                     }
-                }
                 });
             }
-        });
-        
+         });
+
+
         $('#btnPublicarSolReq').click(function () {
             if (validaPublicacion())
             {
+                $.blockUI({
+                    message: '<h1>Publicando...</h1>',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .5,
+                        color: '#fff'
+                    }
+                });
                 $.ajax({
                 data: $("#frmPublicaSolReemplazoCargo").serialize(),
                 type: "POST",
-                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area="Intranet"})',
+                url: '@Url.Action("PublicaSolReqPersonal", "SolicitudCargo", new { area = "Intranet" })',
                 traditional: true,
                     success: function (data) {
-                        if (data.Resultado)
-                        {
+                        if (data.Resultado) {
+                            $.unblockUI();
                             // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                          information("divMensaje", "spnMensaje", data.Mensaje, "INFORMATIVO");
-
+                            mensajeRedirecciona(data.Mensaje, "INFORMATIVO");
                         }
+                        else {
+                            $.unblockUI();
+                            MostrarMensaje(data.mensaje, "ALERTA");
+                        }
+
                     }
                 });
             }
@@ -125,7 +133,7 @@
         $('#btnAnteriorPublica').click(function () {
             var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
 
-            window.location = '@Url.Action("Edit", "SolicitudCargo", new { id = "", area = "Intranet"})' + '/' + selr;
+            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })' + '/' + selr;
 
         });
         
@@ -154,7 +162,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Conocimientos", "SolicitudCargo")',
+                    url: '@Url.Action("Conocimientos", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -170,9 +178,10 @@
                     }
                 });
             },
-            colNames: ['Descripci&oacuten'],
+            colNames: ['Tipo de Conocimiento', 'Descripci&oacuten'],
             colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 760 }
+                    { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false, width: 380},
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380}
             ],
 
             //pager: jQuery('#grdPagerEstudios'),
@@ -222,7 +231,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Estudios", "SolicitudCargo")',
+                    url: '@Url.Action("Estudios", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -238,12 +247,13 @@
                     }
                 });
             },
-            colNames: ['Descripci&oacuten'],
+            colNames: ['TipoEstudio','Descripci&oacuten'],
             colModel: [
-                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 760 }
+                    { name: 'TipoEstudio', index: 'TipoEstudio', align: 'left', editable: false, sortable: false, width: 380 },
+                    { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380 }
             ],
 
-            //pager: jQuery('#grdPagerConocimientos'),
+           // pager: jQuery('#grdPagerConocimientos'),
             rowNum: 10,
             //rowList: [10, 30, 50],
             autowidth: true,
@@ -290,7 +300,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Competencias", "SolicitudCargo")',
+                    url: '@Url.Action("Competencias", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -311,7 +321,7 @@
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 760}
             ],
 
-            //pager: jQuery('#grdPagerCompetencias'),
+            pager: jQuery('#grdPagerCompetencias'),
             rowNum: 10,
             //rowList: [10, 30, 50],
             autowidth: true,
@@ -359,7 +369,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Experiencia", "SolicitudCargo")',
+                    url: '@Url.Action("Experiencia", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -378,7 +388,7 @@
             colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 380 },
-                    { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false, width: 380 },
+                    { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false, width: 380},
             ],
 
              // pager: jQuery('#grdPagerExperiencia'),
@@ -429,7 +439,7 @@
                 var params = { grid: migrilla };
 
                 $.ajax({
-                    url: '@Url.Action("Ofrecemos", "SolicitudCargo")',
+                    url: '@Url.Action("Ofrecemos", "SolicitudAmpliacionCargo")',
                     type: 'post',
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(params),
@@ -450,8 +460,7 @@
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false, width: 760 },
             ],
 
-
-           //  pager: jQuery('#grdPagerOfrecemos'),
+             //pager: jQuery('#grdPagerOfrecemos'),
              rowNum: 10,
              //rowList: [10, 30, 50],
              autowidth: true,
@@ -472,48 +481,40 @@
              }
         });
 
-        //Ocultar cabeceras de las grillas
+
+        //ocultar las cabeceras
 
         $('.ui-jqgrid-hbox').hide();
+
 
     });
 
     function validaPublicacion() {
 
-        var fechaActual = $.datepicker.formatDate('dd/mm/yy', new Date());
+        var fechaInicial = $('#SolReqPersonal_FecPublicacion').val();
+        var fechaFinal = $('#SolReqPersonal_FecExpiracacion').val();
 
-        var observacion = $("#SolReqPersonal_ObservacionPublica").val();
-
-        var fechaInicial = $("#SolReqPersonal_FecPublicacion").val();
-        var fechaFinal = $("#SolReqPersonal_FecExpiracacion").val();
-
+        var observacion = $('#SolReqPersonal_ObservacionPublica').val();
 
         if ((fechaInicial.length == 0) || (fechaFinal.length == 0)) {
 
-            MostrarMensaje('Las fechas son obligatorias', "ALERTA");
-            return false;
-        }
-
-        if (Funciones.compareDate(fechaActual, fechaInicial) == -1) {
-            MostrarMensaje('La fecha inicial debe ser mayor o igual a la fecha del día', "ALERTA");
+            MostrarMensaje('Las fechas son obligatorias', "MENSAJE");
             return false;
         }
 
         if (Funciones.compareDate(fechaInicial, fechaFinal) == -1) {
-            MostrarMensaje('Fecha de publicación no puede ser mayor a la fecha de experización', "ALERTA");
+            MostrarMensaje('La fecha inicial no puede ser mayor que la fecha final', "MENSAJE");
             return false;
         }
 
-        if (observacion == null || observacion.length==0) {
-            MostrarMensaje('Esta pendiente el campo observación', "ALERTA");
+        if ((observacion.length == 0) || (observacion.length > 255)) {
+            MostrarMensaje('Ingresar una observación', "MENSAJE");
             return false;
         }
 
         return true;
 
-
     }
-
 
     function MostrarMensaje(mensaje, titulo) {
         Funciones.Alert("divMensaje", "spnMensaje", mensaje, titulo);
@@ -537,6 +538,8 @@
 
     }
 
+    
+
     function RedireccionaBus() {
         var pagina = $('#Pagina').val();
 
@@ -545,6 +548,20 @@
         } else {
             window.location = '@Url.Action("ListaReemplazo", "SolicitudCargo", new { area = "Intranet"})';
         }
+    }
+
+    function mensajeRedirecciona(mensaje, titulo) {
+        $("#spnMensaje").html(mensaje);
+        $("#divMensaje").dialog({
+            title: titulo,
+            modal: true,
+            buttons: {
+                "Aceptar": function () {
+                    $(this).dialog("close");
+                    SanPablo.Redirecciona('@Url.Action("Index","SolicitudAmpliacionCargo")');
+                }
+            }
+        });
     }
 
 
@@ -556,11 +573,11 @@
             <div class="widget-title">
                 <h5>@Model.SolReqPersonal.nombreCargo - @Model.SolReqPersonal.DesCargo</h5>
             </div>
-@using (Html.BeginForm("Index", "SolicitudReemplazoCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo"}))
+@using (Html.BeginForm("Publicacion", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo" }))
 {
     @Html.ValidationSummary(true)
 
-     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
+    
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
     
                 <fieldset>
@@ -569,71 +586,68 @@
 
                     <tr class="formulario-fila">
                         <td class="control-label" >Área</td>
-                        <td class="controles">                         
-                            @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                        <td class="controls">                     
+                              @Html.TextBoxFor(model => model.SolReqPersonal.Area_des, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </td>
                         <td style="width:45px">&nbsp;</td>
                         <td class="control-label" >Tipo</td>
-                        <td class="controles">                         
-                            @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                        <td class="controls">                     
+                              @Html.TextBoxFor(model => model.SolReqPersonal.TipPuestoDes, new { @class = "textoFormulario", disabled = "disabled" }) 
                         </td>
                     </tr>
                       
                     <tr class="formulario-fila">
                         <td class="control-label">Vacantes</td>
                         <td class="controles">                         
-                            @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,disabled ="disabled" }) 
+                            @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "input-small", disabled = "disabled" }) 
                         </td>
                         <td style="width:45px">&nbsp;</td>
-                        <td class="control-label" >Rango Salarial</td>
+                        <td class="control-label">Rango Salarial</td>
                         <td class="controls">
-                            @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled"})
-                                <label for="TipoRangoSalarior" style="display:inline-block">Publicar</label>
-                                @if(TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
+                                @Html.DropDownListFor(model => model.SolReqPersonal.TipoRangoSalario, new SelectList(Model.listaRangoSalarial, "Valor", "Descripcion", Model.SolReqPersonal.TipoRangoSalario), new { @disabled = "disabled" })
+                                @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox", disabled = "disabled" , style="display:inline-block;" })
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox", disabled = "disabled", style = "display:inline-block;" })<Label style="display:inline-block; font-size:10pt" for="publicar">Publicar</Label>  
                                 }
                                 else
                                 {
-                                    @Html.CheckBoxFor(model => model.verSalario, new { @class="checkbox",style="display:inline-block;" })
+                                    @Html.CheckBoxFor(model => model.verSalario, new { @class = "checkbox" })<Label style="display:inline-block; font-size:10pt" for="publicar">Publicar</Label> 
                                 }
-
-                            <td class="controls">
+                       <td class="controls">
                     </tr>
 
                     <tr class="formulario-fila">
-                        <td class="control-label">Fecha de publicaci&oacute;n</td>
+                        <td class="control-label" >Fecha de publicaci&oacute;n</td>
                         <td class="controles">
-                           
+                            
                                 @Html.TextBoxFor(model => model.editarFechaInicoPublica, new { style = "display:none" })
-                                <input type="text" class="input-small"  id="SolReqPersonal_FecPublicacion" name="SolReqPersonal.FecPublicacion" placeholder="Publicaci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecPublicacion)" >
+                                @Html.TextBoxFor(model => model.SolReqPersonal.FecPublicacion, new { @class = "input-small", maxlength = "15", placeholder = " Publicación" })      
                             
                         </td>
                         <td style="width:45px">&nbsp;</td>
-                        
                         <td class="control-label" >Fecha de expiraci&oacute;n</td>
                         <td class="controles">
-                           
-                                <input type="text" class="input-small"  id="SolReqPersonal_FecExpiracacion" name="SolReqPersonal.FecExpiracacion" placeholder="Expiraci&oacute;n" value="@String.Format("{0:dd/MM/yyyy}", Model.SolReqPersonal.FecExpiracacion)" >
+                            
+                                @Html.TextBoxFor(model => model.SolReqPersonal.FecExpiracacion, new { @class = "input-small", maxlength = "15", placeholder = " Expiración" })      
                             
                         </td>
-
                     </tr>
 
                     </table>
 
-                   <table style="margin-left:50px" >
-                        <tr><td>&nbsp;</td></tr>
-                       <tr class="formulario-fila">
+                   <table style="margin-left:50px;" >
+                   <tr><td>&nbsp;</td></tr>
+                       
+                    <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Funciones</strong> </label>
                          <div class="controls">
-                            @Html.TextAreaFor(model=>model.SolReqPersonal.FuncionesCargo, new {@disabled = "disabled", @style = "width:750px; height:100px;resize:none;"})
+                            @Html.TextAreaFor(model => model.SolReqPersonal.FuncionesCargo, new { @disabled = "disabled", @style = "width:800px; height:100px; resize:none;" })
                          </div>
                        </td>
                     </tr>
-                        <tr><td>&nbsp;</td></tr>
-                   <tr><td>&nbsp;</td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                   
                    <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Estudios</strong></label>
@@ -683,53 +697,60 @@
                     </tr>
                         <tr><td>&nbsp;</td></tr>
                    
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01"><strong>Competencias</strong> </label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListCompetencias">
-                                    </table>
-                                   @* <div id="grdPagerCompetencias">
-                                    </div>*@
-                                </div>                                         
-                            </div>
-                         </div>
-                       </td>
-                    </tr>
+
+                       @if(Model.visualizarCompetencias.Equals(Indicador.Si))
+                       {
+                        <tr class="formulario-fila">
+                            <td class="span5">
+                            <label class="control-label" for="input01"><strong>Competencias</strong> </label>
+                             <div class="controls">
+                                <div style="width: 100%">                                        
+                                    <div>
+                                        <table id="grdListCompetencias">
+                                        </table>
+                                        <div id="grdPagerCompetencias">
+                                        </div>
+                                    </div>                                         
+                                </div>
+                             </div>
+                           </td>
+                        </tr>
+                       }
+                       @if(Model.visualizarOfrecemos.Equals(Indicador.Si))
+                       {
+                        <tr><td>&nbsp;</td></tr>
+                        <tr class="formulario-fila">
+                            <td class="span5">
+                            <label class="control-label" for="input01"><strong>Ofrecemos</strong> </label>
+                             <div class="controls">
+                                <div style="width: 100%">                                        
+                                    <div>
+                                        <table id="grdListOfrecemos">
+                                        </table>
+                                        <div id="grdPagerOfrecemos">
+                                        </div>
+                                    </div>                                         
+                                </div>
+                             </div>
+                            </td>
+                        </tr>
+                       }
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01"><strong>Ofrecemos</strong> </label>
-                         <div class="controls">
-                            <div style="width: 100%">                                        
-                                <div>
-                                    <table id="grdListOfrecemos">
-                                    </table>
-                                   @* <div id="grdPagerOfrecemos">
-                                    </div>*@
-                                </div>                                         
-                            </div>
-                         </div>
-                        </td>
-                    </tr>
-                        <tr><td>&nbsp;</td></tr>
-                    <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01"><strong>Observaciones</strong> <span class="text-error">*</span></label>
+                        <label class="control-label" for="input01"><strong>Observaciones</strong> </label>
                          <div class="controls">
 
-                             @if(Model.editarObservaciones.Equals(Indicador.Si))
+                             @if (Indicador.Si.Equals(Model.editarObservaciones))
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254"})
+                                 @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px; resize:none;", maxlength = "255", onblur = "aMays(event, this)" })     
+                                 <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>
+                                
                              }
                              else
                              {
-                                @Html.TextAreaFor(model=>model.SolReqPersonal.ObservacionPublica, new { @style = "width:750px;height:100px;resize:none;" ,maxlength="254", disabled = "disabled"})   
+                                @Html.TextAreaFor(model => model.SolReqPersonal.ObservacionPublica, new { @style = "width:800px;height:100px", disabled = "disabled" })
                              }
-                             <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
-
                          </div>
                         </td>
                     </tr>   
@@ -740,21 +761,21 @@
 
                 </fieldset>
                 <div class="form-actions"> 
-                    @if(TipoSolicitud.Remplazo.Equals(Model.Pagina))
+                    @if (TipoSolicitud.ConsultaRequerimientos.Equals(Model.Pagina))
                     {
-                        <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                        <a class="btn"  href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>     
                     }
                     else
                     {
-                        <a class="btn" href="@Url.Action("Index", "SolicitudConsulta")"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
+                        <a class="btn"  id="btnAnteriorPublica"><i class="icon-arrow-left icon-cog"></i> Anterior</a>    
                     }
-                    @if(Visualicion.SI.Equals(Model.btnPublicar))
+                    @if (Visualicion.SI.Equals(Model.btnPublicar))
                     {
-                       <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
+                        <a class="btn btn-info" id="btnPublicarSolReq"><i class="icon-circle-arrow-up icon-white"></i> Publicar</a>
                     }
                     @if (Visualicion.SI.Equals(Model.btnActualizar))
                     {
-                         <a class="btn btn-info" id="btnActualizar"><i class="icon-circle-arrow-up icon-white"></i> Actualizar</a>
+                        <a class="btn btn-info" id="btnActualizar"><i class="icon-circle-arrow-up icon-white"></i> Actualizar</a>    
                     }
                          
                 </div>

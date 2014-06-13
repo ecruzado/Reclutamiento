@@ -26,12 +26,12 @@
                 </div>
                 <table>
                     <tr class="formulario-fila">
-                        <td class="colEtiqueta">
+                        @*<td class="colEtiqueta">
                             <label class="control-label" for="inputSuccess">Código de Cargo</label>
                         </td>
                         <td class ="colImput">
                             @Html.TextBoxFor(model=>model.Cargo.CodigoCargo,  new { @disabled = "disabled"})
-                        </td>
+                        </td>*@
                     </tr>
                 </table>
             </form>
@@ -68,12 +68,12 @@
 
 <div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
 
-<div id="updateDialogDatos" title="Selección y Reclutamiento de Personal"><p>¿Está seguro de guardar los cambios?</p></div>
+<div id="updateDialogDatos" title="CONFIRMACIÓN"><p>¿Está seguro de guardar los cambios?</p></div>
 
 <div id="updateDialogAprobacion" title="Aprobacion/Rechazo Solicitud" ></div>
-@*<div id="divMensaje">
-    <span id="spanMensaje"></span>
-</div> *@ 
+<div id="divMensajeMantenimientoCargo">
+    <span id="spanMensajeMantenimientoCargo"></span>
+</div> 
 
  
       
@@ -81,9 +81,19 @@
 @section Scripts{ 
 
     @RenderSection("ScriptsCargo", required: false)
-
+  <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/Funciones.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/SanPablo.js")" type="text/javascript"></script>
 <script type="text/javascript">
+   
     $(function () {
+
+        SanPablo.LetrasSpace('Cargo_NombreCargo');
+        SanPablo.LetrasSpace('Cargo_DescripcionCargo');
+
         var estado = $('#Cargo_EstadoActivo').val();
         if (estado = 'A') {
             $('#EstadoRegistro').val('Activo');
@@ -92,42 +102,42 @@
             $('#EstadoRegistro').val('Inactivo');
         }
 
-        $('#updateDialogAprobacion').dialog({
-            autoOpen: false,
-            width: 400,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Enviar": function (e) {
-                    e.preventDefault();
-                    var result = $('#LogSolicitudNuevoCargoForm').valid();
-                    if (result) {
-                        $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
-                        $("#divMensaje").dialog({
-                            title: 'SAN PABLO',
-                            modal: true,
-                            buttons: {
-                                "Aceptar": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
-                                "Cancelar": function () { $(this).dialog("close"); }
-                            }
-                        });
+        //$('#updateDialogAprobacion').dialog({
+        //    autoOpen: false,
+        //    width: 400,
+        //    resizable: false,
+        //    modal: true,
+        //    buttons: {
+        //        "Enviar": function (e) {
+        //            e.preventDefault();
+        //            var result = $('#LogSolicitudNuevoCargoForm').valid();
+        //            if (result) {
+        //                $("#spanMensaje").html("¿Seguro que quiere enviar la Aprobacion/Rechazo de la solicitud?");
+        //                $("#divMensaje").dialog({
+        //                    title: 'SAN PABLO',
+        //                    modal: true,
+        //                    buttons: {
+        //                        "Aceptar": function () { $(this).dialog("close"); enviarAprobacionRechazo(); },
+        //                        "Cancelar": function () { $(this).dialog("close"); }
+        //                    }
+        //                });
 
-                    }
-                    else {
-                        notificacionError("ERROR: Verifique que los datos ingresados son correctos");
-                    }
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
+        //            }
+        //            else {
+        //                notificacionError("ERROR: Verifique que los datos ingresados son correctos");
+        //            }
+        //        },
+        //        "Cancelar": function () {
+        //            $(this).dialog("close");
+        //        }
+        //    }
+        //});
 
         // }
 
         $('#updateDialogDatos').dialog({
             autoOpen: false,
-            width: 400,
+            width: 300,
             resizable: false,
             modal: true,
             buttons: {
@@ -147,7 +157,7 @@
             }
         });
 
-        $('#updateDialogConfirmacion').dialog({
+      @*  $('#updateDialogConfirmacion').dialog({
             autoOpen: false,
             width: 300,
             resizable: false,
@@ -172,13 +182,20 @@
                     $(this).dialog("close");
                 }
             }
-        });
+        });*@
 
         //datos generales
         $('#btnGrabarDatosGenerales').click(function () {
-            var dialogDiv = $('#updateDialogDatos');
-            dialogDiv.dialog('open');
-            // mostrarconfirmacion();
+
+            var result = $("#datosGeneralesForm").valid();
+            if (result) {
+                var dialogDiv = $('#updateDialogDatos');
+                dialogDiv.dialog('open');
+                // mostrarconfirmacion();
+            }
+            else {
+                MostrarMensaje("Revise que los datos esten ingresados correctamente", "ALERTA");
+            }
         });
 
         $('select#Cargo_IdeDependencia').change(function () {
@@ -231,7 +248,7 @@
             function (respuesta) {
                 if (respuesta.Resultado) {
                     $("#updateDialogDatos").dialog("close");
-                    mensajeResultado(respuesta.Mensaje);
+                    MostrarMensaje(respuesta.Mensaje,"INFORMATIVO");
                 }
                 else {
                     notificacionError(respuesta.Mensaje)
@@ -241,19 +258,10 @@
         );
     }
 
-    function mostrarMensaje(msj)
-    {
-        
-        $("#spanMensaje").html(msj);
-        $("#divMensaje").dialog({
-            title: 'ALERTA',
-            resizable:false,
-            modal: true,
-            buttons: {
-                "Aceptar": function () { $(this).dialog("close"); }
-            }
-        });
+    function MostrarMensaje(mensaje, titulo) {
+        Funciones.Alert("divMensajeMantenimientoCargo", "spanMensajeMantenimientoCargo", mensaje, titulo);
     }
+
 
     function mostrarConfirmacion() {
         var dialogDiv = $('#updateDialogConfirmacion');
@@ -287,7 +295,7 @@
         return false;
     }
 
-    function enviarAprobacionRechazo() {
+@*    function enviarAprobacionRechazo() {
         $.post('@Url.Action("AprobacionRechazoPerfil", "LogSolicitudNuevoCargo")',
              $("#LogSolicitudNuevoCargoForm").serialize(),
              function (respuesta) {
@@ -298,7 +306,7 @@
                          title: 'SAN PABLO',
                          modal: true,
                          buttons: {
-                             "Ok": function () { $(this).dialog("close"); }
+                             "Aceptar": function () { $(this).dialog("close"); }
                          }
                      });
                  }
@@ -307,7 +315,7 @@
                  }
              }
         );
-    }
+    }*@
 
 </script>
 }

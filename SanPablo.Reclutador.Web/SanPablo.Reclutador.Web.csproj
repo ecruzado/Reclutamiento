@@ -436,7 +436,7 @@
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPorRequerimiento.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\PostulantesPreSeleccionados.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ProgramarEvaluacion.cshtml" />
-    <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion1.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen2.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen3.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudCargo\ResultadoExamen4.cshtml" />
@@ -562,6 +562,7 @@
     <Content Include="Areas\Intranet\Views\MantenimientoCargo\Index.cshtml" />
     <Content Include="Areas\Intranet\Views\Ranking\PopupPostulacion.cshtml" />
     <Content Include="Areas\Intranet\Views\SolicitudAmpliacionCargo\Evaluacion.cshtml" />
+    <Content Include="Areas\Intranet\Views\SolicitudCargo\Publicacion.cshtml" />
     <None Include="Properties\PublishProfiles\iisLocal.pubxml" />
     <Content Include="Scripts\bootswatch.js" />
     <Content Include="Scripts\Funciones.js" />
