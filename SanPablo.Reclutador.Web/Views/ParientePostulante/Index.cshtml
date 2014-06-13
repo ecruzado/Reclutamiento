@@ -82,10 +82,13 @@
             });
 
             $('#btnAgregar').click(function () {
+                validaSes();
+
                 mostrarAgregarPariente();
             });
 
             $('#btnEditar').click(function () {
+                validaSes();
                 var idePariente = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (idePariente != null) {
                     mostrarEditarPariente(idePariente);
@@ -105,6 +108,7 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
+                validaSes();
                 var idePariente = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (idePariente != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');

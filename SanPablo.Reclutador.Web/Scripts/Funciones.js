@@ -364,6 +364,9 @@ Funciones = {
         });
     },
 
+    
+
+
     Alert: function (selectorDiv, selectorSpan, msg, title) {
         $('#' + selectorSpan).html(msg);
         //$('#' + selectorDiv).dialog({

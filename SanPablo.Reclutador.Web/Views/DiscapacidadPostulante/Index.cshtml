@@ -80,10 +80,14 @@
             });
 
             $('#btnAgregar').click(function () {
+                validaSes();
+
                 mostrarAgregarDiscapacidad();
             });
 
             $('#btnEditar').click(function () {
+                validaSes();
+
                 var ideDiscapacidad = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideDiscapacidad != null) {
                     mostrarEditarDiscapacidad(ideDiscapacidad);
@@ -103,6 +107,8 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
+                validaSes();
+
                 var ideDiscapacidad = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideDiscapacidad != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');

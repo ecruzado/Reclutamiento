@@ -26,6 +26,10 @@
             _postulanteRepository = postulanteRepository;
         }
 
+
+
+
+        [ValidarSesion(TipoServicio = TipMenu.Extranet)]
         public ActionResult Index()
         {
             var parienteViewModel = InicializarParientes();
@@ -216,50 +220,6 @@
         }
 
 
-        //#region METODOS
-
-        //[HttpPost]
-        //public ActionResult listarNombreInstitucion(string tipoInstituto)
-        //{
-        //    ActionResult result = null;
-        //    var listaResultado = new List<DetalleGeneral>();
-
-        //    switch (tipoInstituto)
-        //    {
-        //        case "01": //es Universidad
-        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-        //            break;
-        //        case "02": // es Instituto
-        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-        //            break;
-        //        case "03": // es Colegio
-        //            listaResultado = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreColegio));
-        //            break;
-        //    }
-        //    result = Json(listaResultado);
-        //    return result;
-        //}
-        //public EstudioPostulanteGeneralViewModel actualizarDatos(EstudioPostulanteGeneralViewModel estudioPostulanteGeneralViewModel, EstudioPostulante estudioPostulante)
-        //{
-        //    if (estudioPostulante != null)
-        //    {
-        //        string tipTipoInst = estudioPostulante.TipTipoInstitucion;
-        //        switch (tipTipoInst)
-        //        {
-        //            case "01":
-        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreUnivesidad));
-        //                break;
-        //            case "02":
-        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-        //                break;
-        //            case "03":
-        //                estudioPostulanteGeneralViewModel.TipoNombreInstituciones = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoNombreInstituto));
-        //                break;
-        //        }
-
-        //    }
-        //    return estudioPostulanteGeneralViewModel;
-        //}
-        //#endregion
+       
     }
 }
