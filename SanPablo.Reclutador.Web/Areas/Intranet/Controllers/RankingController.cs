@@ -697,6 +697,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             //ReclutamientoPersona reclutamientoPersona;
             List<Categoria> lista;
             string cPostulacion;
+            string auxCadena="";
             try
             {
 
@@ -704,18 +705,27 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 cPostulacion = (grid.rules[0].data == null ? "" : Convert.ToString(grid.rules[0].data));
                 lista = new List<Categoria>();
-
+                 List<String> listaString = new List<String>();
                 Categoria objValor;
 
                 if (cPostulacion!=null)
 	            {
-
+                    
                     string[] words = cPostulacion.Split(',');
                     foreach (string word in words)
                     {
+
+                        
                         objValor = new Categoria();
-                        objValor.DESCCATEGORIA = word;
-                        lista.Add(objValor);
+                        objValor.DESCCATEGORIA = word.Trim();
+
+                        if (!listaString.Contains(word.Trim()))
+                        {
+                            listaString.Add(word.Trim());
+                            lista.Add(objValor);
+                        }                       
+                        
+                        
                     }
                     
                 }

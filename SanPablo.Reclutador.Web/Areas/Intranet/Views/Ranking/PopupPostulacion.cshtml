@@ -62,11 +62,11 @@
             sortorder: 'desc',
             
             viewrecords: true,
-            //height: 340,
+            height: 270,
             cellsubmit: 'clientArray',
             hidegrid: false,
             shrinkToFit: false,
-            autowidth: true,
+            
             
             onSelectAll: function (aRowids, status) {
                 completeRow = aRowids;
@@ -81,6 +81,9 @@
             }, loadComplete: function (data) {
             }
         });
+
+        $('.ui-jqgrid-hbox').hide();
+
      });
 
 </script>

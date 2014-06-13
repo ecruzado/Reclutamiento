@@ -612,10 +612,19 @@
             }
         }
 
+
+        /// <summary>
+        /// verifica el perfil completo
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult verificarPerfilCompleto()
         {
             JsonMessage objJsonMessage = new JsonMessage();
+            EvaluacionCargo objExamen;
+            bool resultado = false;
+            string mensaje = "";
+
             try 
             {
                 var cargo = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
@@ -640,14 +649,43 @@
                     (nroExperiencia > 0) &&
                     (nroExamenes > 0))
                 {
-                    objJsonMessage.Resultado = true;
-                    return Json(objJsonMessage);
+                    resultado = true;
+                    mensaje = "";
                 }
                 else
                 {
-                    objJsonMessage.Resultado = false;
-                    return Json(objJsonMessage);
+                    resultado = false;
+                    mensaje = "Debe completar el perfil con los datos obligatorios";
                 }
+
+                if (resultado)
+                {
+
+                    objExamen = new EvaluacionCargo();
+                    List<EvaluacionCargo> ListaExamen = (List<EvaluacionCargo>)_evaluacionCargoRepository.GetBy(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.TipoExamen=="02");
+
+                    if (ListaExamen!=null)
+                    {
+                        foreach (EvaluacionCargo item in ListaExamen)
+                        {
+
+                            if (item.IndEntrevFinal== null|| Indicador.No.Equals(item.IndEntrevFinal))
+                                {
+                                    resultado = false;
+                                    mensaje = "Debe completar el perfil con los datos obligatorios, debe indicar una entrevista final";
+                                }
+                        
+                        }
+                    }
+
+                }
+
+
+
+                objJsonMessage.Resultado = resultado;
+                objJsonMessage.Mensaje = mensaje;
+
+                return Json(objJsonMessage);
             } 
             catch (Exception ex)
             {

@@ -78,6 +78,11 @@
             }
         }
 
+        /// <summary>
+        /// Inicializa el popup de Evaluacion del cargo
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult Edit(string id)
         {
@@ -91,6 +96,12 @@
             return View(evaluacionViewModel);
         }
 
+
+        /// <summary>
+        /// Actualiza o Agrega una evaluación
+        /// </summary>
+        /// <param name="evaluacionCargo"></param>
+        /// <returns></returns>
         [ValidarSesion(TipoDevolucionError = Core.TipoDevolucionError.Json)]
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Evaluacion")]EvaluacionCargo evaluacionCargo)
@@ -130,6 +141,26 @@
                         evaluacionCargo.Cargo = new Cargo();
                         evaluacionCargo.Cargo.IdeCargo = IdeCargo;
 
+                        // guarga el indicador de la entrevista final
+
+                        if ("02".Equals(evaluacionCargo.TipoExamen))
+                        {
+                            if (evaluacionCargo.EsEntrevistaFinal)
+                            {
+                                evaluacionCargo.IndEntrevFinal = Indicador.Si;
+                            }
+                            else
+                            {
+                                evaluacionCargo.IndEntrevFinal = Indicador.No;
+                            }
+                        }
+                        else
+                        {
+                            evaluacionCargo.IndEntrevFinal = Indicador.No;
+                        }
+
+                        
+
                         _evaluacionCargoRepository.Add(evaluacionCargo);
                         _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, 0, IdeCargo);
 
@@ -164,6 +195,25 @@
                         evaluacionCargoActualizar.NotaMinimaExamen = evaluacionCargo.NotaMinimaExamen;
                         evaluacionCargoActualizar.UsuarioModificacion = UsuarioActual.NombreUsuario;
                         evaluacionCargoActualizar.FechaModificacion = FechaModificacion;
+
+                        if ("02".Equals(evaluacionCargoActualizar.TipoExamen))
+                        {
+
+                            if (evaluacionCargo.EsEntrevistaFinal)
+                            {
+                                evaluacionCargoActualizar.IndEntrevFinal = Indicador.Si;
+                            }
+                            else
+                            {
+                                evaluacionCargoActualizar.IndEntrevFinal = Indicador.No;
+                            }
+
+                        }
+                        else
+                        {
+                            evaluacionCargoActualizar.IndEntrevFinal = Indicador.No;
+                        }
+                        
                         _evaluacionCargoRepository.Update(evaluacionCargoActualizar);
                         _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, valorEditar, IdeCargo);
 
@@ -182,6 +232,9 @@
             }
 
         }
+
+
+
         public EvaluacionCargoViewModel inicializarEvaluacion()
         {
             var evaluacionCargoViewModel = new EvaluacionCargoViewModel();

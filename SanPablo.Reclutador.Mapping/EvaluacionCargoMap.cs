@@ -23,6 +23,9 @@
             Map(x => x.UsuarioModificacion, "USRMODIFICA");
             Map(x => x.FechaModificacion, "FECMODIFICA");
 
+            Map(x => x.IndEntrevFinal, "INDENTREVFINAL");
+            
+
             Map(x => x.DescripcionExamen).Formula("(SELECT E.DESCEXAMEN FROM EXAMEN E WHERE E.IDEEXAMEN = IDEEXAMEVAL )");
             Map(x => x.DescripcionTipoExamen).Formula("(select chsprp.pr_intranet.sp_lista_lval(" + (int)TipoTabla.TipoCriterio + ",TIPEXAMEN) from dual)");
                      

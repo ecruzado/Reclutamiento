@@ -21,6 +21,11 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionTipoExamen { get; set; }
         public virtual string DescripcionAreaResponsable { get; set; }
 
+        /// <summary>
+        /// Indicador de entrevista final
+        /// </summary>
+        public virtual string IndEntrevFinal { get; set; }
+           
 
         public virtual int IdeExamen
         {
@@ -38,6 +43,26 @@ namespace SanPablo.Reclutador.Entity
                
             }
         }
+
+
+        /// <summary>
+        /// flag para el indicador de entervista final
+        /// </summary>
+        public virtual bool EsEntrevistaFinal
+        {
+            get
+            {
+                return IndEntrevFinal == Indicador.Si ? true : false;
+            }
+            set
+            {
+                if (value)
+                    IndEntrevFinal = Indicador.Si;
+                else
+                    IndEntrevFinal = Indicador.No;
+            }
+        }
+
         
     }
 }

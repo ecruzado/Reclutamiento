@@ -245,7 +245,50 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
 
+        /// <summary>
+        /// valida si el examen esta siendo utilizado en una solicitud publicada
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidarSesion]
+        public ActionResult validaExamenSol(int idExamen)
+        {
 
+            JsonMessage objJson = new JsonMessage();
+            Examen objExamen = new Examen();
+            Boolean resultado = false;
+            String mensaje = "";
+            objExamen.IdeExamen = idExamen;
+
+            string indExamen = _examenRepository.getValidacionExamenSol(objExamen);
+
+            if ("X".Equals(indExamen))
+            {
+                resultado = true;
+                mensaje = "";
+            }
+            else
+            {
+                resultado = false;
+                mensaje = indExamen;
+            }
+
+            objJson.Resultado = resultado;
+            objJson.Mensaje = mensaje;
+
+            return Json(objJson);
+        }
+
+
+
+
+
+        /// <summary>
+        /// inicializa el examen
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidarSesion]
         public ActionResult Index(ExamenViewModel model)

@@ -19,6 +19,8 @@ namespace SanPablo.Reclutador.Entity
         public virtual string DescripcionExamen { get; set; }
         public virtual string DescripcionTipoExamen { get; set; }
         public virtual string DescripcionAreaResponsable { get; set; }
+
+        public virtual string IndEntrevFinal { get; set; }
         
     }
 }
