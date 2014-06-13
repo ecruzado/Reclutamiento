@@ -88,7 +88,8 @@
                         id = item.IdeNivelAcademicoCargo.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionAreaEstudio,
+                                item.DescripcionTipoEducacion==null?"":item.DescripcionTipoEducacion.ToString(),
+                                item.DescripcionAreaEstudio == null?"": item.DescripcionAreaEstudio.ToString(),
                             }
                     }).ToArray();
 

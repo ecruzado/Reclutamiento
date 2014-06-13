@@ -183,7 +183,7 @@
 
                          if (contador > 0)
                          {
-                             objJsonMessage.Mensaje = "El tipo de Educación ya existe, no puede agregar otro igual";
+                             objJsonMessage.Mensaje = "El tipo de educación ya existe, no puede agregar otro igual";
                              objJsonMessage.Resultado = false;
                              return Json(objJsonMessage);
                          }
@@ -228,7 +228,7 @@
             nivelAcademicoViewModel.TiposEducacion = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoEducacion));
             nivelAcademicoViewModel.TiposEducacion.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
-            nivelAcademicoViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea));
+            nivelAcademicoViewModel.AreasEstudio = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoArea).OrderBy(x=>x.Descripcion));
             nivelAcademicoViewModel.AreasEstudio.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             nivelAcademicoViewModel.NivelesAlcanzados = new List<DetalleGeneral>();

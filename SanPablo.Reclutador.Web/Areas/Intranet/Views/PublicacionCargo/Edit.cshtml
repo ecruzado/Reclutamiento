@@ -18,6 +18,8 @@
         
     $(document).ready(function () {
 
+       
+
         var fechaPublicacion = $('#SolicitudCargo_FechaPublicacion').val();
         if (fechaPublicacion != null) {
             $('#SolicitudCargo_FechaPublicacion').val(fechaPublicacion.substring(0, 10));
@@ -115,7 +117,8 @@
             url: '@Url.Action("Competencias", "PublicacionCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
+            //colNames: ['Descripci&oacuten'],
+            //colNames: [''],
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
             ],
@@ -142,7 +145,8 @@
             url: '@Url.Action("Ofrecemos", "PublicacionCargo")',
             datatype: 'json',
             mtype: 'POST',
-            colNames: ['Descripci&oacuten'],
+            //colNames: ['Descripci&oacuten'],
+            //colNames: [''],
             colModel: [
                     { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
             ],
@@ -167,8 +171,10 @@
             url: '@Url.Action("Estudios", "PublicacionCargo")',
              datatype: 'json',
              mtype: 'POST',
-             colNames: ['Descripci&oacuten'],
+            //colNames: ['','Descripci&oacuten'],
+             //colNames: ['', ''],
              colModel: [
+                     { name: 'NivelAcademico', index: 'NivelAcademico', align: 'left', editable: false, sortable: false },
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
              ],
              sortname: 'IdeNivelAcademicoCargo',
@@ -192,7 +198,8 @@
             url: '@Url.Action("Conocimientos", "PublicacionCargo")',
               datatype: 'json',
               mtype: 'POST',
-              colNames: ['TipoConocimiento', 'Descripci&oacuten'],
+            //colNames: ['TipoConocimiento', 'Descripci&oacuten'],
+            //  colNames: ['', ''],
               colModel: [
                       { name: 'TipoConocimiento', index: 'TipoConocimiento', align: 'left', editable: false, sortable: false },
                       { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
@@ -219,7 +226,8 @@
             url: '@Url.Action("Experiencia", "PublicacionCargo")',
               datatype: 'json',
               mtype: 'POST',
-              colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
+              //colNames: ['Descripci&oacuten', 'Tiempo de Experiencia'],
+             // colNames: ['', ''],
               colModel: [
                       { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                       { name: 'TiempoExperiencia', index: 'TiempoExperiencia', align: 'left', editable: false, sortable: false },
@@ -287,6 +295,10 @@
             }
          });
 
+
+        //ocultar las cabeceras
+
+        $('.ui-jqgrid-hbox').hide();
 
     });
 
@@ -456,7 +468,7 @@
                         <td class="control-label" >Fecha Publicación</td>
                         <td class="controls">
                             @Html.TextBoxFor(model => model.editarFechaPublicacion, new { style = "display:none" })
-                            @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de Publicación"  })
+                            @Html.TextBoxFor(model=>model.SolicitudCargo.FechaPublicacion, new {  @class = "input-small" ,  maxlength="15", placeholder="Desde"  })
                             
                            
                         </td>
@@ -464,7 +476,7 @@
                         <td class="control-label" >Fecha Expiración</td>
                         <td class="controls">
                            
-                            @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "textoFormulario" ,  maxlength="15", placeholder=" Fecha de expiración " })
+                            @Html.TextBoxFor(model =>model.SolicitudCargo.FechaExpiracion, new {  @class = "input-small" ,  maxlength="15", placeholder="Hasta" })
                             
                         </td>
                     </tr>
@@ -476,7 +488,17 @@
                    <tr><td>&nbsp;</td></tr>
                    <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Estudios</label>
+                        <label class="control-label" for="input01"><strong> Funciones</strong></label>
+                         <div class="controls">
+                            @Html.TextAreaFor(model=>model.Cargo.FuncionCargo, new {@disabled = "disabled", @style = "width:800px; height:100px; resize:none;"})
+                         </div>
+                       </td>
+                   </tr>
+                   <tr><td>&nbsp;</td></tr>
+
+                   <tr class="formulario-fila">
+                        <td class="span5">
+                        <label class="control-label" for="input01"><strong> Estudios</strong> </label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -492,7 +514,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Conocimientos</label>
+                        <label class="control-label" for="input01"><strong> Conocimientos</strong></label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -508,7 +530,7 @@
                     <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Experiencia</label>
+                        <label class="control-label" for="input01"><strong> Experiencia</strong></label>
                          <div class="controls">
                             <div style="width: 100%">                                        
                                 <div>
@@ -522,21 +544,13 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-                   <tr class="formulario-fila">
-                        <td class="span5">
-                        <label class="control-label" for="input01">Funciones</label>
-                         <div class="controls">
-                            @Html.TextAreaFor(model=>model.Cargo.FuncionCargo, new {@disabled = "disabled", @style = "width:800px; height:100px; resize:none;"})
-                         </div>
-                       </td>
-                    </tr>
-                        <tr><td>&nbsp;</td></tr>
+                  
 
                         @if(Indicador.Si.Equals(Model.visualizarCompetencias))
                         {
                             <tr class="formulario-fila">
                                 <td class="span5">
-                                <label class="control-label" for="input01">Competencias</label>
+                                <label class="control-label" for="input01"><strong> Competencias</strong></label>
                                  <div class="controls">
                                     <div style="width: 100%">                                        
                                         <div>
@@ -555,7 +569,7 @@
                                 <tr><td>&nbsp;</td></tr>
                             <tr class="formulario-fila">
                                 <td class="span5">
-                                <label class="control-label" for="input01">Ofrecemos</label>
+                                <label class="control-label" for="input01"><strong> Ofrecemos</strong></label>
                                  <div class="controls">
                                     <div style="width: 100%">                                        
                                         <div>
@@ -572,7 +586,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01">Observaciones<span class="text-error">*</span> </label>
+                        <label class="control-label" for="input01"> <strong> Observaciones</strong><span class="text-error">*</span> </label>
                          <div class="controls">
                             
                              @if (Indicador.Si.Equals(Model.editarObservaciones))

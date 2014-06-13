@@ -1180,7 +1180,6 @@ namespace SanPablo.Reclutador.Repository
                          evaluacion.IdeEvaluacionRequerimiento = Convert.ToInt32(lector["IDEEVALUACIONSOLREQ"]);
                          evaluacion.DescripcionExamen = Convert.ToString(lector["NOMEXAMEN"]);
                          evaluacion.DescripcionTipoExamen = Convert.ToString(lector["TIPOEXAMEN"]);
-                         evaluacion.DescripcionAreaResponsable = Convert.ToString(lector["NOMAREA"]);
                          evaluacion.PuntajeExamen = Convert.ToInt32(lector["PUNTEXAMEN"]);
                          evaluacion.NotaMinimaExamen = Convert.ToInt32(lector["NOTAMINEXAMEN"]);
                          listaEvaluacion.Add(evaluacion);
