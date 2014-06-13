@@ -255,18 +255,22 @@
                 }
             });
             $('#btnAgregarIdioma').click(function () {
+                validaSes();
                 mostrarAgregarIdioma();
             });
 
             $('#btnAgregarOtro').click(function () {
+                validaSes();
                 mostrarAgregarOtro();
             });
 
             $('#btnAgregar').click(function () {
+                validaSes();
                 mostrarAgregarOfimatica();
             });
 
             $('#btnEditar').click(function () {
+                validaSes();
                 var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
                 if (ideOfimatica != null) {
                     mostrarEditarOfimatica(ideOfimatica);
@@ -285,6 +289,7 @@
             });
 
             $('#btnEditarIdioma').click(function () {
+                validaSes();
                 var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
                 if (ideIdioma != null) {
                     mostrarEditarIdioma(ideIdioma);
@@ -303,6 +308,7 @@
             });
            
             $('#btnEditarOtro').click(function () {
+                validaSes();
                 var ideOtroConocimiento = jQuery('#grdOtrosConocimientos').jqGrid('getGridParam', 'selrow');
                 if (ideOtroConocimiento != null) {
                     mostrarEditarOtroConocimiento(ideOtroConocimiento);
@@ -322,6 +328,7 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
+                validaSes();
                 var ideConocimiento = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
                 if (ideConocimiento != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -353,6 +360,7 @@
             });
 
             $('#btnEliminarIdioma').click(function () {
+                validaSes();
                 var ideConocimiento = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
                 if (ideConocimiento != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -383,6 +391,7 @@
             });
 
             $('#btnEliminarOtro').click(function () {
+                validaSes();
                 var ideConocimiento = jQuery('#grdOtrosConocimientos').jqGrid('getGridParam', 'selrow');
                 if (ideConocimiento != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');

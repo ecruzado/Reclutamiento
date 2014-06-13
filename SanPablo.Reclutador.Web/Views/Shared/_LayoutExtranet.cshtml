@@ -195,18 +195,18 @@
 
          function validaSes() {
 
-             $.ajax({
+            $.ajax({
 
-                 type: "POST",
-                 url: '@Url.Action("validaSesPopup", "Seguridad")',
-            traditional: true,
-            success: function (data) {
+                    type: "POST",
+                    url: '@Url.Action("validaSesPopup", "Seguridad")',
+                traditional: true,
+                success: function (data) {
                 if (data.redirecciona) {
                     SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                     }
                 }
 
-        });
+            });
 
         }
 

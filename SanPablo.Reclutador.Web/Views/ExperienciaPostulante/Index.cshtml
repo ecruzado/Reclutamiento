@@ -114,10 +114,16 @@
             });
 
             $('#btnAgregar').click(function () {
+                validaSes();
+
                 mostrarAgregarExperiencia();
             });
-            // btn Editar
+            
+
             $('#btnEditar').click(function () {
+                validaSes();
+
+
                 var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideExperiencia != null) {
                     mostrarEditarExperiencia(ideExperiencia);
@@ -137,6 +143,8 @@
 
             // btn Eliminar
             $('#btnEliminar').click(function () {
+                validaSes();
+
                 var ideExperiencia = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (ideExperiencia != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?');
