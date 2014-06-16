@@ -556,7 +556,7 @@
 
             if (validaEnvio()) {
 
-                id = $("#SolReqPersonal_CodSolReqPersonal").val();
+                id = $("#SolReqPersonal_IdeSolReqPersonal").val();
 
                 if (id != null && id > 0) {
                     var url = '@Url.Action("Publica", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + id + "&pagina=" + pagina;
