@@ -132,8 +132,21 @@
 
         $('#btnAnteriorPublica').click(function () {
             var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
+            var pagina = $("#Pagina").val();
 
-            window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })' + '/' + selr;
+
+            if (pagina == '@TipoSolicitud.Remplazo') {
+                var url = '@Url.Action("Edit", "SolicitudCargo", new { id = "",area="Intranet" })?id=' + selr + "&pagina=" + pagina;
+                window.location = url;
+
+            }
+            else
+            {
+                window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })' + '/' + selr;
+            }
+
+
+            
 
         });
         
@@ -579,6 +592,8 @@
 
     
      @Html.TextBoxFor(model => model.SolReqPersonal.IdeSolReqPersonal, new { style = "display: none;" })
+         @Html.TextBoxFor(model => model.Pagina, new { style = "display: none;" })
+    
     
                 <fieldset>
                     <legend></legend>
