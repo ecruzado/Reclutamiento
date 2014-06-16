@@ -289,7 +289,29 @@
                 if ("I" == indEstado) {
                     MostrarMensaje('El registro se encuentra desactivado', "ALERTA");
                 } else {
-                    window.location = '@Url.Action("Edicion", "Examen", new { area = "Intranet", id = "" })' + '/' + selr;
+
+
+                    //valida si esta siendo utilizado
+
+                    $.ajax({
+                        data: {
+                            idExamen: selr
+                        },
+                        type: "POST",
+                        url: "@Url.Action("validaExamenSol", "Examen")",
+                        traditional: true,
+                        success: function (data) {
+                            if (data.Resultado) {
+                                window.location = '@Url.Action("Edicion", "Examen", new { area = "Intranet", id = "" })' + '/' + selr;
+                            } else {
+                                MostrarMensaje(data.Mensaje, "ALERTA");
+                            }
+                        }
+                    });
+
+
+
+                    
                 }
 
             } else {

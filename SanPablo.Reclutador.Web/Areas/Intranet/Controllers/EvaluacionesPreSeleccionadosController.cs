@@ -175,6 +175,18 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
         }
 
+
+        /// <summary>
+        /// programa las evaluaciones por tipo de examen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="responsable"></param>
+        /// <param name="idRecluPost"></param>
+        /// <param name="idSol"></param>
+        /// <param name="tipSol"></param>
+        /// <param name="pagina"></param>
+        /// <param name="ind"></param>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult ProgramarEvaluacion(string id, string responsable, string idRecluPost, int idSol, string tipSol, string pagina, string ind)
         {
@@ -196,6 +208,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             modelEvaluacion.nombreUsuario = responsable;
             
+            //modelEvaluacion.ReclutaPersonaExamen.EsEntrevistaFinal
+
+
             return View("ProgramarEvaluacion",modelEvaluacion);
         }
 
@@ -229,7 +244,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     reclutamientoExamenEditar.FechaModificacion = FechaModificacion;
                     reclutamientoExamenEditar.TipoEstadoEvaluacion = EstadoEvaluacion.Programado;
                     reclutamientoExamenEditar.UsuarioModificacion = Session[ConstanteSesion.UsuarioDes].ToString();
-                    reclutamientoExamenEditar.EsEntrevistaFinal = model.ReclutaPersonaExamen.EsEntrevistaFinal;
+                    //reclutamientoExamenEditar.EsEntrevistaFinal = model.ReclutaPersonaExamen.EsEntrevistaFinal;
 
                     _reclutamientoPersonaExamenRepository.Update(reclutamientoExamenEditar);
                     enviarCorreo(reclutamientoExamenEditar);

@@ -213,7 +213,7 @@
             }
         });
     },
-    colNames: ['Estado','', '', '', '','','','','Sede','Dependencia','Departamento','Area'],
+    colNames: ['Estado','', '', '', '','','','','Sede','Dependencia','Departamento','Área'],
     colModel: [
 				 
              { name: 'ESTADO', index: 'ESTADO', align: 'left', sortable: false, editable: false, hidden: true },
@@ -1048,6 +1048,9 @@
                     <td class="colEtiqueta">
                    
                     </td>
+
+
+
                     <td >
                        
                     </td>
@@ -1060,7 +1063,18 @@
                         </td>
                     </tr>
                </table>          
-            
+                <div class="form-actions">
+                
+                    @if (Accion.Consultar.Equals(Model.Accion))
+                    {
+                        <span></span>
+                    }
+                    else
+                    {
+                        <a class="btn btn-info"  onclick ="validacion();"><i class=" icon-hdd icon-white"></i> Grabar</a>
+                    }
+                
+                </div>
           
                 @if (Accion.Nuevo.Equals(Model.Accion))
                 {
@@ -1096,14 +1110,14 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Usuario", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 
-                @if (Accion.Consultar.Equals(Model.Accion))
+                @*@if (Accion.Consultar.Equals(Model.Accion))
                 {
                     <span></span>
                 }
                 else
                 {
                     <a class="btn btn-info"  onclick ="validacion();"><i class=" icon-hdd icon-white"></i> Grabar</a>
-                }
+                }*@
                 
             </div>
            

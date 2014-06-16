@@ -13,6 +13,16 @@
     $(document).ready(function () {
         //ACTUALIZAR EL TIPO DE EXAMEN
 
+        var cTipExamen = "@Model.Evaluacion.TipoExamen";
+
+        if ("02" == cTipExamen) {
+            $("#idTipoExamen").show();
+        } else {
+            $("#idTipoExamen").hide();
+        }
+
+
+
         SanPablo.Numeros('Evaluacion_NotaMinimaExamen');
 
         $('select#Evaluacion_IdeExamen').change(function () {
@@ -26,6 +36,15 @@
                     {
                         $('#descExamen').val(respuesta.Mensaje);
                         $('#Evaluacion_TipoExamen').val(respuesta.Accion);
+
+                        var tipoExamen = $('#Evaluacion_TipoExamen').val();
+
+                        if ("02" == tipoExamen) {
+                            $("#idTipoExamen").show();
+                        } else {
+                            $("#idTipoExamen").hide();
+                        }
+
                     }
                 },
                 error: function (e) {
@@ -86,5 +105,18 @@
                 </div>
            </td>
        </tr> 
+
+       <tr id="idTipoExamen">
+                <td class="colEtiqueta">
+                    <label style="width:150px" class="etiquetaFormulario" for="setipoInstitucion">Entrevista final </label>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.Evaluacion.EsEntrevistaFinal)
+                </td>
+        </tr> 
+
+
+
+
     </table>
 }

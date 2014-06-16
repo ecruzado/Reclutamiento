@@ -55,6 +55,49 @@
                 lcon.Close();
             }
         }
+
+
+        /// <summary>
+        /// valida si el examen esta siendo utilizado en solicitudes publicadas
+        /// </summary>
+        /// <param name="objExamen"></param>
+        /// <returns></returns>
+        public string getValidacionExamenSol(Examen objExamen)
+        {
+
+            string retorno;
+
+            OracleConnection lcon = new OracleConnection(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["DbDevConnectionString"]));
+            try
+            {
+                
+
+                lcon.Open();
+                OracleCommand lspcmd = new OracleCommand("PR_INTRANET_ED.SP_VALIDA_EXAMEN_SOL");
+                lspcmd.CommandType = CommandType.StoredProcedure;
+                lspcmd.Connection = lcon;
+
+                lspcmd.Parameters.Add("p_nideexamen", OracleType.Number).Value = objExamen.IdeExamen;
+                lspcmd.Parameters.Add("p_cretval", OracleType.VarChar, 4000).Direction = ParameterDirection.Output;
+
+
+                lspcmd.ExecuteNonQuery();
+
+                retorno = (lspcmd.Parameters["p_cretval"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cretval"].Value));
+
+                return retorno;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                lcon.Close();
+            }
+        }
+
         /// <summary>
         /// otbtiene los datos para la impresion del examen
         /// </summary>
