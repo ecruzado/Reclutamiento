@@ -186,7 +186,7 @@
             experienciaViewModel.Cargo = new Cargo();
             experienciaViewModel.Experiencia = new ExperienciaCargo();
 
-            experienciaViewModel.TiposCargo = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo));
+            experienciaViewModel.TiposCargo = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.TipoCargo).OrderBy(x=>x.Descripcion));
             experienciaViewModel.TiposCargo.Insert(0, new DetalleGeneral { Valor = "00", Descripcion = "Seleccionar" });
 
             return experienciaViewModel;
