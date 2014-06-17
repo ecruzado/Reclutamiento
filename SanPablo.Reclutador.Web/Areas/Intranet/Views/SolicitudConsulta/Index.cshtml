@@ -351,16 +351,13 @@
         var pagina = '@TipoSolicitud.ConsultaRequerimientos';
         if (tipoSolicitud == "01") {
             if (idCargo != 0) {
-
                 var url = '@Url.Action("Index", "Perfil", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
                 window.location = url;
                 @* window.location = '@Url.Action("Index", "Perfil", new { id = ""})' + '/' + ideSol;*@
             }
             else {
-
                 var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=' + ideSol + "&pagina=" + pagina;
                 window.location = url;
-
                 @*window.location = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = ""})' + '/' + ideSol;*@
             }
         }

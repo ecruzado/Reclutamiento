@@ -819,7 +819,17 @@
             switch (tipoEtapa)
             {
                 case Etapa.Aprobado:
-                    perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+                    {
+                        perfilViewModel.Accion = Accion.Enviar;
+                        perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    }
+                    else
+                    {
+                        perfilViewModel.Accion = Accion.Consultar;
+                        perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    }
+                    
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.NO;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
@@ -847,7 +857,16 @@
                     perfilViewModel.btnVerPublicar = Visualicion.SI;
                     break;
                 case Etapa.Observado:
-                    perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+                    {
+                        perfilViewModel.Accion = Accion.Enviar;
+                        perfilViewModel.btnVerEnviar = Visualicion.SI;
+                    }
+                    else
+                    {
+                        perfilViewModel.Accion = Accion.Consultar;
+                        perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    }
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.SI;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
@@ -889,14 +908,14 @@
             //{
             //    perfilViewModel.Accion = Accion.Consultar;
             //}
-            if (rolSession == Roles.Jefe_Corporativo_Seleccion)
-            {
-                perfilViewModel.Accion = Accion.Enviar;
-            }
-            else
-            {
-                perfilViewModel.Accion = Accion.Consultar;
-            }
+            //if (rolSession == Roles.Jefe_Corporativo_Seleccion)
+            //{
+            //    perfilViewModel.Accion = Accion.Enviar;
+            //}
+            //else
+            //{
+            //    perfilViewModel.Accion = Accion.Consultar;
+            //}
         }
 
 

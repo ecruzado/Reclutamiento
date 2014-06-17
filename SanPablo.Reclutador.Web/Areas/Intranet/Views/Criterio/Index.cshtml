@@ -205,7 +205,7 @@
          });*@
 
         jQuery("#grdList").jqGrid({
-            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Modo', 'Fecha Creación', 'Usuario Creación', 'Fecha Modificación', 'Usuario Modificación'],
+            colNames: ['Estado', '', '', 'Pregunta', 'Medición', '', '', 'Tipo', '', 'Modo', '', '', '', ''],
             colModel: [
                    { name: 'Estado', index: 'Estado', align: 'center', sortable: false, width: 50, formatter: HabilitarFormatter },
                     { name: 'CodigoEstado', index: 'CodigoEstado', align: 'center', width: 10, hidden: true, sortable: false },
@@ -217,10 +217,10 @@
                     { name: 'TipoCriterioDes', index: 'TipoCriterioDes', align: 'left', width: 150, sortable: false },
                     { name: 'Modo', index: 'Modo', align: 'left', hidden: true },
                     { name: 'TipoModoDes', index: 'TipoModoDes', align: 'left', width: 150, sortable: false },
-                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150, sortable: false },
-                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 250, sortable: false },
-                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150, sortable: false },
-                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 250, sortable: false }
+                    { name: 'FechaCreacion', index: 'FechaCreacion', align: 'left', width: 150, sortable: false, hidden: true },
+                    { name: 'UsuarioCreacion', index: 'UsuarioCreacion', align: 'left', width: 250, sortable: false, hidden: true },
+                    { name: 'FechaModificacion', index: 'FechaModificacion', align: 'left', width: 150, sortable: false, hidden: true },
+                    { name: 'UsuarioModificacion', index: 'UsuarioModificacion', align: 'left', width: 250, sortable: false, hidden: true }
 
             ],
             pager: jQuery('#grdPager'),
