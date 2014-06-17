@@ -21,8 +21,10 @@ namespace SanPablo.Reclutador.Web.Models
         public List<Cargo> listaCargos { get; set; }
         public List<OportunidadLaboral> listaOportunidadLaboral { get; set; }
 
-       
-       
-
+        public string VisualizarCompetenecias { get; set; }
+        public string VisualizarOfrecemos { get; set; }
+        public string VisualizarIdiomas { get; set; }
+        public string VisualizarOfimatica { get; set; }
+        public string VisualizarOtrosConocimientos { get; set; }
     }
 }

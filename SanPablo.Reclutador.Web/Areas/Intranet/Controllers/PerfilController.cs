@@ -854,11 +854,11 @@
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Publicado:
-                     perfilViewModel.btnVerEnviar = Visualicion.NO;
+                    perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.SI;
                     perfilViewModel.btnVerAceptar = Visualicion.NO;
-                    if (Roles.Analista_Seleccion == rolSession)
+                    if ((Roles.Analista_Seleccion == rolSession)||(Roles.Encargado_Seleccion == rolSession))
                     {
                         perfilViewModel.btnVerPublicar = Visualicion.SI;
                     }

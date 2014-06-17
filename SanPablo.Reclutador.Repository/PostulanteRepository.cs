@@ -126,7 +126,7 @@
             string NombreCargo = null;
             string Funciones = null;
             string Observacion = null;
-
+            string IndVerSalario = null;
             SolReqPersonal SolReqPersonal = null;
             try
             {
@@ -150,7 +150,7 @@
                 lspcmd.Parameters.Add("p_cNombreCargo", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("p_cFunciones", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 lspcmd.Parameters.Add("p_cObcervacion", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
-                
+                lspcmd.Parameters.Add("p_cIndVerSalario", OracleType.VarChar, 500).Direction = ParameterDirection.Output;
                 
 
                 lspcmd.ExecuteNonQuery();
@@ -165,7 +165,7 @@
                 NombreCargo = (lspcmd.Parameters["p_cNombreCargo"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cNombreCargo"].Value));
                 Funciones = (lspcmd.Parameters["p_cFunciones"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cFunciones"].Value));
                 Observacion = (lspcmd.Parameters["p_cObcervacion"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cObcervacion"].Value));
-
+                IndVerSalario = (lspcmd.Parameters["p_cIndVerSalario"].Value == null ? "" : Convert.ToString(lspcmd.Parameters["p_cIndVerSalario"].Value));
                     
                 SolReqPersonal = new SolReqPersonal();
 
@@ -179,7 +179,7 @@
                 SolReqPersonal.nombreCargo = NombreCargo;
                 SolReqPersonal.FuncionesCargo = Funciones;
                 SolReqPersonal.ObservacionPublica = Observacion;
-
+                SolReqPersonal.IndVerSalario = IndVerSalario;
                 return SolReqPersonal;
             }
             catch (Exception ex)

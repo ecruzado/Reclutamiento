@@ -679,10 +679,6 @@
                         </td>
                     </tr>
                     <tr><td>&nbsp;</td></tr>
-
-				   
-                    
-				   
 						
 					 <tr class="formulario-fila">
                         <td class="span5">
@@ -699,7 +695,8 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>	
-						
+						@if(Model.VisualizarCompetenecias.Equals(Indicador.Si))
+                        {
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Competencias</strong></label>
@@ -715,7 +712,10 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
+                        }
 
+                       @if(Model.VisualizarOfimatica.Equals(Indicador.Si))
+                       {
                        <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Conocimientos</strong></label>
@@ -731,7 +731,9 @@
                         </td>
                     </tr>
                     <tr><td>&nbsp;</td></tr>
-
+                       }
+                       @if(Model.VisualizarOtrosConocimientos.Equals(Indicador.Si))
+                       {
                           <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Otros Conocimientos</strong></label>
@@ -747,8 +749,9 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
-
-                       
+                       }
+                       @if(Model.VisualizarIdiomas.Equals(Indicador.Si))
+                       {
                         <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Idiomas</strong></label>
@@ -764,12 +767,10 @@
                        </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
+                       }
                        
-                       
-                  
-
-                       
-						
+                       @if(Model.VisualizarOfrecemos.Equals(Indicador.Si))
+                       {
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Ofrecemos</strong></label>
@@ -785,9 +786,8 @@
                         </td>
                     </tr>
                         <tr><td>&nbsp;</td></tr>
+                       }
 
-
-						
                     <tr class="formulario-fila">
                         <td class="span5">
                         <label class="control-label" for="input01"><strong>Observaciones</strong></label>

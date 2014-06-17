@@ -570,7 +570,7 @@
         <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>@Model.SolReqPersonal.nombreCargo - @Model.SolReqPersonal.DesCargo</h5>
+                <h5>@Model.SolReqPersonal.nombreCargo - SEDE @Html.DisplayFor(model=>model.Sede)</h5>
             </div>
 @using (Html.BeginForm("Publicacion", "SolicitudAmpliacionCargo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmPublicaSolReemplazoCargo" }))
 {
@@ -737,7 +737,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01"><strong>Observaciones</strong> </label>
+                        <label class="control-label" for="input01"><strong>Observaciones</strong><span class="text-error">*</span> </label>
                          <div class="controls">
 
                              @if (Indicador.Si.Equals(Model.editarObservaciones))

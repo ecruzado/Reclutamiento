@@ -318,6 +318,8 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.oportunidadLaboral = new OportunidadLaboral();
             model.solReqPersonal = new SolReqPersonal();
 
+            camposVisualizar(id, tipo, model);
+
             SolReqPersonal obj;
             obj = new SolReqPersonal();
 
@@ -333,28 +335,28 @@ namespace SanPablo.Reclutador.Web.Controllers
 
             model.solReqPersonal = _postulanteRepository.GetDatosSolGrupo(model.oportunidadLaboral);
 
-            if (TipoSolicitud.Nuevo.Equals(tipo))
-            {
-                var objSol = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo ==Convert.ToInt32(id) && x.EstadoActivo==IndicadorActivo.Activo);
-                model.solReqPersonal.IndVerSalario = objSol.IndicadorVerSalario;
+            //if (TipoSolicitud.Nuevo.Equals(tipo))
+            //{
+            //    var objSol = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo ==Convert.ToInt32(id) && x.EstadoActivo==IndicadorActivo.Activo);
+            //    model.solReqPersonal.IndVerSalario = objSol.IndicadorVerSalario;
 
                 
-            }
-            else
-            {
-                var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeCargo == Convert.ToInt32(id) && 
-                                                                    x.TipoSolicitud==tipo && x.EstadoActivo==IndicadorActivo.Activo);
+            //}
+            //else
+            //{
+            //    var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeCargo == Convert.ToInt32(id) && 
+            //                                                        x.TipoSolicitud==tipo && x.EstadoActivo==IndicadorActivo.Activo);
 
-                if (objSolReq!=null)
-                {
-                    model.solReqPersonal.IndVerSalario = (objSolReq.IndVerSalario == null ? "N" : objSolReq.IndVerSalario);
-                }
-                else
-                {
-                    model.solReqPersonal.IndVerSalario = "N";
-                }
+            //    if (objSolReq!=null)
+            //    {
+            //        model.solReqPersonal.IndVerSalario = (objSolReq.IndVerSalario == null ? "N" : objSolReq.IndVerSalario);
+            //    }
+            //    else
+            //    {
+            //        model.solReqPersonal.IndVerSalario = "N";
+            //    }
                 
-            }
+            //}
 
 
             model.solReqPersonal.FechaInicioBus = Convert.ToDateTime(fechaInicio);
@@ -372,7 +374,62 @@ namespace SanPablo.Reclutador.Web.Controllers
             return View("DetalleGrupoCargo", model);
         }
 
+        public void camposVisualizar(string id, string tipo, OportunidadLaboralViewModel model)
+        {
+            int idSol = Convert.ToInt32(id);
+            var contadorOfrecemos = 0;
+            var contadorCompetenecias = 0;
+            var contadorOfimatica = 0;
+            var contadorIdiomas = 0;
+            var contadorOtrosConocimientos = 0;
 
+            model.VisualizarCompetenecias = Indicador.No;
+            model.VisualizarOfrecemos = Indicador.No;
+            model.VisualizarOfimatica = Indicador.No;
+            model.VisualizarIdiomas = Indicador.No;
+            model.VisualizarOtrosConocimientos = Indicador.No;
+
+            if (idSol != 0)
+            {
+                if (TipoSolicitud.Nuevo.Equals(tipo)) //Es una solictud nueva
+                {
+                    contadorOfrecemos = _ofrecemosCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol);
+                    contadorCompetenecias = _competenciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol);
+                    contadorOfimatica = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoOfimatica != null);
+                    contadorIdiomas = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoIdioma != null);
+                    contadorOtrosConocimientos = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoGeneral != null);
+                }
+                else
+                {
+                    contadorOfrecemos = _ofrecemosRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == idSol);
+                    contadorCompetenecias = _competenciaRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == idSol);
+                    contadorOfimatica = _ConocimientoGeneralRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == idSol && x.TipoConocimientoOfimatica != null);
+                    contadorIdiomas = _ConocimientoGeneralRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == idSol && x.TipoConocimientoIdioma != null);
+                    contadorOtrosConocimientos = _ConocimientoGeneralRequerimientoRepository.CountByExpress(x => x.SolicitudRequerimiento.IdeSolReqPersonal == idSol && x.TipoConocimientoGeneral != null);
+
+                }
+            }
+            if (contadorCompetenecias > 0)
+            {
+                model.VisualizarCompetenecias = Indicador.Si;
+            }
+            if (contadorOfrecemos > 0)
+            {
+                model.VisualizarOfrecemos = Indicador.Si;
+            }
+            if (contadorOfimatica > 0)
+            {
+                model.VisualizarOfimatica = Indicador.Si;
+            }
+            if (contadorIdiomas > 0)
+            {
+                model.VisualizarIdiomas = Indicador.Si;
+            }
+            if (contadorOtrosConocimientos > 0)
+            {
+                model.VisualizarOtrosConocimientos = Indicador.Si;
+            }
+        }
         /// <summary>
         /// Estudios del grupo del cargo
         /// </summary>

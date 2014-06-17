@@ -46,11 +46,11 @@ create or replace package PR_INTRANET is
                              p_ideSede      IN SEDE.IDESEDE%TYPE,
                              p_cRetCursor   OUT SYS_REFCURSOR);
 
-  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
+ /* PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
                                     p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
                                     p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
                                     p_ideSede          IN SEDE.IDESEDE%TYPE,
-                                    p_cRetCursor       OUT SYS_REFCURSOR);
+                                    p_cRetCursor       OUT SYS_REFCURSOR);*/
 
   PROCEDURE SP_OBTENER_COMPETENCIAREMP(p_ideSolicitud IN SOLREQ_PERSONAL.IDESOLREQPERSONAL%TYPE,
                                        p_cRetCursor   OUT SYS_REFCURSOR);
@@ -706,7 +706,7 @@ create or replace package body PR_INTRANET is
       14/02/2014  Jaqueline Ccana       Creaci?n    
   ------------------------------------------------------------ */
 
-  PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
+  /*PROCEDURE SP_CONSULTAR_DATOS_AREA(p_ideArea          IN AREA.IDEAREA%TYPE,
                                     p_ideDepartamento  IN DEPARTAMENTO.IDEDEPARTAMENTO%TYPE,
                                     p_ideDependencia   IN DEPENDENCIA.IDEDEPENDENCIA%TYPE,
                                     p_ideSede          IN SEDE.IDESEDE%TYPE,
@@ -732,7 +732,7 @@ create or replace package body PR_INTRANET is
        WHERE AR.IDEDEPARTAMENTO = DP.IDEDEPARTAMENTO
          AND DP.IDEDEPENDENCIA = DE.IDEDEPENDENCIA
          AND AR.IDEAREA = p_ideArea;
-  END SP_CONSULTAR_DATOS_AREA;
+  END SP_CONSULTAR_DATOS_AREA;*/
 
   /* ------------------------------------------------------------
     Nombre      : SP_DATOS_COMPETENCIA_REMP
@@ -1585,6 +1585,14 @@ create or replace package body PR_INTRANET is
    
      cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SA.TIPETAPA ';
    
+   ELSE
+   
+    IF p_nIdRoL=8 OR p_nIdRoL =9 THEN
+      
+         cWhere := cWhere || ' AND SA.TIPETAPA IN (SELECT CE.TIPETAPA FROM CONFIG_ETAPA CE WHERE CE.IDROL = ''' || p_nIdRoL || ''' AND CE.TIPSOL=''03'' AND CE.ESTACTIVO=''A'' AND CE.DEFECTO = ''S'') ';
+    
+    END IF;
+   
    END IF;
  
    IF LENGTH(TRIM(p_cTipResp)) > 0 AND p_cTipResp != 0 THEN
@@ -1744,7 +1752,8 @@ create or replace package body PR_INTRANET is
                                'AND S.IDESEDE = '||p_nIdSede ||
                                ' AND R.IDROL = '|| p_cRolResp ||
                                ' AND LS.USRESPONSABLE = '||p_cUsrResponsable ||') SN WHERE 1=1' ;
-  
+    
+    
     IF p_nIdSolicitud > 0 THEN
     
       cWhere := cWhere || ' AND  SN.IDESOLNUEVOCARGO = ' || p_nIdSolicitud;
@@ -1772,6 +1781,13 @@ create or replace package body PR_INTRANET is
     IF p_cTipEtapa IS NOT NULL AND p_cTipEtapa <> '0' THEN
     
       cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SN.TIPETAPA ';
+    
+    ELSE
+      
+      IF p_cRolResp=8 OR p_cRolResp =9 THEN
+    
+      cWhere := cWhere || ' AND SN.TIPETAPA IN (SELECT CE.TIPETAPA FROM CONFIG_ETAPA CE WHERE CE.IDROL = ''' || p_cRolResp || ''' AND CE.TIPSOL=''01'' AND CE.ESTACTIVO=''A'' AND CE.DEFECTO = ''S'') ';
+      END IF;
     
     END IF;
   
@@ -1982,6 +1998,14 @@ create or replace package body PR_INTRANET is
     
       cWhere := cWhere || ' AND ''' || p_cTipEtapa || ''' = SA.TIPETAPA ';
     
+    ELSE
+    
+      IF p_nIdRoL=8 OR p_nIdRoL =9 THEN
+      
+         cWhere := cWhere || ' AND SA.TIPETAPA IN (SELECT CE.TIPETAPA FROM CONFIG_ETAPA CE WHERE CE.IDROL = ''' || p_nIdRoL || ''' AND CE.TIPSOL=''02'' AND CE.ESTACTIVO=''A'' AND CE.DEFECTO = ''S'') ';
+    
+      END IF;
+      
     END IF;
   
     IF  LENGTH(TRIM(p_cTipResp))>0 AND  p_cTipResp!=0 THEN

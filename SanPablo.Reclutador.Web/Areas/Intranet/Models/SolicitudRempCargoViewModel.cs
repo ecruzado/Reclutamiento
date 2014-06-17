@@ -55,6 +55,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string editarObservaciones { get; set; }
         public string editarFechaInicoPublica { get; set; }
         public string editarFechaFinPublica { get; set; }
+
+
+        public string Sede { get; set; }
         #region Botonera de busqueda
         /// <summary>
         /// boton ranking

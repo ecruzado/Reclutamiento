@@ -641,7 +641,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.btnVerPublicar = Visualicion.SI;
                         model.btnVerAceptar = Visualicion.NO;
                     }
-                    else
+                    else if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Publicado)) 
+                    {
+                        model.btnVerPublicar = Visualicion.SI;
+                        model.btnVerAceptar = Visualicion.NO;
+                    }
+                    else if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aprobacion_Perfil)) 
                     {
                         model.btnVerPublicar = Visualicion.NO;
                         model.btnVerAceptar = Visualicion.SI;
@@ -1778,7 +1783,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.editarFechaFinPublica = Indicador.Si;
             model.editarFechaInicoPublica = Indicador.Si;
             model.editarObservaciones = Indicador.Si;
-            
+            model.Sede = Session[ConstanteSesion.SedeDes].ToString();
+
             var ObjSol = _solicitudAmpliacionPersonal.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
 
             if (ObjSol != null)

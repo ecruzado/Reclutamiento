@@ -900,7 +900,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (Etapa.Publicado.Equals(EtapaSol))
             {
-                if (Roles.Analista_Seleccion.Equals(idRolUsuario))
+                if ((Roles.Analista_Seleccion.Equals(idRolUsuario)) || (Roles.Encargado_Seleccion.Equals(idRolUsuario)))
                 {
                     model.Accion = Accion.Publicar;
 
@@ -1697,6 +1697,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.editarFechaFinPublica = Indicador.Si;
             model.editarFechaInicoPublica = Indicador.Si;
             model.editarObservaciones = Indicador.Si;
+
+            model.Sede = Session[ConstanteSesion.SedeDes].ToString();
 
             var ObjSol = _solReqPersonalRepository.GetSingle(x => x.IdeSolReqPersonal == Convert.ToInt32(id));
 
