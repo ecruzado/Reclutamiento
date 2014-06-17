@@ -17,7 +17,9 @@
    
     $(document).ready(function () {
     
-    $('#btnAgregarCategoria').click(function () {
+        $('#btnAgregarCategoria').click(function () {
+            validaSesIntranet();
+
         var codigoExamen = $("#Examen_IdeExamen").val();
         
         if (codigoExamen != null && codigoExamen > 0) {
@@ -29,8 +31,11 @@
     });
 
 
-    $("#btnGuardarExamen").click(function () {
-        //if ($("#frmCriterio").validate().form()) {
+        $("#btnGuardarExamen").click(function () {
+
+            validaSesIntranet();
+
+        
         if ($('#frmExamenEdicion').valid()) {
 
             $.ajax({
@@ -58,7 +63,10 @@
 
 
 
-    $('#btnEliminarCategoria').click(function () {
+        $('#btnEliminarCategoria').click(function () {
+
+            validaSesIntranet();
+
         var codigoExamen = $("#Examen_IdeExamen").val();
         var codigoCategoria = jQuery('#grdListaCatxExamen').jqGrid('getGridParam', 'selrow');
        

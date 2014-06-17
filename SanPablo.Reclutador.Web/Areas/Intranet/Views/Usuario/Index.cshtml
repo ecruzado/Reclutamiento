@@ -63,6 +63,9 @@
         });
 
         $('#btnActivarDesactivar').click(function () {
+            validaSesIntranet();
+
+
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
 
@@ -76,6 +79,8 @@
 
 
         $('#btnEliminar').click(function () {
+            validaSesIntranet();
+
             var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
 
@@ -211,90 +216,10 @@
               }
           });
 
-  
-
-       @* $('#btnTipoReq').click(function () {
-            
-
-            var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
-
-            if (selr != null && selr > 0) {
-                mostrarPopup(selr);
-            } else {
-                MostrarMensaje('Seleccione un usuario', "Sistema de Reclutamiento Y Seleccion de Personal");
-            }
-
-        });
-
-
-       
-        $('#popupDialog').dialog({
-            autoOpen: false,
-            width: 500,
-            height: 650,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Grabar": function () {
-                    $('#tipoReq').dialog('open');
-
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#spanTipoReq").html("¿Desea guardar los cambios?")
-        $('#tipoReq').dialog({
-            autoOpen: false,
-            modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
-            buttons: {
-                "Si": function () {
-                    if ($("#frmTipoReq").validate().form()) {
-                        $.ajax({
-                            data: {
-                                selc: $("#grdListaTipReq").jqGrid('getGridParam', 'selarrrow'),
-                                codUsuario: $('#IdUsuario').val()
-                            },
-                            type: "POST",
-                            url: '@Url.Action("SetPopupTipoReq", "Usuario")',
-                            traditional: true,
-                            success: function (data) {
-                            if (data.Resultado) {
-
-                               // MostrarMensaje(data.Mensaje, "Sistema de Reclutamiento Y Seleccion de Personal");
-                                $('#tipoReq').dialog("close");
-                                $('#popupDialog').dialog("close");
-                                $('#grdListUsuario').trigger('reloadGrid');
-                            }
-                        }
-                    });
-                }
-            },
-            "No": function () {
-                $(this).dialog("close");
-            }
-        }
-    });*@
-
 
     });
 
-   @* function mostrarPopup(selr) {
-        var dialogDiv = $('#popupDialog');
-
-        $.get('@Url.Action("inicioPopupTipReq", "Usuario", new { area = "Intranet"})?id=' + selr, function (data) {
-
-                dialogDiv.html(data);
-                $.validator.unobtrusive.parse($("#popupDialog"));
-                dialogDiv.dialog('open');
-            });
-            return false;
-        }*@
-
-
+  
     function ActivarDesactivarUsuario(selr, estado) {
 
         $.ajax({

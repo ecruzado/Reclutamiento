@@ -19,6 +19,8 @@
 
             
             $('#btnContratar').click(function () {
+                validaSesIntranet();
+
                 var selr = jQuery('#grdListSel').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListSel').jqGrid('getRowData', selr);
                 var colEstado = rowData.EstPostulante;
@@ -73,7 +75,7 @@
 
 
             $('#btnFinalizar').click(function () {
-                
+                validaSesIntranet();
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
                 var idSede = $("#Solicitud_IdeSede").val();
@@ -89,6 +91,8 @@
 
 
             $('#btnAnteriorPre').click(function () {
+                validaSesIntranet();
+
                 var idSol = $("#Solicitud_IdeSolReqPersonal").val();
                 var tipSol = $("#Solicitud_Tipsol").val();
                
@@ -105,6 +109,7 @@
 
 
             $('#btnContactado').click(function () {
+                validaSesIntranet();
 
                 var selr = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
                 var rowData = jQuery('#grdListEvaluacion').jqGrid('getRowData', selr);

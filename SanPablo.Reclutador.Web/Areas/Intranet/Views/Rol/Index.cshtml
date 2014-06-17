@@ -12,17 +12,27 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+
+       
+
         $('#btnBuscar').click(function () {
+            validaSesIntranet();
+
             $('#grdListRol').trigger('reloadGrid');
         });
         
 
 
         $('#btnNuevo').click(function () {
+            validaSesIntranet();
+
             window.location = '@Url.Action("Nuevo", "Rol")';
         });
 
         $('#btnEditar').click(function () {
+
+            validaSesIntranet();
+
             var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
                 window.location = '@Url.Action("Edicion", "Rol")' + '/' + selr;
@@ -32,6 +42,9 @@
         });
 
         $('#btnConsultar').click(function () {
+
+            validaSesIntranet();
+
             var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
 
             if (selr != null) {
@@ -45,6 +58,8 @@
 
 
         $('#btnEliminar').click(function () {
+            validaSesIntranet();
+
             var selr = jQuery('#grdListRol').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
 

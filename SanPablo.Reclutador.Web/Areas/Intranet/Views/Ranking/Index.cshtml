@@ -19,6 +19,8 @@
            
             
          $('#btnAgregarRanking').click(function () {
+             validaSesIntranet();
+
              var idSol = $("#Solicitud_IdeSolReqPersonal").val();
              var tipSol = $("#Solicitud_Tipsol").val();
              if (idSol != null && idSol > 0) {
@@ -31,7 +33,7 @@
 
 
          $('#btnNoApto').click(function () {
-
+             validaSesIntranet();
              var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
              if (selr != null && selr > 0) {
                  $('#confirmacionNoApto').dialog('open');
@@ -43,6 +45,8 @@
         
 
          $('#btnAprobarPost').click(function () {
+             validaSesIntranet();
+
              var selr = jQuery('#grdListRankingPost').jqGrid('getGridParam', 'selrow');
              var rowData = jQuery('#grdListRankingPost').jqGrid('getRowData', selr);
              var idPostulante = rowData.IdePostulante;
@@ -58,6 +62,8 @@
 
 
          $('#btnAprobarPre').click(function () {
+
+             validaSesIntranet();
              var idSol = $("#Solicitud_IdeSolReqPersonal").val();
              var tipSol = $("#Solicitud_Tipsol").val();
              var pagina = $("#pagina").val();
@@ -78,6 +84,7 @@
 
 
          $('#btnBuscarPostulantes').click(function () {
+             validaSesIntranet();
              $('#grdListRankingPost').trigger('reloadGrid');
         });
 
@@ -161,7 +168,7 @@
 
 
          $('#btnEliminarPos').click(function () {
-
+             validaSesIntranet();
              var selr = jQuery('#grdListCvPostulante').jqGrid('getGridParam', 'selrow');
              if (selr != null && selr > 0) {
                  $('#confirmacionPos').dialog('open');
@@ -173,7 +180,7 @@
 
 
          $('#btnCitaPos').click(function () {
-
+             validaSesIntranet();
              var selr = jQuery('#grdListCvPostulante').jqGrid('getGridParam', 'selrow');
              if (selr != null && selr > 0) {
                  citaPostulante(selr);
@@ -184,7 +191,7 @@
          });
 
          $('#btnAsistioPos').click(function () {
-
+             validaSesIntranet();
              var selr = jQuery('#grdListCvPostulante').jqGrid('getGridParam', 'selrow');
              if (selr != null && selr > 0) {
                  asistePostulante(selr);
@@ -196,7 +203,7 @@
 
 
          $('#btnEditarRanking').click(function () {
-             
+             validaSesIntranet();
              var selr = jQuery('#grdListCvPostulante').jqGrid('getGridParam', 'selrow');
              var rowData = jQuery('#grdListCvPostulante').jqGrid('getRowData', selr);
              var idpost = rowData.IdCvPostulante;
@@ -251,39 +258,7 @@
          });
 
 
-            @*$("#spanConfCv").html("¿Desea guardar los cambios?")
-            $('#confCv').dialog({
-            autoOpen: false,
-            modal: true,
-            title: "Sistema de Reclutamiento Y Seleccion de Personal",
-            buttons: {
-                "Aceptar": function () {
-                    if ($("#frmPopupCvPostulante").validate().form()) {
-                        $.ajax({
-                            type: "POST",
-                            data: $("#frmPopupCvPostulante").serialize(),
-                            url: '@Url.Action("SetCvPostulante", "Ranking", new { area = "Intranet"})',
-                            traditional: true,
-                            success: function (data) {
-                        if (data.Resultado) {
-                            $('#confCv').dialog("close");
-                            $('#popupDialogCv').dialog("close");
-                            $('#grdListCvPostulante').trigger('reloadGrid');
-                            
-                            MostrarMensaje(data.Mensaje, "MENSAJE");
-                        } else {
-                            MostrarMensaje(data.Mensaje, "MENSAJE");
-                        }
-
-                    }
-                });
-                }
-            },
-            "Cancelar": function () {
-            $(this).dialog("close");
-            }
-            }
-            });*@
+           
 
        
             jQuery("#grdListCvPostulante").jqGrid({
