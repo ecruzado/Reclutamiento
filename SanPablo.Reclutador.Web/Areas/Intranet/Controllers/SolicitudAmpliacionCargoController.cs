@@ -636,6 +636,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 case Roles.Encargado_Seleccion:
                     model.btnVerEnviar = Visualicion.NO;
                     model.btnVerAproRech = Visualicion.NO;
+                    model.btnVerPublicar = Visualicion.NO;
+                    model.btnVerAceptar = Visualicion.NO;
                     if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aceptado))
                     {
                         model.btnVerPublicar = Visualicion.SI;
@@ -646,7 +648,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         model.btnVerPublicar = Visualicion.SI;
                         model.btnVerAceptar = Visualicion.NO;
                     }
-                    else if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aprobacion_Perfil)) 
+                    else if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Aprobado)) 
                     {
                         model.btnVerPublicar = Visualicion.NO;
                         model.btnVerAceptar = Visualicion.SI;

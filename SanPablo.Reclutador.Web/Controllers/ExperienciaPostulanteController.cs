@@ -72,7 +72,7 @@
                                 //item.FechaTrabajoFin.ToString(),
                                 item.IndicadorActualmenteTrabajo,
                                 item.TiempoDeServicio == null?"": item.IndicadorActualmenteTrabajo == "S"?
-                                     calcularTiempoExperiencia(Convert.ToDateTime(item.FechaInicio), DateTime.Now, Convert.ToInt32(item.IdeExperienciaPostulante)):item.TiempoDeServicio,//actualizar el tiempo de servicio
+                                     calcularTiempoExperiencia(Convert.ToDateTime(item.FechaInicio), DateTime.Now, Convert.ToInt32(item.IdeExperienciaPostulante),Indicador.Si):item.TiempoDeServicio,//actualizar el tiempo de servicio
                                 item.DescripcionMotivoCese == null?"":item.DescripcionMotivoCese,
                                 item.NombreReferente ==null?"": item.NombreReferente.ToUpper(),
                                 item.NumeroMovilReferencia == null?"":item.NumeroMovilReferencia.ToString(),
@@ -200,28 +200,55 @@
         {
             DateTime fechaInicio = Convert.ToDateTime(inicio);
             DateTime fechaFin = Convert.ToDateTime(fin);
-
+            var indicadorActual = Indicador.No;
             ActionResult result = null;
 
             if (fechaFin.Year == 1000)
             {
                 fechaFin = DateTime.Now;
+                indicadorActual = Indicador.Si;
             }
 
-            string tiempoServicio = calcularTiempoExperiencia(fechaInicio, fechaFin,0);
+            string tiempoServicio = calcularTiempoExperiencia(fechaInicio, fechaFin, 0, indicadorActual);
             
             return result = Json(tiempoServicio);
         }
 
 
-        public string calcularTiempoExperiencia(DateTime fechaInicio, DateTime fechaFin, int ideExperienciaPostulante)
+        public string calcularTiempoExperiencia(DateTime fechaInicio, DateTime fechaFin, int ideExperienciaPostulante, string indicadorActual)
         {
-            var days = fechaFin - fechaInicio;
+            int contadorMeses = 0;
 
-            int anhos = days.Days / 365;
-            int resto = days.Days % 365;
-            int meses = resto / 30;
+            int diasFechaFin = fechaFin.Day;
 
+            int mesFechaInicio = fechaInicio.Month;
+            int anhoFechaInicio = fechaInicio.Year;
+
+            int mesFechaFin = fechaFin.Month;
+            int anhoFechaFin = fechaFin.Year;
+
+            while ((mesFechaInicio != mesFechaFin) || (anhoFechaInicio != anhoFechaFin))
+            {
+                mesFechaInicio++;
+                contadorMeses++;
+                if (mesFechaInicio == 13)
+                {
+                    anhoFechaInicio++;
+                    mesFechaInicio = 1;
+                }
+            }
+
+            if (((diasFechaFin == 28) && (mesFechaFin == 2)) ||
+                ((diasFechaFin == 31) && ((mesFechaFin == 1) || (mesFechaFin == 3) || (mesFechaFin == 5) || (mesFechaFin == 7) || (mesFechaFin == 8) || (mesFechaFin == 10) || (mesFechaFin == 12))) ||
+                ((diasFechaFin == 30) && ((mesFechaFin == 4) || (mesFechaFin == 6) || (mesFechaFin == 9) || (mesFechaFin == 11))) ||
+                ((diasFechaFin == 1)&&(indicadorActual == Indicador.No)))
+            {
+                contadorMeses++; // se suma el mes actual
+            }
+            int anhos = contadorMeses / 12;
+            int meses = contadorMeses % 12;
+            
+           
             string tiempoServicio = anhos.ToString() + " AÑO(S) Y " + meses.ToString() + " MES(ES)";
             if (ideExperienciaPostulante != 0)
             {

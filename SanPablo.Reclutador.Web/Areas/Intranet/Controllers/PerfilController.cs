@@ -836,6 +836,7 @@
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Generacion_Perfil:
+                    perfilViewModel.Accion = Accion.Consultar;
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.SI;
                     perfilViewModel.indVisibilidad = Visualicion.NO;
@@ -843,6 +844,7 @@
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aprobacion_Perfil:
+                    perfilViewModel.Accion = Accion.Consultar;
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.SI;
@@ -850,6 +852,7 @@
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Aceptado:
+                    perfilViewModel.Accion = Accion.Consultar;
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.SI;
@@ -873,6 +876,7 @@
                     perfilViewModel.btnVerPublicar = Visualicion.NO;
                     break;
                 case Etapa.Publicado:
+                    perfilViewModel.Accion = Accion.Consultar;
                     perfilViewModel.btnVerEnviar = Visualicion.NO;
                     perfilViewModel.btnVerAprobar = Visualicion.NO;
                     perfilViewModel.indVisibilidad = Visualicion.SI;

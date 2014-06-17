@@ -13,7 +13,7 @@
                 <h5>Cargo</h5>
                 <div class="opciones">
                     <label>Estado</label>
-                    @Html.HiddenFor(model=>model.Cargo.EstadoActivo)
+                    @Html.TextBoxFor(model=>model.Cargo.EstadoActivo, new { style = "display:none;" })
                    @* @Html.HiddenFor(model=>model.IdeSolicitud)*@
                     @Html.TextBoxFor(model => model.IdeSolicitud, new { style = "display:none;" })
                     @Html.TextBoxFor(model => model.Pagina, new { style = "display:none;" })
