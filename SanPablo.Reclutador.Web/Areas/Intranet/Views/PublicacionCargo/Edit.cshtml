@@ -304,6 +304,7 @@
 
     function publicarSolicitud()
     {
+        validaSesIntranet();
         //var result = $('#publicacionCargoForm').valid();
         //if (result) {
             if (valida()) {
@@ -326,6 +327,7 @@
 
     function actualizarSolitud()
     {
+        validaSesIntranet();
         if (valida()) {
             var dialogDiv = $('#updateDialogActualizar');
             dialogDiv.dialog('open');

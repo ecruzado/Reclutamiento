@@ -71,6 +71,8 @@
 
         
         $('#btnActualizar').click(function () {
+            validaSesIntranet();
+
             var fecha = $('#SolReqPersonal_FecExpiracacion').val();
             var id = $('#SolReqPersonal_IdeSolReqPersonal').val();
             var fechaPublica = $('#SolReqPersonal_FecPublicacion').val();
@@ -94,6 +96,8 @@
 
 
         $('#btnPublicarSolReq').click(function () {
+            validaSesIntranet();
+
             if (validaPublicacion())
             {
                 $.blockUI({
@@ -131,6 +135,8 @@
 
 
         $('#btnAnteriorPublica').click(function () {
+
+            validaSesIntranet();
             var selr = $("#SolReqPersonal_IdeSolReqPersonal").val();
 
             window.location = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "", area = "Intranet" })' + '/' + selr;

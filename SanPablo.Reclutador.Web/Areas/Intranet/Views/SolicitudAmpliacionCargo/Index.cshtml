@@ -30,7 +30,7 @@
 
 
     $('#btnBuscarReemplazo').click(function () {
-
+        validaSesIntranet();
         if (valida()) {
             $('#grdList').trigger('reloadGrid');
         }
@@ -39,7 +39,7 @@
 
 
     $('#btnPreseleccion').click(function () {
-
+        validaSesIntranet();
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
         var idSol = selr;
@@ -72,7 +72,7 @@
      });
 
     $('#btnNuevoAmpliacion').click(function () {
-
+        validaSesIntranet();
         var pagina = '@TipoSolicitud.Ampliacion';
         var url = '@Url.Action("Edit", "SolicitudAmpliacionCargo", new { id = "",area="Intranet" })?id=0'+ "&pagina=" + pagina;
         window.location = url;
@@ -83,7 +83,7 @@
 
     $('#btnRankingSol').click(function () {
 
-
+        validaSesIntranet();
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
         var pagina = '@TipoSolicitud.Ampliacion';
@@ -113,6 +113,8 @@
 
 
     $('#btnAproRechaSol').click(function () {
+        validaSesIntranet();
+
         var ideSolAmpliacion = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var pagina = '@TipoSolicitud.Ampliacion';
         if (ideSolAmpliacion != null) {

@@ -34,6 +34,8 @@
         $('#fechaInicio,#fechaFin').attr("readonly", "readonly");
 
         $('#btnBuscarSolicitud').click(function () {
+            validaSesIntranet();
+
             $('#grdList').trigger('reloadGrid');
         });
 
@@ -196,7 +198,7 @@
 
 
         $('#btnRankingSol').click(function () {
-
+            validaSesIntranet();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
             var ideSolicitud = selr;
@@ -224,7 +226,7 @@
 
 
         $('#btnPreseleccion').click(function () {
-
+            validaSesIntranet();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
 
@@ -253,7 +255,7 @@
          });
 
         $('#btnNuevo').click(function () {
-
+            validaSesIntranet();
             var pagina = '@TipoSolicitud.Nuevo';
             var url = '@Url.Action("Edit", "SolicitudNuevoCargo", new { id = "",area="Intranet" })?id=0'+ "&pagina="+ pagina;
             window.location = url;
@@ -261,6 +263,8 @@
 
    
         $('#btnEditarSolicitud').click(function () {
+            validaSesIntranet();
+
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var pagina = '@TipoSolicitud.Nuevo'
 
@@ -277,6 +281,8 @@
         });
         
         $('#btnPerfil').click(function () {
+            validaSesIntranet();
+
             var ideSolicitud = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', ideSolicitud);
             var estado = rowData.EstadoActivo;

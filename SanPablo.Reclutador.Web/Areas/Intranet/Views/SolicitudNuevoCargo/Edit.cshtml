@@ -190,7 +190,7 @@
         });
     }
     function mostrarAprobarDesaprobar() {
-
+        validaSesIntranet();
         
         //var estado = $('#SolicitudNuevoCargo_EstadoActivo').val();
         //if (estado == "A") {
@@ -230,6 +230,7 @@
 
     function guardarDatosEditados()
     {
+        validaSesIntranet();
         var result = $('#solicitudNuevoCargoForm').valid();
         if (result) {
 
@@ -258,6 +259,7 @@
 
     function enviarAprobacionRechazo()
     {
+        validaSesIntranet();
         $.blockUI({
             message: '<h1>Enviando...</h1>',
             css: {
@@ -299,11 +301,13 @@
 
 
     function mostrarConfirmacion() {
+        validaSesIntranet();
         var dialogDiv = $('#updateDialogConfirmacion');
             dialogDiv.dialog('open');
     }
 
     function ocultarAprobarDesaprobar() {
+
         $('#modalAprobarRechazar').modal('hide');
     }
 
@@ -317,6 +321,7 @@
 
     function verificarCodigo()
     {
+        validaSesIntranet();
         var idSolicitud = $('#SolicitudNuevoCargo_IdeSolicitudNuevoCargo').val();
         
         var codCodigo = $("#SolicitudNuevoCargo_CodigoCargo").val();
@@ -346,6 +351,8 @@
         }
     }
     function actualizarCodigo(codigo) {
+        validaSesIntranet();
+
         $.ajax({
             async: "false",
             data: { codigo: codigo },

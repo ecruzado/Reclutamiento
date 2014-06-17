@@ -15,6 +15,9 @@
         $(document).ready(function () {
             
             $('#btnGrabar').click(function () {
+
+                validaSesIntranet();
+
                 var result = $('#configuracionPerfilForm').valid();
                 if (result) {
                     $.post('@Url.Action("ConfiguracionPerfil", "Perfil")',

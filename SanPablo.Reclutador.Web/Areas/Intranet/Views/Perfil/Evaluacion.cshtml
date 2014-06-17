@@ -13,6 +13,8 @@
   $(document).ready(function () {
 
       $('#btnAgregarEvaluacion').click(function () {
+          validaSesIntranet();
+
           mostrarAgregarEvaluacion();
       });
 
@@ -56,6 +58,8 @@
 
 
       $('#btnEliminarEvaluacion').click(function () {
+
+          validaSesIntranet();
           var ideEvaluacion = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
           if (ideEvaluacion != null) {
               $("#spanMensajeConfirmacion").html('¿Está seguro que desea eliminar el registro?.');
@@ -77,6 +81,8 @@
       });
 
       $('#btnEditarEvaluacion').click(function () {
+
+          validaSesIntranet();
           var ideEvaluacion = jQuery('#grdListEvaluacion').jqGrid('getGridParam', 'selrow');
           if (ideEvaluacion != null) {
               mostrarEditarEvaluacion(ideEvaluacion);

@@ -83,6 +83,8 @@
 
         //PERFIL PUESTO
         $('#btnAgregarCompetencia').click(function () {
+            validaSesIntranet();
+
             mostrarAgregarCompetencia();
         });
 
@@ -122,6 +124,9 @@
 
         // btn Eliminar
         $('#btnEliminarCompetencia').click(function () {
+
+            validaSesIntranet();
+
             var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
             if (ideCompetencia != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -152,6 +157,8 @@
 
 
         $('#btnAgregarOfrecimiento').click(function () {
+
+            validaSesIntranet();
             mostrarAgregarOfrecimiento();
         });
 
@@ -192,6 +199,8 @@
         });
 
         $('#btnEliminarOfrecimiento').click(function () {
+            validaSesIntranet();
+
             var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
             if (ideOfrecimiento != null) {
                 $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -275,7 +284,9 @@
         });
     });
 
-    function mostrarAgregarCompetencia() {
+      function mostrarAgregarCompetencia() {
+          validaSesIntranet();
+
         var dialogDiv = $('#updateDialog');
         $.get('@Url.Action("Edit", "CompetenciaCargo")', function (data) {
             dialogDiv.html(data);
@@ -285,7 +296,9 @@
         return false;
     }
 
-    function eliminarCompetencia(id) {
+      function eliminarCompetencia(id) {
+
+          validaSesIntranet();
         $.ajax({
             async: false,
             type: "POST",
@@ -294,7 +307,9 @@
         });
     }
 
-    function mostrarAgregarOfrecimiento() {
+      function mostrarAgregarOfrecimiento() {
+          validaSesIntranet();
+
         var dialogDiv = $('#updateDialog2');
         $.get('@Url.Action("Edit", "OfrecimientoCargo")', function (data) {
             dialogDiv.html(data);
@@ -304,7 +319,9 @@
         return false;
     }
 
-    function eliminarOfrecimiento(id) {
+      function eliminarOfrecimiento(id) {
+
+          validaSesIntranet();
         $.ajax({
             async: false,
             type: "POST",

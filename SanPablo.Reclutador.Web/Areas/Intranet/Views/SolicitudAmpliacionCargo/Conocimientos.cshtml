@@ -7,6 +7,8 @@
         $(document).ready(function () {
  
             $('#btnAgregarOfimatica').click(function () {
+                validaSesIntranet();
+
                 mostrarAgregarOfimatica();
             });
 
@@ -45,6 +47,8 @@
             });
 
             $('#btnEliminarOfimatica').click(function () {
+                validaSesIntranet();
+
                 var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
                 if (ideOfimatica != null) {
                     $("#spanMensaje7").html('¿Está seguro que desea eliminar el registro?.');
@@ -74,6 +78,8 @@
             });
 
             $('#btnEditarOfimatica').click(function () {
+                validaSesIntranet();
+
                 var ideOfimatica = jQuery('#grdListOfimatica').jqGrid('getGridParam', 'selrow');
                 if (ideOfimatica != null) {
                     mostrarEditarOfimatica(ideOfimatica);
@@ -92,6 +98,9 @@
             });
 
             $('#btnAgregarIdioma').click(function () {
+
+                validaSesIntranet();
+
                 mostrarAgregarIdioma();
             });
 
@@ -130,6 +139,9 @@
             });
 
             $('#btnEliminarIdioma').click(function () {
+
+                validaSesIntranet();
+
                 var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
                 if (ideIdioma != null) {
                     $("#spanMensaje8").html('¿Está seguro que desea eliminar el registro?.');
@@ -159,6 +171,8 @@
             });
 
             $('#btnEditarIdioma').click(function () {
+                validaSesIntranet();
+
                 var ideIdioma = jQuery('#grdListIdioma').jqGrid('getGridParam', 'selrow');
                 if (ideIdioma != null) {
                     mostrarEditarIdioma(ideIdioma);
@@ -177,6 +191,8 @@
             });
 
             $('#btnAgregarOtrosConocimientos').click(function () {
+
+                validaSesIntranet();
                 mostrarAgregarOtrosConocimientos();
             });
 
@@ -215,6 +231,8 @@
             });
 
             $('#btnEliminarOtrosConocimientos').click(function () {
+                validaSesIntranet();
+
                 var ideOtrosConocimientos = jQuery('#grdListOtrosConocimientos').jqGrid('getGridParam', 'selrow');
                 if (ideOtrosConocimientos != null) {
                     $("#spanMensaje9").html('¿Está seguro que desea eliminar el registro?.');
@@ -242,6 +260,9 @@
             });
 
             $('#btnEditarOtrosConocimientos').click(function () {
+
+                validaSesIntranet();
+
                 var ideOtrosConocimientos = jQuery('#grdListOtrosConocimientos').jqGrid('getGridParam', 'selrow');
                 if (ideOtrosConocimientos != null) {
                     mostrarEditarOtrosConocimientos(ideOtrosConocimientos);

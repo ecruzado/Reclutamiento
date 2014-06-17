@@ -14,7 +14,7 @@
         setInterval(function () { $('#grdList').trigger('reloadGrid');}, 3600000);
 
         $('#btnProgramarEvaluacion').click(function () {
-
+            validaSesIntranet();
             var id = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList').jqGrid('getRowData', id);
 
@@ -47,7 +47,7 @@
         });
 
         $('#btnAnterior').click(function () {
-
+            validaSesIntranet();
             var idSol = $("#IdeSolReqPersonal").val();
             var tipSol = $("#tipsol").val();
             var pagina = $("#pagina").val();
@@ -195,7 +195,8 @@
 
     function MostrarExamen(idRP, idRE)
     {
-        var url = '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados", new { idRP = "", area = "Intranet" })?idRP=' + idRP + '&idRE=' + idRE ;
+        validaSesIntranet();
+        var url = '@Url.Action("ResultadoEvaluacion", "EvaluacionesPreSeleccionados", new { idRP = "", area = "Intranet" })?idRP=' + idRP + '&idRE=' + idRE;
         @*var url = '@Url.Action("Preseleccionado", "Ranking", new { id = "", area = "Intranet" })?id=' + idSol + "&tipSol=" + tipSol + "&pagina=" + pagina + "&ind=" + indPagina;*@
         window.open(url);
     }
@@ -268,7 +269,7 @@
     function mostraringresoocomentario(idReclutaPersoExam) {
         //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         //if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
-       
+        validaSesIntranet();
             $.ajax({
                 data: {
                     id: idReclutaPersoExam

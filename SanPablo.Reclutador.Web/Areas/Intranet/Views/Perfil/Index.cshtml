@@ -131,12 +131,14 @@
 
         //PERFIL PUESTO
         $('#btnAgregarCompetencia').click(function () {
+            validaSesIntranet();
+
             mostrarAgregarCompetencia();
         });
 
 
         $('#btnGrabarPuesto').click(function () {
-            
+            validaSesIntranet();
 
             if ($("#puestoPerfilForm").validate().form()) {
 
@@ -201,6 +203,8 @@
 
         // btn Eliminar
         $('#btnEliminarCompetencia').click(function () {
+            validaSesIntranet();
+
             var ideCompetencia = jQuery('#grdListCompetencias').jqGrid('getGridParam', 'selrow');
             if (ideCompetencia != null) {
                 $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
@@ -225,6 +229,8 @@
 
 
         $('#btnAgregarOfrecimiento').click(function () {
+
+            validaSesIntranet();
             mostrarAgregarOfrecimiento();
         });
 
@@ -269,6 +275,8 @@
         });
 
         $('#btnEliminarOfrecimiento').click(function () {
+            validaSesIntranet();
+
             var ideOfrecimiento = jQuery('#grdListOfrecemos').jqGrid('getGridParam', 'selrow');
             if (ideOfrecimiento != null) {
                 $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');

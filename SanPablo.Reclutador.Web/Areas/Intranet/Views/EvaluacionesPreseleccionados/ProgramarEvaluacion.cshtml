@@ -89,16 +89,18 @@
 
 
             $('#btnBusquedaUsuario').click(function () {
+                validaSesIntranet();
                 mostrarBusquedaUsuario();
             });
 
             $('#btnAnterior').click(function () {
+                validaSesIntranet();
                 anterior();
             });
 
 
             $('#btnGuardar').click(function () {
-                
+                validaSesIntranet();
                 if (validar()) {
 
                     guardarProgramacion();

@@ -78,46 +78,6 @@
         });
 
 
-        @*$('select#SolicitudRequerimiento_IdeDependencia').change(function () {
-            var ideDependencia = $(this).val();
-            $("select#SolicitudRequerimiento_IdeArea").empty();
-            $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listaDepartamentos", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
-            data: { ideDependencia: ideDependencia },
-            success: function (respuesta) {
-                $("select#SolicitudRequerimiento_IdeDepartamento").empty();
-                $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='0'> Seleccionar </option>");
-                $.each(respuesta, function (i, item) {
-                    $("select#SolicitudRequerimiento_IdeDepartamento").append("<option value='"
-                    + item.IdeDepartamento + "'>" + item.NombreDepartamento + "</option>");
-                }
-            );
-            }
-        });
-         })
-
-        $('select#SolicitudRequerimiento_IdeDepartamento').change(function () {
-            var ideDepartamento = $(this).val();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("listaAreas", "SolicitudAmpliacionCargo", new { area = "Intranet" })',
-            data: { ideDepartamento: ideDepartamento },
-            success: function (respuesta) {
-                $("select#SolicitudRequerimiento_IdeArea").empty();
-                $("select#SolicitudRequerimiento_IdeArea").append("<option value='0'> Seleccionar </option>");
-                $.each(respuesta, function (i, item) {
-                    $("select#SolicitudRequerimiento_IdeArea").append("<option value='"
-                    + item.IdeArea + "'>" + item.NombreArea + "</option>");
-                }
-            );
-            }
-        });
-    })*@
-
-
-
         $('select#SolicitudRequerimiento_IdeDependencia').change(function () {
             var ideDependencia = $(this).val();
             $("select#SolicitudRequerimiento_IdeArea").empty();
@@ -638,11 +598,16 @@
 
         
         $('#btnAceptar').click(function () {
+
+            validaSesIntranet();
+
             mostrarConfirmaAceptar();
         });
 
         $('#btnPublicar').click(function () {
-                
+            
+            validaSesIntranet();
+
             var pagina = '@TipoSolicitud.Ampliacion';
 
             if (validaEnvio()) {
@@ -675,13 +640,18 @@
         }
         else { return true; }
   }
-  function mostrarConfirmaAceptar() {
+    function mostrarConfirmaAceptar() {
+
+        validaSesIntranet();
+
       var dialogDiv = $('#updateDialogAceptar');
       dialogDiv.dialog('open');
   }
 
   function confirmarEnvio()
   {
+
+      validaSesIntranet();
       if ($('#solicitudAmpliacionCargoForm').valid()) {
           var dialogDiv = $('#updateDialogConfirmacion');
           dialogDiv.dialog('open');
@@ -715,6 +685,9 @@
   }
 
   function mostrarAprobarRechazar() {
+
+      validaSesIntranet();
+
       //var estado = $('#SolicitudRequerimiento_EstadoActivo').val();
       //if (estado == "A") {
           var dialogDiv = $('#updateDialogAprobacion');
@@ -794,6 +767,8 @@
     }
 
     function validaEnvio() {
+
+        
 
         var solReqIdeCargo = $('#SolicitudRequerimiento_Idecargo').val();
         var numVacante = parseInt($('#SolicitudRequerimiento_NumVacantes').val());

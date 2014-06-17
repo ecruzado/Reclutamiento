@@ -11,6 +11,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnAgregarDiscapacidad').click(function () {
+            validaSesIntranet();
+
             mostrarAgregarDiscapacidad();
         });
 
@@ -52,6 +54,9 @@
         });
 
         $('#btnEliminarDiscapacidad').click(function () {
+
+            validaSesIntranet();
+
             var ideDiscapacidad = jQuery('#grdListDiscapacidad').jqGrid('getGridParam', 'selrow');
             if (ideDiscapacidad != null) {
                 $("#spanMensaje11").html('¿Está seguro que desea eliminar el registro?.');
@@ -73,6 +78,8 @@
         });
 
         $('#btnEditarDiscapacidad').click(function () {
+            validaSesIntranet();
+
             var ideDiscapacidad = jQuery('#grdListDiscapacidad').jqGrid('getGridParam', 'selrow');
             if (ideDiscapacidad != null) {
                 mostrarEditarDiscapacidad(ideDiscapacidad);
