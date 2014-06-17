@@ -433,13 +433,20 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             UsuarioRolSedeViewModel model = new UsuarioRolSedeViewModel();
             model.UsuarioRolSede = new UsuarioRolSede();
-            
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+
             model = InicializarPopupSedeRol();
 
             model.IdUsuario = id;
             model.IdRolUsuario = idSel;
 
-            
+
+            if (Roles.Encargado_Seleccion.Equals(idRol) || Roles.Analista_Seleccion.Equals(idRol))
+            {
+                model.TipRol = new List<Rol>(_rolRepository.GetBy(x => x.IdRol == Roles.Postulante));
+                model.TipRol.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
+            }
+
 
             if (idSel>0)
             {
