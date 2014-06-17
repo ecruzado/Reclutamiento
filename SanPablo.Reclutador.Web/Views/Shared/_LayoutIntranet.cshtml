@@ -387,7 +387,7 @@
                     traditional: true,
                     success: function (data) {
                         if (data.redirecciona) {
-                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad", new { area="Intranet" })');
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad", new { area = "Intranet"})');
                         }
                     }
 
