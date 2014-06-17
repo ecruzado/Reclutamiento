@@ -378,6 +378,24 @@
                 elemento.value = elemento.value.toUpperCase();
             }
 
+            function validaSesIntranet() {
+
+                $.ajax({
+
+                    type: "POST",
+                    url: '@Url.Action("validaSesPopup", "Seguridad", new { area = "Intranet"})',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.redirecciona) {
+                            SanPablo.Redirecciona('@Url.Action("Login", "Seguridad", new { area="Intranet" })');
+                    }
+                }
+
+            });
+
+    }
+
+
         </script>
          @RenderSection("Scripts", required: false)
     </body>
