@@ -96,6 +96,8 @@
         });
 
         $('#btnNuevo').click(function () {
+            validaSesIntranet();
+
             var codRol = $("#rol_IdRol").val();
 
             if (codRol != null && codRol > 0) {
@@ -108,7 +110,8 @@
 
 
         $('#btnEliminar').click(function () {
-           
+            validaSesIntranet();
+
             var selr = jQuery('#grdListOpciones').jqGrid('getGridParam', 'selrow');
             if (selr != null && selr > 0) {
                 $('#confirmacion').dialog('open');

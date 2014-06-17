@@ -18,6 +18,8 @@
 
 
         $('#btnNuevoSubDetalle').click(function () {
+
+            validaSesIntranet();
             $('#TablaSubDetalle_Accion').val('N');
             $('#TablaSubDetalle_Valor').removeAttr("disabled");
             limpiarCampos();
@@ -25,6 +27,8 @@
         });
 
         $('#btnGuardarSubDetalle').click(function () {
+
+            validaSesIntranet();
             var valor = $('#TablaSubDetalle_Valor').val();
             var descripcion = $('#TablaSubDetalle_Descripcion').val();
             $('#valorDetalle').val(valor);
@@ -37,6 +41,7 @@
         });
 
         $('#btnEliminarSubDetalle').click(function () {
+            validaSesIntranet();
             var selr = jQuery('#grdListSubDetalle').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdListSubDetalle').jqGrid('getRowData', selr);
             if (selr != null) {
@@ -111,6 +116,8 @@
     });
 
     function guardarDatos(valor, descripcion) {
+        validaSesIntranet();
+
         var result = $('#SubDetalleForm').valid();
         if (result) {
             $.post('@Url.Action("SubDetalle", "MantenimientoGenerales")',

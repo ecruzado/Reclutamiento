@@ -311,14 +311,16 @@
 
          $("#msjErrorEdad").hide();
 
-            $('#btnAgregarHorario').click(function () {
+         $('#btnAgregarHorario').click(function () {
+             validaSesIntranet();
+
                 mostrarAgregarHorario();
             });
             
 
             $('#btnGrabar').click(function () {
 
-                
+                validaSesIntranet();
                    if ($("#generalPerfilForm").validate().form()) {
 
                        if (validacion()) {
@@ -390,7 +392,9 @@
             });
 
 
-            $('#btnEditarHorario').click(function () {
+         $('#btnEditarHorario').click(function () {
+             validaSesIntranet();
+
                 var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
                 if (ideHorario != null) {
                     mostrarEditarHorario(ideHorario);
@@ -401,7 +405,9 @@
             });
 
             // btn Eliminar
-            $('#btnEliminarHorario').click(function () {
+         $('#btnEliminarHorario').click(function () {
+             validaSesIntranet();
+
                 var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
                 if (ideHorario != null) {
                     $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');
@@ -422,7 +428,9 @@
             });
 
 
-            $('#btnAgregarUbigeo').click(function () {
+         $('#btnAgregarUbigeo').click(function () {
+
+             validaSesIntranet();
                 mostrarAgregarUbigeo();
             });
 
@@ -465,7 +473,9 @@
                 }
             });
 
-            $('#btnEditarUbigeo').click(function () {
+         $('#btnEditarUbigeo').click(function () {
+             validaSesIntranet();
+
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
                 if (ideUbigeo != null) {
                     mostrarEditarUbigeo(ideUbigeo);
@@ -498,7 +508,9 @@
 
 
             // btn Eliminar
-            $('#btnEliminarUbigeo').click(function () {
+         $('#btnEliminarUbigeo').click(function () {
+             validaSesIntranet();
+
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
                 if (ideUbigeo != null) {
                     $("#spanMensajeConfirmar").html('¿Está seguro que desea eliminar el registro?.');

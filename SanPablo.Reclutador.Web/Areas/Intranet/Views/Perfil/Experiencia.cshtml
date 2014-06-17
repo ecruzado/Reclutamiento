@@ -14,6 +14,8 @@
 
 
         $('#btnAgregarExperiencia').click(function () {
+
+            validaSesIntranet();
             mostrarAgregarExperiencia();
         });
 
@@ -56,6 +58,8 @@
         });
 
         $('#btnEliminarExperiencia').click(function () {
+            validaSesIntranet();
+
             var ideExperiencia = jQuery('#grdListExperiencia').jqGrid('getGridParam', 'selrow');
             if (ideExperiencia != null) {
                 $("#spanMensaje10").html('¿Está seguro que desea eliminar el registro?.');
@@ -77,6 +81,8 @@
         });
 
         $('#btnEditarExperiencia').click(function () {
+            validaSesIntranet();
+
             var ideExperiencia = jQuery('#grdListExperiencia').jqGrid('getGridParam', 'selrow');
             if (ideExperiencia != null) {
                 mostrarEditarExperiencia(ideExperiencia);

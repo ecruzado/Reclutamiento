@@ -5,7 +5,9 @@
 @section ScriptsCargo{  
 <script type="text/javascript">
      $(document).ready(function () {
-        $('#btnAgregarNivelAcademico').click(function () {
+         $('#btnAgregarNivelAcademico').click(function () {
+             validaSesIntranet();
+
             mostrarAgregarNivelAcademico();
         });
 
@@ -42,7 +44,9 @@
             }
         });
 
-        $('#btnAgregarCentroEstudio').click(function () {
+         $('#btnAgregarCentroEstudio').click(function () {
+
+             validaSesIntranet();
             mostrarAgregarCentroEstudio();
         });
 
@@ -81,6 +85,8 @@
         });
 
          $('#btnEliminarNivelAcademico').click(function () {
+             validaSesIntranet();
+
              var ideNivelAcademico = jQuery('#grdListNivelAcademico').jqGrid('getGridParam', 'selrow');
              if (ideNivelAcademico != null) {
                  $("#spanMensaje5").html('¿Está seguro que desea eliminar el registro?.');
@@ -108,6 +114,8 @@
          });
 
          $('#btnEliminarCentroEstudio').click(function () {
+
+             validaSesIntranet();
              var ideCentroEstudio = jQuery('#grdListCentroEstudio').jqGrid('getGridParam', 'selrow');
              if (ideCentroEstudio != null) {
                  $("#spanMensaje6").html('¿Está seguro que desea eliminar el registro?.');
@@ -135,6 +143,8 @@
          });
 
          $('#btnEditarNivelAcademico').click(function () {
+
+             validaSesIntranet();
              var ideNivelAcademico = jQuery('#grdListNivelAcademico').jqGrid('getGridParam', 'selrow');
              if (ideNivelAcademico != null) {
                  mostrarEditarNivelAcademico(ideNivelAcademico);
@@ -152,6 +162,8 @@
          });
 
          $('#btnEditarCentroEstudio').click(function () {
+             validaSesIntranet();
+
              var ideCentroEstudio = jQuery('#grdListCentroEstudio').jqGrid('getGridParam', 'selrow');
              if (ideCentroEstudio != null) {
                  mostrarEditarCentroEstudio(ideCentroEstudio);

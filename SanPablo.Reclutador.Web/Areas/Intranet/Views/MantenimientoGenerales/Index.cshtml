@@ -20,14 +20,20 @@
         });
 
         $('#btnNuevo').click(function () {
+
+            validaSesIntranet();
             window.location = '@Url.Action("Nuevo", "Usuario")';
         });
 
         $('#btnBuscar').click(function () {
+
+            validaSesIntranet();
             $('#grdList').trigger('reloadGrid');
         });
 
         $('#btnEditar').click(function () {
+            validaSesIntranet();
+
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
                 mostrarEditarDetalle(selr);
@@ -39,6 +45,8 @@
 
         
         $('#btnConsultar').click(function () {
+
+            validaSesIntranet();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
                 mostrarConsultarDetalle(selr);
@@ -73,6 +81,8 @@
         });*@
 
         $('#btnSedeNivel').click(function () {
+
+            validaSesIntranet();
             var idUsu = $("#Usuario_IdUsuario").val();
             var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdListaNivelSede').jqGrid('getRowData', selr);

@@ -15,6 +15,8 @@
         $('#TablaDetalleGeneral_IndActivo').val('');
 
         $('#btnNuevo').click(function () {
+            validaSesIntranet();
+
             $('#TablaDetalleGeneral_Accion').val('N');
             $('#TablaDetalleGeneral_Valor').removeAttr("disabled");
             $('#TablaDetalleGeneral_Valor').val('');
@@ -24,6 +26,8 @@
         });
 
         $('#btnGuardar').click(function () {
+            validaSesIntranet();
+
             var valor = $('#TablaDetalleGeneral_Valor').val();
             var descripcion = $('#TablaDetalleGeneral_Descripcion').val();
             $('#valorDetalle').val(valor);
@@ -36,6 +40,8 @@
         });
 
         $('#btnEliminar').click(function () {
+            validaSesIntranet();
+
             var selr = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList1').jqGrid('getRowData', selr);
             if (selr != null) {
@@ -47,6 +53,8 @@
 
 
         $('#btnEditarDetalle').click(function () {
+
+            validaSesIntranet();
             var selr = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList1').jqGrid('getRowData', selr);
             if (selr != null) {
@@ -58,6 +66,8 @@
 
         
         $('#btnConsultarSubDetalle').click(function () {
+
+            validaSesIntranet();
             var selr = jQuery('#grdList1').jqGrid('getGridParam', 'selrow');
             var rowData = jQuery('#grdList1').jqGrid('getRowData', selr);
             if (selr != null) {
@@ -146,6 +156,7 @@
 
     function guardarDatos(valor, descripcion)
     {
+        validaSesIntranet();
         var result = $('#mantenimientoGeneralesForm').valid();
 
         if (result) {
@@ -187,7 +198,7 @@
 
     function activarDesactivar(valor, descripcion)
     {
-
+        validaSesIntranet();
             $.post('@Url.Action("ActivarDesactivar", "MantenimientoGenerales", new { area = "Intranet"})?valor=' + valor + "&descripcion=" + descripcion ,
             function (respuesta) {
                 if (respuesta.Resultado) {
@@ -205,7 +216,7 @@
     }
 
     function mostrarEditarSubDetalle(id,descripcion) {
-
+        validaSesIntranet();
         var dialogDiv = $('#updateDialogSubDetalle');
 
         $.get('@Url.Action("SubDetalle", "MantenimientoGenerales", new { area = "Intranet"})?id=' + id, function (data) {
@@ -221,7 +232,7 @@
     }
 
     function mostrarConsultarSubDetalle(id, descripcion) {
-
+        validaSesIntranet();
         var dialogDiv = $('#updateDialogSubDetalle');
 
         $.get('@Url.Action("ConsultarSubDetalle", "MantenimientoGenerales", new { area = "Intranet"})?id=' + id, function (data) {

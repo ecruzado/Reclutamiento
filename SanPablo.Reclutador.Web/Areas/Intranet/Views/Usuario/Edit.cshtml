@@ -28,7 +28,7 @@
     $(document).ready(function () {
 
         $("#tabs").tabs();
-
+        
        
         jQuery("#grdListUsuario").jqGrid({
             datatype: function (postdata) {
@@ -252,7 +252,7 @@
 
     
     $('#btnEliminar').click(function () {
-
+        validaSesIntranet();
         var selr = jQuery('#grdListUsuario').jqGrid('getGridParam', 'selrow');
         if (selr != null && selr > 0) {
             $('#confirmacion').dialog('open');
@@ -265,7 +265,7 @@
 
 
     $('#btnEliminarSedeNivel').click(function () {
-
+        validaSesIntranet();
         var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
         if (selr != null && selr > 0) {
             $('#confirmacionSedeNivel').dialog('open');
@@ -278,6 +278,7 @@
 
 
     $('#btnEliminarReq').click(function () {
+        validaSesIntranet();
 
         var selr = jQuery('#grdListaTipoReqInicial').jqGrid('getGridParam', 'selrow');
         if (selr != null && selr > 0) {
@@ -370,6 +371,8 @@
 
 
     $('#btnNuevo').click(function () {
+        validaSesIntranet();
+
         var idUsu = $("#Usuario_IdUsuario").val();
 
         if (idUsu != null && idUsu > 0) {
@@ -382,6 +385,9 @@
 
 
     $('#btnNuevoSede').click(function () {
+
+        validaSesIntranet();
+
         var idUsu = $("#Usuario_IdUsuario").val();
 
         if (idUsu != null && idUsu > 0) {
@@ -394,6 +400,9 @@
 
 
     $('#btnSedeNivel').click(function () {
+
+        validaSesIntranet();
+
         var idUsu = $("#Usuario_IdUsuario").val();
         var selr = jQuery('#grdListaNivelSede').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListaNivelSede').jqGrid('getRowData', selr);
@@ -581,6 +590,9 @@
      
     $('#btnNuevoReq').click(function () {
 
+        validaSesIntranet();
+
+
         var idUsu = $("#Usuario_IdUsuario").val();
 
         // valida si es de recursos humanos
@@ -727,6 +739,8 @@
     }
 
     function validacion() {
+
+        validaSesIntranet();
        
         if ($("#frmEdicionUsuario").validate().form()) {
             var codUsuario = $("#Usuario_CodUsuario").val();
@@ -1110,14 +1124,7 @@
             <div class="form-actions">
                 <a class="btn" href="@Url.Action("Index", "Usuario", new { area = "Intranet" })" ><i class="icon-arrow-left icon-cog"></i> Anterior</a>
                 
-                @*@if (Accion.Consultar.Equals(Model.Accion))
-                {
-                    <span></span>
-                }
-                else
-                {
-                    <a class="btn btn-info"  onclick ="validacion();"><i class=" icon-hdd icon-white"></i> Grabar</a>
-                }*@
+               
                 
             </div>
            

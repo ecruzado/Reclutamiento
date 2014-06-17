@@ -32,6 +32,8 @@
 
         
         $("#btnGuardarCriterio").click(function () {
+
+            validaSesIntranet();
             //if ($("#frmCriterio").validate().form()) {
 
             if(valida()){
@@ -199,6 +201,8 @@
         });
 
         $('#Agregar').click(function () {
+            validaSesIntranet();
+
             var codigoCriterio = $("#Criterio_IdeCriterio").val();
             if (codigoCriterio != null && codigoCriterio > 0) {
                 mostrarAgregarEstudios(0, codigoCriterio);
@@ -209,6 +213,8 @@
         });
 
         $('#btnEditar').click(function () {
+
+            validaSesIntranet();
                 var codigoCriterio = $("#Criterio_IdeCriterio").val();
                 var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
                 if (selr != null) {
@@ -220,6 +226,8 @@
         });
 
         $('#btnEliminar').click(function () {
+
+            validaSesIntranet();
             var codigoCriterio = $("#Criterio_IdeCriterio").val();
             var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
             if (selr != null) {
@@ -235,6 +243,8 @@
         
 
         $('#btnGuardar').click(function () {
+            validaSesIntranet();
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("Edit", "Criterio")',

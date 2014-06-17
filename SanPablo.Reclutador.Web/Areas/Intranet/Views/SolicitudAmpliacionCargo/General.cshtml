@@ -189,6 +189,8 @@
         $(document).ready(function () {
 
             $('#btnAgregarHorario').click(function () {
+                validaSesIntranet();
+
                 mostrarAgregarHorario();
             });
 
@@ -229,6 +231,8 @@
 
 
             $('#btnEditarHorario').click(function () {
+                validaSesIntranet();
+
                 var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
                 if (ideHorario != null) {
                     mostrarEditarHorario(ideHorario);
@@ -240,6 +244,8 @@
 
             // btn Eliminar
             $('#btnEliminarHorario').click(function () {
+                validaSesIntranet();
+
                 var ideHorario = jQuery('#grdListHorario').jqGrid('getGridParam', 'selrow');
                 if (ideHorario != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');
@@ -262,6 +268,8 @@
 
 
             $('#btnAgregarUbigeo').click(function () {
+                validaSesIntranet();
+
                 mostrarAgregarUbigeo();
             });
 
@@ -300,6 +308,8 @@
             });
 
             $('#btnEditarUbigeo').click(function () {
+                validaSesIntranet();
+
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
                 if (ideUbigeo != null) {
                     mostrarEditarUbigeo(ideUbigeo);
@@ -311,6 +321,8 @@
 
             // btn Eliminar
             $('#btnEliminarUbigeo').click(function () {
+                validaSesIntranet();
+
                 var ideUbigeo = jQuery('#grdListUbigeo').jqGrid('getGridParam', 'selrow');
                 if (ideUbigeo != null) {
                     $("#spanMensaje").html('¿Está seguro que desea eliminar el registro?.');

@@ -33,6 +33,9 @@
 
 
     $('#btnBuscarReemplazo').click(function () {
+
+        validaSesIntranet();
+
         if (valida()) {
             $('#grdListBusquedaReemplazo').trigger('reloadGrid');
         }
@@ -41,7 +44,7 @@
 
 
     $('#btnEliminar').click(function () {
-       
+        validaSesIntranet();
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
         var idSol = rowData.IdeSolReqPersonal;
@@ -73,7 +76,7 @@
 
 
     $('#btnPreseleccion').click(function () {
-
+        validaSesIntranet();
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
 
@@ -118,6 +121,8 @@
 
 
     $('#btnRankingSol').click(function () {
+        validaSesIntranet();
+
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdListBusquedaReemplazo').jqGrid('getRowData', selr);
         var pagina = '@TipoSolicitud.Remplazo';
@@ -157,6 +162,8 @@
     }); 
 
     $('#btnRequerimintoSol').click(function () {
+
+        validaSesIntranet();
         var selr = jQuery('#grdListBusquedaReemplazo').jqGrid('getGridParam', 'selrow');
         var pagina = '@TipoSolicitud.Remplazo';
         if (selr != null) {

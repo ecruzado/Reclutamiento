@@ -31,11 +31,12 @@
     $('#SolicitudRequerimiento_FechaInicioBus,#SolicitudRequerimiento_FechaFinBus').attr("readonly", "readonly");
 
     $('#btnBuscarReemplazo').click(function () {
-
+        validaSesIntranet();
         $('#grdList').trigger('reloadGrid');
     });
 
     $('#btnActivarDesactivar').click(function () {
+        validaSesIntranet();
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         if (selr != null) {
             $('#updateDialog').dialog('open');
@@ -72,7 +73,7 @@
 
 
     $('#btnConsultarSolicitud').click(function () {
-
+        validaSesIntranet();
         var ide = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', ide);
         var tipoSolicitud = rowData.TipoSol;
@@ -88,7 +89,7 @@
     });
 
     $('#btnPreseleccion').click(function () {
-
+        validaSesIntranet();
         var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
 
@@ -115,7 +116,9 @@
 
 
 
-         $('#btnRankingSol').click(function () {
+    $('#btnRankingSol').click(function () {
+
+        validaSesIntranet();
              var selr = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
              var rowData = jQuery('#grdList').jqGrid('getRowData', selr);
              var pagina = '@TipoSolicitud.ConsultaRequerimientos';
