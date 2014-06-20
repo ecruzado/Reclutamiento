@@ -207,9 +207,10 @@
         var archivo = 'application.gif';
         var pagina = $('#pagina').val();
         var usuario = $('#usuarioSession').val();
+
         if (pagina == "04") {
             if (usuario == rowObject[8]) {
-                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0], 'S'+ ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
             else {
                 strImg = '<img onclick="mostrarMensajeAlerta();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
@@ -217,10 +218,11 @@
         }
         else {
             if (rowObject[4] == "04") {
-                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0] + ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0],'S'+ ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
             else {
-                strImg = '<img onclick="mostrarMensajeAnalista();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                strImg = '<img onclick="mostraringresoocomentario(' + rowObject[0],'N'+ ');" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
+                //strImg = '<img onclick="mostrarMensajeAnalista();" src="' + imgPath + archivo + '" width="16" height="16" title="Ingresar Nota" alt="Ingresar Nota">';
             }
         }
         
@@ -266,7 +268,7 @@
         });
     }*@
 
-    function mostraringresoocomentario(idReclutaPersoExam) {
+    function mostraringresoocomentario(idReclutaPersoExam, editar) {
         //var idReclutaPersoExam = jQuery('#grdList').jqGrid('getGridParam', 'selrow');
         //if (idReclutaPersoExam != null && idReclutaPersoExam > 0) {
         validaSesIntranet();
@@ -281,7 +283,10 @@
                     if (data.Resultado) {
                         
                             var dialogDiv = $('#updateDialog');
-                            $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', { id: idReclutaPersoExam }, function (data) {
+                            $.get('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")', {
+                                id: idReclutaPersoExam,
+                                modo: editar
+                            }, function (data) {
                                 dialogDiv.html(data);
                                 $.validator.unobtrusive.parse($("#updateDialog"));
                                 dialogDiv.dialog('open');
@@ -323,6 +328,7 @@
                     <td class="span5">
                         <label class="control-label" for="inputSuccess">Solicitud</label>
                     <div class="controles">
+                        
                         @Html.TextBoxFor(model => model.pagina, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.IdeSolReqPersonal, new { style = "display: none;" }) 
                         @Html.TextBoxFor(model => model.tipsol, new { style = "display: none;" })  

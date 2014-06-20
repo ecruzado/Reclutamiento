@@ -274,11 +274,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         [ValidarSesion]
-        public ActionResult PopupResultado(string id)
+        public ActionResult PopupResultado(string id, string accion)
         {
 
             var modelResultado = iniciarPopupResultado();
-
+            modelResultado.tipoAccion = accion;
             int idRecluPersoExamen = Convert.ToInt32(id);
             if (idRecluPersoExamen != 0)
             {
@@ -440,7 +440,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             model.ListaAprobadoDesaprobado = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.IdeGeneral == Convert.ToInt32(TipoTabla.EstadoEvaluacion) && x.Valor != EstadoEvaluacion.Pendiente 
                                                                                                       && x.Valor != EstadoEvaluacion.Evaluado && x.Valor != EstadoEvaluacion.Programado));
-            
+
+
+            model.tipoAccion = Indicador.Si;
             return model;
         }
 

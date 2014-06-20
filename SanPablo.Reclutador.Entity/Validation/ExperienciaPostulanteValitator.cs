@@ -64,7 +64,7 @@
                 .WithMessage("Máx. 50 caracteres");
 
             RuleFor(x => x.FechaTrabajoFin)
-                .GreaterThan(x => x.FechaTrabajoInicio.Value).When(x => x.FechaTrabajoInicio != null)
+                .GreaterThanOrEqualTo(x => x.FechaTrabajoInicio.Value).When(x => x.FechaTrabajoInicio != null)
                 .When(x => x.ActualmenteTrabajando.Equals(false))
                 .WithMessage("Ingresar una fecha final válida");
 

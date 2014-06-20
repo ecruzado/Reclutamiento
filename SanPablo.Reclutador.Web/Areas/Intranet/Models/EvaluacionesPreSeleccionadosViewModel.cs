@@ -37,6 +37,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string idReclutaPost { get; set; }
         //public string tipSol { get; set; }
         public string ind { get; set; }
+
+        public string tipoAccion { get; set; }
             
 
 

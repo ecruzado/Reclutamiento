@@ -666,7 +666,13 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     else
                     {
                        // model.btnVerPublicar = Visualicion.NO;
-                        model.btnVerPublicar = Visualicion.SI;
+                        if ((solicitud != null) && (solicitud.TipEtapa == Etapa.Publicado))
+                        {
+                            model.btnVerPublicar = Visualicion.SI;
+                        }
+                        else {
+                            model.btnVerPublicar = Visualicion.NO;
+                        }
                     }
                     model.btnVerPerfil = Visualicion.SI;
                     break;
