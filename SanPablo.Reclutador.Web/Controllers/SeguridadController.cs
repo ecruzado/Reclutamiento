@@ -136,7 +136,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             else
             {
                 ObjJsonMessage.Resultado = false;
-                ObjJsonMessage.Mensaje = "Usuario o contraseña incorrecta.";
+                ObjJsonMessage.Mensaje = "La dirección de correo electrónico o la contraseña que has introducido no son correctas";
             }
 
             return Json(ObjJsonMessage);
