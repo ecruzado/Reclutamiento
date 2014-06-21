@@ -206,8 +206,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Areas = new List<Area>();
             model.Areas.Add(new Area { IdeArea = 0, NombreArea = "Seleccionar" });
 
-            model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSede(Convert.ToInt32(Session[ConstanteSesion.Sede])));
-            model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+            //model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSede(Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            //model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
+
+            model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSedeConsulta(Convert.ToInt32(Session[ConstanteSesion.Sede])));
+            model.Cargos.Insert(0, new Cargo { CodigoCargo = "0", NombreCargo = "Seleccionar" });
 
             model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
             model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
@@ -259,8 +262,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 solicitudRequerimiento.TipEtapa = (grid.rules[8].data == null ? "" : grid.rules[8].data);
                 solicitudRequerimiento.TipEstado = (grid.rules[9].data == null ? "" : grid.rules[9].data);
                 solicitudRequerimiento.TipoSolicitud = (grid.rules[10].data == "0"? "" : grid.rules[10].data);
-                //solicitudRequerimiento.CodSolReqPersonal = (grid.rules[11].data == null ? "" : grid.rules[11].data);
-                solicitudRequerimiento.IdeSolReqPersonal = (grid.rules[11].data == null ? 0 : Convert.ToInt32(grid.rules[11].data));
+                solicitudRequerimiento.CodSolReqPersonal = (grid.rules[11].data == null ? "" : grid.rules[11].data);
+                solicitudRequerimiento.IdeSolReqPersonal = (grid.rules[12].data == null ? 0 : Convert.ToInt32(grid.rules[12].data));
 
                 lista = _listaSolicitudes.ListaSolicitudesRequerimientos(solicitudRequerimiento);
 

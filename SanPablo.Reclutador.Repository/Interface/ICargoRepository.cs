@@ -62,5 +62,12 @@ using System.Data;
         /// <param name="obj"></param>
         /// <returns></returns>
         List<Cargo> GetCargoxSede(Cargo obj);
+
+        /// <summary>
+        /// CARGOS POR SEDE
+        /// </summary>
+        /// <param name="ideSede"></param>
+        /// <returns></returns>
+        List<Cargo> listarCargosSedeConsulta(int ideSede);
     }
 }

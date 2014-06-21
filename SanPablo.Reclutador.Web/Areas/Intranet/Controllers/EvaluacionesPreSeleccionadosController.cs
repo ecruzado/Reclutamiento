@@ -274,11 +274,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         }
 
         [ValidarSesion]
-        public ActionResult PopupResultado(string id, string accion)
+        public ActionResult PopupResultado(string id, string modo)
         {
 
             var modelResultado = iniciarPopupResultado();
-            modelResultado.tipoAccion = accion;
+            modelResultado.tipoAccion = modo;
             int idRecluPersoExamen = Convert.ToInt32(id);
             if (idRecluPersoExamen != 0)
             {
