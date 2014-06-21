@@ -249,7 +249,7 @@
                     { field: 'tipEtapa', data: $("#SolicitudRequerimiento_TipEtapa").val() },
                     { field: 'tipEstado', data: $("#SolicitudRequerimiento_TipEstado").val() },
                     { field: 'tipSol', data: $("#SolicitudRequerimiento_TipoSolicitud").val() },
-                   // { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodSolReqPersonal").val() }
+                    { field: 'codSolicitud', data: $("#SolicitudRequerimiento_CodCargo").val() },
                     { field: 'idSolicitud', data: $("#SolicitudRequerimiento_IdeSolReqPersonal").val() }
                 
 
@@ -404,7 +404,8 @@
                        
                             <label class="control-label" for="inputSuccess">Cargo</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo),new {  data_val = "false"})
+                              @*  @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeCargo, new SelectList(Model.Cargos, "IdeCargo", "NombreCargo", Model.SolicitudRequerimiento.IdeCargo),new {  data_val = "false"})*@
+                              @Html.DropDownListFor(model => model.SolicitudRequerimiento.CodCargo, new SelectList(Model.Cargos, "CodigoCargo", "NombreCargo", Model.SolicitudRequerimiento.CodCargo),new {  data_val = "false"})
                             </div>
                     </td>
                     <td class="span5" style="width:500px">
