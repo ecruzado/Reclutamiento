@@ -42,8 +42,8 @@
               .NotEmpty()
               .WithMessage("Ingrese los motivos del requerimiento");
             RuleFor(x => x.Motivo)
-                .Length(1, 255)
-                .WithMessage("El número máximo de caracteres permitido paea este campo es 255");
+                .Length(1, 1000)
+                .WithMessage("El número máximo de caracteres permitido paea este campo es 1000");
 
             RuleFor(x => x.EstadoActivo)
                .NotEmpty()

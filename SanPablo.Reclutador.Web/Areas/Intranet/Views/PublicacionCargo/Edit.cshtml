@@ -352,11 +352,11 @@
             return false;
         }
 
-        if ((observacion.length == 0) || (observacion.length > 255))
-        {
-            MostrarMensaje('Ingresar una observación, máx. 255 caracteres', "Mensaje");
-            return false;
-        }
+        //if ((observacion.length == 0) || (observacion.length > 255))
+        //{
+        //    MostrarMensaje('Ingresar una observación, máx. 255 caracteres', "Mensaje");
+        //    return false;
+        //}
 
         return true;
 
@@ -588,16 +588,17 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01"> <strong> Observaciones</strong><span class="text-error">*</span> </label>
+                        <label class="control-label" for="input01"> <strong> Observaciones</strong> </label>
                          <div class="controls">
                             
                              @if (Indicador.Si.Equals(Model.editarObservaciones))
                              { 
                                  @Html.TextAreaFor(model => model.SolicitudCargo.ObservacionPublicacion, new { @style = "width:800px;height:100px;resize:none;", onblur = "aMays(event, this)", maxlength = "255" })
-                                <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div> 
+                                <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>
+                                    @* 
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudCargo.ObservacionPublicacion)
-                                    </div>
+                                    </div>*@
                                 
                              }
                              else

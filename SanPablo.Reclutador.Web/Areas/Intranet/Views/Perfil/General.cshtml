@@ -106,7 +106,7 @@
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Sexo <span class="text-error">*</span></label> 
+                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Género <span class="text-error">*</span></label> 
                             @if (Model.Accion.Equals(Accion.Consultar))
                             { 
                                 @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" , disabled = "disabled"})
@@ -260,11 +260,22 @@
             <div class="opciones">
              @if (Accion.Enviar == Model.Accion)
              {
-                <a id="btnGrabar"  class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+                @*<a id="btnGrabar"  class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>*@
                 //<button id="btnGrabar" type="submit" class="btn btn-info"></button>
+                <a id="btnGrabarAnterior" class="btn btn-info" ><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a id="btnGrabarSiguiente" class="btn btn-info" ><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                
              }
-                <a class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
-                <a class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+             else
+             {
+                @*
+                 <a id="btnGrabarAnterior" class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a id="btnGrabarSiguiente" class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                 *@
+                <a  class="btn btn-info" href="@Url.Action("Index", "Perfil")"><i class="icon-arrow-left icon-white"></i> Anterior</a>
+                <a  class="btn btn-info" href="@Url.Action("Estudio", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                 
+             }
                 
             </div>
 
@@ -318,7 +329,7 @@
             });
             
 
-            $('#btnGrabar').click(function () {
+         $('#btnGrabarAnterior').click(function () {
 
                 validaSesIntranet();
                    if ($("#generalPerfilForm").validate().form()) {
@@ -329,13 +340,14 @@
                        $.ajax({
                         type: "POST",
                         data: $("#generalPerfilForm").serialize(),
-                        url: '@Url.Action("General", "Perfil", new { area = "Intranet"})',
+                        url: '@Url.Action("General", "Perfil", new { area = "Intranet" })',
                         traditional: true,
                         success: function (data) {
                             if (data.redirecciona) {
                                 SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                             }if (data.Resultado) {
-                                MostrarInfo(data.Mensaje,"CONFIRMACIÓN");
+                                //informationAntGen("divInfo", "spanInfo", data.Mensaje, "CONFIRMACIÓN");
+                                window.location = '@Url.Action("Index", "Perfil")';
                             }
                         }
                        });
@@ -347,9 +359,41 @@
                        $("#Cargo_Sexo").focus();
                    }
             
-            });
+         });
 
+         $('#btnGrabarSiguiente').click(function () {
+
+             validaSesIntranet();
+             if ($("#generalPerfilForm").validate().form()) {
+
+                 if (validacion()) {
+
+                       
+                     $.ajax({
+                         type: "POST",
+                         data: $("#generalPerfilForm").serialize(),
+                         url: '@Url.Action("General", "Perfil", new { area = "Intranet" })',
+                        traditional: true,
+                        success: function (data) {
+                            if (data.redirecciona) {
+                                SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
+                            }if (data.Resultado) {
+                               // informationSigGen("divInfo", "spanInfo", data.Mensaje, "CONFIRMACIÓN");
+                                window.location = '@Url.Action("Estudio", "Perfil")';
+                            }
+                        }
+                       });
+                } else {
+                    validarEdad();
+                    $("#Cargo_Sexo").focus();
+                }
+            } else {
+                $("#Cargo_Sexo").focus();
+            }
             
+         });
+
+       
 
 
 
@@ -492,7 +536,7 @@
                 var edadInicio = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("listaEdadGenerar","Perfil",new { area = "Intranet"})',
+                    url: '@Url.Action("listaEdadGenerar", "Perfil", new { area = "Intranet" })',
                 data: { edadInicio: edadInicio },
                 success: function (respuesta) {
                     $("select#Cargo_EdadFin").empty();
@@ -599,6 +643,44 @@
     });
     return false;
     }
+
+    function informationSigGen(selectorDiv, selectorSpan, msg, title) {
+         $('#' + selectorSpan).html(msg);
+         var opt = {
+             title: title,
+             autoOpen: false,
+             modal: true,
+             buttons: {
+                 "Aceptar": function () {
+                     $(this).dialog("close");
+
+                     window.location = '@Url.Action("Estudio", "Perfil")';
+                  
+                  }
+              }
+          };
+          $('#' + selectorDiv).dialog(opt).dialog('open');
+      }
+
+
+     function informationAntGen(selectorDiv, selectorSpan, msg, title) {
+         $('#' + selectorSpan).html(msg);
+         var opt = {
+             title: title,
+             autoOpen: false,
+             modal: true,
+             buttons: {
+                 "Aceptar": function () {
+                     $(this).dialog("close");
+
+                    
+                     window.location = '@Url.Action("Index", "Perfil")';
+
+                 }
+             }
+         };
+         $('#' + selectorDiv).dialog(opt).dialog('open');
+     }
 
     function mostrarEditarHorario(ideHorario) {
         var dialogDiv = $('#updateDialogHorario');

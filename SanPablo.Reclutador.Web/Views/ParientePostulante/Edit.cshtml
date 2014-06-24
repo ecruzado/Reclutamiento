@@ -49,27 +49,15 @@
         $('select#Pariente_TipoDeVinculo').change(function () {
             var tipoVinculo = $(this).val();
             var span = document.getElementById('spanFecNac');
-            if (tipoVinculo == "03") {
+            if (tipoVinculo == "03" || tipoVinculo == "05") {
                 span.innerHTML = "*";
             }
+          
+
             else { span.innerHTML = "";}
 
          })
-        //    //$('#fechaNacimiento').change(function () {
-        //    //    var date = $(this).val();
-        //    //    var arrDate = date.split("/");
-        //    //    var today = new Date();
-        //    //    var msj = document.getElementById('msjError');
-                
-        //    //    useDate = new Date(arrDate[2], arrDate[1] - 1, arrDate[0]);
-
-        //    //    if (useDate > today) {
-        //    //        msj.innerHTML = "Ingresar un fecha válida";
-        //    //        msj.style.display = "block";
-        //    //        $(this).val('');
-        //    //    }
-        //    //    else { msj.style.display = "none"; }
-        //    //});
+       
         });
     </script>
 @using (Html.BeginForm("Edit", "ParientePostulante", FormMethod.Post, new { @id = "parientePostulanteForm" }))

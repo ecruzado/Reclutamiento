@@ -241,9 +241,20 @@
         public const string TipoColegio = "03";
     }
 
+    /// <summary>
+    /// tipo de vinculo
+    /// </summary>
     public sealed class TipoVinculo
     {
+        
+        /// <summary>
+        /// hijo
+        /// </summary>
         public const string Hijo = "03";
+        /// <summary>
+        /// hija
+        /// </summary>
+        public const string Hija = "05";
     }
 
     public sealed class TipoSolicitud

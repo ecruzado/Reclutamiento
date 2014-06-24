@@ -336,7 +336,7 @@
             try
             {
                 SolicitudNuevoCargoValidator validation = new SolicitudNuevoCargoValidator();
-                ValidationResult result = validation.Validate(solicitudNuevoCargo, "ObservacionPublicacion", "FechaPublicacion", "FechaExpiracion");
+                ValidationResult result = validation.Validate(solicitudNuevoCargo, "FechaPublicacion", "FechaExpiracion");
                
 
                 if (!result.IsValid)
@@ -482,7 +482,7 @@
                     var solicitud = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
                     solicitud.FechaExpiracion = fecha;
                     solicitud.FechaPublicacion = fechaPublicacion;
-                    solicitud.ObservacionPublicacion = Observacion;
+                    solicitud.ObservacionPublicacion = (Observacion == null ? "" : Observacion);
                     _solicitudNuevoCargoRepository.Update(solicitud);
 
                     objJsonMessage.Mensaje = "Solicitud actualizada correctamente";
@@ -494,7 +494,7 @@
                     objJsonMessage.Mensaje = "ERROR: no se pudo actualizar la fecha de expiración";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
- 
+
                 }
                     
              }

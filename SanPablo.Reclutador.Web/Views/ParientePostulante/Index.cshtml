@@ -51,26 +51,28 @@
                 modal: true,
                 buttons: {
                     "Grabar": function (e) {
-                        validarFechaNac();
-                        e.preventDefault();
-                        var result = $('#parientePostulanteForm').valid();
-                        if (result) {
-                            $.post('@Url.Action("Edit", "ParientePostulante")',
-                                $("#parientePostulanteForm").serialize(),
-                                function (respuesta) {
-                                    if (respuesta.Resultado) {
-                                        $("#updateDialog").dialog("close");
-                                        location.reload(true);
+                        if (validarFechaNac()) {
+                            e.preventDefault();
+                            var result = $('#parientePostulanteForm').valid();
+                            if (result) {
+                                $.post('@Url.Action("Edit", "ParientePostulante")',
+                                    $("#parientePostulanteForm").serialize(),
+                                    function (respuesta) {
+                                        if (respuesta.Resultado) {
+                                            $("#updateDialog").dialog("close");
+                                            location.reload(true);
 
+                                        }
+                                        //else {
+                                        //    var mensj = document.getElementById("mensajeError");
+                                        //    mensj.innerHTML = respuesta.Mensaje;
+                                        //    mensj.style.display = "block";
+                                        //}
                                     }
-                                    //else {
-                                    //    var mensj = document.getElementById("mensajeError");
-                                    //    mensj.innerHTML = respuesta.Mensaje;
-                                    //    mensj.style.display = "block";
-                                    //}
-                                }
-                            );
+                                );
+                            }
                         }
+
                     },
                     "Cancelar": function () {
                         $(this).dialog("close");
@@ -172,25 +174,52 @@
             var vinculo = $('#Pariente_TipoDeVinculo').val();
             var menjError = document.getElementById("msjError");
             var fecha = $('#Pariente_FechaNacimiento').val();
+            
+
             if (vinculo == "03") {
                 
                 if ((fecha == null)||(fecha =="")) {
 
                     menjError.style.display = "block";
+                    return false;
                 }
                 else {
-                    var fechaActual = new Date();
-                    if (Date.parse(fecha) > Date.parse(fechaActual)) {
-                        $('#Pariente_FechaNacimiento').val("");
-                        menjError.innerHTML = "Ingresar una fecha válida"
-                        menjError.style.display = "block";
-                    }
-                    else { menjError.style.display = "none"; }
+                    //var fechaActual = new Date();
+                    //if (Date.parse(fecha) > Date.parse(fechaActual)) {
+                    //    $('#Pariente_FechaNacimiento').val("");
+                    //    menjError.innerHTML = "Ingresar una fecha válida"
+                    //    menjError.style.display = "block";
+                    //    return false;
+                    //}
+                    //else { menjError.style.display = "none"; }
+                    menjError.style.display = "none";
+                    return true;
+                }
+            }else if
+            (vinculo == "05") {
+                
+                if ((fecha == null)||(fecha =="")) {
+
+                    menjError.style.display = "block";
+                    return false;
+                }
+                else {
+                    //var fechaActual = new Date();
+                    //if (Date.parse(fecha) > Date.parse(fechaActual)) {
+                    //    $('#Pariente_FechaNacimiento').val("");
+                    //    menjError.innerHTML = "Ingresar una fecha válida"
+                    //    menjError.style.display = "block";
+                    //    return false;
+                    //}
+                    //else { menjError.style.display = "none"; }
+                    menjError.style.display = "none";
+                    return true;
+
                 }
             }
             else { menjError.style.display = "none"; }
 
-           
+            return true;
             
         }
 
@@ -199,9 +228,11 @@
             var span = document.getElementById('spanFecNac');
             var opcion = $('Pariente_TipoDeVinculo').val();
 
-            if (opcion == "03") {
+            if (opcion == "03" || opcion == "05") {
                 span.innerHTML = "*";
             }
+           
+
             else { span.innerHTML = ""; }
         }
     </script>
@@ -213,7 +244,7 @@
     <div class="span12">
         <div class="widget-box">
             <div class="widget-title">
-                <h5>Parientes</h5>
+                <h5>Familiares </h5>
             </div>
             @Html.HiddenFor(model=>model.porcentaje)
             <div style="margin-top:10px;margin-left:20px;" > Ingresar datos de la familia directa (padres, conyugue y/o hijos)</div>
@@ -242,7 +273,7 @@
             <div style="clear:both"></div>
         </div>
     </div>
-<div id="updateDialog" title="Datos de familiar"></div>
+<div id="updateDialog" title="Datos del familiar"></div>
  <div id="divMensaje">
         <span id="spanMensaje"></span>
     </div>

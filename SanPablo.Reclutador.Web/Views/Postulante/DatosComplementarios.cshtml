@@ -98,7 +98,7 @@
             <table style="margin-left:100px;">
                 <tr>
                     <td class="colEtiqueta" style="width:190px;">
-                        <label class="etiquetaFormulario" for="setipodocumento">Sueldo bruto (S/.) <span class="text-error">*</span></label>
+                        <label class="etiquetaFormulario" for="setipodocumento">Expectativa salarial, sueldo bruto (S/.). <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                          @Html.DropDownListFor(model => model.Postulante.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Valor", "Descripcion", Model.Postulante.TipoSalario))
@@ -148,7 +148,7 @@
                 </tr>
                 <tr>
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01">¿Actualmente tiene un pariente que ha trabajado con nosotros?</label>
+                        <label class="etiquetaFormulario" for="input01">¿Actualmente tiene algún familiar que trabaje con nosotros?. </label>
                     </td>
                     <td class="colInput">
                         @Html.RadioButtonFor(model => model.Postulante.IndicadorParientesCHSP, "S", new { @id="rd-btn-parienteCHSP"}) @Html.Label("SI", new { @style = "display: inline-block" }) &nbsp;&nbsp;&nbsp;
@@ -168,7 +168,7 @@
                 </tr>
                 <tr>
                     <td class="colEtiqueta">
-                        <label class="etiquetaFormulario" for="input01" id="labelNombre" style="display:none;" >Nombre del pariente</label>
+                        <label class="etiquetaFormulario" for="input01" id="labelNombre" style="display:none;" >Nombre del familiar</label>
                     </td>
                     <td class="colInput">
                          @Html.TextBoxFor(model => model.Postulante.ParienteNombre, new { @class = "textoFormulario", @style = "display:none;", onblur="aMays(event, this)" , maxlength="100" })
@@ -197,14 +197,22 @@
                             <tr>
                                 <td>
                                     @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"01", new { @id = "rad-btn-comoEntero" }) @Html.Label("Pagina Web CHSP", new { @style = "display: inline-block"}) &nbsp;&nbsp;&nbsp;
-                                    @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"02", new { @id = "rad-btn-comoEntero" }) @Html.Label("Internet", new { @style = "display: inline-block" })
+                                    
                                  </td>
+                                <td>
+                                    @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"02", new { @id = "rad-btn-comoEntero" }) @Html.Label("Internet", new { @style = "display: inline-block" })
+
+                                </td>
+
                                  <td></td>
                             </tr>
                             <tr>
                                 <td>
                                  @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"03", new { @id = "rad-btn-comoEntero" }) @Html.Label("Amigos/Familiares", new { @style = "display: inline-block" }) &nbsp;&nbsp;&nbsp;
-                                 @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero, "04", new { @id = "rad-btn-comoEntero" }) @Html.Label("Otros", new { @style = "display: inline-block" })
+                                 
+                                </td>
+                                <td>
+                                    @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero, "04", new { @id = "rad-btn-comoEntero" }) @Html.Label("Otros", new { @style = "display: inline-block" })
                                 </td>
                                 <td>@Html.TextBoxFor(model => model.Postulante.DescripcionOtroMedio, new { @class = "input-medium", @style = "disabled:disabled", maxlength="50", onblur="aMays(event, this)"})
                                    <div class="tex-error" style="font-size:12px;color:red"> 
@@ -213,11 +221,21 @@
                             </tr>
                             <tr>
                                 <td>
-                                 @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"05", new { @id = "rad-btn-comoEntero" }) @Html.Label("Diarios", new { @style = "display: inline-block" })
-                                 <div class="tex-error" style="font-size:12px;color:red"> 
+                                 @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"05", new { @id = "rad-btn-comoEntero" }) @Html.Label("Diarios", new { @style = "display: inline-block" }) &nbsp;&nbsp;&nbsp;
+                                
+                                 </td>
+                                <td>
+                                    @Html.RadioButtonFor(model => model.Postulante.TipoComoSeEntero,"06", new { @id = "rad-btn-comoEntero" }) @Html.Label("Universidad", new { @style = "display: inline-block" })
+                                </td>
+                                <td>
+                                    <div class="tex-error" style="font-size:12px;color:red"> 
                                     @Html.ValidationMessageFor(model => model.Postulante.TipoComoSeEntero)
                                 </div>
                                 </td>
+                                
+                                
+
+
                             </tr>
                         </table>
                     </td>

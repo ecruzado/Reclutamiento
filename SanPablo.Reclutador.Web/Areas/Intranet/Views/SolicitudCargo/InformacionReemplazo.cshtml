@@ -956,15 +956,15 @@
         if (aprobado == 1) {
             return true;
         }
-        else {
+        //else {
 
-            if (observacion != null && longitud > 0) {
-                return true;
-            } else {
-                return false;
-            }
+        //    if (observacion != null && longitud > 0) {
+        //        return true;
+        //    } else {
+        //        return false;
+        //    }
 
-        }
+        //}
     }
 
 
@@ -1041,10 +1041,10 @@
             return false;
         }
 
-        if (observ.length==0) {
-            MostrarMensaje("Ingrese observaciones", "ALERTA");
-            return false;
-        }
+        //if (observ.length==0) {
+        //    MostrarMensaje("Ingrese observaciones", "ALERTA");
+        //    return false;
+        //}
 
 
         return true;
@@ -1231,7 +1231,7 @@
                             <div class="controles">
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
                             {
-                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { disabled ="disabled" })                      
+                                 @Html.DropDownListFor(model => model.SolReqPersonal.IdeDependencia, new SelectList(Model.listaDependencia, "IdeDependencia", "NombreDependencia", Model.SolReqPersonal.IdeDependencia), new { @readonly="readonly" })                      
                             }
                             else
                             {
@@ -1260,7 +1260,7 @@
                             
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
                             {
-                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo), new { disabled ="disabled" })
+                                @Html.DropDownListFor(model => model.SolReqPersonal.IdeCargo, new SelectList(Model.listaTipCargo, "IdeCargo", "NombreCargo", Model.SolReqPersonal.IdeCargo), new { @disabled="disabled" })
                             }
                             else
                             {
@@ -1277,7 +1277,7 @@
 
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
                             {
-                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { disabled ="disabled" })                      
+                            @Html.DropDownListFor(model => model.SolReqPersonal.IdeDepartamento, new SelectList(Model.listaDepartamento, "IdeDepartamento", "NombreDepartamento", Model.SolReqPersonal.IdeDepartamento), new { @readonly="readonly" })                      
                             }
                             else
                             {
@@ -1308,7 +1308,7 @@
                             
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
                             {
-                              @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante), new { disabled ="disabled"})
+                              @Html.DropDownListFor(model => model.SolReqPersonal.TipVacante, new SelectList(Model.listaTipVacante, "Valor", "Descripcion", Model.SolReqPersonal.TipVacante), new { @disabled="disabled"})
                             }
                             else
                             {
@@ -1325,7 +1325,7 @@
                                 
                             @if ( Accion.Aprobar.Equals(Model.Accion) || Accion.Publicar.Equals(Model.Accion))
                             {
-                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { disabled ="disabled" })                      
+                              @Html.DropDownListFor(model => model.SolReqPersonal.IdeArea, new SelectList(Model.listaArea, "IdeArea", "NombreArea", Model.SolReqPersonal.IdeArea), new { @readonly="readonly" })                      
                             }
                             else
                             {
@@ -1355,7 +1355,17 @@
                                 
                                 @if (!Accion.Publicar.Equals(Model.Accion))
                                 {
-                                    @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "2",style="width: 50px"})     
+
+                                    if (Visualicion.SI.Equals(Model.CampoNumVacantes))
+                                    {
+                                        @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario" ,onkeypress="return Funciones.isNumberKey(event)",maxlength = "2",style="width: 50px"})     
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.SolReqPersonal.NumVacantes, new { @class = "textoFormulario", onkeypress = "return Funciones.isNumberKey(event)", maxlength = "2", style = "width: 50px",@readonly = "readonly" })          
+                                    }
+                                    
+                                    
                                 }
                                 else
 	                            {
@@ -1373,13 +1383,20 @@
                             <div class="controles">
                             @if (!Accion.Publicar.Equals(Model.Accion))
                                 {
-                                
-                                    @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
+
+                                if (Visualicion.SI.Equals(Model.CampoTipPuesto))
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto))
+                                }
+                                else
+                                {
+                                  @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto), new { @disabled = "disabled"})
+                                }  
                                 
                                 }
                             else
                             {
-                                      @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto), new { @readonly = "readonly"})
+                                      @Html.DropDownListFor(model => model.SolReqPersonal.TipPuesto, new SelectList(Model.listaTipPuesto, "Valor", "Descripcion", Model.SolReqPersonal.TipPuesto), new { @disabled = "disabled"})
                             }
                         </div>
                         </td>                   
@@ -1387,7 +1404,7 @@
                     </tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="inputSuccess">Observaciones <span class="text-error">*</span></label>
+                        <label class="control-label" for="inputSuccess">Observaciones (Horario detallado, turno, otros). </label>
                         <div class="controles">
                                
                             
@@ -1430,9 +1447,20 @@
                                 }
                                 else
                                 {
-                                    <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>
+                                    if (Visualicion.SI.Equals(Model.CampoPopEditar))
+                                    {
+                                       <a class="btn btn-small btn-info" title="Agregar" id ="btnAgregarReemplazo"><i class="icon-plus icon-white"></i></a>
+                                    }
+                                    
                                     <a id="btnEditar"  class ="btn btn-small btn-info" title="Editar"><i class="icon-edit icon-white"></i></a>  
-                                    <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                                   
+                                    if (Visualicion.SI.Equals(Model.CampoPopEliminar))
+                                    {
+                                      <a class="btn btn-small btn-info" title="Eliminar" id="btnEliminaReemplazo"><i class="icon-remove icon-white"></i></a>                                  
+                                    }
+
+
+
                                 }
                             </div>
                             <div style="clear:both"></div>

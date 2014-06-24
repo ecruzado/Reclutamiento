@@ -288,6 +288,8 @@ namespace SanPablo.Reclutador.Web.Controllers
                                 Session[ConstanteSesion.ObjUsuarioExtranet] = objUSaurioExtranet;
                                 Session[ConstanteSesion.Usuario] = objUSaurioExtranet.IdUsuario;
                                 Session[ConstanteSesion.Rol] = SanPablo.Reclutador.Entity.Roles.Postulante;
+                             
+
                                 
                             }
 

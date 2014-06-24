@@ -513,10 +513,10 @@
             return false;
         }
 
-        if ((observacion.length == 0) || (observacion.length > 255)) {
-            MostrarMensaje('Ingresar una observación', "MENSAJE");
-            return false;
-        }
+        //if ((observacion.length == 0) || (observacion.length > 255)) {
+        //    MostrarMensaje('Ingresar una observación', "MENSAJE");
+        //    return false;
+        //}
 
         return true;
 
@@ -743,7 +743,7 @@
                         <tr><td>&nbsp;</td></tr>
                     <tr class="formulario-fila">
                         <td class="span5">
-                        <label class="control-label" for="input01"><strong>Observaciones</strong><span class="text-error">*</span> </label>
+                        <label class="control-label" for="input01"><strong>Observaciones</strong>@*<span class="text-error">*</span>*@ </label>
                          <div class="controls">
 
                              @if (Indicador.Si.Equals(Model.editarObservaciones))

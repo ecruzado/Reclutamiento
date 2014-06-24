@@ -682,11 +682,11 @@
                 <div style="clear:both"></div>
                 @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                 {
-                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none; ", maxlength = "255", onblur = "aMays(event, this)" })
+                    @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionFunciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none; ", maxlength = "1000", onblur = "aMays(event, this)" })
                     <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionFunciones)
                     </div>
-                    <div class="tex-error" style="font-size:11px;color:gray;margin-left: 10px">Máx. 255 caracteres</div>
+                    <div class="tex-error" style="font-size:11px;color:gray;margin-left: 10px">Máx. 1000 caracteres</div>
                 }
                 else
                 {
@@ -696,15 +696,15 @@
             </div>
             <div>
                 <div class="grilla-opciones">
-                <h6>Observaciones adicionales<span class="text-error">*</span></h6>
+                <h6>Observaciones adicionales (sustento)<span class="text-error">*</span></h6>
                 <div style="clear:both"></div>
                      @if (TipoSolicitud.Nuevo.Equals(Model.Pagina))
                      {
-                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", maxlength = "255", onblur = "aMays(event, this)" })
+                        @Html.TextAreaFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", maxlength = "1000", onblur = "aMays(event, this)" })
                          <div class="tex-error" style="font-size:12px;color:red;margin-left: 10px"> 
                             @Html.ValidationMessageFor(model => model.SolicitudNuevoCargo.DescripcionObservaciones)
                         </div>
-                        <div class="tex-error" style="font-size:11px;color:gray;margin-left: 10px">Máx. 255 caracteres</div>
+                        <div class="tex-error" style="font-size:11px;color:gray;margin-left: 10px">Máx. 1000 caracteres</div>
                      }
                      else
                      {

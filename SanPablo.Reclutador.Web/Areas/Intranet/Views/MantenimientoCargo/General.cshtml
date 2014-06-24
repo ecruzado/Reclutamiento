@@ -106,7 +106,7 @@
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Sexo <span class="text-error">*</span></label> 
+                            <label class="control-label" for="input01" style="display:inline-block; width:180px">Género <span class="text-error">*</span></label> 
                             @if (Model.Accion.Equals(Accion.Consultar))
                             { 
                                 @Html.DropDownListFor(model => model.Cargo.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.Cargo.Sexo), new { @style = "width: 150px; display:inline-block" , disabled = "disabled"})

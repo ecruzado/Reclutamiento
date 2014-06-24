@@ -549,7 +549,7 @@
                         </td>
                         <td style="width:40px;"></td>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="seSexo">Sexo <span class="text-error">*</span></label>
+                            <label class="etiquetaFormulario" for="seSexo">Género <span class="text-error">*</span></label>
                         </td>
                         <td class="colInput">
                             @Html.DropDownListFor(model => model.Postulante.IndicadorSexo, new SelectList(Model.Sexo, "Valor", "Descripcion", Model.Postulante.IndicadorSexo))
@@ -582,7 +582,7 @@
                 <table style="margin-left:120px;" >
                     <tr>
                         <td class="colEtiqueta">
-                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Perfil<span class="text-error">*</span></label>
+                            <label class="etiquetaFormulario" for="taobservaciongeneral" style="width:150px" >Resumen Profesional <span class="text-error">*</span></label>
                         </td >
                         <td colspan="4" class="colInput">
                             @Html.TextAreaFor(model => model.Postulante.Observacion, new { @class = "textoFormulario", rows="3", style="width:570px;height: 80px;resize:none;" , onblur="aMays(event, this)" })

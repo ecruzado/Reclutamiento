@@ -151,7 +151,7 @@
 
             RuleFor(x => x.ParienteNombre)
                 .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
-                .WithMessage("Ingresar nombre del pariente");
+                .WithMessage("Ingresar nombre del familiar");
 
             //RuleFor(x => x.ParienteNombre)
             //    .Length(0,100)
@@ -159,7 +159,7 @@
 
             RuleFor(x => x.ParienteCargo)
                 .NotEmpty().When(x => x.IndicadorParientesCHSP == null ? false : x.IndicadorParientesCHSP.Equals("S"))
-                .WithMessage("Ingresar cargo del pariente");
+                .WithMessage("Ingresar cargo del familiar");
 
             //RuleFor(x => x.ParienteCargo)
             //    .Length(0,50)

@@ -68,7 +68,7 @@
                     <tr>
                         <td></td>
                         <td class="td-label">
-                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Sexo</label> 
+                            <label class="control-label" for="input01" style="display:inline-block; width:170px">Género</label> 
                             @Html.DropDownListFor(model => model.SolReqPersonal.Sexo, new SelectList(Model.Sexos, "Valor", "Descripcion", Model.SolReqPersonal.Sexo), new { @style = "width: 150px; display:inline-block", disabled = "disabled"  })
                             <div class="tex-error" style="font-size:12px;color:red"> 
                                 @Html.ValidationMessageFor(model => model.SolReqPersonal.Sexo)

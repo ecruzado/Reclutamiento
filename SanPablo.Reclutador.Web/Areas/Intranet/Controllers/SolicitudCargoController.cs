@@ -176,6 +176,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "S";
                           model.CampoEtapa = "S";
+
+                          //model.CampoPopEliminar = "N";
+                          //model.CampoPopEditar = "N";
+                          //model.CampoTipPuesto = "N";
+                          //model.Vacantes = "N";
+
                           
                       }
 
@@ -186,6 +192,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnNuevo = "N";
                           model.btnRequerimiento = "S";
                           model.CampoEtapa = "S";
+
+                          //model.CampoPopEliminar = "S";
+                          //model.CampoPopEditar = "S";
+                          //model.CampoTipPuesto = "S";
+                          //model.Vacantes = "S";
                          
                       }
 
@@ -197,6 +208,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
                           model.CampoEtapa = "N";
+
+                          //model.CampoPopEliminar = "S";
+                          //model.CampoPopEditar = "S";
+                          //model.CampoTipPuesto = "S";
+                          //model.Vacantes = "S";
                         
                       }
 
@@ -209,6 +225,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnRequerimiento = "N";
                           model.CampoEtapa = "N";
 
+                          //model.CampoPopEliminar = "N";
+                          //model.CampoPopEditar = "N";
+                          //model.CampoTipPuesto = "N";
+                          //model.Vacantes = "N";
+
                       }
 
                       if (Roles.Gerente.Equals(idRol))
@@ -219,6 +240,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
                           model.CampoEtapa = "N";
+
+                          //model.CampoPopEliminar = "S";
+                          //model.CampoPopEditar = "S";
+                          //model.CampoTipPuesto = "S";
+                          //model.Vacantes = "S";
 
                       }
 
@@ -231,6 +257,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnRequerimiento = "N";
                           model.CampoEtapa = "N";
 
+                          //model.CampoPopEliminar = "S";
+                          //model.CampoPopEditar = "S";
+                          //model.CampoTipPuesto = "S";
+                          //model.Vacantes = "S";
+
                       }
 
                       if (Roles.Administrador_Sistema.Equals(idRol))
@@ -241,6 +272,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                           model.btnNuevo = "S";
                           model.btnRequerimiento = "S";
                           model.CampoEtapa = "S";
+
+                          //model.CampoPopEliminar = "S";
+                          //model.CampoPopEditar = "S";
+                          //model.CampoTipPuesto = "S";
+                          //model.Vacantes = "S";
 
                       }
 
@@ -655,6 +691,89 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             model.Accion = Accion.Enviar;
             model.idRol = Convert.ToInt32(codRol);
 
+
+
+            if (idRol > 0)
+            {
+                if (Roles.Analista_Seleccion.Equals(idRol))
+                {
+
+
+                    model.CampoPopEliminar = "N";
+                    model.CampoPopEditar = "N";
+                    model.CampoTipPuesto = "N";
+                    model.CampoNumVacantes = "N";
+
+
+                }
+
+                if (Roles.Encargado_Seleccion.Equals(idRol))
+                {
+
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Gerente_General_Adjunto.Equals(idRol))
+                {
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Jefe_Corporativo_Seleccion.Equals(idRol))
+                {
+
+                    model.CampoPopEliminar = "N";
+                    model.CampoPopEditar = "N";
+                    model.CampoTipPuesto = "N";
+                    model.CampoNumVacantes = "N";
+
+                }
+
+                if (Roles.Gerente.Equals(idRol))
+                {
+
+
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Jefe.Equals(idRol))
+                {
+
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Administrador_Sistema.Equals(idRol))
+                {
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+            }
+
+
             return View("InformacionReemplazo", model);
         }
 
@@ -909,7 +1028,84 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.CampoObservacion = Visualicion.NO;
                 }
             }
-                   
+
+
+            if (idRolUsuario > 0)
+            {
+                if (Roles.Analista_Seleccion.Equals(idRolUsuario))
+                {
+
+
+                    model.CampoPopEliminar = "N";
+                    model.CampoPopEditar = "N";
+                    model.CampoTipPuesto = "N";
+                    model.CampoNumVacantes = "N";
+
+
+                }
+
+                if (Roles.Encargado_Seleccion.Equals(idRolUsuario))
+                {
+
+                    model.CampoPopEliminar = "N";
+                    model.CampoPopEditar = "N";
+                    model.CampoTipPuesto = "N";
+                    model.CampoNumVacantes = "N";
+
+                }
+
+                if (Roles.Gerente_General_Adjunto.Equals(idRolUsuario))
+                {
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Jefe_Corporativo_Seleccion.Equals(idRolUsuario))
+                {
+
+                    model.CampoPopEliminar = "N";
+                    model.CampoPopEditar = "N";
+                    model.CampoTipPuesto = "N";
+                    model.CampoNumVacantes = "N";
+
+                }
+
+                if (Roles.Gerente.Equals(idRolUsuario))
+                {
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Jefe.Equals(idRolUsuario))
+                {
+
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+                if (Roles.Administrador_Sistema.Equals(idRolUsuario))
+                {
+
+                    model.CampoPopEliminar = "S";
+                    model.CampoPopEditar = "S";
+                    model.CampoTipPuesto = "S";
+                    model.CampoNumVacantes = "S";
+
+                }
+
+            }
+
 
             return View("InformacionReemplazo", model);
         }
@@ -1039,13 +1235,40 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     var objSol = _solReqPersonalRepository.GetSingle(x => x.CodSolReqPersonal == model.SolReqPersonal.CodSolReqPersonal && x.TipoSolicitud==TipoSolicitud.Remplazo);
 
-                    objSol.IdeArea = model.SolReqPersonal.IdeArea;
-                    objSol.IdeDependencia = model.SolReqPersonal.IdeDependencia;
-                    objSol.IdeDepartamento = model.SolReqPersonal.IdeDepartamento;
-                    objSol.Observacion = model.SolReqPersonal.Observacion;
-                    objSol.TipPuesto = model.SolReqPersonal.TipPuesto;
-                    objSol.TipVacante = model.SolReqPersonal.TipVacante;
-                    objSol.NumVacantes = model.SolReqPersonal.NumVacantes;
+                    if (model.SolReqPersonal.IdeArea!=null)
+                    {
+                        objSol.IdeArea = model.SolReqPersonal.IdeArea;
+                    }
+                    if (model.SolReqPersonal.IdeDependencia!=null)
+                    {
+                        objSol.IdeDependencia = model.SolReqPersonal.IdeDependencia;
+                    }
+                    if (model.SolReqPersonal.IdeDepartamento!=null)
+                    {
+                        objSol.IdeDepartamento = model.SolReqPersonal.IdeDepartamento;
+                    }
+                    if (model.SolReqPersonal.Observacion!=null)
+                    {
+                        objSol.Observacion = model.SolReqPersonal.Observacion;
+                    }
+
+                    if (model.SolReqPersonal.TipPuesto!=null)
+                    {
+                         objSol.TipPuesto = model.SolReqPersonal.TipPuesto;
+                    }
+
+
+                    if (model.SolReqPersonal.TipVacante!=null)
+                    {
+                         objSol.TipVacante = model.SolReqPersonal.TipVacante;
+                    }
+
+                    if (model.SolReqPersonal.NumVacantes!=null)
+                    {
+                        objSol.NumVacantes = model.SolReqPersonal.NumVacantes;
+                    }
+
+                    
                     objSol.FechaModificacion = FechaSistema;
                     objSol.UsuarioModificacion = UsuarioActual.NombreUsuario;
                     _solReqPersonalRepository.Update(objSol);

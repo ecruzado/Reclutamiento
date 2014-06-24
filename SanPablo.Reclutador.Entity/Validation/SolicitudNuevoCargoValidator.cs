@@ -69,8 +69,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingrese las funciones");
             RuleFor(x => x.DescripcionFunciones)
-                .Length(1, 255)
-                .WithMessage("Máx. 255 caracteres");
+                .Length(1, 1000)
+                .WithMessage("Máx. 1000 caracteres");
 
             RuleFor(x => x.DescripcionCompetencias)
                 .NotEmpty()
@@ -84,8 +84,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingrese las observaciones adicionales");
             RuleFor(x => x.DescripcionObservaciones)
-                .Length(1, 255)
-                .WithMessage("Máx. 255 caracteres");
+                .Length(1, 1000)
+                .WithMessage("Máx. 1000 caracteres");
 
 
             RuleFor(x => x.FechaPublicacion)

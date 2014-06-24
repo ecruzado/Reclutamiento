@@ -20,8 +20,8 @@ namespace SanPablo.Reclutador.Entity.Validation
                 .NotEmpty()
                 .WithMessage("Ingresar las Funciones");
             RuleFor(x => x.FuncionCargo)
-                .Length(1, 255)
-                .WithMessage("Máx. 255 caracteres");
+                .Length(1, 1000)
+                .WithMessage("Máx. 1000 caracteres");
 
             //pestaña General
 

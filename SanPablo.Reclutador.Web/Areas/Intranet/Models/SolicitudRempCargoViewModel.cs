@@ -113,6 +113,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
 
         public int TotalMaxino { get; set; }
 
+
+        public string CampoPopEliminar { get; set; }
+        public string CampoPopEditar { get; set; }
+        public string CampoTipPuesto { get; set; }
+        public string CampoNumVacantes { get; set; }
+       
+
+
         #endregion
 
     }

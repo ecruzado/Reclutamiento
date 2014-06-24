@@ -41,16 +41,16 @@
         </div>
         @if (Accion.Consultar.Equals(Model.Accion))
         {
-               @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", disabled = "disabled", @maxlength = "255" }) 
+               @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", disabled = "disabled", @maxlength = "1000" }) 
                
-                 <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+                 <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 1000 caracteres</p>
               
         }
         else
         {
-            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", onblur = "aMays(event, this)", @maxlength = "255" })
+            @Html.TextAreaFor(model => model.Cargo.FuncionCargo, new { @style = "margin: 10px 10px 10px; width: 890px; height: 54px;resize: none;", onblur = "aMays(event, this)", @maxlength = "1000" })
              
-                <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 255 caracteres</p>
+                <p style="font-size:11px;margin: 0px 10px 10px;" class="help-block">Máx. 1000 caracteres</p>
                
                 <div class="tex-error" style="font-size:12px;color:red;margin: 0px 10px 10px;"> 
                 @Html.ValidationMessageFor(model => model.Cargo.FuncionCargo)
@@ -97,10 +97,16 @@
             <div class="opciones">
             @if (Accion.Enviar == Model.Accion)
             {    
-                @*<button id="btnGrabar" type="submit" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</button>*@
-                <a id="btnGrabarPuesto" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>
+               <a class="btn btn-info" id="btnGrabarPuesto" ><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+                
+                @*<a id="btnGrabarPuesto" class="btn btn-info"><i class="icon-hdd icon-white"></i> Grabar</a>*@
             }
-               <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a>
+            else
+            {
+               <a class="btn btn-info" href="@Url.Action("General", "Perfil")"><i class="icon-arrow-right icon-white"></i> Siguiente</a> 
+            }
+               
+
             </div>
                             
         </div>
@@ -145,14 +151,15 @@
                 $.ajax({
                     type: "POST",
                     data: $("#puestoPerfilForm").serialize(),
-                    url: '@Url.Action("Index", "Perfil", new { area = "Intranet"})',
+                    url: '@Url.Action("Index", "Perfil", new { area = "Intranet" })',
                     traditional: true,
                     success: function (data) {
                         if (data.redirecciona) {
                             SanPablo.Redirecciona('@Url.Action("Login", "Seguridad")');
                          }
                         if (data.Resultado) {
-                            MostrarInfo(data.Mensaje, "CONFIRMACIÓN");
+                            //information("divInfo", "spanInfo",data.Mensaje, "CONFIRMACIÓN");
+                            window.location = '@Url.Action("General", "Perfil")';
                         }
                     }
                 });
@@ -364,6 +371,25 @@
         });
         return false;
     }
+
+
+     function information(selectorDiv, selectorSpan, msg, title) {
+          $('#' + selectorSpan).html(msg);
+          var opt = {
+              title: title,
+              autoOpen: false,
+              modal: true,
+              buttons: {
+                  "Aceptar": function () {
+                      $(this).dialog("close");
+                      
+                      window.location = '@Url.Action("General", "Perfil")';
+
+                  }
+              }
+          };
+          $('#' + selectorDiv).dialog(opt).dialog('open');
+      }
 
     function eliminarCompetencia(id) {
         $.ajax({
