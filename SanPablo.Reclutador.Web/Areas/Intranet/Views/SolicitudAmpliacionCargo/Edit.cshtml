@@ -773,7 +773,7 @@
         var solReqIdeCargo = $('#SolicitudRequerimiento_Idecargo').val();
         var numVacante = parseInt($('#SolicitudRequerimiento_NumVacantes').val());
 
-        var observ = $('#SolicitudRequerimiento_Observacion').val();
+       // var observ = $('#SolicitudRequerimiento_Observacion').val();
         var motivo = $('#SolicitudRequerimiento_Motivo').val();
 
         //if (tipVacante == "0") {
@@ -791,10 +791,10 @@
             return false;
         }
 
-        if (observ == "") {
-            notificacionExito("Ingrese las observaciones");
-            return false;
-        }
+        //if (observ == "") {
+        //    notificacionExito("Ingrese las observaciones");
+        //    return false;
+        //}
         return true;
 
     }
@@ -1014,12 +1014,12 @@
                             <div class="controles">
                                 @if (Model.Accion.Equals(Accion.Consultar))
                                 {
-                                       @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)", disabled = "disabled" })
+                                       @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)", disabled = "disabled" ,data_val = "false"})
                                     <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>  
                                 }
                                 else
                                 {
-                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)" })
+                                    @Html.TextAreaFor(model => model.SolicitudRequerimiento.Observacion, new { rows = 4, cols = 10, style = "margin: 0px 0px 10px; width: 598px; height: 70px;resize:none;", maxlength = "255", onblur = "aMays(event, this)",data_val = "false" })
                                     <div class="tex-error" style="font-size:11px;color:gray">Máx. 255 caracteres</div>@* 
                                     <div class="tex-error" style="font-size:12px;color:red"> 
                                         @Html.ValidationMessageFor(model => model.SolicitudRequerimiento.Observacion)

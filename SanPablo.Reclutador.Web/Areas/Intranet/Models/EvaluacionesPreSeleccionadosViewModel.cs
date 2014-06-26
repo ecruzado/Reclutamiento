@@ -39,6 +39,12 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string ind { get; set; }
 
         public string tipoAccion { get; set; }
+
+        /// <summary>
+        /// boton gurada Resultado Examen
+        /// </summary>
+        public string CampoBtnGuardaResultadoEx { get; set; }
+        
             
 
 

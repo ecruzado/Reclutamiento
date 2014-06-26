@@ -153,7 +153,7 @@
             height: 450,
             resizable: false,
             modal: true,
-            buttons: {
+            @*buttons: {
                 "Grabar": function (e) {
                     
                     e.preventDefault();
@@ -172,14 +172,11 @@
                                 });
                     
                     }
-                    //else {
-                    //    notificacionError("ERROR: Verifique que los datos ingresados sean correctos");
-                    //}
                 },
                 "Cancelar": function () {
                     $(this).dialog("close");
                 }
-            }
+            }*@
         });
         
                 
@@ -192,7 +189,13 @@
             strAref = '<a style="text-decoration: underline" href= "#" onclick= "MostrarExamen(' + rowObject[1] + ',' + rowObject[0] + ')"; >' + cellvalue + '</a>';
         }
         return strAref;
-      }
+    }
+
+
+    function CerrarPopupResultadoEx() {
+        $("#updateDialog").dialog("close");
+        $('#grdList').trigger('reloadGrid');
+    }
 
     function MostrarExamen(idRP, idRE)
     {

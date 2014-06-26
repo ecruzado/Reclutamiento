@@ -1269,7 +1269,7 @@ namespace SanPablo.Reclutador.Repository
                  cmd.Parameters.Add("p_numVacantes", OracleType.Int32).Value = solicitudAmpliacion.NumVacantes;
                  cmd.Parameters.Add("p_motivo", OracleType.VarChar).Value = solicitudAmpliacion.Motivo;
                  cmd.Parameters.Add("p_tipoPuesto", OracleType.VarChar).Value = solicitudAmpliacion.TipPuesto;
-                 cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = solicitudAmpliacion.Observacion;
+                 cmd.Parameters.Add("p_observacion", OracleType.VarChar).Value = (solicitudAmpliacion.Observacion==null?"":solicitudAmpliacion.Observacion);
                  cmd.Parameters.Add("p_ideUsuarioSuceso", OracleType.Int32).Value = ideUsuarioSuceso;
                  cmd.Parameters.Add("p_ideRolSuceso", OracleType.Int32).Value = ideRolSuceso;
                  cmd.Parameters.Add("p_cEtapa", OracleType.VarChar).Value = etapa;

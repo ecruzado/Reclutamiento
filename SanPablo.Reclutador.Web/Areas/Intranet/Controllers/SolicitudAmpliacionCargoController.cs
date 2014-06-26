@@ -237,7 +237,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             {
                 SolReqPersonalValidator validation = new SolReqPersonalValidator();
                 ValidationResult result = validation.Validate(solicitudAmpliacion, "IdeCargo", "IdeDependencia", "IdeDepartamento", "IdeArea", 
-                                                                                    "NumVacantes", "Observacion", "Motivo");
+                                                                                    "NumVacantes", "Motivo");
 
                 List<String> listSends = null;
                 List<String> listCopys = null;

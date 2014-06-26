@@ -12,6 +12,36 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+
+
+        
+        $("#btnGuardaResultadoEx").click(function () {
+           
+
+            var result = $('#PopupResultadoForm').valid();
+            if (result) {
+                $.post('@Url.Action("PopupResultado", "EvaluacionesPreSeleccionados")',
+                                $("#PopupResultadoForm").serialize(),
+                                function (respuesta) {
+                                    if (respuesta.Resultado) {
+                                        parent.CerrarPopupResultadoEx();
+                                    }
+                                    else {
+                                        notificacionError(respuesta.Mensaje);
+                                    }
+                                });
+
+                    }
+
+         });
+
+        $("#btnCancelarResultadoEx").click(function () {
+            parent.CerrarPopupResultadoEx();
+        });
+
+
+
         $("#image").uploadify({
             'uploader': '@Url.Content("~/Scripts/uploadify/uploadify.swf")',
             'script': '@Url.Action("Upload", "EvaluacionesPreSeleccionados")',
@@ -261,7 +291,23 @@
                     }
                 }
             </tr>
-
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align:right" >
+                    
+                    @if (Visualicion.SI.Equals(Model.CampoBtnGuardaResultadoEx))
+                    {
+                      <a id="btnGuardaResultadoEx" class="btn btn-info" ><i class="icon-hdd icon-white"></i> Grabar</a>
+                    }
+                    
+                    <a id="btnCancelarResultadoEx" class="btn" > Cancelar</a></td>
+            
+            </tr>
           
        </table>
              

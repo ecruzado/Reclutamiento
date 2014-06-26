@@ -273,6 +273,14 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             return model;
         }
 
+
+
+        /// <summary>
+        /// Inicializa el popup resultado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="modo"></param>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult PopupResultado(string id, string modo)
         {
@@ -280,6 +288,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             var modelResultado = iniciarPopupResultado();
             modelResultado.tipoAccion = modo;
             int idRecluPersoExamen = Convert.ToInt32(id);
+
+            int idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
+            
             if (idRecluPersoExamen != 0)
             {
                 var reclutamientoExamen = _reclutamientoPersonaExamenRepository.GetSingle(x => x.IdeReclutamientoPersonaExamen == idRecluPersoExamen);
@@ -293,6 +304,21 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
                 modelResultado.ReclutaPersonaExamen = reclutamientoExamen;
+            }
+
+            modelResultado.CampoBtnGuardaResultadoEx = Visualicion.SI;
+
+            if (idRol>0)
+            {
+                if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(idRol))
+                {
+                    modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
+                }
+
+                if (SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(idRol))
+                {
+                    modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
+                }
             }
 
             return View("PopupResultado", modelResultado);
