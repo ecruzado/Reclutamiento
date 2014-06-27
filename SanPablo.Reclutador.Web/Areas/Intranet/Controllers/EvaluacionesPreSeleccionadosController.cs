@@ -310,14 +310,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             if (idRol>0)
             {
-                if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(idRol))
+                if (!Indicador.Si.Equals(modo))
                 {
-                    modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
-                }
+                    if (SanPablo.Reclutador.Entity.Roles.Encargado_Seleccion.Equals(idRol))
+                    {
+                        modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
+                    }
 
-                if (SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(idRol))
-                {
-                    modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
+                    if (SanPablo.Reclutador.Entity.Roles.Analista_Seleccion.Equals(idRol))
+                    {
+                        modelResultado.CampoBtnGuardaResultadoEx = Visualicion.NO;
+                    }
                 }
             }
 
