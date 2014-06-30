@@ -1545,7 +1545,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                          CellSalarioInicio.Border = Rectangle.NO_BORDER;
                          tableSalario.AddCell(CellSalarioInicio);
 
-                         PdfPCell CellSalario = new PdfPCell(new Phrase("SALARIO BRUTO: " + salario, normal));
+                         PdfPCell CellSalario = new PdfPCell(new Phrase("SUELDO BRUTO: " + salario, normal));
                          CellSalario.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
                          CellSalario.Border = Rectangle.NO_BORDER;
                          CellSalario.Colspan = 2;

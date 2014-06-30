@@ -285,10 +285,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
-                throw;
+
+                return MensajeError();
             }
             
             return View("ListaReemplazo", model);
@@ -376,12 +376,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         {
             ActionResult result = null;
 
-            //var listaCargoxSede = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == ideDepartamento));
-
-            //foreach (Area item in listaResultado)
-            //{
-            //    item.Departamento = null;
-            //}
+           
             Cargo objCargo = new Cargo();
 
             var idSede = Session[ConstanteSesion.Sede];
@@ -2902,11 +2897,9 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         id = item.IdeEvaluacionRequerimiento.ToString(),
                         cell = new string[]
                             {
-                                item.DescripcionExamen,
-                                item.DescripcionTipoExamen,
-                                item.NotaMinimaExamen.ToString(),
-                                item.DescripcionAreaResponsable.ToString(),
-                                item.PuntajeExamen.ToString(),
+                                item.DescripcionExamen==null?"":item.DescripcionExamen,
+                                item.DescripcionTipoExamen== null?"":item.DescripcionTipoExamen,
+                                item.NotaMinimaExamen==null?"":item.NotaMinimaExamen.ToString()
                             }
                     }).ToArray();
 

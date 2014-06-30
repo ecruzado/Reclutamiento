@@ -66,7 +66,7 @@
     </div>
 </div>
 
-<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>
+@*<div id="updateDialogConfirmacion" title="CONFIRMACIÓN" ><p>¿Está seguro de enviar la solicitud de nuevo cargo?</p></div>*@
 
 <div id="updateDialogDatos" title="CONFIRMACIÓN"><p>¿Está seguro de guardar los cambios?</p></div>
 
@@ -157,32 +157,7 @@
             }
         });
 
-      @*  $('#updateDialogConfirmacion').dialog({
-            autoOpen: false,
-            width: 300,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "Aceptar": function (e) {
-                    $.post('@Url.Action("enviarPerfil", "Perfil")',
-                        //$("#solicitudNuevoCargoForm").serialize(),
-                        function (respuesta) {
-                            if (respuesta.Resultado) {
-                                $('#updateDialogConfirmacion').dialog("close");
-                                mostrarMensaje("Solicitud enviada exitosamente");
-
-                            }
-                            else {
-                                $('#updateDialogConfirmacion').dialog("close");
-                                mostrarMensaje(respuesta.Mensaje);
-                            }
-                        });
-                },
-                "Cancelar": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });*@
+    
 
         //datos generales
         $('#btnGrabarDatosGenerales').click(function () {
@@ -263,21 +238,23 @@
     }
 
 
-    function mostrarConfirmacion() {
-        var dialogDiv = $('#updateDialogConfirmacion');
-        dialogDiv.dialog('open');
-    }
+    //function mostrarConfirmacion() {
+    //    var dialogDiv = $('#updateDialogConfirmacion');
+    //    dialogDiv.dialog('open');
+    //}
 
-    function validarFormulario() {
-        if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
-            if ($("#solicitudNuevoCargoForm").validate().form()) {
-                mostrarConfirmacion();
-            }
-        }
-        else {
-            mensajeResultado("Solicitud en estado: 'INACTIVO'");
-        }
-    }
+    //function validarFormulario() {
+    //    if ($('#SolicitudNuevoCargo_EstadoActivo').val() != "I") {
+    //        if ($("#solicitudNuevoCargoForm").validate().form()) {
+    //            mostrarConfirmacion();
+    //        }
+    //    }
+    //    else {
+    //        mensajeResultado("Solicitud en estado: 'INACTIVO'");
+    //    }
+    //}
+
+
     function mostrarAprobarDesaprobar() {
         var estado = $('#Cargo_EstadoActivo').val();
         if (estado == "A") {
@@ -295,27 +272,7 @@
         return false;
     }
 
-@*    function enviarAprobacionRechazo() {
-        $.post('@Url.Action("AprobacionRechazoPerfil", "LogSolicitudNuevoCargo")',
-             $("#LogSolicitudNuevoCargoForm").serialize(),
-             function (respuesta) {
-                 if (respuesta.Resultado) {
-                     $("#updateDialogAprobacion").dialog("close");
-                     $("#spanMensaje").html("Aprobacion/Rechazo enviado exitosamente");
-                     $("#divMensaje").dialog({
-                         title: 'SAN PABLO',
-                         modal: true,
-                         buttons: {
-                             "Aceptar": function () { $(this).dialog("close"); }
-                         }
-                     });
-                 }
-                 else {
-                     notificacionError(respuesta.Mensaje);
-                 }
-             }
-        );
-    }*@
+
 
 </script>
 }

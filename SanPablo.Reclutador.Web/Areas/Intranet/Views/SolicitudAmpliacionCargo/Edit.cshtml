@@ -487,13 +487,13 @@
             url: '@Url.Action("ListaEvaluaciones", "SolicitudAmpliacionCargo")',
              datatype: 'json',
              mtype: 'POST',
-             colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima', 'Responsable', 'Puntaje'],
+             colNames: ['Descripci&oacuten', 'Tipo', 'Nota Mínima'],
              colModel: [
                      { name: 'Descripcion', index: 'Descripcion', align: 'left', editable: false, sortable: false },
                      { name: 'Tipo', index: 'Tipo', align: 'left', editable: false, sortable: false },
-                     { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false, width: 60 },
-                     { name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
-                     { name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
+                     { name: 'NotaMinima', index: 'NotaMinima', align: 'left', editable: false, sortable: false, width: 60 }
+                     //{ name: 'Responsable', index: 'Responsable', align: 'left', editable: false, sortable: false },
+                     //{ name: 'Puntaje', index: 'Puntaje', align: 'left', sortable: false, width: 50, editable: true },
              ],
              pager: jQuery('#grdPagerEvaluacion'),
              sortname: 'TipoExamen',

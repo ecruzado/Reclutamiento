@@ -82,7 +82,7 @@ namespace SanPablo.Reclutador.Entity.Validation
 
             RuleFor(x => x.DescripcionObservaciones)
                 .NotEmpty()
-                .WithMessage("Ingrese las observaciones adicionales");
+                .WithMessage("Ingrese el sustento");
             RuleFor(x => x.DescripcionObservaciones)
                 .Length(1, 1000)
                 .WithMessage("Máx. 1000 caracteres");

@@ -141,83 +141,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
 
 
-            ////actualiza el cargo segun el usuario 
-
-            //var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
-            //var idSede = Session[ConstanteSesion.Sede];
-            //Int32 idRol = Convert.ToInt32(Session[ConstanteSesion.Rol]);
-            //SedeNivel usuarioSede;
-
-
-            //if (objUsuarioSede != null)
-            //{
-            //    usuarioSede = new SedeNivel();
-            //    usuarioSede = (SedeNivel)objUsuarioSede;
-
-            //    //incializa
-
-            //    if (idRol == Roles.Gerente || idRol == Roles.Jefe)
-            //    {
-            //        solicitudModel.Dependencias = new List<Dependencia>(_dependenciaRepository.GetBy(x => x.EstadoActivo == IndicadorActivo.Activo
-            //                                                            && x.IdeSede == usuarioSede.IDESEDE
-            //                                                            && x.IdeDependencia == usuarioSede.IDEDEPENDENCIA
-            //                                                            ));
-
-
-            //        solicitudModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
-            //                                                                                  && x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
-            //                                                                                  && x.EstadoActivo == IndicadorActivo.Activo));
-
-
-            //        solicitudModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.IdeArea == usuarioSede.IDEAREA
-            //                                                                  && x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
-            //                                                                  && x.EstadoActivo == IndicadorActivo.Activo));
-
-            //        Cargo objCargo = new Cargo();
-
-            //        objCargo.IdeSede = Convert.ToInt32(idSede);
-            //        objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
-            //        objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
-            //        objCargo.IdeArea = usuarioSede.IDEAREA;
-
-            //        solicitudModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
-            //        solicitudModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
-
-            //    }
-
-
-            //    if (Roles.Gerente_General_Adjunto.Equals(idRol))
-            //    {
-
-            //        solicitudModel.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
-            //                                                                                 && x.EstadoActivo == IndicadorActivo.Activo));
-
-
-            //        solicitudModel.Areas = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
-            //                                                                  && x.EstadoActivo == IndicadorActivo.Activo));
-
-            //        solicitudModel.SolicitudRequerimiento.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
-            //        solicitudModel.SolicitudRequerimiento.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
-            //        solicitudModel.SolicitudRequerimiento.IdeArea = usuarioSede.IDEAREA;
-
-
-            //        Cargo objCargo = new Cargo();
-
-            //        objCargo.IdeSede = Convert.ToInt32(idSede);
-            //        objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
-            //        objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
-            //        objCargo.IdeArea = usuarioSede.IDEAREA;
-
-            //        solicitudModel.Cargos = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
-            //        solicitudModel.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
-            //    }
-
-            //}
-
-            //// fin de actualizacion
-
-
-
             return View(solicitudModel);
         }
 
@@ -247,9 +170,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     objJsonMessage.Mensaje = "ERROR: Verificar los datos ingresados";
                     objJsonMessage.Resultado = false;
                     return Json(objJsonMessage);
-                    //var solicitudAmpliacionModel = inicializarAmpliacionCargo(model.Pagina);
-                    //solicitudAmpliacionModel.SolicitudRequerimiento = solicitudAmpliacion;
-                    //return View(solicitudAmpliacionModel);
+                    
                 }
                 if (model.SolicitudRequerimiento.IdeSolReqPersonal == null)
                 {
@@ -585,7 +506,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 model.Cargos = new List<Cargo>(_cargoRepository.GetCargoxSede(cargoDatos));
 
-                //model.Cargos = new List<Cargo>(_cargoRepository.GetBy(x=>x.IdeSede == cargoDatos.IdeSede && x.IdeArea== ))
+                
                 model.Cargos.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
             }
 
@@ -746,7 +667,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             }
             catch (Exception)
             {
-                //return View(perfilAmpliacionViewModel);
+                
                 return PartialView();
             }
 
@@ -815,7 +736,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                ///enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
+               
 
                 var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
 
@@ -848,7 +769,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             JsonMessage objJsonMessage = new JsonMessage();
             var enviarMail = new SendMail();
             SedeNivel usuarioSession = (SedeNivel)Session[ConstanteSesion.UsuarioSede];
-            //var cargoEnviar = _cargoRepository.GetSingle(x => x.IdeCargo == CargoPerfil.IdeCargo);
+            
 
             var dir = Server.MapPath(@"~/TemplateEmail/EnviarSolicitud.htm");
             var SedeSession = Session[ConstanteSesion.Sede];
@@ -910,9 +831,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         
                         var usuarioResp = _usuarioRepository.GetSingle(x => x.IdUsuario == ideUsuario);
                         
-                        
-                        //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
-
                         var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
 
                         if (objUsuario != null)
@@ -1592,9 +1510,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                     model.SolicitudRequerimiento.IdeArea = area.IdeArea;
 
-                    //model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
-                    //model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
-
+                   
                     if (rolSession == Roles.Jefe)
                     {
                         model.Etapas = new List<DetalleGeneral>(_detalleGeneralRepository.GetBy(x => x.General.IdeGeneral == 50 && x.Valor == "05"));
@@ -1650,21 +1566,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
             Cargo objCargo = new Cargo();
 
             objCargo.IdeSede = Convert.ToInt32(idSede);
-            //objCargo.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
-            //objCargo.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
-            //objCargo.IdeArea = usuarioSede.IDEAREA;
-
-            //model.listaTipCargo = new List<Cargo>(_solReqPersonalRepository.GetCargoxSede(objCargo));
-            //model.listaTipCargo.Insert(0, new Cargo { IdeCargo = 0, NombreCargo = "Seleccionar" });
-
+           
 
             model.Cargos = new List<Cargo>(_cargoRepository.listarCargosSedeCodigo(objCargo.IdeSede));
             model.Cargos.Insert(0, new Cargo { CodigoCargo = "0", NombreCargo = "Seleccionar" });
 
-            //model.Roles = new List<Rol>(_usuarioRolSedeRepository.GetListaRol(0));
-            //model.Roles.Insert(0, new Rol { IdRol = 0, CodRol = "Seleccionar" });
-
-           
             model.Estados = new List<DetalleGeneral>(_detalleGeneralRepository.GetByTipoTabla(TipoTabla.EstadosSolicitud));
             model.Estados.Insert(0, new DetalleGeneral { Valor = "0", Descripcion = "Seleccionar" });
 
@@ -2118,9 +2024,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 enviarMail.Area = usuarioSession.AREADES;
                 enviarMail.Sede = usuarioSession.SEDEDES;
                 enviarMail.Rol = Session[ConstanteSesion.RolDes].ToString();
-                
-                //enviarMail.Usuario = Session[ConstanteSesion.UsuarioDes].ToString();
-
+              
                 var objUsuario = (Usuario)Session[ConstanteSesion.ObjUsuario];
 
                 if (objUsuario != null)

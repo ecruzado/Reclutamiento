@@ -73,11 +73,7 @@
                
             </tr>
             <tr class="formulario-fila">
-                @*<td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="inputSuccess">&nbsp; </label>
-                </td>
-                <td class ="colImput">&nbsp;
-                </td>*@
+               
 
                  <td class="colEtiqueta" style="width:130px;text-align:right">
                     <label class="control-label" for="inputSuccess">Descripcion <span class="text-error">*</span></label>
@@ -111,19 +107,7 @@
                         @Html.DropDownListFor(model => model.Cargo.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.Cargo.IdeArea), new { disabled = "disabled"})
                     }
                 </td>
-                @*<td class="colEtiqueta" style="width:130px;text-align:right">
-                    <label class="control-label" for="inputSuccess">Núm. Posiciones</label>
-                </td>*@
-                @*<td class="colImput">
-                    @if (Accion.Editar == Model.Accion)
-                    {
-                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right"})
-                    }
-                    else
-                    {
-                        @Html.TextBoxFor(model => model.Cargo.NumeroPosiciones, new { @class = "input-xmini text-right", disabled = "disabled"})
-                    }
-                </td>*@
+              
             </tr>
         </table>
         <div class="formulario-accion">   

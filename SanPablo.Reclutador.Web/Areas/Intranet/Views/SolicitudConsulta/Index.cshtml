@@ -421,7 +421,17 @@
                         
                             <label class="control-label" for="inputSuccess">Dependencia</label>
                             <div class="controles">
-                              @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false"})
+                             
+                                 @if (Visualicion.SI.Equals(Model.CampoDependencia))
+                                 {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false"})
+                                 }
+                                 else
+                                 {
+                                     @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDependencia, new SelectList(Model.Dependencias, "IdeDependencia", "NombreDependencia", Model.SolicitudRequerimiento.IdeDependencia),new {  data_val = "false",disabled="disabled"})
+                                 }
+                                
+                            
                             </div>
                         
                     </td>
@@ -441,7 +451,17 @@
                        
                             <label class="control-label" for="inputSuccess">Departamento</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false"})
+                                
+                                 @if (Visualicion.SI.Equals(Model.CampoDepartamento))
+                                 {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false"})
+                                 }
+                                 else
+                                 {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeDepartamento, new SelectList(Model.Departamentos, "IdeDepartamento", "NombreDepartamento", Model.SolicitudRequerimiento.IdeDepartamento),new {  data_val = "false",disabled="disabled"}) 
+                                 }
+                            
+                            
                             </div>
                         
                     </td>
@@ -459,7 +479,17 @@
                       
                             <label class="control-label" for="inputSuccess">Área</label>
                             <div class="controles">
-                                @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false"})
+                                
+                                @if (Visualicion.SI.Equals(Model.CampoArea))
+                                 {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false"})
+                                 }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.SolicitudRequerimiento.IdeArea, new SelectList(Model.Areas, "IdeArea", "NombreArea", Model.SolicitudRequerimiento.IdeArea),new {  data_val = "false",disabled="disabled"})    
+                                }
+
+
                             </div>
                       
                     </td>

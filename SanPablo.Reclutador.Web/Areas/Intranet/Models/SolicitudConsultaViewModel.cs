@@ -28,6 +28,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Models
         public string btnRanking { get; set; }
         public string btnPreSeleccion { get; set; }
 
+        public string CampoDependencia { get; set; }
+        public string CampoDepartamento { get; set; }
+        public string CampoArea { get; set; }
+         
+
     }
 
 }

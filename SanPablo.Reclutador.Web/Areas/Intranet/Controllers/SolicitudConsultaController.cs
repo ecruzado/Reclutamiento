@@ -64,6 +64,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
         public ActionResult Index()
         {
             SolicitudConsultaViewModel model;
+
+            SedeNivel usuarioSede = new SedeNivel();
             try
             {
                 model = new SolicitudConsultaViewModel();
@@ -92,6 +94,10 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 //accesos de botones
                 idRol = (Session[ConstanteSesion.Rol] == null ? 0 : Convert.ToInt32(Session[ConstanteSesion.Rol]));
 
+                model.CampoDependencia = Visualicion.SI;
+                model.CampoDepartamento = Visualicion.SI;
+                model.CampoArea = Visualicion.SI;
+
                 if (Roles.Administrador_Sistema.Equals(idRol))
                 {
                     model.btnRanking = Visualicion.SI;
@@ -111,11 +117,65 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                 {
                     model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
+
+                    var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
+                   
+
+                    if (objUsuarioSede != null)
+                    {
+                        usuarioSede = (SedeNivel)objUsuarioSede;
+                    }
+
+                    model.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                                             && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                    model.Areas = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+
+                    model.SolicitudRequerimiento.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                    model.SolicitudRequerimiento.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                    model.SolicitudRequerimiento.IdeArea = usuarioSede.IDEAREA;
+
+
+                    model.CampoDependencia = Visualicion.NO;
+                    model.CampoDepartamento = Visualicion.NO;
+                    model.CampoArea = Visualicion.NO;
+
                 }
                 else if(Roles.Gerente.Equals(idRol))
                 {
                     model.btnRanking = Visualicion.NO;
                     model.btnPreSeleccion = Visualicion.SI;
+
+                    var objUsuarioSede = Session[ConstanteSesion.UsuarioSede];
+                   
+
+                    if (objUsuarioSede != null)
+                    {
+                        usuarioSede = (SedeNivel)objUsuarioSede;
+                    }
+
+                    model.Departamentos = new List<Departamento>(_departamentoRepository.GetBy(x => x.Dependencia.IdeDependencia == usuarioSede.IDEDEPENDENCIA
+                                                                                            && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+                    model.Areas = new List<Area>(_areaRepository.GetBy(x => x.Departamento.IdeDepartamento == usuarioSede.IDEDEPARTAMENTO
+                                                                              && x.EstadoActivo == IndicadorActivo.Activo));
+
+
+
+
+                    model.SolicitudRequerimiento.IdeDependencia = usuarioSede.IDEDEPENDENCIA;
+                    model.SolicitudRequerimiento.IdeDepartamento = usuarioSede.IDEDEPARTAMENTO;
+                    model.SolicitudRequerimiento.IdeArea = usuarioSede.IDEAREA;
+
+                    model.CampoDependencia = Visualicion.NO;
+                    model.CampoDepartamento = Visualicion.NO;
+                    model.CampoArea = Visualicion.NO;
+
                 }
                 else if (Roles.Encargado_Seleccion.Equals(idRol))
                 {
@@ -128,9 +188,6 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     model.btnPreSeleccion = Visualicion.NO;
                 }
                 
-
-
-
 
             }
             catch (Exception)

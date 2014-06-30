@@ -97,8 +97,8 @@
             </div>
             <table style="margin-left:100px;">
                 <tr>
-                    <td class="colEtiqueta" style="width:190px;">
-                        <label class="etiquetaFormulario" for="setipodocumento">Expectativa salarial, sueldo bruto (S/.). <span class="text-error">*</span></label>
+                    <td class="colEtiqueta" style="width:230px;">
+                        <label class="etiquetaFormulario" for="setipodocumento">Expectativa salarial, sueldo bruto <span class="text-error">*</span></label>
                     </td>
                     <td class="colInput">
                          @Html.DropDownListFor(model => model.Postulante.TipoSalario, new SelectList(Model.TipoSueldosBrutos, "Valor", "Descripcion", Model.Postulante.TipoSalario))
