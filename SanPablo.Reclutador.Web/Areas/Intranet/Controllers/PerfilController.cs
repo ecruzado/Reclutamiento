@@ -491,6 +491,9 @@
             perfilViewModel.IdeSolicitud = CargoPerfil.IdeSolicitud;
             perfilViewModel.Pagina = CargoPerfil.Pagina;
 
+            perfilViewModel.Cargo.EstadoActivo = cargo.EstadoActivo;
+
+
             if (cargo.EstadoActivo == IndicadorActivo.Activo)
             { perfilViewModel.EstadoRegistro = "Activo"; }
             else
@@ -662,20 +665,13 @@
                 {
 
                     objExamen = new EvaluacionCargo();
-                    List<EvaluacionCargo> ListaExamen = (List<EvaluacionCargo>)_evaluacionCargoRepository.GetBy(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.TipoExamen=="02");
+                    int? contEntrevistaFinal = _evaluacionCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == CargoPerfil.IdeCargo && x.TipoExamen=="02" && x.IndEntrevFinal == Indicador.Si);
 
-                    if (ListaExamen!=null)
+                    if (contEntrevistaFinal == 0)
                     {
-                        foreach (EvaluacionCargo item in ListaExamen)
-                        {
-
-                            if (item.IndEntrevFinal== null|| Indicador.No.Equals(item.IndEntrevFinal))
-                                {
-                                    resultado = false;
-                                    mensaje = "Debe completar el perfil con los datos obligatorios, debe indicar una entrevista final";
-                                }
-                        
-                        }
+                        resultado = false;
+                        mensaje = "Debe completar el perfil con los datos obligatorios, debe indicar una entrevista final";
+                       
                     }
 
                 }

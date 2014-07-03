@@ -885,6 +885,8 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                         objUsuarioVista.IDESEDE = Convert.ToInt32(grid.rules[2].data);
                         //where.Add(Expression.Eq("IDESEDE", Convert.ToInt32(grid.rules[2].data)));
                     }
+                    
+
                     if (!"".Equals(grid.rules[3].data) && grid.rules[3].data != null && grid.rules[3].data != "0")
                     {
                         

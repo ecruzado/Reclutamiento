@@ -108,6 +108,8 @@
         {
             EvaluacionCargoValidator validator = new EvaluacionCargoValidator();
             ValidationResult result = validator.Validate(evaluacionCargo, "TipoExamen", "NotaMinimaExamen");
+            int? contEntrevistaFinal;
+
 
             int IdeCargo = CargoPerfil.IdeCargo;
             JsonMessage objJsonMessage = new JsonMessage();
@@ -122,6 +124,14 @@
                         return View(evaluacionViewModel);
                     //}
                 }
+
+                contEntrevistaFinal = _evaluacionCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == IdeCargo
+                                                                              && x.IndEntrevFinal == Indicador.Si
+                                                                              && x.TipoExamen == evaluacionCargo.TipoExamen
+                                                                              );
+                        
+
+
                 if (evaluacionCargo.IdeEvaluacionCargo == 0)
                 {
 
@@ -159,7 +169,19 @@
                             evaluacionCargo.IndEntrevFinal = Indicador.No;
                         }
 
-                        
+
+
+                        if ("02".Equals(evaluacionCargo.TipoExamen) && evaluacionCargo.EsEntrevistaFinal == true)
+                        {
+                            if (contEntrevistaFinal >= 1)
+                            {
+                                objJsonMessage.Mensaje = "Solo se puede agregar una entrevista final";
+                                objJsonMessage.Resultado = false;
+                                return Json(objJsonMessage);
+                            }
+                        }
+
+
 
                         _evaluacionCargoRepository.Add(evaluacionCargo);
                         _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, 0, IdeCargo);
@@ -213,7 +235,18 @@
                         {
                             evaluacionCargoActualizar.IndEntrevFinal = Indicador.No;
                         }
-                        
+
+
+                        if ("02".Equals(evaluacionCargo.TipoExamen) && evaluacionCargo.EsEntrevistaFinal==true)
+                        {
+                            if (contEntrevistaFinal >= 1)
+                            {
+                                objJsonMessage.Mensaje = "Solo se puede agregar una entrevista final";
+                                objJsonMessage.Resultado = false;
+                                return Json(objJsonMessage);
+                            }
+                        }
+
                         _evaluacionCargoRepository.Update(evaluacionCargoActualizar);
                         _evaluacionCargoRepository.actualizarPuntaje(evaluacionCargo.PuntajeExamen, valorEditar, IdeCargo);
 
