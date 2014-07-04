@@ -620,7 +620,7 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
             List<ReclutamientoPersona> listaReclutamiento = new List<ReclutamientoPersona>();
 
-            listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == objReCluta.IdeSol && x.TipSol == objReCluta.TipSol && x.TipPuesto == objReCluta.TipPuesto && x.IdSede == x.IdSede && x.IdeCargo == objReCluta.IdeCargo);
+            listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == objReCluta.IdeSol && x.TipSol == objReCluta.TipSol && x.TipPuesto == objReCluta.TipPuesto && x.IdSede == objReCluta.IdSede && x.IdeCargo == objReCluta.IdeCargo);
 
             Usuario objUsuario;
             SedeNivel objSedeNivel;
