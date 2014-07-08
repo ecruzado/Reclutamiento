@@ -82,6 +82,12 @@
             return View(horariosViewModel);
         }
 
+
+        /// <summary>
+        /// Ingresa los horarios al perfil cuando es uno nuevo
+        /// </summary>
+        /// <param name="horarioCargo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit([Bind(Prefix = "Horario")]HorarioCargo horarioCargo)
         {
@@ -102,6 +108,18 @@
                     //return Json(objJsonMessage);
 
                 }
+
+
+                int contador = _horarioCargoRepository.CountByExpress(x =>  x.Cargo.IdeCargo == IdeCargo && x.PuntajeHorario == horarioCargo.PuntajeHorario);
+
+                if (contador>0)
+                {
+                    objJsonMessage.Mensaje = "Debe ingresar un puntaje diferente";
+                    objJsonMessage.Resultado = false;
+                    return Json(objJsonMessage);
+                }
+
+
                 if (horarioCargo.IdeHorarioCargo == 0)
                 {
                     if (existe(horarioCargo.TipoHorario))
@@ -130,9 +148,9 @@
                 {
                     var horarioCargoActualizar = _horarioCargoRepository.GetSingle(x => x.IdeHorarioCargo == horarioCargo.IdeHorarioCargo);
 
-                    int contador = _horarioCargoRepository.CountByExpress(x => x.TipoHorario == horarioCargo.TipoHorario && x.Cargo.IdeCargo == IdeCargo && x.IdeHorarioCargo != horarioCargo.IdeHorarioCargo);
+                    int cont = _horarioCargoRepository.CountByExpress(x => x.TipoHorario == horarioCargo.TipoHorario && x.Cargo.IdeCargo == IdeCargo && x.IdeHorarioCargo != horarioCargo.IdeHorarioCargo);
 
-                    if (contador > 0)
+                    if (cont > 0)
                     {
                         objJsonMessage.Mensaje = "No puede agregar el mismo tipo de horario más de una vez";
                         objJsonMessage.Resultado = false;

@@ -318,7 +318,7 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.oportunidadLaboral = new OportunidadLaboral();
             model.solReqPersonal = new SolReqPersonal();
 
-            camposVisualizar(id, tipo, model);
+           
 
             SolReqPersonal obj;
             obj = new SolReqPersonal();
@@ -332,31 +332,11 @@ namespace SanPablo.Reclutador.Web.Controllers
             {
                 model.oportunidadLaboral.TipoHorarioDes = Convert.ToString(objDetalle.Descripcion);
             }
-
+            // se obtiene los datos que se muestran en la pantalla del detalle del cargo
             model.solReqPersonal = _postulanteRepository.GetDatosSolGrupo(model.oportunidadLaboral);
-
-            //if (TipoSolicitud.Nuevo.Equals(tipo))
-            //{
-            //    var objSol = _solicitudNuevoCargoRepository.GetSingle(x => x.IdeCargo ==Convert.ToInt32(id) && x.EstadoActivo==IndicadorActivo.Activo);
-            //    model.solReqPersonal.IndVerSalario = objSol.IndicadorVerSalario;
-
-                
-            //}
-            //else
-            //{
-            //    var objSolReq = _solReqPersonalRepository.GetSingle(x => x.IdeCargo == Convert.ToInt32(id) && 
-            //                                                        x.TipoSolicitud==tipo && x.EstadoActivo==IndicadorActivo.Activo);
-
-            //    if (objSolReq!=null)
-            //    {
-            //        model.solReqPersonal.IndVerSalario = (objSolReq.IndVerSalario == null ? "N" : objSolReq.IndVerSalario);
-            //    }
-            //    else
-            //    {
-            //        model.solReqPersonal.IndVerSalario = "N";
-            //    }
-                
-            //}
+            
+            camposVisualizar(id, model.solReqPersonal.IdeSolReqPersonal, tipo, model);
+            
 
 
             model.solReqPersonal.FechaInicioBus = Convert.ToDateTime(fechaInicio);
@@ -374,9 +354,20 @@ namespace SanPablo.Reclutador.Web.Controllers
             return View("DetalleGrupoCargo", model);
         }
 
-        public void camposVisualizar(string id, string tipo, OportunidadLaboralViewModel model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">id del Cargo</param>
+        /// <param name="idSolicitud">id de la solicitud</param>
+        /// <param name="tipo">tipo de solicitud</param>
+        /// <param name="model">modelo</param>
+        public void camposVisualizar(string id, int? idSolicitud, string tipo, OportunidadLaboralViewModel model)
         {
-            int idSol = Convert.ToInt32(id);
+
+            int idSol = Convert.ToInt32(idSolicitud);
+
+            int idCargo= Convert.ToInt32(id);
+
             var contadorOfrecemos = 0;
             var contadorCompetenecias = 0;
             var contadorOfimatica = 0;
@@ -389,15 +380,15 @@ namespace SanPablo.Reclutador.Web.Controllers
             model.VisualizarIdiomas = Indicador.No;
             model.VisualizarOtrosConocimientos = Indicador.No;
 
-            if (idSol != 0)
+            if (idCargo != 0)
             {
                 if (TipoSolicitud.Nuevo.Equals(tipo)) //Es una solictud nueva
                 {
-                    contadorOfrecemos = _ofrecemosCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol);
-                    contadorCompetenecias = _competenciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol);
-                    contadorOfimatica = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoOfimatica != null);
-                    contadorIdiomas = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoIdioma != null);
-                    contadorOtrosConocimientos = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idSol && x.TipoConocimientoGeneral != null);
+                    contadorOfrecemos = _ofrecemosCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idCargo);
+                    contadorCompetenecias = _competenciaCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idCargo);
+                    contadorOfimatica = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idCargo && x.TipoConocimientoOfimatica != null);
+                    contadorIdiomas = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idCargo && x.TipoConocimientoIdioma != null);
+                    contadorOtrosConocimientos = _conocimientoCargoRepository.CountByExpress(x => x.Cargo.IdeCargo == idCargo && x.TipoConocimientoGeneral != null);
                 }
                 else
                 {
@@ -522,6 +513,7 @@ namespace SanPablo.Reclutador.Web.Controllers
                 {
 
                     DetachedCriteria where = DetachedCriteria.For<ConocimientoGeneralRequerimiento>();
+                    where.Add(Expression.IsNotNull("TipoConocimientoOfimatica"));
                     where.Add(Expression.Eq("SolicitudRequerimiento.IdeSolReqPersonal", IdeSolReqPersonal));
                    
                     var generic = Listar(_ConocimientoGeneralRequerimientoRepository, grid.sidx, grid.sord, grid.page, grid.rows, grid._search, grid.searchField, grid.searchOper, grid.searchString, where);
