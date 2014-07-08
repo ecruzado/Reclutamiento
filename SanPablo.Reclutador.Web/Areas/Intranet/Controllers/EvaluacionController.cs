@@ -230,7 +230,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
 
-
+        /// <summary>
+        /// Examen
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ValidarSesion]
         public ActionResult Examen(string id)
         {
@@ -255,7 +259,19 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                     HoraInicioEvaluacion = HoraInicio;
                     TiempoEvaluacion = categoria.TIEMPO;
                     cargarCriterio(0, modelExamen);
-                    modelExamen.Accion = Accion.Siguiente;
+                    
+                    //se agrega validacion si un examen tiene una sola pregunta
+                    if (nroPreguntas==1)
+                    {
+                         modelExamen.Accion = Accion.Terminar;
+                    }
+                    else
+                    {
+                        modelExamen.Accion = Accion.Siguiente;
+                    }
+                    
+
+
 
                     var reclutamientoCategoria = _reclutamientoExamenCategoriaRepository.GetSingle(x => x.IdeReclutamientoPersonaExamenCategoria == IdeReclutamientoExamenCategoria);
                     reclutamientoCategoria.Estado = EstadoCategoria.Evaluado;
