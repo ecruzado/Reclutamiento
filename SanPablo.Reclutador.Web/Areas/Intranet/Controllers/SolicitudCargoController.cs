@@ -979,9 +979,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
 
                 int puntajeTotal = Convert.ToInt32(solicitud.PuntTotCentroEst) + Convert.ToInt32(solicitud.PuntTotConoGen) + Convert.ToInt32(solicitud.PuntTotDisCapa) +
-                              Convert.ToInt32(solicitud.PuntEdad) + Convert.ToInt32(solicitud.PuntTotExpLaboral) + Convert.ToInt32(solicitud.PuntTotHorario) +
-                              Convert.ToInt32(solicitud.PuntTotConoIdioma) + Convert.ToInt32(solicitud.PuntTotNivelEst) + Convert.ToInt32(solicitud.PuntajeTotalOfimatica) + Convert.ToInt32(solicitud.PuntTotPostuinte) +
-                              Convert.ToInt32(solicitud.PuntTotSalario) + Convert.ToInt32(solicitud.PuntTotSexo) + Convert.ToInt32(solicitud.PuntTotUbigeo);
+                               Convert.ToInt32(solicitud.PuntEdad) + Convert.ToInt32(solicitud.PuntTotExpLaboral) + Convert.ToInt32(solicitud.PuntTotHorario) +
+                               Convert.ToInt32(solicitud.PuntTotConoIdioma) + Convert.ToInt32(solicitud.PuntTotNivelEst) + Convert.ToInt32(solicitud.PuntajeTotalOfimatica) +
+                               Convert.ToInt32(solicitud.PuntTotPostuinte) + Convert.ToInt32(solicitud.PuntSalario) + Convert.ToInt32(solicitud.PuntSexo) +
+                               Convert.ToInt32(solicitud.PuntTotUbigeo);
+
 
                 model.TotalMaxino = puntajeTotal;
 

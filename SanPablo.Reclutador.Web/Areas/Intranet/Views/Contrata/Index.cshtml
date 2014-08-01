@@ -370,7 +370,8 @@
                     if (data.Resultado) {
                         $.unblockUI();
                         $('#grdListSel').trigger('reloadGrid');
-                        MostrarMensaje(data.Mensaje, "INFORMATIVO");
+                        mensajeRedirecciona(data.Mensaje, "INFORMATIVO");
+                        //MostrarMensaje(data.Mensaje, "INFORMATIVO");
                     } else {
                         $.unblockUI();
                         var dialogDiv = $('#popupDialogObserv');

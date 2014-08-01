@@ -423,13 +423,11 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
 
                 }
 
-
-
                 //actualiza estado de la solicitud
 
                 List<ReclutamientoPersona> listaReclutamiento = new List<ReclutamientoPersona>();
 
-                listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == idSol && x.TipSol == objReCluta.TipSol && x.TipPuesto == tipPuesto && x.IdSede == x.IdSede && x.IdeCargo == idCargo);
+                listaReclutamiento = (List<ReclutamientoPersona>)_reclutamientoPersonaRepository.GetBy(x => x.IdeSol == objReCluta.IdeSol && x.TipSol == objReCluta.TipSol && x.TipPuesto == objReCluta.TipPuesto && x.IdSede == objReCluta.IdSede && x.IdeCargo == objReCluta.IdeCargo);
 
                 Usuario objUsuario;
                 SedeNivel objSedeNivel;
@@ -455,6 +453,17 @@ namespace SanPablo.Reclutador.Web.Areas.Intranet.Controllers
                                 foreach (SedeNivel item2 in objSedeNivel2)
                                 {
                                     _sedeNivelRepository.Remove(item2);
+                                }
+
+
+                                var objSedeRolUsuario = _usuarioRolSedeRepository.GetBy(x => x.IdUsuario == objUsuario2.IdUsuario);
+
+                                foreach (UsuarioRolSede item3 in objSedeRolUsuario)
+                                {
+
+                                    item3.IdSede = 0;
+
+                                    _usuarioRolSedeRepository.Update(item3);
                                 }
                                 
                                 
